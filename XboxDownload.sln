@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XboxDownload", "XboxDownload\XboxDownload.csproj", "{30A5B67E-9E5A-4A4E-92F6-3091A36D6E86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30A5B67E-9E5A-4A4E-92F6-3091A36D6E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30A5B67E-9E5A-4A4E-92F6-3091A36D6E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30A5B67E-9E5A-4A4E-92F6-3091A36D6E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30A5B67E-9E5A-4A4E-92F6-3091A36D6E86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C53F76EA-D34E-42BA-A35B-0FCAC1CCCADF}
+	EndGlobalSection
+EndGlobal
