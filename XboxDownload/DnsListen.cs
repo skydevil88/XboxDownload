@@ -92,7 +92,7 @@ namespace XboxDownload
                 parentForm.Invoke(new Action(() =>
                 {
                     parentForm.pictureBox1.Image = Properties.Resource.Xbox3;
-                    MessageBox.Show(String.Format("启用DNS服务失败!\n错误信息: {0}\n\n解决方法：1、停用占用 {1} 端口的服务。2、监听IP选择(Any)", ex.Message, port), "启用DNS服务失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"启用DNS服务失败!\n错误信息: {ex.Message}\n\n解决方法：1、停用占用 {port} 端口的服务。2、监听IP选择(Any)", "启用DNS服务失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }));
                 return;
             }
@@ -814,11 +814,7 @@ namespace XboxDownload
         public static string? DoH(string hostName, string dohServer = "223.5.5.5")
         {
             string? ip = null;
-            if (Environment.OSVersion.Version.Major < 10 && dohServer == "223.5.5.5")
-                dohServer = "http://" + dohServer;
-            else
-                dohServer = "https://" + dohServer;
-            string html = ClassWeb.HttpResponseContent(dohServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, null, 6000);
+            string html = ClassWeb.HttpResponseContent("https://" + dohServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, null, 6000);
             if (Regex.IsMatch(html.Trim(), @"^{.+}$", RegexOptions.Singleline))
             {
                 try

@@ -14,18 +14,6 @@ using System.Text.RegularExpressions;
 
 namespace XboxDownload
 {
-    internal class SocketPackage
-    {
-        public Uri? Uri;
-        public String Err = "", Headers = "", Html = "";
-        public Byte[] Buffer = Array.Empty<Byte>();
-
-        public String All
-        {
-            get { return "==========Uri==========\r\n" + this.Uri + "\r\n==========Err==========\r\n" + this.Err + "\r\n==========Headers==========\r\n" + this.Headers + "\r\n==========Html==========\r\n" + this.Html; }
-        }
-    }
-
     internal class ClassWeb
     {
         public static string language = Thread.CurrentThread.CurrentCulture.Name;
@@ -104,7 +92,7 @@ namespace XboxDownload
                                 break;
                             case "Range":
                                 {
-                                    Match result = Regex.Match(header.Value, @"(\d+)-(\d+)");
+                                    Match result = Regex.Match(header.Value, @"^(\d+)-(\d+)$");
                                     if (result.Success)
                                         client.DefaultRequestHeaders.Range = new RangeHeaderValue(long.Parse(result.Groups[1].Value), long.Parse(result.Groups[2].Value));
                                 }
@@ -165,7 +153,6 @@ namespace XboxDownload
                             Debug.WriteLine(ex.Message);
                         }
                     }
-
                 }
             }
         }
@@ -420,6 +407,18 @@ namespace XboxDownload
             doc = null;
             webb?.Dispose();
             webb = null;
+        }
+    }
+
+    internal class SocketPackage
+    {
+        public Uri? Uri;
+        public String Err = "", Headers = "", Html = "";
+        public Byte[] Buffer = Array.Empty<Byte>();
+
+        public String All
+        {
+            get { return "==========Uri==========\r\n" + this.Uri + "\r\n==========Err==========\r\n" + this.Err + "\r\n==========Headers==========\r\n" + this.Headers + "\r\n==========Html==========\r\n" + this.Html; }
         }
     }
 }

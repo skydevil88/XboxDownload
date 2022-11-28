@@ -42,9 +42,10 @@
             // 
             this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(176, 11);
+            this.linkLabel1.Location = new System.Drawing.Point(266, 18);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(200, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(298, 24);
             this.linkLabel1.TabIndex = 0;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "外服主机玩国服独占中文游戏的方法";
@@ -56,11 +57,12 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.linkLabel1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 523);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 784);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(379, 40);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(568, 60);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // dgvGames
@@ -74,12 +76,13 @@
             this.Col_ProductId});
             this.dgvGames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvGames.Location = new System.Drawing.Point(0, 0);
+            this.dgvGames.Margin = new System.Windows.Forms.Padding(4);
             this.dgvGames.MultiSelect = false;
             this.dgvGames.Name = "dgvGames";
             this.dgvGames.ReadOnly = true;
-            this.dgvGames.RowHeadersWidth = 35;
+            this.dgvGames.RowHeadersWidth = 40;
             this.dgvGames.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGames.Size = new System.Drawing.Size(379, 523);
+            this.dgvGames.Size = new System.Drawing.Size(568, 784);
             this.dgvGames.TabIndex = 2;
             this.dgvGames.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvGames_CellDoubleClick);
             this.dgvGames.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DgvGames_RowPostPaint);
@@ -92,7 +95,7 @@
             this.Col_Name.Name = "Col_Name";
             this.Col_Name.ReadOnly = true;
             this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_Name.Width = 180;
+            this.Col_Name.Width = 175;
             // 
             // Col_Note
             // 
@@ -116,12 +119,13 @@
             // 
             // FormChinese
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(379, 563);
+            this.ClientSize = new System.Drawing.Size(568, 844);
             this.Controls.Add(this.dgvGames);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormChinese";

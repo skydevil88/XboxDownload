@@ -36,18 +36,20 @@
             // cbStartup
             // 
             this.cbStartup.AutoSize = true;
-            this.cbStartup.Location = new System.Drawing.Point(29, 15);
+            this.cbStartup.Location = new System.Drawing.Point(44, 22);
+            this.cbStartup.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbStartup.Name = "cbStartup";
-            this.cbStartup.Size = new System.Drawing.Size(99, 21);
+            this.cbStartup.Size = new System.Drawing.Size(144, 28);
             this.cbStartup.TabIndex = 0;
             this.cbStartup.Text = "开机自动运行";
             this.cbStartup.UseVisualStyleBackColor = true;
             // 
             // butSubmit
             // 
-            this.butSubmit.Location = new System.Drawing.Point(134, 12);
+            this.butSubmit.Location = new System.Drawing.Point(201, 18);
+            this.butSubmit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.butSubmit.Name = "butSubmit";
-            this.butSubmit.Size = new System.Drawing.Size(67, 24);
+            this.butSubmit.Size = new System.Drawing.Size(100, 36);
             this.butSubmit.TabIndex = 1;
             this.butSubmit.Text = "保存";
             this.butSubmit.UseVisualStyleBackColor = true;
@@ -56,21 +58,23 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 49);
+            this.label1.Location = new System.Drawing.Point(31, 69);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(193, 17);
+            this.label1.Size = new System.Drawing.Size(285, 24);
             this.label1.TabIndex = 2;
             this.label1.Text = "开机启动监听 + 最小化到系统托盘";
             // 
             // FormStartup
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(237, 67);
+            this.ClientSize = new System.Drawing.Size(356, 100);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.butSubmit);
             this.Controls.Add(this.cbStartup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormStartup";

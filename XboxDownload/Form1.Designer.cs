@@ -329,6 +329,7 @@
             this.cmsCopyUrl = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmCopyUrl1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmCopyUrl2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmAllUrl = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAuthorization1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAuthorization2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
@@ -1017,7 +1018,6 @@
             this.Col_IP.Name = "Col_IP";
             this.Col_IP.ReadOnly = true;
             this.Col_IP.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Col_IP.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Col_ASN
             // 
@@ -1025,7 +1025,6 @@
             this.Col_ASN.Name = "Col_ASN";
             this.Col_ASN.ReadOnly = true;
             this.Col_ASN.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Col_ASN.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Col_TTL
             // 
@@ -1036,7 +1035,6 @@
             this.Col_TTL.Name = "Col_TTL";
             this.Col_TTL.ReadOnly = true;
             this.Col_TTL.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Col_TTL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Col_RoundtripTime
             // 
@@ -1047,7 +1045,6 @@
             this.Col_RoundtripTime.Name = "Col_RoundtripTime";
             this.Col_RoundtripTime.ReadOnly = true;
             this.Col_RoundtripTime.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Col_RoundtripTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Col_Speed
             // 
@@ -1058,7 +1055,6 @@
             this.Col_Speed.Name = "Col_Speed";
             this.Col_Speed.ReadOnly = true;
             this.Col_Speed.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // panel3
             // 
@@ -2554,6 +2550,7 @@
             this.cmsCopyUrl.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmCopyUrl1,
             this.tsmCopyUrl2,
+            this.tsmAllUrl,
             this.tsmAuthorization1,
             this.tsmAuthorization2});
             this.cmsCopyUrl.Name = "cmsCopyUrl";
@@ -2570,6 +2567,12 @@
             this.tsmCopyUrl2.Name = "tsmCopyUrl2";
             resources.ApplyResources(this.tsmCopyUrl2, "tsmCopyUrl2");
             this.tsmCopyUrl2.Click += new System.EventHandler(this.TsmCopyUrl_Click);
+            // 
+            // tsmAllUrl
+            // 
+            this.tsmAllUrl.Name = "tsmAllUrl";
+            resources.ApplyResources(this.tsmAllUrl, "tsmAllUrl");
+            this.tsmAllUrl.Click += new System.EventHandler(this.TsmAllUrl_Click);
             // 
             // tsmAuthorization1
             // 
@@ -2808,12 +2811,6 @@
         private ToolStripMenuItem tsmSpeedTest;
         private ToolStripMenuItem tsmDNSmasp;
         private ToolStripMenuItem tsmHosts;
-        private DataGridViewCheckBoxColumn Col_Check;
-        private DataGridViewTextBoxColumn Col_IP;
-        private DataGridViewTextBoxColumn Col_ASN;
-        private DataGridViewTextBoxColumn Col_TTL;
-        private DataGridViewTextBoxColumn Col_RoundtripTime;
-        private DataGridViewTextBoxColumn Col_Speed;
         private ComboBox cbSpeedTestTimeOut;
         private Label label7;
         private TabPage tabCND;
@@ -2950,10 +2947,17 @@
         private Label label51;
         private LinkLabel linkEaOriginRepair;
         private GroupBox groupBox11;
+        private DataGridViewCheckBoxColumn Col_Check;
+        private DataGridViewTextBoxColumn Col_IP;
+        private DataGridViewTextBoxColumn Col_ASN;
+        private DataGridViewTextBoxColumn Col_TTL;
+        private DataGridViewTextBoxColumn Col_RoundtripTime;
+        private DataGridViewTextBoxColumn Col_Speed;
         private DataGridViewTextBoxColumn Col_DeviceID;
         private DataGridViewTextBoxColumn Col_Model;
         private DataGridViewTextBoxColumn Col_InterfaceType;
         private DataGridViewTextBoxColumn Col_Size;
         private DataGridViewTextBoxColumn Col_Mode;
+        private ToolStripMenuItem tsmAllUrl;
     }
 }

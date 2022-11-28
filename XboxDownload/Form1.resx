@@ -2230,7 +2230,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="dgvIpList.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>35</value>
+    <value>40</value>
   </data>
   <data name="dgvIpList.Size" type="System.Drawing.Size, System.Drawing">
     <value>1432, 651</value>
@@ -2347,13 +2347,13 @@
     <value>1</value>
   </data>
   <data name="butSpeedTest.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1299, 82</value>
+    <value>1299, 78</value>
   </data>
   <data name="butSpeedTest.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="butSpeedTest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 45</value>
+    <value>124, 49</value>
   </data>
   <data name="butSpeedTest.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -3094,7 +3094,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="dgvHosts.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>35</value>
+    <value>40</value>
   </data>
   <data name="dgvHosts.Size" type="System.Drawing.Size, System.Drawing">
     <value>1428, 728</value>
@@ -4621,7 +4621,7 @@
     <value>8</value>
   </data>
   <data name="Col_Model.Width" type="System.Int32, mscorlib">
-    <value>400</value>
+    <value>395</value>
   </data>
   <metadata name="Col_InterfaceType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -4669,7 +4669,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="dgvDevice.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>35</value>
+    <value>40</value>
   </data>
   <data name="dgvDevice.Size" type="System.Drawing.Size, System.Drawing">
     <value>1282, 343</value>
@@ -8794,6 +8794,12 @@ U盘卷标不能有中文。</value>
   <data name="tsmCopyUrl2.Text" xml:space="preserve">
     <value>复制(.com替换为.cn)，国内CDN文件经常有坏块，建议用.com域名</value>
   </data>
+  <data name="tsmAllUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>617, 30</value>
+  </data>
+  <data name="tsmAllUrl.Text" xml:space="preserve">
+    <value>查看运行库等所有相关下载</value>
+  </data>
   <data name="tsmAuthorization1.Size" type="System.Drawing.Size, System.Drawing">
     <value>617, 30</value>
   </data>
@@ -8807,7 +8813,7 @@ U盘卷标不能有中文。</value>
     <value>打开光环无限，点击安装（无需实际安装）</value>
   </data>
   <data name="cmsCopyUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>618, 124</value>
+    <value>618, 154</value>
   </data>
   <data name="&gt;&gt;cmsCopyUrl.Name" xml:space="preserve">
     <value>cmsCopyUrl</value>
@@ -10341,6 +10347,12 @@ U盘卷标不能有中文。</value>
     <value>tsmCopyUrl2</value>
   </data>
   <data name="&gt;&gt;tsmCopyUrl2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmAllUrl.Name" xml:space="preserve">
+    <value>tsmAllUrl</value>
+  </data>
+  <data name="&gt;&gt;tsmAllUrl.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmAuthorization1.Name" xml:space="preserve">
