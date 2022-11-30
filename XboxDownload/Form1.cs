@@ -1295,12 +1295,6 @@ namespace XboxDownload
                 case 4:
                     host = "Akamai";
                     break;
-                case 5:
-                    host = "gst.prod.dl.playstation.net";
-                    break;
-                case 6:
-                    host = "epicgames-download1-1251447533.file.myqcloud.com";
-                    break;
             }
             dgvIpList.Tag = host;
             gbIPList.Text = "IP ¡–±Ì (" + host + ")";
@@ -1603,7 +1597,7 @@ namespace XboxDownload
                     {
                         LinkLabel lb1 = new()
                         {
-                            Tag = "http://epicgames-download1-1251447533.file.myqcloud.com/Builds/UnrealEngineLauncher/Installers/Win32/EpicInstaller-13.3.0.msi?launcherfilename=EpicInstaller-13.3.0.msi",
+                            Tag = "http://epicgames-download1-1251447533.file.myqcloud.com/Builds/UnrealEngineLauncher/Installers/Win32/EpicInstaller-14.2.1.msi?launcherfilename=EpicInstaller-14.2.1.msi",
                             Text = "Epic Games Launcher",
                             AutoSize = true,
                             Parent = this.flpTestUrl
@@ -2313,10 +2307,12 @@ namespace XboxDownload
             }
             if (Regex.IsMatch(url, @"^https?://"))
             {
+                int range = 104857599;              //100M
+                //if (Form1.debug) range = 1048575;   //1M
+
                 string hosts = Regex.Match(url, @"(?<=://)[a-zA-Z\.0-9\-]+(?=\/)").Value;
                 string useragent = url.Contains(".nintendo.net") ? "Nintendo NX" : "XboxDownload";
-                Dictionary<string, string> headers = new() { { "Range", "0-104857599" }, { "Host", hosts }, { "User-Agent", useragent } };
-                //if (debug) headers["Range"] = "0-1048575"; //1M
+                Dictionary<string, string> headers = new() { { "Range", "0-" + range }, { "Host", hosts }, { "User-Agent", useragent } };
                 Stopwatch sw = new();
                 foreach (DataGridViewRow dgvr in ls)
                 {
@@ -2345,7 +2341,7 @@ namespace XboxDownload
                     if (!string.IsNullOrEmpty(url))
                     {
                         sw.Restart();
-                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(hosts, ip), "GET", null, null, headers, timeout, "NoCache", ctsSpeedTest.Token);
+                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(hosts, ip), "GET", null, null, headers, timeout, "SpeedTest", ctsSpeedTest.Token);
                         sw.Stop();
                         if (dgvr.Index >= 0)
                         {
@@ -2356,7 +2352,7 @@ namespace XboxDownload
                             }
                             else if (!ctsSpeedTest.IsCancellationRequested)
                             {
-                                if (response != null) dgvr.Tag = response.ReasonPhrase;
+                                if (response != null) dgvr.Tag = "HTTP/" + response.Version + " " + (int)response.StatusCode + " " + response.StatusCode + "\n" + response.Content.Headers.ToString() + response.Headers.ToString(); //response.ReasonPhrase;
                                 dgvr.Cells["Col_Speed"].Value = (double)0;
                                 dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
                             }
@@ -4056,7 +4052,6 @@ namespace XboxDownload
                     }
                     if (lsDownloadUrl.Count >= 1)
                     {
-                        lsDownloadUrl.Reverse();
                         lsDownloadUrl.Sort((x, y) => string.Compare(x.SubItems[0].Tag.ToString(), y.SubItems[0].Tag.ToString()));
                         lvGame.Items.AddRange(lsDownloadUrl.ToArray());
                     }
@@ -4315,7 +4310,8 @@ namespace XboxDownload
             string? wuCategoryId = lvGame.Tag.ToString();
             if (string.IsNullOrEmpty(wuCategoryId)) return;
             lvGame.Tag = null;
-            lvGame.Items.Add(new ListViewItem(new string[] { "", "", "", "«Î…‘∫Ú..." }));
+            ListViewItem last = new(new string[] { "", "", "", "«Î…‘∫Ú..." });
+            lvGame.Items.Add(last);
             List<String> filter = new();
             foreach (ListViewItem item in lvGame.Items)
             {
@@ -4338,6 +4334,7 @@ namespace XboxDownload
                 List<ListViewItem> list = new();
                 if (json != null && json.Code != null && json.Code == "200" && json.Data != null)
                 {
+                    json.Data.Sort((x, y) => string.Compare(x.Name, y.Name));
                     foreach (var item in json.Data)
                     {
                         if (!string.IsNullOrEmpty(item.Url))
@@ -4362,8 +4359,11 @@ namespace XboxDownload
                 }
                 this.Invoke(new Action(() =>
                 {
-                    lvGame.Items.RemoveAt(lvGame.Items.Count - 1);
-                    if (list.Count > 0) lvGame.Items.AddRange(list.ToArray());
+                    if (last.Index != -1)
+                    {
+                        lvGame.Items.RemoveAt(lvGame.Items.Count - 1);
+                        if (list.Count > 0) lvGame.Items.AddRange(list.ToArray());
+                    }
                 }));
             });
         }

@@ -17,6 +17,7 @@ namespace XboxDownload
     internal class ClassWeb
     {
         public static string language = Thread.CurrentThread.CurrentCulture.Name;
+        public static string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.56";
         private static IHttpClientFactory? httpClientFactory;
 
         public static void HttpClientFactory()
@@ -24,9 +25,10 @@ namespace XboxDownload
             ServiceCollection services = new();
             services.AddHttpClient("default").ConfigureHttpClient(httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "XboxDownload");
+                httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
             }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; },
                 AutomaticDecompression = DecompressionMethods.All
             });
             services.AddHttpClient("XboxDownload").ConfigureHttpClient(httpClient =>
@@ -37,7 +39,7 @@ namespace XboxDownload
             {
                 AutomaticDecompression = DecompressionMethods.All
             });
-            services.AddHttpClient("NoCache").ConfigureHttpClient(httpClient =>
+            services.AddHttpClient("SpeedTest").ConfigureHttpClient(httpClient =>
             {
                 CacheControlHeaderValue cacheControl = new()
                 {
@@ -46,6 +48,9 @@ namespace XboxDownload
                     NoTransform = true,
                 };
                 httpClient.DefaultRequestHeaders.CacheControl = cacheControl;
+            }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                AllowAutoRedirect = false
             });
             services.AddHttpClient("Nothing").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
@@ -85,6 +90,7 @@ namespace XboxDownload
                 {
                     foreach (var header in headers)
                     {
+                        if (string.IsNullOrEmpty(header.Value)) continue;
                         switch (header.Key)
                         {
                             case "Host":
@@ -123,7 +129,7 @@ namespace XboxDownload
                     {
                         ReasonPhrase = ex.Message
                     };
-                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.Message + " " + httpRequestMessage.RequestUri);
                 }
             }
             return response;
@@ -173,6 +179,145 @@ namespace XboxDownload
             return contentType;
         }
 
+        public static SocketPackage TcpRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000)
+        {
+            SocketPackage socketPackage = new()
+            {
+                Uri = uri
+            };
+            String contentencoding = string.Empty;
+            List<Byte> list = new();
+            using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
+                mySocket.SendTimeout = timeout;
+                mySocket.ReceiveTimeout = timeout;
+                try
+                {
+                    if (host == null)
+                        mySocket.Connect(uri.Host, uri.Port);
+                    else
+                        mySocket.Connect(host, uri.Port);
+                }
+                catch (Exception ex)
+                {
+                    socketPackage.Err = ex.Message;
+                }
+                if (mySocket.Connected)
+                {
+                    Byte[] bReceive = new Byte[4096];
+                    Int32 len = -1;
+                    long ContentLength = -1;
+                    String TransferEncoding = "";
+                    mySocket.Send(send, 0, send.Length, SocketFlags.None, out SocketError errorCode);
+                    while ((len = mySocket.Receive(bReceive, 0, bReceive.Length, SocketFlags.None, out errorCode)) > 0)
+                    {
+                        if (len == bReceive.Length) list.AddRange(bReceive);
+                        else
+                        {
+                            Byte[] dest = new Byte[len];
+                            Buffer.BlockCopy(bReceive, 0, dest, 0, len);
+                            list.AddRange(dest);
+                        }
+                        if (String.IsNullOrEmpty(socketPackage.Headers))
+                        {
+                            Byte[] bytes = list.ToArray();
+                            for (int i = 1; i <= bytes.Length - 4; i++)
+                            {
+                                if (BitConverter.ToString(bytes, i, 4) == "0D-0A-0D-0A")
+                                {
+                                    list.Clear();
+                                    Byte[] dest = new Byte[bytes.Length - i - 4];
+                                    Buffer.BlockCopy(bytes, i + 4, dest, 0, dest.Length);
+                                    list.AddRange(dest);
+
+                                    socketPackage.Headers = Encoding.ASCII.GetString(bytes, 0, i + 4);
+                                    Match result = Regex.Match(socketPackage.Headers, @"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.IgnoreCase);
+                                    if (result.Success)
+                                    {
+                                        ContentLength = Convert.ToInt32(result.Groups["ContentLength"].Value);
+                                    }
+                                    result = Regex.Match(socketPackage.Headers, @"Transfer-Encoding:\s*(?<TransferEncoding>.+)", RegexOptions.IgnoreCase);
+                                    if (result.Success)
+                                    {
+                                        TransferEncoding = result.Groups["TransferEncoding"].Value.Trim();
+                                    }
+                                    result = Regex.Match(socketPackage.Headers, @"Content-Encoding:\s*(?<ContentEncoding>.+)", RegexOptions.IgnoreCase);
+                                    if (result.Success)
+                                    {
+                                        contentencoding = result.Groups["ContentEncoding"].Value.Trim().ToLower();
+                                    }
+                                    if (decode && String.IsNullOrEmpty(charset))
+                                    {
+                                        result = Regex.Match(socketPackage.Headers, @"Content-Type:.*charset=(?<charset>.+)", RegexOptions.IgnoreCase);
+                                        if (result.Success)
+                                        {
+                                            charset = result.Groups["charset"].Value.Trim();
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        if (!String.IsNullOrEmpty(socketPackage.Headers))
+                        {
+                            if (TransferEncoding == "chunked")
+                            {
+                                Byte[] bytes = list.ToArray();
+                                if (bytes.Length >= 5 && BitConverter.ToString(bytes, bytes.Length - 5) == "30-0D-0A-0D-0A")
+                                {
+                                    list.Clear();
+                                    int step = 0;
+                                    for (int i = 1; i < bytes.Length - 1; i++)
+                                    {
+                                        if (BitConverter.ToString(bytes, i, 2) == "0D-0A")
+                                        {
+                                            Int32.TryParse(Encoding.ASCII.GetString(bytes, step, i - step), System.Globalization.NumberStyles.HexNumber, null, out int chunk);
+                                            if (chunk == 0) break;
+
+                                            Byte[] dest = new Byte[chunk];
+                                            Buffer.BlockCopy(bytes, i + 2, dest, 0, dest.Length);
+                                            list.AddRange(dest);
+
+                                            i = step = i + 2 + chunk;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                            else if (ContentLength >= 0)
+                            {
+                                if (list.Count == ContentLength) break;
+                            }
+                            else break;
+                        }
+                    }
+                    if (errorCode.ToString() != "Success")
+                        socketPackage.Err = errorCode.ToString();
+                }
+                if (mySocket.Connected)
+                {
+                    try
+                    {
+                        mySocket.Shutdown(SocketShutdown.Both);
+                    }
+                    finally
+                    {
+                        mySocket.Close();
+                    }
+                }
+                mySocket.Dispose();
+            }
+            socketPackage.Buffer = ClassWeb.DeCompress(list.ToArray(), contentencoding);
+            if (decode)
+            {
+                if (String.IsNullOrEmpty(charset)) charset = "utf-8";
+                socketPackage.Html = Encoding.GetEncoding(charset).GetString(socketPackage.Buffer);
+            }
+            return socketPackage;
+        }
+
 
         public static SocketPackage SslRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000)
         {
@@ -184,6 +329,8 @@ namespace XboxDownload
             List<Byte> list = new();
             using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
                 mySocket.SendTimeout = timeout;
                 mySocket.ReceiveTimeout = timeout;
                 try
@@ -372,8 +519,6 @@ namespace XboxDownload
                     return buffer;
             }
         }
-
-        
 
         internal static Object docLock = new();
         internal static WebBrowser? webb = null;

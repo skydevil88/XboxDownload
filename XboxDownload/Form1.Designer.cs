@@ -1159,9 +1159,7 @@
             resources.GetString("cbImportIP.Items1"),
             resources.GetString("cbImportIP.Items2"),
             resources.GetString("cbImportIP.Items3"),
-            resources.GetString("cbImportIP.Items4"),
-            resources.GetString("cbImportIP.Items5"),
-            resources.GetString("cbImportIP.Items6")});
+            resources.GetString("cbImportIP.Items4")});
             resources.ApplyResources(this.cbImportIP, "cbImportIP");
             this.cbImportIP.Name = "cbImportIP";
             this.cbImportIP.SelectedIndexChanged += new System.EventHandler(this.CbImportIP_SelectedIndexChanged);

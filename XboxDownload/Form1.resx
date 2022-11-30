@@ -2595,12 +2595,6 @@
   <data name="cbImportIP.Items4" xml:space="preserve">
     <value>4.Xbox &amp; NS &amp; EA &amp; 战网 (Akamai)</value>
   </data>
-  <data name="cbImportIP.Items5" xml:space="preserve">
-    <value>5.PlayStation 3/4/5 游戏下载</value>
-  </data>
-  <data name="cbImportIP.Items6" xml:space="preserve">
-    <value>6.Epic Games (腾讯云)</value>
-  </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>940, 6</value>
   </data>
