@@ -1,6 +1,6 @@
 # Xbox下载助手
 
-Xbox下载助手-网页版：https://xbox.skydevil.xyz
+Xbox下载助手-商店网页版：https://xbox.skydevil.xyz
 
 [OpenWrt 域名跳转加速](./README_OpenWrt.md)
 

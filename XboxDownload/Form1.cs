@@ -497,7 +497,7 @@ namespace XboxDownload
                 string? dnsIP = null;
                 if (!string.IsNullOrEmpty(tbDnsIP.Text.Trim()))
                 {
-                    if (IPAddress.TryParse(tbDnsIP.Text, out IPAddress? ipAddress))
+                    if (IPAddress.TryParse(tbDnsIP.Text, out IPAddress? ipAddress)&& !IPAddress.IsLoopback(ipAddress))
                     {
                         dnsIP = ipAddress.ToString();
                     }
@@ -1360,50 +1360,8 @@ namespace XboxDownload
 
         private void AddTestUrl(string host)
         {
-            string[,] xboxGames = new string[,]
-            {
-                {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/ec6a6cd6-a71d-4311-a4f3-f9ee327a8c14/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3651.1607.0.d1423751-3eb5-4b3c-9655-1dbb60256e18/Microsoft.254428597CFE2_1.3651.1607.0_x64__8wekyb3d8bbwe.msixvc" },
-                {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/13/da696217-ac96-43aa-a8eb-6b7e9b54337d/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.527.960.0.7e816066-8a60-4c0d-93e5-7cd0ffa7c288/Microsoft.624F8B84B80_3.527.960.0_x64__8wekyb3d8bbwe.msixvc" },
-                {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
-            };
             switch (host)
             {
-                case "xvcf1.xboxlive.com":
-                case "xvcf2.xboxlive.com":
-                case "assets1.xboxlive.com":
-                case "assets2.xboxlive.com":
-                case "d1.xboxlive.com":
-                case "d2.xboxlive.com":
-                case "dlassets.xboxlive.com":
-                case "dlassets2.xboxlive.com":
-                    {
-                        LinkLabel lb1 = new()
-                        {
-                            Tag = "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
-                            Text = "Xbox测速文件",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        for (int i = 0; i <= xboxGames.GetLength(0) - 1; i++)
-                        {
-                            string? url = null;
-                            if (XboxGameDownload.dicXboxGame.TryGetValue(xboxGames[i, 1], out XboxGameDownload.Products? XboxGame))
-                            {
-                                url = XboxGame.Url?.Replace(".xboxlive.cn", ".xboxlive.com");
-                            }
-                            if (string.IsNullOrEmpty(url)) url = "http://assets1.xboxlive.com" + xboxGames[i, 2];
-                            LinkLabel lb = new()
-                            {
-                                Tag = url,
-                                Text = xboxGames[i, 0],
-                                AutoSize = true,
-                                Parent = this.flpTestUrl
-                            };
-                            lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        }
-                    }
-                    break;
                 case "assets1.xboxlive.cn":
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
@@ -1417,10 +1375,16 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        for (int i = 0; i <= xboxGames.GetLength(0) - 1; i++)
+                        string[,] games = new string[,]
+                        {
+                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/ec6a6cd6-a71d-4311-a4f3-f9ee327a8c14/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3651.1607.0.d1423751-3eb5-4b3c-9655-1dbb60256e18/Microsoft.254428597CFE2_1.3651.1607.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/13/da696217-ac96-43aa-a8eb-6b7e9b54337d/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.527.960.0.7e816066-8a60-4c0d-93e5-7cd0ffa7c288/Microsoft.624F8B84B80_3.527.960.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
+                        };
+                        for (int i = 0; i <= games.GetLength(0) - 1; i++)
                         {
                             string? url = null;
-                            if (XboxGameDownload.dicXboxGame.TryGetValue(xboxGames[i, 1], out XboxGameDownload.Products? XboxGame))
+                            if (XboxGameDownload.dicXboxGame.TryGetValue(games[i, 1], out XboxGameDownload.Products? XboxGame))
                             {
                                 url = XboxGame.Url;
                                 if (url == null) continue;
@@ -1432,11 +1396,11 @@ namespace XboxDownload
                                     _ => url.Replace(".xboxlive.com", ".xboxlive.cn"),
                                 };
                             }
-                            if (string.IsNullOrEmpty(url)) url = "http://assets1.xboxlive.cn" + xboxGames[i, 2];
+                            if (string.IsNullOrEmpty(url)) url = "http://assets1.xboxlive.cn" + games[i, 2];
                             LinkLabel lb = new()
                             {
                                 Tag = url,
-                                Text = xboxGames[i, 0],
+                                Text = games[i, 0],
                                 AutoSize = true,
                                 Parent = this.flpTestUrl
                             };
@@ -1447,18 +1411,11 @@ namespace XboxDownload
                 case "dlassets.xboxlive.cn":
                 case "dlassets2.xboxlive.cn":
                     {
-                        LinkLabel lb1 = new()
-                        {
-                            Tag = "http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt",
-                            Text = "Xbox测速文件",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
                             {"光之子(国服)", "fe238acf-b298-408c-94c5-97c921640c02_x", "/public/content/77d0d59a-34b7-4482-a1c7-c0abbed17de2/fe238acf-b298-408c-94c5-97c921640c02/1.0.0.1.7c96decd-b0bf-47e0-ab50-c593d2c2983a/ChildOfLight-CH_1.0.0.1_x64__b6krnev7r9sf8" },
-                            {"麦克斯：兄弟魔咒(国服)", "1e2131e1-299c-4df1-bdb6-84a38e07ea9f_x", "/public/content/1d6640d3-3441-42bd-bffd-953d7d09ff5c/1e2131e1-299c-4df1-bdb6-84a38e07ea9f/1.5.0.0.6bd5e6cb-7547-4c90-a84c-ee06ba0bdf5b/Microsoft.Max_1.5.0.0_neutral__ph1m9x8skttmg" }
+                            {"麦克斯:兄弟魔咒(国服)", "1e2131e1-299c-4df1-bdb6-84a38e07ea9f_x", "/public/content/1d6640d3-3441-42bd-bffd-953d7d09ff5c/1e2131e1-299c-4df1-bdb6-84a38e07ea9f/1.5.0.0.6bd5e6cb-7547-4c90-a84c-ee06ba0bdf5b/Microsoft.Max_1.5.0.0_neutral__ph1m9x8skttmg" },
+                            {"型可塑(国服)", "22f22996-d089-4cc2-9919-3b0ef9fa783f_x", "/public/content/1c4b6e60-b2e3-420c-a8a8-540fb14c9286/22f22996-d089-4cc2-9919-3b0ef9fa783f/1.0.0.6.ec5e1d6e-4d07-41d0-8312-66bf5bcd7815/SHPUPCH446612E0_1.0.0.6_x64__zjr0dfhgjwvde" }
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
                         {
@@ -1522,38 +1479,6 @@ namespace XboxDownload
                         };
                     }
                     break;
-                case "gst.prod.dl.playstation.net":
-                case "gs2.ww.prod.dl.playstation.net":
-                case "zeus.dl.playstation.net":
-                case "ares.dl.playstation.net":
-                    {
-                        // ====================================================  有PS主机的玩家可以帮忙更新测速文件  ====================================================
-                        LinkLabel lb1 = new()
-                        {
-                            Tag = "http://gst.prod.dl.playstation.net/gst/prod/00/PPSA01559_00/app/pkg/3/f_74b53478b371caae3fa56806be11f158fdbdc12d5dbf943fd070bb9d1f7536e8/HP0102-PPSA01559_00-VILLAGEFULLGAMEX_0.pkg",
-                            Text = "生化危机8(PS5)",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        LinkLabel lb2 = new()
-                        {
-                            Tag = "http://gs2.ww.prod.dl.playstation.net/gs2/appkgo/prod/CUSA18045_00/4/f_9671561044a3d7c67e7258ff87e2da8e486cc36cb73ebbef61faa91e6fc56bcd/f/HP0102-CUSA18045_00-VILLAGEFULLGAMEX_0.pkg",
-                            Text = "生化危机8(PS4)",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        LinkLabel lb3 = new()
-                        {
-                            Tag = "http://zeus.dl.playstation.net/cdn/UP1004/NPUB31154_00/eISFknCNDxqSsVVywSenkJdhzOIfZjrqKHcuGBHEGvUxQJksdPvRNYbIyWcxFsvH.pkg",
-                            Text = "侠盗猎车手5(PS3)",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                    }
-                    break;
                 case "Akamai":
                 case "origin-a.akamaihd.net":
                 case "blzddist1-a.akamaihd.net":
@@ -1591,18 +1516,6 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                    }
-                    break;
-                case "epicgames-download1-1251447533.file.myqcloud.com":
-                    {
-                        LinkLabel lb1 = new()
-                        {
-                            Tag = "http://epicgames-download1-1251447533.file.myqcloud.com/Builds/UnrealEngineLauncher/Installers/Win32/EpicInstaller-14.2.1.msi?launcherfilename=EpicInstaller-14.2.1.msi",
-                            Text = "Epic Games Launcher",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                     }
                     break;
             }
@@ -1863,32 +1776,6 @@ namespace XboxDownload
                 string msg = string.Empty;
                 switch (host)
                 {
-                    case "xvcf1.xboxlive.com":
-                    case "xvcf2.xboxlive.com":
-                    case "assets1.xboxlive.com":
-                    case "assets2.xboxlive.com":
-                    case "d1.xboxlive.com":
-                    case "d2.xboxlive.com":
-                    case "dlassets.xboxlive.com":
-                    case "dlassets2.xboxlive.com":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.xboxlive\.com\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " xvcf1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " xvcf2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " assets1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " assets2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " d1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " d2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " dlassets.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " dlassets2.xboxlive.com # " + Form1.appName);
-                        ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
-                        break;
-                    case "dl.delivery.mp.microsoft.com":
-                    case "tlu.dl.delivery.mp.microsoft.com":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.delivery\.mp\.microsoft\.com\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # " + Form1.appName);
-                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # " + Form1.appName);
-                        ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
-                        break;
                     case "assets1.xboxlive.cn":
                     case "assets2.xboxlive.cn":
                     case "d1.xboxlive.cn":
@@ -1909,29 +1796,28 @@ namespace XboxDownload
                         msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
                         ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                         break;
-                    case "gst.prod.dl.playstation.net":
-                    case "gs2.ww.prod.dl.playstation.net":
-                    case "zeus.dl.playstation.net":
-                    case "ares.dl.playstation.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.dl\.playstation\.net\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " gst.prod.dl.playstation.net # " + Form1.appName);
-                        sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # " + Form1.appName);
-                        sb.AppendLine(ip + " zeus.dl.playstation.net # " + Form1.appName);
-                        sb.AppendLine(ip + " ares.dl.playstation.net # " + Form1.appName);
+                    case "dl.delivery.mp.microsoft.com":
+                    case "tlu.dl.delivery.mp.microsoft.com":
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.delivery\.mp\.microsoft\.com\s+# " + Form1.appName + "\r\n", "");
+                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # " + Form1.appName);
+                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # " + Form1.appName);
+                        ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                         break;
                     case "Akamai":
                     case "atum.hac.lp1.d4c.nintendo.net":
                     case "origin-a.akamaihd.net":
                     case "blzddist1-a.akamaihd.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+(\.xboxlive\.com|\.nintendo\.net|\.cdn\.ea\.com|\.akamaihd\.net)\s+# " + Form1.appName + "\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+(\.xboxlive\.com|\.delivery\.mp\.microsoft\.com|\.nintendo\.net|\.cdn\.ea\.com|\.akamaihd\.net)\s+# " + Form1.appName + "\r\n", "");
                         sb.AppendLine(ip + " xvcf1.xboxlive.com # " + Form1.appName);
                         sb.AppendLine(ip + " xvcf2.xboxlive.com # " + Form1.appName);
                         sb.AppendLine(ip + " assets1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " dlassets2.xboxlive.com # " + Form1.appName);
+                        sb.AppendLine(ip + " assets2.xboxlive.com # " + Form1.appName);
                         sb.AppendLine(ip + " d1.xboxlive.com # " + Form1.appName);
                         sb.AppendLine(ip + " d2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " assets2.xboxlive.com # " + Form1.appName);
                         sb.AppendLine(ip + " dlassets.xboxlive.com # " + Form1.appName);
+                        sb.AppendLine(ip + " dlassets2.xboxlive.com # " + Form1.appName);
+                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # " + Form1.appName);
+                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # " + Form1.appName);
                         sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # " + Form1.appName);
                         sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net # " + Form1.appName);
                         sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net # " + Form1.appName);
@@ -1941,11 +1827,6 @@ namespace XboxDownload
                         sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # " + Form1.appName);
                         sb.AppendLine(ip + " blzddist1-a.akamaihd.net # " + Form1.appName);
                         msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网只能用监听方式加速。";
-                        break;
-                    case "epicgames-download1-1251447533.file.myqcloud.com":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+" + host + @"\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " " + host + " # " + Form1.appName);
-                        msg = "\n需要重启 Epic Games Launcher 才能生效。";
                         break;
                     default:
                         sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+" + host + @"\s+# " + Form1.appName + "\r\n", "");
@@ -1977,50 +1858,6 @@ namespace XboxDownload
             string msg = string.Empty;
             switch (host)
             {
-                case "xvcf1.xboxlive.com":
-                case "xvcf2.xboxlive.com":
-                case "assets1.xboxlive.com":
-                case "assets2.xboxlive.com":
-                case "d1.xboxlive.com":
-                case "d2.xboxlive.com":
-                case "dlassets.xboxlive.com":
-                case "dlassets2.xboxlive.com":
-                    if (tsmi.Name == "tsmDNSmasp")
-                    {
-                        sb.AppendLine("address=/xvcf1.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/xvcf2.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/assets1.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/assets2.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/d1.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/d2.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/dlassets.xboxlive.com/" + ip);
-                        sb.AppendLine("address=/dlassets2.xboxlive.com/" + ip);
-                    }
-                    else
-                    {
-                        sb.AppendLine(ip + " xvcf1.xboxlive.com");
-                        sb.AppendLine(ip + " xvcf2.xboxlive.com");
-                        sb.AppendLine(ip + " assets1.xboxlive.com");
-                        sb.AppendLine(ip + " assets2.xboxlive.com");
-                        sb.AppendLine(ip + " d1.xboxlive.com");
-                        sb.AppendLine(ip + " d2.xboxlive.com");
-                        sb.AppendLine(ip + " dlassets.xboxlive.com");
-                        sb.AppendLine(ip + " dlassets2.xboxlive.com");
-                    }
-                    break;
-                case "dl.delivery.mp.microsoft.com":
-                case "tlu.dl.delivery.mp.microsoft.com":
-                    if (tsmi.Name == "tsmDNSmasp")
-                    {
-                        sb.AppendLine("address=/dl.delivery.mp.microsoft.com/" + ip);
-                        sb.AppendLine("address=/tlu.dl.delivery.mp.microsoft.com/" + ip);
-                    }
-                    else
-                    {
-                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com");
-                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com");
-                    }
-                    break;
                 case "assets1.xboxlive.cn":
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
@@ -2055,23 +1892,17 @@ namespace XboxDownload
                     }
                     msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
                     break;
-                case "gst.prod.dl.playstation.net":
-                case "gs2.ww.prod.dl.playstation.net":
-                case "zeus.dl.playstation.net":
-                case "ares.dl.playstation.net":
+                case "dl.delivery.mp.microsoft.com":
+                case "tlu.dl.delivery.mp.microsoft.com":
                     if (tsmi.Name == "tsmDNSmasp")
                     {
-                        sb.AppendLine("address=/gst.prod.dl.playstation.net/" + ip);
-                        sb.AppendLine("address=/gs2.ww.prod.dl.playstation.net/" + ip);
-                        sb.AppendLine("address=/zeus.dl.playstation.net/" + ip);
-                        sb.AppendLine("address=/ares.dl.playstation.net/" + ip);
+                        sb.AppendLine("address=/dl.delivery.mp.microsoft.com/" + ip);
+                        sb.AppendLine("address=/tlu.dl.delivery.mp.microsoft.com/" + ip);
                     }
                     else
                     {
-                        sb.AppendLine(ip + " gst.prod.dl.playstation.net");
-                        sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net");
-                        sb.AppendLine(ip + " zeus.dl.playstation.net");
-                        sb.AppendLine(ip + " ares.dl.playstation.net");
+                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com");
+                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com");
                     }
                     break;
                 case "Akamai":
@@ -2089,6 +1920,8 @@ namespace XboxDownload
                         sb.AppendLine("address=/d2.xboxlive.com/" + ip);
                         sb.AppendLine("address=/dlassets.xboxlive.com/" + ip);
                         sb.AppendLine("address=/dlassets2.xboxlive.com/" + ip);
+                        sb.AppendLine("address=/dl.delivery.mp.microsoft.com/" + ip);
+                        sb.AppendLine("address=/tlu.dl.delivery.mp.microsoft.com/" + ip);
                         sb.AppendLine();
                         sb.AppendLine("# Nintendo Switch");
                         sb.AppendLine("address=/atum.hac.lp1.d4c.nintendo.net/" + ip);
@@ -2113,6 +1946,8 @@ namespace XboxDownload
                         sb.AppendLine(ip + " d2.xboxlive.com");
                         sb.AppendLine(ip + " dlassets.xboxlive.com");
                         sb.AppendLine(ip + " dlassets2.xboxlive.com");
+                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com");
+                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com");
                         sb.AppendLine();
                         sb.AppendLine("# Nintendo Switch");
                         sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net");
@@ -2307,12 +2142,13 @@ namespace XboxDownload
             }
             if (Regex.IsMatch(url, @"^https?://"))
             {
-                int range = 104857599;              //100M
-                //if (Form1.debug) range = 1048575;   //1M
+                int range = 104857599;                  //100M
+                //if (Form1.debug) range = 1048575;     //1M
 
-                string hosts = Regex.Match(url, @"(?<=://)[a-zA-Z\.0-9\-]+(?=\/)").Value;
                 string useragent = url.Contains(".nintendo.net") ? "Nintendo NX" : "XboxDownload";
-                Dictionary<string, string> headers = new() { { "Range", "0-" + range }, { "Host", hosts }, { "User-Agent", useragent } };
+                string host = Regex.Match(url, @"(?<=://)[a-zA-Z\.0-9\-]+(?=\/)").Value;
+                /*
+                Dictionary<string, string> headers = new() { { "Range", "0-" + range }, { "Host", host }, { "User-Agent", useragent } };
                 Stopwatch sw = new();
                 foreach (DataGridViewRow dgvr in ls)
                 {
@@ -2341,18 +2177,17 @@ namespace XboxDownload
                     if (!string.IsNullOrEmpty(url))
                     {
                         sw.Restart();
-                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(hosts, ip), "GET", null, null, headers, timeout, "SpeedTest", ctsSpeedTest.Token);
+                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(host, ip), "GET", null, null, headers, timeout, "SpeedTest", ctsSpeedTest.Token);
                         sw.Stop();
                         if (dgvr.Index >= 0)
                         {
+                            if (response != null) dgvr.Tag = "HTTP/" + response.Version + " " + (int)response.StatusCode + " " + response.ReasonPhrase + "\n" + response.Content.Headers.ToString() + response.Headers.ToString();
                             if (response != null && response.IsSuccessStatusCode)
                             {
-                                dgvr.Tag = "HTTP/" + response.Version + " " + (int)response.StatusCode + " " + response.StatusCode + "\n" + response.Content.Headers.ToString() + response.Headers.ToString();
                                 dgvr.Cells["Col_Speed"].Value = Math.Round((double)(response.Content.ReadAsByteArrayAsync().Result.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
                             }
                             else if (!ctsSpeedTest.IsCancellationRequested)
                             {
-                                if (response != null) dgvr.Tag = "HTTP/" + response.Version + " " + (int)response.StatusCode + " " + response.StatusCode + "\n" + response.Content.Headers.ToString() + response.Headers.ToString(); //response.ReasonPhrase;
                                 dgvr.Cells["Col_Speed"].Value = (double)0;
                                 dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
                             }
@@ -2366,6 +2201,71 @@ namespace XboxDownload
                     else dgvr.Cells["Col_Speed"].Value = null;
                 }
                 GC.Collect();
+                */
+                Uri? uri = null;
+                try
+                {
+                    uri = new Uri(url);
+                }
+                catch { }
+                if(uri != null)
+                {
+                    StringBuilder sb = new();
+                    sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
+                    sb.AppendLine("Host: " + host);
+                    sb.AppendLine("User-Agent: " + useragent);
+                    sb.AppendLine("Range: bytes=0-" + range);
+                    sb.AppendLine();
+                    byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
+
+                    Stopwatch sw = new();
+                    foreach (DataGridViewRow dgvr in ls)
+                    {
+                        if (ctsSpeedTest.IsCancellationRequested) break;
+                        string ip = dgvr.Cells["Col_IP"].Value.ToString() ?? string.Empty;
+                        dgvr.Cells["Col_TTL"].Value = null;
+                        dgvr.Cells["Col_RoundtripTime"].Value = null;
+                        dgvr.Cells["Col_Speed"].Value = "正在测试";
+                        dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
+                        dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
+                        dgvr.Tag = null;
+
+                        using (Ping p1 = new())
+                        {
+                            try
+                            {
+                                PingReply reply = p1.Send(ip);
+                                if (reply.Status == IPStatus.Success)
+                                {
+                                    dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
+                                    dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
+                                }
+                            }
+                            catch { }
+                        }
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            sw.Restart();
+                            SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.SslRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
+                            sw.Stop();
+                            if (dgvr.Index >= 0)
+                            {
+                                dgvr.Tag = string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
+                                if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
+                                {
+                                    dgvr.Cells["Col_Speed"].Value = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
+                                }
+                                else
+                                {
+                                    dgvr.Cells["Col_Speed"].Value = (double)0;
+                                    dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
+                                }
+                            }
+                        }
+                        else dgvr.Cells["Col_Speed"].Value = null;
+                    }
+                    GC.Collect();
+                }
             }
             ctsSpeedTest = null;
             this.Invoke(new Action(() =>
@@ -3368,7 +3268,7 @@ namespace XboxDownload
             }
             if (lsBundledId.Count >= 1)
             {
-                url = "https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds=" + string.Join(",", lsBundledId.ToArray()) + "&market=US&languages=" + ClassWeb.language + "&MS-CV=DGU1mcuYo0WMMp+F.1";
+                url = "https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds=" + string.Join(",", lsBundledId.ToArray()) + "&market=US&languages=zh-Hans,zh-Hant&MS-CV=DGU1mcuYo0WMMp+F.1";
                 html = ClassWeb.HttpResponseContent(url);
                 if (Regex.IsMatch(html, @"^{.+}$", RegexOptions.Singleline))
                 {

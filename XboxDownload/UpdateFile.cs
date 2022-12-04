@@ -14,12 +14,12 @@ namespace XboxDownload
         private const string testFile = "XboxDownload.exe.md5";
         public const string pdfFile = "ProductManual.pdf";
         public const string dataFile = "XboxGame.json";
-
-
         private static readonly string[,] proxys = {
             { "proxy", "https://ghproxy.com/" },
             { "proxy", "https://gh.api.99988866.xyz/" },
             { "proxy", "https://github.91chi.fun/" },
+            { "proxy", "https://ghps.cc/" },
+            { "proxy", "https://proxy.zyun.vip/" },
             //{ "mirror", "https://cdn.githubjs.cf/" },   //失效
             //{ "mirror", "https://hub.fastgit.xyz/" },   //失效
             { "direct", "" }
@@ -37,12 +37,12 @@ namespace XboxDownload
                 string updateUrl = proxys[i, 0] switch
                 {
                     "proxy" => proxys[i, 1] + UpdateFile.updateUrl,
-                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"https?://[^/]+/", ""),
+                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"^https?://[^/]+/", ""),
                     _ => UpdateFile.updateUrl
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string html = ClassWeb.HttpResponseContent(updateUrl + UpdateFile.filePath + UpdateFile.testFile);
+                    string html = ClassWeb.HttpResponseContent(updateUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
                     if (string.IsNullOrEmpty(md5) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
                     {
                         md5 = html;
@@ -106,36 +106,36 @@ namespace XboxDownload
                         if (!Directory.Exists(Form1.resourcePath))
                             Directory.CreateDirectory(Form1.resourcePath);
                         byte[] buffer = response2.Content.ReadAsByteArrayAsync().Result;
-                        using FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        fs.Write(buffer, 0, buffer.Length);
-                        fs.Flush();
-                        fs.Close();
-
-                        string tempDir = Form1.resourcePath + @"\Temp";
-                        if (Directory.Exists(tempDir))
-                            Directory.Delete(tempDir, true);
-
-                        ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
-                        DirectoryInfo di = new(tempDir + @"\Xbox下载助手");
-
-                        if (di.Exists)
+                        if (buffer.Length > 0)
                         {
-                            parentForm.Invoke(new Action(() =>
+                            using FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                            fs.Write(buffer, 0, buffer.Length);
+                            fs.Flush();
+                            fs.Close();
+                            string tempDir = Form1.resourcePath + @"\Temp";
+                            if (Directory.Exists(tempDir))
+                                Directory.Delete(tempDir, true);
+                            ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
+                            DirectoryInfo di = new(tempDir + @"\Xbox下载助手");
+                            if (di.Exists)
                             {
-                                if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
-                                parentForm.notifyIcon1.Visible = false;
-                            }));
-                            string cmd = "choice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q "+ Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
-                            File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd, Encoding.GetEncoding(0));
-                            using (Process p = new())
-                            {
-                                p.StartInfo.FileName = "cmd.exe";
-                                p.StartInfo.UseShellExecute = false;
-                                p.StartInfo.CreateNoWindow = true;
-                                p.StartInfo.Arguments = "/c \"" + tempDir + "\\.update.cmd\"";
-                                p.Start();
+                                parentForm.Invoke(new Action(() =>
+                                {
+                                    if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
+                                    parentForm.notifyIcon1.Visible = false;
+                                }));
+                                string cmd = "choice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
+                                File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd, Encoding.GetEncoding(0));
+                                using (Process p = new())
+                                {
+                                    p.StartInfo.FileName = "cmd.exe";
+                                    p.StartInfo.UseShellExecute = false;
+                                    p.StartInfo.CreateNoWindow = true;
+                                    p.StartInfo.Arguments = "/c \"" + tempDir + "\\.update.cmd\"";
+                                    p.Start();
+                                }
+                                Process.GetCurrentProcess().Kill();
                             }
-                            Process.GetCurrentProcess().Kill();
                         }
                     }
                 }
@@ -156,7 +156,7 @@ namespace XboxDownload
                 string updateUrl = proxys[i, 0] switch
                 {
                     "proxy" => proxys[i, 1] + UpdateFile.updateUrl,
-                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"https?://[^/]+/", ""),
+                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"^https?://[^/]+/", ""),
                     _ => UpdateFile.updateUrl
                 };
                 tasks[i] = new Task(() =>
@@ -165,9 +165,10 @@ namespace XboxDownload
                     if (string.IsNullOrEmpty(md5) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
                     {
                         md5 = html;
-                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(updateUrl + UpdateFile.filePath + fi.Name, "GET", null, null, null, 180000);
+                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(updateUrl + UpdateFile.filePath + fi.Name, "GET", null, null, null, 60000);
                         if (response != null && response.IsSuccessStatusCode)
                         {
+                            /*
                             using Stream stream = response.Content.ReadAsStreamAsync().Result;
                             if (stream.Length > 0)
                             {
@@ -175,6 +176,18 @@ namespace XboxDownload
                                     Directory.CreateDirectory(fi.DirectoryName);
                                 using FileStream fileStream = fi.Create();
                                 stream.CopyToAsync(fileStream);
+                                fi.Refresh();
+                            }
+                            */
+                            byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
+                            if (buffer.Length > 0)
+                            {
+                                if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
+                                    Directory.CreateDirectory(fi.DirectoryName);
+                                using FileStream fs = new(fi.FullName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                                fs.Write(buffer, 0, buffer.Length);
+                                fs.Flush();
+                                fs.Close();
                                 fi.Refresh();
                             }
                         }

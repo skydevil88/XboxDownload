@@ -63,7 +63,7 @@ namespace XboxDownload
                     {
                         if (dns.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            if (dns.ToString() == Properties.Settings.Default.LocalIP)
+                            if (dns.ToString() == Properties.Settings.Default.LocalIP || IPAddress.IsLoopback(dns))
                                 continue;
                             iPEndPoint = new IPEndPoint(dns, port);
                             break;

@@ -179,7 +179,7 @@ namespace XboxDownload
             return contentType;
         }
 
-        public static SocketPackage TcpRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000)
+        public static SocketPackage TcpRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000, CancellationTokenSource? cts = null)
         {
             SocketPackage socketPackage = new()
             {
@@ -187,12 +187,13 @@ namespace XboxDownload
             };
             String contentencoding = string.Empty;
             List<Byte> list = new();
+            DateTime endtime = DateTime.Now.AddMilliseconds(timeout);
             using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
-                mySocket.SendTimeout = timeout;
-                mySocket.ReceiveTimeout = timeout;
+                mySocket.SendTimeout = 6000;
+                mySocket.ReceiveTimeout = 6000;
                 try
                 {
                     if (host == null)
@@ -292,6 +293,7 @@ namespace XboxDownload
                             }
                             else break;
                         }
+                        if ((cts != null && cts.IsCancellationRequested) || DateTime.Compare(endtime, DateTime.Now) < 0) break;
                     }
                     if (errorCode.ToString() != "Success")
                         socketPackage.Err = errorCode.ToString();
@@ -319,7 +321,7 @@ namespace XboxDownload
         }
 
 
-        public static SocketPackage SslRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000)
+        public static SocketPackage SslRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000, CancellationTokenSource? cts = null)
         {
             SocketPackage socketPackage = new()
             {
@@ -327,12 +329,13 @@ namespace XboxDownload
             };
             String contentencoding = string.Empty;
             List<Byte> list = new();
+            DateTime endtime = DateTime.Now.AddMilliseconds(timeout);
             using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
-                mySocket.SendTimeout = timeout;
-                mySocket.ReceiveTimeout = timeout;
+                mySocket.SendTimeout = 6000;
+                mySocket.ReceiveTimeout = 6000;
                 try
                 {
                     if (host == null)
@@ -441,6 +444,7 @@ namespace XboxDownload
                                     }
                                     else break;
                                 }
+                                if ((cts != null && cts.IsCancellationRequested) || DateTime.Compare(endtime, DateTime.Now) < 0) break;
                             }
                         }
                     }
