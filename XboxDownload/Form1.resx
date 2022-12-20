@@ -2377,7 +2377,7 @@
     <value>True</value>
   </data>
   <data name="tbDlUrl.PlaceholderText" xml:space="preserve">
-    <value>请关闭加速器、代理软件再开始测速，下载速度换算公式：1 MB/s = 8 Mbps</value>
+    <value>请关闭加速器、代理软件再开始测速，下载速度换算公式：1 MB/s = 8 Mbps；国内IP一般只需测本省IP，可以使用查找功能筛选。</value>
   </data>
   <data name="tbDlUrl.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
     <value>Both</value>
@@ -4837,7 +4837,7 @@
     <value>4</value>
   </data>
   <data name="lvGameSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>150, 96</value>
+    <value>149, 93</value>
   </data>
   <data name="lvGameSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>

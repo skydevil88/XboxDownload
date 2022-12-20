@@ -333,6 +333,7 @@ namespace XboxDownload
 
         private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.Show();
             switch (tabControl1.SelectedTab.Name)
             {
                 case "tabStore":
@@ -1040,12 +1041,9 @@ namespace XboxDownload
 
         private void LvLog_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && lvLog.SelectedItems.Count == 1)
             {
-                if (lvLog.SelectedItems.Count == 1)
-                {
-                    cmsLog.Show(MousePosition.X, MousePosition.Y);
-                }
+                cmsLog.Show(MousePosition.X, MousePosition.Y);
             }
         }
 
@@ -1124,7 +1122,6 @@ namespace XboxDownload
             dgvIpList.ClearSelection();
             DataGridViewRow dgvr = dgvIpList.Rows[e.RowIndex];
             dgvr.Selected = true;
-            tsmCopyLog.Visible = tsmExportLog.Visible = false;
             tsmUseIP.Visible = tsmExportRule.Visible = true;
             foreach (var item in this.tsmUseIP.DropDownItems)
             {
@@ -1377,8 +1374,8 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/ec6a6cd6-a71d-4311-a4f3-f9ee327a8c14/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3651.1607.0.d1423751-3eb5-4b3c-9655-1dbb60256e18/Microsoft.254428597CFE2_1.3651.1607.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/13/da696217-ac96-43aa-a8eb-6b7e9b54337d/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.527.960.0.7e816066-8a60-4c0d-93e5-7cd0ffa7c288/Microsoft.624F8B84B80_3.527.960.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/10/bfd7560c-f314-4a6e-b8e6-da2a09f63018/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3689.20075.0.eaaa434b-a879-4a95-bda8-b5c8235297d7/Microsoft.254428597CFE2_1.3689.20075.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/11/a9b79080-5523-4dc2-9fad-a87bfcf9ed78/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.538.198.0.08509ea5-f4eb-44d0-a697-f866b6ade093/Microsoft.624F8B84B80_3.538.198.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -1386,15 +1383,17 @@ namespace XboxDownload
                             string? url = null;
                             if (XboxGameDownload.dicXboxGame.TryGetValue(games[i, 1], out XboxGameDownload.Products? XboxGame))
                             {
-                                url = XboxGame.Url;
-                                if (url == null) continue;
-                                string hosts = Regex.Match(url, @"(?<=://)[a-zA-Z\.0-9]+(?=\/)").Value;
-                                url = hosts switch
+                                if (XboxGame.Url != null && XboxGame.Version > new Version(Regex.Match(games[i, 2], @"(\d+\.\d+\.\d+\.\d+)").Value))
                                 {
-                                    "xvcf1.xboxlive.com" => url.Replace("xvcf1.xboxlive.com", "assets1.xboxlive.cn"),
-                                    "xvcf2.xboxlive.com" => url.Replace("xvcf2.xboxlive.com", "assets2.xboxlive.cn"),
-                                    _ => url.Replace(".xboxlive.com", ".xboxlive.cn"),
-                                };
+                                    url = XboxGame.Url;
+                                    string hosts = Regex.Match(url, @"(?<=://)[a-zA-Z\.0-9]+(?=\/)").Value;
+                                    url = hosts switch
+                                    {
+                                        "xvcf1.xboxlive.com" => url.Replace("xvcf1.xboxlive.com", "assets1.xboxlive.cn"),
+                                        "xvcf2.xboxlive.com" => url.Replace("xvcf2.xboxlive.com", "assets2.xboxlive.cn"),
+                                        _ => url.Replace(".xboxlive.com", ".xboxlive.cn"),
+                                    };
+                                }
                             }
                             if (string.IsNullOrEmpty(url)) url = "http://assets1.xboxlive.cn" + games[i, 2];
                             LinkLabel lb = new()
@@ -1670,7 +1669,7 @@ namespace XboxDownload
             string? host = dgvIpList.Tag.ToString();
             SaveFileDialog dlg = new()
             {
-                InitialDirectory = Application.StartupPath,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 Title = "导出数据",
                 Filter = "文本文件(*.txt)|*.txt",
                 FileName = "导出IP(" + host + ")"
@@ -2145,10 +2144,21 @@ namespace XboxDownload
                 int range = 104857599;                  //100M
                 //if (Form1.debug) range = 1048575;     //1M
 
-                string useragent = url.Contains(".nintendo.net") ? "Nintendo NX" : "XboxDownload";
-                string host = Regex.Match(url, @"(?<=://)[a-zA-Z\.0-9\-]+(?=\/)").Value;
-                /*
-                Dictionary<string, string> headers = new() { { "Range", "0-" + range }, { "Host", host }, { "User-Agent", useragent } };
+                Uri? uri = null;
+                try
+                {
+                    uri = new Uri(url);
+                }
+                catch { }
+                StringBuilder sb = new();
+                sb.AppendLine("GET " + uri?.PathAndQuery + " HTTP/1.1");
+                sb.AppendLine("Host: " + uri?.Host);
+                sb.AppendLine("User-Agent: " + ((uri?.Host ?? string.Empty).Contains(".nintendo.net") ? "Nintendo NX" : "XboxDownload"));
+                sb.AppendLine("Range: bytes=0-" + range);
+                sb.AppendLine();
+                byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
+                bool isSsl = uri?.Scheme == "https";
+
                 Stopwatch sw = new();
                 foreach (DataGridViewRow dgvr in ls)
                 {
@@ -2174,98 +2184,25 @@ namespace XboxDownload
                         }
                         catch { }
                     }
-                    if (!string.IsNullOrEmpty(url))
+                    if (uri != null)
                     {
                         sw.Restart();
-                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(host, ip), "GET", null, null, headers, timeout, "SpeedTest", ctsSpeedTest.Token);
+                        SocketPackage socketPackage = isSsl ? ClassWeb.SslRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
                         sw.Stop();
-                        if (dgvr.Index >= 0)
+                        dgvr.Tag = string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
+                        if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
                         {
-                            if (response != null) dgvr.Tag = "HTTP/" + response.Version + " " + (int)response.StatusCode + " " + response.ReasonPhrase + "\n" + response.Content.Headers.ToString() + response.Headers.ToString();
-                            if (response != null && response.IsSuccessStatusCode)
-                            {
-                                dgvr.Cells["Col_Speed"].Value = Math.Round((double)(response.Content.ReadAsByteArrayAsync().Result.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
-                            }
-                            else if (!ctsSpeedTest.IsCancellationRequested)
-                            {
-                                dgvr.Cells["Col_Speed"].Value = (double)0;
-                                dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
-                            }
-                            else
-                            {
-                                dgvr.Cells["Col_Speed"].Value = null;
-                            }
+                            dgvr.Cells["Col_Speed"].Value = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
                         }
-                        response?.Dispose();
+                        else
+                        {
+                            dgvr.Cells["Col_Speed"].Value = (double)0;
+                            dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
+                        }
                     }
                     else dgvr.Cells["Col_Speed"].Value = null;
                 }
                 GC.Collect();
-                */
-                Uri? uri = null;
-                try
-                {
-                    uri = new Uri(url);
-                }
-                catch { }
-                if(uri != null)
-                {
-                    StringBuilder sb = new();
-                    sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
-                    sb.AppendLine("Host: " + host);
-                    sb.AppendLine("User-Agent: " + useragent);
-                    sb.AppendLine("Range: bytes=0-" + range);
-                    sb.AppendLine();
-                    byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-
-                    Stopwatch sw = new();
-                    foreach (DataGridViewRow dgvr in ls)
-                    {
-                        if (ctsSpeedTest.IsCancellationRequested) break;
-                        string ip = dgvr.Cells["Col_IP"].Value.ToString() ?? string.Empty;
-                        dgvr.Cells["Col_TTL"].Value = null;
-                        dgvr.Cells["Col_RoundtripTime"].Value = null;
-                        dgvr.Cells["Col_Speed"].Value = "正在测试";
-                        dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
-                        dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
-                        dgvr.Tag = null;
-
-                        using (Ping p1 = new())
-                        {
-                            try
-                            {
-                                PingReply reply = p1.Send(ip);
-                                if (reply.Status == IPStatus.Success)
-                                {
-                                    dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
-                                    dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
-                                }
-                            }
-                            catch { }
-                        }
-                        if (!string.IsNullOrEmpty(url))
-                        {
-                            sw.Restart();
-                            SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.SslRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
-                            sw.Stop();
-                            if (dgvr.Index >= 0)
-                            {
-                                dgvr.Tag = string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
-                                if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
-                                {
-                                    dgvr.Cells["Col_Speed"].Value = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
-                                }
-                                else
-                                {
-                                    dgvr.Cells["Col_Speed"].Value = (double)0;
-                                    dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
-                                }
-                            }
-                        }
-                        else dgvr.Cells["Col_Speed"].Value = null;
-                    }
-                    GC.Collect();
-                }
             }
             ctsSpeedTest = null;
             this.Invoke(new Action(() =>
@@ -2422,7 +2359,7 @@ namespace XboxDownload
         {
             OpenFileDialog openFileDialog1 = new()
             {
-                InitialDirectory = Application.StartupPath,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 Title = "导入域名 (Hosts格式 或者 DNSmasq格式)",
                 Filter = "文本文件(*.txt)|*.txt",
                 RestoreDirectory = true
@@ -3023,8 +2960,8 @@ namespace XboxDownload
             else
             {
                 string pat =
-                    @"^https?://www\.xbox\.com(/[^/]+)?/games/store/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^https?://www\.microsoft\.com(/[^/]+)?/p/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^https?://www\.xbox\.com(/[^/]*)?/games/store/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^https?://www\.microsoft\.com(/[^/]*)?/p/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^https?://www\.microsoft\.com/store/productId/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^https?://apps\.microsoft\.com/store/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})[^a-zA-Z0-9]|" +
                     @"productid=(?<productId>[a-zA-Z0-9]{12})|" +
@@ -3644,7 +3581,7 @@ namespace XboxDownload
                                                 case 50000:
                                                     {
                                                         string key = contentId + "_x";
-                                                        ListViewItem item = new(new string[] { "Xbox One", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), url })
+                                                        ListViewItem item = new(new string[] { "Xbox One", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), Path.GetFileName(url) })
                                                         {
                                                             Tag = "Game"
                                                         };
@@ -3675,7 +3612,7 @@ namespace XboxDownload
                                                 case 51000:
                                                     {
                                                         string key = contentId + "_xs";
-                                                        ListViewItem item = new(new string[] { "Xbox Series X|S", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), url })
+                                                        ListViewItem item = new(new string[] { "Xbox Series X|S", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), Path.GetFileName(url) })
                                                         {
                                                             Tag = "Game"
                                                         };
@@ -3711,7 +3648,7 @@ namespace XboxDownload
                                                         ListViewItem? item = lsDownloadUrl.ToArray().Where(x => x.Tag.ToString() == "App" && x.SubItems[2].Tag.ToString() == key).FirstOrDefault();
                                                         if (item == null)
                                                         {
-                                                            item = new ListViewItem(new string[] { "Xbox One", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), url })
+                                                            item = new ListViewItem(new string[] { "Xbox One", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), Path.GetFileName(url) })
                                                             {
                                                                 Tag = "App"
                                                             };
@@ -3742,7 +3679,7 @@ namespace XboxDownload
                                                 case "msixvc":
                                                     {
                                                         string key = contentId;
-                                                        ListViewItem item = new(new string[] { "Windows PC", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), url })
+                                                        ListViewItem item = new(new string[] { "Windows PC", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), Path.GetFileName(url) })
                                                         {
                                                             Tag = "Game"
                                                         };
@@ -3781,7 +3718,7 @@ namespace XboxDownload
                                                         ListViewItem? item = lsDownloadUrl.ToArray().Where(x => x.Tag.ToString() == "App" && x.SubItems[2].Tag.ToString() == key).FirstOrDefault();
                                                         if (item == null)
                                                         {
-                                                            item = new ListViewItem(new string[] { "Windows PC", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), url })
+                                                            item = new ListViewItem(new string[] { "Windows PC", market.cname, ClassMbr.ConvertBytes(packages.MaxDownloadSizeInBytes), Path.GetFileName(url) })
                                                             {
                                                                 Tag = "App"
                                                             };

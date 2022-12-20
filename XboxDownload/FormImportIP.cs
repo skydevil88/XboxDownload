@@ -106,7 +106,7 @@ namespace XboxDownload
         {
             OpenFileDialog openFileDialog = new()
             {
-                InitialDirectory = Application.StartupPath,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                 Filter = "文本文件(*.txt)|*.txt",
                 RestoreDirectory = true
             };
