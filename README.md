@@ -1,11 +1,10 @@
 # Xbox下载助手
 
-Xbox下载助手-商店网页版：https://xbox.skydevil.xyz
+[OpenWrt 安装 Lighttpd 或者 Nginx，使用URL重写跳转国内CDN服务器加速下载](./README_OpenWrt.md)
 
-[OpenWrt 域名跳转加速](./README_OpenWrt.md)
-
-获取PC微软商店游戏下载链接
+获取微软商店游戏下载链接
 ---
+Xbox下载助手-商店网页版：https://xbox.skydevil.xyz
 ![图0](doc/pm00.png)
 
 

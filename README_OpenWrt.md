@@ -16,7 +16,7 @@ ip6tables -I INPUT -p udp -m mac --mac-source XBOX_MAC --dport 547 -j DROP
 ## 方法一：Lighttpd 
 B站视频教程：https://www.bilibili.com/video/BV1wP4y1G7zf
 
-1. 修改uhttpd端口（修改后进入OpenWrt管理页面要用 192.168.1.1:8080）
+1. 修改uhttpd端口（修改后进入OpenWrt管理页面要用 192.168.1.1:8080，修改端口目的是要让出80端口给Lighttpd或者Nginx使用）
 ```bash
 vi /etc/config/uhttpd
 #按 i 进入编辑模式，
