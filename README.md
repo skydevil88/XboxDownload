@@ -5,7 +5,7 @@
 获取微软商店游戏下载链接
 ---
 Xbox下载助手-商店网页版：https://xbox.skydevil.xyz
-![图0](doc/pm00.png)
+![图0](doc/pm00.gif)
 
 
 使用说明
