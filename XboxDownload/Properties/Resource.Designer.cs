@@ -63,7 +63,7 @@ namespace XboxDownload.Properties {
         /// <summary>
         ///   查找类似 ###################### Microsoft ######################
         ///catalog.gamepass.com	#XGP游戏库
-        ///download.xbox.com	#Xbox360主机下载域名
+        ///download.xbox.com		#Xbox360主机下载域名
         ///
         ///
         ///###################### Nintendo ######################
@@ -81,7 +81,7 @@ namespace XboxDownload.Properties {
         ///ratt.juno.ea.com
         ///autopatch.juno.ea.com
         ///desktop-config.juno.ea.com
-        ///split-evaluator.j [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///split-evaluator. [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Akamai {
             get {

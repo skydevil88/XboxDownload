@@ -1375,7 +1375,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/10/bfd7560c-f314-4a6e-b8e6-da2a09f63018/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3689.20075.0.eaaa434b-a879-4a95-bda8-b5c8235297d7/Microsoft.254428597CFE2_1.3689.20075.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/11/a9b79080-5523-4dc2-9fad-a87bfcf9ed78/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.538.198.0.08509ea5-f4eb-44d0-a697-f866b6ade093/Microsoft.624F8B84B80_3.538.198.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/14/47e57555-24b7-4298-98e7-fa2ebffcf5a8/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.553.89.0.ee5c8df6-b719-4475-86a1-7e28ce38671c/Microsoft.624F8B84B80_3.553.89.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -3195,7 +3195,7 @@ namespace XboxDownload
         {
             List<Product> lsProduct = new();
             List<string> lsBundledId = new();
-            string url = "https://catalog.gamepass.com/sigls/v2?id=" + siglId + "&language=" + ClassWeb.language + "&market=US";
+            string url = "https://catalog.gamepass.com/sigls/v2?id=" + siglId + "&language=en-US&market=US";
             string html = ClassWeb.HttpResponseContent(url);
             Match result = Regex.Match(html, @"\{""id"":""(?<ProductId>[a-zA-Z0-9]{12})""\}");
             while (result.Success)

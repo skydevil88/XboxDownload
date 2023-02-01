@@ -37,7 +37,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 25);
+            this.label1.Location = new System.Drawing.Point(15, 24);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 24);
@@ -57,8 +57,8 @@
             "blzddist1-a.akamaihd.net",
             "epicgames-download1-1251447533.file.myqcloud.com",
             "www.baidu.com"});
-            this.cbDomainName.Location = new System.Drawing.Point(69, 20);
-            this.cbDomainName.Margin = new System.Windows.Forms.Padding(4);
+            this.cbDomainName.Location = new System.Drawing.Point(69, 18);
+            this.cbDomainName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbDomainName.Name = "cbDomainName";
             this.cbDomainName.Size = new System.Drawing.Size(510, 32);
             this.cbDomainName.TabIndex = 1;
@@ -66,8 +66,8 @@
             // 
             // butTest
             // 
-            this.butTest.Location = new System.Drawing.Point(587, 16);
-            this.butTest.Margin = new System.Windows.Forms.Padding(4);
+            this.butTest.Location = new System.Drawing.Point(586, 17);
+            this.butTest.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.butTest.Name = "butTest";
             this.butTest.Size = new System.Drawing.Size(98, 36);
             this.butTest.TabIndex = 2;
@@ -79,7 +79,7 @@
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Window;
             this.textBox1.Location = new System.Drawing.Point(15, 62);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -98,7 +98,7 @@
             this.Controls.Add(this.cbDomainName);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormDns";

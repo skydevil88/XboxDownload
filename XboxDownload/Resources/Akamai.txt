@@ -1,6 +1,6 @@
 ###################### Microsoft ######################
 catalog.gamepass.com	#XGP游戏库
-download.xbox.com	#Xbox360主机下载域名
+download.xbox.com		#Xbox360主机下载域名
 
 
 ###################### Nintendo ######################

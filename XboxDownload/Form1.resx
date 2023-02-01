@@ -296,7 +296,7 @@
     <value>True</value>
   </data>
   <data name="ckbRecordLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1238, 9</value>
+    <value>1237, 9</value>
   </data>
   <data name="ckbRecordLog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -500,7 +500,7 @@
     <value>True</value>
   </data>
   <data name="ckbSteamStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 277</value>
+    <value>1220, 278</value>
   </data>
   <data name="ckbSteamStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -560,7 +560,7 @@
     <value>True</value>
   </data>
   <data name="ckbBattleStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 221</value>
+    <value>1220, 220</value>
   </data>
   <data name="ckbBattleStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -590,7 +590,7 @@
     <value>True</value>
   </data>
   <data name="ckbEAStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 193</value>
+    <value>1220, 194</value>
   </data>
   <data name="ckbEAStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -650,7 +650,7 @@
     <value>True</value>
   </data>
   <data name="ckbSetDns.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 139</value>
+    <value>1220, 140</value>
   </data>
   <data name="ckbSetDns.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -713,7 +713,7 @@
     <value>NoControl</value>
   </data>
   <data name="ckbHttpService.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 83</value>
+    <value>1220, 82</value>
   </data>
   <data name="ckbHttpService.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -743,7 +743,7 @@
     <value>True</value>
   </data>
   <data name="ckbDnsService.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 55</value>
+    <value>1220, 56</value>
   </data>
   <data name="ckbDnsService.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -890,7 +890,7 @@
     <value>13</value>
   </data>
   <data name="butBrowse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1020, 373</value>
+    <value>1020, 374</value>
   </data>
   <data name="butBrowse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1004,7 +1004,7 @@
     <value>True</value>
   </data>
   <data name="ckbEpicCDN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>726, 343</value>
+    <value>726, 344</value>
   </data>
   <data name="ckbEpicCDN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1034,7 +1034,7 @@
     <value>True</value>
   </data>
   <data name="label20.Location" type="System.Drawing.Point, System.Drawing">
-    <value>514, 343</value>
+    <value>514, 344</value>
   </data>
   <data name="label20.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1088,7 +1088,7 @@
     <value>True</value>
   </data>
   <data name="labelEpic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 343</value>
+    <value>116, 344</value>
   </data>
   <data name="labelEpic.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1118,7 +1118,7 @@
     <value>True</value>
   </data>
   <data name="ckbBattleCDN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>787, 308</value>
+    <value>788, 308</value>
   </data>
   <data name="ckbBattleCDN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1262,7 +1262,7 @@
     <value>True</value>
   </data>
   <data name="ckbEACDN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>787, 272</value>
+    <value>788, 272</value>
   </data>
   <data name="ckbEACDN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2227,7 +2227,7 @@
     <value>40</value>
   </data>
   <data name="dgvIpList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1432, 651</value>
+    <value>1432, 645</value>
   </data>
   <data name="dgvIpList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2257,7 +2257,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbIPList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 678</value>
+    <value>1436, 672</value>
   </data>
   <data name="gbIPList.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2287,7 +2287,7 @@
     <value>60秒</value>
   </data>
   <data name="cbSpeedTestTimeOut.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1342, 41</value>
+    <value>1342, 40</value>
   </data>
   <data name="cbSpeedTestTimeOut.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2341,13 +2341,13 @@
     <value>1</value>
   </data>
   <data name="butSpeedTest.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1299, 77</value>
+    <value>1299, 81</value>
   </data>
   <data name="butSpeedTest.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="butSpeedTest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 49</value>
+    <value>124, 51</value>
   </data>
   <data name="butSpeedTest.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -2368,7 +2368,7 @@
     <value>2</value>
   </data>
   <data name="tbDlUrl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 73</value>
+    <value>6, 74</value>
   </data>
   <data name="tbDlUrl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2377,7 +2377,7 @@
     <value>True</value>
   </data>
   <data name="tbDlUrl.PlaceholderText" xml:space="preserve">
-    <value>请关闭加速器、代理软件再开始测速，下载速度换算公式：1 MB/s = 8 Mbps；国内IP一般只需测本省IP，可以使用查找功能筛选。</value>
+    <value>请关闭加速器、代理软件再开始测速，国内IP一般只需测本省IP，可以使用查找功能筛选；下载速度换算公式：1 MB/s = 8 Mbps</value>
   </data>
   <data name="tbDlUrl.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
     <value>Both</value>
@@ -2404,7 +2404,7 @@
     <value>True</value>
   </data>
   <data name="linkHostsEdit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1110, 43</value>
+    <value>1110, 44</value>
   </data>
   <data name="linkHostsEdit.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2434,7 +2434,7 @@
     <value>True</value>
   </data>
   <data name="linkHostsClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>940, 43</value>
+    <value>940, 44</value>
   </data>
   <data name="linkHostsClear.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2488,7 +2488,7 @@
     <value>True</value>
   </data>
   <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 43</value>
+    <value>3, 44</value>
   </data>
   <data name="label5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2518,7 +2518,7 @@
     <value>True</value>
   </data>
   <data name="linkImportIPManual.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1362, 11</value>
+    <value>1359, 10</value>
   </data>
   <data name="linkImportIPManual.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2548,7 +2548,7 @@
     <value>True</value>
   </data>
   <data name="linkExportIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1298, 11</value>
+    <value>1296, 10</value>
   </data>
   <data name="linkExportIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2590,13 +2590,13 @@
     <value>4.Xbox &amp; NS &amp; EA &amp; 战网 (Akamai)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>940, 5</value>
+    <value>940, 4</value>
   </data>
   <data name="cbImportIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="cbImportIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>338, 32</value>
+    <value>350, 32</value>
   </data>
   <data name="cbImportIP.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -2617,7 +2617,7 @@
     <value>True</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>838, 11</value>
+    <value>838, 10</value>
   </data>
   <data name="label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2647,7 +2647,7 @@
     <value>True</value>
   </data>
   <data name="linkFindIpArea.Location" type="System.Drawing.Point, System.Drawing">
-    <value>774, 11</value>
+    <value>774, 10</value>
   </data>
   <data name="linkFindIpArea.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2947,7 +2947,7 @@
     <value>True</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 11</value>
+    <value>3, 10</value>
   </data>
   <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -2977,13 +2977,13 @@
     <value>Bottom</value>
   </data>
   <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 678</value>
+    <value>0, 672</value>
   </data>
   <data name="panel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 132</value>
+    <value>1436, 138</value>
   </data>
   <data name="panel3.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3205,7 +3205,7 @@
     <value>None</value>
   </data>
   <data name="butHostReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>723, 8</value>
+    <value>724, 8</value>
   </data>
   <data name="butHostReset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3595,7 +3595,7 @@
     <value>Top</value>
   </data>
   <data name="butCdnReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>729, 8</value>
+    <value>730, 8</value>
   </data>
   <data name="butCdnReset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3628,7 +3628,7 @@
     <value>NoControl</value>
   </data>
   <data name="butCdnSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>597, 8</value>
+    <value>598, 8</value>
   </data>
   <data name="butCdnSave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3979,7 +3979,7 @@
     <value>NoControl</value>
   </data>
   <data name="label30.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 323</value>
+    <value>6, 322</value>
   </data>
   <data name="label30.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -4144,7 +4144,7 @@
     <value>True</value>
   </data>
   <data name="label27.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 214</value>
+    <value>6, 214</value>
   </data>
   <data name="label27.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -4204,7 +4204,7 @@
     <value>9</value>
   </data>
   <data name="tbProductID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>172, 173</value>
+    <value>172, 172</value>
   </data>
   <data name="tbProductID.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -4234,7 +4234,7 @@
     <value>NoControl</value>
   </data>
   <data name="label26.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 177</value>
+    <value>6, 177</value>
   </data>
   <data name="label26.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -4837,7 +4837,7 @@
     <value>4</value>
   </data>
   <data name="lvGameSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>149, 93</value>
+    <value>148, 94</value>
   </data>
   <data name="lvGameSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -4906,7 +4906,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="lvGame.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1432, 286</value>
+    <value>1432, 283</value>
   </data>
   <data name="lvGame.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -4927,7 +4927,7 @@
     <value>True</value>
   </data>
   <data name="linkAppxAdd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1235, 321</value>
+    <value>1234, 321</value>
   </data>
   <data name="linkAppxAdd.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -5038,7 +5038,7 @@
     <value>3</value>
   </data>
   <data name="tbGamePrice.Location" type="System.Drawing.Point, System.Drawing">
-    <value>377, 282</value>
+    <value>376, 282</value>
   </data>
   <data name="tbGamePrice.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5095,7 +5095,7 @@
     <value>5</value>
   </data>
   <data name="tbGameLanguages.Location" type="System.Drawing.Point, System.Drawing">
-    <value>377, 246</value>
+    <value>376, 246</value>
   </data>
   <data name="tbGameLanguages.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5152,7 +5152,7 @@
     <value>7</value>
   </data>
   <data name="tbGameDescription.Location" type="System.Drawing.Point, System.Drawing">
-    <value>377, 86</value>
+    <value>376, 86</value>
   </data>
   <data name="tbGameDescription.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5302,7 +5302,7 @@
     <value>NoControl</value>
   </data>
   <data name="label37.Location" type="System.Drawing.Point, System.Drawing">
-    <value>953, 51</value>
+    <value>952, 51</value>
   </data>
   <data name="label37.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -5329,7 +5329,7 @@
     <value>13</value>
   </data>
   <data name="tbGameDeveloperName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>377, 48</value>
+    <value>376, 48</value>
   </data>
   <data name="tbGameDeveloperName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5410,7 +5410,7 @@
     <value>16</value>
   </data>
   <data name="tbGameTitle.Location" type="System.Drawing.Point, System.Drawing">
-    <value>377, 10</value>
+    <value>376, 10</value>
   </data>
   <data name="tbGameTitle.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5717,7 +5717,7 @@
     <value>Fill</value>
   </data>
   <data name="gbGameInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 147</value>
+    <value>0, 150</value>
   </data>
   <data name="gbGameInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5726,7 +5726,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbGameInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 663</value>
+    <value>1436, 660</value>
   </data>
   <data name="gbGameInfo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5747,7 +5747,7 @@
     <value>1</value>
   </data>
   <data name="flpGameWithGold.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 100</value>
+    <value>148, 102</value>
   </data>
   <data name="flpGameWithGold.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5879,13 +5879,13 @@
     <value>4</value>
   </data>
   <data name="tbGameSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 63</value>
+    <value>148, 64</value>
   </data>
   <data name="tbGameSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tbGameSearch.PlaceholderText" xml:space="preserve">
-    <value>建议使用英文名称</value>
+    <value>建议使用英文名称，支持应用搜索</value>
   </data>
   <data name="tbGameSearch.Size" type="System.Drawing.Size, System.Drawing">
     <value>316, 30</value>
@@ -5936,13 +5936,13 @@
     <value>6</value>
   </data>
   <data name="butGame.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1268, 26</value>
+    <value>1274, 24</value>
   </data>
   <data name="butGame.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="butGame.Size" type="System.Drawing.Size, System.Drawing">
-    <value>158, 36</value>
+    <value>152, 39</value>
   </data>
   <data name="butGame.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -5963,7 +5963,7 @@
     <value>7</value>
   </data>
   <data name="cbGameMarket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1132, 24</value>
+    <value>1138, 26</value>
   </data>
   <data name="cbGameMarket.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5993,7 +5993,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tbGameUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>978, 30</value>
+    <value>985, 30</value>
   </data>
   <data name="tbGameUrl.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -6053,7 +6053,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbMicrosoftStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 147</value>
+    <value>1436, 150</value>
   </data>
   <data name="gbMicrosoftStore.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -6101,7 +6101,7 @@
     <value>True</value>
   </data>
   <data name="label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 20</value>
+    <value>758, 15</value>
   </data>
   <data name="label51.Size" type="System.Drawing.Size, System.Drawing">
     <value>477, 120</value>
@@ -6216,7 +6216,7 @@
     <value>NoControl</value>
   </data>
   <data name="rbEACdn3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 38</value>
+    <value>262, 38</value>
   </data>
   <data name="rbEACdn3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6309,7 +6309,7 @@
     <value>Top</value>
   </data>
   <data name="gpEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 488</value>
+    <value>0, 489</value>
   </data>
   <data name="gpEACdn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6396,7 +6396,7 @@
     <value>True</value>
   </data>
   <data name="label50.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 21</value>
+    <value>758, 16</value>
   </data>
   <data name="label50.Size" type="System.Drawing.Size, System.Drawing">
     <value>590, 144</value>
@@ -6577,7 +6577,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>3, 2, 3, 2</value>
   </data>
   <data name="groupBox10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 194</value>
+    <value>1436, 195</value>
   </data>
   <data name="groupBox10.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>

@@ -39,19 +39,6 @@ namespace XboxDownload
             {
                 AutomaticDecompression = DecompressionMethods.All
             });
-            services.AddHttpClient("SpeedTest").ConfigureHttpClient(httpClient =>
-            {
-                CacheControlHeaderValue cacheControl = new()
-                {
-                    NoCache = true,
-                    NoStore = true,
-                    NoTransform = true,
-                };
-                httpClient.DefaultRequestHeaders.CacheControl = cacheControl;
-            }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                AllowAutoRedirect = false
-            });
             services.AddHttpClient("Nothing").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.All
