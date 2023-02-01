@@ -21,7 +21,7 @@ Xbox主机是根据使用者IP分配游戏下载域名，国内IP使用assets1.x
 天翼云盘: https://cloud.189.cn/t/JJvY3aZvyyM3 提取码：7oqc
 源码：https://github.com/skydevil88/XboxDownload
 ```
-![图1](doc/pm01.gif)
+![图1](doc/pm01.png)
 
 1.使用设置（Nintendo Switch、PlayStation 使用方法同理）
 ---
