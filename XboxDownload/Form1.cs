@@ -2963,7 +2963,7 @@ namespace XboxDownload
                     @"^https?://www\.xbox\.com(/[^/]*)?/games/store/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^https?://www\.microsoft\.com(/[^/]*)?/p/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^https?://www\.microsoft\.com/store/productId/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^https?://apps\.microsoft\.com/store/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})[^a-zA-Z0-9]|" +
+                    @"^https?://apps\.microsoft\.com/store/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"productid=(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^(?<productId>[a-zA-Z0-9]{12})$";
                 Match result = Regex.Match(url, pat, RegexOptions.IgnoreCase);
