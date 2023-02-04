@@ -93,6 +93,7 @@
             "assets1.xboxlive.cn (Xbox & 微软商店 游戏下载)",
             "dlassets.xboxlive.cn (Xbox & 微软商店 游戏下载)",
             "tlu.dl.delivery.mp.microsoft.com (Xbox & 微软商店 应用下载)",
+            "gst.prod.dl.playstation.net  (PS5 游戏下载)",
             "atum.hac.lp1.d4c.nintendo.net (Switch)",
             "origin-a.akamaihd.net (EA)",
             "blzddist1-a.akamaihd.net (战网)"});

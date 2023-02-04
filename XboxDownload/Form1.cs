@@ -1187,6 +1187,7 @@ namespace XboxDownload
             }
             tsmSpeedTest.Visible = true;
             tsmSpeedTest.Enabled = ctsSpeedTest is null;
+            tsmSpeedTestLog.Enabled = dgvr.Tag is not null;
             cmsIP.Show(MousePosition.X, MousePosition.Y);
         }
 
@@ -1290,6 +1291,9 @@ namespace XboxDownload
                     host = "tlu.dl.delivery.mp.microsoft.com";
                     break;
                 case 4:
+                    host = "gst.prod.dl.playstation.net";
+                    break;
+                case 5:
                     host = "Akamai";
                     break;
             }
@@ -1478,6 +1482,37 @@ namespace XboxDownload
                         };
                     }
                     break;
+                case "gst.prod.dl.playstation.net":
+                case "gs2.ww.prod.dl.playstation.net":
+                case "zeus.dl.playstation.net":
+                case "ares.dl.playstation.net":
+                    {
+                        LinkLabel lb1 = new()
+                        {
+                            Tag = "http://gst.prod.dl.playstation.net/networktest/get_192m",
+                            Text = "PSN测速文件",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb2 = new()
+                        {
+                            Tag = "http://gst.prod.dl.playstation.net/gst/prod/00/PPSA04478_00/app/pkg/26/f_f2e4ff2bc3be11cb844dfe2a7ff8df357d7930152fb5984294a794823ec7472b/EP1464-PPSA04478_00-XXXXXXXXXXXXXXXX_0.pkg",
+                            Text = "糖豆人(PS5)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb3 = new()
+                        {
+                            Tag = "http://gs2.ww.prod.dl.playstation.net/gs2/appkgo/prod/CUSA03962_00/4/f_526a2fab32d369a8ca6298b59686bf823fa9edfe95acb85bc140c27f810842ce/f/UP0102-CUSA03962_00-BH70000000000001_0.pkg",
+                            Text = "生化危机7(PS4)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                    }
+                    break;
                 case "Akamai":
                 case "origin-a.akamaihd.net":
                 case "blzddist1-a.akamaihd.net":
@@ -1527,7 +1562,7 @@ namespace XboxDownload
             for (int i = 0; i <= 2; i++)
             {
                 string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload", cts);
-                if (Regex.IsMatch(html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+                if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                 {
                     XboxPackage.App? json = null;
                     try
@@ -1802,6 +1837,16 @@ namespace XboxDownload
                         sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # " + Form1.appName);
                         ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                         break;
+                    case "gst.prod.dl.playstation.net":
+                    case "gs2.ww.prod.dl.playstation.net":
+                    case "zeus.dl.playstation.net":
+                    case "ares.dl.playstation.net":
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.dl\.playstation\.net\s+# " + Form1.appName + "\r\n", "");
+                        sb.AppendLine(ip + " gst.prod.dl.playstation.net # " + Form1.appName);
+                        sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # " + Form1.appName);
+                        sb.AppendLine(ip + " zeus.dl.playstation.net # " + Form1.appName);
+                        sb.AppendLine(ip + " ares.dl.playstation.net # " + Form1.appName);
+                        break;
                     case "Akamai":
                     case "atum.hac.lp1.d4c.nintendo.net":
                     case "origin-a.akamaihd.net":
@@ -1904,6 +1949,25 @@ namespace XboxDownload
                         sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com");
                     }
                     break;
+                case "gst.prod.dl.playstation.net":
+                case "gs2.ww.prod.dl.playstation.net":
+                case "zeus.dl.playstation.net":
+                case "ares.dl.playstation.net":
+                    if (tsmi.Name == "tsmDNSmasp")
+                    {
+                        sb.AppendLine("address=/gst.prod.dl.playstation.net/" + ip);
+                        sb.AppendLine("address=/gs2.ww.prod.dl.playstation.net/" + ip);
+                        sb.AppendLine("address=/zeus.dl.playstation.net/" + ip);
+                        sb.AppendLine("address=/ares.dl.playstation.net/" + ip);
+                    }
+                    else
+                    {
+                        sb.AppendLine(ip + " gst.prod.dl.playstation.net");
+                        sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net");
+                        sb.AppendLine(ip + " zeus.dl.playstation.net");
+                        sb.AppendLine(ip + " ares.dl.playstation.net");
+                    }
+                    break;
                 case "Akamai":
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
@@ -1989,6 +2053,13 @@ namespace XboxDownload
             butSpeedTest.Enabled = false;
             Col_IP.SortMode = Col_ASN.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
             ThreadPool.QueueUserWorkItem(delegate { SpeedTest(ls); });
+        }
+
+        private void TsmSpeedTestLog_Click(object sender, EventArgs e)
+        {
+            if (dgvIpList.SelectedRows.Count != 1) return;
+            DataGridViewRow dgvr = dgvIpList.SelectedRows[0];
+            if (dgvr.Tag != null) MessageBox.Show(dgvr.Tag.ToString(), "Request Headers", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
         private void LinkHostsClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2164,6 +2235,7 @@ namespace XboxDownload
                 {
                     if (ctsSpeedTest.IsCancellationRequested) break;
                     string ip = dgvr.Cells["Col_IP"].Value.ToString() ?? string.Empty;
+                    dgvr.Cells["Col_302"].Value = false;
                     dgvr.Cells["Col_TTL"].Value = null;
                     dgvr.Cells["Col_RoundtripTime"].Value = null;
                     dgvr.Cells["Col_Speed"].Value = "正在测试";
@@ -2189,7 +2261,36 @@ namespace XboxDownload
                         sw.Restart();
                         SocketPackage socketPackage = isSsl ? ClassWeb.SslRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
                         sw.Stop();
-                        dgvr.Tag = string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
+                        if (socketPackage.Headers.StartsWith("HTTP/1.1 302"))
+                        {
+                            dgvr.Cells["Col_302"].Value = true;
+                            Match result = Regex.Match(socketPackage.Headers, @"Location: (.+)");
+                            if (result.Success)
+                            {
+                                uri = null;
+                                try
+                                {
+                                    uri = new(result.Groups[1].Value);
+                                }
+                                catch { }
+                                if (uri != null)
+                                {
+                                    dgvr.Tag = socketPackage.Headers + "===============临时性重定向(跳转)===============\n"+ uri.OriginalString + "\n\n";
+                                    sb = new();
+                                    sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
+                                    sb.AppendLine("Host: " + uri.Host);
+                                    sb.AppendLine("User-Agent: " + (uri.Host.Contains(".nintendo.net") ? "Nintendo NX" : "XboxDownload"));
+                                    sb.AppendLine("Range: bytes=0-" + range);
+                                    sb.AppendLine();
+                                    buffer = Encoding.ASCII.GetBytes(sb.ToString());
+                                    isSsl = uri.Scheme == "https";
+                                    sw.Restart();
+                                    socketPackage = isSsl ? ClassWeb.SslRequest(uri, buffer, null, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, null, false, null, timeout, ctsSpeedTest);
+                                    sw.Stop();
+                                }
+                            }
+                        }
+                        dgvr.Tag += string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
                         if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
                         {
                             dgvr.Cells["Col_Speed"].Value = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
@@ -4588,7 +4689,7 @@ namespace XboxDownload
         {
             XboxPackage.Data? data = null;
             string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetAppPackage?WuCategoryId=f2ea4abe-4e1e-48ff-9022-a8a758303181", "GET", null, null, null, 30000, "XboxDownload");
-            if (Regex.IsMatch(html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+            if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 XboxPackage.App? json = null;
                 try

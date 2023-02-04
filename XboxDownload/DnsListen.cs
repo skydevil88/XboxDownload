@@ -390,7 +390,7 @@ namespace XboxDownload
                                 if (Properties.Settings.Default.DoH && !reDohBlacklist.IsMatch(queryName))
                                 {
                                     string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
-                                    if (Regex.IsMatch(html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+                                    if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                     {
                                         try
                                         {
@@ -815,7 +815,7 @@ namespace XboxDownload
         {
             string? ip = null;
             string html = ClassWeb.HttpResponseContent("https://" + dohServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, null, 6000);
-            if (Regex.IsMatch(html.Trim(), @"^{.+}$", RegexOptions.Singleline))
+            if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 try
                 {

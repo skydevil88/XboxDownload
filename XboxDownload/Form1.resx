@@ -2176,7 +2176,19 @@
     <value>8</value>
   </data>
   <data name="Col_ASN.Width" type="System.Int32, mscorlib">
-    <value>360</value>
+    <value>320</value>
+  </data>
+  <metadata name="Col_302.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Col_302.HeaderText" xml:space="preserve">
+    <value>跳转</value>
+  </data>
+  <data name="Col_302.MinimumWidth" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="Col_302.Width" type="System.Int32, mscorlib">
+    <value>43</value>
   </data>
   <metadata name="Col_TTL.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -2587,7 +2599,10 @@
     <value>3.Xbox &amp; 微软商店 (cn 应用下载)</value>
   </data>
   <data name="cbImportIP.Items4" xml:space="preserve">
-    <value>4.Xbox &amp; NS &amp; EA &amp; 战网 (Akamai)</value>
+    <value>4.PlayStation (游戏下载)</value>
+  </data>
+  <data name="cbImportIP.Items5" xml:space="preserve">
+    <value>5.Xbox &amp; NS &amp; EA &amp; 战网 (Akamai)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>940, 4</value>
@@ -8737,8 +8752,14 @@ U盘卷标不能有中文。</value>
   <data name="tsmSpeedTest.Text" xml:space="preserve">
     <value>测速</value>
   </data>
+  <data name="tsmSpeedTestLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>168, 30</value>
+  </data>
+  <data name="tsmSpeedTestLog.Text" xml:space="preserve">
+    <value>日志</value>
+  </data>
   <data name="cmsIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 94</value>
+    <value>169, 124</value>
   </data>
   <data name="&gt;&gt;cmsIP.Name" xml:space="preserve">
     <value>cmsIP</value>
@@ -10040,42 +10061,6 @@ U盘卷标不能有中文。</value>
   <data name="&gt;&gt;Col_Time.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Col_Check.Name" xml:space="preserve">
-    <value>Col_Check</value>
-  </data>
-  <data name="&gt;&gt;Col_Check.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_IP.Name" xml:space="preserve">
-    <value>Col_IP</value>
-  </data>
-  <data name="&gt;&gt;Col_IP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_ASN.Name" xml:space="preserve">
-    <value>Col_ASN</value>
-  </data>
-  <data name="&gt;&gt;Col_ASN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_TTL.Name" xml:space="preserve">
-    <value>Col_TTL</value>
-  </data>
-  <data name="&gt;&gt;Col_TTL.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_RoundtripTime.Name" xml:space="preserve">
-    <value>Col_RoundtripTime</value>
-  </data>
-  <data name="&gt;&gt;Col_RoundtripTime.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Speed.Name" xml:space="preserve">
-    <value>Col_Speed</value>
-  </data>
-  <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
     <value>Col_Enable</value>
   </data>
@@ -10304,6 +10289,12 @@ U盘卷标不能有中文。</value>
   <data name="&gt;&gt;tsmSpeedTest.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tsmSpeedTestLog.Name" xml:space="preserve">
+    <value>tsmSpeedTestLog</value>
+  </data>
+  <data name="&gt;&gt;tsmSpeedTestLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tsmCopyUrl1.Name" xml:space="preserve">
     <value>tsmCopyUrl1</value>
   </data>
@@ -10333,6 +10324,48 @@ U盘卷标不能有中文。</value>
   </data>
   <data name="&gt;&gt;tsmAuthorization2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Check.Name" xml:space="preserve">
+    <value>Col_Check</value>
+  </data>
+  <data name="&gt;&gt;Col_Check.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_IP.Name" xml:space="preserve">
+    <value>Col_IP</value>
+  </data>
+  <data name="&gt;&gt;Col_IP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_ASN.Name" xml:space="preserve">
+    <value>Col_ASN</value>
+  </data>
+  <data name="&gt;&gt;Col_ASN.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_302.Name" xml:space="preserve">
+    <value>Col_302</value>
+  </data>
+  <data name="&gt;&gt;Col_302.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_TTL.Name" xml:space="preserve">
+    <value>Col_TTL</value>
+  </data>
+  <data name="&gt;&gt;Col_TTL.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_RoundtripTime.Name" xml:space="preserve">
+    <value>Col_RoundtripTime</value>
+  </data>
+  <data name="&gt;&gt;Col_RoundtripTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Speed.Name" xml:space="preserve">
+    <value>Col_Speed</value>
+  </data>
+  <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

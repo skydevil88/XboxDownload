@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>XBox.ico</ApplicationIcon>
-    <FileVersion>2.0.0.9</FileVersion>
+    <FileVersion>2.0.0.10</FileVersion>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
 
