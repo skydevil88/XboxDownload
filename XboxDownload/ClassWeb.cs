@@ -308,7 +308,7 @@ namespace XboxDownload
         }
 
 
-        public static SocketPackage SslRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000, CancellationTokenSource? cts = null)
+        public static SocketPackage TlsRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000, CancellationTokenSource? cts = null)
         {
             SocketPackage socketPackage = new()
             {

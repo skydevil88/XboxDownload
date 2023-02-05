@@ -178,7 +178,7 @@ namespace XboxDownload
                                                 }
                                                 string _url = "https://" + _hosts + _filePath;
                                                 Uri uri = new(_url);
-                                                SocketPackage socketPackage = ClassWeb.SslRequest(uri, Encoding.ASCII.GetBytes(_buffer), ip, decode);
+                                                SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer), ip, decode);
                                                 if (string.IsNullOrEmpty(socketPackage.Err))
                                                 {
                                                     bFileNotFound = false;
@@ -280,7 +280,7 @@ namespace XboxDownload
                                             }
                                             _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _hosts2);
                                             Uri uri = new("https://" + _hosts2 + _filePath);
-                                            SocketPackage socketPackage = ClassWeb.SslRequest(uri, Encoding.ASCII.GetBytes(_buffer));
+                                            SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer));
                                             if (string.IsNullOrEmpty(socketPackage.Err))
                                             {
                                                 bFileNotFound = false;
