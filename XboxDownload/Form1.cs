@@ -2284,17 +2284,17 @@ namespace XboxDownload
                                 Match result = Regex.Match(socketPackage.Headers, @"Location: (.+)");
                                 if (result.Success)
                                 {
-                                    uri = new Uri(uri, result.Groups[1].Value);
-                                    dgvr.Tag = socketPackage.Headers + "===============临时性重定向(跳转)===============\n" + uri.OriginalString + "\n\n";
+                                    Uri uri2 = new(uri, result.Groups[1].Value);
+                                    dgvr.Tag = socketPackage.Headers + "===============临时性重定向(跳转)===============\n" + uri2.OriginalString + "\n\n";
                                     sb.Clear();
-                                    sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
-                                    sb.AppendLine("Host: " + uri.Host);
+                                    sb.AppendLine("GET " + uri2.PathAndQuery + " HTTP/1.1");
+                                    sb.AppendLine("Host: " + uri2.Host);
                                     sb.AppendLine("User-Agent: XboxDownload");
                                     sb.AppendLine("Range: bytes=0-" + range);
                                     sb.AppendLine();
                                     buffer = Encoding.ASCII.GetBytes(sb.ToString());
                                     sw.Restart();
-                                    socketPackage = uri.Scheme == "https" ? ClassWeb.TlsRequest(uri, buffer, null, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, null, false, null, timeout, ctsSpeedTest);
+                                    socketPackage = uri2.Scheme == "https" ? ClassWeb.TlsRequest(uri2, buffer, null, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri2, buffer, null, false, null, timeout, ctsSpeedTest);
                                     sw.Stop();
                                 }
                             }
@@ -2303,7 +2303,7 @@ namespace XboxDownload
                             {
                                 double speed = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
                                 dgvr.Cells["Col_Speed"].Value = speed;
-                                dgvr.Tag += "下载：" + ClassMbr.ConvertBytes((ulong)socketPackage.Buffer.Length) + "，耗时：" + sw.ElapsedMilliseconds.ToString("N0") + " 毫秒，平均速度：" + speed + "MB/s";
+                                dgvr.Tag += "下载：" + ClassMbr.ConvertBytes((ulong)socketPackage.Buffer.Length) + "，耗时：" + sw.ElapsedMilliseconds.ToString("N0") + " 毫秒，平均速度："+ speed +" MB/s";
                             }
                             else
                             {
