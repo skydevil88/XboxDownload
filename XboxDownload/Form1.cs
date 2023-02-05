@@ -1511,6 +1511,22 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb4 = new LinkLabel()
+                        {
+                            Tag = "http://zeus.dl.playstation.net/cdn/UP1004/NPUB31154_00/eISFknCNDxqSsVVywSenkJdhzOIfZjrqKHcuGBHEGvUxQJksdPvRNYbIyWcxFsvH.pkg",
+                            Text = "侠盗猎车手5(PS3)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb5 = new LinkLabel()
+                        {
+                            Tag = "http://ares.dl.playstation.net/cdn/JP0102/PCSG00350_00/fMBmIgPfrBTVSZCRQFevSzxaPyzFWOuorSKrvdIjDIJwmaGLjpTmRgzLLTJfASFYZMqEpwSknlWocYelXNHMkzXvpbbvtCSymAwWF.pkg",
+                            Text = "怪物猎人:边境G(PSV)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb5.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                     }
                     break;
                 case "Akamai":

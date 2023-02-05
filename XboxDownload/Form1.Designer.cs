@@ -2570,6 +2570,7 @@
             // 
             resources.ApplyResources(this.Col_302, "Col_302");
             this.Col_302.Name = "Col_302";
+            this.Col_302.ReadOnly = true;
             this.Col_302.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // Col_TTL
