@@ -116,7 +116,8 @@ namespace XboxDownload
                             if (Directory.Exists(tempDir))
                                 Directory.Delete(tempDir, true);
                             ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
-                            DirectoryInfo di = new(tempDir + @"\Xbox下载助手");
+                            DirectoryInfo di = new(tempDir + @"\XboxDownload");
+                            if (!di.Exists) di = new(tempDir + @"\Xbox下载助手");
                             if (di.Exists)
                             {
                                 parentForm.Invoke(new Action(() =>

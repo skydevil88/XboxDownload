@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmUpdate = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,6 +122,13 @@
             this.tabSpeedTest = new System.Windows.Forms.TabPage();
             this.gbIPList = new System.Windows.Forms.GroupBox();
             this.dgvIpList = new System.Windows.Forms.DataGridView();
+            this.Col_Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Col_IP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_ASN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_302 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Col_TTL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_RoundtripTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel3 = new System.Windows.Forms.Panel();
             this.cbSpeedTestTimeOut = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -155,7 +162,7 @@
             this.Col_Remark = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
             this.linkHostClear = new System.Windows.Forms.LinkLabel();
-            this.linkHostImport = new System.Windows.Forms.LinkLabel();
+            this.linkHostsImport = new System.Windows.Forms.LinkLabel();
             this.butHostReset = new System.Windows.Forms.Button();
             this.butHostSave = new System.Windows.Forms.Button();
             this.cbDohDNS = new System.Windows.Forms.ComboBox();
@@ -325,15 +332,9 @@
             this.tsmCopyUrl1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmCopyUrl2 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAllUrl = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmAuthorization = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAuthorization1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAuthorization2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.Col_Check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Col_IP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_ASN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_302 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Col_TTL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_RoundtripTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabService.SuspendLayout();
@@ -1010,6 +1011,62 @@
             this.dgvIpList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvIpList_CellMouseDown);
             this.dgvIpList.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.Dgv_RowPostPaint);
             // 
+            // Col_Check
+            // 
+            resources.ApplyResources(this.Col_Check, "Col_Check");
+            this.Col_Check.Name = "Col_Check";
+            // 
+            // Col_IP
+            // 
+            resources.ApplyResources(this.Col_IP, "Col_IP");
+            this.Col_IP.Name = "Col_IP";
+            this.Col_IP.ReadOnly = true;
+            this.Col_IP.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Col_ASN
+            // 
+            resources.ApplyResources(this.Col_ASN, "Col_ASN");
+            this.Col_ASN.Name = "Col_ASN";
+            this.Col_ASN.ReadOnly = true;
+            this.Col_ASN.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Col_302
+            // 
+            resources.ApplyResources(this.Col_302, "Col_302");
+            this.Col_302.Name = "Col_302";
+            this.Col_302.ReadOnly = true;
+            this.Col_302.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Col_TTL
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.Col_TTL, "Col_TTL");
+            this.Col_TTL.Name = "Col_TTL";
+            this.Col_TTL.ReadOnly = true;
+            this.Col_TTL.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Col_RoundtripTime
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.Col_RoundtripTime, "Col_RoundtripTime");
+            this.Col_RoundtripTime.Name = "Col_RoundtripTime";
+            this.Col_RoundtripTime.ReadOnly = true;
+            this.Col_RoundtripTime.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Col_Speed
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.Col_Speed, "Col_Speed");
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.ReadOnly = true;
+            this.Col_Speed.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
             // panel3
             // 
             this.panel3.Controls.Add(this.cbSpeedTestTimeOut);
@@ -1264,7 +1321,7 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.linkHostClear);
-            this.panel2.Controls.Add(this.linkHostImport);
+            this.panel2.Controls.Add(this.linkHostsImport);
             this.panel2.Controls.Add(this.butHostReset);
             this.panel2.Controls.Add(this.butHostSave);
             this.panel2.Controls.Add(this.cbDohDNS);
@@ -1279,12 +1336,12 @@
             this.linkHostClear.TabStop = true;
             this.linkHostClear.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkHostClear_LinkClicked);
             // 
-            // linkHostImport
+            // linkHostsImport
             // 
-            resources.ApplyResources(this.linkHostImport, "linkHostImport");
-            this.linkHostImport.Name = "linkHostImport";
-            this.linkHostImport.TabStop = true;
-            this.linkHostImport.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkHostImport_LinkClicked);
+            resources.ApplyResources(this.linkHostsImport, "linkHostsImport");
+            this.linkHostsImport.Name = "linkHostsImport";
+            this.linkHostsImport.TabStop = true;
+            this.linkHostsImport.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkHostsImport_LinkClicked);
             // 
             // butHostReset
             // 
@@ -2511,8 +2568,7 @@
             this.tsmCopyUrl1,
             this.tsmCopyUrl2,
             this.tsmAllUrl,
-            this.tsmAuthorization1,
-            this.tsmAuthorization2});
+            this.tsmAuthorization});
             this.cmsCopyUrl.Name = "cmsCopyUrl";
             resources.ApplyResources(this.cmsCopyUrl, "cmsCopyUrl");
             // 
@@ -2534,6 +2590,14 @@
             resources.ApplyResources(this.tsmAllUrl, "tsmAllUrl");
             this.tsmAllUrl.Click += new System.EventHandler(this.TsmAllUrl_Click);
             // 
+            // tsmAuthorization
+            // 
+            this.tsmAuthorization.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmAuthorization1,
+            this.tsmAuthorization2});
+            this.tsmAuthorization.Name = "tsmAuthorization";
+            resources.ApplyResources(this.tsmAuthorization, "tsmAuthorization");
+            // 
             // tsmAuthorization1
             // 
             this.tsmAuthorization1.Name = "tsmAuthorization1";
@@ -2546,62 +2610,6 @@
             resources.ApplyResources(this.tsmAuthorization2, "tsmAuthorization2");
             this.tsmAuthorization2.Tag = "9PP5G1F0C2B6";
             this.tsmAuthorization2.Click += new System.EventHandler(this.TsmAuthorization_Click);
-            // 
-            // Col_Check
-            // 
-            resources.ApplyResources(this.Col_Check, "Col_Check");
-            this.Col_Check.Name = "Col_Check";
-            // 
-            // Col_IP
-            // 
-            resources.ApplyResources(this.Col_IP, "Col_IP");
-            this.Col_IP.Name = "Col_IP";
-            this.Col_IP.ReadOnly = true;
-            this.Col_IP.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Col_ASN
-            // 
-            resources.ApplyResources(this.Col_ASN, "Col_ASN");
-            this.Col_ASN.Name = "Col_ASN";
-            this.Col_ASN.ReadOnly = true;
-            this.Col_ASN.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Col_302
-            // 
-            resources.ApplyResources(this.Col_302, "Col_302");
-            this.Col_302.Name = "Col_302";
-            this.Col_302.ReadOnly = true;
-            this.Col_302.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Col_TTL
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
-            resources.ApplyResources(this.Col_TTL, "Col_TTL");
-            this.Col_TTL.Name = "Col_TTL";
-            this.Col_TTL.ReadOnly = true;
-            this.Col_TTL.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Col_RoundtripTime
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.Col_RoundtripTime, "Col_RoundtripTime");
-            this.Col_RoundtripTime.Name = "Col_RoundtripTime";
-            this.Col_RoundtripTime.ReadOnly = true;
-            this.Col_RoundtripTime.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Col_Speed
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
-            resources.ApplyResources(this.Col_Speed, "Col_Speed");
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.ReadOnly = true;
-            this.Col_Speed.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // Form1
             // 
@@ -2773,7 +2781,7 @@
         private Button butHostSave;
         private Button butHostReset;
         private LinkLabel linkHostClear;
-        private LinkLabel linkHostImport;
+        private LinkLabel linkHostsImport;
         private DataGridViewCheckBoxColumn Col_Enable;
         private DataGridViewTextBoxColumn Col_HostName;
         private DataGridViewTextBoxColumn Col_IPv4;
@@ -2924,8 +2932,6 @@
         private ToolStripMenuItem tsmCopyUrl1;
         private ToolStripMenuItem tsmCopyUrl2;
         private ImageList imageList1;
-        private ToolStripMenuItem tsmAuthorization1;
-        private ToolStripMenuItem tsmAuthorization2;
         private GroupBox groupBox8;
         private Label label43;
         private RadioButton rbXboxSeries;
@@ -2978,5 +2984,8 @@
         private DataGridViewTextBoxColumn Col_TTL;
         private DataGridViewTextBoxColumn Col_RoundtripTime;
         private DataGridViewTextBoxColumn Col_Speed;
+        private ToolStripMenuItem tsmAuthorization;
+        private ToolStripMenuItem tsmAuthorization1;
+        private ToolStripMenuItem tsmAuthorization2;
     }
 }

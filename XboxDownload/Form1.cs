@@ -498,7 +498,7 @@ namespace XboxDownload
                 string? dnsIP = null;
                 if (!string.IsNullOrEmpty(tbDnsIP.Text.Trim()))
                 {
-                    if (IPAddress.TryParse(tbDnsIP.Text, out IPAddress? ipAddress)&& !IPAddress.IsLoopback(ipAddress))
+                    if (IPAddress.TryParse(tbDnsIP.Text, out IPAddress? ipAddress) && !IPAddress.IsLoopback(ipAddress))
                     {
                         dnsIP = ipAddress.ToString();
                     }
@@ -1416,16 +1416,19 @@ namespace XboxDownload
                     {
                         string[,] games = new string[,]
                         {
-                            {"光之子(国服)", "fe238acf-b298-408c-94c5-97c921640c02_x", "/public/content/77d0d59a-34b7-4482-a1c7-c0abbed17de2/fe238acf-b298-408c-94c5-97c921640c02/1.0.0.1.7c96decd-b0bf-47e0-ab50-c593d2c2983a/ChildOfLight-CH_1.0.0.1_x64__b6krnev7r9sf8" },
-                            {"麦克斯:兄弟魔咒(国服)", "1e2131e1-299c-4df1-bdb6-84a38e07ea9f_x", "/public/content/1d6640d3-3441-42bd-bffd-953d7d09ff5c/1e2131e1-299c-4df1-bdb6-84a38e07ea9f/1.5.0.0.6bd5e6cb-7547-4c90-a84c-ee06ba0bdf5b/Microsoft.Max_1.5.0.0_neutral__ph1m9x8skttmg" },
-                            {"型可塑(国服)", "22f22996-d089-4cc2-9919-3b0ef9fa783f_x", "/public/content/1c4b6e60-b2e3-420c-a8a8-540fb14c9286/22f22996-d089-4cc2-9919-3b0ef9fa783f/1.0.0.6.ec5e1d6e-4d07-41d0-8312-66bf5bcd7815/SHPUPCH446612E0_1.0.0.6_x64__zjr0dfhgjwvde" }
+                            {"刺客信条4:黑旗", "608ac2db-5e7f-40f6-8f71-67d7ca0b67fe_x", "/public/content/0044aef3-bd7e-4478-8782-6191546dcd9a/608ac2db-5e7f-40f6-8f71-67d7ca0b67fe/1.0.0.1.9ad3c756-4548-4842-94d3-726374bc24ab/ACBFJKT_1.0.0.1_x64__b6krnev7r9sf8" },
+                            {"麦克斯:兄弟魔咒", "26213de4-885d-4eaa-a433-ed5157116507_x", "/public/content/1d6640d3-3441-42bd-bffd-953d7d09ff5c/26213de4-885d-4eaa-a433-ed5157116507/1.2.1.0.89417ea8-51b5-408c-9283-60c181763a39/Microsoft.Max_1.2.1.0_neutral__ph1m9x8skttmg" },
+                            {"光之子", "db7a9163-9c5e-43a8-b8bf-fe0208149792_x", "/public/content/77d0d59a-34b7-4482-a1c7-c0abbed17de2/db7a9163-9c5e-43a8-b8bf-fe0208149792/1.0.0.3.65565c9c-8a1e-438a-b714-2d9965f0485b/ChildOfLight_1.0.0.3_x64__b6krnev7r9sf8" }
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
                         {
                             string? url = null;
                             if (XboxGameDownload.dicXboxGame.TryGetValue(games[i, 1], out XboxGameDownload.Products? XboxGame))
                             {
-                                url = XboxGame.Url?.Replace(".xboxlive.com", ".xboxlive.cn");
+                                if (XboxGame.Url != null && XboxGame.Version > new Version(Regex.Match(games[i, 2], @"(\d+\.\d+\.\d+\.\d+)").Value))
+                                {
+                                    url = XboxGame.Url?.Replace(".xboxlive.com", ".xboxlive.cn");
+                                }
                             }
                             if (string.IsNullOrEmpty(url)) url = "http://dlassets.xboxlive.cn" + games[i, 2];
                             LinkLabel lb = new()
@@ -2066,7 +2069,7 @@ namespace XboxDownload
                 LinkLabel? link = flpTestUrl.Controls[0] as LinkLabel;
                 tbDlUrl.Text = link?.Tag.ToString();
             }
-            butSpeedTest.Enabled = false;
+            cbImportIP.Enabled = butSpeedTest.Enabled = false;
             Col_IP.SortMode = Col_ASN.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
             ThreadPool.QueueUserWorkItem(delegate { SpeedTest(ls); });
         }
@@ -2430,7 +2433,7 @@ namespace XboxDownload
                 case "Col_HostName":
                     if (!string.IsNullOrWhiteSpace(e.FormattedValue.ToString()))
                     {
-                        if (!DnsListen.reHosts.IsMatch(e.FormattedValue.ToString()?.Trim() ?? string.Empty))
+                        if (!DnsListen.reHosts.IsMatch(Regex.Replace((e.FormattedValue.ToString() ?? string.Empty).Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2")))
                         {
                             e.Cancel = true;
                             dgvHosts.Rows[e.RowIndex].ErrorText = "域名格式不正确";
@@ -2554,24 +2557,19 @@ namespace XboxDownload
             dgvHosts.ClearSelection();
         }
 
-        private void LinkHostImport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkHostsImport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new()
+            FormImportHosts dialog = new();
+            dialog.ShowDialog();
+            string hosts = dialog.hosts;
+            dialog.Dispose();
+            if (string.IsNullOrEmpty(hosts)) return;
+            Regex regex = new (@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?<hostname>[^\s+]+)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$");
+            string[] array = hosts.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string str in array)
             {
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                Title = "导入域名 (Hosts格式 或者 DNSmasq格式)",
-                Filter = "文本文件(*.txt)|*.txt",
-                RestoreDirectory = true
-            };
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string str = string.Empty;
-                using (StreamReader sr = new(openFileDialog1.FileName))
-                {
-                    str = sr.ReadToEnd();
-                }
-                Match result = Regex.Match(str, @"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?<hostname>[^\s+]+)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", RegexOptions.Multiline);
-                while (result.Success)
+                Match result = regex.Match(str.Trim());
+                if (result.Success)
                 {
                     string hostname = result.Groups["hostname"].Value.Trim().ToLower();
                     if (IPAddress.TryParse(result.Groups["ip"].Value, out IPAddress? ip) && DnsListen.reHosts.IsMatch(hostname))
@@ -2591,7 +2589,6 @@ namespace XboxDownload
                         }
                         dr["IPv4"] = ip.ToString();
                     }
-                    result = result.NextMatch();
                 }
             }
             if (bServiceFlag) AddHosts(true);
@@ -4293,12 +4290,12 @@ namespace XboxDownload
                         tsmCopyUrl1.Visible = tsmCopyUrl2.Visible = true;
                         tsmCopyUrl2.Enabled = isGame;
                         tsmAllUrl.Visible = !isGame && lvGame.Tag != null && item.SubItems[0].Text == "Windows PC";
-                        tsmAuthorization1.Visible = tsmAuthorization2.Visible = false;
+                        tsmAuthorization.Visible = false;
                     }
                     else
                     {
-                        tsmCopyUrl1.Visible = tsmCopyUrl2.Visible = tsmAuthorization2.Visible = tsmAllUrl.Visible = false;
-                        tsmAuthorization1.Visible = tsmAuthorization2.Visible = true;
+                        tsmCopyUrl1.Visible = tsmCopyUrl2.Visible = tsmAllUrl.Visible = false;
+                        tsmAuthorization.Visible = true;
                     }
                     cmsCopyUrl.Show(MousePosition.X, MousePosition.Y);
                 }

@@ -163,16 +163,16 @@
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 540);
+            this.panel2.Location = new System.Drawing.Point(0, 542);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(975, 52);
+            this.panel2.Size = new System.Drawing.Size(975, 50);
             this.panel2.TabIndex = 1;
             // 
             // linkLabel4
             // 
             this.linkLabel4.AutoSize = true;
-            this.linkLabel4.Location = new System.Drawing.Point(884, 18);
+            this.linkLabel4.Location = new System.Drawing.Point(884, 15);
             this.linkLabel4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(82, 24);
@@ -183,7 +183,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(430, 10);
+            this.button1.Location = new System.Drawing.Point(430, 7);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(112, 36);
@@ -195,7 +195,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(20, 18);
+            this.label5.Location = new System.Drawing.Point(20, 15);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(334, 24);
@@ -210,7 +210,7 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(975, 442);
+            this.textBox1.Size = new System.Drawing.Size(975, 444);
             this.textBox1.TabIndex = 2;
             // 
             // FormImportIP
