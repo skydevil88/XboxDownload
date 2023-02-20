@@ -46,7 +46,7 @@ $HTTP["host"] =~ "^(dlassets|dlassets2)\.xboxlive\.com$" {
 	url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
 }
 #其它访问转发到8080端口，进入管理页面不需要加端口
-servers.modules +=( "mod_proxy")
+server.modules +=( "mod_proxy")
 proxy.server = ( "" => (( "host" => "127.0.0.1", "port" => 8080	)))
 
 #启动lighttpd服务以及设置其开机自启
@@ -57,7 +57,7 @@ proxy.server = ( "" => (( "host" => "127.0.0.1", "port" => 8080	)))
 ```
 ![图2](doc/Op2.png)
 
-4.打开OpenWrt管理页 网络-》主机名 ，添加 主机名：
+4.打开OpenWrt管理页 网络-》主机名 ，添加 主机名（注意以下的192.168.1.1应替换为您的Openwrt路由的ip地址）：
 ```bash
 xvcf1.xboxlive.com			192.168.1.1
 xvcf2.xboxlive.com			192.168.1.1
