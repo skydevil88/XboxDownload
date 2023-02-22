@@ -106,7 +106,7 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 vi /etc/nginx/conf.d/xbox.conf
 #按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
 
-server_names_hash_bucket_size 128;
+server_names_hash_bucket_size 64;
 server {
         listen 80;
         server_name assets1.xboxlive.com assets2.xboxlive.com d1.xboxlive.com d2.xboxlive.com xvcf1.xboxlive.com xvcf2.xboxlive.com dlassets.xboxlive.com dlassets2.xboxlive.com;
