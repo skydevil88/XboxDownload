@@ -106,6 +106,7 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 vi /etc/nginx/conf.d/xbox.conf
 #按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
 #启动报错可以增加以下一句，server_names_hash_bucket_size 64; 不够就按32倍数往上加(128、256)
+
 server_names_hash_bucket_size 64;
 server {
         listen 80;
