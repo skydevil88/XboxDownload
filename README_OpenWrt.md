@@ -13,6 +13,8 @@ ip6tables -I INPUT -p icmpv6 -m mac --mac-source XBOX_MAC -j DROP
 ip6tables -I INPUT -p udp -m mac --mac-source XBOX_MAC --dport 547 -j DROP
 ```
 
+注意：以下教程里面的 192.168.1.1 替换为您的Openwrt路由的ip地址
+
 ## 方法一：Lighttpd 
 B站视频教程：https://www.bilibili.com/video/BV1wP4y1G7zf
 
@@ -57,7 +59,7 @@ proxy.server = ( "" => (( "host" => "127.0.0.1", "port" => 8080	)))
 ```
 ![图2](doc/Op2.png)
 
-4.打开OpenWrt管理页 网络-》主机名 ，添加 主机名（注意以下的192.168.1.1应替换为您的Openwrt路由的ip地址）：
+4.打开OpenWrt管理页 网络-》主机名 ，添加 主机名：
 ```bash
 xvcf1.xboxlive.com			192.168.1.1
 xvcf2.xboxlive.com			192.168.1.1
@@ -93,6 +95,7 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 
 
 ## 方法二：Nginx	
+注：部分使用了Nginx替换Uhttpd固件可以省略步骤 1、2 
 1. 修改uhttpd端口, 这次用管理页面直接修改(系统->Web管理)，端口改为8080保存重启。
 没有此页面可以参考上面Lighttpd修改uhttpd端口
 ![图2.1](doc/Op2.1.png)
