@@ -67,7 +67,6 @@ namespace XboxDownload.Properties {
         ///
         ///
         ///###################### Nintendo ######################
-        ///bugyo.hac.lp1.eshop.nintendo.net	#NS商店、视频
         ///*.hac.lp1.d4c.nintendo.net
         ///*.hac.lp1.eshop.nintendo.net
         ///*.hac.lp1.dragons.nintendo.net
@@ -81,7 +80,9 @@ namespace XboxDownload.Properties {
         ///ratt.juno.ea.com
         ///autopatch.juno.ea.com
         ///desktop-config.juno.ea.com
-        ///split-evaluator. [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///split-evaluator.juno.ea.com
+        ///contentful-proxy.juno.ea.com
+        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Akamai {
             get {

@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmUpdate = new System.Windows.Forms.ToolStripMenuItem();
@@ -229,6 +229,7 @@
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkAppxAdd = new System.Windows.Forms.LinkLabel();
             this.linkWebPage = new System.Windows.Forms.LinkLabel();
             this.linkCompare = new System.Windows.Forms.LinkLabel();
@@ -1039,9 +1040,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            this.Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(this.Col_TTL, "Col_TTL");
             this.Col_TTL.Name = "Col_TTL";
             this.Col_TTL.ReadOnly = true;
@@ -1049,9 +1050,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            this.Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.Col_RoundtripTime, "Col_RoundtripTime");
             this.Col_RoundtripTime.Name = "Col_RoundtripTime";
             this.Col_RoundtripTime.ReadOnly = true;
@@ -1059,9 +1060,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            this.Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.Col_Speed, "Col_Speed");
             this.Col_Speed.Name = "Col_Speed";
             this.Col_Speed.ReadOnly = true;
@@ -1835,6 +1836,7 @@
             // 
             // panel6
             // 
+            this.panel6.Controls.Add(this.linkLabel1);
             this.panel6.Controls.Add(this.linkAppxAdd);
             this.panel6.Controls.Add(this.linkWebPage);
             this.panel6.Controls.Add(this.linkCompare);
@@ -1858,6 +1860,15 @@
             this.panel6.Controls.Add(this.pbGame);
             resources.ApplyResources(this.panel6, "panel6");
             this.panel6.Name = "panel6";
+            // 
+            // linkLabel1
+            // 
+            resources.ApplyResources(this.linkLabel1, "linkLabel1");
+            this.linkLabel1.LinkColor = System.Drawing.Color.Red;
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Tag = "https://www.bilibili.com/video/BV1Bj411P7uE/";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_LinkClicked);
             // 
             // linkAppxAdd
             // 
@@ -2987,5 +2998,6 @@
         private ToolStripMenuItem tsmAuthorization;
         private ToolStripMenuItem tsmAuthorization1;
         private ToolStripMenuItem tsmAuthorization2;
+        private LinkLabel linkLabel1;
     }
 }

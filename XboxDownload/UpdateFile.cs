@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
@@ -115,27 +116,29 @@ namespace XboxDownload
                             string tempDir = Form1.resourcePath + @"\Temp";
                             if (Directory.Exists(tempDir))
                                 Directory.Delete(tempDir, true);
-                            ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
-                            DirectoryInfo di = new(tempDir + @"\XboxDownload");
-                            if (!di.Exists) di = new(tempDir + @"\Xbox下载助手");
-                            if (di.Exists)
+                            ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, true);
+                            foreach (DirectoryInfo di in new DirectoryInfo(tempDir).GetDirectories())
                             {
-                                parentForm.Invoke(new Action(() =>
+                                if (File.Exists(di.FullName + @"\XboxDownload.exe"))
                                 {
-                                    if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
-                                    parentForm.notifyIcon1.Visible = false;
-                                }));
-                                string cmd = "choice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
-                                File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd, Encoding.GetEncoding(0));
-                                using (Process p = new())
-                                {
-                                    p.StartInfo.FileName = "cmd.exe";
-                                    p.StartInfo.UseShellExecute = false;
-                                    p.StartInfo.CreateNoWindow = true;
-                                    p.StartInfo.Arguments = "/c \"" + tempDir + "\\.update.cmd\"";
-                                    p.Start();
+                                    parentForm.Invoke(new Action(() =>
+                                    {
+                                        if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
+                                        parentForm.notifyIcon1.Visible = false;
+                                    }));
+                                    string cmd = "choice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
+                                    File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd, Encoding.GetEncoding(0));
+                                    using (Process p = new())
+                                    {
+                                        p.StartInfo.FileName = "cmd.exe";
+                                        p.StartInfo.UseShellExecute = false;
+                                        p.StartInfo.CreateNoWindow = true;
+                                        p.StartInfo.Arguments = "/c \"" + tempDir + "\\.update.cmd\"";
+                                        p.Start();
+                                    }
+                                    Process.GetCurrentProcess().Kill();
+                                    break;
                                 }
-                                Process.GetCurrentProcess().Kill();
                             }
                         }
                     }

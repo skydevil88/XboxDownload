@@ -64,7 +64,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelCn2, "包括以下cn2游戏下载域名\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn\n\n以上域名可以共用 Akamai IP");
             toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
-            toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
+            toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net\n\n速度不正常请点击右下角 “修复 EA app”");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
@@ -1378,7 +1378,7 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/10/bfd7560c-f314-4a6e-b8e6-da2a09f63018/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3689.20075.0.eaaa434b-a879-4a95-bda8-b5c8235297d7/Microsoft.254428597CFE2_1.3689.20075.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/Z/1132f759-91b5-422a-b782-685fbb1cff6f/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3730.28308.0.34a6e89d-d1be-41d6-b790-1a7742284856/Microsoft.254428597CFE2_1.3730.28308.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/14/47e57555-24b7-4298-98e7-fa2ebffcf5a8/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.553.89.0.ee5c8df6-b719-4475-86a1-7e28ce38671c/Microsoft.624F8B84B80_3.553.89.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
@@ -1470,12 +1470,20 @@ namespace XboxDownload
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb3 = new()
                         {
+                            Tag = "e0229546-200d-4c66-a693-df9bf799635f|EAppxBundle|9PNQKHFLD2WQ",
+                            Text = "地平线4(PC)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb4 = new()
+                        {
                             Tag = "10234393-bf1c-453c-84c2-f0fd48d6b800|EAppxBundle|9P2N57MC619K",
                             Text = "盗贼之海(PC)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
-                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         _ = new Label()
                         {
                             ForeColor = Color.Green,
@@ -2106,7 +2114,7 @@ namespace XboxDownload
                 string newHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# " + Form1.appName + "\r\n", "");
                 if (String.Equals(sHosts, newHosts))
                 {
-                    MessageBox.Show("Hosts文件没有写入任何规则，无需清除。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    MessageBox.Show("Hosts文件没有写入任何规则，无需清除。\n\n注：只清除Xbox下载助手写入的规则。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 else
                 {

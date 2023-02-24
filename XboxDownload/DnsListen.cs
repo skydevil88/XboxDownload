@@ -299,6 +299,7 @@ namespace XboxDownload
                                         argb = 0x008000;
                                         break;
                                     case "atum.hac.lp1.d4c.nintendo.net":
+                                    case "bugyo.hac.lp1.eshop.nintendo.net":
                                     case "ctest-dl-lp1.cdn.nintendo.net":
                                     case "ctest-ul-lp1.cdn.nintendo.net":
                                         byteIP = nsIP;

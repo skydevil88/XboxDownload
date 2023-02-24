@@ -4,7 +4,6 @@ download.xbox.com		#Xbox360主机下载域名
 
 
 ###################### Nintendo ######################
-bugyo.hac.lp1.eshop.nintendo.net	#NS商店、视频
 *.hac.lp1.d4c.nintendo.net
 *.hac.lp1.eshop.nintendo.net
 *.hac.lp1.dragons.nintendo.net
