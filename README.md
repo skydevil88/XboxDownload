@@ -1,14 +1,5 @@
 # Xbox下载助手
 
-最近国内游戏无法打开的解决办法
----
-```
-20.54.89.15 fe3cr.delivery.mp.microsoft.com #没法下载应用和部分PC商店游戏(盗贼之海、地平线4)多数是这个域名出问题，要用欧洲IP，用美国IP会被重置。
-20.123.104.105 licensing.mp.microsoft.com
-```
-
-![GFW](doc/gfw.png)
-
 [OpenWrt 安装 Lighttpd 或者 Nginx，使用URL重写跳转国内CDN服务器加速下载](./README_OpenWrt.md)
 
 获取微软商店应用游戏下载链接
