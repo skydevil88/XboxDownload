@@ -4657,7 +4657,7 @@ namespace XboxDownload
         private void LinkAppxRefreshDrive_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs? e)
         {
             cbAppxDrive.Items.Clear();
-            DriveInfo[] driverList = Array.FindAll(DriveInfo.GetDrives(), a => a.DriveType == DriveType.Fixed);
+            DriveInfo[] driverList = Array.FindAll(DriveInfo.GetDrives(), a => a.DriveType == DriveType.Fixed && a.IsReady && a.DriveFormat == "NTFS");
             if (driverList.Length >= 1)
             {
                 cbAppxDrive.Items.AddRange(driverList);
