@@ -17,6 +17,9 @@ namespace XboxDownload
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form1());
 
+#if DEBUG
+            Form1.debug = true;
+#endif
             using Process? instance = RunningInstance();
             if (instance == null)
             {

@@ -2389,7 +2389,8 @@
     <value>True</value>
   </data>
   <data name="tbDlUrl.PlaceholderText" xml:space="preserve">
-    <value>请关闭加速器、代理软件再开始测速，国内IP一般只需测本省IP，可以使用查找功能筛选；下载速度换算公式：1 MB/s = 8 Mbps</value>
+    <value>请关闭加速器、代理软件再开始测速，国内IP一般只需测本省IP，可以使用查找功能筛选；下载速度换算公式：1 MB/s = 8 Mbps。
+实际下载速度跟CDN有没有该游戏的缓存有关，速度慢可以使用正在下载的游戏链接测速。</value>
   </data>
   <data name="tbDlUrl.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
     <value>Both</value>
@@ -6351,7 +6352,7 @@
     <value>Top</value>
   </data>
   <data name="gpEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 489</value>
+    <value>0, 560</value>
   </data>
   <data name="gpEACdn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6610,7 +6611,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>Top</value>
   </data>
   <data name="groupBox10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 294</value>
+    <value>0, 365</value>
   </data>
   <data name="groupBox10.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6646,7 +6647,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>758, 20</value>
   </data>
   <data name="label48.Size" type="System.Drawing.Size, System.Drawing">
-    <value>596, 96</value>
+    <value>654, 168</value>
   </data>
   <data name="label48.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -6655,7 +6656,10 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>使用说明：
 1. 选择已经下载完成微软商店应用或者游戏。
 2. 然后点击安装，等待进度条完成后重启Xbox应用。
-提示：游戏安装文件夹可以在Xbox“设置-&gt;常规-&gt;游戏安装选项”中更改。</value>
+提示：游戏安装文件夹可以在Xbox“设置-&gt;常规-&gt;游戏安装选项”中更改。
+安装盘无法选择可以在以下位置更改，开始菜单右键：
+系统-&gt;存储-&gt;高级存储设置-&gt;保存新内容的地方-&gt;新的应用将保存到（Win11）
+系统-&gt;存储-&gt;更改新内容的保存位置-&gt;新的应用将保存到（Win10）</value>
   </data>
   <data name="&gt;&gt;label48.Name" xml:space="preserve">
     <value>label48</value>
@@ -6673,7 +6677,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>NoControl</value>
   </data>
   <data name="butAppxInstall.Location" type="System.Drawing.Point, System.Drawing">
-    <value>568, 68</value>
+    <value>568, 74</value>
   </data>
   <data name="butAppxInstall.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6703,7 +6707,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>NoControl</value>
   </data>
   <data name="butAppxOpenFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>568, 27</value>
+    <value>568, 33</value>
   </data>
   <data name="butAppxOpenFile.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6736,7 +6740,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>NoControl</value>
   </data>
   <data name="linkAppxRefreshDrive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>220, 74</value>
+    <value>220, 80</value>
   </data>
   <data name="linkAppxRefreshDrive.Size" type="System.Drawing.Size, System.Drawing">
     <value>46, 24</value>
@@ -6760,7 +6764,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>3</value>
   </data>
   <data name="cbAppxDrive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>94, 69</value>
+    <value>94, 75</value>
   </data>
   <data name="cbAppxDrive.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6787,7 +6791,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>True</value>
   </data>
   <data name="label47.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 74</value>
+    <value>8, 80</value>
   </data>
   <data name="label47.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -6811,7 +6815,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>5</value>
   </data>
   <data name="tbAppxFilePath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>94, 27</value>
+    <value>94, 33</value>
   </data>
   <data name="tbAppxFilePath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -6838,7 +6842,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>True</value>
   </data>
   <data name="label46.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 33</value>
+    <value>8, 39</value>
   </data>
   <data name="label46.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -6874,7 +6878,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>3, 2, 3, 2</value>
   </data>
   <data name="groupBox9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 124</value>
+    <value>1436, 195</value>
   </data>
   <data name="groupBox9.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>

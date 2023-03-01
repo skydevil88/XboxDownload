@@ -1379,7 +1379,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/Z/1132f759-91b5-422a-b782-685fbb1cff6f/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3730.28308.0.34a6e89d-d1be-41d6-b790-1a7742284856/Microsoft.254428597CFE2_1.3730.28308.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/14/47e57555-24b7-4298-98e7-fa2ebffcf5a8/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.553.89.0.ee5c8df6-b719-4475-86a1-7e28ce38671c/Microsoft.624F8B84B80_3.553.89.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/7/dabe1153-2b4f-4a06-ba15-c4eb2e27c4b1/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.563.816.0.a2d93f91-f546-45a3-aeb5-27b49fe73ce5/Microsoft.624F8B84B80_3.563.816.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -2572,7 +2572,7 @@ namespace XboxDownload
             string hosts = dialog.hosts;
             dialog.Dispose();
             if (string.IsNullOrEmpty(hosts)) return;
-            Regex regex = new (@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?<hostname>[^\s+]+)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$");
+            Regex regex = new(@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?<hostname>[^\s+]+)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$");
             string[] array = hosts.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string str in array)
             {

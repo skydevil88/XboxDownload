@@ -126,8 +126,8 @@ namespace XboxDownload
                                         if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
                                         parentForm.notifyIcon1.Visible = false;
                                     }));
-                                    string cmd = "choice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
-                                    File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd, Encoding.GetEncoding(0));
+                                    string cmd = "chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
+                                    File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd);
                                     using (Process p = new())
                                     {
                                         p.StartInfo.FileName = "cmd.exe";
