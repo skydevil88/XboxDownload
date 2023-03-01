@@ -5,11 +5,12 @@ namespace XboxDownload
 {
     public partial class FormStartup : Form
     {
+        readonly string appName = Form1.appName;
         public FormStartup()
         {
             InitializeComponent();
-
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\Tasks\"+ Form1.appName))
+            if (Thread.CurrentThread.CurrentCulture.Name != "zh-CN") appName = "XboxDownload";
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\Tasks\" + appName))
             {
                 cbStartup.Checked = true;
             }
@@ -31,7 +32,7 @@ namespace XboxDownload
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                p.StandardInput.WriteLine("schtasks /create /xml \"" + filePath + "\" /tn \"" + Form1.appName + "\" /f");
+                p.StandardInput.WriteLine("schtasks /create /xml \"" + filePath + "\" /tn \"" + appName + "\" /f");
                 p.StandardInput.WriteLine("exit");
                 p.WaitForExit();
                 File.Delete(filePath);
@@ -46,6 +47,7 @@ namespace XboxDownload
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
                 p.StandardInput.WriteLine("schtasks /delete /tn \"" + Form1.appName + "\" /f");
+                p.StandardInput.WriteLine("schtasks /delete /tn \"" + appName + "\" /f");
                 p.StandardInput.WriteLine("exit");
                 p.WaitForExit();
             }
