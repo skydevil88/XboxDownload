@@ -5,12 +5,10 @@ namespace XboxDownload
 {
     public partial class FormStartup : Form
     {
-        readonly string appName = Form1.appName;
         public FormStartup()
         {
             InitializeComponent();
-            if (Thread.CurrentThread.CurrentCulture.Name != "zh-CN") appName = "XboxDownload";
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\Tasks\" + appName))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\Tasks\" + Form1.appName))
             {
                 cbStartup.Checked = true;
             }
@@ -22,34 +20,39 @@ namespace XboxDownload
 
             if (cbStartup.Checked)
             {
-                string filePath = Path.GetTempPath() + "XboxDownloadTask.xml";
+                string taskPath = Path.GetTempPath() + "XboxDownloadTask.xml";
                 string xml = String.Format(Properties.Resource.Task, Application.ExecutablePath);
-                File.WriteAllText(filePath, xml, Encoding.GetEncoding("UTF-16"));
-                using Process p = new();
-                p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-                p.StandardInput.WriteLine("schtasks /create /xml \"" + filePath + "\" /tn \"" + appName + "\" /f");
-                p.StandardInput.WriteLine("exit");
-                p.WaitForExit();
-                File.Delete(filePath);
+                File.WriteAllText(taskPath, xml, Encoding.GetEncoding("UTF-16"));
+                string cmdPath = Path.GetTempPath() + "\\XboxDownloadTask.cmd";
+                string cmd = "chcp 65001\r\nschtasks /create /xml \"" + taskPath + "\" /tn \"" + Form1.appName + "\" /f";
+                File.WriteAllText(cmdPath, cmd);
+                using (Process p = new())
+                {
+                    p.StartInfo.FileName = "cmd.exe";
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.Arguments = "/c \"" + cmdPath + "\"";
+                    p.Start();
+                    p.WaitForExit();
+                }
+                File.Delete(cmdPath);
+                File.Delete(taskPath);
             }
             else
             {
-                using Process p = new();
-                p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-                p.StandardInput.WriteLine("schtasks /delete /tn \"" + Form1.appName + "\" /f");
-                p.StandardInput.WriteLine("schtasks /delete /tn \"" + appName + "\" /f");
-                p.StandardInput.WriteLine("exit");
-                p.WaitForExit();
+                string cmdPath = Path.GetTempPath() + "XboxDownloadTask.cmd";
+                string cmd = "chcp 65001\r\nschtasks /delete /tn \"" + Form1.appName + "\" /f\r\nschtasks /delete /tn \"XboxDownload\" /f";
+                File.WriteAllText(cmdPath, cmd);
+                using (Process p = new())
+                {
+                    p.StartInfo.FileName = "cmd.exe";
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.Arguments = "/c \"" + cmdPath + "\"";
+                    p.Start();
+                    p.WaitForExit();
+                }
+                File.Delete(cmdPath);
             }
             this.Close();
         }
