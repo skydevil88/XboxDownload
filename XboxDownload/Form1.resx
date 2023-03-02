@@ -4886,7 +4886,7 @@
     <value>0</value>
   </data>
   <data name="columnHeader1.Text" xml:space="preserve">
-    <value>类别</value>
+    <value>游戏平台</value>
   </data>
   <data name="columnHeader1.Width" type="System.Int32, mscorlib">
     <value>105</value>
