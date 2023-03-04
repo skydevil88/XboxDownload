@@ -245,6 +245,7 @@ namespace XboxDownload
                 ThreadPool.QueueUserWorkItem(delegate { UpdateFile.Start(true, this); });
             }
         }
+
         private void TsmUpdate_Click(object sender, EventArgs e)
         {
             tsmUpdate.Enabled = false;
@@ -1416,7 +1417,7 @@ namespace XboxDownload
                     {
                         string[,] games = new string[,]
                         {
-                            {"刺客信条4:黑旗", "608ac2db-5e7f-40f6-8f71-67d7ca0b67fe_x", "/public/content/0044aef3-bd7e-4478-8782-6191546dcd9a/608ac2db-5e7f-40f6-8f71-67d7ca0b67fe/1.0.0.1.9ad3c756-4548-4842-94d3-726374bc24ab/ACBFJKT_1.0.0.1_x64__b6krnev7r9sf8" },
+                            {"刺客信条:大革命", "372e2966-b158-4488-8bc8-15ef23db1379_x", "/public/content/1b5a4a08-06f0-49d6-b25f-d7322c11f3c8/372e2966-b158-4488-8bc8-15ef23db1379/1.5.0.1018.88cd7a5d-f56a-40c7-afd8-85cd4940b891/ACUEU771E1BF7_1.5.0.1018_x64__b6krnev7r9sf8" },
                             {"麦克斯:兄弟魔咒", "26213de4-885d-4eaa-a433-ed5157116507_x", "/public/content/1d6640d3-3441-42bd-bffd-953d7d09ff5c/26213de4-885d-4eaa-a433-ed5157116507/1.2.1.0.89417ea8-51b5-408c-9283-60c181763a39/Microsoft.Max_1.2.1.0_neutral__ph1m9x8skttmg" },
                             {"光之子", "db7a9163-9c5e-43a8-b8bf-fe0208149792_x", "/public/content/77d0d59a-34b7-4482-a1c7-c0abbed17de2/db7a9163-9c5e-43a8-b8bf-fe0208149792/1.0.0.3.65565c9c-8a1e-438a-b714-2d9965f0485b/ChildOfLight_1.0.0.3_x64__b6krnev7r9sf8" }
                         };
@@ -3540,7 +3541,7 @@ namespace XboxDownload
                     {
                         string url = result.Groups["url"].Value.Trim();
                         string title = Regex.Replace(HttpUtility.HtmlDecode(result.Groups["title"].Value), "^Free Play Days – ", "").Trim();
-                        DateTime dt = DateTime.ParseExact(result.Groups["date"].Value, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture).AddHours(12);
+                        DateTime dt = DateTime.ParseExact(result.Groups["date"].Value, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture).AddHours(TimeZoneInfo.Local.BaseUtcOffset.Hours + 4);
                         DateTime monday = dt.AddDays(Convert.ToInt32(1 - Convert.ToInt32(dt.DayOfWeek)) + 7);
                         lbFreePlayDays = new LinkLabel
                         {
@@ -3588,11 +3589,6 @@ namespace XboxDownload
                     if (lbFreePlayDays != null)
                     {
                         lbFreePlayDays.Parent = this.flpGameWithGold;
-                    }
-                    if (flpGameWithGold.VerticalScroll.Visible)
-                    {
-                        gbMicrosoftStore.Height = (int)(gbMicrosoftStore.Height + 30 * Form1.dpixRatio);
-                        flpGameWithGold.Height = (int)(flpGameWithGold.Height + 30 * Form1.dpixRatio);
                     }
                 }));
             }
@@ -4249,6 +4245,15 @@ namespace XboxDownload
             if (sender is not LinkLabel link) return;
             string? url = link.Tag.ToString();
             if (string.IsNullOrEmpty(url)) return;
+            switch (link.Name)
+            {
+                case "linkWebPage":
+                    if (gbGameInfo.Tag != null)
+                    {
+                        url += "?" + ((ClassGame.Game)gbGameInfo.Tag).Products[0].ProductId;
+                    }
+                    break;
+            }
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
 
@@ -4657,6 +4662,7 @@ namespace XboxDownload
         private void LinkAppxRefreshDrive_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs? e)
         {
             cbAppxDrive.Items.Clear();
+            cbAppxDrive.Items.Add("系统默认");
             DriveInfo[] driverList = Array.FindAll(DriveInfo.GetDrives(), a => a.DriveType == DriveType.Fixed && a.IsReady && a.DriveFormat == "NTFS");
             if (driverList.Length >= 1)
             {
@@ -4708,7 +4714,10 @@ namespace XboxDownload
             }
             else
             {
-                cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\"";
+                if (cbAppxDrive.SelectedIndex == 0)
+                    cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "'\"";
+                else
+                    cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\"";
             }
             try
             {

@@ -4886,7 +4886,7 @@
     <value>0</value>
   </data>
   <data name="columnHeader1.Text" xml:space="preserve">
-    <value>游戏平台</value>
+    <value>播放平台</value>
   </data>
   <data name="columnHeader1.Width" type="System.Int32, mscorlib">
     <value>105</value>
@@ -5789,6 +5789,9 @@
   <data name="&gt;&gt;gbGameInfo.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="flpGameWithGold.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <data name="flpGameWithGold.Location" type="System.Drawing.Point, System.Drawing">
     <value>148, 102</value>
   </data>
@@ -5796,7 +5799,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="flpGameWithGold.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1278, 42</value>
+    <value>1278, 45</value>
   </data>
   <data name="flpGameWithGold.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
