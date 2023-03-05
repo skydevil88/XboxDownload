@@ -381,7 +381,6 @@ namespace XboxDownload
                     if (cbAppxDrive.Items.Count == 0)
                     {
                         LinkAppxRefreshDrive_LinkClicked(null, null);
-                        GetEACdn();
                     }
                     break;
             }
@@ -4659,16 +4658,111 @@ namespace XboxDownload
             }
         }
 
+        private void CbAppxDrive_SelectedIndexChanged(object? sender, EventArgs? e)
+        {
+            string drive = cbAppxDrive.Text;
+            Task.Run(() =>
+            {
+                bool error = false;
+                string apps;
+                string outputString = string.Empty;
+                using (Process p = new())
+                {
+                    p.StartInfo.FileName = "powershell.exe";
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardInput = true;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+                    p.StandardInput.WriteLine("Get-AppxVolume -Path " + drive);
+                    p.StandardInput.Close();
+                    outputString = p.StandardOutput.ReadToEnd();
+                    p.WaitForExit();
+                }
+                Match result = Regex.Match(outputString, @"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)");
+                if (result.Success)
+                {
+                    if (result.Groups["IsOffline"].Value == "False")
+                    {
+                        apps = result.Groups["PackageStorePath"].Value.Trim();
+                    }
+                    else
+                    {
+                        error = true;
+                        apps = result.Groups["PackageStorePath"].Value.Trim() + (result.Groups["IsOffline"].Value == "True" ? " (离线)" : "");
+                    }
+                }
+                else
+                {
+                    error = true;
+                    result = Regex.Match(outputString, @"Get-AppxVolume :(.+)");
+                    if (result.Success)
+                        apps = result.Groups[1].Value.Trim();
+                    else
+                        apps = "(未知错误)";
+                }
+                string games;
+                if (File.Exists(drive + "\\.GamingRoot"))
+                {
+                    using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
+                    using BinaryReader br = new(fs);
+                    if (Encoding.Default.GetString(br.ReadBytes(0x4)) == "RGBX")
+                    {
+                        br.BaseStream.Position = 0x8;
+                        games = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
+                        if (!Directory.Exists(games))
+                        {
+                            games += " (文件夹不存在)";
+                        }
+                    }
+                    else
+                    {
+                        games = drive + " (文件夹未知)";
+                    }
+                }
+                else
+                {
+                    games = drive + " (文件夹未知)";
+                }
+                this.Invoke(new Action(() =>
+                {
+                    linkFixAppxDrive.Visible = error;
+                    labelInstallationLocation.ForeColor = error ? Color.Red : Color.Green;
+                    labelInstallationLocation.Text = $"应用安装目录：{apps}\r\n游戏安装目录：{games}";
+                }));
+            });
+        }
+
         private void LinkAppxRefreshDrive_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs? e)
         {
             cbAppxDrive.Items.Clear();
-            cbAppxDrive.Items.Add("系统默认");
             DriveInfo[] driverList = Array.FindAll(DriveInfo.GetDrives(), a => a.DriveType == DriveType.Fixed && a.IsReady && a.DriveFormat == "NTFS");
             if (driverList.Length >= 1)
             {
                 cbAppxDrive.Items.AddRange(driverList);
                 cbAppxDrive.SelectedIndex = 0;
             }
+        }
+
+        private void LinkFixAppxDrive_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string drive = cbAppxDrive.Text, path;
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            if (dir.StartsWith(drive))
+                path = dir + "\\WindowsApps";
+            else
+                path = drive + "WindowsApps";
+            using Process p = new();
+            p.StartInfo.FileName = @"powershell.exe";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            p.StandardInput.WriteLine("Add-AppxVolume -Path " + path);
+            p.StandardInput.WriteLine("exit");
+            p.WaitForExit();
+            MessageBox.Show("安装位置修复已完成。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CbAppxDrive_SelectedIndexChanged(null, null);
         }
 
         private void ButAppxOpenFile_Click(object sender, EventArgs e)
@@ -4714,10 +4808,7 @@ namespace XboxDownload
             }
             else
             {
-                if (cbAppxDrive.SelectedIndex == 0)
-                    cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "'\"";
-                else
-                    cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\"";
+                cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\"";
             }
             try
             {
@@ -4737,6 +4828,7 @@ namespace XboxDownload
             linkRestartGamingServices.Enabled = linkReInstallGamingServices.Enabled = false;
             ThreadPool.QueueUserWorkItem(delegate { ReStartGamingServices(); });
         }
+
         private void ReStartGamingServices()
         {
             bool bTimeOut = false, bDone = false;
@@ -4839,7 +4931,10 @@ namespace XboxDownload
                 else
                 {
                     string msg = response != null ? "下载失败，错误信息：" + response.ReasonPhrase : "下载失败";
-                    MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke(new Action(() =>
+                    {
+                        MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
                 }
                 if (File.Exists(filePath))
                 {
@@ -4946,103 +5041,6 @@ namespace XboxDownload
                 outputString = Regex.Replace(outputString, "\r\n+", "\r\n");
                 MessageBox.Show(outputString.Trim(), "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
-
-
-        private void ButEACdn_Click(object sender, EventArgs e)
-        {
-            if (gpEACdn.Tag == null)
-            {
-                MessageBox.Show("没有安装 Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                return;
-            }
-            string cdn = string.Empty, status;
-            if (rbEACdn1.Checked)
-            {
-                cdn = "[connection]\r\nEnvironmentName=production\r\n\r\n[Feature]\r\nCdnOverride=akamai\r\n";
-                status = "当前使用CDN：Akamai";
-            }
-            else if (rbEACdn2.Checked)
-            {
-                cdn = "[connection]\r\nEnvironmentName=production\r\n\r\n[Feature]\r\nCdnOverride=level3\r\n";
-                status = "当前使用CDN：Level3";
-            }
-            else
-            {
-                status = "当前使用CDN：自动";
-            }
-            string? eaCoreIni = gpEACdn.Tag.ToString();
-            if (!string.IsNullOrEmpty(eaCoreIni))
-            {
-                using StreamWriter sw = new(eaCoreIni, false);
-                sw.Write(cdn);
-            }
-            labelStatusEACdn.Text = status;
-        }
-
-        private void LinkEaOriginRepair_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (MessageBox.Show("此操作将删除Origin缓存文件和登录信息，执行下一步之前请先退出Origin，是否继续？", "修复 EA Origin", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-            {
-                Process[] processes = Process.GetProcessesByName("Origin");
-                if (processes.Length == 0)
-                {
-                    try
-                    {
-                        DirectoryInfo di1 = new(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Origin");
-                        if (di1.Exists) di1.Delete(true);
-                        DirectoryInfo di2 = new(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Local\\Origin");
-                        if (di2.Exists) di2.Delete(true);
-                    }
-                    catch { }
-                    string? originPath = e.Link.LinkData.ToString();
-                    if (!string.IsNullOrEmpty(originPath))
-                    {
-                        Process.Start(new ProcessStartInfo(originPath) { UseShellExecute = true });
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("请先退出 Origin。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-            }
-        }
-
-        private void GetEACdn()
-        {
-            string eaCoreIni = string.Empty;
-            using (var key = Microsoft.Win32.Registry.LocalMachine)
-            {
-                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Origin");
-                rk ??= key.OpenSubKey(@"SOFTWARE\Origin");
-                if (rk != null)
-                {
-                    string originPath = (string)(rk.GetValue("OriginPath", null) ?? string.Empty);
-                    if (File.Exists(originPath))
-                    {
-                        linkEaOriginRepair.Links[0].LinkData = originPath;
-                        linkEaOriginRepair.Enabled = true;
-                        eaCoreIni = Path.GetDirectoryName(originPath) + "\\EACore.ini";
-                    }
-                    rk.Close();
-                }
-            }
-            if (string.IsNullOrEmpty(eaCoreIni))
-            {
-                labelStatusEACdn.Text += "没有安装 Origin";
-                return;
-            }
-            gpEACdn.Tag = eaCoreIni;
-            string str = string.Empty;
-            using (StreamReader sw = new(eaCoreIni))
-            {
-                str = sw.ReadToEnd();
-            }
-            Match result = Regex.Match(str, @"CdnOverride=(.+)");
-            if (result.Success)
-                labelStatusEACdn.Text += Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(result.Groups[1].Value.Trim());
-            else
-                labelStatusEACdn.Text += "自动";
         }
         #endregion
     }

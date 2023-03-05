@@ -264,14 +264,6 @@
             tbGameUrl = new TextBox();
             label32 = new Label();
             tabTool = new TabPage();
-            gpEACdn = new GroupBox();
-            label51 = new Label();
-            linkEaOriginRepair = new LinkLabel();
-            labelStatusEACdn = new Label();
-            butEACdn = new Button();
-            rbEACdn3 = new RadioButton();
-            rbEACdn2 = new RadioButton();
-            rbEACdn1 = new RadioButton();
             groupBox10 = new GroupBox();
             linkLabel2 = new LinkLabel();
             linkTroubleshootGame = new LinkLabel();
@@ -282,6 +274,8 @@
             linkRestartGamingServices = new LinkLabel();
             textBox1 = new TextBox();
             groupBox9 = new GroupBox();
+            linkFixAppxDrive = new LinkLabel();
+            labelInstallationLocation = new Label();
             label48 = new Label();
             butAppxInstall = new Button();
             butAppxOpenFile = new Button();
@@ -368,7 +362,6 @@
             ((System.ComponentModel.ISupportInitialize)pbGame).BeginInit();
             gbMicrosoftStore.SuspendLayout();
             tabTool.SuspendLayout();
-            gpEACdn.SuspendLayout();
             groupBox10.SuspendLayout();
             groupBox9.SuspendLayout();
             groupBox8.SuspendLayout();
@@ -2037,71 +2030,12 @@
             // 
             // tabTool
             // 
-            tabTool.Controls.Add(gpEACdn);
             tabTool.Controls.Add(groupBox10);
             tabTool.Controls.Add(groupBox9);
             tabTool.Controls.Add(groupBox8);
             resources.ApplyResources(tabTool, "tabTool");
             tabTool.Name = "tabTool";
             tabTool.UseVisualStyleBackColor = true;
-            // 
-            // gpEACdn
-            // 
-            gpEACdn.Controls.Add(label51);
-            gpEACdn.Controls.Add(linkEaOriginRepair);
-            gpEACdn.Controls.Add(labelStatusEACdn);
-            gpEACdn.Controls.Add(butEACdn);
-            gpEACdn.Controls.Add(rbEACdn3);
-            gpEACdn.Controls.Add(rbEACdn2);
-            gpEACdn.Controls.Add(rbEACdn1);
-            resources.ApplyResources(gpEACdn, "gpEACdn");
-            gpEACdn.Name = "gpEACdn";
-            gpEACdn.TabStop = false;
-            // 
-            // label51
-            // 
-            resources.ApplyResources(label51, "label51");
-            label51.Name = "label51";
-            // 
-            // linkEaOriginRepair
-            // 
-            resources.ApplyResources(linkEaOriginRepair, "linkEaOriginRepair");
-            linkEaOriginRepair.Name = "linkEaOriginRepair";
-            linkEaOriginRepair.TabStop = true;
-            linkEaOriginRepair.LinkClicked += LinkEaOriginRepair_LinkClicked;
-            // 
-            // labelStatusEACdn
-            // 
-            resources.ApplyResources(labelStatusEACdn, "labelStatusEACdn");
-            labelStatusEACdn.ForeColor = Color.Red;
-            labelStatusEACdn.Name = "labelStatusEACdn";
-            // 
-            // butEACdn
-            // 
-            resources.ApplyResources(butEACdn, "butEACdn");
-            butEACdn.Name = "butEACdn";
-            butEACdn.UseVisualStyleBackColor = true;
-            butEACdn.Click += ButEACdn_Click;
-            // 
-            // rbEACdn3
-            // 
-            resources.ApplyResources(rbEACdn3, "rbEACdn3");
-            rbEACdn3.Name = "rbEACdn3";
-            rbEACdn3.UseVisualStyleBackColor = true;
-            // 
-            // rbEACdn2
-            // 
-            resources.ApplyResources(rbEACdn2, "rbEACdn2");
-            rbEACdn2.Name = "rbEACdn2";
-            rbEACdn2.UseVisualStyleBackColor = true;
-            // 
-            // rbEACdn1
-            // 
-            resources.ApplyResources(rbEACdn1, "rbEACdn1");
-            rbEACdn1.Checked = true;
-            rbEACdn1.Name = "rbEACdn1";
-            rbEACdn1.TabStop = true;
-            rbEACdn1.UseVisualStyleBackColor = true;
             // 
             // groupBox10
             // 
@@ -2172,6 +2106,8 @@
             // 
             // groupBox9
             // 
+            groupBox9.Controls.Add(linkFixAppxDrive);
+            groupBox9.Controls.Add(labelInstallationLocation);
             groupBox9.Controls.Add(label48);
             groupBox9.Controls.Add(butAppxInstall);
             groupBox9.Controls.Add(butAppxOpenFile);
@@ -2183,6 +2119,19 @@
             resources.ApplyResources(groupBox9, "groupBox9");
             groupBox9.Name = "groupBox9";
             groupBox9.TabStop = false;
+            // 
+            // linkFixAppxDrive
+            // 
+            resources.ApplyResources(linkFixAppxDrive, "linkFixAppxDrive");
+            linkFixAppxDrive.Name = "linkFixAppxDrive";
+            linkFixAppxDrive.TabStop = true;
+            linkFixAppxDrive.LinkClicked += LinkFixAppxDrive_LinkClicked;
+            // 
+            // labelInstallationLocation
+            // 
+            resources.ApplyResources(labelInstallationLocation, "labelInstallationLocation");
+            labelInstallationLocation.ForeColor = Color.Green;
+            labelInstallationLocation.Name = "labelInstallationLocation";
             // 
             // label48
             // 
@@ -2216,6 +2165,7 @@
             cbAppxDrive.FormattingEnabled = true;
             resources.ApplyResources(cbAppxDrive, "cbAppxDrive");
             cbAppxDrive.Name = "cbAppxDrive";
+            cbAppxDrive.SelectedIndexChanged += CbAppxDrive_SelectedIndexChanged;
             // 
             // label47
             // 
@@ -2272,7 +2222,7 @@
             // labelStatusDrive
             // 
             resources.ApplyResources(labelStatusDrive, "labelStatusDrive");
-            labelStatusDrive.ForeColor = Color.Red;
+            labelStatusDrive.ForeColor = Color.Green;
             labelStatusDrive.Name = "labelStatusDrive";
             // 
             // linkRefreshDrive
@@ -2587,8 +2537,6 @@
             gbMicrosoftStore.ResumeLayout(false);
             gbMicrosoftStore.PerformLayout();
             tabTool.ResumeLayout(false);
-            gpEACdn.ResumeLayout(false);
-            gpEACdn.PerformLayout();
             groupBox10.ResumeLayout(false);
             groupBox10.PerformLayout();
             groupBox9.ResumeLayout(false);
@@ -2881,14 +2829,6 @@
         private Label label50;
         private LinkLabel linkResetWinsock;
         private LinkLabel linkReInstallGamingServices;
-        private GroupBox gpEACdn;
-        private Label labelStatusEACdn;
-        private Button butEACdn;
-        private RadioButton rbEACdn3;
-        private RadioButton rbEACdn2;
-        private RadioButton rbEACdn1;
-        private Label label51;
-        private LinkLabel linkEaOriginRepair;
         private GroupBox groupBox11;
         private DataGridViewTextBoxColumn Col_DeviceID;
         private DataGridViewTextBoxColumn Col_Model;
@@ -2908,5 +2848,7 @@
         private ToolStripMenuItem tsmAuthorization1;
         private ToolStripMenuItem tsmAuthorization2;
         private LinkLabel linkLabel1;
+        private Label labelInstallationLocation;
+        private LinkLabel linkFixAppxDrive;
     }
 }
