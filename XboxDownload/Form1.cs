@@ -218,6 +218,12 @@ namespace XboxDownload
             cbGameMarket.SelectedIndex = 0;
             pbGame.Image = pbGame.InitialImage;
 
+            if (Environment.OSVersion.Version.Major < 10)
+            {
+                linkAppxAdd.Enabled = false;
+                gbAddAppxPackage.Visible = gbGamingServices.Visible = false;
+            }
+            
             if (File.Exists(resourcePath + "\\" + UpdateFile.dataFile))
             {
                 string json = File.ReadAllText(resourcePath + "\\" + UpdateFile.dataFile);
@@ -378,7 +384,7 @@ namespace XboxDownload
                     }
                     break;
                 case "tabTool":
-                    if (cbAppxDrive.Items.Count == 0)
+                    if (cbAppxDrive.Items.Count == 0 && gbAddAppxPackage.Visible)
                     {
                         LinkAppxRefreshDrive_LinkClicked(null, null);
                     }
@@ -4759,6 +4765,7 @@ namespace XboxDownload
             p.StartInfo.CreateNoWindow = true;
             p.Start();
             p.StandardInput.WriteLine("Add-AppxVolume -Path " + path);
+            p.StandardInput.WriteLine("Mount-AppxVolume -Volume " + path);
             p.StandardInput.WriteLine("exit");
             p.WaitForExit();
             MessageBox.Show("安装位置修复已完成。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -4804,11 +4811,11 @@ namespace XboxDownload
                 {
                     File.Move(appSignature, appSignature + ".bak");
                 }
-                cmd = "-noexit \"Add-AppxPackage -Register '" + filepath + "'\"";
+                cmd = "Add-AppxPackage -Register '" + filepath + "'\necho 部署脚本执行完毕，按Enter键退出。\npause";
             }
             else
             {
-                cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\"";
+                cmd = "Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\necho 部署脚本执行完毕，按Enter键退出。\npause";
             }
             try
             {

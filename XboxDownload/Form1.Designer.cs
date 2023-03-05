@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -264,7 +264,7 @@
             tbGameUrl = new TextBox();
             label32 = new Label();
             tabTool = new TabPage();
-            groupBox10 = new GroupBox();
+            gbGamingServices = new GroupBox();
             linkLabel2 = new LinkLabel();
             linkTroubleshootGame = new LinkLabel();
             label50 = new Label();
@@ -273,7 +273,7 @@
             linkReInstallGamingServices = new LinkLabel();
             linkRestartGamingServices = new LinkLabel();
             textBox1 = new TextBox();
-            groupBox9 = new GroupBox();
+            gbAddAppxPackage = new GroupBox();
             linkFixAppxDrive = new LinkLabel();
             labelInstallationLocation = new Label();
             label48 = new Label();
@@ -362,8 +362,8 @@
             ((System.ComponentModel.ISupportInitialize)pbGame).BeginInit();
             gbMicrosoftStore.SuspendLayout();
             tabTool.SuspendLayout();
-            groupBox10.SuspendLayout();
-            groupBox9.SuspendLayout();
+            gbGamingServices.SuspendLayout();
+            gbAddAppxPackage.SuspendLayout();
             groupBox8.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             cmsLog.SuspendLayout();
@@ -1007,9 +1007,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1017,9 +1017,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1027,9 +1027,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2030,26 +2030,26 @@
             // 
             // tabTool
             // 
-            tabTool.Controls.Add(groupBox10);
-            tabTool.Controls.Add(groupBox9);
+            tabTool.Controls.Add(gbGamingServices);
+            tabTool.Controls.Add(gbAddAppxPackage);
             tabTool.Controls.Add(groupBox8);
             resources.ApplyResources(tabTool, "tabTool");
             tabTool.Name = "tabTool";
             tabTool.UseVisualStyleBackColor = true;
             // 
-            // groupBox10
+            // gbGamingServices
             // 
-            groupBox10.Controls.Add(linkLabel2);
-            groupBox10.Controls.Add(linkTroubleshootGame);
-            groupBox10.Controls.Add(label50);
-            groupBox10.Controls.Add(label49);
-            groupBox10.Controls.Add(linkResetWinsock);
-            groupBox10.Controls.Add(linkReInstallGamingServices);
-            groupBox10.Controls.Add(linkRestartGamingServices);
-            groupBox10.Controls.Add(textBox1);
-            resources.ApplyResources(groupBox10, "groupBox10");
-            groupBox10.Name = "groupBox10";
-            groupBox10.TabStop = false;
+            gbGamingServices.Controls.Add(linkLabel2);
+            gbGamingServices.Controls.Add(linkTroubleshootGame);
+            gbGamingServices.Controls.Add(label50);
+            gbGamingServices.Controls.Add(label49);
+            gbGamingServices.Controls.Add(linkResetWinsock);
+            gbGamingServices.Controls.Add(linkReInstallGamingServices);
+            gbGamingServices.Controls.Add(linkRestartGamingServices);
+            gbGamingServices.Controls.Add(textBox1);
+            resources.ApplyResources(gbGamingServices, "gbGamingServices");
+            gbGamingServices.Name = "gbGamingServices";
+            gbGamingServices.TabStop = false;
             // 
             // linkLabel2
             // 
@@ -2104,21 +2104,21 @@
             resources.ApplyResources(textBox1, "textBox1");
             textBox1.Name = "textBox1";
             // 
-            // groupBox9
+            // gbAddAppxPackage
             // 
-            groupBox9.Controls.Add(linkFixAppxDrive);
-            groupBox9.Controls.Add(labelInstallationLocation);
-            groupBox9.Controls.Add(label48);
-            groupBox9.Controls.Add(butAppxInstall);
-            groupBox9.Controls.Add(butAppxOpenFile);
-            groupBox9.Controls.Add(linkAppxRefreshDrive);
-            groupBox9.Controls.Add(cbAppxDrive);
-            groupBox9.Controls.Add(label47);
-            groupBox9.Controls.Add(tbAppxFilePath);
-            groupBox9.Controls.Add(label46);
-            resources.ApplyResources(groupBox9, "groupBox9");
-            groupBox9.Name = "groupBox9";
-            groupBox9.TabStop = false;
+            gbAddAppxPackage.Controls.Add(linkFixAppxDrive);
+            gbAddAppxPackage.Controls.Add(labelInstallationLocation);
+            gbAddAppxPackage.Controls.Add(label48);
+            gbAddAppxPackage.Controls.Add(butAppxInstall);
+            gbAddAppxPackage.Controls.Add(butAppxOpenFile);
+            gbAddAppxPackage.Controls.Add(linkAppxRefreshDrive);
+            gbAddAppxPackage.Controls.Add(cbAppxDrive);
+            gbAddAppxPackage.Controls.Add(label47);
+            gbAddAppxPackage.Controls.Add(tbAppxFilePath);
+            gbAddAppxPackage.Controls.Add(label46);
+            resources.ApplyResources(gbAddAppxPackage, "gbAddAppxPackage");
+            gbAddAppxPackage.Name = "gbAddAppxPackage";
+            gbAddAppxPackage.TabStop = false;
             // 
             // linkFixAppxDrive
             // 
@@ -2537,10 +2537,10 @@
             gbMicrosoftStore.ResumeLayout(false);
             gbMicrosoftStore.PerformLayout();
             tabTool.ResumeLayout(false);
-            groupBox10.ResumeLayout(false);
-            groupBox10.PerformLayout();
-            groupBox9.ResumeLayout(false);
-            groupBox9.PerformLayout();
+            gbGamingServices.ResumeLayout(false);
+            gbGamingServices.PerformLayout();
+            gbAddAppxPackage.ResumeLayout(false);
+            gbAddAppxPackage.PerformLayout();
             groupBox8.ResumeLayout(false);
             groupBox8.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
@@ -2811,7 +2811,7 @@
         private Button butConsoleRegionUnlock;
         private Button butConsoleRegionLock;
         private Label label45;
-        private GroupBox groupBox9;
+        private GroupBox gbAddAppxPackage;
         private TextBox tbAppxFilePath;
         private Label label46;
         private ComboBox cbAppxDrive;
@@ -2820,7 +2820,7 @@
         private Button butAppxOpenFile;
         private LinkLabel linkAppxRefreshDrive;
         private Label label48;
-        private GroupBox groupBox10;
+        private GroupBox gbGamingServices;
         private TextBox textBox1;
         private Label label49;
         private LinkLabel linkRestartGamingServices;
