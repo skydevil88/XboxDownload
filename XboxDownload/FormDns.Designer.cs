@@ -28,92 +28,82 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbDomainName = new System.Windows.Forms.ComboBox();
-            this.butTest = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.SuspendLayout();
+            label1 = new Label();
+            cbHostName = new ComboBox();
+            butTest = new Button();
+            textBox1 = new TextBox();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 24);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 24);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "域名";
+            label1.AutoSize = true;
+            label1.Location = new Point(15, 24);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(46, 24);
+            label1.TabIndex = 0;
+            label1.Text = "域名";
             // 
-            // cbDomainName
+            // cbHostName
             // 
-            this.cbDomainName.FormattingEnabled = true;
-            this.cbDomainName.Items.AddRange(new object[] {
-            "assets1.xboxlive.com",
-            "assets1.xboxlive.cn",
-            "tlu.dl.delivery.mp.microsoft.com",
-            "gst.prod.dl.playstation.net",
-            "atum.hac.lp1.d4c.nintendo.net",
-            "origin-a.akamaihd.net",
-            "blzddist1-a.akamaihd.net",
-            "epicgames-download1-1251447533.file.myqcloud.com",
-            "www.baidu.com"});
-            this.cbDomainName.Location = new System.Drawing.Point(69, 18);
-            this.cbDomainName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.cbDomainName.Name = "cbDomainName";
-            this.cbDomainName.Size = new System.Drawing.Size(510, 32);
-            this.cbDomainName.TabIndex = 1;
-            this.cbDomainName.Validating += new System.ComponentModel.CancelEventHandler(this.CbDomainName_Validating);
+            cbHostName.FormattingEnabled = true;
+            cbHostName.Items.AddRange(new object[] { "assets1.xboxlive.com", "assets1.xboxlive.cn", "tlu.dl.delivery.mp.microsoft.com", "gst.prod.dl.playstation.net", "atum.hac.lp1.d4c.nintendo.net", "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "epicgames-download1-1251447533.file.myqcloud.com", "www.baidu.com" });
+            cbHostName.Location = new Point(69, 18);
+            cbHostName.Margin = new Padding(4);
+            cbHostName.Name = "cbHostName";
+            cbHostName.Size = new Size(510, 32);
+            cbHostName.TabIndex = 1;
+            cbHostName.Validating += CbDomainName_Validating;
             // 
             // butTest
             // 
-            this.butTest.Location = new System.Drawing.Point(586, 17);
-            this.butTest.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.butTest.Name = "butTest";
-            this.butTest.Size = new System.Drawing.Size(98, 36);
-            this.butTest.TabIndex = 2;
-            this.butTest.Text = "测试";
-            this.butTest.UseVisualStyleBackColor = true;
-            this.butTest.Click += new System.EventHandler(this.ButTest_Click);
+            butTest.Location = new Point(586, 17);
+            butTest.Margin = new Padding(4);
+            butTest.Name = "butTest";
+            butTest.Size = new Size(98, 36);
+            butTest.TabIndex = 2;
+            butTest.Text = "测试";
+            butTest.UseVisualStyleBackColor = true;
+            butTest.Click += ButTest_Click;
             // 
             // textBox1
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox1.Location = new System.Drawing.Point(15, 62);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(670, 240);
-            this.textBox1.TabIndex = 3;
+            textBox1.BackColor = SystemColors.Window;
+            textBox1.Location = new Point(15, 62);
+            textBox1.Margin = new Padding(4);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.ScrollBars = ScrollBars.Both;
+            textBox1.Size = new Size(670, 240);
+            textBox1.TabIndex = 3;
             // 
             // FormDns
             // 
-            this.AcceptButton = this.butTest;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(698, 318);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.butTest);
-            this.Controls.Add(this.cbDomainName);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FormDns";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "测试DNS服务器";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AcceptButton = butTest;
+            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(698, 318);
+            Controls.Add(textBox1);
+            Controls.Add(butTest);
+            Controls.Add(cbHostName);
+            Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(4);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FormDns";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "测试DNS服务器";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Label label1;
-        private ComboBox cbDomainName;
+        private ComboBox cbHostName;
         private Button butTest;
         private TextBox textBox1;
     }

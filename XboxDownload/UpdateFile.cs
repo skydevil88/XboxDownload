@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
@@ -18,9 +17,9 @@ namespace XboxDownload
         private static readonly string[,] proxys = {
             { "proxy", "https://ghproxy.com/" },
             { "proxy", "https://gh.api.99988866.xyz/" },
-            { "proxy", "https://github.91chi.fun/" },
             { "proxy", "https://ghps.cc/" },
             { "proxy", "https://proxy.zyun.vip/" },
+            //{ "proxy", "https://github.91chi.fun/" },
             //{ "mirror", "https://cdn.githubjs.cf/" },   //失效
             //{ "mirror", "https://hub.fastgit.xyz/" },   //失效
             { "direct", "" }

@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -161,6 +161,7 @@
             Col_IPv4 = new DataGridViewTextBoxColumn();
             Col_Remark = new DataGridViewTextBoxColumn();
             panel2 = new Panel();
+            linkHostsConnectTest = new LinkLabel();
             linkHostClear = new LinkLabel();
             linkHostsImport = new LinkLabel();
             butHostReset = new Button();
@@ -302,6 +303,7 @@
             cmsLog = new ContextMenuStrip(components);
             tsmCopyLog = new ToolStripMenuItem();
             tsmExportLog = new ToolStripMenuItem();
+            tsmConnectTest = new ToolStripMenuItem();
             cmsIP = new ContextMenuStrip(components);
             tsmUseIP = new ToolStripMenuItem();
             tsmUseIPCn = new ToolStripMenuItem();
@@ -1007,9 +1009,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1017,9 +1019,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1027,9 +1029,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1239,6 +1241,7 @@
             dgvHosts.MultiSelect = false;
             dgvHosts.Name = "dgvHosts";
             dgvHosts.ShowCellToolTips = false;
+            dgvHosts.CellDoubleClick += DgvHosts_CellDoubleClick;
             dgvHosts.CellValidating += DgvHosts_CellValidating;
             dgvHosts.CellValueChanged += DgvHosts_CellValueChanged;
             dgvHosts.DefaultValuesNeeded += DgvHosts_DefaultValuesNeeded;
@@ -1275,6 +1278,7 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(linkHostsConnectTest);
             panel2.Controls.Add(linkHostClear);
             panel2.Controls.Add(linkHostsImport);
             panel2.Controls.Add(butHostReset);
@@ -1283,6 +1287,13 @@
             panel2.Controls.Add(cbHosts);
             resources.ApplyResources(panel2, "panel2");
             panel2.Name = "panel2";
+            // 
+            // linkHostsConnectTest
+            // 
+            resources.ApplyResources(linkHostsConnectTest, "linkHostsConnectTest");
+            linkHostsConnectTest.Name = "linkHostsConnectTest";
+            linkHostsConnectTest.TabStop = true;
+            linkHostsConnectTest.LinkClicked += LinkHostsConnectTest_LinkClicked;
             // 
             // linkHostClear
             // 
@@ -2292,7 +2303,7 @@
             // cmsLog
             // 
             cmsLog.ImageScalingSize = new Size(24, 24);
-            cmsLog.Items.AddRange(new ToolStripItem[] { tsmCopyLog, tsmExportLog });
+            cmsLog.Items.AddRange(new ToolStripItem[] { tsmCopyLog, tsmExportLog, tsmConnectTest });
             cmsLog.Name = "tsmExportLog";
             resources.ApplyResources(cmsLog, "cmsLog");
             // 
@@ -2307,6 +2318,12 @@
             tsmExportLog.Name = "tsmExportLog";
             resources.ApplyResources(tsmExportLog, "tsmExportLog");
             tsmExportLog.Click += TsmExportLog_Click;
+            // 
+            // tsmConnectTest
+            // 
+            tsmConnectTest.Name = "tsmConnectTest";
+            resources.ApplyResources(tsmConnectTest, "tsmConnectTest");
+            tsmConnectTest.Click += TsmConnectTest_Click;
             // 
             // cmsIP
             // 
@@ -2650,10 +2667,6 @@
         private Button butHostReset;
         private LinkLabel linkHostClear;
         private LinkLabel linkHostsImport;
-        private DataGridViewCheckBoxColumn Col_Enable;
-        private DataGridViewTextBoxColumn Col_HostName;
-        private DataGridViewTextBoxColumn Col_IPv4;
-        private DataGridViewTextBoxColumn Col_Remark;
         private ContextMenuStrip cmsLog;
         private ToolStripMenuItem tsmCopyLog;
         private ToolStripMenuItem tsmExportLog;
@@ -2850,5 +2863,11 @@
         private LinkLabel linkLabel1;
         private Label labelInstallationLocation;
         private LinkLabel linkFixAppxDrive;
+        private ToolStripMenuItem tsmConnectTest;
+        private LinkLabel linkHostsConnectTest;
+        private DataGridViewCheckBoxColumn Col_Enable;
+        private DataGridViewTextBoxColumn Col_HostName;
+        private DataGridViewTextBoxColumn Col_IPv4;
+        private DataGridViewTextBoxColumn Col_Remark;
     }
 }

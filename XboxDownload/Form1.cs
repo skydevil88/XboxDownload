@@ -223,7 +223,7 @@ namespace XboxDownload
                 linkAppxAdd.Enabled = false;
                 gbAddAppxPackage.Visible = gbGamingServices.Visible = false;
             }
-            
+
             if (File.Exists(resourcePath + "\\" + UpdateFile.dataFile))
             {
                 string json = File.ReadAllText(resourcePath + "\\" + UpdateFile.dataFile);
@@ -1049,15 +1049,16 @@ namespace XboxDownload
         {
             if (e.Button == MouseButtons.Right && lvLog.SelectedItems.Count == 1)
             {
+                tsmConnectTest.Visible = lvLog.SelectedItems[0].SubItems[0].Text == "DNS 查询" && Regex.IsMatch(lvLog.SelectedItems[0].SubItems[1].Text, @" -> \d+.\d+.\d+.\d+");
                 cmsLog.Show(MousePosition.X, MousePosition.Y);
             }
         }
 
         private void TsmCopyLog_Click(object sender, EventArgs e)
         {
-            string text = lvLog.SelectedItems[0].SubItems[1].Text;
-            Clipboard.SetDataObject(text);
-            if (Regex.IsMatch(text, @"^https?://(origin-a\.akamaihd\.net|ssl-lvlt\.cdn\.ea\.com|lvlt\.cdn\.ea\.com)"))
+            string content = lvLog.SelectedItems[0].SubItems[1].Text;
+            Clipboard.SetDataObject(content);
+            if (Regex.IsMatch(content, @"^https?://(origin-a\.akamaihd\.net|ssl-lvlt\.cdn\.ea\.com|lvlt\.cdn\.ea\.com)"))
             {
                 MessageBox.Show("离线包安装方法：下载完成后删除安装目录下的所有文件，把解压缩文件复制到安装目录，回到 EA app 或者 Origin 选择继续下载，等待游戏验证完成后即可。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1080,6 +1081,15 @@ namespace XboxDownload
                 }
                 File.WriteAllText(dlg.FileName, sb.ToString());
             }
+        }
+
+        private void TsmConnectTest_Click(object sender, EventArgs e)
+        {
+            string[] strArray = Regex.Split(lvLog.SelectedItems[0].SubItems[1].Text, " -> ");
+            if (strArray.Length != 2) return;
+            FormConnectTest dialog = new(strArray[0], strArray[1]);
+            dialog.ShowDialog();
+            dialog.Dispose();
         }
 
         private void CbLocalIP_SelectedIndexChanged(object sender, EventArgs e)
@@ -2480,6 +2490,20 @@ namespace XboxDownload
             }
         }
 
+        private void DgvHosts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            DataGridViewRow dgvr = dgvHosts.Rows[e.RowIndex];
+            string? hostName = dgvr.Cells["Col_HostName"].Value?.ToString();
+            string? ip = dgvr.Cells["Col_IPv4"].Value?.ToString();
+            if (!string.IsNullOrEmpty(hostName) && !string.IsNullOrEmpty(ip))
+            {
+                FormConnectTest dialog = new(hostName, ip);
+                dialog.ShowDialog();
+                dialog.Dispose();
+            }
+        }
+
         private void CbHosts_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbHosts.SelectedIndex <= 0) return;
@@ -2571,6 +2595,13 @@ namespace XboxDownload
             dgvHosts.ClearSelection();
         }
 
+        private void LinkHostsConnectTest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FormConnectTest dialog = new(string.Empty, string.Empty);
+            dialog.ShowDialog();
+            dialog.Dispose();
+        }
+
         private void LinkHostsImport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FormImportHosts dialog = new();
@@ -2578,7 +2609,7 @@ namespace XboxDownload
             string hosts = dialog.hosts;
             dialog.Dispose();
             if (string.IsNullOrEmpty(hosts)) return;
-            Regex regex = new(@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?<hostname>[^\s+]+)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$");
+            Regex regex = new(@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?<hostname>[^\s+]+)(?<remark>.*)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?<remark>.*)$");
             string[] array = hosts.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string str in array)
             {
@@ -2586,6 +2617,9 @@ namespace XboxDownload
                 if (result.Success)
                 {
                     string hostname = result.Groups["hostname"].Value.Trim().ToLower();
+                    string remark = result.Groups["remark"].Value.Trim();
+                    if (remark.StartsWith("#"))
+                        remark = remark[1..].Trim();
                     if (IPAddress.TryParse(result.Groups["ip"].Value, out IPAddress? ip) && DnsListen.reHosts.IsMatch(hostname))
                     {
                         DataRow[] rows = dtHosts.Select("HostName='" + hostname + "'");
@@ -2602,6 +2636,7 @@ namespace XboxDownload
                             dtHosts.Rows.Add(dr);
                         }
                         dr["IPv4"] = ip.ToString();
+                        if (!string.IsNullOrEmpty(remark)) dr["Remark"] = remark;
                     }
                 }
             }
@@ -4670,8 +4705,7 @@ namespace XboxDownload
             Task.Run(() =>
             {
                 bool error = false;
-                string apps;
-                string outputString = string.Empty;
+                string apps, games, outputString;
                 using (Process p = new())
                 {
                     p.StartInfo.FileName = "powershell.exe";
@@ -4707,14 +4741,12 @@ namespace XboxDownload
                     else
                         apps = "(未知错误)";
                 }
-                string games;
                 if (File.Exists(drive + "\\.GamingRoot"))
                 {
                     using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
                     using BinaryReader br = new(fs);
-                    if (Encoding.Default.GetString(br.ReadBytes(0x4)) == "RGBX")
+                    if (ClassMbr.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
                     {
-                        br.BaseStream.Position = 0x8;
                         games = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
                         if (!Directory.Exists(games))
                         {
@@ -4811,11 +4843,11 @@ namespace XboxDownload
                 {
                     File.Move(appSignature, appSignature + ".bak");
                 }
-                cmd = "Add-AppxPackage -Register '" + filepath + "'\necho 部署脚本执行完毕，按Enter键退出。\npause";
+                cmd = "-noexit \"Add-AppxPackage -Register '" + filepath + "'\necho 部署脚本执行完毕，按Enter键退出。\npause\nexit\"";
             }
             else
             {
-                cmd = "Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\necho 部署脚本执行完毕，按Enter键退出。\npause";
+                cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\necho 部署脚本执行完毕，按Enter键退出。\npause\nexit\"";
             }
             try
             {

@@ -466,6 +466,50 @@ namespace XboxDownload
             return socketPackage;
         }
 
+        public static bool VerifySslCertificate(Uri uri, IPAddress ip, out string errMsg)
+        {
+            bool verified = false;
+            errMsg = "";
+            using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
+                mySocket.SendTimeout = 6000;
+                mySocket.ReceiveTimeout = 6000;
+                try
+                {
+                    mySocket.Connect(ip, uri.Port);
+                }
+                catch (Exception ex)
+                {
+                    errMsg = ex.Message;
+                }
+                if (mySocket.Connected)
+                {
+                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return sslPolicyErrors == SslPolicyErrors.None; }), null);
+                    try
+                    {
+                        ssl.AuthenticateAsClient(uri.Host, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        if (ssl.IsAuthenticated)
+                        {
+                            verified = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        errMsg = ex.Message;
+                    }
+                    finally
+                    {
+                        ssl.Close();
+                    }
+                }
+                mySocket.Close();
+                mySocket.Dispose();
+            }
+            return verified;
+        }
+
         public static Byte[] DeCompress(Byte[] buffer, String contentencoding)
         {
             switch (contentencoding)
