@@ -42,7 +42,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(24, 26);
+            label1.Location = new Point(24, 22);
             label1.Name = "label1";
             label1.Size = new Size(46, 24);
             label1.TabIndex = 0;
@@ -50,7 +50,7 @@
             // 
             // tbHostName
             // 
-            tbHostName.Location = new Point(76, 23);
+            tbHostName.Location = new Point(76, 19);
             tbHostName.Name = "tbHostName";
             tbHostName.Size = new Size(412, 30);
             tbHostName.TabIndex = 1;
@@ -58,7 +58,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(24, 62);
+            label2.Location = new Point(24, 60);
             label2.Name = "label2";
             label2.Size = new Size(26, 24);
             label2.TabIndex = 2;
@@ -66,7 +66,7 @@
             // 
             // tbIP
             // 
-            tbIP.Location = new Point(76, 59);
+            tbIP.Location = new Point(76, 57);
             tbIP.Name = "tbIP";
             tbIP.Size = new Size(543, 30);
             tbIP.TabIndex = 3;
@@ -74,7 +74,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(494, 26);
+            label3.Location = new Point(494, 22);
             label3.Name = "label3";
             label3.Size = new Size(46, 24);
             label3.TabIndex = 4;
@@ -82,7 +82,7 @@
             // 
             // tbPort
             // 
-            tbPort.Location = new Point(546, 26);
+            tbPort.Location = new Point(546, 19);
             tbPort.Name = "tbPort";
             tbPort.Size = new Size(73, 30);
             tbPort.TabIndex = 2;
@@ -90,17 +90,20 @@
             // 
             // tbMessage
             // 
-            tbMessage.Location = new Point(76, 95);
+            tbMessage.BackColor = SystemColors.Window;
+            tbMessage.Location = new Point(76, 96);
             tbMessage.Multiline = true;
             tbMessage.Name = "tbMessage";
+            tbMessage.ReadOnly = true;
+            tbMessage.ScrollBars = ScrollBars.Vertical;
             tbMessage.Size = new Size(696, 151);
             tbMessage.TabIndex = 100;
             // 
             // butTest
             // 
-            butTest.Location = new Point(625, 23);
+            butTest.Location = new Point(625, 19);
             butTest.Name = "butTest";
-            butTest.Size = new Size(147, 66);
+            butTest.Size = new Size(147, 68);
             butTest.TabIndex = 4;
             butTest.Text = "检测";
             butTest.UseVisualStyleBackColor = true;
@@ -109,7 +112,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(24, 95);
+            label4.Location = new Point(24, 96);
             label4.Name = "label4";
             label4.Size = new Size(46, 24);
             label4.TabIndex = 101;

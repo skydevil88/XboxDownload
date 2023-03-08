@@ -466,7 +466,7 @@ namespace XboxDownload
             return socketPackage;
         }
 
-        public static bool VerifySslCertificate(Uri uri, IPAddress ip, out string errMsg)
+        public static bool ConnectTest(Uri uri, IPAddress ip, out string errMsg)
         {
             bool verified = false;
             errMsg = "";

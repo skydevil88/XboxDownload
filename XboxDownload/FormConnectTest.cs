@@ -17,21 +17,24 @@ namespace XboxDownload
             }
         }
 
-        private void ButTest_Click(object? sender, EventArgs? e)
+        private async void ButTest_Click(object? sender, EventArgs? e)
         {
             string hostName = tbHostName.Text.Trim();
             if (string.IsNullOrEmpty(hostName))
             {
+                tbHostName.Focus();
                 MessageBox.Show("域名不能空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!int.TryParse(tbPort.Text, out int port) || port < 1 || port > 65535)
             {
+                tbPort.Focus();
                 MessageBox.Show("无效端口", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!IPAddress.TryParse(tbIP.Text.Trim(), out IPAddress? ip))
             {
+                tbIP.Focus();
                 MessageBox.Show("无效IP", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -39,47 +42,35 @@ namespace XboxDownload
             butTest.Enabled = false;
             tbMessage.Clear();
             Uri uri = new("https://" + hostName + ":" + port);
-            Task.Run(() =>
-            {
-                bool verified = ClassWeb.VerifySslCertificate(uri, ip, out string errMsg);
-
-                if (verified)
-                {
-                    SetMsg("OK");
-                }
-                else
-                {
-                    SetMsg(errMsg);
-                }
-                SetButEnable(true);
-            });
+            await ConnectTest(uri, ip);
         }
 
-        delegate void CallbackButEnable(bool enabled);
-        private void SetButEnable(bool enabled)
+        private async Task ConnectTest(Uri uri, IPAddress ip)
         {
-            if (this.IsDisposed) return;
-            if (butTest.InvokeRequired)
+            bool verified = false;
+            string location = string.Empty, errMsg = string.Empty;
+            Task[] tasks = new Task[2];
+            tasks[0] = new Task(() =>
             {
-                CallbackButEnable d = new(SetButEnable);
-                this.Invoke(d, new object[] { enabled });
+                verified = ClassWeb.ConnectTest(uri, ip, out errMsg);
+            });
+            tasks[1] = new Task(() =>
+            {
+                location = "\r\n\r\n//IP地址: " + ip + " " + ClassDNS.QueryLocation(ip.ToString());
+            });
+            Array.ForEach(tasks, x => x.Start());
+            await Task.WhenAll(tasks);
+            if (verified)
+            {
+                tbMessage.ForeColor = Color.Green;
+                tbMessage.Text = "OK" + location;
             }
             else
             {
-                butTest.Enabled = enabled;
+                tbMessage.ForeColor = Color.Red;
+                tbMessage.Text = errMsg + location;
             }
-        }
-
-        delegate void CallbackMsg(string str);
-        private void SetMsg(string str)
-        {
-            if (this.IsDisposed) return;
-            if (tbMessage.InvokeRequired)
-            {
-                CallbackMsg d = new(SetMsg);
-                Invoke(d, new object[] { str });
-            }
-            else tbMessage.AppendText(str);
+            butTest.Enabled = true;
         }
     }
 }

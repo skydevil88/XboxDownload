@@ -3062,7 +3062,7 @@
     <value>8</value>
   </data>
   <data name="Col_HostName.Width" type="System.Int32, mscorlib">
-    <value>340</value>
+    <value>280</value>
   </data>
   <metadata name="Col_IPv4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -3074,7 +3074,7 @@
     <value>8</value>
   </data>
   <data name="Col_IPv4.Width" type="System.Int32, mscorlib">
-    <value>160</value>
+    <value>120</value>
   </data>
   <metadata name="Col_Remark.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -3086,7 +3086,7 @@
     <value>8</value>
   </data>
   <data name="Col_Remark.Width" type="System.Int32, mscorlib">
-    <value>300</value>
+    <value>440</value>
   </data>
   <data name="dgvHosts.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3161,7 +3161,7 @@
     <value>82, 24</value>
   </data>
   <data name="linkHostsConnectTest.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+    <value>4</value>
   </data>
   <data name="linkHostsConnectTest.Text" xml:space="preserve">
     <value>检测连接</value>
@@ -3194,7 +3194,7 @@
     <value>82, 24</value>
   </data>
   <data name="linkHostClear.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="linkHostClear.Text" xml:space="preserve">
     <value>清空域名</value>
@@ -3227,7 +3227,7 @@
     <value>82, 24</value>
   </data>
   <data name="linkHostsImport.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="linkHostsImport.Text" xml:space="preserve">
     <value>批量导入</value>
@@ -9996,30 +9996,6 @@ U盘卷标不能有中文。</value>
   <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
-    <value>Col_Enable</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
-    <value>Col_HostName</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_IPv4.Name" xml:space="preserve">
-    <value>Col_IPv4</value>
-  </data>
-  <data name="&gt;&gt;Col_IPv4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
-    <value>Col_Remark</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;Col_DeviceID.Name" xml:space="preserve">
     <value>Col_DeviceID</value>
   </data>
@@ -10271,6 +10247,30 @@ U盘卷标不能有中文。</value>
   </data>
   <data name="&gt;&gt;tsmAuthorization2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
+    <value>Col_Enable</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
+    <value>Col_HostName</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_IPv4.Name" xml:space="preserve">
+    <value>Col_IPv4</value>
+  </data>
+  <data name="&gt;&gt;Col_IPv4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
+    <value>Col_Remark</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>
