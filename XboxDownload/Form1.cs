@@ -850,8 +850,18 @@ namespace XboxDownload
             {
                 DnsListen.dicHosts.Clear();
                 DnsListen.dicHosts2.Clear();
-                foreach (DataRow dr in dtHosts.Rows)
+                DataTable dt = dtHosts.Clone();
+                if (File.Exists(resourcePath + "\\Hosts.xml"))
                 {
+                    try
+                    {
+                        dt.ReadXml(resourcePath + "\\Hosts.xml");
+                    }
+                    catch { }
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dr.RowState == DataRowState.Deleted) continue;
                     if (Convert.ToBoolean(dr["Enable"]))
                     {
                         string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
@@ -864,7 +874,7 @@ namespace XboxDownload
                 }
             }
 
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.SteamStore)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.SteamStore)) return;
 
             StringBuilder sb = new();
             string sHostsPath = Environment.SystemDirectory + "\\drivers\\etc\\hosts";
@@ -1051,6 +1061,18 @@ namespace XboxDownload
             {
                 tsmConnectTest.Visible = lvLog.SelectedItems[0].SubItems[0].Text == "DNS 查询" && Regex.IsMatch(lvLog.SelectedItems[0].SubItems[1].Text, @" -> \d+.\d+.\d+.\d+");
                 cmsLog.Show(MousePosition.X, MousePosition.Y);
+            }
+        }
+
+        private void LvLog_DoubleClick(object sender, EventArgs e)
+        {
+            if (lvLog.SelectedItems.Count == 1)
+            {
+                string[] strArray = Regex.Split(lvLog.SelectedItems[0].SubItems[1].Text, " -> ");
+                if (strArray.Length != 2) return;
+                FormConnectTest dialog = new(strArray[0], strArray[1]);
+                dialog.ShowDialog();
+                dialog.Dispose();
             }
         }
 
@@ -1395,7 +1417,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/12/8bf3ef34-0f74-4c08-bec7-5aacfd0ae2b4/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3758.9902.0.a530295d-0a04-41c0-843c-9f9bc29a82a9/Microsoft.254428597CFE2_1.3758.9902.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/7/dabe1153-2b4f-4a06-ba15-c4eb2e27c4b1/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.563.816.0.a2d93f91-f546-45a3-aeb5-27b49fe73ce5/Microsoft.624F8B84B80_3.563.816.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/12/56a74a8f-6745-4c8a-b51b-c2aa9111f6c8/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.567.563.0.7f3ea421-68d2-460c-b0a6-c6594fe1dcfe/Microsoft.624F8B84B80_3.567.563.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -2492,7 +2514,7 @@ namespace XboxDownload
 
         private void DgvHosts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0 || e.ColumnIndex != 1) return;
             DataGridViewRow dgvr = dgvHosts.Rows[e.RowIndex];
             string? hostName = dgvr.Cells["Col_HostName"].Value?.ToString();
             string? ip = dgvr.Cells["Col_IPv4"].Value?.ToString();
@@ -4700,92 +4722,70 @@ namespace XboxDownload
 
         private void CbAppxDrive_SelectedIndexChanged(object? sender, EventArgs? e)
         {
-            string drive = cbAppxDrive.Text;
-            Task.Run(() =>
+            if (cbAppxDrive.Tag == null) return;
+            DataTable dt = (DataTable)cbAppxDrive.Tag;
+            string drive = cbAppxDrive.Text, gamesPath;
+            string? storePath;
+            bool error = false;
+            DataRow? dr = dt.Rows.Find(drive);
+            if (dr != null)
             {
-                bool error = false;
-                string apps, games, outputString;
-                using (Process p = new())
-                {
-                    p.StartInfo.FileName = "powershell.exe";
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.RedirectStandardInput = true;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.CreateNoWindow = true;
-                    p.Start();
-                    p.StandardInput.WriteLine("Get-AppxVolume -Path " + drive);
-                    p.StandardInput.Close();
-                    outputString = p.StandardOutput.ReadToEnd();
-                    p.WaitForExit();
-                }
-                Match result = Regex.Match(outputString, @"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)");
-                if (result.Success)
-                {
-                    if (result.Groups["IsOffline"].Value == "False")
-                    {
-                        apps = result.Groups["PackageStorePath"].Value.Trim();
-                    }
-                    else
-                    {
-                        error = true;
-                        apps = result.Groups["PackageStorePath"].Value.Trim() + (result.Groups["IsOffline"].Value == "True" ? " (离线)" : "");
-                    }
-                }
-                else
+                storePath = dr["StorePath"].ToString();
+                if (Convert.ToBoolean(dr["IsOffline"]))
                 {
                     error = true;
-                    result = Regex.Match(outputString, @"Get-AppxVolume :(.+)");
-                    if (result.Success)
-                        apps = result.Groups[1].Value.Trim();
-                    else
-                        apps = "(未知错误)";
+                    storePath += " (离线)";
                 }
-                if (File.Exists(drive + "\\.GamingRoot"))
+            }
+            else
+            {
+                error = true;
+                storePath = "(未知错误)";
+            }
+            if (File.Exists(drive + "\\.GamingRoot"))
+            {
+                using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
+                using BinaryReader br = new(fs);
+                if (ClassMbr.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
                 {
-                    using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
-                    using BinaryReader br = new(fs);
-                    if (ClassMbr.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
+                    gamesPath = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
+                    if (!Directory.Exists(gamesPath))
                     {
-                        games = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
-                        if (!Directory.Exists(games))
-                        {
-                            games += " (文件夹不存在)";
-                        }
-                    }
-                    else
-                    {
-                        games = drive + " (文件夹未知)";
+                        gamesPath += " (文件夹不存在)";
                     }
                 }
                 else
                 {
-                    games = drive + " (文件夹未知)";
+                    gamesPath = drive + " (文件夹未知)";
                 }
-                this.Invoke(new Action(() =>
-                {
-                    linkFixAppxDrive.Visible = error;
-                    labelInstallationLocation.ForeColor = error ? Color.Red : Color.Green;
-                    labelInstallationLocation.Text = $"应用安装目录：{apps}\r\n游戏安装目录：{games}";
-                }));
-            });
+            }
+            else
+            {
+                gamesPath = drive + " (文件夹未知)";
+            }
+            linkFixAppxDrive.Visible = error;
+            labelInstallationLocation.ForeColor = error ? Color.Red : Color.Green;
+            labelInstallationLocation.Text = $"应用安装目录：{storePath}\r\n游戏安装目录：{gamesPath}";
         }
 
         private void LinkAppxRefreshDrive_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs? e)
         {
             cbAppxDrive.Items.Clear();
+            cbAppxDrive.Tag = null;
             DriveInfo[] driverList = Array.FindAll(DriveInfo.GetDrives(), a => a.DriveType == DriveType.Fixed && a.IsReady && a.DriveFormat == "NTFS");
             if (driverList.Length >= 1)
             {
                 cbAppxDrive.Items.AddRange(driverList);
                 cbAppxDrive.SelectedIndex = 0;
             }
+            ThreadPool.QueueUserWorkItem(delegate { GetAppxVolume(); });
         }
 
         private void LinkFixAppxDrive_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string drive = cbAppxDrive.Text, path;
             string dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            if (dir.StartsWith(drive))
+            if (drive == Directory.GetDirectoryRoot(dir))
                 path = dir + "\\WindowsApps";
             else
                 path = drive + "WindowsApps";
@@ -4795,12 +4795,53 @@ namespace XboxDownload
             p.StartInfo.RedirectStandardInput = true;
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            p.StandardInput.WriteLine("Add-AppxVolume -Path " + path);
-            p.StandardInput.WriteLine("Mount-AppxVolume -Volume " + path);
+            p.StandardInput.WriteLine("Add-AppxVolume -Path \"" + path + "\"");
+            p.StandardInput.WriteLine("Mount-AppxVolume -Volume \"" + path + "\"");
             p.StandardInput.WriteLine("exit");
             p.WaitForExit();
             MessageBox.Show("安装位置修复已完成。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            CbAppxDrive_SelectedIndexChanged(null, null);
+            ThreadPool.QueueUserWorkItem(delegate { GetAppxVolume(); });
+        }
+
+        private void GetAppxVolume()
+        {
+            string outputString;
+            using (Process p = new())
+            {
+                p.StartInfo.FileName = "powershell.exe";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+                p.StandardInput.WriteLine("Get-AppxVolume");
+                p.StandardInput.Close();
+                outputString = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+            }
+            DataTable dt = new();
+            DataColumn dcDirectoryRoot = dt.Columns.Add("DirectoryRoot", typeof(String));
+            dt.Columns.Add("StorePath", typeof(String));
+            dt.Columns.Add("IsOffline", typeof(Boolean));
+            dt.PrimaryKey = new DataColumn[] { dcDirectoryRoot };
+            Match result = Regex.Match(outputString, @"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)");
+            while (result.Success)
+            {
+                string storePath = result.Groups["PackageStorePath"].Value.Trim();
+                string directoryRoot = Directory.GetDirectoryRoot(storePath);
+                bool isOffline = result.Groups["IsOffline"].Value == "True";
+                DataRow dr = dt.NewRow();
+                dr["DirectoryRoot"] = directoryRoot;
+                dr["StorePath"] = storePath;
+                dr["IsOffline"] = isOffline;
+                dt.Rows.Add(dr);
+                result = result.NextMatch();
+            }
+            cbAppxDrive.Tag = dt;
+            this.Invoke(new Action(() =>
+            {
+                CbAppxDrive_SelectedIndexChanged(null, null);
+            }));
         }
 
         private void ButAppxOpenFile_Click(object sender, EventArgs e)
@@ -4842,11 +4883,11 @@ namespace XboxDownload
                 {
                     File.Move(appSignature, appSignature + ".bak");
                 }
-                cmd = "-noexit \"Add-AppxPackage -Register '" + filepath + "'\necho 部署脚本执行完毕，按Enter键退出。\npause\nexit\"";
+                cmd = "-noexit \"Add-AppxPackage -Register '" + filepath + "'\necho 部署脚本执行完毕，如果没有其它需要可以直接关闭此窗口\"";
             }
             else
             {
-                cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\necho 部署脚本执行完毕，按Enter键退出。\npause\nexit\"";
+                cmd = "-noexit \"Add-AppxPackage -Path '" + filepath + "' -Volume '" + cbAppxDrive.Text + "'\necho 部署脚本执行完毕，如果没有其它需要可以直接关闭此窗口。\"";
             }
             try
             {

@@ -156,6 +156,10 @@
             tabHosts = new TabPage();
             groupBox2 = new GroupBox();
             dgvHosts = new DataGridView();
+            Col_Enable = new DataGridViewCheckBoxColumn();
+            Col_HostName = new DataGridViewTextBoxColumn();
+            Col_IPv4 = new DataGridViewTextBoxColumn();
+            Col_Remark = new DataGridViewTextBoxColumn();
             panel2 = new Panel();
             linkHostsConnectTest = new LinkLabel();
             linkHostClear = new LinkLabel();
@@ -328,10 +332,6 @@
             tsmAuthorization = new ToolStripMenuItem();
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
-            Col_Enable = new DataGridViewCheckBoxColumn();
-            Col_HostName = new DataGridViewTextBoxColumn();
-            Col_IPv4 = new DataGridViewTextBoxColumn();
-            Col_Remark = new DataGridViewTextBoxColumn();
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
@@ -508,6 +508,7 @@
             lvLog.Name = "lvLog";
             lvLog.UseCompatibleStateImageBehavior = false;
             lvLog.View = View.Details;
+            lvLog.DoubleClick += LvLog_DoubleClick;
             lvLog.MouseClick += LvLog_MouseClick;
             // 
             // Col_Request
@@ -1246,6 +1247,35 @@
             dgvHosts.CellValueChanged += DgvHosts_CellValueChanged;
             dgvHosts.DefaultValuesNeeded += DgvHosts_DefaultValuesNeeded;
             dgvHosts.RowPostPaint += Dgv_RowPostPaint;
+            // 
+            // Col_Enable
+            // 
+            Col_Enable.DataPropertyName = "Enable";
+            resources.ApplyResources(Col_Enable, "Col_Enable");
+            Col_Enable.Name = "Col_Enable";
+            Col_Enable.Resizable = DataGridViewTriState.True;
+            // 
+            // Col_HostName
+            // 
+            Col_HostName.DataPropertyName = "HostName";
+            resources.ApplyResources(Col_HostName, "Col_HostName");
+            Col_HostName.MaxInputLength = 64;
+            Col_HostName.Name = "Col_HostName";
+            Col_HostName.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_IPv4
+            // 
+            Col_IPv4.DataPropertyName = "IPv4";
+            resources.ApplyResources(Col_IPv4, "Col_IPv4");
+            Col_IPv4.Name = "Col_IPv4";
+            Col_IPv4.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Remark
+            // 
+            Col_Remark.DataPropertyName = "Remark";
+            resources.ApplyResources(Col_Remark, "Col_Remark");
+            Col_Remark.Name = "Col_Remark";
+            Col_Remark.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // panel2
             // 
@@ -2469,35 +2499,6 @@
             resources.ApplyResources(tsmAuthorization2, "tsmAuthorization2");
             tsmAuthorization2.Tag = "9PP5G1F0C2B6";
             tsmAuthorization2.Click += TsmAuthorization_Click;
-            // 
-            // Col_Enable
-            // 
-            Col_Enable.DataPropertyName = "Enable";
-            resources.ApplyResources(Col_Enable, "Col_Enable");
-            Col_Enable.Name = "Col_Enable";
-            Col_Enable.Resizable = DataGridViewTriState.True;
-            // 
-            // Col_HostName
-            // 
-            Col_HostName.DataPropertyName = "HostName";
-            resources.ApplyResources(Col_HostName, "Col_HostName");
-            Col_HostName.MaxInputLength = 64;
-            Col_HostName.Name = "Col_HostName";
-            Col_HostName.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_IPv4
-            // 
-            Col_IPv4.DataPropertyName = "IPv4";
-            resources.ApplyResources(Col_IPv4, "Col_IPv4");
-            Col_IPv4.Name = "Col_IPv4";
-            Col_IPv4.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Remark
-            // 
-            Col_Remark.DataPropertyName = "Remark";
-            resources.ApplyResources(Col_Remark, "Col_Remark");
-            Col_Remark.Name = "Col_Remark";
-            Col_Remark.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // Form1
             // 

@@ -51,8 +51,9 @@
             // tbHostName
             // 
             tbHostName.Location = new Point(76, 19);
+            tbHostName.MaxLength = 63;
             tbHostName.Name = "tbHostName";
-            tbHostName.Size = new Size(412, 30);
+            tbHostName.Size = new Size(543, 30);
             tbHostName.TabIndex = 1;
             // 
             // label2
@@ -67,14 +68,15 @@
             // tbIP
             // 
             tbIP.Location = new Point(76, 57);
+            tbIP.MaxLength = 15;
             tbIP.Name = "tbIP";
-            tbIP.Size = new Size(543, 30);
-            tbIP.TabIndex = 3;
+            tbIP.Size = new Size(412, 30);
+            tbIP.TabIndex = 2;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(494, 22);
+            label3.Location = new Point(494, 57);
             label3.Name = "label3";
             label3.Size = new Size(46, 24);
             label3.TabIndex = 4;
@@ -82,10 +84,11 @@
             // 
             // tbPort
             // 
-            tbPort.Location = new Point(546, 19);
+            tbPort.Location = new Point(546, 54);
+            tbPort.MaxLength = 5;
             tbPort.Name = "tbPort";
             tbPort.Size = new Size(73, 30);
-            tbPort.TabIndex = 2;
+            tbPort.TabIndex = 3;
             tbPort.Text = "443";
             // 
             // tbMessage
@@ -138,7 +141,7 @@
             Name = "FormConnectTest";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "检测连接（只测试TLS握手，部分不使用公共证书域名无法通过测试）";
+            Text = "检测连接（只测试TLS握手，没开放HTTPS服务或者不使用公共证书域名无法通过测试）";
             ResumeLayout(false);
             PerformLayout();
         }

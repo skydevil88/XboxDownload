@@ -23,19 +23,19 @@ namespace XboxDownload
             if (string.IsNullOrEmpty(hostName))
             {
                 tbHostName.Focus();
-                MessageBox.Show("域名不能空", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("域名不能空", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
             if (!int.TryParse(tbPort.Text, out int port) || port < 1 || port > 65535)
             {
                 tbPort.Focus();
-                MessageBox.Show("无效端口", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("无效端口", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
             if (!IPAddress.TryParse(tbIP.Text.Trim(), out IPAddress? ip))
             {
                 tbIP.Focus();
-                MessageBox.Show("无效IP", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("无效IP", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
 
