@@ -265,19 +265,9 @@ namespace XboxDownload
             dialog.Dispose();
         }
 
-        private async void TsmProductManual_Click(object sender, EventArgs e)
+        private void TsmProductManual_Click(object sender, EventArgs e)
         {
-            FileInfo fi = new(resourcePath + "\\" + UpdateFile.pdfFile);
-            if (!fi.Exists || fi.Length == 0)
-            {
-                tsmProductManual.Enabled = false;
-                await UpdateFile.Download(fi);
-                tsmProductManual.Enabled = true;
-            }
-            if (fi.Exists)
-                Process.Start(new ProcessStartInfo(fi.FullName) { UseShellExecute = true });
-            else
-                MessageBox.Show("文件不存在", "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            Process.Start(new ProcessStartInfo("https://blog.skydevil.xyz/archives/4") { UseShellExecute = true });
         }
 
         private void TsmAbout_Click(object sender, EventArgs e)
@@ -1481,7 +1471,7 @@ namespace XboxDownload
                         _ = new Label()
                         {
                             ForeColor = Color.Green,
-                            Text = "部分老游戏使用此域名下载",
+                            Text = "部分老主机游戏使用此域名下载",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
@@ -4751,16 +4741,19 @@ namespace XboxDownload
                     gamesPath = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
                     if (!Directory.Exists(gamesPath))
                     {
+                        error = true;
                         gamesPath += " (文件夹不存在)";
                     }
                 }
                 else
                 {
+                    error = true;
                     gamesPath = drive + " (文件夹未知)";
                 }
             }
             else
             {
+                error = true;
                 gamesPath = drive + " (文件夹未知)";
             }
             linkFixAppxDrive.Visible = error;
@@ -4799,6 +4792,46 @@ namespace XboxDownload
             p.StandardInput.WriteLine("Mount-AppxVolume -Volume \"" + path + "\"");
             p.StandardInput.WriteLine("exit");
             p.WaitForExit();
+            bool fixGamingRoot = false;
+            if (!File.Exists(drive + "\\.GamingRoot"))
+            {
+                fixGamingRoot = true;
+            }
+            else
+            {
+                using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
+                using BinaryReader br = new(fs);
+                if (ClassMbr.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
+                {
+                    string gamesPath = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
+                    if (!Directory.Exists(gamesPath))
+                    {
+                        fixGamingRoot = true;
+                    }
+                }
+            }
+            if (fixGamingRoot)
+            {
+                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "GamingServices").SingleOrDefault();
+                if (service != null)
+                {
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(10000);
+                    try
+                    {
+                        if (service.Status == ServiceControllerStatus.Running)
+                        {
+                            service.Stop();
+                            service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                        }
+                        if (service.Status != ServiceControllerStatus.Running)
+                        {
+                            service.Start();
+                            service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                        }
+                    }
+                    catch { }
+                }
+            }
             MessageBox.Show("安装位置修复已完成。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ThreadPool.QueueUserWorkItem(delegate { GetAppxVolume(); });
         }
@@ -4859,9 +4892,14 @@ namespace XboxDownload
         private void ButAppxInstall_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(tbAppxFilePath.Text)) return;
-            if (Environment.OSVersion.Version.Major < 10)
+            if (linkFixAppxDrive.Visible)
             {
-                MessageBox.Show("只支持Win10或以上版本操作系统。", "操作系统版本过低", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (MessageBox.Show("安装目录好像有问题，是否要继续安装？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
+            }
+            ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "GamingServices").SingleOrDefault();
+            if (service == null || service.Status != ServiceControllerStatus.Running)
+            {
+                MessageBox.Show("没有检测到游戏服务(Gaming Services)，请先启动游戏服务再安装。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
             string filepath = tbAppxFilePath.Text;
@@ -5029,7 +5067,7 @@ namespace XboxDownload
                         p.StartInfo.RedirectStandardInput = true;
                         p.StartInfo.CreateNoWindow = true;
                         p.Start();
-                        p.StandardInput.WriteLine("get-appxpackage Microsoft.GamingServices | remove-AppxPackage -allusers");
+                        p.StandardInput.WriteLine("Get-AppxPackage Microsoft.GamingServices | Remove-AppxPackage -AllUsers");
                         p.StandardInput.WriteLine("Add-AppxPackage \"" + filePath + "\"");
                         p.StandardInput.WriteLine("exit");
                         p.WaitForExit();

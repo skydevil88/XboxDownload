@@ -15,7 +15,7 @@ namespace XboxDownload
     {
         private readonly Form1 parentForm;
         private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://223.5.5.5" : "http://223.5.5.5";
-        private readonly Regex reDohBlacklist = new("google|youtube");
+        private readonly Regex reDohBlacklist = new("google|youtube|facebook|twitter");
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, Byte[]> dicHosts = new();
         public static ConcurrentDictionary<String, IPAddress> dicHosts2 = new();

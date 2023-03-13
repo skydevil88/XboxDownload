@@ -6497,7 +6497,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>758, 20</value>
   </data>
   <data name="label48.Size" type="System.Drawing.Size, System.Drawing">
-    <value>654, 168</value>
+    <value>578, 168</value>
   </data>
   <data name="label48.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -6507,9 +6507,9 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
 1. 选择已经下载完成微软商店应用或者游戏。
 2. 然后点击安装，等待进度条完成后重启Xbox应用。
 提示：游戏安装目录可以在Xbox“设置-&gt;常规-&gt;游戏安装选项”中更改。
-安装位置无法选择可以在以下位置更改，开始菜单右键：
-系统-&gt;存储-&gt;高级存储设置-&gt;保存新内容的地方-&gt;新的应用将保存到（Win11）
-系统-&gt;存储-&gt;更改新内容的保存位置-&gt;新的应用将保存到（Win10）</value>
+错误代码：
+HRESULT: 0x80073CF0, 无法打开包（重启游戏服务或者重启电脑）
+HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，重新下载）</value>
   </data>
   <data name="&gt;&gt;label48.Name" xml:space="preserve">
     <value>label48</value>

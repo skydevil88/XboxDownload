@@ -12,7 +12,6 @@ namespace XboxDownload
         public const string updateUrl = "https://github.com/skydevil88/XboxDownload/releases/";
         public const string filePath = "download/v1/";
         private const string testFile = "XboxDownload.exe.md5";
-        public const string pdfFile = "ProductManual.pdf";
         public const string dataFile = "XboxGame.json";
         private static readonly string[,] proxys = {
             { "proxy", "https://ghproxy.com/" },
