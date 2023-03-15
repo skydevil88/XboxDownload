@@ -1330,7 +1330,7 @@ namespace XboxDownload
 
             bool update = true;
             FileInfo fi = new(resourcePath + "\\IP." + host + ".txt");
-            if (fi.Exists && fi.Length > 0) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddHours(24)) >= 0;
+            if (fi.Exists && fi.Length >= 1) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddHours(24)) >= 0;
             if (update)
             {
                 await UpdateFile.Download(fi);
@@ -4776,6 +4776,12 @@ namespace XboxDownload
 
         private void LinkFixAppxDrive_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "GamingServices").SingleOrDefault();
+            if (service == null || service.Status != ServiceControllerStatus.Running)
+            {
+                MessageBox.Show("没有检测到游戏服务(Gaming Services)，请先启动游戏服务再执行此操作。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
             string drive = cbAppxDrive.Text, path;
             string dir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (drive == Directory.GetDirectoryRoot(dir))
@@ -4812,7 +4818,6 @@ namespace XboxDownload
             }
             if (fixGamingRoot)
             {
-                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "GamingServices").SingleOrDefault();
                 if (service != null)
                 {
                     TimeSpan timeout = TimeSpan.FromMilliseconds(10000);
@@ -4892,15 +4897,15 @@ namespace XboxDownload
         private void ButAppxInstall_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(tbAppxFilePath.Text)) return;
-            if (linkFixAppxDrive.Visible)
-            {
-                if (MessageBox.Show("安装目录好像有问题，是否要继续安装？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
-            }
             ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "GamingServices").SingleOrDefault();
             if (service == null || service.Status != ServiceControllerStatus.Running)
             {
-                MessageBox.Show("没有检测到游戏服务(Gaming Services)，请先启动游戏服务再安装。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("没有检测到游戏服务(Gaming Services)，请先启动游戏服务再执行此操作。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
+            }
+            if (linkFixAppxDrive.Visible)
+            {
+                if (MessageBox.Show("安装目录好像有问题，是否要继续安装？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
             }
             string filepath = tbAppxFilePath.Text;
             tbAppxFilePath.Clear();

@@ -243,13 +243,6 @@ namespace XboxDownload
     {
         public static ConcurrentDictionary<String, Products> dicXboxGame = new();
 
-        public class Products
-        {
-            public Version Version { get; set; } = new Version();
-            public ulong FileSize { get; set; }
-            public string Url { get; set; } = "";
-        }
-
         static int delay = 0;
         public static void SaveXboxGame()
         {
@@ -275,10 +268,10 @@ namespace XboxDownload
                     WriteIndented = true
                 };
                 string jsonString = JsonSerializer.Serialize(xboxGame, options);
-                if (!Directory.Exists(Form1.resourcePath))
-                    Directory.CreateDirectory(Form1.resourcePath);
                 try
                 {
+                    if (!Directory.Exists(Form1.resourcePath))
+                        Directory.CreateDirectory(Form1.resourcePath);
                     File.WriteAllText(Form1.resourcePath + "\\" + UpdateFile.dataFile, jsonString);
                 }
                 catch { }
@@ -288,6 +281,13 @@ namespace XboxDownload
         public class XboxGame
         {
             public ConcurrentDictionary<String, Products>? Serialize { get; set; }
+        }
+
+        public class Products
+        {
+            public Version Version { get; set; } = new Version();
+            public ulong FileSize { get; set; }
+            public string Url { get; set; } = "";
         }
 
         public class Game

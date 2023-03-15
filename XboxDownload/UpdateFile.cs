@@ -15,10 +15,10 @@ namespace XboxDownload
         public const string dataFile = "XboxGame.json";
         private static readonly string[,] proxys = {
             { "proxy", "https://ghproxy.com/" },
-            { "proxy", "https://gh.api.99988866.xyz/" },
             { "proxy", "https://ghps.cc/" },
             { "proxy", "https://proxy.zyun.vip/" },
-            //{ "proxy", "https://github.91chi.fun/" },
+            { "proxy", "https://gh.api.99988866.xyz/" },  //慢
+            //{ "proxy", "https://github.91chi.fun/" },   //失效
             //{ "mirror", "https://cdn.githubjs.cf/" },   //失效
             //{ "mirror", "https://hub.fastgit.xyz/" },   //失效
             { "direct", "" }
@@ -29,11 +29,11 @@ namespace XboxDownload
             Properties.Settings.Default.NextUpdate = DateTime.Now.AddDays(7).Ticks;
             Properties.Settings.Default.Save();
 
-            string md5 = string.Empty;
+            string updateUrl = string.Empty, md5 = string.Empty;
             Task[] tasks = new Task[proxys.GetLongLength(0)];
             for (int i = 0; i <= tasks.Length - 1; i++)
             {
-                string updateUrl = proxys[i, 0] switch
+                string testUrl = proxys[i, 0] switch
                 {
                     "proxy" => proxys[i, 1] + UpdateFile.updateUrl,
                     "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"^https?://[^/]+/", ""),
@@ -41,16 +41,21 @@ namespace XboxDownload
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string html = ClassWeb.HttpResponseContent(updateUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
+                    string html = ClassWeb.HttpResponseContent(testUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
                     if (string.IsNullOrEmpty(md5) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
                     {
                         md5 = html;
-                        Update(autoupdate, updateUrl, parentForm);
+                        updateUrl = testUrl;
                     }
+                    else Thread.Sleep(6000);
                 });
             }
             Array.ForEach(tasks, x => x.Start());
-            Task.WaitAll(tasks);
+            Task.WaitAny(tasks);
+            if (!string.IsNullOrEmpty(md5))
+            {
+                Update(autoupdate, updateUrl, parentForm);
+            }
             if (string.IsNullOrEmpty(md5) && !autoupdate)
             {
                 parentForm.Invoke(new Action(() =>
@@ -151,11 +156,11 @@ namespace XboxDownload
 
         public static async Task Download(FileInfo fi)
         {
-            string md5 = string.Empty;
+            string updateUrl = string.Empty;
             Task[] tasks = new Task[proxys.GetLongLength(0)];
             for (int i = 0; i <= tasks.Length - 1; i++)
             {
-                string updateUrl = proxys[i, 0] switch
+                string testUrl = proxys[i, 0] switch
                 {
                     "proxy" => proxys[i, 1] + UpdateFile.updateUrl,
                     "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"^https?://[^/]+/", ""),
@@ -163,41 +168,33 @@ namespace XboxDownload
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string html = ClassWeb.HttpResponseContent(updateUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
-                    if (string.IsNullOrEmpty(md5) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
-                    {
-                        md5 = html;
-                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(updateUrl + UpdateFile.filePath + fi.Name, "GET", null, null, null, 60000);
-                        if (response != null && response.IsSuccessStatusCode)
-                        {
-                            /*
-                            using Stream stream = response.Content.ReadAsStreamAsync().Result;
-                            if (stream.Length > 0)
-                            {
-                                if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
-                                    Directory.CreateDirectory(fi.DirectoryName);
-                                using FileStream fileStream = fi.Create();
-                                stream.CopyToAsync(fileStream);
-                                fi.Refresh();
-                            }
-                            */
-                            byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
-                            if (buffer.Length > 0)
-                            {
-                                if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
-                                    Directory.CreateDirectory(fi.DirectoryName);
-                                using FileStream fs = new(fi.FullName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                                fs.Write(buffer, 0, buffer.Length);
-                                fs.Flush();
-                                fs.Close();
-                                fi.Refresh();
-                            }
-                        }
-                    }
+                    string html = ClassWeb.HttpResponseContent(testUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
+                    if (string.IsNullOrEmpty(updateUrl) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
+                        updateUrl = testUrl;
+                    else
+                        Thread.Sleep(6000);
                 });
             }
             Array.ForEach(tasks, x => x.Start());
-            await Task.WhenAll(tasks);
+            await Task.WhenAny(tasks);
+            if (!string.IsNullOrEmpty(updateUrl))
+            {
+                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(updateUrl + UpdateFile.filePath + fi.Name, "GET", null, null, null, 60000);
+                if (response != null && response.IsSuccessStatusCode)
+                {
+                    byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
+                    if (buffer.Length > 0)
+                    {
+                        if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
+                            Directory.CreateDirectory(fi.DirectoryName);
+                        using FileStream fs = new(fi.FullName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                        fs.Write(buffer, 0, buffer.Length);
+                        fs.Flush();
+                        fs.Close();
+                        fi.Refresh();
+                    }
+                }
+            }
         }
     }
 }
