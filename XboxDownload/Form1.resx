@@ -470,7 +470,7 @@
     <value>宋体, 12pt</value>
   </data>
   <data name="butStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 315</value>
+    <value>1220, 317</value>
   </data>
   <data name="butStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -500,7 +500,7 @@
     <value>True</value>
   </data>
   <data name="ckbSteamStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 278</value>
+    <value>1220, 280</value>
   </data>
   <data name="ckbSteamStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -530,7 +530,7 @@
     <value>True</value>
   </data>
   <data name="ckbEpicStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 249</value>
+    <value>1220, 252</value>
   </data>
   <data name="ckbEpicStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -560,7 +560,7 @@
     <value>True</value>
   </data>
   <data name="ckbBattleStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 220</value>
+    <value>1220, 224</value>
   </data>
   <data name="ckbBattleStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -590,7 +590,7 @@
     <value>True</value>
   </data>
   <data name="ckbEAStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 194</value>
+    <value>1220, 196</value>
   </data>
   <data name="ckbEAStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -620,7 +620,7 @@
     <value>True</value>
   </data>
   <data name="ckbMicrosoftStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 165</value>
+    <value>1220, 168</value>
   </data>
   <data name="ckbMicrosoftStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -680,7 +680,7 @@
     <value>True</value>
   </data>
   <data name="ckbDoH.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 110</value>
+    <value>1220, 112</value>
   </data>
   <data name="ckbDoH.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -713,7 +713,7 @@
     <value>NoControl</value>
   </data>
   <data name="ckbHttpService.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 82</value>
+    <value>1220, 84</value>
   </data>
   <data name="ckbHttpService.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
