@@ -91,7 +91,7 @@ namespace XboxDownload
                     string _extension = Path.GetExtension(_tmpPath).ToLowerInvariant();
                     if (Properties.Settings.Default.LocalUpload && !string.IsNullOrEmpty(_localPath))
                     {
-                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
+                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
                         using FileStream fs = new(_localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                         using BinaryReader br = new(fs);
                         string _contentRange = string.Empty, _status = "200 OK";
@@ -205,24 +205,7 @@ namespace XboxDownload
                             sb.Append("Content-Length: 0\r\n\r\n");
                             Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
                             mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                            if (Properties.Settings.Default.RecordLog)
-                            {
-                                int argb = 0;
-                                switch (_hosts)
-                                {
-                                    case "assets1.xboxlive.com":
-                                    case "assets2.xboxlive.com":
-                                    case "dlassets.xboxlive.com":
-                                    case "dlassets2.xboxlive.com":
-                                    case "d1.xboxlive.com":
-                                    case "d2.xboxlive.com":
-                                    case "xvcf1.xboxlive.com":
-                                    case "xvcf2.xboxlive.com":
-                                        argb = 0x008000;
-                                        break;
-                                }
-                                parentForm.SaveLog("HTTP 301", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, argb);
-                            }
+                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 301", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
                         }
                         else
                         {

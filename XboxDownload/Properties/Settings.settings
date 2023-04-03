@@ -30,7 +30,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="NSHomepage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://xbox.skydevil.xyz</Value>
+      <Value Profile="(Default)">https://blog.skydevil.xyz</Value>
     </Setting>
     <Setting Name="EAIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

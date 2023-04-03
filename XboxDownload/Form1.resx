@@ -467,10 +467,10 @@
     <value>1</value>
   </data>
   <data name="butStart.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 12pt</value>
+    <value>Microsoft YaHei UI, 11pt</value>
   </data>
   <data name="butStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1220, 317</value>
+    <value>1220, 320</value>
   </data>
   <data name="butStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3962,7 +3962,7 @@
     <value>True</value>
   </data>
   <data name="label31.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 10.5pt</value>
+    <value>Microsoft YaHei UI, 11pt</value>
   </data>
   <data name="label31.Location" type="System.Drawing.Point, System.Drawing">
     <value>22, 376</value>
@@ -3971,7 +3971,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label31.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1115, 21</value>
+    <value>1162, 30</value>
   </data>
   <data name="label31.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -6497,7 +6497,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>758, 20</value>
   </data>
   <data name="label48.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 168</value>
+    <value>669, 168</value>
   </data>
   <data name="label48.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -6509,7 +6509,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
 提示：游戏安装目录可以在Xbox“设置-&gt;常规-&gt;游戏安装选项”中更改。
 错误代码：
 HRESULT: 0x80073CF0, 无法打开包（重启游戏服务或者重启电脑）
-HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，重新下载）</value>
+HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名重新下载）</value>
   </data>
   <data name="&gt;&gt;label48.Name" xml:space="preserve">
     <value>label48</value>
@@ -8658,19 +8658,19 @@ U盘卷标不能有中文。</value>
     <value>804, 17</value>
   </metadata>
   <data name="tsmCopyUrl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 30</value>
+    <value>323, 30</value>
   </data>
   <data name="tsmCopyUrl1.Text" xml:space="preserve">
-    <value>复制下载链接(.com 域名)推荐</value>
+    <value>复制下载链接(.com 域名) 推荐</value>
   </data>
   <data name="tsmCopyUrl2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 30</value>
+    <value>323, 30</value>
   </data>
   <data name="tsmCopyUrl2.Text" xml:space="preserve">
-    <value>复制下载链接(.cn 域名)</value>
+    <value>复制下载链接(.cn 域名) </value>
   </data>
   <data name="tsmAllUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 30</value>
+    <value>323, 30</value>
   </data>
   <data name="tsmAllUrl.Text" xml:space="preserve">
     <value>查看运行库等所有相关下载</value>
@@ -8688,13 +8688,13 @@ U盘卷标不能有中文。</value>
     <value>打开光环：无限</value>
   </data>
   <data name="tsmAuthorization.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 30</value>
+    <value>323, 30</value>
   </data>
   <data name="tsmAuthorization.Text" xml:space="preserve">
     <value>启动 Xbox App 更新授权</value>
   </data>
   <data name="cmsCopyUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 124</value>
+    <value>324, 124</value>
   </data>
   <data name="&gt;&gt;cmsCopyUrl.Name" xml:space="preserve">
     <value>cmsCopyUrl</value>

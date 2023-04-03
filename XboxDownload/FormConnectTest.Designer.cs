@@ -61,9 +61,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(24, 60);
             label2.Name = "label2";
-            label2.Size = new Size(26, 24);
+            label2.Size = new Size(46, 24);
             label2.TabIndex = 2;
-            label2.Text = "IP";
+            label2.Text = "IPv4";
             // 
             // tbIP
             // 

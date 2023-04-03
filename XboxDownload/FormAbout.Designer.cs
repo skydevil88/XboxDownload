@@ -56,11 +56,11 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Font = new Font("Microsoft YaHei UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             label1.Location = new Point(180, 22);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(262, 24);
+            label1.Size = new Size(247, 30);
             label1.TabIndex = 1;
             label1.Text = "Xbox下载助手 By Devil";
             // 
@@ -91,11 +91,11 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(120, 152);
+            label2.Font = new Font("Microsoft YaHei UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(126, 150);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(406, 24);
+            label2.Size = new Size(372, 30);
             label2.TabIndex = 4;
             label2.Text = "如果软件对您有帮助，欢迎打赏作者!\r\n";
             // 

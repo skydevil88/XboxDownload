@@ -1406,8 +1406,8 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/12/8bf3ef34-0f74-4c08-bec7-5aacfd0ae2b4/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3758.9902.0.a530295d-0a04-41c0-843c-9f9bc29a82a9/Microsoft.254428597CFE2_1.3758.9902.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/12/56a74a8f-6745-4c8a-b51b-c2aa9111f6c8/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.567.563.0.7f3ea421-68d2-460c-b0a6-c6594fe1dcfe/Microsoft.624F8B84B80_3.567.563.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/d1a3439e-ae03-41fa-8a7c-afa4843c2a23/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3780.27332.0.95e9ae47-da08-4f65-a036-aa795bfd698f/Microsoft.254428597CFE2_1.3780.27332.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/12/5d4e24ba-54ba-4956-a7c1-4264ddcbb40e/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.573.834.0.629400ca-17a0-4687-95f6-ba9eb3b6374e/Microsoft.624F8B84B80_3.573.834.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -1471,7 +1471,7 @@ namespace XboxDownload
                         _ = new Label()
                         {
                             ForeColor = Color.Green,
-                            Text = "部分老主机游戏使用此域名下载",
+                            Text = "部分老主机游戏(不包括PC)使用此域名下载",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
@@ -4788,16 +4788,23 @@ namespace XboxDownload
                 path = dir + "\\WindowsApps";
             else
                 path = drive + "WindowsApps";
-            using Process p = new();
-            p.StartInfo.FileName = @"powershell.exe";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardInput = true;
-            p.StartInfo.CreateNoWindow = true;
-            p.Start();
-            p.StandardInput.WriteLine("Add-AppxVolume -Path \"" + path + "\"");
-            p.StandardInput.WriteLine("Mount-AppxVolume -Volume \"" + path + "\"");
-            p.StandardInput.WriteLine("exit");
-            p.WaitForExit();
+            try
+            {
+                using Process p = new();
+                p.StartInfo.FileName = @"powershell.exe";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+                p.StandardInput.WriteLine("Add-AppxVolume -Path \"" + path + "\"");
+                p.StandardInput.WriteLine("Mount-AppxVolume -Volume \"" + path + "\"");
+                p.StandardInput.WriteLine("exit");
+                p.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("调用PowerShell失败，错误信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             bool fixGamingRoot = false;
             if (!File.Exists(drive + "\\.GamingRoot"))
             {
@@ -4843,9 +4850,10 @@ namespace XboxDownload
 
         private void GetAppxVolume()
         {
-            string outputString;
-            using (Process p = new())
+            string outputString = "";
+            try
             {
+                using Process p = new();
                 p.StartInfo.FileName = "powershell.exe";
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardInput = true;
@@ -4857,6 +4865,7 @@ namespace XboxDownload
                 outputString = p.StandardOutput.ReadToEnd();
                 p.WaitForExit();
             }
+            catch { }
             DataTable dt = new();
             DataColumn dcDirectoryRoot = dt.Columns.Add("DirectoryRoot", typeof(String));
             dt.Columns.Add("StorePath", typeof(String));
@@ -5144,8 +5153,9 @@ namespace XboxDownload
             if (MessageBox.Show("请确认是否要“重置 Winsock 目录”？\n\n重置完成后需要重启计算机。", "重置Winsock目录", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 string outputString = string.Empty;
-                using (Process p = new())
+                try
                 {
+                    using Process p = new();
                     p.StartInfo.FileName = "powershell.exe";
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.RedirectStandardInput = true;
@@ -5157,10 +5167,14 @@ namespace XboxDownload
                     p.StandardInput.Close();
                     outputString = p.StandardOutput.ReadToEnd();
                     p.WaitForExit();
+                    outputString = outputString[(outputString.IndexOf("netsh int ip reset") + 18)..];
+                    outputString = Regex.Replace(outputString, "PS.+", "");
+                    outputString = Regex.Replace(outputString, "\r\n+", "\r\n");
                 }
-                outputString = outputString[(outputString.IndexOf("netsh int ip reset") + 18)..];
-                outputString = Regex.Replace(outputString, "PS.+", "");
-                outputString = Regex.Replace(outputString, "\r\n+", "\r\n");
+                catch (Exception ex)
+                {
+                    outputString = ex.Message;
+                }
                 MessageBox.Show(outputString.Trim(), "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
