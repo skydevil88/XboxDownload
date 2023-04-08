@@ -4949,7 +4949,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="lvGame.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1432, 283</value>
+    <value>1432, 278</value>
   </data>
   <data name="lvGame.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5787,7 +5787,7 @@
     <value>Fill</value>
   </data>
   <data name="gbGameInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 150</value>
+    <value>0, 155</value>
   </data>
   <data name="gbGameInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -5796,7 +5796,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbGameInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 660</value>
+    <value>1436, 655</value>
   </data>
   <data name="gbGameInfo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5826,7 +5826,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="flpGameWithGold.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1278, 48</value>
+    <value>1278, 50</value>
   </data>
   <data name="flpGameWithGold.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -6126,7 +6126,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbMicrosoftStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 150</value>
+    <value>1436, 155</value>
   </data>
   <data name="gbMicrosoftStore.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -6174,7 +6174,7 @@
     <value>True</value>
   </data>
   <data name="linkLabel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1108, 166</value>
+    <value>1108, 165</value>
   </data>
   <data name="linkLabel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>310, 24</value>
@@ -6201,7 +6201,7 @@
     <value>True</value>
   </data>
   <data name="linkTroubleshootGame.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 166</value>
+    <value>758, 165</value>
   </data>
   <data name="linkTroubleshootGame.Size" type="System.Drawing.Size, System.Drawing">
     <value>346, 24</value>
@@ -6287,7 +6287,7 @@
     <value>True</value>
   </data>
   <data name="linkResetWinsock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>544, 130</value>
+    <value>540, 165</value>
   </data>
   <data name="linkResetWinsock.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 24</value>
@@ -6314,7 +6314,7 @@
     <value>True</value>
   </data>
   <data name="linkReInstallGamingServices.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 130</value>
+    <value>130, 165</value>
   </data>
   <data name="linkReInstallGamingServices.Size" type="System.Drawing.Size, System.Drawing">
     <value>154, 24</value>
@@ -6341,7 +6341,7 @@
     <value>True</value>
   </data>
   <data name="linkRestartGamingServices.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 130</value>
+    <value>6, 165</value>
   </data>
   <data name="linkRestartGamingServices.Size" type="System.Drawing.Size, System.Drawing">
     <value>118, 24</value>
@@ -6374,7 +6374,7 @@
     <value>True</value>
   </data>
   <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>694, 64</value>
+    <value>694, 102</value>
   </data>
   <data name="textBox1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>

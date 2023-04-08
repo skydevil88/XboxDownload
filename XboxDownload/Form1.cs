@@ -1407,7 +1407,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/d1a3439e-ae03-41fa-8a7c-afa4843c2a23/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3780.27332.0.95e9ae47-da08-4f65-a036-aa795bfd698f/Microsoft.254428597CFE2_1.3780.27332.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/12/5d4e24ba-54ba-4956-a7c1-4264ddcbb40e/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.573.834.0.629400ca-17a0-4687-95f6-ba9eb3b6374e/Microsoft.624F8B84B80_3.573.834.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/Z/7ddff4f4-fd4a-4ab1-817a-20889a8b267b/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.576.537.0.d9928baa-b206-4dd7-9706-4fb8f2a4a450/Microsoft.624F8B84B80_3.576.537.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -4734,21 +4734,29 @@ namespace XboxDownload
             }
             if (File.Exists(drive + "\\.GamingRoot"))
             {
-                using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
-                using BinaryReader br = new(fs);
-                if (ClassMbr.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
+                try
                 {
-                    gamesPath = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
-                    if (!Directory.Exists(gamesPath))
+                    using FileStream fs = new(drive + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
+                    using BinaryReader br = new(fs);
+                    if (ClassMbr.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
+                    {
+                        gamesPath = drive + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
+                        if (!Directory.Exists(gamesPath))
+                        {
+                            error = true;
+                            gamesPath += " (文件夹不存在)";
+                        }
+                    }
+                    else
                     {
                         error = true;
-                        gamesPath += " (文件夹不存在)";
+                        gamesPath = drive + " (文件夹未知)";
                     }
                 }
-                else
+                catch (Exception ex)
                 {
                     error = true;
-                    gamesPath = drive + " (文件夹未知)";
+                    gamesPath = drive + " (" + ex.Message + ")";
                 }
             }
             else
@@ -4877,11 +4885,15 @@ namespace XboxDownload
                 string storePath = result.Groups["PackageStorePath"].Value.Trim();
                 string directoryRoot = Directory.GetDirectoryRoot(storePath);
                 bool isOffline = result.Groups["IsOffline"].Value == "True";
-                DataRow dr = dt.NewRow();
-                dr["DirectoryRoot"] = directoryRoot;
-                dr["StorePath"] = storePath;
-                dr["IsOffline"] = isOffline;
-                dt.Rows.Add(dr);
+                DataRow? dr = dt.Rows.Find(directoryRoot);
+                if (dr == null)
+                {
+                    dr = dt.NewRow();
+                    dr["DirectoryRoot"] = directoryRoot;
+                    dr["StorePath"] = storePath;
+                    dr["IsOffline"] = isOffline;
+                    dt.Rows.Add(dr);
+                }
                 result = result.NextMatch();
             }
             cbAppxDrive.Tag = dt;
