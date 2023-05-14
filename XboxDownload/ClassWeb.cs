@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Net;
@@ -156,14 +155,10 @@ namespace XboxDownload
             return UrlEncoder.Default.Encode(str);
         }
 
-        public static string GetMimeMapping(string filePath)
+        public static string GetMimeMapping(string path)
         {
-            FileExtensionContentTypeProvider provider = new();
-            if (!provider.TryGetContentType(filePath, out string contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-            return contentType;
+            ClassFileContentType.TryGetContentType(path, out string? contentType);
+            return contentType ?? "application/octet-stream";
         }
 
         public static SocketPackage TcpRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000, CancellationTokenSource? cts = null)

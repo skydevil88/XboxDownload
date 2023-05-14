@@ -70,10 +70,10 @@
             linkLabel1.Location = new Point(180, 82);
             linkLabel1.Margin = new Padding(4, 0, 4, 0);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(220, 24);
+            linkLabel1.Size = new Size(221, 24);
             linkLabel1.TabIndex = 2;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "https://blog.skydevil.xyz";
+            linkLabel1.Text = "https://xbox.skydevil.xyz";
             linkLabel1.LinkClicked += LinkLabel_LinkClicked;
             // 
             // linkLabel2
