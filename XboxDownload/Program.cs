@@ -205,6 +205,24 @@ namespace XboxDownload
             [DllImport("gdi32.dll")]
             private extern static int GetDeviceCaps(IntPtr hdc, int nIndex);
         }
+
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
+        private static extern long WritePrivateProfileString(string section, string? key, string? val, string filePath);
+
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
+        private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+
+        public static void FilesIniWrite(string section, string? key, string? value, string path)
+        {
+            _ = WritePrivateProfileString(section, key, value, path);
+        }
+
+        public static string FilesIniRead(string section, string key, string path)
+        {
+            StringBuilder sb = new(255);
+            _ = GetPrivateProfileString(section, key, "", sb, 255, path);
+            return sb.ToString();
+        }
     }
 
     class DoubleBufferListView : ListView

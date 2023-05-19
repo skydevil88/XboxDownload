@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -265,6 +265,16 @@
             tbGameUrl = new TextBox();
             label32 = new Label();
             tabTool = new TabPage();
+            gpEACdn = new GroupBox();
+            linkLabel3 = new LinkLabel();
+            linkEaOriginNoUpdate = new LinkLabel();
+            linkEaOriginRepair = new LinkLabel();
+            label51 = new Label();
+            labelStatusEACdn = new Label();
+            butEACdn = new Button();
+            rbEACdn2 = new RadioButton();
+            rbEACdn1 = new RadioButton();
+            rbEACdn0 = new RadioButton();
             gbGamingServices = new GroupBox();
             linkLabel2 = new LinkLabel();
             linkTroubleshootGame = new LinkLabel();
@@ -364,6 +374,7 @@
             ((System.ComponentModel.ISupportInitialize)pbGame).BeginInit();
             gbMicrosoftStore.SuspendLayout();
             tabTool.SuspendLayout();
+            gpEACdn.SuspendLayout();
             gbGamingServices.SuspendLayout();
             gbAddAppxPackage.SuspendLayout();
             groupBox8.SuspendLayout();
@@ -1010,9 +1021,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1020,9 +1031,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1030,9 +1041,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2042,12 +2053,89 @@
             // 
             // tabTool
             // 
+            tabTool.Controls.Add(gpEACdn);
             tabTool.Controls.Add(gbGamingServices);
             tabTool.Controls.Add(gbAddAppxPackage);
             tabTool.Controls.Add(groupBox8);
             resources.ApplyResources(tabTool, "tabTool");
             tabTool.Name = "tabTool";
             tabTool.UseVisualStyleBackColor = true;
+            // 
+            // gpEACdn
+            // 
+            gpEACdn.Controls.Add(linkLabel3);
+            gpEACdn.Controls.Add(linkEaOriginNoUpdate);
+            gpEACdn.Controls.Add(linkEaOriginRepair);
+            gpEACdn.Controls.Add(label51);
+            gpEACdn.Controls.Add(labelStatusEACdn);
+            gpEACdn.Controls.Add(butEACdn);
+            gpEACdn.Controls.Add(rbEACdn2);
+            gpEACdn.Controls.Add(rbEACdn1);
+            gpEACdn.Controls.Add(rbEACdn0);
+            resources.ApplyResources(gpEACdn, "gpEACdn");
+            gpEACdn.Name = "gpEACdn";
+            gpEACdn.TabStop = false;
+            // 
+            // linkLabel3
+            // 
+            resources.ApplyResources(linkLabel3, "linkLabel3");
+            linkLabel3.Name = "linkLabel3";
+            linkLabel3.TabStop = true;
+            linkLabel3.Tag = "https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp";
+            linkLabel3.LinkClicked += Link_LinkClicked;
+            // 
+            // linkEaOriginNoUpdate
+            // 
+            resources.ApplyResources(linkEaOriginNoUpdate, "linkEaOriginNoUpdate");
+            linkEaOriginNoUpdate.Name = "linkEaOriginNoUpdate";
+            linkEaOriginNoUpdate.TabStop = true;
+            linkEaOriginNoUpdate.LinkClicked += LinkEaOriginNoUpdate_LinkClicked;
+            // 
+            // linkEaOriginRepair
+            // 
+            resources.ApplyResources(linkEaOriginRepair, "linkEaOriginRepair");
+            linkEaOriginRepair.Name = "linkEaOriginRepair";
+            linkEaOriginRepair.TabStop = true;
+            linkEaOriginRepair.LinkClicked += LinkEaOriginRepair_LinkClicked;
+            // 
+            // label51
+            // 
+            resources.ApplyResources(label51, "label51");
+            label51.Name = "label51";
+            // 
+            // labelStatusEACdn
+            // 
+            resources.ApplyResources(labelStatusEACdn, "labelStatusEACdn");
+            labelStatusEACdn.ForeColor = Color.Green;
+            labelStatusEACdn.Name = "labelStatusEACdn";
+            // 
+            // butEACdn
+            // 
+            resources.ApplyResources(butEACdn, "butEACdn");
+            butEACdn.Name = "butEACdn";
+            butEACdn.UseVisualStyleBackColor = true;
+            butEACdn.Click += ButEACdn_Click;
+            // 
+            // rbEACdn2
+            // 
+            resources.ApplyResources(rbEACdn2, "rbEACdn2");
+            rbEACdn2.Name = "rbEACdn2";
+            rbEACdn2.TabStop = true;
+            rbEACdn2.UseVisualStyleBackColor = true;
+            // 
+            // rbEACdn1
+            // 
+            resources.ApplyResources(rbEACdn1, "rbEACdn1");
+            rbEACdn1.Name = "rbEACdn1";
+            rbEACdn1.TabStop = true;
+            rbEACdn1.UseVisualStyleBackColor = true;
+            // 
+            // rbEACdn0
+            // 
+            resources.ApplyResources(rbEACdn0, "rbEACdn0");
+            rbEACdn0.Name = "rbEACdn0";
+            rbEACdn0.TabStop = true;
+            rbEACdn0.UseVisualStyleBackColor = true;
             // 
             // gbGamingServices
             // 
@@ -2555,6 +2643,8 @@
             gbMicrosoftStore.ResumeLayout(false);
             gbMicrosoftStore.PerformLayout();
             tabTool.ResumeLayout(false);
+            gpEACdn.ResumeLayout(false);
+            gpEACdn.PerformLayout();
             gbGamingServices.ResumeLayout(false);
             gbGamingServices.PerformLayout();
             gbAddAppxPackage.ResumeLayout(false);
@@ -2870,5 +2960,15 @@
         private DataGridViewTextBoxColumn Col_HostName;
         private DataGridViewTextBoxColumn Col_IPv4;
         private DataGridViewTextBoxColumn Col_Remark;
+        private GroupBox gpEACdn;
+        private Button butEACdn;
+        private RadioButton rbEACdn2;
+        private RadioButton rbEACdn1;
+        private RadioButton rbEACdn0;
+        private Label label51;
+        private Label labelStatusEACdn;
+        private LinkLabel linkEaOriginRepair;
+        private LinkLabel linkEaOriginNoUpdate;
+        private LinkLabel linkLabel3;
     }
 }

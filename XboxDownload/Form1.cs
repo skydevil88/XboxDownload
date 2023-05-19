@@ -1,18 +1,18 @@
-using System.Diagnostics;
-using System.Net.Sockets;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Data;
-using System.Text;
-using System.ServiceProcess;
+using System.Diagnostics;
 using System.Collections.Concurrent;
-using NetFwTypeLib;
-using System.Security.AccessControl;
-using System.Text.Json;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Management;
+using System.Security.AccessControl;
+using System.ServiceProcess;
+using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Web;
-using static XboxDownload.ClassGame;
+using System.Xml.Linq;
+using NetFwTypeLib;
 
 namespace XboxDownload
 {
@@ -378,6 +378,7 @@ namespace XboxDownload
                     if (cbAppxDrive.Items.Count == 0 && gbAddAppxPackage.Visible)
                     {
                         LinkAppxRefreshDrive_LinkClicked(null, null);
+                        GetEACdn();
                     }
                     break;
             }
@@ -5190,6 +5191,150 @@ namespace XboxDownload
                 }
                 MessageBox.Show(outputString.Trim(), "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void GetEACdn()
+        {
+            string? eaCoreIni = null;
+            using (var key = Microsoft.Win32.Registry.LocalMachine)
+            {
+                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Origin");
+                rk ??= key.OpenSubKey(@"SOFTWARE\Origin");
+                if (rk != null)
+                {
+                    string? originPath = rk.GetValue("OriginPath", null)?.ToString();
+                    if (originPath != null && File.Exists(originPath))
+                    {
+                        linkEaOriginRepair.Links[0].LinkData = originPath;
+                        eaCoreIni = Path.GetDirectoryName(originPath) + "\\EACore.ini";
+                    }
+                    rk.Close();
+                }
+            }
+            if (string.IsNullOrEmpty(eaCoreIni))
+            {
+                labelStatusEACdn.Text += "没有安装 Origin";
+                return;
+            }
+            gpEACdn.Tag = eaCoreIni;
+            string CdnOverride = Program.FilesIniRead("connection", "CdnOverride", eaCoreIni).Trim();
+            switch (CdnOverride.ToLower())
+            {
+                case "akamai":
+                    rbEACdn1.Checked = true;
+                    labelStatusEACdn.Text += "Akamai";
+                    break;
+                case "level3":
+                    rbEACdn2.Checked = true;
+                    labelStatusEACdn.Text += "Level3";
+                    break;
+                default:
+                    rbEACdn0.Checked = true;
+                    labelStatusEACdn.Text += "自动";
+                    break;
+            }
+        }
+
+        private void ButEACdn_Click(object sender, EventArgs e)
+        {
+            string? eaCoreIni = gpEACdn.Tag?.ToString();
+            if (string.IsNullOrEmpty(eaCoreIni))
+            {
+                MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
+            string status;
+            if (rbEACdn1.Checked)
+            {
+                Program.FilesIniWrite("connection", "EnvironmentName", "production", eaCoreIni);
+                Program.FilesIniWrite("connection", "CdnOverride", "akamai", eaCoreIni);
+                status = "当前使用CDN：Akamai";
+            }
+            else if (rbEACdn2.Checked)
+            {
+                Program.FilesIniWrite("connection", "EnvironmentName", "production", eaCoreIni);
+                Program.FilesIniWrite("connection", "CdnOverride", "level3", eaCoreIni);
+                status = "当前使用CDN：Level3";
+            }
+            else
+            {
+                Program.FilesIniWrite("connection", null, null, eaCoreIni);
+                status = "当前使用CDN：自动";
+            }
+            labelStatusEACdn.Text = status;
+        }
+
+        private void LinkEaOriginRepair_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (gpEACdn.Tag == null)
+            {
+                MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
+            if (MessageBox.Show("此操作将删除Origin缓存文件和登录信息，执行下一步之前请先退出Origin，是否继续？", "修复 EA Origin", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                Process[] processes = Process.GetProcessesByName("Origin");
+                if (processes.Length == 0)
+                {
+                    try
+                    {
+                        DirectoryInfo di1 = new(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Origin");
+                        if (di1.Exists) di1.Delete(true);
+                        DirectoryInfo di2 = new(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Local\\Origin");
+                        if (di2.Exists) di2.Delete(true);
+                    }
+                    catch { }
+                    string? path = e.Link.LinkData?.ToString();
+                    if (path != null) Process.Start(path);
+                }
+                else
+                {
+                    MessageBox.Show("请先退出 Origin。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+            }
+        }
+
+        private void LinkEaOriginNoUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (gpEACdn.Tag == null)
+            {
+                MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
+            string? filePath = Path.GetDirectoryName(gpEACdn.Tag?.ToString()) + "\\OriginThinSetupInternal.exe";
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch { }
+            }
+            string xmlPath = @"C:\ProgramData\Origin\local.xml";
+            if (File.Exists(xmlPath))
+            {
+                var doc = XDocument.Load(xmlPath);
+                var root = doc.Descendants("Setting");
+                if (root == null) return;
+                var node = root.ToList().Find(x => x.Attribute("key")?.Value == "MigrationDisabled");
+                if (node == null)
+                {
+                    var xe = new XElement("Setting");
+                    xe.SetAttributeValue("key", "MigrationDisabled");
+                    xe.SetAttributeValue("value", "true");
+                    xe.SetAttributeValue("type", "1");
+                    doc.Root?.Add(xe);
+                    doc.Save(xmlPath);
+                }
+                else
+                {
+                    node.SetAttributeValue("key", "MigrationDisabled");
+                    node.SetAttributeValue("value", "true");
+                    node.SetAttributeValue("type", "1");
+                    doc.Save(xmlPath);
+                }
+            }
+            MessageBox.Show("已经成功禁止强制升级 Origin。\n\n注：此方法只适合 Origin v10.5.118.52644 版本。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
     }
