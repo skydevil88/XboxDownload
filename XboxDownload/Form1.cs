@@ -5308,7 +5308,7 @@ namespace XboxDownload
                 }
                 catch { }
             }
-            string xmlPath = @"C:\ProgramData\Origin\local.xml";
+            string xmlPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Origin\local.xml");
             if (File.Exists(xmlPath))
             {
                 var doc = XDocument.Load(xmlPath);
@@ -5332,7 +5332,7 @@ namespace XboxDownload
                     doc.Save(xmlPath);
                 }
             }
-            MessageBox.Show("已经成功禁止强制升级 Origin。\n\n注：此方法只适合 Origin v10.5.118.52644 版本。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("已经成功禁止强制升级 Origin。\n\n注：此方法只适合 v10.5.119.52718 或以下版本 Origin。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
     }
