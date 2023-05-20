@@ -5217,7 +5217,7 @@ namespace XboxDownload
                 return;
             }
             gpEACdn.Tag = eaCoreIni;
-            string CdnOverride = Program.FilesIniRead("connection", "CdnOverride", eaCoreIni).Trim();
+            string CdnOverride = Program.FilesIniRead("Feature", "CdnOverride", eaCoreIni).Trim();
             switch (CdnOverride.ToLower())
             {
                 case "akamai":
@@ -5246,19 +5246,17 @@ namespace XboxDownload
             string status;
             if (rbEACdn1.Checked)
             {
-                Program.FilesIniWrite("connection", "EnvironmentName", "production", eaCoreIni);
-                Program.FilesIniWrite("connection", "CdnOverride", "akamai", eaCoreIni);
+                Program.FilesIniWrite("Feature", "CdnOverride", "akamai", eaCoreIni);
                 status = "当前使用CDN：Akamai";
             }
             else if (rbEACdn2.Checked)
             {
-                Program.FilesIniWrite("connection", "EnvironmentName", "production", eaCoreIni);
-                Program.FilesIniWrite("connection", "CdnOverride", "level3", eaCoreIni);
+                Program.FilesIniWrite("Feature", "CdnOverride", "level3", eaCoreIni);
                 status = "当前使用CDN：Level3";
             }
             else
             {
-                Program.FilesIniWrite("connection", null, null, eaCoreIni);
+                Program.FilesIniWrite("Feature", null, null, eaCoreIni);
                 status = "当前使用CDN：自动";
             }
             labelStatusEACdn.Text = status;
