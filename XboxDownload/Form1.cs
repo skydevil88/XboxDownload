@@ -5322,15 +5322,13 @@ namespace XboxDownload
                     xe.SetAttributeValue("value", "true");
                     xe.SetAttributeValue("type", "1");
                     doc.Root?.Add(xe);
-                    doc.Save(xmlPath);
                 }
                 else
                 {
-                    node.SetAttributeValue("key", "MigrationDisabled");
                     node.SetAttributeValue("value", "true");
                     node.SetAttributeValue("type", "1");
-                    doc.Save(xmlPath);
                 }
+                doc.Save(xmlPath);
             }
             MessageBox.Show("已经成功禁止强制升级 Origin。\n\n注：此方法只适合 v10.5.119.52718 或以下版本 Origin。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
