@@ -5198,8 +5198,7 @@ namespace XboxDownload
             string? eaCoreIni = null;
             using (var key = Microsoft.Win32.Registry.LocalMachine)
             {
-                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Origin");
-                rk ??= key.OpenSubKey(@"SOFTWARE\Origin");
+                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Origin") ?? key.OpenSubKey(@"SOFTWARE\Origin");
                 if (rk != null)
                 {
                     string? originPath = rk.GetValue("OriginPath", null)?.ToString();
@@ -5213,7 +5212,7 @@ namespace XboxDownload
             }
             if (string.IsNullOrEmpty(eaCoreIni))
             {
-                labelStatusEACdn.Text += "没有安装 Origin";
+                labelStatusEACdn.Text = "当前使用CDN：没有安装 Origin";
                 return;
             }
             gpEACdn.Tag = eaCoreIni;
@@ -5222,21 +5221,22 @@ namespace XboxDownload
             {
                 case "akamai":
                     rbEACdn1.Checked = true;
-                    labelStatusEACdn.Text += "Akamai";
+                    labelStatusEACdn.Text = "当前使用CDN：Akamai";
                     break;
                 case "level3":
                     rbEACdn2.Checked = true;
-                    labelStatusEACdn.Text += "Level3";
+                    labelStatusEACdn.Text = "当前使用CDN：Level3";
                     break;
                 default:
                     rbEACdn0.Checked = true;
-                    labelStatusEACdn.Text += "自动";
+                    labelStatusEACdn.Text = "当前使用CDN：自动";
                     break;
             }
         }
 
         private void ButEACdn_Click(object sender, EventArgs e)
         {
+            if (gpEACdn.Tag == null) GetEACdn();
             string? eaCoreIni = gpEACdn.Tag?.ToString();
             if (string.IsNullOrEmpty(eaCoreIni))
             {
@@ -5264,6 +5264,7 @@ namespace XboxDownload
 
         private void LinkEaOriginRepair_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (gpEACdn.Tag == null) GetEACdn();
             if (gpEACdn.Tag == null)
             {
                 MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -5294,6 +5295,7 @@ namespace XboxDownload
 
         private void LinkEaOriginNoUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (gpEACdn.Tag == null) GetEACdn();
             if (gpEACdn.Tag == null)
             {
                 MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -5313,22 +5315,24 @@ namespace XboxDownload
             {
                 var doc = XDocument.Load(xmlPath);
                 var root = doc.Descendants("Setting");
-                if (root == null) return;
-                var node = root.ToList().Find(x => x.Attribute("key")?.Value == "MigrationDisabled");
-                if (node == null)
+                if (root != null)
                 {
-                    var xe = new XElement("Setting");
-                    xe.SetAttributeValue("key", "MigrationDisabled");
-                    xe.SetAttributeValue("value", "true");
-                    xe.SetAttributeValue("type", "1");
-                    doc.Root?.Add(xe);
+                    var node = root.ToList().Find(x => x.Attribute("key")?.Value == "MigrationDisabled");
+                    if (node == null)
+                    {
+                        var xe = new XElement("Setting");
+                        xe.SetAttributeValue("key", "MigrationDisabled");
+                        xe.SetAttributeValue("value", "true");
+                        xe.SetAttributeValue("type", "1");
+                        doc.Root?.Add(xe);
+                    }
+                    else
+                    {
+                        node.SetAttributeValue("value", "true");
+                        node.SetAttributeValue("type", "1");
+                    }
+                    doc.Save(xmlPath);
                 }
-                else
-                {
-                    node.SetAttributeValue("value", "true");
-                    node.SetAttributeValue("type", "1");
-                }
-                doc.Save(xmlPath);
             }
             MessageBox.Show("已经成功禁止强制升级 Origin。\n\n注：此方法只适合 v10.5.119.52718 或以下版本 Origin。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
