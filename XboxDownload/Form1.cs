@@ -5275,11 +5275,11 @@ namespace XboxDownload
                 Process[] processes = Process.GetProcessesByName("Origin");
                 if (processes.Length == 0)
                 {
+                    DirectoryInfo di1 = new(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Origin");
+                    DirectoryInfo di2 = new(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Local\\Origin");
                     try
                     {
-                        DirectoryInfo di1 = new(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Origin");
                         if (di1.Exists) di1.Delete(true);
-                        DirectoryInfo di2 = new(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Local\\Origin");
                         if (di2.Exists) di2.Delete(true);
                     }
                     catch { }
@@ -5314,10 +5314,10 @@ namespace XboxDownload
             if (File.Exists(xmlPath))
             {
                 var doc = XDocument.Load(xmlPath);
-                var root = doc.Descendants("Setting");
-                if (root != null)
+                var settings = doc.Descendants("Setting");
+                if (settings != null)
                 {
-                    var node = root.ToList().Find(x => x.Attribute("key")?.Value == "MigrationDisabled");
+                    var node = settings.ToList().Find(x => x.Attribute("key")?.Value == "MigrationDisabled");
                     if (node == null)
                     {
                         var xe = new XElement("Setting");
