@@ -18,8 +18,9 @@ namespace XboxDownload
 {
     public partial class Form1 : Form
     {
+        internal const String appName = "Xbox下载助手";
         internal static Boolean bServiceFlag = false, bAutoStartup = false;
-        internal readonly static String appName = "Xbox下载助手", resourcePath = Application.StartupPath + "Resource";
+        internal readonly static String resourcePath = Application.StartupPath + "Resource";
         internal static List<Market> lsMarket = new();
         internal static float dpixRatio = 1;
         private readonly DataTable dtHosts = new("Hosts");

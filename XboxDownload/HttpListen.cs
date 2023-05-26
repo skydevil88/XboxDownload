@@ -91,47 +91,71 @@ namespace XboxDownload
                     string _extension = Path.GetExtension(_tmpPath).ToLowerInvariant();
                     if (Properties.Settings.Default.LocalUpload && !string.IsNullOrEmpty(_localPath))
                     {
-                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
-                        using FileStream fs = new(_localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        using BinaryReader br = new(fs);
-                        string _contentRange = string.Empty, _status = "200 OK";
-                        long _fileLength = br.BaseStream.Length, _startPosition = 0;
-                        long _endPosition = _fileLength;
-                        result = Regex.Match(_buffer, @"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?");
-                        if (result.Success)
+                        FileStream? fs = null;
+                        try
                         {
-                            _startPosition = long.Parse(result.Groups["StartPosition"].Value);
-                            if (_startPosition > br.BaseStream.Length) _startPosition = 0;
-                            if (!string.IsNullOrEmpty(result.Groups["EndPosition"].Value))
-                                _endPosition = long.Parse(result.Groups["EndPosition"].Value) + 1;
-                            _contentRange = "bytes " + _startPosition + "-" + (_endPosition - 1) + "/" + _fileLength;
-                            _status = "206 Partial Content";
+                            fs = new(_localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                         }
-
-                        StringBuilder sb = new();
-                        sb.Append("HTTP/1.1 " + _status + "\r\n");
-                        sb.Append("Content-Type: " + ClassWeb.GetMimeMapping(_filePath) + "\r\n");
-                        sb.Append("Content-Length: " + (_endPosition - _startPosition) + "\r\n");
-                        if (_contentRange != null) sb.Append("Content-Range: " + _contentRange + "\r\n");
-                        sb.Append("Accept-Ranges: bytes\r\n\r\n");
-
-                        Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                        mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-
-                        br.BaseStream.Position = _startPosition;
-                        int _size = 4096;
-                        while (Form1.bServiceFlag && mySocket.Connected)
+                        catch (Exception ex)
                         {
-                            long _remaining = _endPosition - br.BaseStream.Position;
-                            if (Properties.Settings.Default.Truncation && _extension == ".xcp" && _remaining <= 1048576) //Xbox360主机本地上传防爆头
+                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", ex.Message, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0xFF0000);
+                        }
+                        if (fs != null)
+                        {
+                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
+                            using BinaryReader br = new(fs);
+                            string _contentRange = string.Empty, _status = "200 OK";
+                            long _fileLength = br.BaseStream.Length, _startPosition = 0;
+                            long _endPosition = _fileLength;
+                            result = Regex.Match(_buffer, @"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?");
+                            if (result.Success)
                             {
-                                Thread.Sleep(1000);
-                                continue;
+                                _startPosition = long.Parse(result.Groups["StartPosition"].Value);
+                                if (_startPosition > br.BaseStream.Length) _startPosition = 0;
+                                if (!string.IsNullOrEmpty(result.Groups["EndPosition"].Value))
+                                    _endPosition = long.Parse(result.Groups["EndPosition"].Value) + 1;
+                                _contentRange = "bytes " + _startPosition + "-" + (_endPosition - 1) + "/" + _fileLength;
+                                _status = "206 Partial Content";
                             }
-                            byte[] _response = new byte[_remaining <= _size ? _remaining : _size];
-                            br.Read(_response, 0, _response.Length);
+
+                            StringBuilder sb = new();
+                            sb.Append("HTTP/1.1 " + _status + "\r\n");
+                            sb.Append("Content-Type: " + ClassWeb.GetMimeMapping(_filePath) + "\r\n");
+                            sb.Append("Content-Length: " + (_endPosition - _startPosition) + "\r\n");
+                            if (_contentRange != null) sb.Append("Content-Range: " + _contentRange + "\r\n");
+                            sb.Append("Accept-Ranges: bytes\r\n\r\n");
+
+                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                            mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+
+                            br.BaseStream.Position = _startPosition;
+                            int _size = 4096;
+                            while (Form1.bServiceFlag && mySocket.Connected)
+                            {
+                                long _remaining = _endPosition - br.BaseStream.Position;
+                                if (Properties.Settings.Default.Truncation && _extension == ".xcp" && _remaining <= 1048576) //Xbox360主机本地上传防爆头
+                                {
+                                    Thread.Sleep(1000);
+                                    continue;
+                                }
+                                byte[] _response = new byte[_remaining <= _size ? _remaining : _size];
+                                br.Read(_response, 0, _response.Length);
+                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                if (_remaining <= _size) break;
+                            }
+                            fs.Close();
+                            fs.Dispose();
+                        }
+                        else
+                        {
+                            Byte[] _response = Encoding.ASCII.GetBytes("Internal Server Error");
+                            StringBuilder sb = new();
+                            sb.Append("HTTP/1.1 500 Server Error\r\n");
+                            sb.Append("Content-Type: text/html\r\n");
+                            sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                            mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
                             mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
-                            if (_remaining <= _size) break;
                         }
                     }
                     else

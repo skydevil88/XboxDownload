@@ -108,8 +108,18 @@ namespace XboxDownload
                             string _extension = Path.GetExtension(_tmpPath).ToLowerInvariant();
                             if (Properties.Settings.Default.LocalUpload && !string.IsNullOrEmpty(_localPath))
                             {
-                                using (FileStream fs = new(_localPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                FileStream? fs = null;
+                                try
                                 {
+                                    fs = new(_localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", ex.Message, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0xFF0000);
+                                }
+                                if (fs != null)
+                                {
+                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
                                     using BinaryReader br = new(fs);
                                     string _contentRange = string.Empty, _status = "200 OK";
                                     long _fileLength = br.BaseStream.Length, _startPosition = 0;
@@ -146,8 +156,20 @@ namespace XboxDownload
                                         if (_remaining <= _size) break;
                                     }
                                     ssl.Flush();
+                                    fs.Close();
+                                    fs.Dispose();
                                 }
-                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
+                                else
+                                {
+                                    Byte[] _response = Encoding.ASCII.GetBytes("Internal Server Error");
+                                    StringBuilder sb = new();
+                                    sb.Append("HTTP/1.1 500 Server Error\r\n");
+                                    sb.Append("Content-Type: text/html\r\n");
+                                    sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                    Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                    ssl.Write(_headers);
+                                    ssl.Write(_response);
+                                }
                             }
                             else
                             {
