@@ -107,6 +107,9 @@ namespace XboxDownload
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
             ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
+            tbSniProxy.Text = Properties.Settings.Default.IpsSniProxy;
+            ckbNfSniProxy.Checked = Properties.Settings.Default.NfSniProxy;
+            ckbEnableSniProxy.Checked = Properties.Settings.Default.EnableSniProxy;
 
             ckbRecordLog.CheckedChanged += new EventHandler(CkbRecordLog_CheckedChanged);
             ckbSetDns.CheckedChanged += new EventHandler(CkbSetDns_CheckedChanged);
@@ -141,7 +144,16 @@ namespace XboxDownload
                 string json = File.ReadAllText(resourcePath + "\\Akamai.txt");
                 tbHosts2Akamai.Text = json.Trim() + "\r\n";
             }
-            ButCdnSave_Click(null, null);
+            if (Properties.Settings.Default.NfSniProxy)
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")..];
+            else
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")];
+            if (File.Exists(resourcePath + "\\SniProxy.txt"))
+            {
+                string json = File.ReadAllText(resourcePath + "\\SniProxy.txt");
+                tbHosts2SniProxy.Text = json.Trim() + "\r\n";
+            }
+            SetCdnHosts();
 
             cbHosts.SelectedIndex = 0;
             cbSpeedTestTimeOut.SelectedIndex = 0;
@@ -1410,7 +1422,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/4/934b0730-48ce-44a1-9a87-5c06a89adf26/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3799.1756.0.f86f8683-3e70-4d93-8abe-748efa65d281/Microsoft.254428597CFE2_1.3799.1756.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/11/643575a5-f03e-48b2-8258-d3b0dc87955e/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.583.19.0.ca5258f7-3539-4c7c-a771-78bef63333a1/Microsoft.624F8B84B80_3.583.19.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/Z/eab2acd3-8d9a-442a-a46b-8833b94119f9/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.588.95.0.0fc87fbb-f841-41b5-8700-2eeba1f4193f/Microsoft.624F8B84B80_3.588.95.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -2787,10 +2799,10 @@ namespace XboxDownload
                 }
             }
             Clipboard.SetDataObject(sb.ToString() + "\n\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\n");
-            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 全局设置，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void ButCdnSave_Click(object? sender, EventArgs? e)
+        private void ButCdnSave_Click(object sender, EventArgs e)
         {
             if (sender != null)
             {
@@ -2799,12 +2811,122 @@ namespace XboxDownload
                 Properties.Settings.Default.EnableCdnIP = ckbEnableCdnIP.Checked;
                 Properties.Settings.Default.Save();
             }
+            SetCdnHosts();
+        }
 
+        private void ButCdnReset_Click(object sender, EventArgs e)
+        {
+            tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
+            if (File.Exists(resourcePath + "\\Akamai.txt"))
+            {
+                using StreamReader sr = new(resourcePath + "\\Akamai.txt");
+                tbHosts2Akamai.Text = sr.ReadToEnd().Trim() + "\r\n";
+            }
+            else tbHosts2Akamai.Clear();
+            ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
+        }
+
+        private void LinkSniProxyExportRule_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string ip = string.Empty;
+            foreach (string str in tbSniProxy.Text.Split(','))
+            {
+                if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
+                {
+                    ip = address.ToString();
+                    break;
+                }
+            }
+            if (string.IsNullOrEmpty(ip))
+            {
+                MessageBox.Show("请先添加优选IP。", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            StringBuilder sb = new();
+            List<string> lsHostsTmp = new();
+            foreach (string str in Regex.Replace(tbHosts1SniProxy.Text, @"\#[^\r\n]+", "").Split('\n'))
+            {
+                if (string.IsNullOrWhiteSpace(str))
+                    continue;
+                string hosts = str.Trim().ToLower();
+                if (hosts.StartsWith("*."))
+                {
+                    hosts = Regex.Replace(hosts, @"^\*\.", "");
+                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                    {
+                        lsHostsTmp.Add(hosts);
+                        sb.AppendLine("'*." + hosts + "': " + ip);
+                    }
+                }
+                else if (DnsListen.reHosts.IsMatch(hosts))
+                {
+                    sb.AppendLine("'" + hosts + "': " + ip);
+                }
+            }
+            foreach (string str in Regex.Replace(tbHosts2SniProxy.Text, @"\#[^\r\n]+", "").Split('\n'))
+            {
+                if (string.IsNullOrWhiteSpace(str))
+                    continue;
+                string hosts = str.Trim().ToLower();
+                if (hosts.StartsWith("*."))
+                {
+                    hosts = Regex.Replace(hosts, @"^\*\.", "");
+                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                    {
+                        lsHostsTmp.Add(hosts);
+                        sb.AppendLine("'*." + hosts + "': " + ip);
+                    }
+                }
+                else if (DnsListen.reHosts.IsMatch(hosts))
+                {
+                    sb.AppendLine("'" + hosts + "': " + ip);
+                }
+            }
+            Clipboard.SetDataObject(sb.ToString() + "\n\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\n");
+            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void CkbNfSniProxy_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckbNfSniProxy.Checked)
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")..];
+            else
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")];
+        }
+
+        private void ButSniProxySave_Click(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                SaveHosts("SniProxy.txt", tbHosts2SniProxy.Text);
+                Properties.Settings.Default.IpsSniProxy = tbSniProxy.Text;
+                Properties.Settings.Default.NfSniProxy = ckbNfSniProxy.Checked;
+                Properties.Settings.Default.EnableSniProxy = ckbEnableSniProxy.Checked;
+                Properties.Settings.Default.Save();
+            }
+            SetCdnHosts();
+        }
+
+        private void ButSniProxyReset_Click(object sender, EventArgs e)
+        {
+            tbSniProxy.Text = Properties.Settings.Default.IpsSniProxy;
+            if (File.Exists(resourcePath + "\\SniProxy.txt"))
+            {
+                using StreamReader sr = new(resourcePath + "\\SniProxy.txt");
+                tbHosts2SniProxy.Text = sr.ReadToEnd().Trim() + "\r\n";
+            }
+            else tbHosts2SniProxy.Clear();
+            ckbNfSniProxy.Checked = Properties.Settings.Default.NfSniProxy;
+            ckbEnableSniProxy.Checked = Properties.Settings.Default.EnableSniProxy;
+        }
+
+        private void SetCdnHosts()
+        {
             DnsListen.dicCdnHosts1.Clear();
             DnsListen.dicCdnHosts2.Clear();
+
             if (Properties.Settings.Default.EnableCdnIP)
             {
-
                 string hosts2 = tbHosts2Akamai.Text.Trim();
                 List<string> lsIpTmp = new();
                 List<ResouceRecord> lsIp = new();
@@ -2845,6 +2967,16 @@ namespace XboxDownload
                                 DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
                             }
                         }
+                        else if (hosts.StartsWith("*"))
+                        {
+                            hosts = Regex.Replace(hosts, @"^\*", "");
+                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                            {
+                                lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
+                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
                         else if (DnsListen.reHosts.IsMatch(hosts))
                         {
                             DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
@@ -2852,13 +2984,23 @@ namespace XboxDownload
                     }
                     foreach (string str in Regex.Replace(hosts2, @"\#[^\r\n]+", "").Split('\n'))
                     {
-                        string hosts = str.Trim();
+                        string hosts = str.Trim().ToLower();
                         if (hosts.StartsWith("*."))
                         {
                             hosts = Regex.Replace(hosts, @"^\*\.", "");
                             if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
                             {
                                 lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
+                        else if (hosts.StartsWith("*"))
+                        {
+                            hosts = Regex.Replace(hosts, @"^\*", "");
+                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                            {
+                                lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
                                 DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
                             }
                         }
@@ -2869,18 +3011,93 @@ namespace XboxDownload
                     }
                 }
             }
-        }
 
-        private void ButCdnReset_Click(object sender, EventArgs e)
-        {
-            tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
-            if (File.Exists(resourcePath + "\\Akamai.txt"))
+            if (Properties.Settings.Default.EnableSniProxy)
             {
-                using StreamReader sr = new(resourcePath + "\\Akamai.txt");
-                tbHosts2Akamai.Text = sr.ReadToEnd().Trim() + "\r\n";
+                string hosts2 = tbHosts2SniProxy.Text.Trim();
+                List<string> lsIpTmp = new();
+                List<ResouceRecord> lsIp = new();
+                foreach (string str in tbSniProxy.Text.Replace("，", ",").Split(','))
+                {
+                    if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
+                    {
+                        string ip = address.ToString();
+                        if (!lsIpTmp.Contains(ip))
+                        {
+                            lsIpTmp.Add(ip);
+                            lsIp.Add(new ResouceRecord
+                            {
+                                Datas = address.GetAddressBytes(),
+                                TTL = 100,
+                                QueryClass = 1,
+                                QueryType = QueryType.A
+                            });
+                        }
+                    }
+                }
+                tbSniProxy.Text = string.Join(", ", lsIpTmp.ToArray()); ;
+                if (lsIp.Count >= 1)
+                {
+                    List<string> lsHostsTmp = new();
+                    foreach (string str in Regex.Replace(tbHosts1SniProxy.Text, @"\#[^\r\n]+", "").Split('\n'))
+                    {
+                        if (string.IsNullOrWhiteSpace(str))
+                            continue;
+
+                        string hosts = str.Trim().ToLower();
+                        if (hosts.StartsWith("*."))
+                        {
+                            hosts = Regex.Replace(hosts, @"^\*\.", "");
+                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                            {
+                                lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
+                        else if (hosts.StartsWith("*"))
+                        {
+                            hosts = Regex.Replace(hosts, @"^\*", "");
+                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                            {
+                                lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
+                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
+                        else if (DnsListen.reHosts.IsMatch(hosts))
+                        {
+                            DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
+                        }
+                    }
+                    foreach (string str in Regex.Replace(hosts2, @"\#[^\r\n]+", "").Split('\n'))
+                    {
+                        string hosts = str.Trim().ToLower();
+                        if (hosts.StartsWith("*."))
+                        {
+                            hosts = Regex.Replace(hosts, @"^\*\.", "");
+                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                            {
+                                lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
+                        else if (hosts.StartsWith("*"))
+                        {
+                            hosts = Regex.Replace(hosts, @"^\*", "");
+                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                            {
+                                lsHostsTmp.Add(hosts);
+                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
+                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
+                        else if (DnsListen.reHosts.IsMatch(hosts))
+                        {
+                            DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
+                        }
+                    }
+                }
             }
-            else tbHosts2Akamai.Clear();
-            ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
         }
 
         private static void SaveHosts(string filename, string hosts)
@@ -4292,6 +4509,71 @@ namespace XboxDownload
             FormCompare dialog = new(gbGameInfo.Tag, index);
             dialog.ShowDialog();
             dialog.Dispose();
+        }
+
+        private void LinkTestSniProxy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbSniProxy.Text))
+            {
+                MessageBox.Show("服务器 IP 不能空。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                tbSniProxy.Focus();
+                return;
+            }
+            if (!IPAddress.TryParse(Regex.Replace(tbSniProxy.Text, @",.+", "").Trim(), out IPAddress? address))
+            {
+                MessageBox.Show("服务器 IP 不正确。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                tbSniProxy.Focus();
+                return;
+            }
+            linkTestSniProxy.Enabled = false;
+            labelTestSniProxy.Text = "正在测试，请稍候...";
+            labelTestSniProxy.ForeColor = Color.Empty;
+            labelTestSniProxy.Visible = true;
+
+            Uri uri = new("https://www.netflix.com/title/70143836");
+            StringBuilder sb = new();
+            sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
+            sb.AppendLine("Host: " + uri.Host);
+            sb.AppendLine("User-Agent: " + ClassWeb.userAgent);
+            sb.AppendLine("Range: bytes=0-0");
+            sb.AppendLine();
+            byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
+
+            Task.Run(() =>
+            {
+                SocketPackage socketPackage = ClassWeb.TlsRequest(uri, buffer, address.ToString(), false, null, 6000);
+                this.Invoke(new Action(() =>
+                {
+                    if (!string.IsNullOrEmpty(socketPackage.Err))
+                    {
+                        labelTestSniProxy.Text = "无法连接服务器";
+                        labelTestSniProxy.ForeColor = Color.Red;
+                    }
+                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 200"))
+                    {
+                        labelTestSniProxy.Text = "Netflix 识别的 IP 地域信息：US；服务器 IP 完整解锁 Netflix，支持非自制剧的观看。";
+                        labelTestSniProxy.ForeColor = Color.Green;
+                    }
+                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 301"))
+                    {
+                        Match result = Regex.Match(socketPackage.Headers, @"location: https://www\.netflix\.com/([^/]+)/title/\d+");
+                        string area = result.Success ? Regex.Replace(result.Groups[1].Value, @"-.+$", "").ToUpper() : "未知";
+                        labelTestSniProxy.Text = "NF 识别的 IP 地域信息：" + area + "；服务器 IP 完整解锁 Netflix，支持非自制剧的观看。";
+                        labelTestSniProxy.ForeColor = Color.Green;
+                    }
+                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 404"))
+                    {
+                        labelTestSniProxy.Text = "服务器 IP 可以使用 Netflix，但仅可看自制剧。";
+                        labelTestSniProxy.ForeColor = Color.Empty;
+                    }
+                    else
+                    {
+                        labelTestSniProxy.Text = "测试失败。";
+                        labelTestSniProxy.ForeColor = Color.Red;
+                    }
+                    linkTestSniProxy.Enabled = true;
+                }));
+            });
         }
 
         private void Link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

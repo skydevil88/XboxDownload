@@ -91,6 +91,49 @@ namespace XboxDownload.Properties {
         }
         
         /// <summary>
+        ///   查找类似 *akadns.net
+        ///*akam.net
+        ///*akamai.com
+        ///*akamai.net
+        ///*akamaiedge.net
+        ///*akamaihd.net
+        ///*akamaistream.net
+        ///*akamaitech.net
+        ///*akamaitechnologies.com
+        ///*akamaitechnologies.fr
+        ///*akamaized.net
+        ///*edgekey.net
+        ///*edgesuite.net
+        ///*srip.net
+        ///*footprint.net
+        ///*level3.net
+        ///*llnwd.net
+        ///*edgecastcdn.net
+        ///*cloudfront.net
+        ///*netflix.com
+        ///*netflix.net
+        ///*nflximg.com
+        ///*nflximg.net
+        ///*nflxvideo.net
+        ///*nflxso.net
+        ///*nflxext.com
+        ///*hulu.com
+        ///*huluim.com
+        ///*hbonow.com
+        ///*hbogo.com
+        ///*hbo.com
+        ///*amazon.com
+        ///*amazon.co.uk
+        ///*amazonvideo.com
+        ///*crackle [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string SniProxy {
+            get {
+                return ResourceManager.GetString("SniProxy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-16&quot;?&gt;
         ///&lt;Task version=&quot;1.2&quot; xmlns=&quot;http://schemas.microsoft.com/windows/2004/02/mit/task&quot;&gt;
         ///  &lt;RegistrationInfo&gt;

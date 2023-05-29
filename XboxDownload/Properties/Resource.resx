@@ -121,6 +121,9 @@
   <data name="Akamai" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Akamai.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="SniProxy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SniProxy.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;gb2312</value>
+  </data>
   <data name="Task" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Task.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-16</value>
   </data>

@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -185,6 +185,26 @@
             linkCdnSpeedTest = new LinkLabel();
             tbCdnAkamai = new TextBox();
             label9 = new Label();
+            tabSniProxy = new TabPage();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            groupBox10 = new GroupBox();
+            tbHosts1SniProxy = new TextBox();
+            groupBox12 = new GroupBox();
+            tbHosts2SniProxy = new TextBox();
+            panel7 = new Panel();
+            ckbNfSniProxy = new CheckBox();
+            label54 = new Label();
+            butSniProxyReset = new Button();
+            butSniProxySave = new Button();
+            ckbEnableSniProxy = new CheckBox();
+            linkSniProxyExportRule = new LinkLabel();
+            groupBox9 = new GroupBox();
+            linkTestSniProxy = new LinkLabel();
+            labelTestSniProxy = new Label();
+            label52 = new Label();
+            linkGetSniProxy = new LinkLabel();
+            tbSniProxy = new TextBox();
+            label53 = new Label();
             tabHardDisk = new TabPage();
             groupBox7 = new GroupBox();
             label31 = new Label();
@@ -363,6 +383,12 @@
             groupBox5.SuspendLayout();
             panel4.SuspendLayout();
             groupBox3.SuspendLayout();
+            tabSniProxy.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            groupBox10.SuspendLayout();
+            groupBox12.SuspendLayout();
+            panel7.SuspendLayout();
+            groupBox9.SuspendLayout();
             tabHardDisk.SuspendLayout();
             groupBox7.SuspendLayout();
             groupBox6.SuspendLayout();
@@ -486,6 +512,7 @@
             tabControl1.Controls.Add(tabSpeedTest);
             tabControl1.Controls.Add(tabHosts);
             tabControl1.Controls.Add(tabCND);
+            tabControl1.Controls.Add(tabSniProxy);
             tabControl1.Controls.Add(tabHardDisk);
             tabControl1.Controls.Add(tabStore);
             tabControl1.Controls.Add(tabTool);
@@ -1021,9 +1048,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1031,9 +1058,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1041,9 +1068,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1468,6 +1495,145 @@
             // 
             resources.ApplyResources(label9, "label9");
             label9.Name = "label9";
+            // 
+            // tabSniProxy
+            // 
+            tabSniProxy.Controls.Add(tableLayoutPanel2);
+            tabSniProxy.Controls.Add(panel7);
+            tabSniProxy.Controls.Add(groupBox9);
+            resources.ApplyResources(tabSniProxy, "tabSniProxy");
+            tabSniProxy.Name = "tabSniProxy";
+            tabSniProxy.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel2
+            // 
+            resources.ApplyResources(tableLayoutPanel2, "tableLayoutPanel2");
+            tableLayoutPanel2.Controls.Add(groupBox10, 0, 0);
+            tableLayoutPanel2.Controls.Add(groupBox12, 1, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            // 
+            // groupBox10
+            // 
+            groupBox10.Controls.Add(tbHosts1SniProxy);
+            resources.ApplyResources(groupBox10, "groupBox10");
+            groupBox10.Name = "groupBox10";
+            groupBox10.TabStop = false;
+            // 
+            // tbHosts1SniProxy
+            // 
+            tbHosts1SniProxy.BackColor = SystemColors.Window;
+            resources.ApplyResources(tbHosts1SniProxy, "tbHosts1SniProxy");
+            tbHosts1SniProxy.Name = "tbHosts1SniProxy";
+            tbHosts1SniProxy.ReadOnly = true;
+            // 
+            // groupBox12
+            // 
+            groupBox12.Controls.Add(tbHosts2SniProxy);
+            resources.ApplyResources(groupBox12, "groupBox12");
+            groupBox12.Name = "groupBox12";
+            groupBox12.TabStop = false;
+            // 
+            // tbHosts2SniProxy
+            // 
+            resources.ApplyResources(tbHosts2SniProxy, "tbHosts2SniProxy");
+            tbHosts2SniProxy.Name = "tbHosts2SniProxy";
+            // 
+            // panel7
+            // 
+            panel7.Controls.Add(ckbNfSniProxy);
+            panel7.Controls.Add(label54);
+            panel7.Controls.Add(butSniProxyReset);
+            panel7.Controls.Add(butSniProxySave);
+            panel7.Controls.Add(ckbEnableSniProxy);
+            panel7.Controls.Add(linkSniProxyExportRule);
+            resources.ApplyResources(panel7, "panel7");
+            panel7.Name = "panel7";
+            // 
+            // ckbNfSniProxy
+            // 
+            resources.ApplyResources(ckbNfSniProxy, "ckbNfSniProxy");
+            ckbNfSniProxy.Name = "ckbNfSniProxy";
+            ckbNfSniProxy.UseVisualStyleBackColor = true;
+            ckbNfSniProxy.CheckedChanged += CkbNfSniProxy_CheckedChanged;
+            // 
+            // label54
+            // 
+            resources.ApplyResources(label54, "label54");
+            label54.Name = "label54";
+            // 
+            // butSniProxyReset
+            // 
+            resources.ApplyResources(butSniProxyReset, "butSniProxyReset");
+            butSniProxyReset.Name = "butSniProxyReset";
+            butSniProxyReset.UseVisualStyleBackColor = true;
+            butSniProxyReset.Click += ButSniProxyReset_Click;
+            // 
+            // butSniProxySave
+            // 
+            resources.ApplyResources(butSniProxySave, "butSniProxySave");
+            butSniProxySave.Name = "butSniProxySave";
+            butSniProxySave.UseVisualStyleBackColor = true;
+            butSniProxySave.Click += ButSniProxySave_Click;
+            // 
+            // ckbEnableSniProxy
+            // 
+            resources.ApplyResources(ckbEnableSniProxy, "ckbEnableSniProxy");
+            ckbEnableSniProxy.Name = "ckbEnableSniProxy";
+            ckbEnableSniProxy.UseVisualStyleBackColor = true;
+            // 
+            // linkSniProxyExportRule
+            // 
+            resources.ApplyResources(linkSniProxyExportRule, "linkSniProxyExportRule");
+            linkSniProxyExportRule.Name = "linkSniProxyExportRule";
+            linkSniProxyExportRule.TabStop = true;
+            linkSniProxyExportRule.LinkClicked += LinkSniProxyExportRule_LinkClicked;
+            // 
+            // groupBox9
+            // 
+            groupBox9.Controls.Add(linkTestSniProxy);
+            groupBox9.Controls.Add(labelTestSniProxy);
+            groupBox9.Controls.Add(label52);
+            groupBox9.Controls.Add(linkGetSniProxy);
+            groupBox9.Controls.Add(tbSniProxy);
+            groupBox9.Controls.Add(label53);
+            resources.ApplyResources(groupBox9, "groupBox9");
+            groupBox9.Name = "groupBox9";
+            groupBox9.TabStop = false;
+            // 
+            // linkTestSniProxy
+            // 
+            resources.ApplyResources(linkTestSniProxy, "linkTestSniProxy");
+            linkTestSniProxy.Name = "linkTestSniProxy";
+            linkTestSniProxy.TabStop = true;
+            linkTestSniProxy.LinkClicked += LinkTestSniProxy_LinkClicked;
+            // 
+            // labelTestSniProxy
+            // 
+            resources.ApplyResources(labelTestSniProxy, "labelTestSniProxy");
+            labelTestSniProxy.Name = "labelTestSniProxy";
+            // 
+            // label52
+            // 
+            resources.ApplyResources(label52, "label52");
+            label52.Name = "label52";
+            // 
+            // linkGetSniProxy
+            // 
+            resources.ApplyResources(linkGetSniProxy, "linkGetSniProxy");
+            linkGetSniProxy.Name = "linkGetSniProxy";
+            linkGetSniProxy.TabStop = true;
+            linkGetSniProxy.Tag = "https://fofa.info/result?qbase64=Ym9keT0iQmFja2VuZCBub3QgYXZhaWxhYmxlIg%3D%3D";
+            linkGetSniProxy.LinkClicked += Link_LinkClicked;
+            // 
+            // tbSniProxy
+            // 
+            resources.ApplyResources(tbSniProxy, "tbSniProxy");
+            tbSniProxy.Name = "tbSniProxy";
+            // 
+            // label53
+            // 
+            resources.ApplyResources(label53, "label53");
+            label53.Name = "label53";
             // 
             // tabHardDisk
             // 
@@ -2629,6 +2795,16 @@
             panel4.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            tabSniProxy.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            groupBox10.ResumeLayout(false);
+            groupBox10.PerformLayout();
+            groupBox12.ResumeLayout(false);
+            groupBox12.PerformLayout();
+            panel7.ResumeLayout(false);
+            panel7.PerformLayout();
+            groupBox9.ResumeLayout(false);
+            groupBox9.PerformLayout();
             tabHardDisk.ResumeLayout(false);
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
@@ -2970,5 +3146,25 @@
         private LinkLabel linkEaOriginRepair;
         private LinkLabel linkEaOriginNoUpdate;
         private LinkLabel linkLabel3;
+        private TabPage tabSniProxy;
+        private GroupBox groupBox9;
+        private Label label52;
+        private LinkLabel linkGetSniProxy;
+        private TextBox tbSniProxy;
+        private Label label53;
+        private TableLayoutPanel tableLayoutPanel2;
+        private GroupBox groupBox10;
+        private TextBox tbHosts1SniProxy;
+        private GroupBox groupBox12;
+        private TextBox tbHosts2SniProxy;
+        private Panel panel7;
+        private Label label54;
+        private Button butSniProxyReset;
+        private Button butSniProxySave;
+        private CheckBox ckbEnableSniProxy;
+        private LinkLabel linkSniProxyExportRule;
+        private LinkLabel linkTestSniProxy;
+        private Label labelTestSniProxy;
+        private CheckBox ckbNfSniProxy;
     }
 }
