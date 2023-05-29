@@ -111,7 +111,7 @@
 *ai.com
 *openai.com
 *fast.com
-####################### Netfilx #######################
+####################### Netflix #######################
 netflix.com
 *.netflix.com
 *.netflix.net

@@ -145,9 +145,9 @@ namespace XboxDownload
                 tbHosts2Akamai.Text = json.Trim() + "\r\n";
             }
             if (Properties.Settings.Default.NfSniProxy)
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")..];
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")..];
             else
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")];
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")];
             if (File.Exists(resourcePath + "\\SniProxy.txt"))
             {
                 string json = File.ReadAllText(resourcePath + "\\SniProxy.txt");
@@ -2889,9 +2889,9 @@ namespace XboxDownload
         private void CkbNfSniProxy_CheckedChanged(object sender, EventArgs e)
         {
             if (ckbNfSniProxy.Checked)
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")..];
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")..];
             else
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netfilx #######################")];
+                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")];
         }
 
         private void ButSniProxySave_Click(object sender, EventArgs e)
