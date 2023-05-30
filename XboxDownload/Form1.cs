@@ -2756,6 +2756,7 @@ namespace XboxDownload
             if (string.IsNullOrEmpty(ip))
             {
                 MessageBox.Show("请先添加优选IP。", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbCdnAkamai.Focus();
                 return;
             }
             StringBuilder sb = new();
@@ -2771,6 +2772,16 @@ namespace XboxDownload
                     if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
                     {
                         lsHostsTmp.Add(hosts);
+                        sb.AppendLine("'*." + hosts + "': " + ip);
+                    }
+                }
+                else if (hosts.StartsWith("*"))
+                {
+                    hosts = Regex.Replace(hosts, @"^\*", "");
+                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                    {
+                        lsHostsTmp.Add(hosts);
+                        sb.AppendLine("'" + hosts + "': " + ip);
                         sb.AppendLine("'*." + hosts + "': " + ip);
                     }
                 }
@@ -2798,7 +2809,7 @@ namespace XboxDownload
                     sb.AppendLine("'" + hosts + "': " + ip);
                 }
             }
-            Clipboard.SetDataObject(sb.ToString() + "\n\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\n");
+            Clipboard.SetDataObject(sb.ToString() + "\r\n\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n");
             MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -2839,7 +2850,8 @@ namespace XboxDownload
             }
             if (string.IsNullOrEmpty(ip))
             {
-                MessageBox.Show("请先添加优选IP。", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("请先添加服务器IP。", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbSniProxy.Focus();
                 return;
             }
             StringBuilder sb = new();
@@ -2855,6 +2867,16 @@ namespace XboxDownload
                     if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
                     {
                         lsHostsTmp.Add(hosts);
+                        sb.AppendLine("'*." + hosts + "': " + ip);
+                    }
+                }
+                else if (hosts.StartsWith("*"))
+                {
+                    hosts = Regex.Replace(hosts, @"^\*", "");
+                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
+                    {
+                        lsHostsTmp.Add(hosts);
+                        sb.AppendLine("'" + hosts + "': " + ip);
                         sb.AppendLine("'*." + hosts + "': " + ip);
                     }
                 }
@@ -2882,8 +2904,8 @@ namespace XboxDownload
                     sb.AppendLine("'" + hosts + "': " + ip);
                 }
             }
-            Clipboard.SetDataObject(sb.ToString() + "\n\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\n");
-            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Clipboard.SetDataObject(sb.ToString() + "\r\n\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n#打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT\r\n");
+            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”\n3.打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void CkbNfSniProxy_CheckedChanged(object sender, EventArgs e)
@@ -4546,7 +4568,7 @@ namespace XboxDownload
                 {
                     if (!string.IsNullOrEmpty(socketPackage.Err))
                     {
-                        labelTestSniProxy.Text = "无法连接服务器";
+                        labelTestSniProxy.Text = "无法连接服务器。";
                         labelTestSniProxy.ForeColor = Color.Red;
                     }
                     else if (socketPackage.Headers.StartsWith("HTTP/1.1 200"))
@@ -4564,7 +4586,12 @@ namespace XboxDownload
                     else if (socketPackage.Headers.StartsWith("HTTP/1.1 404"))
                     {
                         labelTestSniProxy.Text = "服务器 IP 可以使用 Netflix，但仅可看自制剧。";
-                        labelTestSniProxy.ForeColor = Color.Empty;
+                        labelTestSniProxy.ForeColor = Color.DarkGoldenrod;
+                    }
+                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 403"))
+                    {
+                        labelTestSniProxy.Text = "服务器 IP 所在的国家 Netflix 不提供服务。";
+                        labelTestSniProxy.ForeColor = Color.Red;
                     }
                     else
                     {
