@@ -2772,7 +2772,7 @@ namespace XboxDownload
                     if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
                     {
                         lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'*." + hosts + "': " + ip);
+                        sb.AppendLine("'." + hosts + "': " + ip);
                     }
                 }
                 else if (hosts.StartsWith("*"))
@@ -2782,7 +2782,7 @@ namespace XboxDownload
                     {
                         lsHostsTmp.Add(hosts);
                         sb.AppendLine("'" + hosts + "': " + ip);
-                        sb.AppendLine("'*." + hosts + "': " + ip);
+                        sb.AppendLine("'." + hosts + "': " + ip);
                     }
                 }
                 else if (DnsListen.reHosts.IsMatch(hosts))
@@ -2867,7 +2867,7 @@ namespace XboxDownload
                     if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
                     {
                         lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'*." + hosts + "': " + ip);
+                        sb.AppendLine("'." + hosts + "': " + ip);
                     }
                 }
                 else if (hosts.StartsWith("*"))
@@ -2877,7 +2877,7 @@ namespace XboxDownload
                     {
                         lsHostsTmp.Add(hosts);
                         sb.AppendLine("'" + hosts + "': " + ip);
-                        sb.AppendLine("'*." + hosts + "': " + ip);
+                        sb.AppendLine("'." + hosts + "': " + ip);
                     }
                 }
                 else if (DnsListen.reHosts.IsMatch(hosts))
