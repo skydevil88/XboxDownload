@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -45,7 +45,7 @@
             tsmTeaching3 = new ToolStripMenuItem();
             tsmTeaching2 = new ToolStripMenuItem();
             tsmTeaching1 = new ToolStripMenuItem();
-            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem = new ToolStripMenuItem();
+            tsmTeaching5 = new ToolStripMenuItem();
             tsmAbout = new ToolStripMenuItem();
             toolStripButton1 = new ToolStripButton();
             tabControl1 = new TabControl();
@@ -459,7 +459,7 @@
             // 
             // tsmTeaching
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, 校园网IPv6免流量下载Xbox游戏ToolStripMenuItem });
+            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
             tsmTeaching.Name = "tsmTeaching";
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
@@ -492,12 +492,12 @@
             tsmTeaching1.Tag = "https://www.bilibili.com/video/BV1wP4y1G7zf";
             tsmTeaching1.Click += TsmOpenSite_Click;
             // 
-            // 校园网IPv6免流量下载Xbox游戏ToolStripMenuItem
+            // tsmTeaching5
             // 
-            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Name = "校园网IPv6免流量下载Xbox游戏ToolStripMenuItem";
-            resources.ApplyResources(校园网IPv6免流量下载Xbox游戏ToolStripMenuItem, "校园网IPv6免流量下载Xbox游戏ToolStripMenuItem");
-            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Tag = "https://www.bilibili.com/video/BV1TN411k7qf";
-            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Click += TsmOpenSite_Click;
+            tsmTeaching5.Name = "tsmTeaching5";
+            resources.ApplyResources(tsmTeaching5, "tsmTeaching5");
+            tsmTeaching5.Tag = "https://www.bilibili.com/video/BV1TN411k7qf";
+            tsmTeaching5.Click += TsmOpenSite_Click;
             // 
             // tsmAbout
             // 
@@ -1055,9 +1055,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1065,9 +1065,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1075,9 +1075,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -3163,6 +3163,6 @@
         private LinkLabel linkTestSniProxy;
         private Label labelTestSniProxy;
         private CheckBox ckbNfSniProxy;
-        private ToolStripMenuItem 校园网IPv6免流量下载Xbox游戏ToolStripMenuItem;
+        private ToolStripMenuItem tsmTeaching5;
     }
 }
