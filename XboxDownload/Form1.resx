@@ -155,28 +155,34 @@
     <value>使用说明</value>
   </data>
   <data name="tsmTeaching4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 34</value>
+    <value>370, 34</value>
   </data>
   <data name="tsmTeaching4.Text" xml:space="preserve">
     <value>操作流程</value>
   </data>
   <data name="tsmTeaching3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 34</value>
+    <value>370, 34</value>
   </data>
   <data name="tsmTeaching3.Text" xml:space="preserve">
     <value>PC简易操作版</value>
   </data>
   <data name="tsmTeaching2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 34</value>
+    <value>370, 34</value>
   </data>
   <data name="tsmTeaching2.Text" xml:space="preserve">
     <value>PC下载回传</value>
   </data>
   <data name="tsmTeaching1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 34</value>
+    <value>370, 34</value>
   </data>
   <data name="tsmTeaching1.Text" xml:space="preserve">
     <value>OpenWrt域名跳转加速</value>
+  </data>
+  <data name="校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>370, 34</value>
+  </data>
+  <data name="校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Text" xml:space="preserve">
+    <value>校园网IPv6免流量下载Xbox游戏</value>
   </data>
   <data name="tsmTeaching.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 34</value>
@@ -268,9 +274,6 @@
   <data name="lvLog.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 26</value>
   </data>
-  <data name="lvLog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="lvLog.Size" type="System.Drawing.Size, System.Drawing">
     <value>1430, 276</value>
   </data>
@@ -316,17 +319,11 @@
   <data name="&gt;&gt;groupBox11.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="linkClearLog.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
   <data name="linkClearLog.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="linkClearLog.Location" type="System.Drawing.Point, System.Drawing">
     <value>1346, 9</value>
-  </data>
-  <data name="linkClearLog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="linkClearLog.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -349,17 +346,11 @@
   <data name="&gt;&gt;linkClearLog.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="ckbRecordLog.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
   <data name="ckbRecordLog.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="ckbRecordLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1237, 9</value>
-  </data>
-  <data name="ckbRecordLog.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>1232, 9</value>
   </data>
   <data name="ckbRecordLog.Size" type="System.Drawing.Size, System.Drawing">
     <value>108, 28</value>
@@ -387,9 +378,6 @@
   </data>
   <data name="label25.Location" type="System.Drawing.Point, System.Drawing">
     <value>414, 9</value>
-  </data>
-  <data name="label25.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="label25.Size" type="System.Drawing.Size, System.Drawing">
     <value>719, 24</value>
@@ -421,9 +409,6 @@
   <data name="linkTestDns.Location" type="System.Drawing.Point, System.Drawing">
     <value>272, 9</value>
   </data>
-  <data name="linkTestDns.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="linkTestDns.Size" type="System.Drawing.Size, System.Drawing">
     <value>139, 24</value>
   </data>
@@ -448,9 +433,6 @@
   <data name="cbLocalIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>74, 3</value>
   </data>
-  <data name="cbLocalIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="cbLocalIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>193, 32</value>
   </data>
@@ -474,9 +456,6 @@
   </data>
   <data name="label24.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 9</value>
-  </data>
-  <data name="label24.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="label24.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 24</value>
@@ -532,9 +511,6 @@
   <data name="butStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 320</value>
   </data>
-  <data name="butStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="butStart.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 75</value>
   </data>
@@ -561,9 +537,6 @@
   </data>
   <data name="ckbSteamStore.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 280</value>
-  </data>
-  <data name="ckbSteamStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbSteamStore.Size" type="System.Drawing.Size, System.Drawing">
     <value>208, 28</value>
@@ -592,9 +565,6 @@
   <data name="ckbEpicStore.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 252</value>
   </data>
-  <data name="ckbEpicStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="ckbEpicStore.Size" type="System.Drawing.Size, System.Drawing">
     <value>153, 28</value>
   </data>
@@ -621,9 +591,6 @@
   </data>
   <data name="ckbBattleStore.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 224</value>
-  </data>
-  <data name="ckbBattleStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbBattleStore.Size" type="System.Drawing.Size, System.Drawing">
     <value>197, 28</value>
@@ -652,9 +619,6 @@
   <data name="ckbEAStore.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 196</value>
   </data>
-  <data name="ckbEAStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="ckbEAStore.Size" type="System.Drawing.Size, System.Drawing">
     <value>140, 28</value>
   </data>
@@ -681,9 +645,6 @@
   </data>
   <data name="ckbMicrosoftStore.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 168</value>
-  </data>
-  <data name="ckbMicrosoftStore.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbMicrosoftStore.Size" type="System.Drawing.Size, System.Drawing">
     <value>179, 28</value>
@@ -712,9 +673,6 @@
   <data name="ckbSetDns.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 140</value>
   </data>
-  <data name="ckbSetDns.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="ckbSetDns.Size" type="System.Drawing.Size, System.Drawing">
     <value>152, 28</value>
   </data>
@@ -741,9 +699,6 @@
   </data>
   <data name="ckbDoH.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 112</value>
-  </data>
-  <data name="ckbDoH.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbDoH.Size" type="System.Drawing.Size, System.Drawing">
     <value>193, 28</value>
@@ -775,9 +730,6 @@
   <data name="ckbHttpService.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 84</value>
   </data>
-  <data name="ckbHttpService.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="ckbHttpService.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 28</value>
   </data>
@@ -804,9 +756,6 @@
   </data>
   <data name="ckbDnsService.Location" type="System.Drawing.Point, System.Drawing">
     <value>1220, 56</value>
-  </data>
-  <data name="ckbDnsService.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbDnsService.Size" type="System.Drawing.Size, System.Drawing">
     <value>162, 28</value>
@@ -837,9 +786,6 @@
   </data>
   <data name="cbListenIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>1284, 15</value>
-  </data>
-  <data name="cbListenIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="cbListenIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>108, 32</value>
@@ -895,9 +841,6 @@
   <data name="label22.Location" type="System.Drawing.Point, System.Drawing">
     <value>8, 442</value>
   </data>
-  <data name="label22.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
     <value>1409, 24</value>
   </data>
@@ -924,9 +867,6 @@
   </data>
   <data name="ckbTruncation.Location" type="System.Drawing.Point, System.Drawing">
     <value>118, 411</value>
-  </data>
-  <data name="ckbTruncation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbTruncation.Size" type="System.Drawing.Size, System.Drawing">
     <value>1027, 28</value>
@@ -978,9 +918,6 @@
   </data>
   <data name="tbLocalPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>406, 375</value>
-  </data>
-  <data name="tbLocalPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="tbLocalPath.Size" type="System.Drawing.Size, System.Drawing">
     <value>608, 30</value>
@@ -1035,9 +972,6 @@
   </data>
   <data name="ckbLocalUpload.Location" type="System.Drawing.Point, System.Drawing">
     <value>118, 380</value>
-  </data>
-  <data name="ckbLocalUpload.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbLocalUpload.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
@@ -1096,9 +1030,6 @@
   <data name="label20.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 344</value>
   </data>
-  <data name="label20.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label20.Size" type="System.Drawing.Size, System.Drawing">
     <value>211, 24</value>
   </data>
@@ -1123,9 +1054,6 @@
   <data name="tbEpicIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 339</value>
   </data>
-  <data name="tbEpicIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbEpicIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1149,9 +1077,6 @@
   </data>
   <data name="labelEpic.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 344</value>
-  </data>
-  <data name="labelEpic.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelEpic.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 24</value>
@@ -1210,9 +1135,6 @@
   <data name="label18.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 309</value>
   </data>
-  <data name="label18.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label18.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 24</value>
   </data>
@@ -1237,9 +1159,6 @@
   <data name="tbBattleIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 303</value>
   </data>
-  <data name="tbBattleIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbBattleIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1263,9 +1182,6 @@
   </data>
   <data name="labelBattle.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 309</value>
-  </data>
-  <data name="labelBattle.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelBattle.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 24</value>
@@ -1354,9 +1270,6 @@
   <data name="label16.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 273</value>
   </data>
-  <data name="label16.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label16.Size" type="System.Drawing.Size, System.Drawing">
     <value>252, 24</value>
   </data>
@@ -1381,9 +1294,6 @@
   <data name="tbEAIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 267</value>
   </data>
-  <data name="tbEAIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbEAIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1407,9 +1317,6 @@
   </data>
   <data name="labelEA.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 273</value>
-  </data>
-  <data name="labelEA.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelEA.Size" type="System.Drawing.Size, System.Drawing">
     <value>187, 24</value>
@@ -1501,9 +1408,6 @@
   <data name="label14.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 237</value>
   </data>
-  <data name="label14.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label14.Size" type="System.Drawing.Size, System.Drawing">
     <value>216, 24</value>
   </data>
@@ -1528,9 +1432,6 @@
   <data name="tbNSIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 231</value>
   </data>
-  <data name="tbNSIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbNSIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1554,9 +1455,6 @@
   </data>
   <data name="labelNS.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 237</value>
-  </data>
-  <data name="labelNS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelNS.Size" type="System.Drawing.Size, System.Drawing">
     <value>189, 24</value>
@@ -1585,9 +1483,6 @@
   <data name="label12.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 201</value>
   </data>
-  <data name="label12.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label12.Size" type="System.Drawing.Size, System.Drawing">
     <value>586, 24</value>
   </data>
@@ -1613,9 +1508,6 @@
   <data name="tbPSIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 195</value>
   </data>
-  <data name="tbPSIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbPSIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1639,9 +1531,6 @@
   </data>
   <data name="labelPS.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 201</value>
-  </data>
-  <data name="labelPS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelPS.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 24</value>
@@ -1670,9 +1559,6 @@
   <data name="label10.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 165</value>
   </data>
-  <data name="label10.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label10.Size" type="System.Drawing.Size, System.Drawing">
     <value>586, 24</value>
   </data>
@@ -1698,9 +1584,6 @@
   <data name="tbAppIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 159</value>
   </data>
-  <data name="tbAppIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbAppIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1724,9 +1607,6 @@
   </data>
   <data name="labelApp.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 165</value>
-  </data>
-  <data name="labelApp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelApp.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 24</value>
@@ -1755,9 +1635,6 @@
   <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 129</value>
   </data>
-  <data name="label8.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
     <value>640, 24</value>
   </data>
@@ -1782,9 +1659,6 @@
   <data name="tbCnIP2.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 123</value>
   </data>
-  <data name="tbCnIP2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbCnIP2.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1808,9 +1682,6 @@
   </data>
   <data name="labelCn2.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 129</value>
-  </data>
-  <data name="labelCn2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelCn2.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 24</value>
@@ -1839,9 +1710,6 @@
   <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 93</value>
   </data>
-  <data name="label6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>640, 24</value>
   </data>
@@ -1866,9 +1734,6 @@
   <data name="tbCnIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 87</value>
   </data>
-  <data name="tbCnIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbCnIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -1892,9 +1757,6 @@
   </data>
   <data name="labelCn.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 93</value>
-  </data>
-  <data name="labelCn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelCn.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 24</value>
@@ -1953,9 +1815,6 @@
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
     <value>514, 57</value>
   </data>
-  <data name="label4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>421, 24</value>
   </data>
@@ -1980,9 +1839,6 @@
   <data name="tbComIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 51</value>
   </data>
-  <data name="tbComIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbComIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -2006,9 +1862,6 @@
   </data>
   <data name="labelCom.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 57</value>
-  </data>
-  <data name="labelCom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelCom.Size" type="System.Drawing.Size, System.Drawing">
     <value>191, 24</value>
@@ -2064,9 +1917,6 @@
   <data name="tbDnsIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 15</value>
   </data>
-  <data name="tbDnsIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="tbDnsIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 30</value>
   </data>
@@ -2090,9 +1940,6 @@
   </data>
   <data name="labelDNS.Location" type="System.Drawing.Point, System.Drawing">
     <value>160, 21</value>
-  </data>
-  <data name="labelDNS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
   </data>
   <data name="labelDNS.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 24</value>
@@ -2121,9 +1968,6 @@
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 64</value>
   </data>
-  <data name="pictureBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>87, 87</value>
   </data>
@@ -2150,9 +1994,6 @@
   </data>
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
-  </data>
-  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3211,6 +3052,9 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="linkHostsConnectTest.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
   <data name="linkHostsConnectTest.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -4139,7 +3983,7 @@
     <value>1</value>
   </data>
   <data name="groupBox12.Text" xml:space="preserve">
-    <value>自定义域名（请不要输入GFW黑名单中的域名，否则代理IP会被封）</value>
+    <value>自定义域名</value>
   </data>
   <data name="&gt;&gt;groupBox12.Name" xml:space="preserve">
     <value>groupBox12</value>
@@ -4487,7 +4331,7 @@
     <value>3</value>
   </data>
   <data name="label52.Text" xml:space="preserve">
-    <value>此功能可以无需翻墙看奈飞、迪士尼等流媒体。</value>
+    <value>此功能可以无需出国看奈飞、迪士尼等流媒体。</value>
   </data>
   <data name="&gt;&gt;label52.Name" xml:space="preserve">
     <value>label52</value>
@@ -6860,33 +6704,6 @@
   <data name="&gt;&gt;tabStore.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="linkLabel3.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkLabel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 124</value>
-  </data>
-  <data name="linkLabel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>312, 24</value>
-  </data>
-  <data name="linkLabel3.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="linkLabel3.Text" xml:space="preserve">
-    <value>下载 Origin v10.5.119.52718 安装包</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.Name" xml:space="preserve">
-    <value>linkLabel3</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="linkEaOriginNoUpdate.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -6894,13 +6711,13 @@
     <value>341, 124</value>
   </data>
   <data name="linkEaOriginNoUpdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 24</value>
+    <value>390, 24</value>
   </data>
   <data name="linkEaOriginNoUpdate.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
   <data name="linkEaOriginNoUpdate.Text" xml:space="preserve">
-    <value>禁止强制升级 Origin</value>
+    <value>禁止强制升级 Origin (2023-8-1 支持最新版本)</value>
   </data>
   <data name="&gt;&gt;linkEaOriginNoUpdate.Name" xml:space="preserve">
     <value>linkEaOriginNoUpdate</value>
@@ -6912,7 +6729,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;linkEaOriginNoUpdate.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="linkEaOriginRepair.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -6939,7 +6756,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;linkEaOriginRepair.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="label51.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -6970,7 +6787,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;label51.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="labelStatusEACdn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -6997,7 +6814,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;labelStatusEACdn.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="butEACdn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -7027,7 +6844,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;butEACdn.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="rbEACdn2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7054,7 +6871,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;rbEACdn2.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="rbEACdn1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7081,7 +6898,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;rbEACdn1.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="rbEACdn0.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7108,7 +6925,7 @@
     <value>gpEACdn</value>
   </data>
   <data name="&gt;&gt;rbEACdn0.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="gpEACdn.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -10865,6 +10682,12 @@ U盘卷标不能有中文。</value>
     <value>tsmTeaching1</value>
   </data>
   <data name="&gt;&gt;tsmTeaching1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Name" xml:space="preserve">
+    <value>校园网IPv6免流量下载Xbox游戏ToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmAbout.Name" xml:space="preserve">

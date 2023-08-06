@@ -45,6 +45,7 @@
             tsmTeaching3 = new ToolStripMenuItem();
             tsmTeaching2 = new ToolStripMenuItem();
             tsmTeaching1 = new ToolStripMenuItem();
+            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem = new ToolStripMenuItem();
             tsmAbout = new ToolStripMenuItem();
             toolStripButton1 = new ToolStripButton();
             tabControl1 = new TabControl();
@@ -286,7 +287,6 @@
             label32 = new Label();
             tabTool = new TabPage();
             gpEACdn = new GroupBox();
-            linkLabel3 = new LinkLabel();
             linkEaOriginNoUpdate = new LinkLabel();
             linkEaOriginRepair = new LinkLabel();
             label51 = new Label();
@@ -459,7 +459,7 @@
             // 
             // tsmTeaching
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1 });
+            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, 校园网IPv6免流量下载Xbox游戏ToolStripMenuItem });
             tsmTeaching.Name = "tsmTeaching";
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
@@ -491,6 +491,13 @@
             resources.ApplyResources(tsmTeaching1, "tsmTeaching1");
             tsmTeaching1.Tag = "https://www.bilibili.com/video/BV1wP4y1G7zf";
             tsmTeaching1.Click += TsmOpenSite_Click;
+            // 
+            // 校园网IPv6免流量下载Xbox游戏ToolStripMenuItem
+            // 
+            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Name = "校园网IPv6免流量下载Xbox游戏ToolStripMenuItem";
+            resources.ApplyResources(校园网IPv6免流量下载Xbox游戏ToolStripMenuItem, "校园网IPv6免流量下载Xbox游戏ToolStripMenuItem");
+            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Tag = "https://www.bilibili.com/video/BV1TN411k7qf";
+            校园网IPv6免流量下载Xbox游戏ToolStripMenuItem.Click += TsmOpenSite_Click;
             // 
             // tsmAbout
             // 
@@ -2229,7 +2236,6 @@
             // 
             // gpEACdn
             // 
-            gpEACdn.Controls.Add(linkLabel3);
             gpEACdn.Controls.Add(linkEaOriginNoUpdate);
             gpEACdn.Controls.Add(linkEaOriginRepair);
             gpEACdn.Controls.Add(label51);
@@ -2241,14 +2247,6 @@
             resources.ApplyResources(gpEACdn, "gpEACdn");
             gpEACdn.Name = "gpEACdn";
             gpEACdn.TabStop = false;
-            // 
-            // linkLabel3
-            // 
-            resources.ApplyResources(linkLabel3, "linkLabel3");
-            linkLabel3.Name = "linkLabel3";
-            linkLabel3.TabStop = true;
-            linkLabel3.Tag = "https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp";
-            linkLabel3.LinkClicked += Link_LinkClicked;
             // 
             // linkEaOriginNoUpdate
             // 
@@ -3145,7 +3143,6 @@
         private Label labelStatusEACdn;
         private LinkLabel linkEaOriginRepair;
         private LinkLabel linkEaOriginNoUpdate;
-        private LinkLabel linkLabel3;
         private TabPage tabSniProxy;
         private GroupBox groupBox9;
         private Label label52;
@@ -3166,5 +3163,6 @@
         private LinkLabel linkTestSniProxy;
         private Label labelTestSniProxy;
         private CheckBox ckbNfSniProxy;
+        private ToolStripMenuItem 校园网IPv6免流量下载Xbox游戏ToolStripMenuItem;
     }
 }

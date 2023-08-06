@@ -110,7 +110,6 @@
 *challenges.cloudflare.com
 *ai.com
 *openai.com
-*fast.com
 ####################### Netflix #######################
 netflix.com
 *.netflix.com

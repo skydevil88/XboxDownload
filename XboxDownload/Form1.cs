@@ -11,7 +11,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Xml.Linq;
 using NetFwTypeLib;
 
 namespace XboxDownload
@@ -1421,8 +1420,8 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/4/934b0730-48ce-44a1-9a87-5c06a89adf26/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3799.1756.0.f86f8683-3e70-4d93-8abe-748efa65d281/Microsoft.254428597CFE2_1.3799.1756.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/Z/eab2acd3-8d9a-442a-a46b-8833b94119f9/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.588.95.0.0fc87fbb-f841-41b5-8700-2eeba1f4193f/Microsoft.624F8B84B80_3.588.95.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/abd26785-75c8-4827-a12f-c10235e143a3/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3837.49917.0.19ff2e2f-7f9a-4634-9d07-1f6193025edf/Microsoft.254428597CFE2_1.3837.49917.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/2/bae18d93-3d78-4c58-a07d-e3ec612613e2/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.604.481.0.ac24d78f-4e0f-4263-842a-d55e08762827/Microsoft.624F8B84B80_3.604.481.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -2809,7 +2808,7 @@ namespace XboxDownload
                     sb.AppendLine("'" + hosts + "': " + ip);
                 }
             }
-            Clipboard.SetDataObject(sb.ToString() + "\r\n\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n");
+            Clipboard.SetDataObject(sb.ToString() + "\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n");
             MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -2904,7 +2903,7 @@ namespace XboxDownload
                     sb.AppendLine("'" + hosts + "': " + ip);
                 }
             }
-            Clipboard.SetDataObject(sb.ToString() + "\r\n\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n#打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT\r\n");
+            Clipboard.SetDataObject(sb.ToString() + "\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n#打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT\r\n");
             MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”\n3.打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -4023,7 +4022,7 @@ namespace XboxDownload
                 string? imageUri = localizedPropertie[0].Images.Where(x => x.ImagePurpose == "BoxArt").Select(x => x.Uri).FirstOrDefault() ?? localizedPropertie[0].Images.Where(x => x.Width == x.Height).OrderByDescending(x => x.Width).Select(x => x.Uri).FirstOrDefault();
                 if (!string.IsNullOrEmpty(imageUri))
                 {
-                    if (imageUri.StartsWith("//")) imageUri = "http:" + imageUri;
+                    if (imageUri.StartsWith("//")) imageUri = "https:" + imageUri;
                     try
                     {
                         pbGame.LoadAsync(imageUri + "?w=170&h=170");
@@ -4036,7 +4035,7 @@ namespace XboxDownload
             var marketProperties = product.MarketProperties;
             if (marketProperties != null && marketProperties.Count >= 1)
             {
-                originalReleaseDate = marketProperties[0].OriginalReleaseDate.ToString("d");
+                originalReleaseDate = marketProperties[0].OriginalReleaseDate.ToLocalTime().ToString("d");
             }
 
             string category = string.Empty;
@@ -5550,7 +5549,7 @@ namespace XboxDownload
             string? eaCoreIni = gpEACdn.Tag?.ToString();
             if (string.IsNullOrEmpty(eaCoreIni))
             {
-                MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("没有安装 EA Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
             string status;
@@ -5577,7 +5576,7 @@ namespace XboxDownload
             if (gpEACdn.Tag == null) GetEACdn();
             if (gpEACdn.Tag == null)
             {
-                MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("没有安装 EA Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
             if (MessageBox.Show("此操作将删除Origin缓存文件和登录信息，执行下一步之前请先退出Origin，是否继续？", "修复 EA Origin", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
@@ -5606,45 +5605,53 @@ namespace XboxDownload
         private void LinkEaOriginNoUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (gpEACdn.Tag == null) GetEACdn();
-            if (gpEACdn.Tag == null)
+            string? eaCoreIni = gpEACdn.Tag?.ToString();
+            if (string.IsNullOrEmpty(eaCoreIni))
             {
-                MessageBox.Show("没有安装 EA app", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("没有安装 EA Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
-            string? filePath = Path.GetDirectoryName(gpEACdn.Tag?.ToString()) + "\\OriginThinSetupInternal.exe";
-            if (File.Exists(filePath))
+            linkEaOriginNoUpdate.Enabled = false;
+            Task.Run(() =>
             {
-                try
+                Process[] processes = Process.GetProcessesByName("Origin");
+                if (processes.Length == 1)
                 {
-                    File.Delete(filePath);
+                    try
+                    {
+                        processes[0].Kill();
+                    }
+                    catch { }
                 }
-                catch { }
-            }
-            string xmlPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Origin\local.xml");
-            if (File.Exists(xmlPath))
-            {
-                var doc = XDocument.Load(xmlPath);
-                var settings = doc.Descendants("Setting");
-                if (settings != null)
+                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "Origin Web Helper Service").SingleOrDefault();
+                if (service != null)
                 {
-                    var node = settings.ToList().Find(x => x.Attribute("key")?.Value == "MigrationDisabled");
-                    if (node == null)
+                    if (service.Status == ServiceControllerStatus.Running)
                     {
-                        var xe = new XElement("Setting");
-                        xe.SetAttributeValue("key", "MigrationDisabled");
-                        xe.SetAttributeValue("value", "true");
-                        xe.SetAttributeValue("type", "1");
-                        doc.Root?.Add(xe);
+                        service.Stop();
+                        service.WaitForStatus(ServiceControllerStatus.Stopped);
                     }
-                    else
-                    {
-                        node.SetAttributeValue("value", "true");
-                        node.SetAttributeValue("type", "1");
-                    }
-                    doc.Save(xmlPath);
                 }
-            }
-            MessageBox.Show("已经成功禁止强制升级 Origin。\n\n注：此方法只适合 v10.5.119.52718 或以下版本 Origin。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Thread.Sleep(3000);
+                Program.FilesIniWrite("Bootstrap", "EnableUpdating", "false", eaCoreIni);
+                using (var key = Microsoft.Win32.Registry.LocalMachine)
+                {
+                    var rk = key.CreateSubKey(@"SOFTWARE\WOW6432Node\Electronic Arts\EA Desktop");
+                    rk.SetValue("InstallSuccessful", true);
+                }
+                using (FileStream fs = new(Path.GetDirectoryName(gpEACdn.Tag?.ToString()) + "\\version.dll", FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    fs.Write(Properties.Resource.version, 0, Properties.Resource.version.Length);
+                    fs.Flush();
+                    fs.Close();
+                }
+                this.Invoke(new Action(() =>
+                {
+                    linkEaOriginNoUpdate.Enabled = true;
+                    MessageBox.Show("已经成功禁止强制升级 Origin。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }));
+            });
         }
         #endregion
     }
