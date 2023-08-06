@@ -362,6 +362,7 @@
             tsmAuthorization = new ToolStripMenuItem();
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
+            linkLabel3 = new LinkLabel();
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
@@ -2236,6 +2237,7 @@
             // 
             // gpEACdn
             // 
+            gpEACdn.Controls.Add(linkLabel3);
             gpEACdn.Controls.Add(linkEaOriginNoUpdate);
             gpEACdn.Controls.Add(linkEaOriginRepair);
             gpEACdn.Controls.Add(label51);
@@ -2752,6 +2754,14 @@
             tsmAuthorization2.Tag = "9PP5G1F0C2B6";
             tsmAuthorization2.Click += TsmAuthorization_Click;
             // 
+            // linkLabel3
+            // 
+            resources.ApplyResources(linkLabel3, "linkLabel3");
+            linkLabel3.Name = "linkLabel3";
+            linkLabel3.TabStop = true;
+            linkLabel3.Tag = "https://github.com/p0358/Fuck_off_EA_App";
+            linkLabel3.LinkClicked += Link_LinkClicked;
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -3164,5 +3174,6 @@
         private Label labelTestSniProxy;
         private CheckBox ckbNfSniProxy;
         private ToolStripMenuItem tsmTeaching5;
+        private LinkLabel linkLabel3;
     }
 }

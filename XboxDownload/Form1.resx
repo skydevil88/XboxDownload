@@ -187,13 +187,13 @@
     <value>帮助</value>
   </data>
   <data name="tsmProductManual.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>266, 34</value>
   </data>
   <data name="tsmProductManual.Text" xml:space="preserve">
     <value>使用说明</value>
   </data>
   <data name="tsmTeaching.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>266, 34</value>
   </data>
   <data name="tsmTeaching.Text" xml:space="preserve">
     <value>视频教程(网友制作)</value>
@@ -229,7 +229,7 @@
     <value>校园网IPv6免流量下载Xbox游戏</value>
   </data>
   <data name="tsmAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>266, 34</value>
   </data>
   <data name="tsmAbout.Text" xml:space="preserve">
     <value>关于</value>
@@ -242,130 +242,6 @@
   </data>
   <data name="toolStripButton1.Text" xml:space="preserve">
     <value>打赏作者</value>
-  </data>
-  <data name="&gt;&gt;tabService.Name" xml:space="preserve">
-    <value>tabService</value>
-  </data>
-  <data name="&gt;&gt;tabService.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabService.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabService.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.Name" xml:space="preserve">
-    <value>tabSpeedTest</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.Name" xml:space="preserve">
-    <value>tabHosts</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tabCND.Name" xml:space="preserve">
-    <value>tabCND</value>
-  </data>
-  <data name="&gt;&gt;tabCND.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabCND.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabCND.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Name" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.Name" xml:space="preserve">
-    <value>tabHardDisk</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;tabStore.Name" xml:space="preserve">
-    <value>tabStore</value>
-  </data>
-  <data name="&gt;&gt;tabStore.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabStore.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabStore.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;tabTool.Name" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;tabTool.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTool.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabTool.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tabControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tabControl1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 33</value>
-  </data>
-  <data name="tabControl1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tabControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1444, 847</value>
-  </data>
-  <data name="tabControl1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tabControl1.Name" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabControl1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabControl1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tabControl1.ZOrder" xml:space="preserve">
-    <value>4</value>
   </data>
   <data name="&gt;&gt;groupBox11.Name" xml:space="preserve">
     <value>groupBox11</value>
@@ -426,6 +302,1082 @@
   </data>
   <data name="&gt;&gt;tabService.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;gbIPList.Name" xml:space="preserve">
+    <value>gbIPList</value>
+  </data>
+  <data name="&gt;&gt;gbIPList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbIPList.Parent" xml:space="preserve">
+    <value>tabSpeedTest</value>
+  </data>
+  <data name="&gt;&gt;gbIPList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel3.Name" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;panel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel3.Parent" xml:space="preserve">
+    <value>tabSpeedTest</value>
+  </data>
+  <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabSpeedTest.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabSpeedTest.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabSpeedTest.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="tabSpeedTest.Text" xml:space="preserve">
+    <value>测速</value>
+  </data>
+  <data name="&gt;&gt;tabSpeedTest.Name" xml:space="preserve">
+    <value>tabSpeedTest</value>
+  </data>
+  <data name="&gt;&gt;tabSpeedTest.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabSpeedTest.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabSpeedTest.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Parent" xml:space="preserve">
+    <value>tabHosts</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panel2.Name" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
+    <value>tabHosts</value>
+  </data>
+  <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabHosts.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabHosts.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabHosts.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tabHosts.Text" xml:space="preserve">
+    <value>域名</value>
+  </data>
+  <data name="&gt;&gt;tabHosts.Name" xml:space="preserve">
+    <value>tabHosts</value>
+  </data>
+  <data name="&gt;&gt;tabHosts.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabHosts.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabHosts.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>tabCND</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBox4" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBox5" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;panel4.Name" xml:space="preserve">
+    <value>panel4</value>
+  </data>
+  <data name="&gt;&gt;panel4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel4.Parent" xml:space="preserve">
+    <value>tabCND</value>
+  </data>
+  <data name="&gt;&gt;panel4.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;groupBox3.Name" xml:space="preserve">
+    <value>groupBox3</value>
+  </data>
+  <data name="&gt;&gt;groupBox3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox3.Parent" xml:space="preserve">
+    <value>tabCND</value>
+  </data>
+  <data name="&gt;&gt;groupBox3.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabCND.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabCND.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabCND.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tabCND.Text" xml:space="preserve">
+    <value>CDN</value>
+  </data>
+  <data name="&gt;&gt;tabCND.Name" xml:space="preserve">
+    <value>tabCND</value>
+  </data>
+  <data name="&gt;&gt;tabCND.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabCND.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabCND.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Name" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
+    <value>tabSniProxy</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBox10" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBox12" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;panel7.Name" xml:space="preserve">
+    <value>panel7</value>
+  </data>
+  <data name="&gt;&gt;panel7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel7.Parent" xml:space="preserve">
+    <value>tabSniProxy</value>
+  </data>
+  <data name="&gt;&gt;panel7.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;groupBox9.Name" xml:space="preserve">
+    <value>groupBox9</value>
+  </data>
+  <data name="&gt;&gt;groupBox9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox9.Parent" xml:space="preserve">
+    <value>tabSniProxy</value>
+  </data>
+  <data name="&gt;&gt;groupBox9.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabSniProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabSniProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabSniProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="tabSniProxy.Text" xml:space="preserve">
+    <value>反代</value>
+  </data>
+  <data name="&gt;&gt;tabSniProxy.Name" xml:space="preserve">
+    <value>tabSniProxy</value>
+  </data>
+  <data name="&gt;&gt;tabSniProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabSniProxy.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabSniProxy.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;groupBox7.Name" xml:space="preserve">
+    <value>groupBox7</value>
+  </data>
+  <data name="&gt;&gt;groupBox7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox7.Parent" xml:space="preserve">
+    <value>tabHardDisk</value>
+  </data>
+  <data name="&gt;&gt;groupBox7.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;groupBox6.Name" xml:space="preserve">
+    <value>groupBox6</value>
+  </data>
+  <data name="&gt;&gt;groupBox6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox6.Parent" xml:space="preserve">
+    <value>tabHardDisk</value>
+  </data>
+  <data name="&gt;&gt;groupBox6.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabHardDisk.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabHardDisk.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabHardDisk.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tabHardDisk.Text" xml:space="preserve">
+    <value>硬盘</value>
+  </data>
+  <data name="&gt;&gt;tabHardDisk.Name" xml:space="preserve">
+    <value>tabHardDisk</value>
+  </data>
+  <data name="&gt;&gt;tabHardDisk.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabHardDisk.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabHardDisk.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;lvGameSearch.Name" xml:space="preserve">
+    <value>lvGameSearch</value>
+  </data>
+  <data name="&gt;&gt;lvGameSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lvGameSearch.Parent" xml:space="preserve">
+    <value>tabStore</value>
+  </data>
+  <data name="&gt;&gt;lvGameSearch.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;gbGameInfo.Name" xml:space="preserve">
+    <value>gbGameInfo</value>
+  </data>
+  <data name="&gt;&gt;gbGameInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbGameInfo.Parent" xml:space="preserve">
+    <value>tabStore</value>
+  </data>
+  <data name="&gt;&gt;gbGameInfo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;gbMicrosoftStore.Name" xml:space="preserve">
+    <value>gbMicrosoftStore</value>
+  </data>
+  <data name="&gt;&gt;gbMicrosoftStore.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbMicrosoftStore.Parent" xml:space="preserve">
+    <value>tabStore</value>
+  </data>
+  <data name="&gt;&gt;gbMicrosoftStore.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabStore.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabStore.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabStore.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tabStore.Text" xml:space="preserve">
+    <value>商店</value>
+  </data>
+  <data name="&gt;&gt;tabStore.Name" xml:space="preserve">
+    <value>tabStore</value>
+  </data>
+  <data name="&gt;&gt;tabStore.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabStore.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabStore.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="linkLabel3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkLabel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>758, 124</value>
+  </data>
+  <data name="linkLabel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>221, 24</value>
+  </data>
+  <data name="linkLabel3.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="linkLabel3.Text" xml:space="preserve">
+    <value>Github Fuck_off_EA_App</value>
+  </data>
+  <data name="&gt;&gt;linkLabel3.Name" xml:space="preserve">
+    <value>linkLabel3</value>
+  </data>
+  <data name="&gt;&gt;linkLabel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel3.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;linkLabel3.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="linkEaOriginNoUpdate.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkEaOriginNoUpdate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>341, 124</value>
+  </data>
+  <data name="linkEaOriginNoUpdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>271, 24</value>
+  </data>
+  <data name="linkEaOriginNoUpdate.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="linkEaOriginNoUpdate.Text" xml:space="preserve">
+    <value>禁止 Origin 强制更新到 EA App</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginNoUpdate.Name" xml:space="preserve">
+    <value>linkEaOriginNoUpdate</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginNoUpdate.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginNoUpdate.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginNoUpdate.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="linkEaOriginRepair.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkEaOriginRepair.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 124</value>
+  </data>
+  <data name="linkEaOriginRepair.Size" type="System.Drawing.Size, System.Drawing">
+    <value>325, 24</value>
+  </data>
+  <data name="linkEaOriginRepair.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="linkEaOriginRepair.Text" xml:space="preserve">
+    <value>修复 Origin "发生了些意料之外的事情"</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginRepair.Name" xml:space="preserve">
+    <value>linkEaOriginRepair</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginRepair.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginRepair.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;linkEaOriginRepair.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label51.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label51.Location" type="System.Drawing.Point, System.Drawing">
+    <value>758, 19</value>
+  </data>
+  <data name="label51.Size" type="System.Drawing.Size, System.Drawing">
+    <value>477, 96</value>
+  </data>
+  <data name="label51.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="label51.Text" xml:space="preserve">
+    <value>使用说明：
+1. 选择CDN服务器后点击应用。
+2. 重启Origin生效。
+提示：服务中勾选“指定CDN Akamai”，此设置将被忽略。
+</value>
+  </data>
+  <data name="&gt;&gt;label51.Name" xml:space="preserve">
+    <value>label51</value>
+  </data>
+  <data name="&gt;&gt;label51.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label51.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;label51.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="labelStatusEACdn.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelStatusEACdn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 83</value>
+  </data>
+  <data name="labelStatusEACdn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>141, 24</value>
+  </data>
+  <data name="labelStatusEACdn.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="labelStatusEACdn.Text" xml:space="preserve">
+    <value>当前使用CDN：</value>
+  </data>
+  <data name="&gt;&gt;labelStatusEACdn.Name" xml:space="preserve">
+    <value>labelStatusEACdn</value>
+  </data>
+  <data name="&gt;&gt;labelStatusEACdn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelStatusEACdn.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;labelStatusEACdn.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="butEACdn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="butEACdn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>423, 36</value>
+  </data>
+  <data name="butEACdn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="butEACdn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 36</value>
+  </data>
+  <data name="butEACdn.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="butEACdn.Text" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="&gt;&gt;butEACdn.Name" xml:space="preserve">
+    <value>butEACdn</value>
+  </data>
+  <data name="&gt;&gt;butEACdn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;butEACdn.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;butEACdn.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="rbEACdn2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbEACdn2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>299, 40</value>
+  </data>
+  <data name="rbEACdn2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 28</value>
+  </data>
+  <data name="rbEACdn2.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="rbEACdn2.Text" xml:space="preserve">
+    <value>Level3</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn2.Name" xml:space="preserve">
+    <value>rbEACdn2</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn2.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn2.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="rbEACdn1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbEACdn1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>140, 40</value>
+  </data>
+  <data name="rbEACdn1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>153, 28</value>
+  </data>
+  <data name="rbEACdn1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbEACdn1.Text" xml:space="preserve">
+    <value>Akamai (推荐)</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn1.Name" xml:space="preserve">
+    <value>rbEACdn1</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn1.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="rbEACdn0.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbEACdn0.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 40</value>
+  </data>
+  <data name="rbEACdn0.Size" type="System.Drawing.Size, System.Drawing">
+    <value>124, 28</value>
+  </data>
+  <data name="rbEACdn0.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbEACdn0.Text" xml:space="preserve">
+    <value>自动 (默认)</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn0.Name" xml:space="preserve">
+    <value>rbEACdn0</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn0.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn0.Parent" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;rbEACdn0.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="gpEACdn.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="gpEACdn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 565</value>
+  </data>
+  <data name="gpEACdn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 163</value>
+  </data>
+  <data name="gpEACdn.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="gpEACdn.Text" xml:space="preserve">
+    <value>EA Origin 切换CDN服务器</value>
+  </data>
+  <data name="&gt;&gt;gpEACdn.Name" xml:space="preserve">
+    <value>gpEACdn</value>
+  </data>
+  <data name="&gt;&gt;gpEACdn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gpEACdn.Parent" xml:space="preserve">
+    <value>tabTool</value>
+  </data>
+  <data name="&gt;&gt;gpEACdn.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;linkLabel2.Name" xml:space="preserve">
+    <value>linkLabel2</value>
+  </data>
+  <data name="&gt;&gt;linkLabel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkLabel2.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkLabel2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;linkTroubleshootGame.Name" xml:space="preserve">
+    <value>linkTroubleshootGame</value>
+  </data>
+  <data name="&gt;&gt;linkTroubleshootGame.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkTroubleshootGame.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkTroubleshootGame.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label50.Name" xml:space="preserve">
+    <value>label50</value>
+  </data>
+  <data name="&gt;&gt;label50.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label50.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;label50.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label49.Name" xml:space="preserve">
+    <value>label49</value>
+  </data>
+  <data name="&gt;&gt;label49.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label49.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;label49.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;linkResetWinsock.Name" xml:space="preserve">
+    <value>linkResetWinsock</value>
+  </data>
+  <data name="&gt;&gt;linkResetWinsock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkResetWinsock.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkResetWinsock.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;linkReInstallGamingServices.Name" xml:space="preserve">
+    <value>linkReInstallGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkReInstallGamingServices.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkReInstallGamingServices.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkReInstallGamingServices.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;linkRestartGamingServices.Name" xml:space="preserve">
+    <value>linkRestartGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkRestartGamingServices.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkRestartGamingServices.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;linkRestartGamingServices.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Name" xml:space="preserve">
+    <value>textBox1</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Parent" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="gbGamingServices.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="gbGamingServices.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 365</value>
+  </data>
+  <data name="gbGamingServices.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 200</value>
+  </data>
+  <data name="gbGamingServices.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="gbGamingServices.Text" xml:space="preserve">
+    <value>在 Windows 10/11 设备上重新安装游戏服务应用</value>
+  </data>
+  <data name="&gt;&gt;gbGamingServices.Name" xml:space="preserve">
+    <value>gbGamingServices</value>
+  </data>
+  <data name="&gt;&gt;gbGamingServices.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbGamingServices.Parent" xml:space="preserve">
+    <value>tabTool</value>
+  </data>
+  <data name="&gt;&gt;gbGamingServices.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;linkFixAppxDrive.Name" xml:space="preserve">
+    <value>linkFixAppxDrive</value>
+  </data>
+  <data name="&gt;&gt;linkFixAppxDrive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkFixAppxDrive.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;linkFixAppxDrive.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;labelInstallationLocation.Name" xml:space="preserve">
+    <value>labelInstallationLocation</value>
+  </data>
+  <data name="&gt;&gt;labelInstallationLocation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelInstallationLocation.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;labelInstallationLocation.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label48.Name" xml:space="preserve">
+    <value>label48</value>
+  </data>
+  <data name="&gt;&gt;label48.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label48.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;label48.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;butAppxInstall.Name" xml:space="preserve">
+    <value>butAppxInstall</value>
+  </data>
+  <data name="&gt;&gt;butAppxInstall.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;butAppxInstall.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;butAppxInstall.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;butAppxOpenFile.Name" xml:space="preserve">
+    <value>butAppxOpenFile</value>
+  </data>
+  <data name="&gt;&gt;butAppxOpenFile.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;butAppxOpenFile.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;butAppxOpenFile.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;linkAppxRefreshDrive.Name" xml:space="preserve">
+    <value>linkAppxRefreshDrive</value>
+  </data>
+  <data name="&gt;&gt;linkAppxRefreshDrive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkAppxRefreshDrive.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;linkAppxRefreshDrive.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;cbAppxDrive.Name" xml:space="preserve">
+    <value>cbAppxDrive</value>
+  </data>
+  <data name="&gt;&gt;cbAppxDrive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbAppxDrive.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;cbAppxDrive.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;label47.Name" xml:space="preserve">
+    <value>label47</value>
+  </data>
+  <data name="&gt;&gt;label47.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label47.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;label47.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;tbAppxFilePath.Name" xml:space="preserve">
+    <value>tbAppxFilePath</value>
+  </data>
+  <data name="&gt;&gt;tbAppxFilePath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbAppxFilePath.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;tbAppxFilePath.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;label46.Name" xml:space="preserve">
+    <value>label46</value>
+  </data>
+  <data name="&gt;&gt;label46.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label46.Parent" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;label46.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="gbAddAppxPackage.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="gbAddAppxPackage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 170</value>
+  </data>
+  <data name="gbAddAppxPackage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 195</value>
+  </data>
+  <data name="gbAddAppxPackage.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="gbAddAppxPackage.Text" xml:space="preserve">
+    <value>本地安装微软商店应用软件</value>
+  </data>
+  <data name="&gt;&gt;gbAddAppxPackage.Name" xml:space="preserve">
+    <value>gbAddAppxPackage</value>
+  </data>
+  <data name="&gt;&gt;gbAddAppxPackage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbAddAppxPackage.Parent" xml:space="preserve">
+    <value>tabTool</value>
+  </data>
+  <data name="&gt;&gt;gbAddAppxPackage.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label45.Name" xml:space="preserve">
+    <value>label45</value>
+  </data>
+  <data name="&gt;&gt;label45.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label45.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;label45.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionLock.Name" xml:space="preserve">
+    <value>butConsoleRegionLock</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionLock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionLock.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionLock.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionUnlock.Name" xml:space="preserve">
+    <value>butConsoleRegionUnlock</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionUnlock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionUnlock.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;butConsoleRegionUnlock.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;labelStatusDrive.Name" xml:space="preserve">
+    <value>labelStatusDrive</value>
+  </data>
+  <data name="&gt;&gt;labelStatusDrive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelStatusDrive.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;labelStatusDrive.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;linkRefreshDrive.Name" xml:space="preserve">
+    <value>linkRefreshDrive</value>
+  </data>
+  <data name="&gt;&gt;linkRefreshDrive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkRefreshDrive.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;linkRefreshDrive.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;cbDrive.Name" xml:space="preserve">
+    <value>cbDrive</value>
+  </data>
+  <data name="&gt;&gt;cbDrive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbDrive.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;cbDrive.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;label44.Name" xml:space="preserve">
+    <value>label44</value>
+  </data>
+  <data name="&gt;&gt;label44.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label44.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;label44.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;rbXboxSeries.Name" xml:space="preserve">
+    <value>rbXboxSeries</value>
+  </data>
+  <data name="&gt;&gt;rbXboxSeries.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbXboxSeries.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;rbXboxSeries.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;rbXboxOne.Name" xml:space="preserve">
+    <value>rbXboxOne</value>
+  </data>
+  <data name="&gt;&gt;rbXboxOne.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbXboxOne.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;rbXboxOne.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;label43.Name" xml:space="preserve">
+    <value>label43</value>
+  </data>
+  <data name="&gt;&gt;label43.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label43.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;label43.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="groupBox8.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="groupBox8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="groupBox8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 170</value>
+  </data>
+  <data name="groupBox8.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="groupBox8.Text" xml:space="preserve">
+    <value>国行Xbox 制作出国/回国U盘</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.Parent" xml:space="preserve">
+    <value>tabTool</value>
+  </data>
+  <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tabTool.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 33</value>
+  </data>
+  <data name="tabTool.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1436, 810</value>
+  </data>
+  <data name="tabTool.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="tabTool.Text" xml:space="preserve">
+    <value>工具</value>
+  </data>
+  <data name="&gt;&gt;tabTool.Name" xml:space="preserve">
+    <value>tabTool</value>
+  </data>
+  <data name="&gt;&gt;tabTool.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabTool.Parent" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabTool.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tabControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tabControl1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 33</value>
+  </data>
+  <data name="tabControl1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tabControl1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1444, 847</value>
+  </data>
+  <data name="tabControl1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.Name" xml:space="preserve">
+    <value>tabControl1</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabControl1.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="&gt;&gt;lvLog.Name" xml:space="preserve">
     <value>lvLog</value>
@@ -2958,54 +3910,6 @@
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
     <value>55</value>
   </data>
-  <data name="&gt;&gt;gbIPList.Name" xml:space="preserve">
-    <value>gbIPList</value>
-  </data>
-  <data name="&gt;&gt;gbIPList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbIPList.Parent" xml:space="preserve">
-    <value>tabSpeedTest</value>
-  </data>
-  <data name="&gt;&gt;gbIPList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;panel3.Name" xml:space="preserve">
-    <value>panel3</value>
-  </data>
-  <data name="&gt;&gt;panel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel3.Parent" xml:space="preserve">
-    <value>tabSpeedTest</value>
-  </data>
-  <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tabSpeedTest.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabSpeedTest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabSpeedTest.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="tabSpeedTest.Text" xml:space="preserve">
-    <value>测速</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.Name" xml:space="preserve">
-    <value>tabSpeedTest</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabSpeedTest.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="&gt;&gt;dgvIpList.Name" xml:space="preserve">
     <value>dgvIpList</value>
   </data>
@@ -4189,54 +5093,6 @@
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>22</value>
   </data>
-  <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;groupBox2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox2.Parent" xml:space="preserve">
-    <value>tabHosts</value>
-  </data>
-  <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;panel2.Name" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
-    <value>tabHosts</value>
-  </data>
-  <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tabHosts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabHosts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabHosts.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tabHosts.Text" xml:space="preserve">
-    <value>域名</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.Name" xml:space="preserve">
-    <value>tabHosts</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabHosts.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="&gt;&gt;dgvHosts.Name" xml:space="preserve">
     <value>dgvHosts</value>
   </data>
@@ -4716,69 +5572,6 @@
   </data>
   <data name="&gt;&gt;cbHosts.ZOrder" xml:space="preserve">
     <value>6</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
-    <value>tabCND</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBox4" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBox5" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;panel4.Name" xml:space="preserve">
-    <value>panel4</value>
-  </data>
-  <data name="&gt;&gt;panel4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel4.Parent" xml:space="preserve">
-    <value>tabCND</value>
-  </data>
-  <data name="&gt;&gt;panel4.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;groupBox3.Name" xml:space="preserve">
-    <value>groupBox3</value>
-  </data>
-  <data name="&gt;&gt;groupBox3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox3.Parent" xml:space="preserve">
-    <value>tabCND</value>
-  </data>
-  <data name="&gt;&gt;groupBox3.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tabCND.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabCND.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabCND.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tabCND.Text" xml:space="preserve">
-    <value>CDN</value>
-  </data>
-  <data name="&gt;&gt;tabCND.Name" xml:space="preserve">
-    <value>tabCND</value>
-  </data>
-  <data name="&gt;&gt;tabCND.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabCND.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabCND.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -5436,69 +6229,6 @@
   </data>
   <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.Name" xml:space="preserve">
-    <value>tableLayoutPanel2</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBox10" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBox12" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;panel7.Name" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;panel7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel7.Parent" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;panel7.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.Name" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.Parent" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tabSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="tabSniProxy.Text" xml:space="preserve">
-    <value>反代</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Name" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.ZOrder" xml:space="preserve">
-    <value>4</value>
   </data>
   <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -6296,54 +7026,6 @@
     <value>groupBox9</value>
   </data>
   <data name="&gt;&gt;label53.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;groupBox7.Name" xml:space="preserve">
-    <value>groupBox7</value>
-  </data>
-  <data name="&gt;&gt;groupBox7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox7.Parent" xml:space="preserve">
-    <value>tabHardDisk</value>
-  </data>
-  <data name="&gt;&gt;groupBox7.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;groupBox6.Name" xml:space="preserve">
-    <value>groupBox6</value>
-  </data>
-  <data name="&gt;&gt;groupBox6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox6.Parent" xml:space="preserve">
-    <value>tabHardDisk</value>
-  </data>
-  <data name="&gt;&gt;groupBox6.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tabHardDisk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabHardDisk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabHardDisk.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="tabHardDisk.Text" xml:space="preserve">
-    <value>硬盘</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.Name" xml:space="preserve">
-    <value>tabHardDisk</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabHardDisk.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
   <data name="&gt;&gt;label31.Name" xml:space="preserve">
@@ -7581,66 +8263,6 @@
   </data>
   <data name="&gt;&gt;butEnabelPc.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="&gt;&gt;lvGameSearch.Name" xml:space="preserve">
-    <value>lvGameSearch</value>
-  </data>
-  <data name="&gt;&gt;lvGameSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lvGameSearch.Parent" xml:space="preserve">
-    <value>tabStore</value>
-  </data>
-  <data name="&gt;&gt;lvGameSearch.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;gbGameInfo.Name" xml:space="preserve">
-    <value>gbGameInfo</value>
-  </data>
-  <data name="&gt;&gt;gbGameInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbGameInfo.Parent" xml:space="preserve">
-    <value>tabStore</value>
-  </data>
-  <data name="&gt;&gt;gbGameInfo.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;gbMicrosoftStore.Name" xml:space="preserve">
-    <value>gbMicrosoftStore</value>
-  </data>
-  <data name="&gt;&gt;gbMicrosoftStore.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbMicrosoftStore.Parent" xml:space="preserve">
-    <value>tabStore</value>
-  </data>
-  <data name="&gt;&gt;gbMicrosoftStore.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tabStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabStore.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tabStore.Text" xml:space="preserve">
-    <value>商店</value>
-  </data>
-  <data name="&gt;&gt;tabStore.Name" xml:space="preserve">
-    <value>tabStore</value>
-  </data>
-  <data name="&gt;&gt;tabStore.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabStore.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabStore.ZOrder" xml:space="preserve">
-    <value>6</value>
   </data>
   <data name="lvGameSearch.Location" type="System.Drawing.Point, System.Drawing">
     <value>148, 94</value>
@@ -9329,547 +9951,6 @@
   <data name="&gt;&gt;label32.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <data name="&gt;&gt;gpEACdn.Name" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.Name" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.Name" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tabTool.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabTool.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabTool.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="tabTool.Text" xml:space="preserve">
-    <value>工具</value>
-  </data>
-  <data name="&gt;&gt;tabTool.Name" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;tabTool.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTool.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabTool.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Name" xml:space="preserve">
-    <value>linkEaOriginNoUpdate</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Name" xml:space="preserve">
-    <value>linkEaOriginRepair</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;label51.Name" xml:space="preserve">
-    <value>label51</value>
-  </data>
-  <data name="&gt;&gt;label51.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label51.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;label51.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Name" xml:space="preserve">
-    <value>labelStatusEACdn</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Name" xml:space="preserve">
-    <value>butEACdn</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Name" xml:space="preserve">
-    <value>rbEACdn2</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Name" xml:space="preserve">
-    <value>rbEACdn1</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Name" xml:space="preserve">
-    <value>rbEACdn0</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="gpEACdn.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="gpEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 565</value>
-  </data>
-  <data name="gpEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 163</value>
-  </data>
-  <data name="gpEACdn.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="gpEACdn.Text" xml:space="preserve">
-    <value>EA Origin 切换CDN服务器</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Name" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>341, 124</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>390, 24</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.Text" xml:space="preserve">
-    <value>禁止强制升级 Origin (2023-8-1 支持最新版本)</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Name" xml:space="preserve">
-    <value>linkEaOriginNoUpdate</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="linkEaOriginRepair.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkEaOriginRepair.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 124</value>
-  </data>
-  <data name="linkEaOriginRepair.Size" type="System.Drawing.Size, System.Drawing">
-    <value>325, 24</value>
-  </data>
-  <data name="linkEaOriginRepair.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="linkEaOriginRepair.Text" xml:space="preserve">
-    <value>修复 Origin "发生了些意料之外的事情"</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Name" xml:space="preserve">
-    <value>linkEaOriginRepair</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="label51.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 19</value>
-  </data>
-  <data name="label51.Size" type="System.Drawing.Size, System.Drawing">
-    <value>477, 96</value>
-  </data>
-  <data name="label51.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="label51.Text" xml:space="preserve">
-    <value>使用说明：
-1. 选择CDN服务器后点击应用。
-2. 重启Origin生效。
-提示：服务中勾选“指定CDN Akamai”，此设置将被忽略。
-</value>
-  </data>
-  <data name="&gt;&gt;label51.Name" xml:space="preserve">
-    <value>label51</value>
-  </data>
-  <data name="&gt;&gt;label51.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label51.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;label51.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="labelStatusEACdn.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="labelStatusEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 83</value>
-  </data>
-  <data name="labelStatusEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 24</value>
-  </data>
-  <data name="labelStatusEACdn.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="labelStatusEACdn.Text" xml:space="preserve">
-    <value>当前使用CDN：</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Name" xml:space="preserve">
-    <value>labelStatusEACdn</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="butEACdn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="butEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>423, 36</value>
-  </data>
-  <data name="butEACdn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 2, 3, 2</value>
-  </data>
-  <data name="butEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 36</value>
-  </data>
-  <data name="butEACdn.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="butEACdn.Text" xml:space="preserve">
-    <value>应用</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Name" xml:space="preserve">
-    <value>butEACdn</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="rbEACdn2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbEACdn2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>299, 40</value>
-  </data>
-  <data name="rbEACdn2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 28</value>
-  </data>
-  <data name="rbEACdn2.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rbEACdn2.Text" xml:space="preserve">
-    <value>Level3</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Name" xml:space="preserve">
-    <value>rbEACdn2</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="rbEACdn1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbEACdn1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>140, 40</value>
-  </data>
-  <data name="rbEACdn1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 28</value>
-  </data>
-  <data name="rbEACdn1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rbEACdn1.Text" xml:space="preserve">
-    <value>Akamai (推荐)</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Name" xml:space="preserve">
-    <value>rbEACdn1</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="rbEACdn0.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbEACdn0.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 40</value>
-  </data>
-  <data name="rbEACdn0.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 28</value>
-  </data>
-  <data name="rbEACdn0.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="rbEACdn0.Text" xml:space="preserve">
-    <value>自动 (默认)</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Name" xml:space="preserve">
-    <value>rbEACdn0</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;linkLabel2.Name" xml:space="preserve">
-    <value>linkLabel2</value>
-  </data>
-  <data name="&gt;&gt;linkLabel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkLabel2.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkLabel2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.Name" xml:space="preserve">
-    <value>linkTroubleshootGame</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;label50.Name" xml:space="preserve">
-    <value>label50</value>
-  </data>
-  <data name="&gt;&gt;label50.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label50.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;label50.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;label49.Name" xml:space="preserve">
-    <value>label49</value>
-  </data>
-  <data name="&gt;&gt;label49.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label49.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;label49.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.Name" xml:space="preserve">
-    <value>linkResetWinsock</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;linkReInstallGamingServices.Name" xml:space="preserve">
-    <value>linkReInstallGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkReInstallGamingServices.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkReInstallGamingServices.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkReInstallGamingServices.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;linkRestartGamingServices.Name" xml:space="preserve">
-    <value>linkRestartGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkRestartGamingServices.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkRestartGamingServices.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkRestartGamingServices.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;textBox1.Name" xml:space="preserve">
-    <value>textBox1</value>
-  </data>
-  <data name="&gt;&gt;textBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox1.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="gbGamingServices.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="gbGamingServices.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 365</value>
-  </data>
-  <data name="gbGamingServices.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 200</value>
-  </data>
-  <data name="gbGamingServices.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="gbGamingServices.Text" xml:space="preserve">
-    <value>在 Windows 10/11 设备上重新安装游戏服务应用</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.Name" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;gbGamingServices.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="linkLabel2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -10095,153 +10176,6 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
   </data>
   <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
     <value>7</value>
-  </data>
-  <data name="&gt;&gt;linkFixAppxDrive.Name" xml:space="preserve">
-    <value>linkFixAppxDrive</value>
-  </data>
-  <data name="&gt;&gt;linkFixAppxDrive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkFixAppxDrive.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;linkFixAppxDrive.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;labelInstallationLocation.Name" xml:space="preserve">
-    <value>labelInstallationLocation</value>
-  </data>
-  <data name="&gt;&gt;labelInstallationLocation.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelInstallationLocation.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;labelInstallationLocation.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;label48.Name" xml:space="preserve">
-    <value>label48</value>
-  </data>
-  <data name="&gt;&gt;label48.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label48.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;label48.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;butAppxInstall.Name" xml:space="preserve">
-    <value>butAppxInstall</value>
-  </data>
-  <data name="&gt;&gt;butAppxInstall.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butAppxInstall.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;butAppxInstall.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;butAppxOpenFile.Name" xml:space="preserve">
-    <value>butAppxOpenFile</value>
-  </data>
-  <data name="&gt;&gt;butAppxOpenFile.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butAppxOpenFile.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;butAppxOpenFile.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;linkAppxRefreshDrive.Name" xml:space="preserve">
-    <value>linkAppxRefreshDrive</value>
-  </data>
-  <data name="&gt;&gt;linkAppxRefreshDrive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkAppxRefreshDrive.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;linkAppxRefreshDrive.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;cbAppxDrive.Name" xml:space="preserve">
-    <value>cbAppxDrive</value>
-  </data>
-  <data name="&gt;&gt;cbAppxDrive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbAppxDrive.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;cbAppxDrive.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;label47.Name" xml:space="preserve">
-    <value>label47</value>
-  </data>
-  <data name="&gt;&gt;label47.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label47.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;label47.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;tbAppxFilePath.Name" xml:space="preserve">
-    <value>tbAppxFilePath</value>
-  </data>
-  <data name="&gt;&gt;tbAppxFilePath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbAppxFilePath.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;tbAppxFilePath.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;label46.Name" xml:space="preserve">
-    <value>label46</value>
-  </data>
-  <data name="&gt;&gt;label46.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label46.Parent" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;label46.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="gbAddAppxPackage.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="gbAddAppxPackage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 170</value>
-  </data>
-  <data name="gbAddAppxPackage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 195</value>
-  </data>
-  <data name="gbAddAppxPackage.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="gbAddAppxPackage.Text" xml:space="preserve">
-    <value>本地安装微软商店应用软件</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.Name" xml:space="preserve">
-    <value>gbAddAppxPackage</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;gbAddAppxPackage.ZOrder" xml:space="preserve">
-    <value>2</value>
   </data>
   <data name="linkFixAppxDrive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -10528,153 +10462,6 @@ HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名�
   </data>
   <data name="&gt;&gt;label46.ZOrder" xml:space="preserve">
     <value>9</value>
-  </data>
-  <data name="&gt;&gt;label45.Name" xml:space="preserve">
-    <value>label45</value>
-  </data>
-  <data name="&gt;&gt;label45.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label45.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;label45.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionLock.Name" xml:space="preserve">
-    <value>butConsoleRegionLock</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionLock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionLock.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionLock.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionUnlock.Name" xml:space="preserve">
-    <value>butConsoleRegionUnlock</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionUnlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionUnlock.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;butConsoleRegionUnlock.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;labelStatusDrive.Name" xml:space="preserve">
-    <value>labelStatusDrive</value>
-  </data>
-  <data name="&gt;&gt;labelStatusDrive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelStatusDrive.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;labelStatusDrive.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;linkRefreshDrive.Name" xml:space="preserve">
-    <value>linkRefreshDrive</value>
-  </data>
-  <data name="&gt;&gt;linkRefreshDrive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkRefreshDrive.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;linkRefreshDrive.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;cbDrive.Name" xml:space="preserve">
-    <value>cbDrive</value>
-  </data>
-  <data name="&gt;&gt;cbDrive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbDrive.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;cbDrive.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;label44.Name" xml:space="preserve">
-    <value>label44</value>
-  </data>
-  <data name="&gt;&gt;label44.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label44.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;label44.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;rbXboxSeries.Name" xml:space="preserve">
-    <value>rbXboxSeries</value>
-  </data>
-  <data name="&gt;&gt;rbXboxSeries.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbXboxSeries.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;rbXboxSeries.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;rbXboxOne.Name" xml:space="preserve">
-    <value>rbXboxOne</value>
-  </data>
-  <data name="&gt;&gt;rbXboxOne.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbXboxOne.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;rbXboxOne.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;label43.Name" xml:space="preserve">
-    <value>label43</value>
-  </data>
-  <data name="&gt;&gt;label43.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label43.Parent" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;label43.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="groupBox8.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="groupBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="groupBox8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 170</value>
-  </data>
-  <data name="groupBox8.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="groupBox8.Text" xml:space="preserve">
-    <value>国行Xbox 制作出国/回国U盘</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Name" xml:space="preserve">
-    <value>groupBox8</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.Parent" xml:space="preserve">
-    <value>tabTool</value>
-  </data>
-  <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="label45.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
