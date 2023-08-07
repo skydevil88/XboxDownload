@@ -5632,24 +5632,34 @@ namespace XboxDownload
                         service.WaitForStatus(ServiceControllerStatus.Stopped);
                     }
                 }
-                Thread.Sleep(3000);
                 Program.FilesIniWrite("Bootstrap", "EnableUpdating", "false", eaCoreIni);
                 using (var key = Microsoft.Win32.Registry.LocalMachine)
                 {
                     var rk = key.CreateSubKey(@"SOFTWARE\WOW6432Node\Electronic Arts\EA Desktop");
                     rk.SetValue("InstallSuccessful", true);
                 }
-                using (FileStream fs = new(Path.GetDirectoryName(gpEACdn.Tag?.ToString()) + "\\version.dll", FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                Thread.Sleep(3000);
+                string dllPath = Path.GetDirectoryName(gpEACdn.Tag?.ToString()) + "\\version.dll";
+                try
                 {
+                    using FileStream fs = new(dllPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                     fs.Write(Properties.Resource.version, 0, Properties.Resource.version.Length);
                     fs.Flush();
                     fs.Close();
                 }
+                catch (Exception ex)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        linkEaOriginNoUpdate.Enabled = true;
+                        MessageBox.Show("复制文件出错，信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
+                    return;
+                }
                 this.Invoke(new Action(() =>
                 {
                     linkEaOriginNoUpdate.Enabled = true;
-                    MessageBox.Show("已经成功禁止强制升级 Origin。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    MessageBox.Show("已经成功禁止 Origin 强制更新到 EA App。\n\n注：如果不生效请检查 " + dllPath + " 是否被杀毒软件删除。", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }));
             });
         }
