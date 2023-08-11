@@ -6708,7 +6708,7 @@
     <value>True</value>
   </data>
   <data name="linkLabel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 124</value>
+    <value>750, 124</value>
   </data>
   <data name="linkLabel3.Size" type="System.Drawing.Size, System.Drawing">
     <value>221, 24</value>
@@ -6789,7 +6789,7 @@
     <value>True</value>
   </data>
   <data name="label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 19</value>
+    <value>750, 19</value>
   </data>
   <data name="label51.Size" type="System.Drawing.Size, System.Drawing">
     <value>477, 96</value>
@@ -6985,7 +6985,7 @@
     <value>True</value>
   </data>
   <data name="linkLabel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1108, 166</value>
+    <value>1100, 166</value>
   </data>
   <data name="linkLabel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>310, 24</value>
@@ -7012,7 +7012,7 @@
     <value>True</value>
   </data>
   <data name="linkTroubleshootGame.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 166</value>
+    <value>750, 166</value>
   </data>
   <data name="linkTroubleshootGame.Size" type="System.Drawing.Size, System.Drawing">
     <value>346, 24</value>
@@ -7039,7 +7039,7 @@
     <value>True</value>
   </data>
   <data name="label50.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 17</value>
+    <value>750, 17</value>
   </data>
   <data name="label50.Size" type="System.Drawing.Size, System.Drawing">
     <value>590, 144</value>
@@ -7299,7 +7299,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>True</value>
   </data>
   <data name="label48.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 21</value>
+    <value>750, 21</value>
   </data>
   <data name="label48.Size" type="System.Drawing.Size, System.Drawing">
     <value>669, 168</value>
@@ -7547,14 +7547,41 @@ HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名�
   <data name="&gt;&gt;gbAddAppxPackage.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="linkUsbDevice.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkUsbDevice.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 74</value>
+  </data>
+  <data name="linkUsbDevice.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 24</value>
+  </data>
+  <data name="linkUsbDevice.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="linkUsbDevice.Text" xml:space="preserve">
+    <value>检查U盘</value>
+  </data>
+  <data name="&gt;&gt;linkUsbDevice.Name" xml:space="preserve">
+    <value>linkUsbDevice</value>
+  </data>
+  <data name="&gt;&gt;linkUsbDevice.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkUsbDevice.Parent" xml:space="preserve">
+    <value>groupBox8</value>
+  </data>
+  <data name="&gt;&gt;linkUsbDevice.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="label45.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label45.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 15</value>
+    <value>750, 15</value>
   </data>
   <data name="label45.Size" type="System.Drawing.Size, System.Drawing">
-    <value>673, 144</value>
+    <value>691, 144</value>
   </data>
   <data name="label45.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -7564,7 +7591,7 @@ HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名�
 1. Xbox 操作系统更新到最新版本
 2. 把制作好的出国/回国U盘插入Xbox后保持连线重启主机
 3. 在主机 设置-系统-语言和区域 中选择对应的国家或者地区后再次重启主机
-提示: 有隐藏启动分区的U盘可能不被Xbox识别，分区格式必需是MBR不能是GPT，
+提示: 有隐藏启动分区的U盘可能不被Xbox识别，分区表类型必需是MBR不能是GPT，
 U盘卷标不能有中文。</value>
   </data>
   <data name="&gt;&gt;label45.Name" xml:space="preserve">
@@ -7577,7 +7604,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;label45.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="butConsoleRegionLock.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -7607,7 +7634,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;butConsoleRegionLock.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="butConsoleRegionUnlock.Location" type="System.Drawing.Point, System.Drawing">
     <value>423, 28</value>
@@ -7634,7 +7661,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;butConsoleRegionUnlock.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="labelStatusDrive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7661,7 +7688,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;labelStatusDrive.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="linkRefreshDrive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7688,7 +7715,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;linkRefreshDrive.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="cbDrive.Location" type="System.Drawing.Point, System.Drawing">
     <value>94, 69</value>
@@ -7712,7 +7739,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;cbDrive.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="label44.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7739,7 +7766,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;label44.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="rbXboxSeries.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7772,7 +7799,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;rbXboxSeries.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="rbXboxOne.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7802,7 +7829,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;rbXboxOne.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="label43.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7829,7 +7856,7 @@ U盘卷标不能有中文。</value>
     <value>groupBox8</value>
   </data>
   <data name="&gt;&gt;label43.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="groupBox8.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>

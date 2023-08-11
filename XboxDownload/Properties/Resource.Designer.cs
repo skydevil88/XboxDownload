@@ -143,12 +143,13 @@ namespace XboxDownload.Properties {
         ///    &lt;LogonTrigger&gt;
         ///      &lt;StartBoundary&gt;2022-01-01T00:00:00&lt;/StartBoundary&gt;
         ///      &lt;Enabled&gt;true&lt;/Enabled&gt;
+        ///      &lt;Delay&gt;PT30S&lt;/Delay&gt;
         ///    &lt;/LogonTrigger&gt;
         ///  &lt;/Triggers&gt;
         ///  &lt;Principals&gt;
         ///    &lt;Principal id=&quot;Author&quot;&gt;
         ///      &lt;LogonType&gt;InteractiveToken&lt;/LogonType&gt;
-        ///      &lt;RunLevel&gt;HighestAvailable&lt;/RunLeve [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &lt;RunLev [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Task {
             get {

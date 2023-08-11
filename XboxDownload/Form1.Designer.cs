@@ -317,6 +317,7 @@
             tbAppxFilePath = new TextBox();
             label46 = new Label();
             groupBox8 = new GroupBox();
+            linkUsbDevice = new LinkLabel();
             label45 = new Label();
             butConsoleRegionLock = new Button();
             butConsoleRegionUnlock = new Button();
@@ -2460,6 +2461,7 @@
             // 
             // groupBox8
             // 
+            groupBox8.Controls.Add(linkUsbDevice);
             groupBox8.Controls.Add(label45);
             groupBox8.Controls.Add(butConsoleRegionLock);
             groupBox8.Controls.Add(butConsoleRegionUnlock);
@@ -2473,6 +2475,13 @@
             resources.ApplyResources(groupBox8, "groupBox8");
             groupBox8.Name = "groupBox8";
             groupBox8.TabStop = false;
+            // 
+            // linkUsbDevice
+            // 
+            resources.ApplyResources(linkUsbDevice, "linkUsbDevice");
+            linkUsbDevice.Name = "linkUsbDevice";
+            linkUsbDevice.TabStop = true;
+            linkUsbDevice.LinkClicked += LinkUsbDevice_LinkClicked;
             // 
             // label45
             // 
@@ -3175,5 +3184,6 @@
         private CheckBox ckbNfSniProxy;
         private ToolStripMenuItem tsmTeaching5;
         private LinkLabel linkLabel3;
+        private LinkLabel linkUsbDevice;
     }
 }

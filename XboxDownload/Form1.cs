@@ -3150,7 +3150,7 @@ namespace XboxDownload
             foreach (var mo in moc)
             {
                 string? sDeviceID = mo.Properties["DeviceID"].Value.ToString();
-                if (sDeviceID == null) continue;
+                if (string.IsNullOrEmpty(sDeviceID)) continue;
                 string mbr = ClassMbr.ByteToHex(ClassMbr.ReadMBR(sDeviceID));
                 if (string.Equals(mbr[..892], ClassMbr.MBR))
                 {
@@ -4932,6 +4932,14 @@ namespace XboxDownload
             {
                 labelStatusDrive.Text = "当前U盘状态：没有找到U盘";
             }
+        }
+
+        private void LinkUsbDevice_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FormUsbDevice dialog = new();
+            dialog.ShowDialog();
+            dialog.Dispose();
+            LinkRefreshDrive_LinkClicked(sender, e);
         }
 
         private void ButConsoleRegionUnlock_Click(object sender, EventArgs e)

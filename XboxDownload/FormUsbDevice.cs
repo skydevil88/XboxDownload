@@ -1,0 +1,132 @@
+﻿using System.Diagnostics;
+using System.Management;
+using System.Text.RegularExpressions;
+
+namespace XboxDownload
+{
+    public partial class FormUsbDevice : Form
+    {
+        public FormUsbDevice()
+        {
+            InitializeComponent();
+
+            if (Form1.dpixRatio > 1)
+            {
+                dgvDevice.RowHeadersWidth = (int)(dgvDevice.RowHeadersWidth * Form1.dpixRatio);
+                foreach (DataGridViewColumn col in dgvDevice.Columns)
+                    col.Width = (int)(col.Width * Form1.dpixRatio);
+            }
+        }
+
+        private void FormUsbDevice_Load(object sender, EventArgs e)
+        {
+            Button1_Click(sender, e);
+        }
+
+        private void DgvDevice_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1) return;
+            button2.Enabled = true;
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            dgvDevice.Rows.Clear();
+            button2.Enabled = false;
+            List<DataGridViewRow> list = new();
+
+            ManagementClass mc = new("Win32_DiskDrive");
+            ManagementObjectCollection moc = mc.GetInstances();
+            foreach (var (mo, sDeviceID, sInterfaceType, sMediaType) in from ManagementObject mo in moc
+                                                                        let sDeviceID = mo.Properties["DeviceID"].Value.ToString()
+                                                                        let sInterfaceType = mo.Properties["InterfaceType"].Value.ToString()
+                                                                        let sMediaType = mo.Properties["MediaType"].Value.ToString()
+                                                                        select (mo, sDeviceID, sInterfaceType, sMediaType))
+            {
+                if (string.IsNullOrEmpty(sDeviceID) || sInterfaceType != "USB" || sMediaType != "Removable Media") continue;
+                int index = Convert.ToInt32(mo.Properties["Index"].Value);
+                int partitions = Convert.ToInt32(mo.Properties["Partitions"].Value);
+                var lstDisk = (from ManagementObject diskPartition in mo.GetRelated("Win32_DiskPartition")
+                               from ManagementBaseObject disk in diskPartition.GetRelated("Win32_LogicalDisk")
+                               select disk.Properties["Name"].Value.ToString()).ToList();
+                string outputString = "";
+                try
+                {
+                    using Process p = new();
+                    p.StartInfo.FileName = "DiskPart.exe";
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardInput = true;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+                    p.StandardInput.WriteLine("list disk");
+                    p.StandardInput.Close();
+                    outputString = p.StandardOutput.ReadToEnd();
+                    p.WaitForExit();
+                }
+                catch { }
+
+                Match result = Regex.Match(outputString, @"\s" + index + ".{43}(?<Gpt>.)");
+                string type = result.Success ? result.Groups["Gpt"].Value == "*" ? "GPT" : "MBR" : "未知";
+                DataGridViewRow dgvr = new();
+                dgvr.CreateCells(dgvDevice);
+                dgvr.Resizable = DataGridViewTriState.False;
+                dgvr.Tag = index;
+                dgvr.Cells[0].Value = sDeviceID;
+                dgvr.Cells[1].Value = mo.Properties["Model"].Value;
+                dgvr.Cells[2].Value = mo.Properties["InterfaceType"].Value;
+                dgvr.Cells[3].Value = ClassMbr.ConvertBytes(Convert.ToUInt64(mo.Properties["Size"].Value));
+                dgvr.Cells[4].Value = type;
+                if (type != "MBR")
+                    dgvr.Cells[4].Style.ForeColor = Color.Red;
+                dgvr.Cells[5].Value = partitions;
+                if (partitions != 1)
+                    dgvr.Cells[5].Style.ForeColor = Color.Red;
+                dgvr.Cells[6].Value = string.Join(',', lstDisk.ToArray());
+                list.Add(dgvr);
+            }
+
+            if (list.Count >= 1)
+            {
+                dgvDevice.Rows.AddRange(list.ToArray());
+                dgvDevice.ClearSelection();
+            }
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            if (dgvDevice.SelectedRows.Count != 1) return;
+            int index = Convert.ToInt32(dgvDevice.SelectedRows[0].Tag);
+            if (MessageBox.Show("确认重新分区U盘？\n\n警告，此操作将删除U盘中的所有文件!\n警告，此操作将删除U盘中的所有文件!\n警告，此操作将删除U盘中的所有文件!", "重新分区", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                try
+                {
+                    using Process p = new();
+                    p.StartInfo.FileName = "DiskPart.exe";
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardInput = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+                    p.StandardInput.WriteLine("list disk");
+                    p.StandardInput.WriteLine("select disk " + index);
+                    p.StandardInput.WriteLine("clean");
+                    p.StandardInput.WriteLine("convert mbr");
+                    p.StandardInput.WriteLine("create partition primary");
+                    p.StandardInput.WriteLine("select partition 1");
+                    p.StandardInput.WriteLine("format fs=ntfs quick");
+                    if (string.IsNullOrEmpty(dgvDevice.SelectedRows[0].Cells[6].Value.ToString()))
+                        p.StandardInput.WriteLine("assign");
+                    p.StandardInput.Close();
+                    p.WaitForExit();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("重新分区U盘失败，错误信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                Button1_Click(sender, e);
+                MessageBox.Show("重新分区成功。", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+            }
+        }
+    }
+}
