@@ -77,8 +77,7 @@ namespace XboxDownload
                 dgvr.Cells[2].Value = mo.Properties["InterfaceType"].Value;
                 dgvr.Cells[3].Value = ClassMbr.ConvertBytes(Convert.ToUInt64(mo.Properties["Size"].Value));
                 dgvr.Cells[4].Value = type;
-                if (type != "MBR")
-                    dgvr.Cells[4].Style.ForeColor = Color.Red;
+                if (type != "MBR") dgvr.Cells[4].Style.ForeColor = Color.Red;
                 dgvr.Cells[5].Value = partitions;
                 if (partitions != 1)
                     dgvr.Cells[5].Style.ForeColor = Color.Red;
@@ -97,7 +96,7 @@ namespace XboxDownload
         {
             if (dgvDevice.SelectedRows.Count != 1) return;
             int index = Convert.ToInt32(dgvDevice.SelectedRows[0].Tag);
-            if (MessageBox.Show("确认重新分区U盘？\n\n警告，此操作将删除U盘中的所有文件!\n警告，此操作将删除U盘中的所有文件!\n警告，此操作将删除U盘中的所有文件!", "重新分区", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (MessageBox.Show("确认重新分区U盘？\n\n警告，此操作将删除U盘中的所有分区和文件!\n警告，此操作将删除U盘中的所有分区和文件!\n警告，此操作将删除U盘中的所有分区和文件!", "重新分区", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 try
                 {
@@ -110,6 +109,8 @@ namespace XboxDownload
                     p.StandardInput.WriteLine("list disk");
                     p.StandardInput.WriteLine("select disk " + index);
                     p.StandardInput.WriteLine("clean");
+                    p.StandardInput.WriteLine("online disk");
+                    p.StandardInput.WriteLine("attributes disk clear readonly");
                     p.StandardInput.WriteLine("convert mbr");
                     p.StandardInput.WriteLine("create partition primary");
                     p.StandardInput.WriteLine("select partition 1");
@@ -121,7 +122,7 @@ namespace XboxDownload
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("重新分区U盘失败，错误信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("重新分区失败，错误信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 Button1_Click(sender, e);
