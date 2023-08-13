@@ -287,6 +287,7 @@
             label32 = new Label();
             tabTool = new TabPage();
             gpEACdn = new GroupBox();
+            linkLabel4 = new LinkLabel();
             linkLabel3 = new LinkLabel();
             linkEaOriginNoUpdate = new LinkLabel();
             linkEaOriginRepair = new LinkLabel();
@@ -2238,6 +2239,7 @@
             // 
             // gpEACdn
             // 
+            gpEACdn.Controls.Add(linkLabel4);
             gpEACdn.Controls.Add(linkLabel3);
             gpEACdn.Controls.Add(linkEaOriginNoUpdate);
             gpEACdn.Controls.Add(linkEaOriginRepair);
@@ -2250,6 +2252,14 @@
             resources.ApplyResources(gpEACdn, "gpEACdn");
             gpEACdn.Name = "gpEACdn";
             gpEACdn.TabStop = false;
+            // 
+            // linkLabel4
+            // 
+            resources.ApplyResources(linkLabel4, "linkLabel4");
+            linkLabel4.Name = "linkLabel4";
+            linkLabel4.TabStop = true;
+            linkLabel4.Tag = "http://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe";
+            linkLabel4.LinkClicked += Link_LinkClicked;
             // 
             // linkLabel3
             // 
@@ -3185,5 +3195,6 @@
         private ToolStripMenuItem tsmTeaching5;
         private LinkLabel linkLabel3;
         private LinkLabel linkUsbDevice;
+        private LinkLabel linkLabel4;
     }
 }

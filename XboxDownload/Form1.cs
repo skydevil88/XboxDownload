@@ -5000,14 +5000,14 @@ namespace XboxDownload
                 }
                 if (driveInfo.IsReady && driveInfo.DriveFormat == "NTFS")
                 {
-                    if (File.Exists(driverName + "$ConsoleGen8"))
-                        File.Delete(driverName + "$ConsoleGen8");
-                    if (File.Exists(driverName + "$ConsoleGen9"))
-                        File.Delete(driverName + "$ConsoleGen9");
-                    if (File.Exists(driverName + "$ConsoleGen8Lock"))
-                        File.Delete(driverName + "$ConsoleGen8Lock");
-                    if (File.Exists(driverName + "$ConsoleGen9Lock"))
-                        File.Delete(driverName + "$ConsoleGen9Lock");
+                    string[] files = { "$ConsoleGen8", "$ConsoleGen8Lock", "$ConsoleGen9", "$ConsoleGen9Lock" };
+                    foreach (string file in files)
+                    {
+                        if (File.Exists(driverName + "\\" + file))
+                        {
+                            File.Delete(driverName + "\\" + file);
+                        }
+                    }
                     if (rbXboxOne.Checked)
                     {
                         using (File.Create(driverName + (unlock ? "$ConsoleGen8" : "$ConsoleGen8Lock"))) { }
@@ -5015,6 +5015,10 @@ namespace XboxDownload
                     else if (rbXboxSeries.Checked)
                     {
                         using (File.Create(driverName + (unlock ? "$ConsoleGen9" : "$ConsoleGen9Lock"))) { }
+                    }
+                    if (Regex.IsMatch(driveInfo.VolumeLabel, @"[^\x00-\xFF]")) //卷标含有非英文字符
+                    {
+                        driveInfo.VolumeLabel = "";
                     }
                 }
                 else
