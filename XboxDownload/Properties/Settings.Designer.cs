@@ -133,7 +133,7 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://blog.skydevil.xyz")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://xbox.skydevil.xyz")]
         public string NSHomepage {
             get {
                 return ((string)(this["NSHomepage"]));
@@ -464,42 +464,6 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["Authorization"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string IpsSniProxy {
-            get {
-                return ((string)(this["IpsSniProxy"]));
-            }
-            set {
-                this["IpsSniProxy"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool NfSniProxy {
-            get {
-                return ((bool)(this["NfSniProxy"]));
-            }
-            set {
-                this["NfSniProxy"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool EnableSniProxy {
-            get {
-                return ((bool)(this["EnableSniProxy"]));
-            }
-            set {
-                this["EnableSniProxy"] = value;
             }
         }
     }

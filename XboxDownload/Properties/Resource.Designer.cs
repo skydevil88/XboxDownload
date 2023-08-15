@@ -91,45 +91,22 @@ namespace XboxDownload.Properties {
         }
         
         /// <summary>
-        ///   查找类似 *akadns.net
-        ///*akam.net
-        ///*akamai.com
-        ///*akamai.net
-        ///*akamaiedge.net
-        ///*akamaihd.net
-        ///*akamaistream.net
-        ///*akamaitech.net
-        ///*akamaitechnologies.com
-        ///*akamaitechnologies.fr
-        ///*akamaized.net
-        ///*edgekey.net
-        ///*edgesuite.net
-        ///*srip.net
-        ///*footprint.net
-        ///*level3.net
-        ///*llnwd.net
-        ///*edgecastcdn.net
-        ///*cloudfront.net
-        ///*netflix.com
-        ///*netflix.net
-        ///*nflximg.com
-        ///*nflximg.net
-        ///*nflxvideo.net
-        ///*nflxso.net
-        ///*nflxext.com
-        ///*hulu.com
-        ///*huluim.com
-        ///*hbonow.com
-        ///*hbogo.com
-        ///*hbo.com
-        ///*amazon.com
-        ///*amazon.co.uk
-        ///*amazonvideo.com
-        ///*crackle [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static string SniProxy {
+        internal static byte[] Certificate1 {
             get {
-                return ResourceManager.GetString("SniProxy", resourceCulture);
+                object obj = ResourceManager.GetObject("Certificate1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] Certificate2 {
+            get {
+                object obj = ResourceManager.GetObject("Certificate2", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -137,7 +114,7 @@ namespace XboxDownload.Properties {
         ///   查找类似 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-16&quot;?&gt;
         ///&lt;Task version=&quot;1.2&quot; xmlns=&quot;http://schemas.microsoft.com/windows/2004/02/mit/task&quot;&gt;
         ///  &lt;RegistrationInfo&gt;
-        ///    &lt;Description&gt;开机启动监听 + 最小化到系统托盘&lt;/Description&gt;
+        ///    &lt;Description&gt;Auto Startup&lt;/Description&gt;
         ///  &lt;/RegistrationInfo&gt;
         ///  &lt;Triggers&gt;
         ///    &lt;LogonTrigger&gt;
@@ -149,7 +126,7 @@ namespace XboxDownload.Properties {
         ///  &lt;Principals&gt;
         ///    &lt;Principal id=&quot;Author&quot;&gt;
         ///      &lt;LogonType&gt;InteractiveToken&lt;/LogonType&gt;
-        ///      &lt;RunLev [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &lt;RunLevel&gt;Hi [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Task {
             get {
@@ -204,26 +181,6 @@ namespace XboxDownload.Properties {
             get {
                 object obj = ResourceManager.GetObject("Xbox3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] XboxDownload {
-            get {
-                object obj = ResourceManager.GetObject("XboxDownload", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] Xbox下载助手 {
-            get {
-                object obj = ResourceManager.GetObject("Xbox下载助手", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }

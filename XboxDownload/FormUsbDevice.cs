@@ -95,9 +95,9 @@ namespace XboxDownload
         private void Button2_Click(object sender, EventArgs e)
         {
             if (dgvDevice.SelectedRows.Count != 1) return;
-            int index = Convert.ToInt32(dgvDevice.SelectedRows[0].Tag);
             if (MessageBox.Show("确认重新分区U盘？\n\n警告，此操作将删除U盘中的所有分区和文件!\n警告，此操作将删除U盘中的所有分区和文件!\n警告，此操作将删除U盘中的所有分区和文件!", "重新分区", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
+                int index = Convert.ToInt32(dgvDevice.SelectedRows[0].Tag);
                 try
                 {
                     using Process p = new();
@@ -126,7 +126,7 @@ namespace XboxDownload
                     return;
                 }
                 Button1_Click(sender, e);
-                MessageBox.Show("重新分区成功。", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show("重新分区成功。", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

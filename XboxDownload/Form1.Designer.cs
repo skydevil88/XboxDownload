@@ -186,26 +186,6 @@
             linkCdnSpeedTest = new LinkLabel();
             tbCdnAkamai = new TextBox();
             label9 = new Label();
-            tabSniProxy = new TabPage();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            groupBox10 = new GroupBox();
-            tbHosts1SniProxy = new TextBox();
-            groupBox12 = new GroupBox();
-            tbHosts2SniProxy = new TextBox();
-            panel7 = new Panel();
-            ckbNfSniProxy = new CheckBox();
-            label54 = new Label();
-            butSniProxyReset = new Button();
-            butSniProxySave = new Button();
-            ckbEnableSniProxy = new CheckBox();
-            linkSniProxyExportRule = new LinkLabel();
-            groupBox9 = new GroupBox();
-            linkTestSniProxy = new LinkLabel();
-            labelTestSniProxy = new Label();
-            label52 = new Label();
-            linkGetSniProxy = new LinkLabel();
-            tbSniProxy = new TextBox();
-            label53 = new Label();
             tabHardDisk = new TabPage();
             groupBox7 = new GroupBox();
             label31 = new Label();
@@ -285,7 +265,7 @@
             cbGameMarket = new ComboBox();
             tbGameUrl = new TextBox();
             label32 = new Label();
-            tabTool = new TabPage();
+            tabTools = new TabPage();
             gpEACdn = new GroupBox();
             linkLabel4 = new LinkLabel();
             linkLabel3 = new LinkLabel();
@@ -298,11 +278,9 @@
             rbEACdn1 = new RadioButton();
             rbEACdn0 = new RadioButton();
             gbGamingServices = new GroupBox();
-            linkLabel2 = new LinkLabel();
-            linkTroubleshootGame = new LinkLabel();
+            linkAppGamingServices = new LinkLabel();
             label50 = new Label();
             label49 = new Label();
-            linkResetWinsock = new LinkLabel();
             linkReInstallGamingServices = new LinkLabel();
             linkRestartGamingServices = new LinkLabel();
             textBox1 = new TextBox();
@@ -386,12 +364,6 @@
             groupBox5.SuspendLayout();
             panel4.SuspendLayout();
             groupBox3.SuspendLayout();
-            tabSniProxy.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            groupBox10.SuspendLayout();
-            groupBox12.SuspendLayout();
-            panel7.SuspendLayout();
-            groupBox9.SuspendLayout();
             tabHardDisk.SuspendLayout();
             groupBox7.SuspendLayout();
             groupBox6.SuspendLayout();
@@ -402,7 +374,7 @@
             panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbGame).BeginInit();
             gbMicrosoftStore.SuspendLayout();
-            tabTool.SuspendLayout();
+            tabTools.SuspendLayout();
             gpEACdn.SuspendLayout();
             gbGamingServices.SuspendLayout();
             gbAddAppxPackage.SuspendLayout();
@@ -522,10 +494,9 @@
             tabControl1.Controls.Add(tabSpeedTest);
             tabControl1.Controls.Add(tabHosts);
             tabControl1.Controls.Add(tabCND);
-            tabControl1.Controls.Add(tabSniProxy);
             tabControl1.Controls.Add(tabHardDisk);
             tabControl1.Controls.Add(tabStore);
-            tabControl1.Controls.Add(tabTool);
+            tabControl1.Controls.Add(tabTools);
             resources.ApplyResources(tabControl1, "tabControl1");
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -1506,145 +1477,6 @@
             resources.ApplyResources(label9, "label9");
             label9.Name = "label9";
             // 
-            // tabSniProxy
-            // 
-            tabSniProxy.Controls.Add(tableLayoutPanel2);
-            tabSniProxy.Controls.Add(panel7);
-            tabSniProxy.Controls.Add(groupBox9);
-            resources.ApplyResources(tabSniProxy, "tabSniProxy");
-            tabSniProxy.Name = "tabSniProxy";
-            tabSniProxy.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel2
-            // 
-            resources.ApplyResources(tableLayoutPanel2, "tableLayoutPanel2");
-            tableLayoutPanel2.Controls.Add(groupBox10, 0, 0);
-            tableLayoutPanel2.Controls.Add(groupBox12, 1, 0);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            // 
-            // groupBox10
-            // 
-            groupBox10.Controls.Add(tbHosts1SniProxy);
-            resources.ApplyResources(groupBox10, "groupBox10");
-            groupBox10.Name = "groupBox10";
-            groupBox10.TabStop = false;
-            // 
-            // tbHosts1SniProxy
-            // 
-            tbHosts1SniProxy.BackColor = SystemColors.Window;
-            resources.ApplyResources(tbHosts1SniProxy, "tbHosts1SniProxy");
-            tbHosts1SniProxy.Name = "tbHosts1SniProxy";
-            tbHosts1SniProxy.ReadOnly = true;
-            // 
-            // groupBox12
-            // 
-            groupBox12.Controls.Add(tbHosts2SniProxy);
-            resources.ApplyResources(groupBox12, "groupBox12");
-            groupBox12.Name = "groupBox12";
-            groupBox12.TabStop = false;
-            // 
-            // tbHosts2SniProxy
-            // 
-            resources.ApplyResources(tbHosts2SniProxy, "tbHosts2SniProxy");
-            tbHosts2SniProxy.Name = "tbHosts2SniProxy";
-            // 
-            // panel7
-            // 
-            panel7.Controls.Add(ckbNfSniProxy);
-            panel7.Controls.Add(label54);
-            panel7.Controls.Add(butSniProxyReset);
-            panel7.Controls.Add(butSniProxySave);
-            panel7.Controls.Add(ckbEnableSniProxy);
-            panel7.Controls.Add(linkSniProxyExportRule);
-            resources.ApplyResources(panel7, "panel7");
-            panel7.Name = "panel7";
-            // 
-            // ckbNfSniProxy
-            // 
-            resources.ApplyResources(ckbNfSniProxy, "ckbNfSniProxy");
-            ckbNfSniProxy.Name = "ckbNfSniProxy";
-            ckbNfSniProxy.UseVisualStyleBackColor = true;
-            ckbNfSniProxy.CheckedChanged += CkbNfSniProxy_CheckedChanged;
-            // 
-            // label54
-            // 
-            resources.ApplyResources(label54, "label54");
-            label54.Name = "label54";
-            // 
-            // butSniProxyReset
-            // 
-            resources.ApplyResources(butSniProxyReset, "butSniProxyReset");
-            butSniProxyReset.Name = "butSniProxyReset";
-            butSniProxyReset.UseVisualStyleBackColor = true;
-            butSniProxyReset.Click += ButSniProxyReset_Click;
-            // 
-            // butSniProxySave
-            // 
-            resources.ApplyResources(butSniProxySave, "butSniProxySave");
-            butSniProxySave.Name = "butSniProxySave";
-            butSniProxySave.UseVisualStyleBackColor = true;
-            butSniProxySave.Click += ButSniProxySave_Click;
-            // 
-            // ckbEnableSniProxy
-            // 
-            resources.ApplyResources(ckbEnableSniProxy, "ckbEnableSniProxy");
-            ckbEnableSniProxy.Name = "ckbEnableSniProxy";
-            ckbEnableSniProxy.UseVisualStyleBackColor = true;
-            // 
-            // linkSniProxyExportRule
-            // 
-            resources.ApplyResources(linkSniProxyExportRule, "linkSniProxyExportRule");
-            linkSniProxyExportRule.Name = "linkSniProxyExportRule";
-            linkSniProxyExportRule.TabStop = true;
-            linkSniProxyExportRule.LinkClicked += LinkSniProxyExportRule_LinkClicked;
-            // 
-            // groupBox9
-            // 
-            groupBox9.Controls.Add(linkTestSniProxy);
-            groupBox9.Controls.Add(labelTestSniProxy);
-            groupBox9.Controls.Add(label52);
-            groupBox9.Controls.Add(linkGetSniProxy);
-            groupBox9.Controls.Add(tbSniProxy);
-            groupBox9.Controls.Add(label53);
-            resources.ApplyResources(groupBox9, "groupBox9");
-            groupBox9.Name = "groupBox9";
-            groupBox9.TabStop = false;
-            // 
-            // linkTestSniProxy
-            // 
-            resources.ApplyResources(linkTestSniProxy, "linkTestSniProxy");
-            linkTestSniProxy.Name = "linkTestSniProxy";
-            linkTestSniProxy.TabStop = true;
-            linkTestSniProxy.LinkClicked += LinkTestSniProxy_LinkClicked;
-            // 
-            // labelTestSniProxy
-            // 
-            resources.ApplyResources(labelTestSniProxy, "labelTestSniProxy");
-            labelTestSniProxy.Name = "labelTestSniProxy";
-            // 
-            // label52
-            // 
-            resources.ApplyResources(label52, "label52");
-            label52.Name = "label52";
-            // 
-            // linkGetSniProxy
-            // 
-            resources.ApplyResources(linkGetSniProxy, "linkGetSniProxy");
-            linkGetSniProxy.Name = "linkGetSniProxy";
-            linkGetSniProxy.TabStop = true;
-            linkGetSniProxy.Tag = "https://fofa.info/result?qbase64=Ym9keT0iQmFja2VuZCBub3QgYXZhaWxhYmxlIg%3D%3D";
-            linkGetSniProxy.LinkClicked += Link_LinkClicked;
-            // 
-            // tbSniProxy
-            // 
-            resources.ApplyResources(tbSniProxy, "tbSniProxy");
-            tbSniProxy.Name = "tbSniProxy";
-            // 
-            // label53
-            // 
-            resources.ApplyResources(label53, "label53");
-            label53.Name = "label53";
-            // 
             // tabHardDisk
             // 
             tabHardDisk.Controls.Add(groupBox7);
@@ -2227,15 +2059,15 @@
             resources.ApplyResources(label32, "label32");
             label32.Name = "label32";
             // 
-            // tabTool
+            // tabTools
             // 
-            tabTool.Controls.Add(gpEACdn);
-            tabTool.Controls.Add(gbGamingServices);
-            tabTool.Controls.Add(gbAddAppxPackage);
-            tabTool.Controls.Add(groupBox8);
-            resources.ApplyResources(tabTool, "tabTool");
-            tabTool.Name = "tabTool";
-            tabTool.UseVisualStyleBackColor = true;
+            tabTools.Controls.Add(gpEACdn);
+            tabTools.Controls.Add(gbGamingServices);
+            tabTools.Controls.Add(gbAddAppxPackage);
+            tabTools.Controls.Add(groupBox8);
+            resources.ApplyResources(tabTools, "tabTools");
+            tabTools.Name = "tabTools";
+            tabTools.UseVisualStyleBackColor = true;
             // 
             // gpEACdn
             // 
@@ -2324,11 +2156,9 @@
             // 
             // gbGamingServices
             // 
-            gbGamingServices.Controls.Add(linkLabel2);
-            gbGamingServices.Controls.Add(linkTroubleshootGame);
+            gbGamingServices.Controls.Add(linkAppGamingServices);
             gbGamingServices.Controls.Add(label50);
             gbGamingServices.Controls.Add(label49);
-            gbGamingServices.Controls.Add(linkResetWinsock);
             gbGamingServices.Controls.Add(linkReInstallGamingServices);
             gbGamingServices.Controls.Add(linkRestartGamingServices);
             gbGamingServices.Controls.Add(textBox1);
@@ -2336,21 +2166,12 @@
             gbGamingServices.Name = "gbGamingServices";
             gbGamingServices.TabStop = false;
             // 
-            // linkLabel2
+            // linkAppGamingServices
             // 
-            resources.ApplyResources(linkLabel2, "linkLabel2");
-            linkLabel2.Name = "linkLabel2";
-            linkLabel2.TabStop = true;
-            linkLabel2.Tag = "https://answers.microsoft.com/zh-hans/windows/forum/all/windows10应用商店/3ec3b96b-f7e0-452f-9082-b9c5a1405116";
-            linkLabel2.LinkClicked += Link_LinkClicked;
-            // 
-            // linkTroubleshootGame
-            // 
-            resources.ApplyResources(linkTroubleshootGame, "linkTroubleshootGame");
-            linkTroubleshootGame.Name = "linkTroubleshootGame";
-            linkTroubleshootGame.TabStop = true;
-            linkTroubleshootGame.Tag = "https://support.xbox.com/zh-CN/help/games-apps/troubleshooting/troubleshoot-games-windows-10";
-            linkTroubleshootGame.LinkClicked += Link_LinkClicked;
+            resources.ApplyResources(linkAppGamingServices, "linkAppGamingServices");
+            linkAppGamingServices.Name = "linkAppGamingServices";
+            linkAppGamingServices.TabStop = true;
+            linkAppGamingServices.LinkClicked += LinkAppGamingServices_LinkClicked;
             // 
             // label50
             // 
@@ -2362,13 +2183,6 @@
             resources.ApplyResources(label49, "label49");
             label49.ForeColor = Color.Red;
             label49.Name = "label49";
-            // 
-            // linkResetWinsock
-            // 
-            resources.ApplyResources(linkResetWinsock, "linkResetWinsock");
-            linkResetWinsock.Name = "linkResetWinsock";
-            linkResetWinsock.TabStop = true;
-            linkResetWinsock.LinkClicked += LinkResetWinsock_LinkClicked;
             // 
             // linkReInstallGamingServices
             // 
@@ -2822,16 +2636,6 @@
             panel4.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
-            tabSniProxy.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            groupBox10.ResumeLayout(false);
-            groupBox10.PerformLayout();
-            groupBox12.ResumeLayout(false);
-            groupBox12.PerformLayout();
-            panel7.ResumeLayout(false);
-            panel7.PerformLayout();
-            groupBox9.ResumeLayout(false);
-            groupBox9.PerformLayout();
             tabHardDisk.ResumeLayout(false);
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
@@ -2845,7 +2649,7 @@
             ((System.ComponentModel.ISupportInitialize)pbGame).EndInit();
             gbMicrosoftStore.ResumeLayout(false);
             gbMicrosoftStore.PerformLayout();
-            tabTool.ResumeLayout(false);
+            tabTools.ResumeLayout(false);
             gpEACdn.ResumeLayout(false);
             gpEACdn.PerformLayout();
             gbGamingServices.ResumeLayout(false);
@@ -3032,7 +2836,7 @@
         private LinkLabel linkCdnExportRule;
         private TabPage tabHardDisk;
         private TabPage tabStore;
-        private TabPage tabTool;
+        private TabPage tabTools;
         private GroupBox groupBox7;
         private GroupBox groupBox6;
         private Panel panel5;
@@ -3131,10 +2935,7 @@
         private TextBox textBox1;
         private Label label49;
         private LinkLabel linkRestartGamingServices;
-        private LinkLabel linkLabel2;
-        private LinkLabel linkTroubleshootGame;
         private Label label50;
-        private LinkLabel linkResetWinsock;
         private LinkLabel linkReInstallGamingServices;
         private GroupBox groupBox11;
         private DataGridViewTextBoxColumn Col_DeviceID;
@@ -3172,29 +2973,10 @@
         private Label labelStatusEACdn;
         private LinkLabel linkEaOriginRepair;
         private LinkLabel linkEaOriginNoUpdate;
-        private TabPage tabSniProxy;
-        private GroupBox groupBox9;
-        private Label label52;
-        private LinkLabel linkGetSniProxy;
-        private TextBox tbSniProxy;
-        private Label label53;
-        private TableLayoutPanel tableLayoutPanel2;
-        private GroupBox groupBox10;
-        private TextBox tbHosts1SniProxy;
-        private GroupBox groupBox12;
-        private TextBox tbHosts2SniProxy;
-        private Panel panel7;
-        private Label label54;
-        private Button butSniProxyReset;
-        private Button butSniProxySave;
-        private CheckBox ckbEnableSniProxy;
-        private LinkLabel linkSniProxyExportRule;
-        private LinkLabel linkTestSniProxy;
-        private Label labelTestSniProxy;
-        private CheckBox ckbNfSniProxy;
         private ToolStripMenuItem tsmTeaching5;
         private LinkLabel linkLabel3;
         private LinkLabel linkUsbDevice;
         private LinkLabel linkLabel4;
+        private LinkLabel linkAppGamingServices;
     }
 }

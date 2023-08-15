@@ -18,7 +18,7 @@ namespace XboxDownload
         public HttpsListen(Form1 parentForm)
         {
             this.parentForm = parentForm;
-            this.certificate = new X509Certificate2(Properties.Resource.XboxDownload);
+            this.certificate = new X509Certificate2(Properties.Resource.Certificate2);
         }
 
         public void Listen()
@@ -42,7 +42,7 @@ namespace XboxDownload
             }
 
             X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
-            X509Certificate2 certificate = new(Properties.Resource.Xbox下载助手);
+            X509Certificate2 certificate = new(Properties.Resource.Certificate1);
             store.Open(OpenFlags.ReadWrite);
             store.Add(certificate);
             store.Close();
@@ -364,7 +364,7 @@ namespace XboxDownload
                 store.Open(OpenFlags.ReadWrite);
                 foreach (var item in store.Certificates)
                 {
-                    if (item.SubjectName.Name == "CN=Xbox下载助手")
+                    if (item.SubjectName.Name == "CN=Xbox下载助手" || item.SubjectName.Name == "CN=XboxDownload")
                     {
                         store.Remove(item);
                         break;

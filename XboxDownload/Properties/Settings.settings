@@ -30,7 +30,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="NSHomepage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://blog.skydevil.xyz</Value>
+      <Value Profile="(Default)">https://xbox.skydevil.xyz</Value>
     </Setting>
     <Setting Name="EAIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -112,15 +112,6 @@
     </Setting>
     <Setting Name="Authorization" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="IpsSniProxy" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="NfSniProxy" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="EnableSniProxy" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -3862,636 +3862,6 @@
   <data name="&gt;&gt;tabCND.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tbHosts1SniProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tbHosts1SniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 25</value>
-  </data>
-  <data name="tbHosts1SniProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tbHosts1SniProxy.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tbHosts1SniProxy.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
-    <value>Vertical</value>
-  </data>
-  <data name="tbHosts1SniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>710, 624</value>
-  </data>
-  <data name="tbHosts1SniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tbHosts1SniProxy.Name" xml:space="preserve">
-    <value>tbHosts1SniProxy</value>
-  </data>
-  <data name="&gt;&gt;tbHosts1SniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbHosts1SniProxy.Parent" xml:space="preserve">
-    <value>groupBox10</value>
-  </data>
-  <data name="&gt;&gt;tbHosts1SniProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="groupBox10.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="groupBox10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 2</value>
-  </data>
-  <data name="groupBox10.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="groupBox10.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="groupBox10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>714, 651</value>
-  </data>
-  <data name="groupBox10.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="groupBox10.Text" xml:space="preserve">
-    <value>内置域名</value>
-  </data>
-  <data name="&gt;&gt;groupBox10.Name" xml:space="preserve">
-    <value>groupBox10</value>
-  </data>
-  <data name="&gt;&gt;groupBox10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox10.Parent" xml:space="preserve">
-    <value>tableLayoutPanel2</value>
-  </data>
-  <data name="&gt;&gt;groupBox10.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tbHosts2SniProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tbHosts2SniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 25</value>
-  </data>
-  <data name="tbHosts2SniProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tbHosts2SniProxy.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tbHosts2SniProxy.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
-    <value>Vertical</value>
-  </data>
-  <data name="tbHosts2SniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>710, 624</value>
-  </data>
-  <data name="tbHosts2SniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tbHosts2SniProxy.Name" xml:space="preserve">
-    <value>tbHosts2SniProxy</value>
-  </data>
-  <data name="&gt;&gt;tbHosts2SniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbHosts2SniProxy.Parent" xml:space="preserve">
-    <value>groupBox12</value>
-  </data>
-  <data name="&gt;&gt;tbHosts2SniProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="groupBox12.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="groupBox12.Location" type="System.Drawing.Point, System.Drawing">
-    <value>720, 2</value>
-  </data>
-  <data name="groupBox12.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="groupBox12.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="groupBox12.Size" type="System.Drawing.Size, System.Drawing">
-    <value>714, 651</value>
-  </data>
-  <data name="groupBox12.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="groupBox12.Text" xml:space="preserve">
-    <value>自定义域名</value>
-  </data>
-  <data name="&gt;&gt;groupBox12.Name" xml:space="preserve">
-    <value>groupBox12</value>
-  </data>
-  <data name="&gt;&gt;groupBox12.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox12.Parent" xml:space="preserve">
-    <value>tableLayoutPanel2</value>
-  </data>
-  <data name="&gt;&gt;groupBox12.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tableLayoutPanel2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tableLayoutPanel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 104</value>
-  </data>
-  <data name="tableLayoutPanel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tableLayoutPanel2.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 655</value>
-  </data>
-  <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.Name" xml:space="preserve">
-    <value>tableLayoutPanel2</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBox10" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBox12" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="ckbNfSniProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbNfSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>253, 12</value>
-  </data>
-  <data name="ckbNfSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 28</value>
-  </data>
-  <data name="ckbNfSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="ckbNfSniProxy.Text" xml:space="preserve">
-    <value>内置域名只保留奈飞</value>
-  </data>
-  <data name="&gt;&gt;ckbNfSniProxy.Name" xml:space="preserve">
-    <value>ckbNfSniProxy</value>
-  </data>
-  <data name="&gt;&gt;ckbNfSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbNfSniProxy.Parent" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;ckbNfSniProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="label54.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
-  <data name="label54.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label54.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label54.Location" type="System.Drawing.Point, System.Drawing">
-    <value>944, 14</value>
-  </data>
-  <data name="label54.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label54.Size" type="System.Drawing.Size, System.Drawing">
-    <value>474, 24</value>
-  </data>
-  <data name="label54.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="label54.Text" xml:space="preserve">
-    <value>PC 用户使用此功能需要在服务页面中勾选“设置本机 DNS”</value>
-  </data>
-  <data name="&gt;&gt;label54.Name" xml:space="preserve">
-    <value>label54</value>
-  </data>
-  <data name="&gt;&gt;label54.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label54.Parent" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;label54.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="butSniProxyReset.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="butSniProxyReset.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="butSniProxyReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>730, 8</value>
-  </data>
-  <data name="butSniProxyReset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="butSniProxyReset.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 34</value>
-  </data>
-  <data name="butSniProxyReset.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="butSniProxyReset.Text" xml:space="preserve">
-    <value>重置</value>
-  </data>
-  <data name="&gt;&gt;butSniProxyReset.Name" xml:space="preserve">
-    <value>butSniProxyReset</value>
-  </data>
-  <data name="&gt;&gt;butSniProxyReset.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butSniProxyReset.Parent" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;butSniProxyReset.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="butSniProxySave.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="butSniProxySave.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="butSniProxySave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>598, 8</value>
-  </data>
-  <data name="butSniProxySave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="butSniProxySave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 34</value>
-  </data>
-  <data name="butSniProxySave.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="butSniProxySave.Text" xml:space="preserve">
-    <value>保存</value>
-  </data>
-  <data name="&gt;&gt;butSniProxySave.Name" xml:space="preserve">
-    <value>butSniProxySave</value>
-  </data>
-  <data name="&gt;&gt;butSniProxySave.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butSniProxySave.Parent" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;butSniProxySave.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="ckbEnableSniProxy.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="ckbEnableSniProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbEnableSniProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="ckbEnableSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>456, 13</value>
-  </data>
-  <data name="ckbEnableSniProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ckbEnableSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 28</value>
-  </data>
-  <data name="ckbEnableSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="ckbEnableSniProxy.Text" xml:space="preserve">
-    <value>启用SNI反代</value>
-  </data>
-  <data name="&gt;&gt;ckbEnableSniProxy.Name" xml:space="preserve">
-    <value>ckbEnableSniProxy</value>
-  </data>
-  <data name="&gt;&gt;ckbEnableSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbEnableSniProxy.Parent" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;ckbEnableSniProxy.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="linkSniProxyExportRule.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkSniProxyExportRule.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="linkSniProxyExportRule.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 14</value>
-  </data>
-  <data name="linkSniProxyExportRule.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="linkSniProxyExportRule.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 24</value>
-  </data>
-  <data name="linkSniProxyExportRule.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="linkSniProxyExportRule.Text" xml:space="preserve">
-    <value>导出 OpenClash 规则</value>
-  </data>
-  <data name="&gt;&gt;linkSniProxyExportRule.Name" xml:space="preserve">
-    <value>linkSniProxyExportRule</value>
-  </data>
-  <data name="&gt;&gt;linkSniProxyExportRule.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkSniProxyExportRule.Parent" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;linkSniProxyExportRule.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="panel7.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="panel7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 759</value>
-  </data>
-  <data name="panel7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="panel7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 51</value>
-  </data>
-  <data name="panel7.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;panel7.Name" xml:space="preserve">
-    <value>panel7</value>
-  </data>
-  <data name="&gt;&gt;panel7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel7.Parent" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;panel7.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="linkTestSniProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkTestSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1158, 36</value>
-  </data>
-  <data name="linkTestSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
-  </data>
-  <data name="linkTestSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="linkTestSniProxy.Text" xml:space="preserve">
-    <value>测试服务器</value>
-  </data>
-  <data name="&gt;&gt;linkTestSniProxy.Name" xml:space="preserve">
-    <value>linkTestSniProxy</value>
-  </data>
-  <data name="&gt;&gt;linkTestSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkTestSniProxy.Parent" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;linkTestSniProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="labelTestSniProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="labelTestSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>720, 70</value>
-  </data>
-  <data name="labelTestSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>136, 24</value>
-  </data>
-  <data name="labelTestSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="labelTestSniProxy.Text" xml:space="preserve">
-    <value>测试服务器信息</value>
-  </data>
-  <data name="labelTestSniProxy.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;labelTestSniProxy.Name" xml:space="preserve">
-    <value>labelTestSniProxy</value>
-  </data>
-  <data name="&gt;&gt;labelTestSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelTestSniProxy.Parent" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;labelTestSniProxy.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="label52.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label52.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label52.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 70</value>
-  </data>
-  <data name="label52.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label52.Size" type="System.Drawing.Size, System.Drawing">
-    <value>388, 24</value>
-  </data>
-  <data name="label52.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="label52.Text" xml:space="preserve">
-    <value>此功能可以无需出国看奈飞、迪士尼等流媒体。</value>
-  </data>
-  <data name="&gt;&gt;label52.Name" xml:space="preserve">
-    <value>label52</value>
-  </data>
-  <data name="&gt;&gt;label52.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label52.Parent" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;label52.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="linkGetSniProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkGetSniProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="linkGetSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1263, 36</value>
-  </data>
-  <data name="linkGetSniProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="linkGetSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 24</value>
-  </data>
-  <data name="linkGetSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="linkGetSniProxy.Text" xml:space="preserve">
-    <value>获取 SNI Proxy IP</value>
-  </data>
-  <data name="&gt;&gt;linkGetSniProxy.Name" xml:space="preserve">
-    <value>linkGetSniProxy</value>
-  </data>
-  <data name="&gt;&gt;linkGetSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkGetSniProxy.Parent" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;linkGetSniProxy.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tbSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>107, 33</value>
-  </data>
-  <data name="tbSniProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tbSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1046, 30</value>
-  </data>
-  <data name="tbSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tbSniProxy.Name" xml:space="preserve">
-    <value>tbSniProxy</value>
-  </data>
-  <data name="&gt;&gt;tbSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbSniProxy.Parent" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;tbSniProxy.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="label53.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label53.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label53.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 36</value>
-  </data>
-  <data name="label53.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label53.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 24</value>
-  </data>
-  <data name="label53.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="label53.Text" xml:space="preserve">
-    <value>服务器 IP</value>
-  </data>
-  <data name="&gt;&gt;label53.Name" xml:space="preserve">
-    <value>label53</value>
-  </data>
-  <data name="&gt;&gt;label53.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label53.Parent" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;label53.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="groupBox9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="groupBox9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="groupBox9.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="groupBox9.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="groupBox9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 104</value>
-  </data>
-  <data name="groupBox9.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="groupBox9.Text" xml:space="preserve">
-    <value>SNI Proxy</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.Name" xml:space="preserve">
-    <value>groupBox9</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.Parent" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;groupBox9.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tabSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 33</value>
-  </data>
-  <data name="tabSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
-  </data>
-  <data name="tabSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="tabSniProxy.Text" xml:space="preserve">
-    <value>反代</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Name" xml:space="preserve">
-    <value>tabSniProxy</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.Parent" xml:space="preserve">
-    <value>tabControl1</value>
-  </data>
-  <data name="&gt;&gt;tabSniProxy.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
   <data name="label31.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -5411,13 +4781,10 @@
     <value>tabControl1</value>
   </data>
   <data name="&gt;&gt;tabHardDisk.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="lvGameSearch.Location" type="System.Drawing.Point, System.Drawing">
     <value>148, 94</value>
-  </data>
-  <data name="lvGameSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
   </data>
   <data name="lvGameSearch.Size" type="System.Drawing.Size, System.Drawing">
     <value>314, 32</value>
@@ -6702,7 +6069,7 @@
     <value>tabControl1</value>
   </data>
   <data name="&gt;&gt;tabStore.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="linkLabel4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -6985,7 +6352,7 @@
     <value>Top</value>
   </data>
   <data name="gpEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 565</value>
+    <value>0, 539</value>
   </data>
   <data name="gpEACdn.Size" type="System.Drawing.Size, System.Drawing">
     <value>1436, 163</value>
@@ -7003,64 +6370,37 @@
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gpEACdn.Parent" xml:space="preserve">
-    <value>tabTool</value>
+    <value>tabTools</value>
   </data>
   <data name="&gt;&gt;gpEACdn.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="linkLabel2.AutoSize" type="System.Boolean, mscorlib">
+  <data name="linkAppGamingServices.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="linkLabel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1100, 166</value>
+  <data name="linkAppGamingServices.Location" type="System.Drawing.Point, System.Drawing">
+    <value>568, 137</value>
   </data>
-  <data name="linkLabel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>310, 24</value>
+  <data name="linkAppGamingServices.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 24</value>
   </data>
-  <data name="linkLabel2.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="linkAppGamingServices.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
-  <data name="linkLabel2.Text" xml:space="preserve">
-    <value>应用商店无法下载应用(重置Winsock)</value>
+  <data name="linkAppGamingServices.Text" xml:space="preserve">
+    <value>游戏服务安装包</value>
   </data>
-  <data name="&gt;&gt;linkLabel2.Name" xml:space="preserve">
-    <value>linkLabel2</value>
+  <data name="&gt;&gt;linkAppGamingServices.Name" xml:space="preserve">
+    <value>linkAppGamingServices</value>
   </data>
-  <data name="&gt;&gt;linkLabel2.Type" xml:space="preserve">
+  <data name="&gt;&gt;linkAppGamingServices.Type" xml:space="preserve">
     <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;linkLabel2.Parent" xml:space="preserve">
+  <data name="&gt;&gt;linkAppGamingServices.Parent" xml:space="preserve">
     <value>gbGamingServices</value>
   </data>
-  <data name="&gt;&gt;linkLabel2.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;linkAppGamingServices.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="linkTroubleshootGame.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkTroubleshootGame.Location" type="System.Drawing.Point, System.Drawing">
-    <value>750, 166</value>
-  </data>
-  <data name="linkTroubleshootGame.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 24</value>
-  </data>
-  <data name="linkTroubleshootGame.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="linkTroubleshootGame.Text" xml:space="preserve">
-    <value>Windows 设备上的游戏安装问题疑难解答</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.Name" xml:space="preserve">
-    <value>linkTroubleshootGame</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkTroubleshootGame.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="label50.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7092,7 +6432,7 @@
     <value>gbGamingServices</value>
   </data>
   <data name="&gt;&gt;label50.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="label49.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7119,40 +6459,13 @@
     <value>gbGamingServices</value>
   </data>
   <data name="&gt;&gt;label49.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="linkResetWinsock.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkResetWinsock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>540, 166</value>
-  </data>
-  <data name="linkResetWinsock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
-  </data>
-  <data name="linkResetWinsock.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="linkResetWinsock.Text" xml:space="preserve">
-    <value>重置 Winsock 目录</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.Name" xml:space="preserve">
-    <value>linkResetWinsock</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.Parent" xml:space="preserve">
-    <value>gbGamingServices</value>
-  </data>
-  <data name="&gt;&gt;linkResetWinsock.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="linkReInstallGamingServices.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="linkReInstallGamingServices.Location" type="System.Drawing.Point, System.Drawing">
-    <value>130, 166</value>
+    <value>130, 137</value>
   </data>
   <data name="linkReInstallGamingServices.Size" type="System.Drawing.Size, System.Drawing">
     <value>154, 24</value>
@@ -7173,13 +6486,13 @@
     <value>gbGamingServices</value>
   </data>
   <data name="&gt;&gt;linkReInstallGamingServices.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>3</value>
   </data>
   <data name="linkRestartGamingServices.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="linkRestartGamingServices.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 166</value>
+    <value>6, 137</value>
   </data>
   <data name="linkRestartGamingServices.Size" type="System.Drawing.Size, System.Drawing">
     <value>118, 24</value>
@@ -7200,7 +6513,7 @@
     <value>gbGamingServices</value>
   </data>
   <data name="&gt;&gt;linkRestartGamingServices.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>4</value>
   </data>
   <data name="textBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 58</value>
@@ -7212,15 +6525,14 @@
     <value>True</value>
   </data>
   <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>694, 102</value>
+    <value>694, 77</value>
   </data>
   <data name="textBox1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="textBox1.Text" xml:space="preserve">
     <value>Get-AppxPackage Microsoft.GamingServices | Remove-AppxPackage -AllUsers
-start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
-</value>
+start ms-windows-store://pdp/?productid=9MWPM2CQNLHN</value>
   </data>
   <data name="&gt;&gt;textBox1.Name" xml:space="preserve">
     <value>textBox1</value>
@@ -7232,7 +6544,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>gbGamingServices</value>
   </data>
   <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>5</value>
   </data>
   <data name="gbGamingServices.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -7241,7 +6553,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>0, 365</value>
   </data>
   <data name="gbGamingServices.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 200</value>
+    <value>1436, 174</value>
   </data>
   <data name="gbGamingServices.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -7256,7 +6568,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gbGamingServices.Parent" xml:space="preserve">
-    <value>tabTool</value>
+    <value>tabTools</value>
   </data>
   <data name="&gt;&gt;gbGamingServices.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -7566,7 +6878,7 @@ HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名�
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gbAddAppxPackage.Parent" xml:space="preserve">
-    <value>tabTool</value>
+    <value>tabTools</value>
   </data>
   <data name="&gt;&gt;gbAddAppxPackage.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -7901,34 +7213,34 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBox8.Parent" xml:space="preserve">
-    <value>tabTool</value>
+    <value>tabTools</value>
   </data>
   <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="tabTool.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tabTools.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 33</value>
   </data>
-  <data name="tabTool.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tabTools.Size" type="System.Drawing.Size, System.Drawing">
     <value>1436, 810</value>
   </data>
-  <data name="tabTool.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabTools.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="tabTool.Text" xml:space="preserve">
+  <data name="tabTools.Text" xml:space="preserve">
     <value>工具</value>
   </data>
-  <data name="&gt;&gt;tabTool.Name" xml:space="preserve">
-    <value>tabTool</value>
+  <data name="&gt;&gt;tabTools.Name" xml:space="preserve">
+    <value>tabTools</value>
   </data>
-  <data name="&gt;&gt;tabTool.Type" xml:space="preserve">
+  <data name="&gt;&gt;tabTools.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabTool.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tabTools.Parent" xml:space="preserve">
     <value>tabControl1</value>
   </data>
-  <data name="&gt;&gt;tabTool.ZOrder" xml:space="preserve">
-    <value>7</value>
+  <data name="&gt;&gt;tabTools.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
   <data name="tabControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

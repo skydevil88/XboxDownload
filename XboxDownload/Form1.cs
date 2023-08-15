@@ -17,7 +17,6 @@ namespace XboxDownload
 {
     public partial class Form1 : Form
     {
-        internal const String appName = "Xbox下载助手";
         internal static Boolean bServiceFlag = false, bAutoStartup = false;
         internal readonly static String resourcePath = Application.StartupPath + "Resource";
         internal static List<Market> lsMarket = new();
@@ -66,7 +65,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
-            toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net\n\n速度不正常请点击右下角 “修复 EA app”");
+            toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
@@ -106,9 +105,6 @@ namespace XboxDownload
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
             ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
-            tbSniProxy.Text = Properties.Settings.Default.IpsSniProxy;
-            ckbNfSniProxy.Checked = Properties.Settings.Default.NfSniProxy;
-            ckbEnableSniProxy.Checked = Properties.Settings.Default.EnableSniProxy;
 
             ckbRecordLog.CheckedChanged += new EventHandler(CkbRecordLog_CheckedChanged);
             ckbSetDns.CheckedChanged += new EventHandler(CkbSetDns_CheckedChanged);
@@ -142,15 +138,6 @@ namespace XboxDownload
             {
                 string json = File.ReadAllText(resourcePath + "\\Akamai.txt");
                 tbHosts2Akamai.Text = json.Trim() + "\r\n";
-            }
-            if (Properties.Settings.Default.NfSniProxy)
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")..];
-            else
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")];
-            if (File.Exists(resourcePath + "\\SniProxy.txt"))
-            {
-                string json = File.ReadAllText(resourcePath + "\\SniProxy.txt");
-                tbHosts2SniProxy.Text = json.Trim() + "\r\n";
             }
             SetCdnHosts();
 
@@ -328,7 +315,7 @@ namespace XboxDownload
             if (bTips && !bAutoStartup)
             {
                 bTips = false;
-                this.notifyIcon1.ShowBalloonTip(5, appName, "最小化到系统托盘", ToolTipIcon.Info);
+                this.notifyIcon1.ShowBalloonTip(5, "Xbox下载助手", "最小化到系统托盘", ToolTipIcon.Info);
             }
             e.Cancel = true;
         }
@@ -386,7 +373,7 @@ namespace XboxDownload
                         ThreadPool.QueueUserWorkItem(delegate { GameWithGold(); });
                     }
                     break;
-                case "tabTool":
+                case "tabTools":
                     if (cbAppxDrive.Items.Count == 0 && gbAddAppxPackage.Visible)
                     {
                         LinkAppxRefreshDrive_LinkClicked(null, null);
@@ -688,7 +675,7 @@ namespace XboxDownload
                             bool bRuleAdd = true;
                             foreach (INetFwRule rule in policy2.Rules)
                             {
-                                if (rule.Name == Form1.appName)
+                                if (rule.Name == "XboxDownload" || rule.Name == "Xbox下载助手")
                                 {
                                     if (bRuleAdd && rule.ApplicationName == Application.ExecutablePath && rule.Direction == NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN && rule.Protocol == (int)NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_ANY && rule.Action == NET_FW_ACTION_.NET_FW_ACTION_ALLOW && rule.Profiles == (int)NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_ALL && rule.Enabled)
                                         bRuleAdd = false;
@@ -707,7 +694,7 @@ namespace XboxDownload
                                 {
                                     if (Activator.CreateInstance(t2) is INetFwRule rule)
                                     {
-                                        rule.Name = Form1.appName;
+                                        rule.Name = "XboxDownload";
                                         rule.ApplicationName = Application.ExecutablePath;
                                         rule.Enabled = true;
                                         policy2.Rules.Add(rule);
@@ -901,13 +888,13 @@ namespace XboxDownload
                 {
                     sHosts = sw.ReadToEnd();
                 }
-                sHosts = Regex.Replace(sHosts, @"# Added by " + Form1.appName + "\r\n(.*\r\n)+# End of " + Form1.appName + "\r\n", "");
+                sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)+# End of (XboxDownload|Xbox下载助手)\r\n", "");
                 if (add)
                 {
                     string comIP = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) ? Properties.Settings.Default.LocalIP : Properties.Settings.Default.ComIP;
                     if (!Properties.Settings.Default.DnsService && Properties.Settings.Default.HttpService && Properties.Settings.Default.MicrosoftStore && string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
                         tbComIP.Text = comIP;
-                    sb.AppendLine("# Added by " + Form1.appName);
+                    sb.AppendLine("# Added by XboxDownload");
                     if (Properties.Settings.Default.MicrosoftStore)
                     {
                         sb.AppendLine(comIP + " xvcf1.xboxlive.com");
@@ -996,7 +983,7 @@ namespace XboxDownload
                             continue;
                         sb.AppendLine(string.Format("{0}.{1}.{2}.{3} {4}", host.Value[0], host.Value[1], host.Value[2], host.Value[3], host.Key));
                     }
-                    sb.AppendLine("# End of " + Form1.appName);
+                    sb.AppendLine("# End of XboxDownload");
                     sHosts = sb.ToString() + sHosts;
                 }
                 using (StreamWriter sw = new(sHostsPath, false))
@@ -1883,67 +1870,67 @@ namespace XboxDownload
                     case "assets2.xboxlive.cn":
                     case "d1.xboxlive.cn":
                     case "d2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+(assets1|assets2|d1|d2)\.xboxlive\.cn\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " assets1.xboxlive.cn # " + Form1.appName);
-                        sb.AppendLine(ip + " assets2.xboxlive.cn # " + Form1.appName);
-                        sb.AppendLine(ip + " d1.xboxlive.cn # " + Form1.appName);
-                        sb.AppendLine(ip + " d2.xboxlive.cn # " + Form1.appName);
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+(assets1|assets2|d1|d2)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sb.AppendLine(ip + " assets1.xboxlive.cn # XboxDownload");
+                        sb.AppendLine(ip + " assets2.xboxlive.cn # XboxDownload");
+                        sb.AppendLine(ip + " d1.xboxlive.cn # XboxDownload");
+                        sb.AppendLine(ip + " d2.xboxlive.cn # XboxDownload");
                         msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
                         ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                         break;
                     case "dlassets.xboxlive.cn":
                     case "dlassets2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+(dlassets|dlassets2)\.xboxlive\.cn\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " dlassets.xboxlive.cn # " + Form1.appName);
-                        sb.AppendLine(ip + " dlassets2.xboxlive.cn # " + Form1.appName);
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+(dlassets|dlassets2)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sb.AppendLine(ip + " dlassets.xboxlive.cn # XboxDownload");
+                        sb.AppendLine(ip + " dlassets2.xboxlive.cn # XboxDownload");
                         msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
                         ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                         break;
                     case "dl.delivery.mp.microsoft.com":
                     case "tlu.dl.delivery.mp.microsoft.com":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.delivery\.mp\.microsoft\.com\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # " + Form1.appName);
-                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # " + Form1.appName);
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.delivery\.mp\.microsoft\.com\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # XboxDownload");
+                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # XboxDownload");
                         ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                         break;
                     case "gst.prod.dl.playstation.net":
                     case "gs2.ww.prod.dl.playstation.net":
                     case "zeus.dl.playstation.net":
                     case "ares.dl.playstation.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.dl\.playstation\.net\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " gst.prod.dl.playstation.net # " + Form1.appName);
-                        sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # " + Form1.appName);
-                        sb.AppendLine(ip + " zeus.dl.playstation.net # " + Form1.appName);
-                        sb.AppendLine(ip + " ares.dl.playstation.net # " + Form1.appName);
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.dl\.playstation\.net\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sb.AppendLine(ip + " gst.prod.dl.playstation.net # XboxDownload");
+                        sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # XboxDownload");
+                        sb.AppendLine(ip + " zeus.dl.playstation.net # XboxDownload");
+                        sb.AppendLine(ip + " ares.dl.playstation.net # XboxDownload");
                         break;
                     case "Akamai":
                     case "atum.hac.lp1.d4c.nintendo.net":
                     case "origin-a.akamaihd.net":
                     case "blzddist1-a.akamaihd.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+(\.xboxlive\.com|\.delivery\.mp\.microsoft\.com|\.nintendo\.net|\.cdn\.ea\.com|\.akamaihd\.net)\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " xvcf1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " xvcf2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " assets1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " assets2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " d1.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " d2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " dlassets.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " dlassets2.xboxlive.com # " + Form1.appName);
-                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # " + Form1.appName);
-                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # " + Form1.appName);
-                        sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # " + Form1.appName);
-                        sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net # " + Form1.appName);
-                        sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net # " + Form1.appName);
-                        sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net # " + Form1.appName);
-                        sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net # " + Form1.appName);
-                        sb.AppendLine(ip + " origin-a.akamaihd.net # " + Form1.appName);
-                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # " + Form1.appName);
-                        sb.AppendLine(ip + " blzddist1-a.akamaihd.net # " + Form1.appName);
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+(\.xboxlive\.com|\.delivery\.mp\.microsoft\.com|\.nintendo\.net|\.cdn\.ea\.com|\.akamaihd\.net)\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sb.AppendLine(ip + " xvcf1.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " xvcf2.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " assets1.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " assets2.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " d1.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " d2.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " dlassets.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " dlassets2.xboxlive.com # XboxDownload");
+                        sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # XboxDownload");
+                        sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # XboxDownload");
+                        sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # XboxDownload");
+                        sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net # XboxDownload");
+                        sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net # XboxDownload");
+                        sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net # XboxDownload");
+                        sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net # XboxDownload");
+                        sb.AppendLine(ip + " origin-a.akamaihd.net # XboxDownload");
+                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # XboxDownload");
+                        sb.AppendLine(ip + " blzddist1-a.akamaihd.net # XboxDownload");
                         msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网只能用监听方式加速。";
                         break;
                     default:
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+" + host + @"\s+# " + Form1.appName + "\r\n", "");
-                        sb.AppendLine(ip + " " + host + " # " + Form1.appName);
+                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+" + host + @"\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sb.AppendLine(ip + " " + host + " # XboxDownload");
                         break;
                 }
                 using (StreamWriter sw = new(sHostsPath, false))
@@ -2153,7 +2140,7 @@ namespace XboxDownload
                 {
                     sHosts = sw.ReadToEnd();
                 }
-                string newHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# " + Form1.appName + "\r\n", "");
+                string newHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                 if (String.Equals(sHosts, newHosts))
                 {
                     MessageBox.Show("Hosts文件没有写入任何规则，无需清除。\n\n注：只清除Xbox下载助手写入的规则。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -2161,7 +2148,7 @@ namespace XboxDownload
                 else
                 {
                     StringBuilder sb = new();
-                    Match result = Regex.Match(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# " + Form1.appName + "\r\n");
+                    Match result = Regex.Match(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n");
                     while (result.Success)
                     {
                         sb.Append(result.Groups[0].Value);
@@ -2836,111 +2823,6 @@ namespace XboxDownload
             ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
         }
 
-        private void LinkSniProxyExportRule_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            string ip = string.Empty;
-            foreach (string str in tbSniProxy.Text.Split(','))
-            {
-                if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
-                {
-                    ip = address.ToString();
-                    break;
-                }
-            }
-            if (string.IsNullOrEmpty(ip))
-            {
-                MessageBox.Show("请先添加服务器IP。", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                tbSniProxy.Focus();
-                return;
-            }
-            StringBuilder sb = new();
-            List<string> lsHostsTmp = new();
-            foreach (string str in Regex.Replace(tbHosts1SniProxy.Text, @"\#[^\r\n]+", "").Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(str))
-                    continue;
-                string hosts = str.Trim().ToLower();
-                if (hosts.StartsWith("*."))
-                {
-                    hosts = Regex.Replace(hosts, @"^\*\.", "");
-                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                    {
-                        lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'." + hosts + "': " + ip);
-                    }
-                }
-                else if (hosts.StartsWith("*"))
-                {
-                    hosts = Regex.Replace(hosts, @"^\*", "");
-                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                    {
-                        lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'" + hosts + "': " + ip);
-                        sb.AppendLine("'." + hosts + "': " + ip);
-                    }
-                }
-                else if (DnsListen.reHosts.IsMatch(hosts))
-                {
-                    sb.AppendLine("'" + hosts + "': " + ip);
-                }
-            }
-            foreach (string str in Regex.Replace(tbHosts2SniProxy.Text, @"\#[^\r\n]+", "").Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(str))
-                    continue;
-                string hosts = str.Trim().ToLower();
-                if (hosts.StartsWith("*."))
-                {
-                    hosts = Regex.Replace(hosts, @"^\*\.", "");
-                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                    {
-                        lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'*." + hosts + "': " + ip);
-                    }
-                }
-                else if (DnsListen.reHosts.IsMatch(hosts))
-                {
-                    sb.AppendLine("'" + hosts + "': " + ip);
-                }
-            }
-            Clipboard.SetDataObject(sb.ToString() + "\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n#打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT\r\n");
-            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”\n3.打开 OpenClash 控制面板在代理设置中把 Netflix 规则设置为 DIRECT", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void CkbNfSniProxy_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ckbNfSniProxy.Checked)
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")..];
-            else
-                tbHosts1SniProxy.Text = Properties.Resource.SniProxy[..Properties.Resource.SniProxy.LastIndexOf("####################### Netflix #######################")];
-        }
-
-        private void ButSniProxySave_Click(object sender, EventArgs e)
-        {
-            if (sender != null)
-            {
-                SaveHosts("SniProxy.txt", tbHosts2SniProxy.Text);
-                Properties.Settings.Default.IpsSniProxy = tbSniProxy.Text;
-                Properties.Settings.Default.NfSniProxy = ckbNfSniProxy.Checked;
-                Properties.Settings.Default.EnableSniProxy = ckbEnableSniProxy.Checked;
-                Properties.Settings.Default.Save();
-            }
-            SetCdnHosts();
-        }
-
-        private void ButSniProxyReset_Click(object sender, EventArgs e)
-        {
-            tbSniProxy.Text = Properties.Settings.Default.IpsSniProxy;
-            if (File.Exists(resourcePath + "\\SniProxy.txt"))
-            {
-                using StreamReader sr = new(resourcePath + "\\SniProxy.txt");
-                tbHosts2SniProxy.Text = sr.ReadToEnd().Trim() + "\r\n";
-            }
-            else tbHosts2SniProxy.Clear();
-            ckbNfSniProxy.Checked = Properties.Settings.Default.NfSniProxy;
-            ckbEnableSniProxy.Checked = Properties.Settings.Default.EnableSniProxy;
-        }
-
         private void SetCdnHosts()
         {
             DnsListen.dicCdnHosts1.Clear();
@@ -2974,93 +2856,6 @@ namespace XboxDownload
                 {
                     List<string> lsHostsTmp = new();
                     foreach (string str in Regex.Replace(tbHosts1Akamai.Text, @"\#[^\r\n]+", "").Split('\n'))
-                    {
-                        if (string.IsNullOrWhiteSpace(str))
-                            continue;
-
-                        string hosts = str.Trim().ToLower();
-                        if (hosts.StartsWith("*."))
-                        {
-                            hosts = Regex.Replace(hosts, @"^\*\.", "");
-                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                            {
-                                lsHostsTmp.Add(hosts);
-                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
-                            }
-                        }
-                        else if (hosts.StartsWith("*"))
-                        {
-                            hosts = Regex.Replace(hosts, @"^\*", "");
-                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                            {
-                                lsHostsTmp.Add(hosts);
-                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
-                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
-                            }
-                        }
-                        else if (DnsListen.reHosts.IsMatch(hosts))
-                        {
-                            DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
-                        }
-                    }
-                    foreach (string str in Regex.Replace(hosts2, @"\#[^\r\n]+", "").Split('\n'))
-                    {
-                        string hosts = str.Trim().ToLower();
-                        if (hosts.StartsWith("*."))
-                        {
-                            hosts = Regex.Replace(hosts, @"^\*\.", "");
-                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                            {
-                                lsHostsTmp.Add(hosts);
-                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
-                            }
-                        }
-                        else if (hosts.StartsWith("*"))
-                        {
-                            hosts = Regex.Replace(hosts, @"^\*", "");
-                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                            {
-                                lsHostsTmp.Add(hosts);
-                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
-                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
-                            }
-                        }
-                        else if (DnsListen.reHosts.IsMatch(hosts))
-                        {
-                            DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
-                        }
-                    }
-                }
-            }
-
-            if (Properties.Settings.Default.EnableSniProxy)
-            {
-                string hosts2 = tbHosts2SniProxy.Text.Trim();
-                List<string> lsIpTmp = new();
-                List<ResouceRecord> lsIp = new();
-                foreach (string str in tbSniProxy.Text.Replace("，", ",").Split(','))
-                {
-                    if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
-                    {
-                        string ip = address.ToString();
-                        if (!lsIpTmp.Contains(ip))
-                        {
-                            lsIpTmp.Add(ip);
-                            lsIp.Add(new ResouceRecord
-                            {
-                                Datas = address.GetAddressBytes(),
-                                TTL = 100,
-                                QueryClass = 1,
-                                QueryType = QueryType.A
-                            });
-                        }
-                    }
-                }
-                tbSniProxy.Text = string.Join(", ", lsIpTmp.ToArray()); ;
-                if (lsIp.Count >= 1)
-                {
-                    List<string> lsHostsTmp = new();
-                    foreach (string str in Regex.Replace(tbHosts1SniProxy.Text, @"\#[^\r\n]+", "").Split('\n'))
                     {
                         if (string.IsNullOrWhiteSpace(str))
                             continue;
@@ -3409,7 +3204,7 @@ namespace XboxDownload
         private void LinkProductID_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + linkProductID.Text;
-            if (butGame.Enabled) ButGame_Click(sender, null);
+            if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             tabControl1.SelectedTab = tabStore;
         }
         #endregion
@@ -3421,13 +3216,13 @@ namespace XboxDownload
             {
                 if (butGame.Enabled)
                 {
-                    ButGame_Click(sender, null);
+                    ButGame_Click(sender, EventArgs.Empty);
                     e.Handled = true;
                 }
             }
         }
 
-        private void ButGame_Click(object sender, EventArgs? e)
+        private void ButGame_Click(object sender, EventArgs e)
         {
             string url = tbGameUrl.Text.Trim();
             if (string.IsNullOrEmpty(url)) return;
@@ -3540,7 +3335,7 @@ namespace XboxDownload
                 string productId = item.SubItems[1].Text;
                 lvGameSearch.Visible = false;
                 tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + productId;
-                if (butGame.Enabled) ButGame_Click(sender, null);
+                if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             }
         }
 
@@ -3552,7 +3347,7 @@ namespace XboxDownload
                 string productId = item.SubItems[1].Text;
                 lvGameSearch.Visible = false;
                 tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + productId;
-                if (butGame.Enabled) ButGame_Click(sender, null);
+                if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             }
         }
 
@@ -3736,7 +3531,7 @@ namespace XboxDownload
             Product product = (Product)cb.SelectedItem;
             if (product.id == "0") return;
             tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + product.id;
-            if (butGame.Enabled) ButGame_Click(sender, null);
+            if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
         }
 
         private void LinkGameChinese_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -3756,7 +3551,7 @@ namespace XboxDownload
                         break;
                     }
                 }
-                if (butGame.Enabled) ButGame_Click(sender, null);
+                if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             }
         }
 
@@ -3914,7 +3709,7 @@ namespace XboxDownload
                 cbGameMarket.Items.Add(new Market(language, language, Regex.Replace(language, "^[^-]+-", ""), language));
                 cbGameMarket.SelectedIndex = cbGameMarket.Items.Count - 1;
             }
-            if (butGame.Enabled) ButGame_Click(sender, null);
+            if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
         }
 
         private void CbGameBundled_SelectedIndexChanged(object? sender, EventArgs? e)
@@ -4532,76 +4327,6 @@ namespace XboxDownload
             dialog.Dispose();
         }
 
-        private void LinkTestSniProxy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(tbSniProxy.Text))
-            {
-                MessageBox.Show("服务器 IP 不能空。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                tbSniProxy.Focus();
-                return;
-            }
-            if (!IPAddress.TryParse(Regex.Replace(tbSniProxy.Text, @",.+", "").Trim(), out IPAddress? address))
-            {
-                MessageBox.Show("服务器 IP 不正确。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                tbSniProxy.Focus();
-                return;
-            }
-            linkTestSniProxy.Enabled = false;
-            labelTestSniProxy.Text = "正在测试，请稍候...";
-            labelTestSniProxy.ForeColor = Color.Empty;
-            labelTestSniProxy.Visible = true;
-
-            Uri uri = new("https://www.netflix.com/title/70143836");
-            StringBuilder sb = new();
-            sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
-            sb.AppendLine("Host: " + uri.Host);
-            sb.AppendLine("User-Agent: " + ClassWeb.userAgent);
-            sb.AppendLine("Range: bytes=0-0");
-            sb.AppendLine();
-            byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-
-            Task.Run(() =>
-            {
-                SocketPackage socketPackage = ClassWeb.TlsRequest(uri, buffer, address.ToString(), false, null, 6000);
-                this.Invoke(new Action(() =>
-                {
-                    if (!string.IsNullOrEmpty(socketPackage.Err))
-                    {
-                        labelTestSniProxy.Text = "无法连接服务器。";
-                        labelTestSniProxy.ForeColor = Color.Red;
-                    }
-                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 200"))
-                    {
-                        labelTestSniProxy.Text = "Netflix 识别的 IP 地域信息：US；服务器 IP 完整解锁 Netflix，支持非自制剧的观看。";
-                        labelTestSniProxy.ForeColor = Color.Green;
-                    }
-                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 301"))
-                    {
-                        Match result = Regex.Match(socketPackage.Headers, @"location: https://www\.netflix\.com/([^/]+)/title/\d+");
-                        string area = result.Success ? Regex.Replace(result.Groups[1].Value, @"-.+$", "").ToUpper() : "未知";
-                        labelTestSniProxy.Text = "NF 识别的 IP 地域信息：" + area + "；服务器 IP 完整解锁 Netflix，支持非自制剧的观看。";
-                        labelTestSniProxy.ForeColor = Color.Green;
-                    }
-                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 404"))
-                    {
-                        labelTestSniProxy.Text = "服务器 IP 可以使用 Netflix，但仅可看自制剧。";
-                        labelTestSniProxy.ForeColor = Color.DarkGoldenrod;
-                    }
-                    else if (socketPackage.Headers.StartsWith("HTTP/1.1 403"))
-                    {
-                        labelTestSniProxy.Text = "服务器 IP 所在的国家 Netflix 不提供服务。";
-                        labelTestSniProxy.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        labelTestSniProxy.Text = "测试失败。";
-                        labelTestSniProxy.ForeColor = Color.Red;
-                    }
-                    linkTestSniProxy.Enabled = true;
-                }));
-            });
-        }
-
         private void Link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (sender is not LinkLabel link) return;
@@ -4621,7 +4346,7 @@ namespace XboxDownload
 
         private void LinkAppxAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            tabControl1.SelectedTab = tabTool;
+            tabControl1.SelectedTab = tabTools;
             tbAppxFilePath.Focus();
         }
 
@@ -5355,6 +5080,13 @@ namespace XboxDownload
             }
         }
 
+        private void LinkAppGamingServices_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            tbGameUrl.Text = "9MWPM2CQNLHN";
+            ButGame_Click(sender, EventArgs.Empty);
+            tabControl1.SelectedTab = tabStore;
+        }
+
         private void ReInstallGamingServices()
         {
             XboxPackage.Data? data = null;
@@ -5476,42 +5208,6 @@ namespace XboxDownload
                 linkReInstallGamingServices.Text = "一键重装游戏服务";
                 linkReInstallGamingServices.Enabled = linkRestartGamingServices.Enabled = true;
             }));
-        }
-
-        private void LinkResetWinsock_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (Environment.OSVersion.Version.Major < 10)
-            {
-                MessageBox.Show("只支持Win10或以上版本操作系统。", "操作系统版本过低", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            if (MessageBox.Show("请确认是否要“重置 Winsock 目录”？\n\n重置完成后需要重启计算机。", "重置Winsock目录", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-            {
-                string outputString = string.Empty;
-                try
-                {
-                    using Process p = new();
-                    p.StartInfo.FileName = "powershell.exe";
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.RedirectStandardInput = true;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.CreateNoWindow = true;
-                    p.Start();
-                    p.StandardInput.WriteLine("netsh int ip reset");
-                    p.StandardInput.WriteLine("netsh winsock reset");
-                    p.StandardInput.Close();
-                    outputString = p.StandardOutput.ReadToEnd();
-                    p.WaitForExit();
-                    outputString = outputString[(outputString.IndexOf("netsh int ip reset") + 18)..];
-                    outputString = Regex.Replace(outputString, "PS.+", "");
-                    outputString = Regex.Replace(outputString, "\r\n+", "\r\n");
-                }
-                catch (Exception ex)
-                {
-                    outputString = ex.Message;
-                }
-                MessageBox.Show(outputString.Trim(), "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         private void GetEACdn()

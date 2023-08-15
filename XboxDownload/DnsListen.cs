@@ -393,41 +393,42 @@ namespace XboxDownload
                                     string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
                                     if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                     {
+                                        ClassDNS.Api? json = null;
                                         try
                                         {
-                                            var json = JsonSerializer.Deserialize<ClassDNS.Api>(html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                                            if (json != null && json.Answer != null)
-                                            {
-                                                if (json.Status == 0)
-                                                {
-                                                    dns.QR = 1;
-                                                    dns.RA = 1;
-                                                    dns.RD = 1;
-                                                    dns.ResouceRecords = new List<ResouceRecord>();
-                                                    foreach (var answer in json.Answer)
-                                                    {
-                                                        if (answer.Type == 1 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress))
-                                                        {
-                                                            dns.ResouceRecords.Add(new ResouceRecord
-                                                            {
-                                                                Datas = ipAddress.GetAddressBytes(),
-                                                                TTL = answer.TTL,
-                                                                QueryClass = 1,
-                                                                QueryType = QueryType.A
-                                                            });
-                                                        }
-                                                    }
-                                                    socket.SendTo(dns.ToBytes(), client);
-                                                    var arrIp = json.Answer.Where(x => x.Type == 1).Select(x => x.Data);
-                                                    if (arrIp != null)
-                                                    {
-                                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", arrIp.ToArray()), ((IPEndPoint)client).Address.ToString(), argb);
-                                                    }
-                                                    return;
-                                                }
-                                            }
+                                            json = JsonSerializer.Deserialize<ClassDNS.Api>(html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                                         }
                                         catch { }
+                                        if (json != null && json.Answer != null)
+                                        {
+                                            if (json.Status == 0)
+                                            {
+                                                dns.QR = 1;
+                                                dns.RA = 1;
+                                                dns.RD = 1;
+                                                dns.ResouceRecords = new List<ResouceRecord>();
+                                                foreach (var answer in json.Answer)
+                                                {
+                                                    if (answer.Type == 1 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress))
+                                                    {
+                                                        dns.ResouceRecords.Add(new ResouceRecord
+                                                        {
+                                                            Datas = ipAddress.GetAddressBytes(),
+                                                            TTL = answer.TTL,
+                                                            QueryClass = 1,
+                                                            QueryType = QueryType.A
+                                                        });
+                                                    }
+                                                }
+                                                socket.SendTo(dns.ToBytes(), client);
+                                                var arrIp = json.Answer.Where(x => x.Type == 1).Select(x => x.Data);
+                                                if (arrIp != null)
+                                                {
+                                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", arrIp.ToArray()), ((IPEndPoint)client).Address.ToString(), argb);
+                                                }
+                                                return;
+                                            }
+                                        }
                                     }
                                 }
                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString(), argb);
