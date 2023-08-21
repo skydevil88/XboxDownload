@@ -15,10 +15,9 @@ namespace XboxDownload
     {
         private readonly Form1 parentForm;
         private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://223.5.5.5" : "http://223.5.5.5";
-        private readonly Regex reDohBlacklist = new("google|youtube|facebook|twitter");
+        private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, Byte[]> dicHosts = new();
-        public static ConcurrentDictionary<String, IPAddress> dicHosts2 = new();
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicCdnHosts1 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicCdnHosts2 = new();
         public static ConcurrentDictionary<String, String[]> dicDns = new();
@@ -388,7 +387,7 @@ namespace XboxDownload
                                         }
                                     }
                                 }
-                                if (Properties.Settings.Default.DoH && !reDohBlacklist.IsMatch(queryName))
+                                if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
                                 {
                                     string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
                                     if (Regex.IsMatch(html.Trim(), @"^{.+}$"))

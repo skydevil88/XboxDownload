@@ -90,7 +90,6 @@
             label18 = new Label();
             tbBattleIP = new TextBox();
             labelBattle = new Label();
-            ckbEAProtocol = new CheckBox();
             ckbEACDN = new CheckBox();
             label16 = new Label();
             tbEAIP = new TextBox();
@@ -125,7 +124,7 @@
             dgvIpList = new DataGridView();
             Col_Check = new DataGridViewCheckBoxColumn();
             Col_IP = new DataGridViewTextBoxColumn();
-            Col_ASN = new DataGridViewTextBoxColumn();
+            Col_Location = new DataGridViewTextBoxColumn();
             Col_302 = new DataGridViewCheckBoxColumn();
             Col_TTL = new DataGridViewTextBoxColumn();
             Col_RoundtripTime = new DataGridViewTextBoxColumn();
@@ -280,7 +279,6 @@
             gbGamingServices = new GroupBox();
             linkAppGamingServices = new LinkLabel();
             label50 = new Label();
-            label49 = new Label();
             linkReInstallGamingServices = new LinkLabel();
             linkRestartGamingServices = new LinkLabel();
             textBox1 = new TextBox();
@@ -623,7 +621,6 @@
             groupBox1.Controls.Add(label18);
             groupBox1.Controls.Add(tbBattleIP);
             groupBox1.Controls.Add(labelBattle);
-            groupBox1.Controls.Add(ckbEAProtocol);
             groupBox1.Controls.Add(ckbEACDN);
             groupBox1.Controls.Add(label16);
             groupBox1.Controls.Add(tbEAIP);
@@ -812,12 +809,6 @@
             resources.ApplyResources(labelBattle, "labelBattle");
             labelBattle.Name = "labelBattle";
             // 
-            // ckbEAProtocol
-            // 
-            resources.ApplyResources(ckbEAProtocol, "ckbEAProtocol");
-            ckbEAProtocol.Name = "ckbEAProtocol";
-            ckbEAProtocol.UseVisualStyleBackColor = true;
-            // 
             // ckbEACDN
             // 
             resources.ApplyResources(ckbEACDN, "ckbEACDN");
@@ -992,7 +983,7 @@
             dgvIpList.AllowUserToAddRows = false;
             dgvIpList.AllowUserToDeleteRows = false;
             dgvIpList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvIpList.Columns.AddRange(new DataGridViewColumn[] { Col_Check, Col_IP, Col_ASN, Col_302, Col_TTL, Col_RoundtripTime, Col_Speed });
+            dgvIpList.Columns.AddRange(new DataGridViewColumn[] { Col_Check, Col_IP, Col_Location, Col_302, Col_TTL, Col_RoundtripTime, Col_Speed });
             resources.ApplyResources(dgvIpList, "dgvIpList");
             dgvIpList.MultiSelect = false;
             dgvIpList.Name = "dgvIpList";
@@ -1013,12 +1004,12 @@
             Col_IP.ReadOnly = true;
             Col_IP.Resizable = DataGridViewTriState.True;
             // 
-            // Col_ASN
+            // Col_Location
             // 
-            resources.ApplyResources(Col_ASN, "Col_ASN");
-            Col_ASN.Name = "Col_ASN";
-            Col_ASN.ReadOnly = true;
-            Col_ASN.Resizable = DataGridViewTriState.True;
+            resources.ApplyResources(Col_Location, "Col_Location");
+            Col_Location.Name = "Col_Location";
+            Col_Location.ReadOnly = true;
+            Col_Location.Resizable = DataGridViewTriState.True;
             // 
             // Col_302
             // 
@@ -1175,63 +1166,63 @@
             resources.ApplyResources(ckbOther, "ckbOther");
             ckbOther.Name = "ckbOther";
             ckbOther.UseVisualStyleBackColor = true;
-            ckbOther.CheckedChanged += CkbASN_CheckedChanged;
+            ckbOther.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbSG
             // 
             resources.ApplyResources(ckbSG, "ckbSG");
             ckbSG.Name = "ckbSG";
             ckbSG.UseVisualStyleBackColor = true;
-            ckbSG.CheckedChanged += CkbASN_CheckedChanged;
+            ckbSG.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbKorea
             // 
             resources.ApplyResources(ckbKorea, "ckbKorea");
             ckbKorea.Name = "ckbKorea";
             ckbKorea.UseVisualStyleBackColor = true;
-            ckbKorea.CheckedChanged += CkbASN_CheckedChanged;
+            ckbKorea.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbJapan
             // 
             resources.ApplyResources(ckbJapan, "ckbJapan");
             ckbJapan.Name = "ckbJapan";
             ckbJapan.UseVisualStyleBackColor = true;
-            ckbJapan.CheckedChanged += CkbASN_CheckedChanged;
+            ckbJapan.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbTW
             // 
             resources.ApplyResources(ckbTW, "ckbTW");
             ckbTW.Name = "ckbTW";
             ckbTW.UseVisualStyleBackColor = true;
-            ckbTW.CheckedChanged += CkbASN_CheckedChanged;
+            ckbTW.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbHK
             // 
             resources.ApplyResources(ckbHK, "ckbHK");
             ckbHK.Name = "ckbHK";
             ckbHK.UseVisualStyleBackColor = true;
-            ckbHK.CheckedChanged += CkbASN_CheckedChanged;
+            ckbHK.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbChinaMobile
             // 
             resources.ApplyResources(ckbChinaMobile, "ckbChinaMobile");
             ckbChinaMobile.Name = "ckbChinaMobile";
             ckbChinaMobile.UseVisualStyleBackColor = true;
-            ckbChinaMobile.CheckedChanged += CkbASN_CheckedChanged;
+            ckbChinaMobile.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbChinaUnicom
             // 
             resources.ApplyResources(ckbChinaUnicom, "ckbChinaUnicom");
             ckbChinaUnicom.Name = "ckbChinaUnicom";
             ckbChinaUnicom.UseVisualStyleBackColor = true;
-            ckbChinaUnicom.CheckedChanged += CkbASN_CheckedChanged;
+            ckbChinaUnicom.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // ckbChinaTelecom
             // 
             resources.ApplyResources(ckbChinaTelecom, "ckbChinaTelecom");
             ckbChinaTelecom.Name = "ckbChinaTelecom";
             ckbChinaTelecom.UseVisualStyleBackColor = true;
-            ckbChinaTelecom.CheckedChanged += CkbASN_CheckedChanged;
+            ckbChinaTelecom.CheckedChanged += CkbLocation_CheckedChanged;
             // 
             // label1
             // 
@@ -2090,7 +2081,7 @@
             resources.ApplyResources(linkLabel4, "linkLabel4");
             linkLabel4.Name = "linkLabel4";
             linkLabel4.TabStop = true;
-            linkLabel4.Tag = "http://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe";
+            linkLabel4.Tag = "https://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe";
             linkLabel4.LinkClicked += Link_LinkClicked;
             // 
             // linkLabel3
@@ -2158,7 +2149,6 @@
             // 
             gbGamingServices.Controls.Add(linkAppGamingServices);
             gbGamingServices.Controls.Add(label50);
-            gbGamingServices.Controls.Add(label49);
             gbGamingServices.Controls.Add(linkReInstallGamingServices);
             gbGamingServices.Controls.Add(linkRestartGamingServices);
             gbGamingServices.Controls.Add(textBox1);
@@ -2177,12 +2167,6 @@
             // 
             resources.ApplyResources(label50, "label50");
             label50.Name = "label50";
-            // 
-            // label49
-            // 
-            resources.ApplyResources(label49, "label49");
-            label49.ForeColor = Color.Red;
-            label49.Name = "label49";
             // 
             // linkReInstallGamingServices
             // 
@@ -2711,7 +2695,6 @@
         private LinkLabel linkNSHomepage;
         private Label labelEA;
         private Label labelBattle;
-        private CheckBox ckbEAProtocol;
         private CheckBox ckbEACDN;
         private Label label16;
         private CheckBox ckbBattleCDN;
@@ -2933,7 +2916,6 @@
         private Label label48;
         private GroupBox gbGamingServices;
         private TextBox textBox1;
-        private Label label49;
         private LinkLabel linkRestartGamingServices;
         private Label label50;
         private LinkLabel linkReInstallGamingServices;
@@ -2945,13 +2927,6 @@
         private DataGridViewTextBoxColumn Col_Mode;
         private ToolStripMenuItem tsmAllUrl;
         private ToolStripMenuItem tsmSpeedTestLog;
-        private DataGridViewCheckBoxColumn Col_Check;
-        private DataGridViewTextBoxColumn Col_IP;
-        private DataGridViewTextBoxColumn Col_ASN;
-        private DataGridViewCheckBoxColumn Col_302;
-        private DataGridViewTextBoxColumn Col_TTL;
-        private DataGridViewTextBoxColumn Col_RoundtripTime;
-        private DataGridViewTextBoxColumn Col_Speed;
         private ToolStripMenuItem tsmAuthorization;
         private ToolStripMenuItem tsmAuthorization1;
         private ToolStripMenuItem tsmAuthorization2;
@@ -2978,5 +2953,12 @@
         private LinkLabel linkUsbDevice;
         private LinkLabel linkLabel4;
         private LinkLabel linkAppGamingServices;
+        private DataGridViewCheckBoxColumn Col_Check;
+        private DataGridViewTextBoxColumn Col_IP;
+        private DataGridViewTextBoxColumn Col_Location;
+        private DataGridViewCheckBoxColumn Col_302;
+        private DataGridViewTextBoxColumn Col_TTL;
+        private DataGridViewTextBoxColumn Col_RoundtripTime;
+        private DataGridViewTextBoxColumn Col_Speed;
     }
 }

@@ -12,13 +12,10 @@ namespace XboxDownload
         public const string updateUrl = "https://github.com/skydevil88/XboxDownload/releases/";
         public const string filePath = "download/v1/";
         private const string testFile = "XboxDownload.exe.md5";
-        public const string dataFile = "XboxGame.json";
         private static readonly string[,] proxys = {
             { "proxy", "https://ghproxy.com/" },
             { "proxy", "https://ghps.cc/" },
-            { "proxy", "https://proxy.zyun.vip/" },
-            { "proxy", "https://gh.api.99988866.xyz/" },  //慢
-            //{ "proxy", "https://github.91chi.fun/" },   //失效
+            { "proxy", "https://gh.api.99988866.xyz/" },
             //{ "mirror", "https://cdn.githubjs.cf/" },   //失效
             //{ "mirror", "https://hub.fastgit.xyz/" },   //失效
             { "direct", "" }

@@ -17,7 +17,7 @@ namespace XboxDownload
             dt = new DataTable();
             dt.Columns.Add("IP", typeof(string));
             dt.Columns.Add("IpFilter", typeof(string));
-            dt.Columns.Add("ASN", typeof(string));
+            dt.Columns.Add("Location", typeof(string));
             dt.Columns.Add("IpLong", typeof(ulong));
             var col = dt.Columns["IpFilter"];
             if (col != null) dt.PrimaryKey = new DataColumn[] { col };
@@ -80,7 +80,7 @@ namespace XboxDownload
                 MessageBox.Show("提交内容不符合条件。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            Match result = Regex.Match(content, @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<ASN>[^\)]+)\)|(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<ASN>.+)\d+ms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$", RegexOptions.Multiline);
+            Match result = Regex.Match(content, @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]+)\)|(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>.+)\d+ms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$", RegexOptions.Multiline);
             while (result.Success)
             {
                 string ip = result.Groups["IP"].Value;
@@ -93,7 +93,7 @@ namespace XboxDownload
                     dr = dt.NewRow();
                     dr["IP"] = ip;
                     dr["IpFilter"] = IpFilter;
-                    dr["ASN"] = Regex.Replace(result.Groups["ASN"].Value.Trim(), @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", "");
+                    dr["Location"] = Regex.Replace(result.Groups["Location"].Value.Trim(), @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", "");
                     dr["IpLong"] = ipLong;
                     dt.Rows.Add(dr);
                 }

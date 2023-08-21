@@ -272,7 +272,7 @@ namespace XboxDownload
                 {
                     if (!Directory.Exists(Form1.resourcePath))
                         Directory.CreateDirectory(Form1.resourcePath);
-                    File.WriteAllText(Form1.resourcePath + "\\" + UpdateFile.dataFile, jsonString);
+                    File.WriteAllText(Form1.resourcePath + "\\XboxGame.json", jsonString);
                 }
                 catch { }
             });

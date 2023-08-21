@@ -77,10 +77,9 @@ namespace XboxDownload
                 dgvr.Cells[2].Value = mo.Properties["InterfaceType"].Value;
                 dgvr.Cells[3].Value = ClassMbr.ConvertBytes(Convert.ToUInt64(mo.Properties["Size"].Value));
                 dgvr.Cells[4].Value = type;
-                if (type != "MBR") dgvr.Cells[4].Style.ForeColor = Color.Red;
+                dgvr.Cells[4].Style.ForeColor = type == "MBR" ? Color.Green : Color.Red;
                 dgvr.Cells[5].Value = partitions;
-                if (partitions != 1)
-                    dgvr.Cells[5].Style.ForeColor = Color.Red;
+                dgvr.Cells[5].Style.ForeColor = partitions == 1 ? Color.Green : Color.Red;
                 dgvr.Cells[6].Value = string.Join(',', lstDisk.ToArray());
                 list.Add(dgvr);
             }
@@ -126,7 +125,7 @@ namespace XboxDownload
                     return;
                 }
                 Button1_Click(sender, e);
-                MessageBox.Show("重新分区成功。", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("已完成分区。", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

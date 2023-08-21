@@ -1,6 +1,6 @@
 ﻿namespace XboxDownload
 {
-    internal class ClassFileContentType
+    internal class ClassContentType
     {
         private static readonly Dictionary<string, string> Mappings = new(StringComparer.OrdinalIgnoreCase)
         {

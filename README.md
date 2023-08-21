@@ -1,4 +1,5 @@
 # Xbox下载助手
+[English](https://github.com/skydevil88/XboxDownload-EN)
 
 [OpenWrt 安装 Lighttpd 或者 Nginx，使用URL重写跳转国内CDN服务器加速下载](./README_OpenWrt.md)
 

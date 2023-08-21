@@ -169,18 +169,6 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EAProtocol {
-            get {
-                return ((bool)(this["EAProtocol"]));
-            }
-            set {
-                this["EAProtocol"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string BattleIP {
             get {
@@ -422,12 +410,12 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string IpArea {
+        public string IpLocation {
             get {
-                return ((string)(this["IpArea"]));
+                return ((string)(this["IpLocation"]));
             }
             set {
-                this["IpArea"] = value;
+                this["IpLocation"] = value;
             }
         }
         

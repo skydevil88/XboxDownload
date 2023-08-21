@@ -38,9 +38,6 @@
     <Setting Name="EACDN" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="EAProtocol" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="BattleIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -101,7 +98,7 @@
     <Setting Name="RecordLog" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="IpArea" Type="System.String" Scope="User">
+    <Setting Name="IpLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="IpsAkamai" Type="System.String" Scope="User">

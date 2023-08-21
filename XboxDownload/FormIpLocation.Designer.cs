@@ -1,6 +1,6 @@
 ﻿namespace XboxDownload
 {
-    partial class FormFindIpArea
+    partial class FormIpLocation
     {
         /// <summary>
         /// Required designer variable.

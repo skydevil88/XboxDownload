@@ -19,6 +19,7 @@ namespace XboxDownload
     {
         internal static Boolean bServiceFlag = false, bAutoStartup = false;
         internal readonly static String resourcePath = Application.StartupPath + "Resource";
+        internal const string gameData = "XboxGame.json";
         internal static List<Market> lsMarket = new();
         internal static float dpixRatio = 1;
         private readonly DataTable dtHosts = new("Hosts");
@@ -85,7 +86,6 @@ namespace XboxDownload
             ckbBattleCDN.Checked = Properties.Settings.Default.BattleCDN;
             tbEpicIP.Text = Properties.Settings.Default.EpicIP;
             ckbEpicCDN.Checked = Properties.Settings.Default.EpicCDN;
-            ckbEAProtocol.Checked = Properties.Settings.Default.EAProtocol;
             ckbRedirect.Checked = Properties.Settings.Default.Redirect;
             ckbTruncation.Checked = Properties.Settings.Default.Truncation;
             ckbLocalUpload.Checked = Properties.Settings.Default.LocalUpload;
@@ -224,9 +224,9 @@ namespace XboxDownload
                 gbAddAppxPackage.Visible = gbGamingServices.Visible = false;
             }
 
-            if (File.Exists(resourcePath + "\\" + UpdateFile.dataFile))
+            if (File.Exists(resourcePath + "\\XboxGame.json"))
             {
-                string json = File.ReadAllText(resourcePath + "\\" + UpdateFile.dataFile);
+                string json = File.ReadAllText(resourcePath + "\\XboxGame.json");
                 XboxGameDownload.XboxGame? xboxGame = null;
                 try
                 {
@@ -434,7 +434,6 @@ namespace XboxDownload
         {
             FolderBrowserDialog dlg = new()
             {
-                Description = "选择本地上传文件夹",
                 SelectedPath = tbLocalPath.Text
             };
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -644,7 +643,6 @@ namespace XboxDownload
                 Properties.Settings.Default.NSBrowser = ckbNSBrowser.Checked;
                 Properties.Settings.Default.EAIP = eaIP;
                 Properties.Settings.Default.EACDN = ckbEACDN.Checked;
-                Properties.Settings.Default.EAProtocol = ckbEAProtocol.Checked;
                 Properties.Settings.Default.BattleIP = battleIP;
                 Properties.Settings.Default.BattleCDN = ckbBattleCDN.Checked;
                 Properties.Settings.Default.EpicIP = epicIP;
@@ -840,7 +838,6 @@ namespace XboxDownload
             if (add)
             {
                 DnsListen.dicHosts.Clear();
-                DnsListen.dicHosts2.Clear();
                 DataTable dt = dtHosts.Clone();
                 if (File.Exists(resourcePath + "\\Hosts.xml"))
                 {
@@ -925,6 +922,7 @@ namespace XboxDownload
                         if (Properties.Settings.Default.HttpService)
                         {
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " www.msftconnecttest.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " packagespc.xboxlive.com");
                         }
                     }
                     if (Properties.Settings.Default.EAStore)
@@ -1344,37 +1342,37 @@ namespace XboxDownload
             }
 
             List<DataGridViewRow> list = new();
-            Match result = Regex.Match(content, @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<ASN>[^\)]+)\)|(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<ASN>.+)\dms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$", RegexOptions.Multiline);
+            Match result = Regex.Match(content, @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]+)\)|(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>.+)\dms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$", RegexOptions.Multiline);
             if (result.Success)
             {
                 while (result.Success)
                 {
                     string ip = result.Groups["IP"].Value;
-                    string ASN = result.Groups["ASN"].Value.Trim();
+                    string location = result.Groups["Location"].Value.Trim();
 
                     DataGridViewRow dgvr = new();
                     dgvr.CreateCells(dgvIpList);
                     dgvr.Resizable = DataGridViewTriState.False;
-                    if (ASN.Contains("电信"))
+                    if (location.Contains("电信"))
                         dgvr.Cells[0].Value = ckbChinaTelecom.Checked;
-                    if (ASN.Contains("联通"))
+                    if (location.Contains("联通"))
                         dgvr.Cells[0].Value = ckbChinaUnicom.Checked;
-                    if (ASN.Contains("移动"))
+                    if (location.Contains("移动"))
                         dgvr.Cells[0].Value = ckbChinaMobile.Checked;
-                    if (ASN.Contains("香港"))
+                    if (location.Contains("香港"))
                         dgvr.Cells[0].Value = ckbHK.Checked;
-                    if (ASN.Contains("台湾"))
+                    if (location.Contains("台湾"))
                         dgvr.Cells[0].Value = ckbTW.Checked;
-                    if (ASN.Contains("日本"))
+                    if (location.Contains("日本"))
                         dgvr.Cells[0].Value = ckbJapan.Checked;
-                    if (ASN.Contains("韩国"))
+                    if (location.Contains("韩国"))
                         dgvr.Cells[0].Value = ckbKorea.Checked;
-                    if (ASN.Contains("新加坡"))
+                    if (location.Contains("新加坡"))
                         dgvr.Cells[0].Value = ckbSG.Checked;
-                    if (!Regex.IsMatch(ASN, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
+                    if (!Regex.IsMatch(location, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
                         dgvr.Cells[0].Value = ckbOther.Checked;
                     dgvr.Cells[1].Value = ip;
-                    dgvr.Cells[2].Value = ASN;
+                    dgvr.Cells[2].Value = location;
                     list.Add(dgvr);
                     result = result.NextMatch();
                 }
@@ -1657,51 +1655,51 @@ namespace XboxDownload
             }
         }
 
-        private void CkbASN_CheckedChanged(object sender, EventArgs e)
+        private void CkbLocation_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
             string network = cb.Text;
             bool isChecked = cb.Checked;
             foreach (DataGridViewRow dgvr in dgvIpList.Rows)
             {
-                string? ASN = dgvr.Cells["Col_ASN"].Value.ToString();
-                if (ASN == null) continue;
+                string? location = dgvr.Cells["Col_Location"].Value.ToString();
+                if (location == null) continue;
                 switch (network)
                 {
                     case "电信":
-                        if (ASN.Contains("电信"))
+                        if (location.Contains("电信"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "联通":
-                        if (ASN.Contains("联通"))
+                        if (location.Contains("联通"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "移动":
-                        if (ASN.Contains("移动"))
+                        if (location.Contains("移动"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "香港":
-                        if (ASN.Contains("香港"))
+                        if (location.Contains("香港"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "台湾":
-                        if (ASN.Contains("台湾"))
+                        if (location.Contains("台湾"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "日本":
-                        if (ASN.Contains("日本"))
+                        if (location.Contains("日本"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "韩国":
-                        if (ASN.Contains("韩国"))
+                        if (location.Contains("韩国"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     case "新加坡":
-                        if (ASN.Contains("新加坡"))
+                        if (location.Contains("新加坡"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                     default:
-                        if (!Regex.IsMatch(ASN, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
+                        if (!Regex.IsMatch(location, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
                             dgvr.Cells["Col_Check"].Value = isChecked;
                         break;
                 }
@@ -1715,7 +1713,7 @@ namespace XboxDownload
                 MessageBox.Show("请先导入IP。", "IP列表为空", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            FormFindIpArea dialog = new();
+            FormIpLocation dialog = new();
             dialog.ShowDialog();
             string key = dialog.key;
             dialog.Dispose();
@@ -1740,9 +1738,9 @@ namespace XboxDownload
                 int rowIndex = 0;
                 foreach (DataGridViewRow dgvr in dgvIpList.Rows)
                 {
-                    if (dgvr.Cells["Col_ASN"].Value == null) continue;
-                    string? ASN = dgvr.Cells["Col_ASN"].Value.ToString();
-                    if (ASN != null && reg.IsMatch(ASN))
+                    if (dgvr.Cells["Col_Location"].Value == null) continue;
+                    string? location = dgvr.Cells["Col_Location"].Value.ToString();
+                    if (location != null && reg.IsMatch(location))
                     {
                         dgvr.Cells["Col_Check"].Value = true;
                         dgvIpList.Rows.Remove(dgvr);
@@ -1773,9 +1771,9 @@ namespace XboxDownload
                 foreach (DataGridViewRow dgvr in dgvIpList.Rows)
                 {
                     if (dgvr.Cells["Col_Speed"].Value != null && !string.IsNullOrEmpty(dgvr.Cells["Col_Speed"].Value.ToString()))
-                        sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_ASN"].Value + ")\t" + dgvr.Cells["Col_TTL"].Value + "|" + dgvr.Cells["Col_RoundtripTime"].Value + "|" + dgvr.Cells["Col_Speed"].Value);
+                        sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_LocationN"].Value + ")\t" + dgvr.Cells["Col_TTL"].Value + "|" + dgvr.Cells["Col_RoundtripTime"].Value + "|" + dgvr.Cells["Col_Speed"].Value);
                     else
-                        sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_ASN"].Value + ")");
+                        sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_Location"].Value + ")");
                 }
                 File.WriteAllText(dlg.FileName, sb.ToString());
             }
@@ -1797,33 +1795,33 @@ namespace XboxDownload
                 dgvIpList.Tag = host;
                 List<DataGridViewRow> list = new();
                 gbIPList.Text = "IP 列表 (" + dgvIpList.Tag + ")";
-                foreach (DataRow dr in dt.Select("", "ASN, IpLong"))
+                foreach (DataRow dr in dt.Select("", "Location, IpLong"))
                 {
-                    string? ASN = dr["ASN"].ToString();
-                    if (ASN == null) continue;
+                    string? location = dr["Location"].ToString();
+                    if (location == null) continue;
                     DataGridViewRow dgvr = new();
                     dgvr.CreateCells(dgvIpList);
                     dgvr.Resizable = DataGridViewTriState.False;
-                    if (ASN.Contains("电信"))
+                    if (location.Contains("电信"))
                         dgvr.Cells[0].Value = ckbChinaTelecom.Checked;
-                    if (ASN.Contains("联通"))
+                    if (location.Contains("联通"))
                         dgvr.Cells[0].Value = ckbChinaUnicom.Checked;
-                    if (ASN.Contains("移动"))
+                    if (location.Contains("移动"))
                         dgvr.Cells[0].Value = ckbChinaMobile.Checked;
-                    if (ASN.Contains("香港"))
+                    if (location.Contains("香港"))
                         dgvr.Cells[0].Value = ckbHK.Checked;
-                    if (ASN.Contains("台湾"))
+                    if (location.Contains("台湾"))
                         dgvr.Cells[0].Value = ckbTW.Checked;
-                    if (ASN.Contains("日本"))
+                    if (location.Contains("日本"))
                         dgvr.Cells[0].Value = ckbJapan.Checked;
-                    if (ASN.Contains("韩国"))
+                    if (location.Contains("韩国"))
                         dgvr.Cells[0].Value = ckbKorea.Checked;
-                    if (ASN.Contains("新加坡"))
+                    if (location.Contains("新加坡"))
                         dgvr.Cells[0].Value = ckbSG.Checked;
-                    if (!Regex.IsMatch(ASN, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
+                    if (!Regex.IsMatch(location, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
                         dgvr.Cells[0].Value = ckbOther.Checked;
                     dgvr.Cells[1].Value = dr["IP"];
-                    dgvr.Cells[2].Value = dr["ASN"];
+                    dgvr.Cells[2].Value = dr["Location"];
                     list.Add(dgvr);
                 }
                 if (list.Count >= 1)
@@ -2107,7 +2105,7 @@ namespace XboxDownload
                 tbDlUrl.Text = link?.Tag.ToString();
             }
             cbImportIP.Enabled = butSpeedTest.Enabled = false;
-            Col_IP.SortMode = Col_ASN.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Col_IP.SortMode = Col_Location.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
             ThreadPool.QueueUserWorkItem(delegate { SpeedTest(ls); });
         }
 
@@ -2212,7 +2210,7 @@ namespace XboxDownload
 
                 butSpeedTest.Text = "停止测速";
                 ckbChinaTelecom.Enabled = ckbChinaUnicom.Enabled = ckbChinaMobile.Enabled = ckbHK.Enabled = ckbTW.Enabled = ckbJapan.Enabled = ckbKorea.Enabled = ckbSG.Enabled = ckbOther.Enabled = linkFindIpArea.Enabled = linkExportIP.Enabled = cbImportIP.Enabled = linkImportIPManual.Enabled = flpTestUrl.Enabled = tbDlUrl.Enabled = cbSpeedTestTimeOut.Enabled = false;
-                Col_IP.SortMode = Col_ASN.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
+                Col_IP.SortMode = Col_Location.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
                 Col_Check.ReadOnly = true;
                 var timeout = cbSpeedTestTimeOut.SelectedIndex switch
                 {
@@ -2448,7 +2446,7 @@ namespace XboxDownload
             {
                 butSpeedTest.Text = "开始测速";
                 ckbChinaTelecom.Enabled = ckbChinaUnicom.Enabled = ckbChinaMobile.Enabled = ckbHK.Enabled = ckbTW.Enabled = ckbJapan.Enabled = ckbKorea.Enabled = ckbSG.Enabled = ckbOther.Enabled = linkFindIpArea.Enabled = linkExportIP.Enabled = cbImportIP.Enabled = linkImportIPManual.Enabled = flpTestUrl.Enabled = tbDlUrl.Enabled = cbSpeedTestTimeOut.Enabled = true;
-                Col_IP.SortMode = Col_ASN.SortMode = Col_Speed.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = DataGridViewColumnSortMode.Automatic;
+                Col_IP.SortMode = Col_Location.SortMode = Col_Speed.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = DataGridViewColumnSortMode.Automatic;
                 Col_Check.ReadOnly = false;
                 butSpeedTest.Enabled = true;
             }));
@@ -4202,6 +4200,7 @@ namespace XboxDownload
                     catch { }
                 }
             }
+            bool succeed = false;
             if (json != null && json.Code == "200")
             {
                 DateTime limit = DateTime.Now.AddMinutes(3);
@@ -4216,7 +4215,7 @@ namespace XboxDownload
                         {
                             XboxGame.Version = version;
                             XboxGame.FileSize = json.Data.Size;
-                            XboxGame.Url = json.Data.Url.Replace(".xboxlive.cn", ".xboxlive.com");
+                            XboxGame.Url = json.Data.Url;
                             update = true;
                         }
                     }
@@ -4226,7 +4225,7 @@ namespace XboxDownload
                         {
                             Version = version,
                             FileSize = json.Data.Size,
-                            Url = json.Data.Url.Replace(".xboxlive.cn", ".xboxlive.com")
+                            Url = json.Data.Url
                         };
                         XboxGameDownload.dicXboxGame.TryAdd(key, XboxGame);
                         update = true;
@@ -4239,6 +4238,7 @@ namespace XboxDownload
                     {
                         if (XboxGame.FileSize == packages.MaxDownloadSizeInBytes)
                         {
+                            succeed = true;
                             item.ForeColor = Color.Empty;
                             item.SubItems[3].Text = Path.GetFileName(XboxGame.Url);
                         }
@@ -4251,6 +4251,78 @@ namespace XboxDownload
                                 item.SubItems[3].Text = Path.GetFileName(XboxGame.Url);
                             }
                         }
+                    }));
+                }
+            }
+            if (!succeed && platform == 2)
+            {
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.Authorization))
+                {
+                    string hosts = "packagespc.xboxlive.com", url = String.Empty;
+                    ulong filesize = 0;
+                    string? ip = ClassDNS.DoH(hosts);
+                    if (string.IsNullOrEmpty(ip)) return;
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://" + ip + "/GetBasePackage/" + contentId, "GET", null, null, new() { { "Host", hosts }, { "Authorization", Properties.Settings.Default.Authorization } });
+                    if (response != null)
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string html = response.Content.ReadAsStringAsync().Result;
+                            if (Regex.IsMatch(html, @"^{.+}$"))
+                            {
+                                XboxGameDownload.PackageFiles? packageFiles = null;
+                                try
+                                {
+                                    var json2 = JsonSerializer.Deserialize<XboxGameDownload.Game>(html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                                    if (json2 != null && json2.PackageFound)
+                                    {
+                                        contentId = json2.ContentId;
+                                        packageFiles = json2.PackageFiles.Where(x => x.RelativeUrl.ToLower().EndsWith(".msixvc")).FirstOrDefault();
+                                    }
+                                }
+                                catch { }
+                                if (packageFiles != null)
+                                {
+                                    url = packageFiles.CdnRootPaths[0] + packageFiles.RelativeUrl;
+                                    Version version;
+                                    Match result = Regex.Match(url, @"(?<version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
+                                    if (result.Success)
+                                        version = new Version(result.Groups["version"].Value);
+                                    else
+                                        version = new Version();
+                                    XboxGameDownload.Products XboxGame = new()
+                                    {
+                                        Version = version,
+                                        FileSize = packageFiles.FileSize,
+                                        Url = url
+                                    };
+                                    filesize = packageFiles.FileSize;
+                                    XboxGameDownload.dicXboxGame.AddOrUpdate(contentId.ToLower(), XboxGame, (oldkey, oldvalue) => XboxGame);
+                                    packages.MaxDownloadSizeInBytes = filesize;
+                                    packages.PackageDownloadUris[0].Uri = url;
+                                    XboxGameDownload.SaveXboxGame();
+                                }
+                            }
+                        }
+                        else if ((int)response.StatusCode == 401)
+                        {
+                            Properties.Settings.Default.Authorization = null;
+                            Properties.Settings.Default.Save();
+                            url = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载地址即可更新授权。";
+                        }
+                    }
+                    this.Invoke(new Action(() =>
+                    {
+                        if (filesize > 0) item.SubItems[2].Text = ClassMbr.ConvertBytes(filesize);
+                        item.SubItems[3].Text = Path.GetFileName(url);
+                    }));
+                    if (Regex.IsMatch(url, @"^https?://")) _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(url), "PUT", null, null, null, 30000, "XboxDownload");
+                }
+                else
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        item.SubItems[3].Text = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载地址即可更新授权。";
                     }));
                 }
             }

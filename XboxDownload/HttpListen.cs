@@ -427,17 +427,30 @@ namespace XboxDownload
                 {
                     if (XboxGame.Version >= version) return;
                 }
-                _hosts = _hosts.Replace(".xboxlive.cn", ".xboxlive.com");
-                if (!DnsListen.dicHosts2.TryGetValue(_hosts, out IPAddress? ip))
+                string? ip = ClassDNS.DoH(_hosts);
+                if (!string.IsNullOrEmpty(ip))
                 {
-                    if (IPAddress.TryParse(ClassDNS.DoH(_hosts), out ip))
+                    switch (_hosts)
                     {
-                        DnsListen.dicHosts2.AddOrUpdate(_hosts, ip, (oldkey, oldvalue) => ip);
+                        case "xvcf1.xboxlive.com":
+                        case "xvcf2.xboxlive.com":
+                        case "assets2.xboxlive.com":
+                        case "d1.xboxlive.com":
+                        case "d2.xboxlive.com":
+                        case "assets1.xboxlive.cn":
+                        case "assets2.xboxlive.cn":
+                        case "d1.xboxlive.cn":
+                        case "d2.xboxlive.cn":
+                            _hosts = "assets1.xboxlive.com";
+                            break;
+                        case "dlassets2.xboxlive.com":
+                        case "dlassets.xboxlive.cn":
+                        case "dlassets2.xboxlive.cn":
+                            _hosts = "dlassets.xboxlive.com";
+                            break;
                     }
-                }
-                if (ip != null)
-                {
-                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("http://" + _hosts + _filePath, "HEAD");
+                    var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("http://" + ip + _filePath, "HEAD", null, null, headers);
                     if (response != null && response.IsSuccessStatusCode)
                     {
                         if (response.Content.Headers.TryGetValues("Content-Length", out IEnumerable<string>? values))
