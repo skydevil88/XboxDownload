@@ -1405,8 +1405,8 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/13/abd26785-75c8-4827-a12f-c10235e143a3/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3837.49917.0.19ff2e2f-7f9a-4634-9d07-1f6193025edf/Microsoft.254428597CFE2_1.3837.49917.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/2/bae18d93-3d78-4c58-a07d-e3ec612613e2/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.604.481.0.ac24d78f-4e0f-4263-842a-d55e08762827/Microsoft.624F8B84B80_3.604.481.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/4/156d3739-bf1a-4deb-ad5c-6f3942fdeb4f/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3871.53028.0.5f8eece4-d371-4fb4-a0bd-3b986e9e6508/Microsoft.254428597CFE2_1.3871.53028.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/11/56a056df-37c7-441b-a3fc-34f1381027ee/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.607.493.0.19f79437-3767-4f94-91c1-5bb1e8bbd295/Microsoft.624F8B84B80_3.607.493.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -1771,7 +1771,7 @@ namespace XboxDownload
                 foreach (DataGridViewRow dgvr in dgvIpList.Rows)
                 {
                     if (dgvr.Cells["Col_Speed"].Value != null && !string.IsNullOrEmpty(dgvr.Cells["Col_Speed"].Value.ToString()))
-                        sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_LocationN"].Value + ")\t" + dgvr.Cells["Col_TTL"].Value + "|" + dgvr.Cells["Col_RoundtripTime"].Value + "|" + dgvr.Cells["Col_Speed"].Value);
+                        sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_Location"].Value + ")\t" + dgvr.Cells["Col_TTL"].Value + "|" + dgvr.Cells["Col_RoundtripTime"].Value + "|" + dgvr.Cells["Col_Speed"].Value);
                     else
                         sb.AppendLine(dgvr.Cells["Col_IP"].Value + "\t(" + dgvr.Cells["Col_Location"].Value + ")");
                 }
@@ -1793,8 +1793,8 @@ namespace XboxDownload
                 flpTestUrl.Controls.Clear();
                 tbDlUrl.Clear();
                 dgvIpList.Tag = host;
+                gbIPList.Text = "IP 列表 (" + host + ")";
                 List<DataGridViewRow> list = new();
-                gbIPList.Text = "IP 列表 (" + dgvIpList.Tag + ")";
                 foreach (DataRow dr in dt.Select("", "Location, IpLong"))
                 {
                     string? location = dr["Location"].ToString();
@@ -2104,7 +2104,11 @@ namespace XboxDownload
                 LinkLabel? link = flpTestUrl.Controls[0] as LinkLabel;
                 tbDlUrl.Text = link?.Tag.ToString();
             }
-            cbImportIP.Enabled = butSpeedTest.Enabled = false;
+            foreach (Control control in this.panelSpeedTest.Controls)
+            {
+                if (control is TextBox || control is CheckBox || control is Button || control is ComboBox || control is LinkLabel || control is FlowLayoutPanel)
+                    control.Enabled = false;
+            }
             Col_IP.SortMode = Col_Location.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
             ThreadPool.QueueUserWorkItem(delegate { SpeedTest(ls); });
         }
@@ -2209,7 +2213,11 @@ namespace XboxDownload
                 dgvIpList.Rows[0].Cells[0].Selected = true;
 
                 butSpeedTest.Text = "停止测速";
-                ckbChinaTelecom.Enabled = ckbChinaUnicom.Enabled = ckbChinaMobile.Enabled = ckbHK.Enabled = ckbTW.Enabled = ckbJapan.Enabled = ckbKorea.Enabled = ckbSG.Enabled = ckbOther.Enabled = linkFindIpArea.Enabled = linkExportIP.Enabled = cbImportIP.Enabled = linkImportIPManual.Enabled = flpTestUrl.Enabled = tbDlUrl.Enabled = cbSpeedTestTimeOut.Enabled = false;
+                foreach (Control control in this.panelSpeedTest.Controls)
+                {
+                    if ((control is TextBox || control is CheckBox || control is Button || control is ComboBox || control is LinkLabel || control is FlowLayoutPanel) && control != butSpeedTest)
+                        control.Enabled = false;
+                }
                 Col_IP.SortMode = Col_Location.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
                 Col_Check.ReadOnly = true;
                 var timeout = cbSpeedTestTimeOut.SelectedIndex switch
@@ -2445,7 +2453,11 @@ namespace XboxDownload
             this.Invoke(new Action(() =>
             {
                 butSpeedTest.Text = "开始测速";
-                ckbChinaTelecom.Enabled = ckbChinaUnicom.Enabled = ckbChinaMobile.Enabled = ckbHK.Enabled = ckbTW.Enabled = ckbJapan.Enabled = ckbKorea.Enabled = ckbSG.Enabled = ckbOther.Enabled = linkFindIpArea.Enabled = linkExportIP.Enabled = cbImportIP.Enabled = linkImportIPManual.Enabled = flpTestUrl.Enabled = tbDlUrl.Enabled = cbSpeedTestTimeOut.Enabled = true;
+                foreach (Control control in this.panelSpeedTest.Controls)
+                {
+                    if (control is TextBox || control is CheckBox || control is Button || control is ComboBox || control is LinkLabel || control is FlowLayoutPanel)
+                        control.Enabled = true;
+                }
                 Col_IP.SortMode = Col_Location.SortMode = Col_Speed.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = DataGridViewColumnSortMode.Automatic;
                 Col_Check.ReadOnly = false;
                 butSpeedTest.Enabled = true;
@@ -2935,7 +2947,7 @@ namespace XboxDownload
         private void ButScan_Click(object sender, EventArgs e)
         {
             dgvDevice.Rows.Clear();
-            butEnabelPc.Enabled = butEnabelXbox.Enabled = false;
+            butEnablePc.Enabled = butEnableXbox.Enabled = false;
             List<DataGridViewRow> list = new();
 
             ManagementClass mc = new("Win32_DiskDrive");
@@ -2976,17 +2988,17 @@ namespace XboxDownload
             string? mode = dgvDevice.Rows[e.RowIndex].Tag?.ToString();
             if (mode == "99CC")
             {
-                butEnabelPc.Enabled = true;
-                butEnabelXbox.Enabled = false;
+                butEnablePc.Enabled = true;
+                butEnableXbox.Enabled = false;
             }
             else if (mode == "55AA")
             {
-                butEnabelPc.Enabled = false;
-                butEnabelXbox.Enabled = true;
+                butEnablePc.Enabled = false;
+                butEnableXbox.Enabled = true;
             }
         }
 
-        private void ButEnabelPc_Click(object sender, EventArgs e)
+        private void ButEnablePc_Click(object sender, EventArgs e)
         {
             if (dgvDevice.SelectedRows.Count != 1) return;
             if (Environment.OSVersion.Version.Major < 10)
@@ -3006,7 +3018,7 @@ namespace XboxDownload
                     dgvDevice.SelectedRows[0].Tag = "55AA";
                     dgvDevice.SelectedRows[0].Cells["Col_Mode"].Value = "PC 模式";
                     dgvDevice.ClearSelection();
-                    butEnabelPc.Enabled = false;
+                    butEnablePc.Enabled = false;
                     using (Process p = new())
                     {
                         p.StartInfo.FileName = "diskpart.exe";
@@ -3023,7 +3035,7 @@ namespace XboxDownload
             }
         }
 
-        private void ButEnabelXbox_Click(object sender, EventArgs e)
+        private void ButEnableXbox_Click(object sender, EventArgs e)
         {
             if (dgvDevice.SelectedRows.Count != 1) return;
             string? sDeviceID = dgvDevice.SelectedRows[0].Cells["Col_DeviceID"].Value.ToString();
@@ -3038,7 +3050,7 @@ namespace XboxDownload
                     dgvDevice.SelectedRows[0].Tag = "99CC";
                     dgvDevice.SelectedRows[0].Cells["Col_Mode"].Value = "Xbox 模式";
                     dgvDevice.ClearSelection();
-                    butEnabelXbox.Enabled = false;
+                    butEnableXbox.Enabled = false;
                     MessageBox.Show("成功转换Xbox模式。", "转换Xbox模式", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
             }

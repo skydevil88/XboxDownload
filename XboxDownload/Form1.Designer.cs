@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -41,6 +41,7 @@
             toolStripDropDownButton2 = new ToolStripDropDownButton();
             tsmProductManual = new ToolStripMenuItem();
             tsmTeaching = new ToolStripMenuItem();
+            tsmTeaching0 = new ToolStripMenuItem();
             tsmTeaching4 = new ToolStripMenuItem();
             tsmTeaching3 = new ToolStripMenuItem();
             tsmTeaching2 = new ToolStripMenuItem();
@@ -129,7 +130,7 @@
             Col_TTL = new DataGridViewTextBoxColumn();
             Col_RoundtripTime = new DataGridViewTextBoxColumn();
             Col_Speed = new DataGridViewTextBoxColumn();
-            panel3 = new Panel();
+            panelSpeedTest = new Panel();
             cbSpeedTestTimeOut = new ComboBox();
             label7 = new Label();
             butSpeedTest = new Button();
@@ -218,8 +219,8 @@
             Col_Mode = new DataGridViewTextBoxColumn();
             panel5 = new Panel();
             butScan = new Button();
-            butEnabelXbox = new Button();
-            butEnabelPc = new Button();
+            butEnableXbox = new Button();
+            butEnablePc = new Button();
             tabStore = new TabPage();
             lvGameSearch = new ListView();
             imageList1 = new ImageList(components);
@@ -351,7 +352,7 @@
             tabSpeedTest.SuspendLayout();
             gbIPList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvIpList).BeginInit();
-            panel3.SuspendLayout();
+            panelSpeedTest.SuspendLayout();
             tabHosts.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvHosts).BeginInit();
@@ -432,10 +433,17 @@
             // 
             // tsmTeaching
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
+            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching0, tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
             tsmTeaching.Name = "tsmTeaching";
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
+            // 
+            // tsmTeaching0
+            // 
+            tsmTeaching0.Name = "tsmTeaching0";
+            resources.ApplyResources(tsmTeaching0, "tsmTeaching0");
+            tsmTeaching0.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
+            tsmTeaching0.Click += TsmOpenSite_Click;
             // 
             // tsmTeaching4
             // 
@@ -966,7 +974,7 @@
             // tabSpeedTest
             // 
             tabSpeedTest.Controls.Add(gbIPList);
-            tabSpeedTest.Controls.Add(panel3);
+            tabSpeedTest.Controls.Add(panelSpeedTest);
             resources.ApplyResources(tabSpeedTest, "tabSpeedTest");
             tabSpeedTest.Name = "tabSpeedTest";
             tabSpeedTest.UseVisualStyleBackColor = true;
@@ -1020,9 +1028,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1030,9 +1038,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1040,41 +1048,41 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
             Col_Speed.Resizable = DataGridViewTriState.True;
             // 
-            // panel3
+            // panelSpeedTest
             // 
-            panel3.Controls.Add(cbSpeedTestTimeOut);
-            panel3.Controls.Add(label7);
-            panel3.Controls.Add(butSpeedTest);
-            panel3.Controls.Add(tbDlUrl);
-            panel3.Controls.Add(linkHostsEdit);
-            panel3.Controls.Add(linkHostsClear);
-            panel3.Controls.Add(flpTestUrl);
-            panel3.Controls.Add(label5);
-            panel3.Controls.Add(linkImportIPManual);
-            panel3.Controls.Add(linkExportIP);
-            panel3.Controls.Add(cbImportIP);
-            panel3.Controls.Add(label3);
-            panel3.Controls.Add(linkFindIpArea);
-            panel3.Controls.Add(ckbOther);
-            panel3.Controls.Add(ckbSG);
-            panel3.Controls.Add(ckbKorea);
-            panel3.Controls.Add(ckbJapan);
-            panel3.Controls.Add(ckbTW);
-            panel3.Controls.Add(ckbHK);
-            panel3.Controls.Add(ckbChinaMobile);
-            panel3.Controls.Add(ckbChinaUnicom);
-            panel3.Controls.Add(ckbChinaTelecom);
-            panel3.Controls.Add(label1);
-            resources.ApplyResources(panel3, "panel3");
-            panel3.Name = "panel3";
+            panelSpeedTest.Controls.Add(cbSpeedTestTimeOut);
+            panelSpeedTest.Controls.Add(label7);
+            panelSpeedTest.Controls.Add(butSpeedTest);
+            panelSpeedTest.Controls.Add(tbDlUrl);
+            panelSpeedTest.Controls.Add(linkHostsEdit);
+            panelSpeedTest.Controls.Add(linkHostsClear);
+            panelSpeedTest.Controls.Add(flpTestUrl);
+            panelSpeedTest.Controls.Add(label5);
+            panelSpeedTest.Controls.Add(linkImportIPManual);
+            panelSpeedTest.Controls.Add(linkExportIP);
+            panelSpeedTest.Controls.Add(cbImportIP);
+            panelSpeedTest.Controls.Add(label3);
+            panelSpeedTest.Controls.Add(linkFindIpArea);
+            panelSpeedTest.Controls.Add(ckbOther);
+            panelSpeedTest.Controls.Add(ckbSG);
+            panelSpeedTest.Controls.Add(ckbKorea);
+            panelSpeedTest.Controls.Add(ckbJapan);
+            panelSpeedTest.Controls.Add(ckbTW);
+            panelSpeedTest.Controls.Add(ckbHK);
+            panelSpeedTest.Controls.Add(ckbChinaMobile);
+            panelSpeedTest.Controls.Add(ckbChinaUnicom);
+            panelSpeedTest.Controls.Add(ckbChinaTelecom);
+            panelSpeedTest.Controls.Add(label1);
+            resources.ApplyResources(panelSpeedTest, "panelSpeedTest");
+            panelSpeedTest.Name = "panelSpeedTest";
             // 
             // cbSpeedTestTimeOut
             // 
@@ -1699,8 +1707,8 @@
             // panel5
             // 
             panel5.Controls.Add(butScan);
-            panel5.Controls.Add(butEnabelXbox);
-            panel5.Controls.Add(butEnabelPc);
+            panel5.Controls.Add(butEnableXbox);
+            panel5.Controls.Add(butEnablePc);
             resources.ApplyResources(panel5, "panel5");
             panel5.Name = "panel5";
             // 
@@ -1711,21 +1719,21 @@
             butScan.UseVisualStyleBackColor = true;
             butScan.Click += ButScan_Click;
             // 
-            // butEnabelXbox
+            // butEnableXbox
             // 
-            resources.ApplyResources(butEnabelXbox, "butEnabelXbox");
-            butEnabelXbox.ForeColor = Color.DarkGreen;
-            butEnabelXbox.Name = "butEnabelXbox";
-            butEnabelXbox.UseVisualStyleBackColor = true;
-            butEnabelXbox.Click += ButEnabelXbox_Click;
+            resources.ApplyResources(butEnableXbox, "butEnableXbox");
+            butEnableXbox.ForeColor = Color.DarkGreen;
+            butEnableXbox.Name = "butEnableXbox";
+            butEnableXbox.UseVisualStyleBackColor = true;
+            butEnableXbox.Click += ButEnableXbox_Click;
             // 
-            // butEnabelPc
+            // butEnablePc
             // 
-            resources.ApplyResources(butEnabelPc, "butEnabelPc");
-            butEnabelPc.ForeColor = Color.DodgerBlue;
-            butEnabelPc.Name = "butEnabelPc";
-            butEnabelPc.UseVisualStyleBackColor = true;
-            butEnabelPc.Click += ButEnabelPc_Click;
+            resources.ApplyResources(butEnablePc, "butEnablePc");
+            butEnablePc.ForeColor = Color.DodgerBlue;
+            butEnablePc.Name = "butEnablePc";
+            butEnablePc.UseVisualStyleBackColor = true;
+            butEnablePc.Click += ButEnablePc_Click;
             // 
             // tabStore
             // 
@@ -2603,8 +2611,8 @@
             tabSpeedTest.ResumeLayout(false);
             gbIPList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvIpList).EndInit();
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
+            panelSpeedTest.ResumeLayout(false);
+            panelSpeedTest.PerformLayout();
             tabHosts.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvHosts).EndInit();
@@ -2754,7 +2762,7 @@
         public ToolStripMenuItem tsmUpdate;
         private Button butStart;
         public NotifyIcon notifyIcon1;
-        private Panel panel3;
+        private Panel panelSpeedTest;
         private GroupBox gbIPList;
         private DataGridView dgvIpList;
         private CheckBox ckbChinaTelecom;
@@ -2824,8 +2832,8 @@
         private GroupBox groupBox6;
         private Panel panel5;
         private DataGridView dgvDevice;
-        private Button butEnabelPc;
-        private Button butEnabelXbox;
+        private Button butEnablePc;
+        private Button butEnableXbox;
         private Button butScan;
         private Button butAnalyze;
         private TextBox tbDownloadUrl;
@@ -2960,5 +2968,6 @@
         private DataGridViewTextBoxColumn Col_TTL;
         private DataGridViewTextBoxColumn Col_RoundtripTime;
         private DataGridViewTextBoxColumn Col_Speed;
+        private ToolStripMenuItem tsmTeaching0;
     }
 }

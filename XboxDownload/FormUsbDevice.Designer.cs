@@ -30,6 +30,9 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             dgvDevice = new DataGridView();
+            button1 = new Button();
+            button2 = new Button();
+            label1 = new Label();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
@@ -37,9 +40,6 @@
             Column5 = new DataGridViewTextBoxColumn();
             Column6 = new DataGridViewTextBoxColumn();
             Column7 = new DataGridViewTextBoxColumn();
-            button1 = new Button();
-            button2 = new Button();
-            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvDevice).BeginInit();
             SuspendLayout();
             // 
@@ -59,6 +59,39 @@
             dgvDevice.Size = new Size(1282, 227);
             dgvDevice.TabIndex = 2;
             dgvDevice.CellClick += DgvDevice_CellClick;
+            // 
+            // button1
+            // 
+            button1.ForeColor = Color.Green;
+            button1.Location = new Point(12, 245);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 3;
+            button1.Text = "刷新";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += Button1_Click;
+            // 
+            // button2
+            // 
+            button2.Enabled = false;
+            button2.ForeColor = Color.Red;
+            button2.Location = new Point(601, 244);
+            button2.Name = "button2";
+            button2.Size = new Size(112, 34);
+            button2.TabIndex = 4;
+            button2.Text = "重新分区";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += Button2_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = SystemColors.GrayText;
+            label1.Location = new Point(795, 250);
+            label1.Name = "label1";
+            label1.Size = new Size(499, 24);
+            label1.TabIndex = 5;
+            label1.Text = "如果Xbox不能识别U盘，请尝试重新分区，再不行重置主机。";
             // 
             // Column1
             // 
@@ -100,7 +133,7 @@
             // 
             // Column5
             // 
-            Column5.HeaderText = "类型";
+            Column5.HeaderText = "分区表";
             Column5.MinimumWidth = 8;
             Column5.Name = "Column5";
             Column5.ReadOnly = true;
@@ -124,39 +157,6 @@
             Column7.ReadOnly = true;
             Column7.SortMode = DataGridViewColumnSortMode.NotSortable;
             Column7.Width = 80;
-            // 
-            // button1
-            // 
-            button1.ForeColor = Color.Green;
-            button1.Location = new Point(12, 245);
-            button1.Name = "button1";
-            button1.Size = new Size(112, 34);
-            button1.TabIndex = 3;
-            button1.Text = "刷新";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += Button1_Click;
-            // 
-            // button2
-            // 
-            button2.Enabled = false;
-            button2.ForeColor = Color.Red;
-            button2.Location = new Point(601, 244);
-            button2.Name = "button2";
-            button2.Size = new Size(112, 34);
-            button2.TabIndex = 4;
-            button2.Text = "重新分区";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += Button2_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = SystemColors.GrayText;
-            label1.Location = new Point(795, 250);
-            label1.Name = "label1";
-            label1.Size = new Size(499, 24);
-            label1.TabIndex = 5;
-            label1.Text = "如果Xbox不能识别U盘，请尝试重新分区，再不行重置主机。";
             // 
             // FormUsbDevice
             // 
@@ -185,6 +185,7 @@
         private DataGridView dgvDevice;
         private Button button1;
         private Button button2;
+        private Label label1;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
@@ -192,6 +193,5 @@
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
-        private Label label1;
     }
 }
