@@ -5,8 +5,10 @@
 
 获取微软商店应用游戏下载链接
 ---
-Xbox下载助手-商店网页版：https://xbox.skydevil.xyz
 ![图0](doc/pm00.gif)
+网页版商店：https://xbox.skydevil.xyz
+
+使用PC下载Xbox主机游戏：https://www.bilibili.com/video/BV1CN4y197Js
 
 
 使用说明
