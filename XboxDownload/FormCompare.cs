@@ -130,7 +130,7 @@ namespace XboxDownload
             {
                 discount_ListPrice_2 = true;
                 priceRatio = Math.Round(ListPrice_2 / MSRP * 100, 0, MidpointRounding.AwayFromZero);
-                this.member = (product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags != null && product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags.Length >= 1 && product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags[0] == "LegacyDiscountEAAccess") ? "EA Play" : "金会员";
+                this.member = (product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags != null && product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags.Length >= 1 && product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags[0] == "LegacyDiscountEAAccess") ? "EA Play" : "会员";
                 dataGridView1.Columns["Col_ListPrice_2"].HeaderText = this.member + "折扣";
             }
             if (WholesalePrice_1 > 0)
@@ -281,7 +281,7 @@ namespace XboxDownload
                                             dgvr.Cells["Col_ListPrice_2"].Value = ListPrice_2;
                                             discount_ListPrice_2 = true;
                                             if (string.IsNullOrEmpty(this.member))
-                                                this.member = (product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags != null && product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags[0] == "LegacyDiscountEAAccess") ? "EA Play" : "金会员";
+                                                this.member = (product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags != null && product.DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags[0] == "LegacyDiscountEAAccess") ? "EA Play" : "会员";
                                         }
                                         if (WholesalePrice_1 > 0)
                                         {

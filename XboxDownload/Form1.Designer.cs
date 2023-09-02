@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -41,7 +41,6 @@
             toolStripDropDownButton2 = new ToolStripDropDownButton();
             tsmProductManual = new ToolStripMenuItem();
             tsmTeaching = new ToolStripMenuItem();
-            tsmTeaching0 = new ToolStripMenuItem();
             tsmTeaching4 = new ToolStripMenuItem();
             tsmTeaching3 = new ToolStripMenuItem();
             tsmTeaching2 = new ToolStripMenuItem();
@@ -231,7 +230,8 @@
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             panel6 = new Panel();
-            linkLabel1 = new LinkLabel();
+            linkConsoleInstall = new LinkLabel();
+            linkPcInstall = new LinkLabel();
             linkAppxAdd = new LinkLabel();
             linkWebPage = new LinkLabel();
             linkCompare = new LinkLabel();
@@ -254,8 +254,6 @@
             linkGameWebsite = new LinkLabel();
             pbGame = new PictureBox();
             gbMicrosoftStore = new GroupBox();
-            flpGameWithGold = new FlowLayoutPanel();
-            label34 = new Label();
             linkGameChinese = new LinkLabel();
             cbGameXGP2 = new ComboBox();
             cbGameXGP1 = new ComboBox();
@@ -433,17 +431,10 @@
             // 
             // tsmTeaching
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching0, tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
+            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
             tsmTeaching.Name = "tsmTeaching";
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
-            // 
-            // tsmTeaching0
-            // 
-            tsmTeaching0.Name = "tsmTeaching0";
-            resources.ApplyResources(tsmTeaching0, "tsmTeaching0");
-            tsmTeaching0.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
-            tsmTeaching0.Click += TsmOpenSite_Click;
             // 
             // tsmTeaching4
             // 
@@ -1028,9 +1019,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1038,9 +1029,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1048,9 +1039,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1801,7 +1792,8 @@
             // 
             // panel6
             // 
-            panel6.Controls.Add(linkLabel1);
+            panel6.Controls.Add(linkConsoleInstall);
+            panel6.Controls.Add(linkPcInstall);
             panel6.Controls.Add(linkAppxAdd);
             panel6.Controls.Add(linkWebPage);
             panel6.Controls.Add(linkCompare);
@@ -1826,14 +1818,23 @@
             resources.ApplyResources(panel6, "panel6");
             panel6.Name = "panel6";
             // 
-            // linkLabel1
+            // linkConsoleInstall
             // 
-            resources.ApplyResources(linkLabel1, "linkLabel1");
-            linkLabel1.LinkColor = Color.Red;
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.TabStop = true;
-            linkLabel1.Tag = "https://www.bilibili.com/video/BV1Bj411P7uE/";
-            linkLabel1.LinkClicked += Link_LinkClicked;
+            resources.ApplyResources(linkConsoleInstall, "linkConsoleInstall");
+            linkConsoleInstall.LinkColor = Color.Red;
+            linkConsoleInstall.Name = "linkConsoleInstall";
+            linkConsoleInstall.TabStop = true;
+            linkConsoleInstall.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
+            linkConsoleInstall.LinkClicked += Link_LinkClicked;
+            // 
+            // linkPcInstall
+            // 
+            resources.ApplyResources(linkPcInstall, "linkPcInstall");
+            linkPcInstall.LinkColor = Color.Red;
+            linkPcInstall.Name = "linkPcInstall";
+            linkPcInstall.TabStop = true;
+            linkPcInstall.Tag = "https://www.bilibili.com/video/BV1Bj411P7uE/";
+            linkPcInstall.LinkClicked += Link_LinkClicked;
             // 
             // linkAppxAdd
             // 
@@ -1970,8 +1971,6 @@
             // 
             // gbMicrosoftStore
             // 
-            gbMicrosoftStore.Controls.Add(flpGameWithGold);
-            gbMicrosoftStore.Controls.Add(label34);
             gbMicrosoftStore.Controls.Add(linkGameChinese);
             gbMicrosoftStore.Controls.Add(cbGameXGP2);
             gbMicrosoftStore.Controls.Add(cbGameXGP1);
@@ -1984,16 +1983,6 @@
             resources.ApplyResources(gbMicrosoftStore, "gbMicrosoftStore");
             gbMicrosoftStore.Name = "gbMicrosoftStore";
             gbMicrosoftStore.TabStop = false;
-            // 
-            // flpGameWithGold
-            // 
-            resources.ApplyResources(flpGameWithGold, "flpGameWithGold");
-            flpGameWithGold.Name = "flpGameWithGold";
-            // 
-            // label34
-            // 
-            resources.ApplyResources(label34, "label34");
-            label34.Name = "label34";
             // 
             // linkGameChinese
             // 
@@ -2089,7 +2078,7 @@
             resources.ApplyResources(linkLabel4, "linkLabel4");
             linkLabel4.Name = "linkLabel4";
             linkLabel4.TabStop = true;
-            linkLabel4.Tag = "https://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe";
+            linkLabel4.Tag = "https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp";
             linkLabel4.LinkClicked += Link_LinkClicked;
             // 
             // linkLabel3
@@ -2874,8 +2863,6 @@
         private LinkLabel linkGameChinese;
         private ComboBox cbGameXGP2;
         private ComboBox cbGameXGP1;
-        private FlowLayoutPanel flpGameWithGold;
-        private Label label34;
         private ListView lvGameSearch;
         private LinkLabel linkGameWebsite;
         private PictureBox pbGame;
@@ -2938,7 +2925,7 @@
         private ToolStripMenuItem tsmAuthorization;
         private ToolStripMenuItem tsmAuthorization1;
         private ToolStripMenuItem tsmAuthorization2;
-        private LinkLabel linkLabel1;
+        private LinkLabel linkPcInstall;
         private Label labelInstallationLocation;
         private LinkLabel linkFixAppxDrive;
         private ToolStripMenuItem tsmConnectTest;
@@ -2968,6 +2955,6 @@
         private DataGridViewTextBoxColumn Col_TTL;
         private DataGridViewTextBoxColumn Col_RoundtripTime;
         private DataGridViewTextBoxColumn Col_Speed;
-        private ToolStripMenuItem tsmTeaching0;
+        private LinkLabel linkConsoleInstall;
     }
 }

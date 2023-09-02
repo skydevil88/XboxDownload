@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAbout));
             pictureBox1 = new PictureBox();
             label1 = new Label();
-            linkLabel1 = new LinkLabel();
             linkLabel2 = new LinkLabel();
             label2 = new Label();
             pictureBox2 = new PictureBox();
@@ -64,22 +63,10 @@
             label1.TabIndex = 1;
             label1.Text = "Xbox下载助手 By Devil";
             // 
-            // linkLabel1
-            // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(180, 82);
-            linkLabel1.Margin = new Padding(4, 0, 4, 0);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(221, 24);
-            linkLabel1.TabIndex = 2;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "https://xbox.skydevil.xyz";
-            linkLabel1.LinkClicked += LinkLabel_LinkClicked;
-            // 
             // linkLabel2
             // 
             linkLabel2.AutoSize = true;
-            linkLabel2.Location = new Point(180, 112);
+            linkLabel2.Location = new Point(180, 106);
             linkLabel2.Margin = new Padding(4, 0, 4, 0);
             linkLabel2.Name = "linkLabel2";
             linkLabel2.Size = new Size(413, 24);
@@ -124,7 +111,7 @@
             // lbVersion
             // 
             lbVersion.AutoSize = true;
-            lbVersion.Location = new Point(180, 56);
+            lbVersion.Location = new Point(180, 68);
             lbVersion.Margin = new Padding(4, 0, 4, 0);
             lbVersion.Name = "lbVersion";
             lbVersion.Size = new Size(74, 24);
@@ -141,7 +128,6 @@
             Controls.Add(pictureBox2);
             Controls.Add(label2);
             Controls.Add(linkLabel2);
-            Controls.Add(linkLabel1);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -163,7 +149,6 @@
 
         private PictureBox pictureBox1;
         private Label label1;
-        private LinkLabel linkLabel1;
         private LinkLabel linkLabel2;
         private Label label2;
         private PictureBox pictureBox2;

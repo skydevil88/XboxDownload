@@ -339,10 +339,7 @@ namespace XboxDownload
                         gbMicrosoftStore.Tag = DateTime.Now;
                         cbGameXGP1.Items.Clear();
                         cbGameXGP2.Items.Clear();
-                        flpGameWithGold.Controls.Clear();
                         dicExchangeRate.Clear();
-                        dicGamesWithGold.Clear();
-                        lbFreePlayDays = null;
                     }
                     if (Environment.OSVersion.Version.Major >= 10)
                     {
@@ -367,10 +364,6 @@ namespace XboxDownload
                         cbGameXGP1.SelectedIndex = 0;
                         cbGameXGP2.Items.Add(new Product("近期新增 Xbox Game Pass 游戏 (不支持)", "0"));
                         cbGameXGP2.SelectedIndex = 0;
-                    }
-                    if (flpGameWithGold.Controls.Count == 0 || dicGamesWithGold.IsEmpty || lbFreePlayDays == null)
-                    {
-                        ThreadPool.QueueUserWorkItem(delegate { GameWithGold(); });
                     }
                     break;
                 case "tabTools":
@@ -3565,161 +3558,10 @@ namespace XboxDownload
             }
         }
 
-        readonly ConcurrentDictionary<String, string[]> dicGamesWithGold = new();
-        LinkLabel? lbFreePlayDays = null;
-        private void GameWithGold()
-        {
-            Task[] tasks = new Task[2];
-            tasks[0] = new Task(() =>
-            {
-                if (dicGamesWithGold.IsEmpty)
-                {
-                    string html = ClassWeb.HttpResponseContent("https://www.xbox.com/en-US/live/gold/js/gwg-globalContent.js");
-                    Match result = Regex.Match(Regex.Replace(html, @"globalContentOld.+", "", RegexOptions.Singleline), @"""(?<language>[^""]+)"": \{\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame1"": ""(?<keyCopytitlenowgame1>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame1"": ""(?<keyLinknowgame1>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame1"": ""(?<keyCopydatesnowgame1>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame2"": ""(?<keyCopytitlenowgame2>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame2"": ""(?<keyLinknowgame2>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame2"": ""(?<keyCopydatesnowgame2>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopytitlenowgame3"": ""(?<keyCopytitlenowgame3>[^""]+)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyLinknowgame3"": ""(?<keyLinknowgame3>[^""]*)"",\n(\s+""[^""]+"": ""[^""]*"",\n)+\s+""keyCopydatesnowgame3"": ""(?<keyCopydatesnowgame3>[^""]*)""");
-                    while (result.Success)
-                    {
-                        string language = result.Groups["language"].Value.ToLowerInvariant();
-                        string keyCopytitlenowgame1 = result.Groups["keyCopytitlenowgame1"].Value;
-                        string keyCopytitlenowgame2 = result.Groups["keyCopytitlenowgame2"].Value;
-                        string keyCopytitlenowgame3 = result.Groups["keyCopytitlenowgame3"].Value;
-                        string keyLinknowgame1 = result.Groups["keyLinknowgame1"].Value;
-                        string keyLinknowgame2 = result.Groups["keyLinknowgame2"].Value;
-                        string keyLinknowgame3 = result.Groups["keyLinknowgame3"].Value;
-                        string keyCopydatesnowgame1 = result.Groups["keyCopydatesnowgame1"].Value;
-                        string keyCopydatesnowgame2 = result.Groups["keyCopydatesnowgame2"].Value;
-                        string keyCopydatesnowgame3 = result.Groups["keyCopydatesnowgame3"].Value;
-                        if (language == "zh-tw")
-                        {
-                            if (!string.IsNullOrEmpty(keyLinknowgame1))
-                            {
-                                string[] detail1 = new string[] { language, keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
-                                dicGamesWithGold.AddOrUpdate(keyLinknowgame1, detail1, (oldkey, oldvalue) => detail1);
-                            }
-                            if (!string.IsNullOrEmpty(keyLinknowgame2))
-                            {
-                                string[] detail2 = new string[] { language, keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
-                                dicGamesWithGold.AddOrUpdate(keyLinknowgame2, detail2, (oldkey, oldvalue) => detail2);
-                            }
-                            if (!string.IsNullOrEmpty(keyLinknowgame3))
-                            {
-                                string[] detail3 = new string[] { language, keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
-                                dicGamesWithGold.AddOrUpdate(keyLinknowgame3, detail3, (oldkey, oldvalue) => detail3);
-                            }
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(keyLinknowgame1) && !dicGamesWithGold.ContainsKey(keyLinknowgame1))
-                            {
-                                string[] detail1 = new string[] { language, keyCopytitlenowgame1, keyLinknowgame1, keyCopydatesnowgame1 };
-                                dicGamesWithGold.TryAdd(keyLinknowgame1, detail1);
-                            }
-                            if (!string.IsNullOrEmpty(keyLinknowgame2) && !dicGamesWithGold.ContainsKey(keyLinknowgame2))
-                            {
-                                string[] detail2 = new string[] { language, keyCopytitlenowgame2, keyLinknowgame2, keyCopydatesnowgame2 };
-                                dicGamesWithGold.TryAdd(keyLinknowgame2, detail2);
-                            }
-                            if (!string.IsNullOrEmpty(keyLinknowgame3) && !dicGamesWithGold.ContainsKey(keyLinknowgame3))
-                            {
-                                string[] detail3 = new string[] { language, keyCopytitlenowgame3, keyLinknowgame3, keyCopydatesnowgame3 };
-                                dicGamesWithGold.TryAdd(keyLinknowgame3, detail3);
-                            }
-                        }
-                        result = result.NextMatch();
-                    }
-                }
-            });
-            tasks[1] = new Task(() =>
-            {
-                if (lbFreePlayDays == null)
-                {
-                    string html = ClassWeb.HttpResponseContent("https://news.xbox.com/en-us/tag/free-play-days/");
-                    Match result = Regex.Match(html, @"<h3 class=""feed__title"">\r?\n\s+<a href=""(?<url>https://news\.xbox\.com/en-us/(?<date>\d{4}/\d{2}/\d{2})/[^""]+)"">(?<title>[^<]+)</a>");
-                    if (result.Success)
-                    {
-                        string url = result.Groups["url"].Value.Trim();
-                        string title = Regex.Replace(HttpUtility.HtmlDecode(result.Groups["title"].Value), "^Free Play Days – ", "").Trim();
-                        DateTime dt = DateTime.ParseExact(result.Groups["date"].Value, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture).AddHours(TimeZoneInfo.Local.BaseUtcOffset.Hours + 4);
-                        DateTime monday = dt.AddDays(Convert.ToInt32(1 - Convert.ToInt32(dt.DayOfWeek)) + 7);
-                        lbFreePlayDays = new LinkLabel
-                        {
-                            Text = title + "\n" + dt.ToString("MM/dd") + "(周末免费游戏日)",
-                            TextAlign = ContentAlignment.TopCenter,
-                            AutoSize = true,
-                            Visible = DateTime.Compare(monday, DateTime.Now) >= 0
-                        };
-                        lbFreePlayDays.Links.Add(0, title.Length, url);
-                        lbFreePlayDays.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkGameWebsite_LinkClicked);
-                    }
-                }
-            });
-            Array.ForEach(tasks, x => x.Start());
-            Task.WaitAll(tasks);
-
-            if (!dicGamesWithGold.IsEmpty || lbFreePlayDays != null)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    flpGameWithGold.Controls.Clear();
-                    if (!dicGamesWithGold.IsEmpty)
-                    {
-                        foreach (var item in dicGamesWithGold)
-                        {
-                            LinkLabel lb = new()
-                            {
-                                Tag = item.Value[0],
-                                Text = item.Value[1] + "\n" + item.Value[3].Replace(" ", ""),
-                                TextAlign = ContentAlignment.TopCenter,
-                                AutoSize = true,
-                                Parent = this.flpGameWithGold
-                            };
-                            string keyLinknowgame = item.Value[2];
-                            if (keyLinknowgame.Contains("www.xbox.com/games/"))
-                                keyLinknowgame = Regex.Replace(keyLinknowgame, @"/games/", "/" + item.Value[0] + "/games/");
-                            else if (keyLinknowgame.Contains("www.microsoft.com/p/"))
-                                keyLinknowgame = Regex.Replace(keyLinknowgame, @"/p/", "/" + item.Value[0] + "/p/");
-                            else if (keyLinknowgame.Contains("marketplace.xbox.com/Product/"))
-                                keyLinknowgame = Regex.Replace(keyLinknowgame, @"/Product/", "/" + item.Value[0] + "/Product/");
-                            lb.Links.Add(0, item.Value[1].Length, keyLinknowgame);
-                            lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkGameWithGold_LinkClicked);
-                        }
-                    }
-                    if (lbFreePlayDays != null)
-                    {
-                        lbFreePlayDays.Parent = this.flpGameWithGold;
-                    }
-                }));
-            }
-        }
-
         private void LinkGameWebsite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string? url = e.Link.LinkData.ToString();
             if (url != null) Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-
-        private void LinkGameWithGold_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            LinkLabel? lb = sender as LinkLabel;
-            string? language = lb?.Tag.ToString()?.ToLowerInvariant();
-            if (language == null) return;
-            tbGameUrl.Text = e.Link.LinkData as string;
-            bool find = false;
-            foreach (var item in cbGameMarket.Items)
-            {
-                Market market = (Market)item;
-                if (market.language.ToLowerInvariant() == language)
-                {
-                    cbGameMarket.SelectedItem = item;
-                    find = true;
-                    break;
-                }
-            }
-            if (!find)
-            {
-                cbGameMarket.Items.Add(new Market(language, language, Regex.Replace(language, "^[^-]+-", ""), language));
-                cbGameMarket.SelectedIndex = cbGameMarket.Items.Count - 1;
-            }
-            if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
         }
 
         private void CbGameBundled_SelectedIndexChanged(object? sender, EventArgs? e)
@@ -4136,7 +3978,7 @@ namespace XboxDownload
                     }
                     if (ListPrice_2 > 0 && ListPrice_2 < ListPrice_1 && ListPrice_2 != MSRP)
                     {
-                        string member = (DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags.Length >= 1 && DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags[0] == "LegacyDiscountEAAccess") ? "EA Play" : "金会员";
+                        string member = (DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags.Length >= 1 && DisplaySkuAvailabilities[0].Availabilities[1].Properties.MerchandisingTags[0] == "LegacyDiscountEAAccess") ? "EA Play" : "会员";
                         sbPrice.Append(string.Format(", {0}折扣{1}%: {2}", member, Math.Round(ListPrice_2 / MSRP * 100, 0, MidpointRounding.AwayFromZero), String.Format("{0:N}", ListPrice_2)));
                         if (ExchangeRate > 0)
                         {
