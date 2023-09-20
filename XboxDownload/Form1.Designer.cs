@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -1019,9 +1019,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1029,9 +1029,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle8;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1039,9 +1039,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle9;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;

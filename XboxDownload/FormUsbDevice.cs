@@ -26,21 +26,21 @@ namespace XboxDownload
         private void DgvDevice_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) return;
-            button2.Enabled = true;
+            rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = true;
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
             dgvDevice.Rows.Clear();
-            button2.Enabled = false;
+            rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = false;
             List<DataGridViewRow> list = new();
 
             ManagementClass mc = new("Win32_DiskDrive");
             ManagementObjectCollection moc = mc.GetInstances();
             foreach (var (mo, sDeviceID, sInterfaceType, sMediaType) in from ManagementObject mo in moc
-                                                                        let sDeviceID = mo.Properties["DeviceID"].Value.ToString()
-                                                                        let sInterfaceType = mo.Properties["InterfaceType"].Value.ToString()
-                                                                        let sMediaType = mo.Properties["MediaType"].Value.ToString()
+                                                                        let sDeviceID = mo.Properties["DeviceID"].Value?.ToString()
+                                                                        let sInterfaceType = mo.Properties["InterfaceType"].Value?.ToString()
+                                                                        let sMediaType = mo.Properties["MediaType"].Value?.ToString()
                                                                         select (mo, sDeviceID, sInterfaceType, sMediaType))
             {
                 if (string.IsNullOrEmpty(sDeviceID) || sInterfaceType != "USB" || sMediaType != "Removable Media") continue;
@@ -89,6 +89,7 @@ namespace XboxDownload
                 dgvDevice.Rows.AddRange(list.ToArray());
                 dgvDevice.ClearSelection();
             }
+            rbMBR.Checked = true;
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -97,6 +98,8 @@ namespace XboxDownload
             if (MessageBox.Show("确认重新分区U盘？\n\n警告，此操作将删除U盘中的所有分区和文件!\n警告，此操作将删除U盘中的所有分区和文件!\n警告，此操作将删除U盘中的所有分区和文件!", "重新分区", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 int index = Convert.ToInt32(dgvDevice.SelectedRows[0].Tag);
+                bool mbr = rbMBR.Checked;
+                rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = false;
                 try
                 {
                     using Process p = new();
@@ -110,12 +113,14 @@ namespace XboxDownload
                     p.StandardInput.WriteLine("clean");
                     p.StandardInput.WriteLine("online disk");
                     p.StandardInput.WriteLine("attributes disk clear readonly");
-                    p.StandardInput.WriteLine("convert mbr");
+                    p.StandardInput.WriteLine("convert " + (mbr ? "mbr" : "gpt"));
                     p.StandardInput.WriteLine("create partition primary");
                     p.StandardInput.WriteLine("select partition 1");
                     p.StandardInput.WriteLine("format fs=ntfs quick");
                     if (string.IsNullOrEmpty(dgvDevice.SelectedRows[0].Cells[6].Value.ToString()))
+                    {
                         p.StandardInput.WriteLine("assign");
+                    }
                     p.StandardInput.Close();
                     p.WaitForExit();
                 }
@@ -124,8 +129,8 @@ namespace XboxDownload
                     MessageBox.Show("重新分区失败，错误信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                Button1_Click(sender, e);
                 MessageBox.Show("已完成分区。", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Button1_Click(sender, e);
             }
         }
     }

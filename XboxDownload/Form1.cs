@@ -1399,7 +1399,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/4/156d3739-bf1a-4deb-ad5c-6f3942fdeb4f/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3871.53028.0.5f8eece4-d371-4fb4-a0bd-3b986e9e6508/Microsoft.254428597CFE2_1.3871.53028.0_x64__8wekyb3d8bbwe.msixvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/11/56a056df-37c7-441b-a3fc-34f1381027ee/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.607.493.0.19f79437-3767-4f94-91c1-5bb1e8bbd295/Microsoft.624F8B84B80_3.607.493.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/2/136ad3e1-ddc5-421b-828b-d9b16260035d/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.614.70.0.81261806-c9d9-4976-b34a-bc24c95c2f45/Microsoft.624F8B84B80_3.614.70.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
