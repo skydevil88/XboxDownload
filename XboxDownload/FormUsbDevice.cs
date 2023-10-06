@@ -20,7 +20,7 @@ namespace XboxDownload
 
         private void FormUsbDevice_Load(object sender, EventArgs e)
         {
-            Button1_Click(sender, e);
+            LinkRefresh_LinkClicked(sender, null);
         }
 
         private void DgvDevice_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -29,7 +29,7 @@ namespace XboxDownload
             rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = true;
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void LinkRefresh_LinkClicked(object sender, LinkLabelLinkClickedEventArgs? e)
         {
             dgvDevice.Rows.Clear();
             rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = false;
@@ -99,7 +99,7 @@ namespace XboxDownload
             {
                 int index = Convert.ToInt32(dgvDevice.SelectedRows[0].Tag);
                 bool mbr = rbMBR.Checked;
-                rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = false;
+                linkRefresh.Enabled = rbGPT.Enabled = rbMBR.Enabled = button2.Enabled = false;
                 try
                 {
                     using Process p = new();
@@ -130,7 +130,8 @@ namespace XboxDownload
                     return;
                 }
                 MessageBox.Show("已完成分区。", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Button1_Click(sender, e);
+                linkRefresh.Enabled = rbMBR.Checked = true;
+                LinkRefresh_LinkClicked(sender, null);
             }
         }
     }

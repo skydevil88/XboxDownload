@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -64,8 +64,8 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            ckbXboxStopped = new CheckBox();
             butStart = new Button();
-            ckbSteamStore = new CheckBox();
             ckbEpicStore = new CheckBox();
             ckbBattleStore = new CheckBox();
             ckbEAStore = new CheckBox();
@@ -594,8 +594,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckbXboxStopped);
             groupBox1.Controls.Add(butStart);
-            groupBox1.Controls.Add(ckbSteamStore);
             groupBox1.Controls.Add(ckbEpicStore);
             groupBox1.Controls.Add(ckbBattleStore);
             groupBox1.Controls.Add(ckbEAStore);
@@ -653,18 +653,20 @@
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
             // 
+            // ckbXboxStopped
+            // 
+            resources.ApplyResources(ckbXboxStopped, "ckbXboxStopped");
+            ckbXboxStopped.ForeColor = Color.Red;
+            ckbXboxStopped.Name = "ckbXboxStopped";
+            ckbXboxStopped.UseVisualStyleBackColor = true;
+            ckbXboxStopped.CheckedChanged += CkbXboxStopped_CheckedChanged;
+            // 
             // butStart
             // 
             resources.ApplyResources(butStart, "butStart");
             butStart.Name = "butStart";
             butStart.UseVisualStyleBackColor = true;
             butStart.Click += ButStart_Click;
-            // 
-            // ckbSteamStore
-            // 
-            resources.ApplyResources(ckbSteamStore, "ckbSteamStore");
-            ckbSteamStore.Name = "ckbSteamStore";
-            ckbSteamStore.UseVisualStyleBackColor = true;
             // 
             // ckbEpicStore
             // 
@@ -1019,9 +1021,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1029,9 +1031,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1039,9 +1041,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2709,7 +2711,6 @@
         private Label label23;
         private CheckBox ckbHttpService;
         private CheckBox ckbDnsService;
-        private CheckBox ckbSteamStore;
         private CheckBox ckbEpicStore;
         private CheckBox ckbBattleStore;
         private CheckBox ckbEAStore;
@@ -2956,5 +2957,6 @@
         private DataGridViewTextBoxColumn Col_RoundtripTime;
         private DataGridViewTextBoxColumn Col_Speed;
         private LinkLabel linkConsoleInstall;
+        private CheckBox ckbXboxStopped;
     }
 }

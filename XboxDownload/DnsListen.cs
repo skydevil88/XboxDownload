@@ -13,6 +13,7 @@ namespace XboxDownload
 {
     internal class DnsListen
     {
+        Socket? socket = null;
         private readonly Form1 parentForm;
         private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://223.5.5.5" : "http://223.5.5.5";
         private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
@@ -21,12 +22,31 @@ namespace XboxDownload
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicCdnHosts1 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicCdnHosts2 = new();
         public static ConcurrentDictionary<String, String[]> dicDns = new();
-
-        Socket? socket = null;
+        private Byte[]? comIP = null, cnIP = null, cnIP2 = null, appIP = null;
 
         public DnsListen(Form1 parentForm)
         {
             this.parentForm = parentForm;
+        }
+
+        public Byte[]? ComIP
+        {
+            set { this.comIP = value; }
+        }
+
+        public Byte[]? CnIP
+        {
+            set { this.cnIP = value; }
+        }
+
+        public Byte[]? CnIP2
+        {
+            set { this.cnIP2 = value; }
+        }
+
+        public Byte[]? AppIP
+        {
+            set { this.appIP = value; }
         }
 
         public void Listen()
@@ -96,7 +116,6 @@ namespace XboxDownload
                 return;
             }
 
-            Byte[]? comIP = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
             {
                 comIP = IPAddress.Parse(Properties.Settings.Default.ComIP).GetAddressBytes();
@@ -106,7 +125,6 @@ namespace XboxDownload
                 if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbComIP, Properties.Settings.Default.LocalIP);
                 comIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
             }
-            Byte[]? cnIP = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
             {
                 cnIP = IPAddress.Parse(Properties.Settings.Default.CnIP).GetAddressBytes();
@@ -123,7 +141,6 @@ namespace XboxDownload
                     }
                 });
             }
-            Byte[]? cnIP2 = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP2))
             {
                 cnIP2 = IPAddress.Parse(Properties.Settings.Default.CnIP2).GetAddressBytes();
@@ -140,7 +157,6 @@ namespace XboxDownload
                     }
                 });
             }
-            Byte[]? appIP = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
             {
                 appIP = IPAddress.Parse(Properties.Settings.Default.AppIP).GetAddressBytes();
@@ -157,6 +173,7 @@ namespace XboxDownload
                     }
                 });
             }
+
             Byte[]? psIP = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.PSIP))
             {

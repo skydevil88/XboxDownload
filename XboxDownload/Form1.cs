@@ -101,7 +101,6 @@ namespace XboxDownload
             ckbEAStore.Checked = Properties.Settings.Default.EAStore;
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
-            ckbSteamStore.Checked = Properties.Settings.Default.SteamStore;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
             ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
@@ -449,6 +448,45 @@ namespace XboxDownload
             }
         }
 
+        private void CkbXboxStopped_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckbXboxStopped.Checked)
+            {
+                Task.Run(() =>
+                {
+                    string? ip = ClassDNS.DoH("xvcf1.xboxlive.com");
+                    if (!string.IsNullOrEmpty(ip))
+                    {
+                        dnsListen.ComIP = dnsListen.CnIP = dnsListen.CnIP2 = dnsListen.AppIP = IPAddress.Parse(ip).GetAddressBytes();
+                        AddHosts(true, ip);
+                        if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
+                    }
+                });
+                MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（可能会影响下载速度），等待几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                if (IPAddress.TryParse(tbComIP.Text, out IPAddress? comIP))
+                    dnsListen.ComIP = comIP.GetAddressBytes();
+                else
+                    dnsListen.ComIP = null;
+                if (IPAddress.TryParse(tbCnIP.Text, out IPAddress? cnIP))
+                    dnsListen.CnIP = cnIP.GetAddressBytes();
+                else
+                    dnsListen.CnIP = null;
+                if (IPAddress.TryParse(tbCnIP2.Text, out IPAddress? cnIP2))
+                    dnsListen.CnIP2 = cnIP2.GetAddressBytes();
+                else
+                    dnsListen.CnIP2 = null;
+                if (IPAddress.TryParse(tbAppIP.Text, out IPAddress? appIP))
+                    dnsListen.AppIP = appIP.GetAddressBytes();
+                else
+                    dnsListen.AppIP = null;
+                AddHosts(true);
+                if (Properties.Settings.Default.MicrosoftStore) ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
+            }
+        }
+
         public void ButStart_Click(object? sender, EventArgs? e)
         {
             if (bServiceFlag)
@@ -475,6 +513,8 @@ namespace XboxDownload
                     if ((control is TextBox || control is CheckBox || control is Button || control is ComboBox) && control != butStart)
                         control.Enabled = true;
                 }
+                ckbXboxStopped.Checked = false;
+                ckbXboxStopped.Enabled = false;
                 cbLocalIP.Enabled = true;
                 dnsListen.Close();
                 httpListen.Close();
@@ -653,7 +693,6 @@ namespace XboxDownload
                 Properties.Settings.Default.EAStore = ckbEAStore.Checked;
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
-                Properties.Settings.Default.SteamStore = ckbSteamStore.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -799,6 +838,7 @@ namespace XboxDownload
                     if (control is TextBox || control is CheckBox || control is Button || control is ComboBox)
                         control.Enabled = false;
                 }
+                ckbXboxStopped.Enabled = true;
                 cbLocalIP.Enabled = false;
                 AddHosts(true);
                 if (Properties.Settings.Default.MicrosoftStore) ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
@@ -826,7 +866,7 @@ namespace XboxDownload
             butStart.Enabled = true;
         }
 
-        private void AddHosts(bool add)
+        private void AddHosts(bool add, string? xboxIp = null)
         {
             if (add)
             {
@@ -855,7 +895,7 @@ namespace XboxDownload
                 }
             }
 
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.SteamStore)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore)) return;
 
             StringBuilder sb = new();
             string sHostsPath = Environment.SystemDirectory + "\\drivers\\etc\\hosts";
@@ -887,6 +927,13 @@ namespace XboxDownload
                     sb.AppendLine("# Added by XboxDownload");
                     if (Properties.Settings.Default.MicrosoftStore)
                     {
+                        string cnIP = Properties.Settings.Default.CnIP;
+                        string cnIP2 = Properties.Settings.Default.CnIP2;
+                        string appIP = Properties.Settings.Default.AppIP;
+                        if (!string.IsNullOrEmpty(xboxIp))
+                        {
+                            comIP = cnIP = cnIP2 = appIP = xboxIp;
+                        }
                         sb.AppendLine(comIP + " xvcf1.xboxlive.com");
                         sb.AppendLine(comIP + " xvcf2.xboxlive.com");
                         sb.AppendLine(comIP + " assets1.xboxlive.com");
@@ -895,22 +942,22 @@ namespace XboxDownload
                         sb.AppendLine(comIP + " d2.xboxlive.com");
                         sb.AppendLine(comIP + " dlassets.xboxlive.com");
                         sb.AppendLine(comIP + " dlassets2.xboxlive.com");
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
+                        if (!string.IsNullOrEmpty(cnIP))
                         {
-                            sb.AppendLine(Properties.Settings.Default.CnIP + " assets1.xboxlive.cn");
-                            sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
-                            sb.AppendLine(Properties.Settings.Default.CnIP + " d1.xboxlive.cn");
-                            sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
+                            sb.AppendLine(cnIP + " assets1.xboxlive.cn");
+                            sb.AppendLine(cnIP + " assets2.xboxlive.cn");
+                            sb.AppendLine(cnIP + " d1.xboxlive.cn");
+                            sb.AppendLine(cnIP + " d2.xboxlive.cn");
                         }
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP2))
+                        if (!string.IsNullOrEmpty(cnIP2))
                         {
-                            sb.AppendLine(Properties.Settings.Default.CnIP2 + " dlassets.xboxlive.cn");
-                            sb.AppendLine(Properties.Settings.Default.CnIP2 + " dlassets2.xboxlive.cn");
+                            sb.AppendLine(cnIP2 + " dlassets.xboxlive.cn");
+                            sb.AppendLine(cnIP2 + " dlassets2.xboxlive.cn");
                         }
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
+                        if (!string.IsNullOrEmpty(appIP))
                         {
-                            sb.AppendLine(Properties.Settings.Default.AppIP + " dl.delivery.mp.microsoft.com");
-                            sb.AppendLine(Properties.Settings.Default.AppIP + " tlu.dl.delivery.mp.microsoft.com");
+                            sb.AppendLine(appIP + " dl.delivery.mp.microsoft.com");
+                            sb.AppendLine(appIP + " tlu.dl.delivery.mp.microsoft.com");
                         }
                         if (Properties.Settings.Default.HttpService)
                         {
@@ -962,11 +1009,6 @@ namespace XboxDownload
                         {
                             sb.AppendLine(Properties.Settings.Default.EpicIP + " epicgames -download1-1251447533.file.myqcloud.com");
                         }
-                    }
-                    if (Properties.Settings.Default.SteamStore)
-                    {
-                        sb.AppendLine(Properties.Settings.Default.LocalIP + " store.steampowered.com");
-                        sb.AppendLine(Properties.Settings.Default.LocalIP + " steamcommunity.com");
                     }
                     foreach (var host in DnsListen.dicHosts)
                     {
@@ -3201,6 +3243,7 @@ namespace XboxDownload
                     MessageBox.Show("重命名本地文件失败，错误信息：" + ex.Message, "重命名本地文件", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 linkRename.Enabled = false;
+                tbContentId.Focus();
             }
         }
 

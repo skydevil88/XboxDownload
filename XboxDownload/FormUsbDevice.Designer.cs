@@ -30,6 +30,12 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             dgvDevice = new DataGridView();
+            button2 = new Button();
+            label1 = new Label();
+            rbGPT = new RadioButton();
+            rbMBR = new RadioButton();
+            label2 = new Label();
+            linkRefresh = new LinkLabel();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
@@ -37,12 +43,6 @@
             Column5 = new DataGridViewTextBoxColumn();
             Column6 = new DataGridViewTextBoxColumn();
             Column7 = new DataGridViewTextBoxColumn();
-            button1 = new Button();
-            button2 = new Button();
-            label1 = new Label();
-            rbGPT = new RadioButton();
-            rbMBR = new RadioButton();
-            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvDevice).BeginInit();
             SuspendLayout();
             // 
@@ -52,17 +52,85 @@
             dgvDevice.AllowUserToDeleteRows = false;
             dgvDevice.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDevice.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7 });
-            dgvDevice.Location = new Point(8, 8);
-            dgvDevice.Margin = new Padding(2);
+            dgvDevice.Location = new Point(13, 11);
             dgvDevice.MultiSelect = false;
             dgvDevice.Name = "dgvDevice";
             dgvDevice.ReadOnly = true;
             dgvDevice.RowHeadersWidth = 40;
             dgvDevice.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDevice.ShowCellToolTips = false;
-            dgvDevice.Size = new Size(816, 161);
+            dgvDevice.Size = new Size(1282, 227);
             dgvDevice.TabIndex = 2;
             dgvDevice.CellClick += DgvDevice_CellClick;
+            // 
+            // button2
+            // 
+            button2.Enabled = false;
+            button2.ForeColor = Color.Red;
+            button2.Location = new Point(600, 244);
+            button2.Name = "button2";
+            button2.Size = new Size(112, 34);
+            button2.TabIndex = 4;
+            button2.Text = "重新分区";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += Button2_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = SystemColors.GrayText;
+            label1.Location = new Point(795, 250);
+            label1.Name = "label1";
+            label1.Size = new Size(499, 24);
+            label1.TabIndex = 5;
+            label1.Text = "如果Xbox不能识别U盘，请尝试重新分区，再不行重置主机。";
+            // 
+            // rbGPT
+            // 
+            rbGPT.AutoSize = true;
+            rbGPT.Enabled = false;
+            rbGPT.ForeColor = Color.Red;
+            rbGPT.Location = new Point(426, 248);
+            rbGPT.Name = "rbGPT";
+            rbGPT.Size = new Size(69, 28);
+            rbGPT.TabIndex = 6;
+            rbGPT.TabStop = true;
+            rbGPT.Text = "GPT";
+            rbGPT.UseVisualStyleBackColor = true;
+            // 
+            // rbMBR
+            // 
+            rbMBR.AutoSize = true;
+            rbMBR.Checked = true;
+            rbMBR.Enabled = false;
+            rbMBR.ForeColor = Color.Green;
+            rbMBR.Location = new Point(509, 248);
+            rbMBR.Name = "rbMBR";
+            rbMBR.Size = new Size(76, 28);
+            rbMBR.TabIndex = 7;
+            rbMBR.TabStop = true;
+            rbMBR.Text = "MBR";
+            rbMBR.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(275, 250);
+            label2.Name = "label2";
+            label2.Size = new Size(136, 24);
+            label2.TabIndex = 8;
+            label2.Text = "选择分区表类型";
+            // 
+            // linkRefresh
+            // 
+            linkRefresh.AutoSize = true;
+            linkRefresh.Location = new Point(13, 252);
+            linkRefresh.Name = "linkRefresh";
+            linkRefresh.Size = new Size(46, 24);
+            linkRefresh.TabIndex = 9;
+            linkRefresh.TabStop = true;
+            linkRefresh.Text = "刷新";
+            linkRefresh.LinkClicked += LinkRefresh_LinkClicked;
             // 
             // Column1
             // 
@@ -122,101 +190,26 @@
             // 
             // Column7
             // 
-            Column7.HeaderText = "卷标";
+            Column7.HeaderText = "盘符";
             Column7.MinimumWidth = 8;
             Column7.Name = "Column7";
             Column7.ReadOnly = true;
             Column7.SortMode = DataGridViewColumnSortMode.NotSortable;
             Column7.Width = 65;
             // 
-            // button1
-            // 
-            button1.ForeColor = Color.Green;
-            button1.Location = new Point(8, 174);
-            button1.Margin = new Padding(2);
-            button1.Name = "button1";
-            button1.Size = new Size(71, 24);
-            button1.TabIndex = 3;
-            button1.Text = "刷新";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += Button1_Click;
-            // 
-            // button2
-            // 
-            button2.Enabled = false;
-            button2.ForeColor = Color.Red;
-            button2.Location = new Point(382, 173);
-            button2.Margin = new Padding(2);
-            button2.Name = "button2";
-            button2.Size = new Size(71, 24);
-            button2.TabIndex = 4;
-            button2.Text = "重新分区";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += Button2_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.ForeColor = SystemColors.GrayText;
-            label1.Location = new Point(506, 177);
-            label1.Margin = new Padding(2, 0, 2, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(335, 17);
-            label1.TabIndex = 5;
-            label1.Text = "如果Xbox不能识别U盘，请尝试重新分区，再不行重置主机。";
-            // 
-            // rbGPT
-            // 
-            rbGPT.AutoSize = true;
-            rbGPT.Enabled = false;
-            rbGPT.Location = new Point(271, 176);
-            rbGPT.Margin = new Padding(2);
-            rbGPT.Name = "rbGPT";
-            rbGPT.Size = new Size(49, 21);
-            rbGPT.TabIndex = 6;
-            rbGPT.TabStop = true;
-            rbGPT.Text = "GPT";
-            rbGPT.UseVisualStyleBackColor = true;
-            // 
-            // rbMBR
-            // 
-            rbMBR.AutoSize = true;
-            rbMBR.Checked = true;
-            rbMBR.Enabled = false;
-            rbMBR.ForeColor = Color.Green;
-            rbMBR.Location = new Point(324, 176);
-            rbMBR.Margin = new Padding(2);
-            rbMBR.Name = "rbMBR";
-            rbMBR.Size = new Size(54, 21);
-            rbMBR.TabIndex = 7;
-            rbMBR.TabStop = true;
-            rbMBR.Text = "MBR";
-            rbMBR.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(175, 177);
-            label2.Margin = new Padding(2, 0, 2, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(92, 17);
-            label2.TabIndex = 8;
-            label2.Text = "选择分区表类型";
-            // 
             // FormUsbDevice
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(833, 201);
+            ClientSize = new Size(1309, 284);
+            Controls.Add(linkRefresh);
             Controls.Add(label2);
             Controls.Add(rbMBR);
             Controls.Add(rbGPT);
             Controls.Add(label1);
             Controls.Add(button2);
-            Controls.Add(button1);
             Controls.Add(dgvDevice);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormUsbDevice";
@@ -232,12 +225,12 @@
         #endregion
 
         private DataGridView dgvDevice;
-        private Button button1;
         private Button button2;
         private Label label1;
         private RadioButton rbGPT;
         private RadioButton rbMBR;
         private Label label2;
+        private LinkLabel linkRefresh;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
