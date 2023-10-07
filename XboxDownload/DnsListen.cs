@@ -18,9 +18,8 @@ namespace XboxDownload
         private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://223.5.5.5" : "http://223.5.5.5";
         private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
-        public static ConcurrentDictionary<String, Byte[]> dicHosts = new();
-        public static ConcurrentDictionary<String, List<ResouceRecord>> dicCdnHosts1 = new();
-        public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicCdnHosts2 = new(), dicCdnHosts3 = new();
+        public static ConcurrentDictionary<String, List<ResouceRecord>> dicHosts1 = new(), dicCdn1 = new();
+        public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new(), dicCdn2 = new();
         public static ConcurrentDictionary<String, String[]> dicDns = new();
         private Byte[]? comIP = null, cnIP = null, cnIP2 = null, appIP = null;
 
@@ -347,12 +346,6 @@ namespace XboxDownload
                                             argb = 0x008000;
                                         }
                                         break;
-                                    default:
-                                        if (dicHosts.TryGetValue(queryName, out byteIP))
-                                        {
-                                            argb = 0x0000FF;
-                                        }
-                                        break;
                                 }
                                 if (byteIP != null)
                                 {
@@ -373,10 +366,10 @@ namespace XboxDownload
                                     if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + (new IPAddress(byteIP)), ((IPEndPoint)client).Address.ToString(), argb);
                                     return;
                                 }
-                                if (dicCdnHosts1.TryGetValue(queryName, out List<ResouceRecord>? lsIp))
+                                if (dicHosts1.TryGetValue(queryName, out List<ResouceRecord>? lsIp))
                                 {
                                     argb = 0x0000FF;
-                                    List<ResouceRecord> lsResouceRecord = lsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                    List<ResouceRecord> lsResouceRecord = lsIp.ToList();
                                     dns.QR = 1;
                                     dns.RA = 1;
                                     dns.RD = 1;
@@ -385,13 +378,13 @@ namespace XboxDownload
                                     if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), argb);
                                     return;
                                 }
-                                foreach (var item in dicCdnHosts3)
+                                foreach (var item in dicHosts2)
                                 {
                                     if (item.Key.IsMatch(queryName))
                                     {
-                                        DnsListen.dicCdnHosts1.TryAdd(queryName, item.Value);
+                                        DnsListen.dicHosts1.TryAdd(queryName, item.Value);
                                         argb = 0x0000FF;
-                                        List<ResouceRecord> lsResouceRecord = item.Value.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                        List<ResouceRecord> lsResouceRecord = item.Value.ToList();
                                         dns.QR = 1;
                                         dns.RA = 1;
                                         dns.RD = 1;
@@ -403,11 +396,23 @@ namespace XboxDownload
                                 }
                                 if (Properties.Settings.Default.EnableCdnIP)
                                 {
-                                    foreach (var item in dicCdnHosts2)
+                                    if (dicCdn1.TryGetValue(queryName, out List<ResouceRecord>? lsIp2))
+                                    {
+                                        argb = 0x0000FF;
+                                        List<ResouceRecord> lsResouceRecord = lsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                        dns.QR = 1;
+                                        dns.RA = 1;
+                                        dns.RD = 1;
+                                        dns.ResouceRecords = lsResouceRecord;
+                                        socket.SendTo(dns.ToBytes(), client);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), argb);
+                                        return;
+                                    }
+                                    foreach (var item in dicCdn2)
                                     {
                                         if (item.Key.IsMatch(queryName))
                                         {
-                                            DnsListen.dicCdnHosts1.TryAdd(queryName, item.Value);
+                                            DnsListen.dicCdn1.TryAdd(queryName, item.Value);
                                             argb = 0x0000FF;
                                             List<ResouceRecord> lsResouceRecord = item.Value.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
                                             dns.QR = 1;
