@@ -2930,7 +2930,7 @@
     <value>True</value>
   </metadata>
   <data name="Col_HostName.HeaderText" xml:space="preserve">
-    <value>域名 (双击检测连接)</value>
+    <value>域名(支持泛域名解析，双击检测连接)</value>
   </data>
   <data name="Col_HostName.MinimumWidth" type="System.Int32, mscorlib">
     <value>8</value>
@@ -10078,30 +10078,6 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
-    <value>Col_Enable</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
-    <value>Col_HostName</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_IPv4.Name" xml:space="preserve">
-    <value>Col_IPv4</value>
-  </data>
-  <data name="&gt;&gt;Col_IPv4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
-    <value>Col_Remark</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;Col_DeviceID.Name" xml:space="preserve">
     <value>Col_DeviceID</value>
   </data>
@@ -10353,6 +10329,30 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   </data>
   <data name="&gt;&gt;tsmAuthorization2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
+    <value>Col_Enable</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
+    <value>Col_HostName</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_IPv4.Name" xml:space="preserve">
+    <value>Col_IPv4</value>
+  </data>
+  <data name="&gt;&gt;Col_IPv4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
+    <value>Col_Remark</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

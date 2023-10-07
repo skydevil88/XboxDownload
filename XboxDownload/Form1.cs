@@ -871,6 +871,8 @@ namespace XboxDownload
             if (add)
             {
                 DnsListen.dicHosts.Clear();
+                DnsListen.dicCdnHosts1.Clear();
+                DnsListen.dicCdnHosts3.Clear();
                 DataTable dt = dtHosts.Clone();
                 if (File.Exists(resourcePath + "\\Hosts.xml"))
                 {
@@ -886,10 +888,32 @@ namespace XboxDownload
                     if (Convert.ToBoolean(dr["Enable"]))
                     {
                         string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
-                        if (!string.IsNullOrEmpty(hostName) && !DnsListen.dicHosts.ContainsKey(hostName) && DnsListen.reHosts.IsMatch(hostName) && IPAddress.TryParse(dr["IPv4"].ToString()?.Trim(), out IPAddress? ip))
+                        if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IPv4"].ToString()?.Trim(), out IPAddress? ip))
                         {
-                            Byte[] ipByte = ip.GetAddressBytes();
-                            DnsListen.dicHosts.AddOrUpdate(hostName, ipByte, (oldkey, oldvalue) => ipByte);
+                            if (hostName.StartsWith("*."))
+                            {
+                                hostName = Regex.Replace(hostName, @"^\*\.", "");
+                                Regex re = new("\\." + hostName.Replace(".", "\\.") + "$");
+                                if (!DnsListen.dicCdnHosts3.ContainsKey(re) && DnsListen.reHosts.IsMatch(hostName))
+                                {
+                                    List<ResouceRecord> lsIp = new()
+                                    {
+                                        new ResouceRecord
+                                        {
+                                            Datas = ip.GetAddressBytes(),
+                                            TTL = 100,
+                                            QueryClass = 1,
+                                            QueryType = QueryType.A
+                                        }
+                                    };
+                                    DnsListen.dicCdnHosts3.TryAdd(re, lsIp);
+                                }
+                            }
+                            else if (!DnsListen.dicHosts.ContainsKey(hostName) && DnsListen.reHosts.IsMatch(hostName))
+                            {
+                                Byte[] ipByte = ip.GetAddressBytes();
+                                DnsListen.dicHosts.TryAdd(hostName, ipByte);
+                            }
                         }
                     }
                 }
@@ -927,10 +951,14 @@ namespace XboxDownload
                     sb.AppendLine("# Added by XboxDownload");
                     if (Properties.Settings.Default.MicrosoftStore)
                     {
-                        string cnIP = Properties.Settings.Default.CnIP;
-                        string cnIP2 = Properties.Settings.Default.CnIP2;
-                        string appIP = Properties.Settings.Default.AppIP;
-                        if (!string.IsNullOrEmpty(xboxIp))
+                        string cnIP, cnIP2, appIP;
+                        if (string.IsNullOrEmpty(xboxIp))
+                        {
+                            cnIP = Properties.Settings.Default.CnIP;
+                            cnIP2 = Properties.Settings.Default.CnIP2;
+                            appIP = Properties.Settings.Default.AppIP;
+                        }
+                        else
                         {
                             comIP = cnIP = cnIP2 = appIP = xboxIp;
                         }
@@ -2513,9 +2541,18 @@ namespace XboxDownload
             switch (dgvHosts.Columns[e.ColumnIndex].Name)
             {
                 case "Col_HostName":
-                    if (!string.IsNullOrWhiteSpace(e.FormattedValue.ToString()))
+                    string? hostName = e.FormattedValue.ToString()?.Trim();
+                    if (!string.IsNullOrEmpty(hostName))
                     {
-                        if (!DnsListen.reHosts.IsMatch(Regex.Replace((e.FormattedValue.ToString() ?? string.Empty).Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2")))
+                        if (hostName.StartsWith("*."))
+                        {
+                            if (!DnsListen.reHosts.IsMatch(Regex.Replace(hostName, @"^\*\.", "")))
+                            {
+                                e.Cancel = true;
+                                dgvHosts.Rows[e.RowIndex].ErrorText = "域名格式不正确";
+                            }
+                        }
+                        else if (!DnsListen.reHosts.IsMatch(Regex.Replace((e.FormattedValue.ToString() ?? string.Empty).Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2")))
                         {
                             e.Cancel = true;
                             dgvHosts.Rows[e.RowIndex].ErrorText = "域名格式不正确";
@@ -2554,7 +2591,7 @@ namespace XboxDownload
             DataGridViewRow dgvr = dgvHosts.Rows[e.RowIndex];
             string? hostName = dgvr.Cells["Col_HostName"].Value?.ToString();
             string? ip = dgvr.Cells["Col_IPv4"].Value?.ToString();
-            if (!string.IsNullOrEmpty(hostName) && !string.IsNullOrEmpty(ip))
+            if (!string.IsNullOrEmpty(hostName) && !string.IsNullOrEmpty(ip) && DnsListen.reHosts.IsMatch(hostName))
             {
                 FormConnectTest dialog = new(hostName, ip);
                 dialog.ShowDialog();
@@ -2872,7 +2909,6 @@ namespace XboxDownload
         {
             DnsListen.dicCdnHosts1.Clear();
             DnsListen.dicCdnHosts2.Clear();
-
             if (Properties.Settings.Default.EnableCdnIP)
             {
                 string hosts2 = tbHosts2Akamai.Text.Trim();
@@ -2896,7 +2932,7 @@ namespace XboxDownload
                         }
                     }
                 }
-                tbCdnAkamai.Text = string.Join(", ", lsIpTmp.ToArray()); ;
+                tbCdnAkamai.Text = string.Join(", ", lsIpTmp.ToArray());
                 if (lsIp.Count >= 1)
                 {
                     List<string> lsHostsTmp = new();
@@ -2912,16 +2948,6 @@ namespace XboxDownload
                             if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
                             {
                                 lsHostsTmp.Add(hosts);
-                                DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
-                            }
-                        }
-                        else if (hosts.StartsWith("*"))
-                        {
-                            hosts = Regex.Replace(hosts, @"^\*", "");
-                            if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                            {
-                                lsHostsTmp.Add(hosts);
-                                DnsListen.dicCdnHosts1.TryAdd(hosts, lsIp);
                                 DnsListen.dicCdnHosts2.TryAdd(new Regex("\\." + hosts.Replace(".", "\\.") + "$"), lsIp);
                             }
                         }
