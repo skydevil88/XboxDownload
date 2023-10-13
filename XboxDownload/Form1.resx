@@ -2264,7 +2264,7 @@
   </data>
   <data name="tbDlUrl.PlaceholderText" xml:space="preserve">
     <value>请关闭加速器、代理软件再开始测速，国内IP一般只需测本省IP，可以使用查找功能筛选；下载速度换算公式：1 MB/s = 8 Mbps。
-实际下载速度跟CDN有没有该游戏的缓存有关，速度慢可以使用正在下载的游戏链接测速。</value>
+实际下载速度跟CDN有没有该游戏的缓存有关，你也可以填写需要下载的游戏链接测速。</value>
   </data>
   <data name="tbDlUrl.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
     <value>Both</value>
@@ -10078,6 +10078,30 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
+    <value>Col_Enable</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
+    <value>Col_HostName</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_IPv4.Name" xml:space="preserve">
+    <value>Col_IPv4</value>
+  </data>
+  <data name="&gt;&gt;Col_IPv4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
+    <value>Col_Remark</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;Col_DeviceID.Name" xml:space="preserve">
     <value>Col_DeviceID</value>
   </data>
@@ -10329,30 +10353,6 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   </data>
   <data name="&gt;&gt;tsmAuthorization2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
-    <value>Col_Enable</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
-    <value>Col_HostName</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_IPv4.Name" xml:space="preserve">
-    <value>Col_IPv4</value>
-  </data>
-  <data name="&gt;&gt;Col_IPv4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
-    <value>Col_Remark</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
-            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，\n停止监听后恢复原来设置，\n本功能需要配合“启用 DNS 服务”使用，\n主机玩家无需设置。");
+            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，\n停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，\n主机玩家无需设置。\n注：如果退出下载助手后没网络，\n请手动把电脑DNS改回自动获取。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -452,17 +452,11 @@ namespace XboxDownload
         {
             if (ckbXboxStopped.Checked)
             {
-                Task.Run(() =>
-                {
-                    string? ip = ClassDNS.DoH("xvcf1.xboxlive.com");
-                    if (!string.IsNullOrEmpty(ip))
-                    {
-                        dnsListen.ComIP = dnsListen.CnIP = dnsListen.CnIP2 = dnsListen.AppIP = IPAddress.Parse(ip).GetAddressBytes();
-                        AddHosts(true, ip);
-                        if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
-                    }
-                });
-                MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（可能会影响下载速度），等待几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string akamai = "223.119.50.144";
+                dnsListen.ComIP = dnsListen.CnIP = dnsListen.CnIP2 = dnsListen.AppIP = IPAddress.Parse(akamai).GetAddressBytes();
+                AddHosts(true, akamai);
+                if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
+                MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（可能会影响下载速度），下载几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -1486,7 +1480,7 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(PC)", "513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33", "/4/156d3739-bf1a-4deb-ad5c-6f3942fdeb4f/513710f5-ab8e-4d7c-9ed5-d0ba94dcfb33/1.3871.53028.0.5f8eece4-d371-4fb4-a0bd-3b986e9e6508/Microsoft.254428597CFE2_1.3871.53028.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5", "/10/560294f4-f714-49ec-aafe-80077de07b7c/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3871.53028.0.75c07552-b3ac-49c0-94e4-c51e3576d6ae/Microsoft.254428597CFE2_1.3871.53028.0_neutral__8wekyb3d8bbwe_xs.xvc" },
                             {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/2/136ad3e1-ddc5-421b-828b-d9b16260035d/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.614.70.0.81261806-c9d9-4976-b34a-bc24c95c2f45/Microsoft.624F8B84B80_3.614.70.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
@@ -1517,6 +1511,13 @@ namespace XboxDownload
                             };
                             lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         }
+                        _ = new Label()
+                        {
+                            ForeColor = Color.Green,
+                            Text = "主下载域名(PC主机共用)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
                     }
                     break;
                 case "dlassets.xboxlive.cn":

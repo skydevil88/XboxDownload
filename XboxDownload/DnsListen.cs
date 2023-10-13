@@ -20,7 +20,6 @@ namespace XboxDownload
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicHosts1 = new(), dicCdn1 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new(), dicCdn2 = new();
-        public static ConcurrentDictionary<String, String[]> dicDns = new();
         private Byte[]? comIP = null, cnIP = null, cnIP2 = null, appIP = null;
 
         public DnsListen(Form1 parentForm)
@@ -51,25 +50,6 @@ namespace XboxDownload
         public void Listen()
         {
             NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up).ToArray();
-            if (Properties.Settings.Default.SetDns)
-            {
-                dicDns.Clear();
-                using var key = Microsoft.Win32.Registry.LocalMachine;
-                foreach (NetworkInterface adapter in adapters)
-                {
-                    var rk = key.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\" + adapter.Id);
-                    if (rk != null)
-                    {
-                        string? dns = rk.GetValue("NameServer", null) as string;
-                        if (!string.IsNullOrEmpty(dns) && dns != Properties.Settings.Default.LocalIP)
-                        {
-                            string[] dnsArray = dns.Split(',');
-                            dicDns.TryAdd(adapter.GetPhysicalAddress().ToString().ToUpper(), dnsArray);
-                        }
-                        rk.Close();
-                    }
-                }
-            }
             int port = 53;
             IPEndPoint? iPEndPoint = null;
             if (string.IsNullOrEmpty(Properties.Settings.Default.DnsIP))
@@ -790,8 +770,6 @@ namespace XboxDownload
                 if (dns != null)
                 {
                     inPar = mo.GetMethodParameters("SetDNSServerSearchOrder");
-                    if (dns.Length == 0)
-                        DnsListen.dicDns.TryGetValue(mo["MacAddress"].ToString()?.Replace(":", "").ToUpper() ?? string.Empty, out dns);
                     inPar["DNSServerSearchOrder"] = dns ?? Array.Empty<string>();
                     outPar = mo.InvokeMethod("SetDNSServerSearchOrder", inPar, methodOptions);
                 }
