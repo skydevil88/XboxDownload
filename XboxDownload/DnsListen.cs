@@ -238,7 +238,7 @@ namespace XboxDownload
                     }
                 });
             }
-            if (Properties.Settings.Default.SetDns) ClassDNS.SetNetworkAdapter(null, null, null, new string[] { Properties.Settings.Default.LocalIP });
+            if (Properties.Settings.Default.SetDns) ClassDNS.SetDns(Properties.Settings.Default.LocalIP);
             while (Form1.bServiceFlag)
             {
                 try
@@ -739,40 +739,31 @@ namespace XboxDownload
 
     internal class ClassDNS
     {
-        public static void SetNetworkAdapter(string[]? ip, string[]? submask, string[]? getway, string[]? dns)
+        public static void SetDns(string? dns)
         {
-            ManagementClass wmi = new("Win32_NetworkAdapterConfiguration");
-            ManagementObjectCollection moc = wmi.GetInstances();
-            ManagementBaseObject inPar;
-            ManagementBaseObject outPar;
-            InvokeMethodOptions methodOptions = new();
-            foreach (ManagementObject mo in moc.Cast<ManagementObject>())
+            try
             {
-                //如果没有启用IP设置的网络设备则跳过
-                if (!(bool)mo["IPEnabled"])
-                    continue;
-                //设置IP地址和掩码
-                if (ip != null && submask != null)
+                using Process p = new();
+                p.StartInfo.FileName = @"powershell.exe";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+                if (string.IsNullOrEmpty(dns))
                 {
-                    inPar = mo.GetMethodParameters("EnableStatic");
-                    inPar["IPAddress"] = ip;
-                    inPar["SubnetMask"] = submask;
-                    outPar = mo.InvokeMethod("EnableStatic", inPar, methodOptions);
+                    p.StandardInput.WriteLine("Get-NetAdapter -Physical| Set-DnsClientServerAddress -ResetServerAddresses");
+                    p.StandardInput.WriteLine("enable-NetAdapterBinding -Name * -ComponentID ms_tcpip6");
                 }
-                //设置网关地址
-                if (getway != null)
+                else
                 {
-                    inPar = mo.GetMethodParameters("SetGateways");
-                    inPar["DefaultIPGateway"] = getway;
-                    outPar = mo.InvokeMethod("SetGateways", inPar, methodOptions);
+                    p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ServerAddresses ('" + dns + "')");
+                    p.StandardInput.WriteLine("disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6");
                 }
-                //设置DNS地址
-                if (dns != null)
-                {
-                    inPar = mo.GetMethodParameters("SetDNSServerSearchOrder");
-                    inPar["DNSServerSearchOrder"] = dns ?? Array.Empty<string>();
-                    outPar = mo.InvokeMethod("SetDNSServerSearchOrder", inPar, methodOptions);
-                }
+                p.StandardInput.WriteLine("exit");
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(dns)) MessageBox.Show("设置本机 DNS 失败，错误信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

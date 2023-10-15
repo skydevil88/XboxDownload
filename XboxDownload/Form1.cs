@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
-            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，\n停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，\n主机玩家无需设置。\n注：如果退出下载助手后没网络，\n请手动把电脑DNS改回自动获取。");
+            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6，\n停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，\n主机玩家无需设置。\n注：如果退出下载助手后没网络，\n请手动把电脑DNS改回自动获取。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -488,7 +488,7 @@ namespace XboxDownload
                 butStart.Enabled = false;
                 bServiceFlag = false;
                 AddHosts(false);
-                if (Properties.Settings.Default.SetDns) ClassDNS.SetNetworkAdapter(null, null, null, Array.Empty<string>());
+                if (Properties.Settings.Default.SetDns) ClassDNS.SetDns(null);
                 if (string.IsNullOrEmpty(Properties.Settings.Default.DnsIP)) tbDnsIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.ComIP)) tbComIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.CnIP)) tbCnIP.Clear();
@@ -834,6 +834,14 @@ namespace XboxDownload
                 }
                 ckbXboxStopped.Enabled = true;
                 cbLocalIP.Enabled = false;
+                Task.Run(() =>
+                {
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "PUT");
+                    if (response != null && response.IsSuccessStatusCode)
+                    {
+                        SaveLog("提示信息", "检测到使用IPv6联网，如果是Xbox主机使用必需关闭。", "localhost", 0x0000FF);
+                    }
+                });
                 AddHosts(true);
                 if (Properties.Settings.Default.MicrosoftStore) ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
                 if (Properties.Settings.Default.DnsService)
@@ -1045,7 +1053,7 @@ namespace XboxDownload
                         if (item.Key == Environment.MachineName)
                             continue;
                         byte[]? b = item.Value[0].Datas;
-                        if (b != null) sb.AppendLine(string.Format(new IPAddress(b) + " " + item.Key));
+                        if (b != null) sb.AppendLine(new IPAddress(b) + " " + item.Key);
                     }
                     sb.AppendLine("# End of XboxDownload");
                     sHosts = sb.ToString() + sHosts;
