@@ -13,9 +13,10 @@ namespace XboxDownload
         public const string filePath = "download/v1/";
         private const string testFile = "XboxDownload.exe.md5";
         private static readonly string[,] proxys = {
+            { "proxy", "https://py.skydevil.xyz/"},
             { "proxy", "https://ghproxy.com/" },
             { "proxy", "https://ghps.cc/" },
-            { "proxy", "https://gh.api.99988866.xyz/" },
+            //{ "proxy", "https://gh.api.99988866.xyz/" },
             //{ "mirror", "https://cdn.githubjs.cf/" },   //失效
             //{ "mirror", "https://hub.fastgit.xyz/" },   //失效
             { "direct", "" }

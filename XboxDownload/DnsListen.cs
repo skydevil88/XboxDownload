@@ -751,13 +751,13 @@ namespace XboxDownload
                 p.Start();
                 if (string.IsNullOrEmpty(dns))
                 {
-                    p.StandardInput.WriteLine("Get-NetAdapter -Physical| Set-DnsClientServerAddress -ResetServerAddresses");
                     p.StandardInput.WriteLine("enable-NetAdapterBinding -Name * -ComponentID ms_tcpip6");
+                    p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ResetServerAddresses");
                 }
                 else
                 {
-                    p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ServerAddresses ('" + dns + "')");
                     p.StandardInput.WriteLine("disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6");
+                    p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ServerAddresses ('" + dns + "')");
                 }
                 p.StandardInput.WriteLine("exit");
             }
