@@ -166,4 +166,17 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 https://tieba.baidu.com/p/7151558145
 
 
+## 方法四：Caddy
 
+Caddyfile:
+
+```
+http://assets1.xboxlive.com, http://assets1.xboxlive.com, http://d1.xboxlive.com, http://d2.xboxlive.com, http://xvcf1.xboxlive.com, http://xvcf2.xboxlive.com {
+        redir http://assets1.xboxlive.cn{uri}
+}
+http://dlassets.xboxlive.com, http://dlassets2.xboxlive.com {
+        redir http://dlassets.xboxlive.cn{uri}
+}
+```
+
+与方法一、二相同，在路由器中把 *.xboxlive.com 域名劫持到 Caddy 服务器 IP.
