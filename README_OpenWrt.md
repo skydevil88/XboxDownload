@@ -1,4 +1,4 @@
-# OpenWrt 安装 Lighttpd 或者 Nginx，使用URL重写跳转国内CDN服务器加速下载
+# OpenWrt 安装 Lighttpd、Nginx、Caddy，使用URL重写跳转国内CDN服务器加速下载
 
 注意：不少人直接把 com 域名指定到 cn ip、或者使用 CNAME 解释到 cn IP，这两种方法都是错误的，服务器会返回403错误。
 com域名不能使用cn IP，反过来cn域名可以使用部分com IP(Akamai). 
@@ -162,11 +162,7 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 
 最后在浏览器中输入(建议使用InPrivate窗口，避免浏览器缓存) http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt, 看到地址变成 http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt 表示成功跳转到cn，接着打开你的Xbox又能愉快地下载。
 
-## 方法三：IIS	
-https://tieba.baidu.com/p/7151558145
-
-
-## 方法四：Caddy
+## 方法三：Caddy
 
 Caddyfile:
 
@@ -180,3 +176,8 @@ http://dlassets.xboxlive.com, http://dlassets2.xboxlive.com {
 ```
 
 与方法一、二相同，在路由器中把 *.xboxlive.com 域名劫持到 Caddy 服务器 IP.
+
+## 其它：IIS	
+https://tieba.baidu.com/p/7151558145
+
+
