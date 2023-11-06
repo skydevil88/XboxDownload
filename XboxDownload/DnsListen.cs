@@ -757,18 +757,6 @@ namespace XboxDownload
     {
         public static void SetDns(string? dns)
         {
-            using (var key = Microsoft.Win32.Registry.LocalMachine)
-            {
-                foreach (var item in DnsListen.dicDns)
-                {
-                    var rk = key.CreateSubKey(@"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\" + item.Key);
-                    if (rk != null)
-                    {
-                        rk.SetValue("NameServer", string.IsNullOrEmpty(dns) ? item.Value : dns);
-                        rk.Close();
-                    }
-                }
-            }
             try
             {
                 using Process p = new();
@@ -790,6 +778,16 @@ namespace XboxDownload
                 p.StandardInput.WriteLine("exit");
             }
             catch { }
+            using var key = Microsoft.Win32.Registry.LocalMachine;
+            foreach (var item in DnsListen.dicDns)
+            {
+                var rk = key.CreateSubKey(@"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\" + item.Key);
+                if (rk != null)
+                {
+                    rk.SetValue("NameServer", string.IsNullOrEmpty(dns) ? item.Value : dns);
+                    rk.Close();
+                }
+            }
         }
 
         public static string QueryLocation(string ip)
