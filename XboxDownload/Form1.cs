@@ -456,7 +456,7 @@ namespace XboxDownload
                 dnsListen.ComIP = dnsListen.CnIP = dnsListen.CnIP2 = dnsListen.AppIP = IPAddress.Parse(akamai).GetAddressBytes();
                 AddHosts(true, akamai);
                 if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
-                MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（可能会影响下载速度），下载几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（关闭代理软件），下载几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -836,10 +836,10 @@ namespace XboxDownload
                 cbLocalIP.Enabled = false;
                 Task.Run(() =>
                 {
-                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "PUT");
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
                     if (response != null && response.IsSuccessStatusCode)
                     {
-                        SaveLog("提示信息", "检测到使用IPv6联网，如果是Xbox主机使用必需关闭。", "localhost", 0x0000FF);
+                        SaveLog("提示信息", "检测到使用IPv6联网，如果是连接Xbox主机使用必需关闭。", "localhost", 0x0000FF);
                     }
                 });
                 AddHosts(true);
@@ -1488,8 +1488,8 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环:无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5", "/10/560294f4-f714-49ec-aafe-80077de07b7c/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3871.53028.0.75c07552-b3ac-49c0-94e4-c51e3576d6ae/Microsoft.254428597CFE2_1.3871.53028.0_neutral__8wekyb3d8bbwe_xs.xvc" },
-                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/2/136ad3e1-ddc5-421b-828b-d9b16260035d/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.614.70.0.81261806-c9d9-4976-b34a-bc24c95c2f45/Microsoft.624F8B84B80_3.614.70.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环:无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5", "/12/ba393baf-afe2-4f1f-926b-8ebdc88afdbc/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3932.60255.0.2713b0ec-ed32-42c9-bed7-b25f550f6ce6/Microsoft.254428597CFE2_1.3932.60255.0_neutral__8wekyb3d8bbwe_xs.xvc" },
+                            {"极限竞速:地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/5/5cb6d65f-eca7-44a7-95f7-80eb28da2236/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.619.349.0.cd216d63-6229-4ce4-8ba5-f7cbaee352eb/Microsoft.624F8B84B80_3.619.349.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)

@@ -65,24 +65,20 @@ namespace XboxDownload.Properties {
         ///catalog.gamepass.com	#XGP游戏库
         ///download.xbox.com		#Xbox360主机下载域名
         ///
-        ///
         ///###################### Nintendo ######################
         ///*.hac.lp1.d4c.nintendo.net
         ///*.hac.lp1.eshop.nintendo.net
         ///*.hac.lp1.dragons.nintendo.net
         ///
+        ///######################## Epic ########################
+        ///*.ak.epicgames.com
+        ///cdn2.epicgames.com
+        ///shared-static-prod.epicgames.com
         ///
-        ///######################### EA #########################
-        ///pl.ea.com
-        ///pc.ea.com
-        ///www.ea.com
-        ///pc-assets.ea.com
-        ///ratt.juno.ea.com
-        ///autopatch.juno.ea.com
-        ///desktop-config.juno.ea.com
-        ///split-evaluator.juno.ea.com
-        ///contentful-proxy.juno.ea.com
-        ///s [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///##################### Riot Games #####################
+        ///*.dyn.riotcdn.net
+        ///
+        ///####################### Steam ## [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Akamai {
             get {
