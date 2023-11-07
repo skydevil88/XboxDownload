@@ -14,7 +14,7 @@ namespace XboxDownload
     {
         Socket? socket = null;
         private readonly Form1 parentForm;
-        private readonly string dohServer = Environment.OSVersion.Version.Major >= 10 ? "https://223.5.5.5" : "http://223.5.5.5";
+        private readonly string dohServer = "https://223.5.5.5";
         private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicHosts1 = new(), dicCdn1 = new();
@@ -816,8 +816,13 @@ namespace XboxDownload
             string? ip = null;
             if (string.IsNullOrEmpty(dnsServer))
             {
-                IPAddress[] ipAddresses = Array.FindAll(Dns.GetHostEntry(hostName).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
-                if (ipAddresses.Length >= 1) ip = ipAddresses[0].ToString();
+                IPAddress[]? ipAddresses = null;
+                try
+                {
+                    ipAddresses = Array.FindAll(Dns.GetHostEntry(hostName).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
+                }
+                catch { }
+                if (ipAddresses != null && ipAddresses.Length >= 1) ip = ipAddresses[0].ToString();
             }
             else
             {
