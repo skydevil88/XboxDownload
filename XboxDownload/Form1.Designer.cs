@@ -64,6 +64,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            ckbGameLink = new CheckBox();
             ckbXboxStopped = new CheckBox();
             butStart = new Button();
             ckbEpicStore = new CheckBox();
@@ -105,9 +106,6 @@
             label10 = new Label();
             tbAppIP = new TextBox();
             labelApp = new Label();
-            label8 = new Label();
-            tbCnIP2 = new TextBox();
-            labelCn2 = new Label();
             label6 = new Label();
             tbCnIP = new TextBox();
             labelCn = new Label();
@@ -315,7 +313,6 @@
             cmsIP = new ContextMenuStrip(components);
             tsmUseIP = new ToolStripMenuItem();
             tsmUseIPCn = new ToolStripMenuItem();
-            tsmUseIPCn2 = new ToolStripMenuItem();
             tsmUseIPCom = new ToolStripMenuItem();
             tsmUseIPXbox = new ToolStripMenuItem();
             tsmUseIPApp = new ToolStripMenuItem();
@@ -594,6 +591,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckbGameLink);
             groupBox1.Controls.Add(ckbXboxStopped);
             groupBox1.Controls.Add(butStart);
             groupBox1.Controls.Add(ckbEpicStore);
@@ -635,9 +633,6 @@
             groupBox1.Controls.Add(label10);
             groupBox1.Controls.Add(tbAppIP);
             groupBox1.Controls.Add(labelApp);
-            groupBox1.Controls.Add(label8);
-            groupBox1.Controls.Add(tbCnIP2);
-            groupBox1.Controls.Add(labelCn2);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(tbCnIP);
             groupBox1.Controls.Add(labelCn);
@@ -652,6 +647,12 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // ckbGameLink
+            // 
+            resources.ApplyResources(ckbGameLink, "ckbGameLink");
+            ckbGameLink.Name = "ckbGameLink";
+            ckbGameLink.UseVisualStyleBackColor = true;
             // 
             // ckbXboxStopped
             // 
@@ -889,21 +890,6 @@
             // 
             resources.ApplyResources(labelApp, "labelApp");
             labelApp.Name = "labelApp";
-            // 
-            // label8
-            // 
-            resources.ApplyResources(label8, "label8");
-            label8.Name = "label8";
-            // 
-            // tbCnIP2
-            // 
-            resources.ApplyResources(tbCnIP2, "tbCnIP2");
-            tbCnIP2.Name = "tbCnIP2";
-            // 
-            // labelCn2
-            // 
-            resources.ApplyResources(labelCn2, "labelCn2");
-            labelCn2.Name = "labelCn2";
             // 
             // label6
             // 
@@ -1144,7 +1130,7 @@
             // 
             cbImportIP.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImportIP.FormattingEnabled = true;
-            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5") });
+            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4") });
             resources.ApplyResources(cbImportIP, "cbImportIP");
             cbImportIP.Name = "cbImportIP";
             cbImportIP.SelectedIndexChanged += CbImportIP_SelectedIndexChanged;
@@ -2413,7 +2399,7 @@
             // 
             // tsmUseIP
             // 
-            tsmUseIP.DropDownItems.AddRange(new ToolStripItem[] { tsmUseIPCn, tsmUseIPCn2, tsmUseIPCom, tsmUseIPXbox, tsmUseIPApp, tssUseIP1, tsmUseIPPS, tsmUseIPNS, tsmUseIPEa, tsmUseIPBattle, tsmUseIPEpic, tssUseIP2, tsmUseAkamai, tsmUseIPHosts });
+            tsmUseIP.DropDownItems.AddRange(new ToolStripItem[] { tsmUseIPCn, tsmUseIPCom, tsmUseIPXbox, tsmUseIPApp, tssUseIP1, tsmUseIPPS, tsmUseIPNS, tsmUseIPEa, tsmUseIPBattle, tsmUseIPEpic, tssUseIP2, tsmUseAkamai, tsmUseIPHosts });
             tsmUseIP.Name = "tsmUseIP";
             resources.ApplyResources(tsmUseIP, "tsmUseIP");
             // 
@@ -2423,13 +2409,6 @@
             tsmUseIPCn.Name = "tsmUseIPCn";
             resources.ApplyResources(tsmUseIPCn, "tsmUseIPCn");
             tsmUseIPCn.Click += TsmUseIP_Click;
-            // 
-            // tsmUseIPCn2
-            // 
-            tsmUseIPCn2.Image = Properties.Resource.Xbox;
-            tsmUseIPCn2.Name = "tsmUseIPCn2";
-            resources.ApplyResources(tsmUseIPCn2, "tsmUseIPCn2");
-            tsmUseIPCn2.Click += TsmUseIP_Click;
             // 
             // tsmUseIPCom
             // 
@@ -2682,9 +2661,7 @@
         private Label label2;
         private Label labelCn;
         private Label label6;
-        private Label labelCn2;
         private Label labelApp;
-        private Label label8;
         private Label label10;
         private Label labelPS;
         private Label label12;
@@ -2730,7 +2707,6 @@
         private Label label25;
         public TextBox tbComIP;
         public TextBox tbCnIP;
-        public TextBox tbCnIP2;
         public TextBox tbAppIP;
         public TextBox tbPSIP;
         public TextBox tbNSIP;
@@ -2779,7 +2755,6 @@
         private ContextMenuStrip cmsIP;
         private ToolStripMenuItem tsmUseIP;
         private ToolStripMenuItem tsmUseIPCn;
-        private ToolStripMenuItem tsmUseIPCn2;
         private ToolStripMenuItem tsmUseIPCom;
         private ToolStripMenuItem tsmUseIPXbox;
         private ToolStripMenuItem tsmUseIPApp;
@@ -2958,5 +2933,6 @@
         private DataGridViewTextBoxColumn Col_HostName;
         private DataGridViewTextBoxColumn Col_IPv4;
         private DataGridViewTextBoxColumn Col_Remark;
+        private CheckBox ckbGameLink;
     }
 }

@@ -20,7 +20,7 @@ namespace XboxDownload
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicHosts1 = new(), dicCdn1 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new(), dicCdn2 = new();
         public static ConcurrentDictionary<String, String> dicDns = new();
-        private Byte[]? comIP = null, cnIP = null, cnIP2 = null, appIP = null;
+        private Byte[]? comIP = null, cnIP = null, appIP = null;
 
         public DnsListen(Form1 parentForm)
         {
@@ -35,11 +35,6 @@ namespace XboxDownload
         public Byte[]? CnIP
         {
             set { this.cnIP = value; }
-        }
-
-        public Byte[]? CnIP2
-        {
-            set { this.cnIP2 = value; }
         }
 
         public Byte[]? AppIP
@@ -111,6 +106,7 @@ namespace XboxDownload
                 return;
             }
 
+            Byte[]? localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
             {
                 comIP = IPAddress.Parse(Properties.Settings.Default.ComIP).GetAddressBytes();
@@ -118,7 +114,7 @@ namespace XboxDownload
             else
             {
                 if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbComIP, Properties.Settings.Default.LocalIP);
-                comIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+                comIP = localIP;
             }
             if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
             {
@@ -128,27 +124,11 @@ namespace XboxDownload
             {
                 Task.Run(() =>
                 {
-                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("assets1.xboxlive.cn") : ClassDNS.HostToIP("assets1.xboxlive.cn", Properties.Settings.Default.DnsIP);
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("assets1.xboxlive.cn") : ClassDNS.HostToIP("assets2.xboxlive.cn", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbCnIP, ip);
                         cnIP = IPAddress.Parse(ip).GetAddressBytes();
-                    }
-                });
-            }
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP2))
-            {
-                cnIP2 = IPAddress.Parse(Properties.Settings.Default.CnIP2).GetAddressBytes();
-            }
-            else
-            {
-                Task.Run(() =>
-                {
-                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("dlassets.xboxlive.cn") : ClassDNS.HostToIP("dlassets.xboxlive.cn", Properties.Settings.Default.DnsIP);
-                    if (!string.IsNullOrEmpty(ip))
-                    {
-                        if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbCnIP2, ip);
-                        cnIP2 = IPAddress.Parse(ip).GetAddressBytes();
                     }
                 });
             }
@@ -272,76 +252,150 @@ namespace XboxDownload
                                 string queryName = (dns.Querys[0].QueryName ?? string.Empty).ToLower();
                                 Byte[]? byteIP = null;
                                 int argb = 0;
-                                switch (queryName)
+                                if (Properties.Settings.Default.GameLink) 
                                 {
-                                    case "assets1.xboxlive.com":
-                                    case "assets2.xboxlive.com":
-                                    case "dlassets.xboxlive.com":
-                                    case "dlassets2.xboxlive.com":
-                                    case "d1.xboxlive.com":
-                                    case "d2.xboxlive.com":
-                                    case "xvcf1.xboxlive.com":
-                                    case "xvcf2.xboxlive.com":
-                                        byteIP = comIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "assets1.xboxlive.cn":
-                                    case "assets2.xboxlive.cn":
-                                    case "d1.xboxlive.cn":
-                                    case "d2.xboxlive.cn":
-                                        byteIP = cnIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "dlassets.xboxlive.cn":
-                                    case "dlassets2.xboxlive.cn":
-                                        byteIP = cnIP2;
-                                        argb = 0x008000;
-                                        break;
-                                    case "dl.delivery.mp.microsoft.com":
-                                    case "tlu.dl.delivery.mp.microsoft.com":
-                                        byteIP = appIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "gst.prod.dl.playstation.net":
-                                    case "gs2.ww.prod.dl.playstation.net":
-                                    case "zeus.dl.playstation.net":
-                                    case "ares.dl.playstation.net":
-                                        byteIP = psIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "atum.hac.lp1.d4c.nintendo.net":
-                                    case "bugyo.hac.lp1.eshop.nintendo.net":
-                                    case "ctest-dl-lp1.cdn.nintendo.net":
-                                    case "ctest-ul-lp1.cdn.nintendo.net":
-                                        byteIP = nsIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "atum-eda.hac.lp1.d4c.nintendo.net":
-                                        byteIP = new byte[4];
-                                        argb = 0x008000;
-                                        break;
-                                    case "origin-a.akamaihd.net":
-                                        byteIP = eaIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "blzddist1-a.akamaihd.net":
-                                    case "blzddist2-a.akamaihd.net":
-                                    case "blzddist3-a.akamaihd.net":
-                                        byteIP = battleIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "epicgames-download1-1251447533.file.myqcloud.com":
-                                        byteIP = epicIP;
-                                        argb = 0x008000;
-                                        break;
-                                    case "www.msftconnecttest.com":
-                                    case "ctest.cdn.nintendo.net":
-                                        if (Properties.Settings.Default.HttpService)
-                                        {
-                                            byteIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+                                    switch (queryName)
+                                    {
+                                        case "xvcf1.xboxlive.com":
+                                        case "assets1.xboxlive.com":
+                                        case "d1.xboxlive.com":
+                                        case "dlassets.xboxlive.com":
+                                        case "assets1.xboxlive.cn":
+                                        case "d1.xboxlive.cn":
+                                        case "dlassets.xboxlive.cn":
+                                            byteIP = localIP;
                                             argb = 0x008000;
-                                        }
-                                        break;
+                                            break;
+                                        case "xvcf2.xboxlive.com":
+                                        case "assets2.xboxlive.com":
+                                        case "dlassets2.xboxlive.com":
+                                        case "d2.xboxlive.com":
+                                            byteIP = comIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "assets2.xboxlive.cn":
+                                        case "d2.xboxlive.cn":
+                                            byteIP = cnIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "dl.delivery.mp.microsoft.com":
+                                        case "tlu.dl.delivery.mp.microsoft.com":
+                                        case "dlassets2.xboxlive.cn":
+                                            byteIP = appIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "gst.prod.dl.playstation.net":
+                                        case "gs2.ww.prod.dl.playstation.net":
+                                        case "zeus.dl.playstation.net":
+                                        case "ares.dl.playstation.net":
+                                            byteIP = psIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "atum.hac.lp1.d4c.nintendo.net":
+                                        case "bugyo.hac.lp1.eshop.nintendo.net":
+                                        case "ctest-dl-lp1.cdn.nintendo.net":
+                                        case "ctest-ul-lp1.cdn.nintendo.net":
+                                            byteIP = nsIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "atum-eda.hac.lp1.d4c.nintendo.net":
+                                            byteIP = new byte[4];
+                                            argb = 0x008000;
+                                            break;
+                                        case "origin-a.akamaihd.net":
+                                            byteIP = eaIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "blzddist1-a.akamaihd.net":
+                                        case "blzddist2-a.akamaihd.net":
+                                        case "blzddist3-a.akamaihd.net":
+                                            byteIP = battleIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "epicgames-download1-1251447533.file.myqcloud.com":
+                                            byteIP = epicIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "www.msftconnecttest.com":
+                                        case "ctest.cdn.nintendo.net":
+                                            if (Properties.Settings.Default.HttpService)
+                                            {
+                                                byteIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+                                                argb = 0x008000;
+                                            }
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    switch (queryName)
+                                    {
+                                        case "assets1.xboxlive.com":
+                                        case "assets2.xboxlive.com":
+                                        case "dlassets.xboxlive.com":
+                                        case "dlassets2.xboxlive.com":
+                                        case "d1.xboxlive.com":
+                                        case "d2.xboxlive.com":
+                                        case "xvcf1.xboxlive.com":
+                                        case "xvcf2.xboxlive.com":
+                                            byteIP = comIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "assets1.xboxlive.cn":
+                                        case "assets2.xboxlive.cn":
+                                        case "d1.xboxlive.cn":
+                                        case "d2.xboxlive.cn":
+                                            byteIP = cnIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "dl.delivery.mp.microsoft.com":
+                                        case "tlu.dl.delivery.mp.microsoft.com":
+                                        case "dlassets.xboxlive.cn":
+                                        case "dlassets2.xboxlive.cn":
+                                            byteIP = appIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "gst.prod.dl.playstation.net":
+                                        case "gs2.ww.prod.dl.playstation.net":
+                                        case "zeus.dl.playstation.net":
+                                        case "ares.dl.playstation.net":
+                                            byteIP = psIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "atum.hac.lp1.d4c.nintendo.net":
+                                        case "bugyo.hac.lp1.eshop.nintendo.net":
+                                        case "ctest-dl-lp1.cdn.nintendo.net":
+                                        case "ctest-ul-lp1.cdn.nintendo.net":
+                                            byteIP = nsIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "atum-eda.hac.lp1.d4c.nintendo.net":
+                                            byteIP = new byte[4];
+                                            argb = 0x008000;
+                                            break;
+                                        case "origin-a.akamaihd.net":
+                                            byteIP = eaIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "blzddist1-a.akamaihd.net":
+                                        case "blzddist2-a.akamaihd.net":
+                                        case "blzddist3-a.akamaihd.net":
+                                            byteIP = battleIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "epicgames-download1-1251447533.file.myqcloud.com":
+                                            byteIP = epicIP;
+                                            argb = 0x008000;
+                                            break;
+                                        case "www.msftconnecttest.com":
+                                        case "ctest.cdn.nintendo.net":
+                                            if (Properties.Settings.Default.HttpService)
+                                            {
+                                                byteIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+                                                argb = 0x008000;
+                                            }
+                                            break;
+                                    }
                                 }
                                 if (byteIP != null)
                                 {
@@ -483,7 +537,7 @@ namespace XboxDownload
                         }
                         catch (Exception ex)
                         {
-                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", ex.Message, ((IPEndPoint)client).Address.ToString());
+                            if (Form1.bServiceFlag && Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", ex.Message, ((IPEndPoint)client).Address.ToString());
                         }
                     });
                 }

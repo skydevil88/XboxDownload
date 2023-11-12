@@ -162,62 +162,115 @@ namespace XboxDownload
                     {
                         bool _redirect = false;
                         string _newHosts = string.Empty;
-                        switch (_hosts)
+                        if (Properties.Settings.Default.GameLink)
                         {
-                            case "assets1.xboxlive.com":
-                            case "assets2.xboxlive.com":
-                            case "dlassets.xboxlive.com":
-                            case "dlassets2.xboxlive.com":
-                            case "d1.xboxlive.com":
-                            case "d2.xboxlive.com":
-                                if (Properties.Settings.Default.Redirect)
-                                {
-                                    _redirect = true;
-                                    _newHosts = Regex.Replace(_hosts, @"\.com$", ".cn");
-                                }
-                                if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                break;
-                            case "xvcf1.xboxlive.com":
-                                if (Properties.Settings.Default.Redirect)
-                                {
-                                    _redirect = true;
-                                    _newHosts = "assets1.xboxlive.cn";
-                                }
-                                if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                break;
-                            case "xvcf2.xboxlive.com":
-                                if (Properties.Settings.Default.Redirect)
-                                {
+                            switch (_hosts)
+                            {
+                                case "xvcf1.xboxlive.com":
+                                case "xvcf2.xboxlive.com":
+                                case "assets1.xboxlive.com":
+                                case "assets2.xboxlive.com":
+                                case "d1.xboxlive.com":
+                                case "d2.xboxlive.com":
+                                case "assets1.xboxlive.cn":
+                                case "d1.xboxlive.cn":
                                     _redirect = true;
                                     _newHosts = "assets2.xboxlive.cn";
-                                }
-                                if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                break;
-                            case "us.cdn.blizzard.com":
-                            case "eu.cdn.blizzard.com":
-                            case "kr.cdn.blizzard.com":
-                            case "level3.blizzard.com":
-                                if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
-                                {
+                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    break;
+                                case "dlassets.xboxlive.com":
+                                case "dlassets2.xboxlive.com":
+                                case "dlassets.xboxlive.cn":
                                     _redirect = true;
-                                    _newHosts = "blzddist1-a.akamaihd.net";
-                                }
-                                break;
-                            case "epicgames-download1.akamaized.net":
-                            case "download.epicgames.com":
-                            case "download2.epicgames.com":
-                            case "download3.epicgames.com":
-                            case "download4.epicgames.com":
-                            case "fastly-download.epicgames.com":
-                                if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
-                                {
-                                    _redirect = true;
-                                    _newHosts = "epicgames-download1-1251447533.file.myqcloud.com";
-                                }
-                                break;
+                                    _newHosts = "dlassets2.xboxlive.cn";
+                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    break;
+
+                                case "us.cdn.blizzard.com":
+                                case "eu.cdn.blizzard.com":
+                                case "kr.cdn.blizzard.com":
+                                case "level3.blizzard.com":
+                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "epicgames-download1.akamaized.net":
+                                case "download.epicgames.com":
+                                case "download2.epicgames.com":
+                                case "download3.epicgames.com":
+                                case "download4.epicgames.com":
+                                case "fastly-download.epicgames.com":
+                                    if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "epicgames-download1-1251447533.file.myqcloud.com";
+                                    }
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (_hosts)
+                            {
+                                case "assets1.xboxlive.com":
+                                case "assets2.xboxlive.com":
+                                case "dlassets.xboxlive.com":
+                                case "dlassets2.xboxlive.com":
+                                case "d1.xboxlive.com":
+                                case "d2.xboxlive.com":
+                                    if (Properties.Settings.Default.Redirect)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = Regex.Replace(_hosts, @"\.com$", ".cn");
+                                    }
+                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    break;
+                                case "xvcf1.xboxlive.com":
+                                    if (Properties.Settings.Default.Redirect)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "assets1.xboxlive.cn";
+                                    }
+                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    break;
+                                case "xvcf2.xboxlive.com":
+                                    if (Properties.Settings.Default.Redirect)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "assets2.xboxlive.cn";
+                                    }
+                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    break;
+                                case "us.cdn.blizzard.com":
+                                case "eu.cdn.blizzard.com":
+                                case "kr.cdn.blizzard.com":
+                                case "level3.blizzard.com":
+                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "epicgames-download1.akamaized.net":
+                                case "download.epicgames.com":
+                                case "download2.epicgames.com":
+                                case "download3.epicgames.com":
+                                case "download4.epicgames.com":
+                                case "fastly-download.epicgames.com":
+                                    if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "epicgames-download1-1251447533.file.myqcloud.com";
+                                    }
+                                    break;
+                            }
                         }
                         if (_redirect)
                         {
@@ -427,28 +480,28 @@ namespace XboxDownload
                 {
                     if (XboxGame.Version >= version) return;
                 }
+                switch (_hosts)
+                {
+                    case "xvcf1.xboxlive.com":
+                    case "xvcf2.xboxlive.com":
+                    case "assets2.xboxlive.com":
+                    case "d1.xboxlive.com":
+                    case "d2.xboxlive.com":
+                    case "assets1.xboxlive.cn":
+                    case "assets2.xboxlive.cn":
+                    case "d1.xboxlive.cn":
+                    case "d2.xboxlive.cn":
+                        _hosts = "assets1.xboxlive.com";
+                        break;
+                    case "dlassets2.xboxlive.com":
+                    case "dlassets.xboxlive.cn":
+                    case "dlassets2.xboxlive.cn":
+                        _hosts = "dlassets.xboxlive.com";
+                        break;
+                }
                 string? ip = ClassDNS.DoH(_hosts);
                 if (!string.IsNullOrEmpty(ip))
                 {
-                    switch (_hosts)
-                    {
-                        case "xvcf1.xboxlive.com":
-                        case "xvcf2.xboxlive.com":
-                        case "assets2.xboxlive.com":
-                        case "d1.xboxlive.com":
-                        case "d2.xboxlive.com":
-                        case "assets1.xboxlive.cn":
-                        case "assets2.xboxlive.cn":
-                        case "d1.xboxlive.cn":
-                        case "d2.xboxlive.cn":
-                            _hosts = "assets1.xboxlive.com";
-                            break;
-                        case "dlassets2.xboxlive.com":
-                        case "dlassets.xboxlive.cn":
-                        case "dlassets2.xboxlive.cn":
-                            _hosts = "dlassets.xboxlive.com";
-                            break;
-                    }
                     var headers = new Dictionary<string, string>() { { "Host", _hosts } };
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("http://" + ip + _filePath, "HEAD", null, null, headers);
                     if (response != null && response.IsSuccessStatusCode)
@@ -467,7 +520,7 @@ namespace XboxDownload
                             _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(XboxGame.Url), "PUT", null, null, null, 30000, "XboxDownload");
                         }
                     }
-                }
+                } 
             }
         }
     }

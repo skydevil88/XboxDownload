@@ -74,18 +74,6 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CnIP2 {
-            get {
-                return ((string)(this["CnIP2"]));
-            }
-            set {
-                this["CnIP2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string AppIP {
             get {
                 return ((string)(this["AppIP"]));
@@ -224,6 +212,18 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["Redirect"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GameLink {
+            get {
+                return ((bool)(this["GameLink"]));
+            }
+            set {
+                this["GameLink"] = value;
             }
         }
         

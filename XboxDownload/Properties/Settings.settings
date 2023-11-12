@@ -14,9 +14,6 @@
     <Setting Name="CnIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="CnIP2" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="AppIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -52,6 +49,9 @@
     </Setting>
     <Setting Name="Redirect" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GameLink" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="Truncation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
