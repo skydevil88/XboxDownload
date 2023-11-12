@@ -104,8 +104,10 @@ namespace XboxDownload
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
             ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
 
-            ckbRecordLog.CheckedChanged += new EventHandler(CkbRecordLog_CheckedChanged);
+            ckbGameLink.CheckedChanged += new EventHandler(CkbGameLink_CheckedChanged);
+            ckbLocalUpload.CheckedChanged += new EventHandler(CkbLocalUpload_CheckedChanged);
             ckbSetDns.CheckedChanged += new EventHandler(CkbSetDns_CheckedChanged);
+            ckbRecordLog.CheckedChanged += new EventHandler(CkbRecordLog_CheckedChanged);
 
             //IPAddress[] ipAddresses = Array.FindAll(Dns.GetHostEntry(string.Empty).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
             //cbLocalIP.Items.AddRange(ipAddresses);
@@ -449,6 +451,23 @@ namespace XboxDownload
             if (!ckbDnsService.Checked)
                 ckbSetDns.Checked = false;
         }
+
+        private void CkbGameLink_CheckedChanged(object? sender, EventArgs? e)
+        {
+            if (!ckbGameLink.Checked)
+            {
+                ckbLocalUpload.Checked = false;
+            }
+        }
+
+        private void CkbLocalUpload_CheckedChanged(object? sender, EventArgs? e)
+        {
+            if (ckbLocalUpload.Checked)
+            {
+                ckbGameLink.Checked = true;
+            }
+        }
+
 
         private void CkbSetDns_CheckedChanged(object? sender, EventArgs? e)
         {
