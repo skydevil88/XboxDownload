@@ -70,18 +70,17 @@ d2.xboxlive.com				192.168.1.1
 dlassets.xboxlive.com			192.168.1.1
 dlassets2.xboxlive.com			192.168.1.1
 
-#xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分三组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
-#第一组
+#xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分两组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
+#第一组，主下载域名（PC主机共用）
 assets1.xboxlive.cn			xxx.xxx.xxx.xxx
 assets2.xboxlive.cn			xxx.xxx.xxx.xxx
 d1.xboxlive.cn				xxx.xxx.xxx.xxx
 d2.xboxlive.cn				xxx.xxx.xxx.xxx
-#第二组，部分老游戏使用此域名，可以不加，使用自动解释
-dlassets.xboxlive.cn			xxx.xxx.xxx.xxx #可选
-dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx	#可选
-#第三组，应用下载和部分PC微软商店游戏
+#第二组，应用和部分游戏使用此域名下载
 dl.delivery.mp.microsoft.com		xxx.xxx.xxx.xxx
 tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
+dlassets.xboxlive.cn			xxx.xxx.xxx.xxx
+dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx
 ```
 
 ![图2](doc/Op3.png)
@@ -142,18 +141,17 @@ d2.xboxlive.com				192.168.1.1
 dlassets.xboxlive.com			192.168.1.1
 dlassets2.xboxlive.com			192.168.1.1
 
-#xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分三组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
-#第一组
+#xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分两组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
+#第一组，主下载域名（PC主机共用）
 assets1.xboxlive.cn			xxx.xxx.xxx.xxx
 assets2.xboxlive.cn			xxx.xxx.xxx.xxx
 d1.xboxlive.cn				xxx.xxx.xxx.xxx
 d2.xboxlive.cn				xxx.xxx.xxx.xxx
-#第二组，部分老游戏使用此域名，可以不加，使用自动解释
-dlassets.xboxlive.cn			xxx.xxx.xxx.xxx #可选
-dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx	#可选
-#第三组，应用下载和部分PC微软商店游戏
+#第二组，应用和部分游戏使用此域名下载
 dl.delivery.mp.microsoft.com		xxx.xxx.xxx.xxx
 tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
+dlassets.xboxlive.cn			xxx.xxx.xxx.xxx
+dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx
 ```
 
 ![图2](doc/Op3.png)

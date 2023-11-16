@@ -84,7 +84,6 @@ namespace XboxDownload
             ckbBattleCDN.Checked = Properties.Settings.Default.BattleCDN;
             tbEpicIP.Text = Properties.Settings.Default.EpicIP;
             ckbEpicCDN.Checked = Properties.Settings.Default.EpicCDN;
-            ckbRedirect.Checked = Properties.Settings.Default.Redirect;
             ckbGameLink.Checked = Properties.Settings.Default.GameLink;
             ckbTruncation.Checked = Properties.Settings.Default.Truncation;
             ckbLocalUpload.Checked = Properties.Settings.Default.LocalUpload;
@@ -109,8 +108,6 @@ namespace XboxDownload
             ckbSetDns.CheckedChanged += new EventHandler(CkbSetDns_CheckedChanged);
             ckbRecordLog.CheckedChanged += new EventHandler(CkbRecordLog_CheckedChanged);
 
-            //IPAddress[] ipAddresses = Array.FindAll(Dns.GetHostEntry(string.Empty).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
-            //cbLocalIP.Items.AddRange(ipAddresses);
             NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback && (x.NetworkInterfaceType == NetworkInterfaceType.Ethernet || x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211) && !x.Description.Contains("Virtual")).ToArray();
             foreach (NetworkInterface adapter in adapters)
             {
@@ -468,7 +465,6 @@ namespace XboxDownload
             }
         }
 
-
         private void CkbSetDns_CheckedChanged(object? sender, EventArgs? e)
         {
             if (ckbSetDns.Checked)
@@ -683,7 +679,6 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleCDN = ckbBattleCDN.Checked;
                 Properties.Settings.Default.EpicIP = epicIP;
                 Properties.Settings.Default.EpicCDN = ckbEpicCDN.Checked;
-                Properties.Settings.Default.Redirect = ckbRedirect.Checked;
                 Properties.Settings.Default.GameLink = ckbGameLink.Checked;
                 Properties.Settings.Default.Truncation = ckbTruncation.Checked;
                 Properties.Settings.Default.LocalUpload = ckbLocalUpload.Checked;
@@ -3079,7 +3074,7 @@ namespace XboxDownload
             }
         }
 
-        private void ButAnalyze_Click(object sender, EventArgs e)
+        private async void ButAnalyze_Click(object sender, EventArgs e)
         {
             string url = tbDownloadUrl.Text.Trim();
             if (string.IsNullOrEmpty(url)) return;
@@ -3089,10 +3084,11 @@ namespace XboxDownload
                 url = "http://assets1.xboxlive.cn" + url;
                 tbDownloadUrl.Text = url;
             }
-
             tbFilePath.Text = string.Empty;
+            tbContentId.Text = tbProductID.Text = tbBuildID.Text = tbFileTimeCreated.Text = tbDriveSize.Text = tbPackageVersion.Text = string.Empty;
+            butAnalyze.Enabled = butOpenFile.Enabled = linkCopyContentID.Enabled = linkRename.Enabled = linkProductID.Visible = false;
             Dictionary<string, string> headers = new() { { "Range", "0-4095" } };
-            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url, "GET", null, null, headers);
+            using HttpResponseMessage? response = await Task.Run(() => ClassWeb.HttpResponseMessage(url, "GET", null, null, headers));
             if (response != null && response.IsSuccessStatusCode)
             {
                 byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
@@ -3103,6 +3099,7 @@ namespace XboxDownload
                 string msg = response != null ? "ÏÂÔØÊ§°Ü£¬´íÎóÐÅÏ¢£º" + response.ReasonPhrase : "ÏÂÔØÊ§°Ü";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            butAnalyze.Enabled = butOpenFile.Enabled = true;
         }
 
         private void ButOpenFile_Click(object sender, EventArgs e)
@@ -3117,7 +3114,8 @@ namespace XboxDownload
             string sFilePath = ofd.FileName;
             tbDownloadUrl.Text = "";
             tbFilePath.Text = sFilePath;
-
+            tbContentId.Text = tbProductID.Text = tbBuildID.Text = tbFileTimeCreated.Text = tbDriveSize.Text = tbPackageVersion.Text = string.Empty;
+            butAnalyze.Enabled = butOpenFile.Enabled = linkCopyContentID.Enabled = linkRename.Enabled = linkProductID.Visible = false;
             FileStream? fs = null;
             try
             {
@@ -3135,11 +3133,11 @@ namespace XboxDownload
                 fs.Close();
                 XvcParse(bFileBuffer);
             }
+            butAnalyze.Enabled = butOpenFile.Enabled = true;
         }
+
         private void XvcParse(byte[] bFileBuffer)
         {
-            tbContentId.Text = tbProductID.Text = tbBuildID.Text = tbFileTimeCreated.Text = tbDriveSize.Text = tbPackageVersion.Text = string.Empty;
-            linkCopyContentID.Enabled = linkRename.Enabled = linkProductID.Visible = false;
             if (bFileBuffer != null && bFileBuffer.Length >= 4096)
             {
                 using MemoryStream ms = new(bFileBuffer);

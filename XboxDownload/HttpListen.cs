@@ -11,6 +11,7 @@ namespace XboxDownload
     {
         private readonly Form1 parentForm;
         private readonly ConcurrentDictionary<String, String> dicAppLocalUploadFile = new();
+        private bool redirect;
         Socket? socket = null;
 
         public HttpListen(Form1 parentForm)
@@ -37,6 +38,7 @@ namespace XboxDownload
                 }));
                 return;
             }
+            redirect = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP;
             while (Form1.bServiceFlag)
             {
                 try
@@ -222,7 +224,7 @@ namespace XboxDownload
                                 case "dlassets2.xboxlive.com":
                                 case "d1.xboxlive.com":
                                 case "d2.xboxlive.com":
-                                    if (Properties.Settings.Default.Redirect)
+                                    if (redirect)
                                     {
                                         _redirect = true;
                                         _newHosts = Regex.Replace(_hosts, @"\.com$", ".cn");
@@ -231,7 +233,7 @@ namespace XboxDownload
                                         ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
                                     break;
                                 case "xvcf1.xboxlive.com":
-                                    if (Properties.Settings.Default.Redirect)
+                                    if (redirect)
                                     {
                                         _redirect = true;
                                         _newHosts = "assets1.xboxlive.cn";
@@ -240,7 +242,7 @@ namespace XboxDownload
                                         ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
                                     break;
                                 case "xvcf2.xboxlive.com":
-                                    if (Properties.Settings.Default.Redirect)
+                                    if (redirect)
                                     {
                                         _redirect = true;
                                         _newHosts = "assets2.xboxlive.cn";

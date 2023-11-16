@@ -109,7 +109,6 @@
             label6 = new Label();
             tbCnIP = new TextBox();
             labelCn = new Label();
-            ckbRedirect = new CheckBox();
             label4 = new Label();
             tbComIP = new TextBox();
             labelCom = new Label();
@@ -636,7 +635,6 @@
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(tbCnIP);
             groupBox1.Controls.Add(labelCn);
-            groupBox1.Controls.Add(ckbRedirect);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(tbComIP);
             groupBox1.Controls.Add(labelCom);
@@ -905,12 +903,6 @@
             // 
             resources.ApplyResources(labelCn, "labelCn");
             labelCn.Name = "labelCn";
-            // 
-            // ckbRedirect
-            // 
-            resources.ApplyResources(ckbRedirect, "ckbRedirect");
-            ckbRedirect.Name = "ckbRedirect";
-            ckbRedirect.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -2655,7 +2647,6 @@
         public PictureBox pictureBox1;
         public TextBox tbDnsIP;
         private Label labelDNS;
-        private CheckBox ckbRedirect;
         private Label label4;
         private Label labelCom;
         private Label label2;

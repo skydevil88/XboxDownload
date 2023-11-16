@@ -26,14 +26,19 @@ namespace XboxDownload
                 new Games("大蛇无双2 终极版", "国服简中", "bs96nlsxq6zw"),
                 new Games("动物园大亨", "只能在国服显示中文", "brwjs8p512vf"),
                 new Games("飞速骑行", "", "c5d7449r6sdr"),
+                new Games("非常英雄", "国服简中", "9nbc54mt6khx"),
                 new Games("光之子", "国语配音", "bq9q620nc614"),
                 new Games("极限竞速5", "国语配音", "bqlk685tm311"),
+                new Games("究极雷电5", "国服简中", "bncx7k1p2rft"),
                 new Games("雷曼传奇", "国语配音", "c26k4dvgr45b"),
+                new Games("里奥的财富", "国服简中", "btwxl6vxs87b"),
                 new Games("麦克斯：兄弟魔咒", "国语配音", "c0sfcf4pbrsz"),
                 new Games("明星高尔夫", "国语配音", "bnq94hh98ztp"),
                 new Games("摩托世界大奖赛2015", "", "bsh5fpmr3gd8"),
+                new Games("潘卡普: 守梦人", "国服简中", "bsqm38zf2sw9"),
                 new Games("桥", "", "c2p1cf27vvdf"),
                 new Games("塞巴斯蒂安拉力赛：进化", "", "br5bk5pnzkvh"),
+                new Games("三国志13", "国服简中", "c13r3s0hl1vz"),
                 new Games("水果忍者：体感版2", "", "btkfdf4dhwrz"),
                 new Games("索尼克 力量", "", "bxk9z89s6rcx"),
                 new Games("特技摩托：聚变", "", "bvcrsr6xsdw5"),
@@ -42,9 +47,10 @@ namespace XboxDownload
                 new Games("体感碰碰球", "", "c4j8pcxk5xlq"),
                 new Games("体感碰碰球2", "", "c3ngpjhhwpw6"),
                 new Games("体感章鱼", "", "bsfzlnb9r9rx"),
+                new Games("无尽之剑: 命运", "国服简中", "c5hc39qrczs6"),
                 new Games("型可塑", "国语配音", "c1b6dl0t68q5"),
                 new Games("真•三国无双７ 帝国", "国服简中", "bvg8190qslw6"),
-                new Games("最终幻想15", "国服简中", "c45d79qvkztp")
+                new Games("最终幻想15", "国服简中", "c45d79qvkztp"),
             };
             //games.Sort((x, y) => string.Compare(x.name, y.name));
 

@@ -18,7 +18,7 @@
     <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
     <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
     <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing"">Blue</data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
     <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
         <value>[base64 mime encoded serialized .NET Framework object]</value>
     </data>
@@ -509,13 +509,13 @@
     <value>True</value>
   </data>
   <data name="ckbGameLink.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1003, 56</value>
+    <value>871, 56</value>
   </data>
   <data name="ckbGameLink.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
   </data>
   <data name="ckbGameLink.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="ckbGameLink.Text" xml:space="preserve">
     <value>显示下载链接</value>
@@ -1088,7 +1088,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbEpicIP.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
+    <value>14</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.Name" xml:space="preserve">
     <value>tbEpicIP</value>
@@ -1142,7 +1142,7 @@
     <value>183, 28</value>
   </data>
   <data name="ckbBattleCDN.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
+    <value>13</value>
   </data>
   <data name="ckbBattleCDN.Text" xml:space="preserve">
     <value>跳转CDN Akamai</value>
@@ -1193,7 +1193,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbBattleIP.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
+    <value>12</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.Name" xml:space="preserve">
     <value>tbBattleIP</value>
@@ -1247,7 +1247,7 @@
     <value>183, 28</value>
   </data>
   <data name="ckbEACDN.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
+    <value>11</value>
   </data>
   <data name="ckbEACDN.Text" xml:space="preserve">
     <value>指定CDN Akamai</value>
@@ -1298,7 +1298,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbEAIP.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
+    <value>10</value>
   </data>
   <data name="&gt;&gt;tbEAIP.Name" xml:space="preserve">
     <value>tbEAIP</value>
@@ -1355,7 +1355,7 @@
     <value>161, 24</value>
   </data>
   <data name="linkNSHomepage.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+    <value>9</value>
   </data>
   <data name="linkNSHomepage.Text" xml:space="preserve">
     <value>设置NS浏览器主页</value>
@@ -1385,7 +1385,7 @@
     <value>187, 28</value>
   </data>
   <data name="ckbNSBrowser.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+    <value>8</value>
   </data>
   <data name="ckbNSBrowser.Text" xml:space="preserve">
     <value>打开NS隐藏浏览器</value>
@@ -1436,7 +1436,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbNSIP.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>7</value>
   </data>
   <data name="&gt;&gt;tbNSIP.Name" xml:space="preserve">
     <value>tbNSIP</value>
@@ -1512,7 +1512,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbPSIP.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+    <value>6</value>
   </data>
   <data name="&gt;&gt;tbPSIP.Name" xml:space="preserve">
     <value>tbPSIP</value>
@@ -1587,7 +1587,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbAppIP.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+    <value>5</value>
   </data>
   <data name="&gt;&gt;tbAppIP.Name" xml:space="preserve">
     <value>tbAppIP</value>
@@ -1614,7 +1614,7 @@
     <value>14</value>
   </data>
   <data name="labelApp.Text" xml:space="preserve">
-    <value>指定应用下载域名    IP</value>
+    <value>指定 应用 下载域名  IP</value>
   </data>
   <data name="&gt;&gt;labelApp.Name" xml:space="preserve">
     <value>labelApp</value>
@@ -1662,7 +1662,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbCnIP.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="&gt;&gt;tbCnIP.Name" xml:space="preserve">
     <value>tbCnIP</value>
@@ -1703,36 +1703,6 @@
   <data name="&gt;&gt;labelCn.ZOrder" xml:space="preserve">
     <value>44</value>
   </data>
-  <data name="ckbRedirect.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbRedirect.Location" type="System.Drawing.Point, System.Drawing">
-    <value>870, 56</value>
-  </data>
-  <data name="ckbRedirect.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ckbRedirect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 28</value>
-  </data>
-  <data name="ckbRedirect.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="ckbRedirect.Text" xml:space="preserve">
-    <value>跳转cn下载</value>
-  </data>
-  <data name="&gt;&gt;ckbRedirect.Name" xml:space="preserve">
-    <value>ckbRedirect</value>
-  </data>
-  <data name="&gt;&gt;ckbRedirect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbRedirect.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;ckbRedirect.ZOrder" xml:space="preserve">
-    <value>45</value>
-  </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1758,7 +1728,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>45</value>
   </data>
   <data name="tbComIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 51</value>
@@ -1779,7 +1749,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbComIP.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>46</value>
   </data>
   <data name="labelCom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1806,7 +1776,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCom.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>47</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1836,7 +1806,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>48</value>
   </data>
   <data name="tbDnsIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 15</value>
@@ -1857,7 +1827,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbDnsIP.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>49</value>
   </data>
   <data name="labelDNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1884,7 +1854,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelDNS.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>50</value>
   </data>
   <data name="pictureBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1911,7 +1881,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>52</value>
+    <value>51</value>
   </data>
   <data name="groupBox1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>

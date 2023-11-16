@@ -33,7 +33,7 @@ Xbox正在下载，请先暂停，完成设置后再继续。
 
 ![图2](doc/pm02.png)
 
-二、本机IP选择跟Xbox同一IP段，一般是192.168.x.x，我这里是192.168.1.5，请自行判断选择。确认勾选 1.启用DNS服务，2.启用HTTP服务，3.跳转cn下载 这三项，然后点击 开始监听。
+二、本机IP选择跟Xbox同一IP段，一般是192.168.x.x，我这里是192.168.50.5，请自行判断选择。确认勾选 1.启用DNS服务，2.启用HTTP服务 这两项，然后点击 开始监听。
 
 ![图3](doc/pm03.png)
 
@@ -68,9 +68,7 @@ Xbox主机DNS可以不用设置，直接自动获取。
 
 2.PC下载回传（PC XGP、PlayStatio、EA同样适用）
 ---
-有两种方法回传Xbox，首先使用下载助手监听到游戏下载地址（Xbox使用assets1.xboxlive.cn域名下载的，请在 “指定 cn 下载域名 IP” 填上本机IP，由于本地还没有文件，下载会出现HTTP 404日志，Xbox下载失败，这是正常的），暂停下载，右键复制下载地址，然后使用PC下载工具把文件下载回来。
-
-PlayStation本地上传 使用方式参考Xbox方法一。 
+有两种方法回传Xbox，首先使用下载助手监听到游戏下载地址（勾选显示下载链接），暂停下载，右键复制下载地址，然后使用PC下载工具把文件下载回来。
 
 PC XGP游戏也可以用此方法监听到下载地址，然后使用下载工具下载，完成后在 工具->离线安装微软商店应用软件 中安装。
 
@@ -103,31 +101,32 @@ https://github.com/skydevil88/XboxDownload/blob/master/README_OpenWrt.md
 
 其它路由器如果支持改Hosts，可以分别把 com 和cn 下载域名测速后找出最快IP写进Hosts 中，不管Xbox使用那个域名下载都能加速。
 
-CN IP 分三组，目前国内 IP 大部分不通用，需要分别测速(Akamai IP 可以通用) 
+CN域名（可以使用Akamai IP，对于CDN没有缓存的老游戏、冷门游戏可能效果更佳）
 ```
-#第一组 
+#第一组，主下载域名（PC主机共用）
 address=/assets1.xboxlive.cn/cn IP 或者 Akamai IP 
 address=/assets2.xboxlive.cn/cn IP 或者 Akamai IP 
 address=/d1.xboxlive.cn/cn IP 或者 Akamai IP 
 address=/d2.xboxlive.cn/cn IP 或者 Akamai IP 
-#第二组，部分老游戏使用此域名，可以不加，使用自动解释 
-address=/dlassets.xboxlive.cn/cn IP 或者 Akamai IP 
-address=/dlassets2.xboxlive.cn/cn IP 或者 Akamai IP 
-#第三组，应用下载和部分 PC 微软商店游戏 
+
+#第二组，应用和部分游戏使用此域名下载
 address=/dl.delivery.mp.microsoft.com/cn IP 或者 Akamai IP 
 address=/tlu.dl.delivery.mp.microsoft.com /cn IP 或者 Akamai IP
+address=/dlassets.xboxlive.cn/cn IP 或者 Akamai IP 
+address=/dlassets2.xboxlive.cn/cn IP 或者 Akamai IP 
 ```
+COM域名（不能使用cn IP）
 ```
-address=/xvcf1.xboxlive.com/com IP
-address=/xvcf2.xboxlive.com/com IP
-address=/assets1.xboxlive.com/com IP
-address=/assets2.xboxlive.com/com IP
-address=/d1.xboxlive.com/com IP
-address=/d2.xboxlive.com/com IP
-address=/dlassets.xboxlive.com/com IP
-address=/dlassets2.xboxlive.com/com IP
+address=/xvcf1.xboxlive.com/Akamai IP
+address=/xvcf2.xboxlive.com/Akamai IP
+address=/assets1.xboxlive.com/Akamai IP
+address=/assets2.xboxlive.com/Akamai IP
+address=/d1.xboxlive.com/Akamai IP
+address=/d2.xboxlive.com/Akamai IP
+address=/dlassets.xboxlive.com/Akamai IP
+address=/dlassets2.xboxlive.com/Akamai IP
 ```
-注意：不少人直接把 com 域名指定到 cn ip、或者使用 CNAME 解释到 cn IP，这两种方法都是错误的，服务器会返回403错误。 com域名不能使用cn IP，反过来cn域名可以使用部分com IP(Akamai).
+注意：不少人直接把 com 域名指定到 cn ip、或者使用 CNAME 解释到 cn IP，这两种方法都是错误的，服务器会返回403错误。 com域名不能使用cn IP，反过来cn域名可以使用部Akamai IP.
 
 关于
 ---
