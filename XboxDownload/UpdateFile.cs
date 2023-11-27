@@ -9,16 +9,11 @@ namespace XboxDownload
     internal class UpdateFile
     {
         public const string homePage = "https://xbox.skydevil.xyz";
-        public const string updateUrl = "https://github.com/skydevil88/XboxDownload/releases/";
-        public const string filePath = "download/v1/";
-        private const string testFile = "XboxDownload.exe.md5";
+        public const string project = "https://github.com/skydevil88/XboxDownload";
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
             { "proxy", "https://ghproxy.com/" },
             { "proxy", "https://ghps.cc/" },
-            //{ "proxy", "https://gh.api.99988866.xyz/" },
-            //{ "mirror", "https://cdn.githubjs.cf/" },   //失效
-            //{ "mirror", "https://hub.fastgit.xyz/" },   //失效
             { "direct", "" }
         };
 
@@ -27,55 +22,30 @@ namespace XboxDownload
             Properties.Settings.Default.NextUpdate = DateTime.Now.AddDays(7).Ticks;
             Properties.Settings.Default.Save();
 
-            string updateUrl = string.Empty, md5 = string.Empty;
+            string? releases = null;
             Task[] tasks = new Task[proxys.GetLongLength(0)];
             for (int i = 0; i <= tasks.Length - 1; i++)
             {
-                string testUrl = proxys[i, 0] switch
+                string proxy = proxys[i, 0] switch
                 {
-                    "proxy" => proxys[i, 1] + UpdateFile.updateUrl,
-                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"^https?://[^/]+/", ""),
-                    _ => UpdateFile.updateUrl
+                    "proxy" => proxys[i, 1],
+                    _ => ""
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string html = ClassWeb.HttpResponseContent(testUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
-                    if (string.IsNullOrEmpty(md5) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
-                    {
-                        md5 = html;
-                        updateUrl = testUrl;
-                    }
-                    else Thread.Sleep(6000);
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + UpdateFile.project + "/releases/latest", "HEAD", null, null, null, 6000);
+                    if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(releases))
+                        releases = response.RequestMessage?.RequestUri?.ToString();
+                    else
+                        Thread.Sleep(6000);
                 });
             }
             Array.ForEach(tasks, x => x.Start());
             Task.WaitAny(tasks);
-            if (!string.IsNullOrEmpty(md5))
-            {
-                Update(autoupdate, updateUrl, parentForm);
-            }
-            if (string.IsNullOrEmpty(md5) && !autoupdate)
-            {
-                parentForm.Invoke(new Action(() =>
-                {
-                    MessageBox.Show("检查更新出错，请稍候再试。", "软件更新", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    parentForm.tsmUpdate.Enabled = true;
-                }));
-            }
-        }
-
-        private static void Update(bool autoupdate, string updateUrl, Form1 parentForm)
-        {
-            string? url = null;
-            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(updateUrl+ "latest", "HEAD");
-            if (response != null && response.IsSuccessStatusCode)
-            {
-                url = response.RequestMessage?.RequestUri?.ToString();
-            }
-            if (url != null)
+            if (!string.IsNullOrEmpty(releases))
             {
                 bool isUpdate = false;
-                Match result = Regex.Match(url, @"(?<version>\d+(\.\d+){2,3})$");
+                Match result = Regex.Match(releases, @"(?<version>\d+(\.\d+){2,3})$");
                 if (result.Success)
                 {
                     Version version1 = new(result.Groups["version"].Value);
@@ -98,10 +68,7 @@ namespace XboxDownload
                         }));
                         return;
                     }
-                }
-                if (isUpdate)
-                {
-                    string download = (url.Replace("tag", "download") + "/XboxDownload.zip");
+                    string download = (releases.Replace("tag", "download") + "/XboxDownload.zip");
                     using HttpResponseMessage? response2 = ClassWeb.HttpResponseMessage(download, "GET", null, null, null, 180000);
                     if (response2 != null && response2.IsSuccessStatusCode)
                     {
@@ -143,41 +110,49 @@ namespace XboxDownload
                             }
                         }
                     }
+                    parentForm.Invoke(new Action(() =>
+                    {
+                        if (!autoupdate) MessageBox.Show("下载更新包出错。请稍后再试。", "更新失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        parentForm.tsmUpdate.Enabled = true;
+                    }));
                 }
             }
-            parentForm.Invoke(new Action(() =>
+            if (!autoupdate)
             {
-                if (!autoupdate) MessageBox.Show("下载文件出错，请稍候再试。", "软件更新", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                parentForm.tsmUpdate.Enabled = true;
-            }));
+                parentForm.Invoke(new Action(() =>
+                {
+                    MessageBox.Show("检查更新出错，请稍候再试。", "更新失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    parentForm.tsmUpdate.Enabled = true;
+                }));
+            }
         }
 
-        public static async Task Download(FileInfo fi)
+        public static async Task DownloadIP(FileInfo fi)
         {
-            string updateUrl = string.Empty;
+            string? fileUrl = null;
             Task[] tasks = new Task[proxys.GetLongLength(0)];
             for (int i = 0; i <= tasks.Length - 1; i++)
             {
-                string testUrl = proxys[i, 0] switch
+                string proxy = proxys[i, 0] switch
                 {
-                    "proxy" => proxys[i, 1] + UpdateFile.updateUrl,
-                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.updateUrl, @"^https?://[^/]+/", ""),
-                    _ => UpdateFile.updateUrl
+                    "proxy" => proxys[i, 1],
+                    _ => ""
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string html = ClassWeb.HttpResponseContent(testUrl + UpdateFile.filePath + UpdateFile.testFile, "GET", null, null, null, 6000);
-                    if (string.IsNullOrEmpty(updateUrl) && Regex.IsMatch(html, @"^[A-Z0-9]{32}$"))
-                        updateUrl = testUrl;
+                    string tmpUrl = proxy + UpdateFile.project.Replace("github.com", "raw.githubusercontent.com") +"/master/IP/" + fi.Name;
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000);
+                    if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(fileUrl))
+                        fileUrl = tmpUrl;
                     else
                         Thread.Sleep(6000);
                 });
             }
             Array.ForEach(tasks, x => x.Start());
             await Task.WhenAny(tasks);
-            if (!string.IsNullOrEmpty(updateUrl))
+            if (!string.IsNullOrEmpty(fileUrl))
             {
-                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(updateUrl + UpdateFile.filePath + fi.Name, "GET", null, null, null, 60000);
+                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(fileUrl, "GET", null, null, null, 60000);
                 if (response != null && response.IsSuccessStatusCode)
                 {
                     byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
