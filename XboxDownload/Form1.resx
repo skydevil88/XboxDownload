@@ -5999,13 +5999,13 @@
     <value>341, 124</value>
   </data>
   <data name="linkEaOriginNoUpdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 24</value>
+    <value>308, 24</value>
   </data>
   <data name="linkEaOriginNoUpdate.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
   <data name="linkEaOriginNoUpdate.Text" xml:space="preserve">
-    <value>禁止 Origin 强制更新到 EA app</value>
+    <value>禁止 Origin 强制更新到 EA app (V3)</value>
   </data>
   <data name="&gt;&gt;linkEaOriginNoUpdate.Name" xml:space="preserve">
     <value>linkEaOriginNoUpdate</value>
