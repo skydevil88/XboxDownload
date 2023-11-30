@@ -121,7 +121,7 @@ server {
         }
 }
 
-#启动 nginx 服务以及设置其开机自启，显示证书警告信息可以不理会。
+#启动 nginx 服务以及设置其开机自启。
 /etc/init.d/nginx start
 /etc/init.d/nginx enable
 #重启nginx
