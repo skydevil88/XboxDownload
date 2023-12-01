@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -176,7 +176,6 @@
             butCdnReset = new Button();
             butCdnSave = new Button();
             ckbEnableCdnIP = new CheckBox();
-            linkCdnExportRule = new LinkLabel();
             groupBox3 = new GroupBox();
             label11 = new Label();
             linkCdnSpeedTest = new LinkLabel();
@@ -999,9 +998,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1009,9 +1008,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1019,9 +1018,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1379,7 +1378,6 @@
             panel4.Controls.Add(butCdnReset);
             panel4.Controls.Add(butCdnSave);
             panel4.Controls.Add(ckbEnableCdnIP);
-            panel4.Controls.Add(linkCdnExportRule);
             resources.ApplyResources(panel4, "panel4");
             panel4.Name = "panel4";
             // 
@@ -1407,13 +1405,6 @@
             resources.ApplyResources(ckbEnableCdnIP, "ckbEnableCdnIP");
             ckbEnableCdnIP.Name = "ckbEnableCdnIP";
             ckbEnableCdnIP.UseVisualStyleBackColor = true;
-            // 
-            // linkCdnExportRule
-            // 
-            resources.ApplyResources(linkCdnExportRule, "linkCdnExportRule");
-            linkCdnExportRule.Name = "linkCdnExportRule";
-            linkCdnExportRule.TabStop = true;
-            linkCdnExportRule.LinkClicked += LinkCdnExportRule_LinkClicked;
             // 
             // groupBox3
             // 
@@ -2780,7 +2771,6 @@
         private Button butCdnReset;
         private Button butCdnSave;
         private CheckBox ckbEnableCdnIP;
-        private LinkLabel linkCdnExportRule;
         private TabPage tabHardDisk;
         private TabPage tabStore;
         private TabPage tabTools;

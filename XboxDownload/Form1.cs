@@ -1521,36 +1521,28 @@ namespace XboxDownload
                     {
                         LinkLabel lb1 = new()
                         {
-                            Tag = "986a47b3-0085-4c0c-b3b3-3b806f969b00|MsixBundle|9MV0B5HZVK9Z",
-                            Text = "Xbox(PC)",
+                            Tag = "e0229546-200d-4c66-a693-df9bf799635f|EAppxBundle|9PNQKHFLD2WQ",
+                            Text = "极限竞速:地平线4(PC)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb2 = new()
                         {
-                            Tag = "64293252-5926-453c-9494-2d4021f1c78d|MsixBundle|9WZDNCRFJBMP",
-                            Text = "微软商店(PC)",
+                            Tag = "10234393-bf1c-453c-84c2-f0fd48d6b800|EAppxBundle|9P2N57MC619K",
+                            Text = "盗贼之海(PC)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb3 = new()
                         {
-                            Tag = "e0229546-200d-4c66-a693-df9bf799635f|EAppxBundle|9PNQKHFLD2WQ",
-                            Text = "地平线4(PC)",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        LinkLabel lb4 = new()
-                        {
                             Tag = "http://dlassets.xboxlive.cn/public/content/77d0d59a-34b7-4482-a1c7-c0abbed17de2/db7a9163-9c5e-43a8-b8bf-fe0208149792/1.0.0.3.65565c9c-8a1e-438a-b714-2d9965f0485b/ChildOfLight_1.0.0.3_x64__b6krnev7r9sf8",
                             Text = "光之子(XboxOne)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
-                        lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         _ = new Label()
                         {
                             ForeColor = Color.Green,
@@ -2773,77 +2765,6 @@ namespace XboxDownload
                 }
                 tabControl1.SelectedTab = tabSpeedTest;
             }
-        }
-
-        private void LinkCdnExportRule_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            string ip = string.Empty;
-            foreach (string str in tbCdnAkamai.Text.Split(','))
-            {
-                if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
-                {
-                    ip = address.ToString();
-                    break;
-                }
-            }
-            if (string.IsNullOrEmpty(ip))
-            {
-                MessageBox.Show("请先添加优选IP。", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                tbCdnAkamai.Focus();
-                return;
-            }
-            StringBuilder sb = new();
-            List<string> lsHostsTmp = new();
-            foreach (string str in Regex.Replace(tbHosts1Akamai.Text, @"\#[^\r\n]+", "").Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(str))
-                    continue;
-                string hosts = str.Trim().ToLower();
-                if (hosts.StartsWith("*."))
-                {
-                    hosts = Regex.Replace(hosts, @"^\*\.", "");
-                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                    {
-                        lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'." + hosts + "': " + ip);
-                    }
-                }
-                else if (hosts.StartsWith("*"))
-                {
-                    hosts = Regex.Replace(hosts, @"^\*", "");
-                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                    {
-                        lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'" + hosts + "': " + ip);
-                        sb.AppendLine("'." + hosts + "': " + ip);
-                    }
-                }
-                else if (DnsListen.reHosts.IsMatch(hosts))
-                {
-                    sb.AppendLine("'" + hosts + "': " + ip);
-                }
-            }
-            foreach (string str in Regex.Replace(tbHosts2Akamai.Text, @"\#[^\r\n]+", "").Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(str))
-                    continue;
-                string hosts = str.Trim().ToLower();
-                if (hosts.StartsWith("*."))
-                {
-                    hosts = Regex.Replace(hosts, @"^\*\.", "");
-                    if (DnsListen.reHosts.IsMatch(hosts) && !lsHostsTmp.Contains(hosts))
-                    {
-                        lsHostsTmp.Add(hosts);
-                        sb.AppendLine("'*." + hosts + "': " + ip);
-                    }
-                }
-                else if (DnsListen.reHosts.IsMatch(hosts))
-                {
-                    sb.AppendLine("'" + hosts + "': " + ip);
-                }
-            }
-            Clipboard.SetDataObject(sb.ToString() + "\r\n#- IP-CIDR," + ip + "/32,DIRECT #请把此条直连规则添加到规则设置中的自定义规则，并且删除开头#号\r\n");
-            MessageBox.Show("规则已复制到剪贴板，支持在 OpenWrt 中的 OpenClash 使用。\n\n使用设置：\n1.打开 OpenClash 覆写设置->DNS 设置->Hosts，把规则粘贴到“自定义 Hosts”\n2.在规则设置中添加一条自定义规则（优先匹配），\n把IP “" + ip + "” 设置为直连。\n“- IP-CIDR," + ip + "/32,DIRECT”", "导出规则", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ButCdnSave_Click(object sender, EventArgs e)
