@@ -480,7 +480,6 @@ namespace XboxDownload
                 string akamai = "223.119.50.144";
                 dnsListen.ComIP = dnsListen.CnIP = dnsListen.AppIP = IPAddress.Parse(akamai).GetAddressBytes();
                 UpdateHosts(true, akamai);
-                if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
                 MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（关闭代理软件），下载几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -498,7 +497,6 @@ namespace XboxDownload
                 else
                     dnsListen.AppIP = null;
                 UpdateHosts(true);
-                if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
             }
         }
 
@@ -534,7 +532,6 @@ namespace XboxDownload
                 httpListen.Close();
                 httpsListen.Close();
                 Program.SystemSleep.RestoreForCurrentThread();
-                if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
             }
             else
             {
@@ -848,7 +845,6 @@ namespace XboxDownload
                     }
                 });
                 UpdateHosts(true);
-                if (Properties.Settings.Default.MicrosoftStore) RestartService("DoSvc");
                 if (Properties.Settings.Default.DnsService)
                 {
                     linkTestDns.Enabled = true;
@@ -1099,35 +1095,6 @@ namespace XboxDownload
             {
                 if (add) MessageBox.Show("修改系统Hosts文件失败，错误信息：" + ex.Message + "\n\n解决方法：手动删除\"" + Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts\"文件，点击开始监听会新建一个。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private static void RestartService(string servicename)
-        {
-            Task.Run(() =>
-            {
-                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == servicename).SingleOrDefault();
-                if (service != null)
-                {
-                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
-                    try
-                    {
-                        if (service.Status == ServiceControllerStatus.Running)
-                        {
-                            service.Stop();
-                            service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-                        }
-                        if (service.Status != ServiceControllerStatus.Running)
-                        {
-                            service.Start();
-                            service.WaitForStatus(ServiceControllerStatus.Running, timeout);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }
-                }
-            });
         }
 
         private void LvLog_MouseClick(object sender, MouseEventArgs e)
@@ -1906,7 +1873,6 @@ namespace XboxDownload
                         sb.AppendLine(ip + " d1.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " d2.xboxlive.cn # XboxDownload");
                         msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
-                        RestartService("DoSvc");
                         break;
                     case "dl.delivery.mp.microsoft.com":
                     case "tlu.dl.delivery.mp.microsoft.com":
@@ -1917,7 +1883,6 @@ namespace XboxDownload
                         sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # XboxDownload");
                         sb.AppendLine(ip + " dlassets.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " dlassets2.xboxlive.cn # XboxDownload");
-                        RestartService("DoSvc");
                         break;
                     case "gst.prod.dl.playstation.net":
                     case "gs2.ww.prod.dl.playstation.net":
