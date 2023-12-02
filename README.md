@@ -109,7 +109,7 @@ address=/assets2.xboxlive.cn/cn IP 或者 Akamai IP
 address=/d1.xboxlive.cn/cn IP 或者 Akamai IP 
 address=/d2.xboxlive.cn/cn IP 或者 Akamai IP 
 
-#第二组，应用和部分游戏使用此域名下载
+#第二组，应用和部分游戏使用此域名下载（Xbox APP提示“此游戏不支持安装到特定文件夹。它将与其他Windows应用一起安装。”）
 address=/dl.delivery.mp.microsoft.com/cn IP 或者 Akamai IP 
 address=/tlu.dl.delivery.mp.microsoft.com /cn IP 或者 Akamai IP
 address=/dlassets.xboxlive.cn/cn IP 或者 Akamai IP 
