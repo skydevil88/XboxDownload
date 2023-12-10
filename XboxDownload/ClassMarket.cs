@@ -263,11 +263,7 @@ namespace XboxDownload
                 {
                     Serialize = dicXboxGame
                 };
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                string jsonString = JsonSerializer.Serialize(xboxGame, options);
+                string jsonString = JsonSerializer.Serialize(xboxGame);
                 try
                 {
                     if (!Directory.Exists(Form1.resourcePath))

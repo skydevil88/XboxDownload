@@ -12,8 +12,6 @@ namespace XboxDownload
         public const string project = "https://github.com/skydevil88/XboxDownload";
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
-            { "proxy", "https://ghproxy.com/" },
-            { "proxy", "https://ghps.cc/" },
             { "direct", "" }
         };
 
@@ -33,7 +31,7 @@ namespace XboxDownload
                 };
                 tasks[i] = new Task(() =>
                 {
-                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + UpdateFile.project + "/releases/latest", "HEAD", null, null, null, 6000);
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + UpdateFile.project + "/releases/latest", "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(releases))
                         releases = response.RequestMessage?.RequestUri?.ToString();
                     else
@@ -44,7 +42,6 @@ namespace XboxDownload
             Task.WaitAny(tasks);
             if (!string.IsNullOrEmpty(releases))
             {
-                bool isUpdate = false;
                 Match result = Regex.Match(releases, @"(?<version>\d+(\.\d+){2,3})$");
                 if (result.Success)
                 {
@@ -52,6 +49,7 @@ namespace XboxDownload
                     Version version2 = new((Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version) ?? string.Empty);
                     if (version1 > version2 && version1.Major == 2)
                     {
+                        bool isUpdate = false;
                         parentForm.Invoke(new Action(() =>
                         {
                             isUpdate = MessageBox.Show("已检测到新版本，是否立即更新？", "软件更新", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes;
@@ -68,44 +66,46 @@ namespace XboxDownload
                         }));
                         return;
                     }
-                    string download = (releases.Replace("tag", "download") + "/XboxDownload.zip");
-                    using HttpResponseMessage? response2 = ClassWeb.HttpResponseMessage(download, "GET", null, null, null, 180000);
-                    if (response2 != null && response2.IsSuccessStatusCode)
+                    string download = releases.Replace("tag", "download") + "/XboxDownload.zip";
+                    using (HttpResponseMessage? response = ClassWeb.HttpResponseMessage(download, "GET", null, null, null, 60000, "XboxDownload"))
                     {
-                        if (!Directory.Exists(Form1.resourcePath))
-                            Directory.CreateDirectory(Form1.resourcePath);
-                        byte[] buffer = response2.Content.ReadAsByteArrayAsync().Result;
-                        if (buffer.Length > 0)
+                        if (response != null && response.IsSuccessStatusCode)
                         {
-                            using FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                            fs.Write(buffer, 0, buffer.Length);
-                            fs.Flush();
-                            fs.Close();
-                            string tempDir = Form1.resourcePath + @"\Temp";
-                            if (Directory.Exists(tempDir))
-                                Directory.Delete(tempDir, true);
-                            ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
-                            foreach (DirectoryInfo di in new DirectoryInfo(tempDir).GetDirectories())
+                            if (!Directory.Exists(Form1.resourcePath))
+                                Directory.CreateDirectory(Form1.resourcePath);
+                            byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
+                            if (buffer.Length > 0)
                             {
-                                if (File.Exists(di.FullName + @"\XboxDownload.exe"))
+                                using FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                                fs.Write(buffer, 0, buffer.Length);
+                                fs.Flush();
+                                fs.Close();
+                                string tempDir = Form1.resourcePath + @"\.Temp";
+                                if (Directory.Exists(tempDir))
+                                    Directory.Delete(tempDir, true);
+                                ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
+                                foreach (DirectoryInfo di in new DirectoryInfo(tempDir).GetDirectories())
                                 {
-                                    parentForm.Invoke(new Action(() =>
+                                    if (File.Exists(di.FullName + @"\XboxDownload.exe"))
                                     {
-                                        if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
-                                        parentForm.notifyIcon1.Visible = false;
-                                    }));
-                                    string cmd = "chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
-                                    File.WriteAllText(tempDir + "\\" + ".update.cmd", cmd);
-                                    using (Process p = new())
-                                    {
-                                        p.StartInfo.FileName = "cmd.exe";
-                                        p.StartInfo.UseShellExecute = false;
-                                        p.StartInfo.CreateNoWindow = true;
-                                        p.StartInfo.Arguments = "/c \"" + tempDir + "\\.update.cmd\"";
-                                        p.Start();
+                                        parentForm.Invoke(new Action(() =>
+                                        {
+                                            if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
+                                            parentForm.notifyIcon1.Visible = false;
+                                        }));
+                                        string cmd = "chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
+                                        File.WriteAllText(tempDir + "\\update.cmd", cmd);
+                                        using (Process p = new())
+                                        {
+                                            p.StartInfo.FileName = "cmd.exe";
+                                            p.StartInfo.UseShellExecute = false;
+                                            p.StartInfo.CreateNoWindow = true;
+                                            p.StartInfo.Arguments = "/c \"" + tempDir + "\\update.cmd\"";
+                                            p.Start();
+                                        }
+                                        Process.GetCurrentProcess().Kill();
+                                        break;
                                     }
-                                    Process.GetCurrentProcess().Kill();
-                                    break;
                                 }
                             }
                         }
@@ -141,7 +141,7 @@ namespace XboxDownload
                 tasks[i] = new Task(() =>
                 {
                     string tmpUrl = proxy + UpdateFile.project.Replace("github.com", "raw.githubusercontent.com") +"/master/IP/" + fi.Name;
-                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000);
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(fileUrl))
                         fileUrl = tmpUrl;
                     else
@@ -152,7 +152,7 @@ namespace XboxDownload
             await Task.WhenAny(tasks);
             if (!string.IsNullOrEmpty(fileUrl))
             {
-                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(fileUrl, "GET", null, null, null, 60000);
+                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(fileUrl, "GET", null, null, null, 60000, "XboxDownload");
                 if (response != null && response.IsSuccessStatusCode)
                 {
                     byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;

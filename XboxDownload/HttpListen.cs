@@ -315,7 +315,7 @@ namespace XboxDownload
                                                 {
                                                     try
                                                     {
-                                                        var json = JsonSerializer.Deserialize<PsGame.Game>(html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                                                        var json = JsonSerializer.Deserialize<PsGame.Game>(html, Form1.jsOptions);
                                                         if (json != null && json.Pieces != null && json.Pieces.Count >= 1)
                                                         {
                                                             StringBuilder sbFile = new();
@@ -457,12 +457,9 @@ namespace XboxDownload
 
         public void Close()
         {
-            if (socket != null)
-            {
-                socket.Close();
-                socket.Dispose();
-                socket = null;
-            }
+            socket?.Close();
+            socket?.Dispose();
+            socket = null;
         }
 
         readonly ConcurrentDictionary<String, String> dicFilePath = new();

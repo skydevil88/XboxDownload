@@ -248,7 +248,7 @@ namespace XboxDownload
                         string html = ClassWeb.HttpResponseContent(url, "GET", null, null, null, 30000, null, cts.Token);
                         if (Regex.IsMatch(html, @"^{.+}$", RegexOptions.Singleline))
                         {
-                            var json = JsonSerializer.Deserialize<ClassGame.Game>(html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                            var json = JsonSerializer.Deserialize<ClassGame.Game>(html, Form1.jsOptions);
                             if (json != null && json.Products != null && json.Products.Count >= 1)
                             {
                                 var product = json.Products[0];

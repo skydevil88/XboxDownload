@@ -13,7 +13,7 @@ ip6tables -I INPUT -p icmpv6 -m mac --mac-source XBOX_MAC -j DROP
 ip6tables -I INPUT -p udp -m mac --mac-source XBOX_MAC --dport 547 -j DROP
 ```
 
-注意：以下教程里面的 192.168.1.1 替换为您的Openwrt路由的ip地址
+注意：以下教程里面的 192.168.1.1 替换为您的Openwrt路由器的ip地址
 
 ## 方法一：Lighttpd 
 B站视频教程：https://www.bilibili.com/video/BV1wP4y1G7zf
@@ -47,7 +47,7 @@ $HTTP["host"] =~ "^(assets1|assets2|d1|d2|xvcf1|xvcf2)\.xboxlive\.com$" {
 $HTTP["host"] =~ "^(dlassets|dlassets2)\.xboxlive\.com$" {
 	url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
 }
-#其它访问转发到8080端口，进入管理页面不需要加端口
+#其它访问转发到8080端口，进入管理页面不需要加端口(可选)
 server.modules +=( "mod_proxy")
 proxy.server = ( "" => (( "host" => "127.0.0.1", "port" => 8080	)))
 
@@ -87,7 +87,7 @@ dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx
 ![图3](doc/pm02.png)
 
 
-最后在浏览器中输入(建议使用InPrivate窗口，避免浏览器缓存) http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt, 看到地址变成 http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt 表示成功跳转到cn，接着打开你的Xbox又能愉快地下载。
+最后在浏览器中输入(电脑需要关闭IPv6，建议在 InPrivate 窗口中打开链接，避免浏览器缓存) http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt, 看到地址变成 http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt 表示成功跳转到cn，接着打开你的Xbox又能愉快地下载。
 
 
 
@@ -158,7 +158,7 @@ dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx
 ![图3](doc/pm02.png)
 
 
-最后在浏览器中输入(建议使用InPrivate窗口，避免浏览器缓存) http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt, 看到地址变成 http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt 表示成功跳转到cn，接着打开你的Xbox又能愉快地下载。
+最后在浏览器中输入(电脑需要关闭IPv6，建议在 InPrivate 窗口中打开链接，避免浏览器缓存) http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt, 看到地址变成 http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt 表示成功跳转到cn，接着打开你的Xbox又能愉快地下载。
 
 ## 方法三：Caddy
 

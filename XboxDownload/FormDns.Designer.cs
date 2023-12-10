@@ -47,7 +47,7 @@
             // cbHostName
             // 
             cbHostName.FormattingEnabled = true;
-            cbHostName.Items.AddRange(new object[] { "assets1.xboxlive.com", "assets1.xboxlive.cn", "tlu.dl.delivery.mp.microsoft.com", "gst.prod.dl.playstation.net", "atum.hac.lp1.d4c.nintendo.net", "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "epicgames-download1-1251447533.file.myqcloud.com", "www.baidu.com" });
+            cbHostName.Items.AddRange(new object[] { "assets1.xboxlive.cn", "assets2.xboxlive.cn", "tlu.dl.delivery.mp.microsoft.com", "gst.prod.dl.playstation.net", "atum.hac.lp1.d4c.nintendo.net", "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "epicgames-download1-1251447533.file.myqcloud.com", "www.baidu.com" });
             cbHostName.Location = new Point(69, 18);
             cbHostName.Margin = new Padding(4);
             cbHostName.Name = "cbHostName";

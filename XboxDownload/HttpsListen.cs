@@ -40,13 +40,13 @@ namespace XboxDownload
                 }));
                 return;
             }
-
+            
             X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
             X509Certificate2 certificate = new(Properties.Resource.Certificate1);
             store.Open(OpenFlags.ReadWrite);
             store.Add(certificate);
             store.Close();
-
+            
             while (Form1.bServiceFlag)
             {
                 try
@@ -207,7 +207,7 @@ namespace XboxDownload
                                                         XboxGameDownload.PackageFiles? packageFiles = null;
                                                         try
                                                         {
-                                                            var json = JsonSerializer.Deserialize<XboxGameDownload.Game>(socketPackage.Html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                                                            var json = JsonSerializer.Deserialize<XboxGameDownload.Game>(socketPackage.Html, Form1.jsOptions);
                                                             if (json != null && json.PackageFound)
                                                             {
                                                                 contentId = json.ContentId;
@@ -275,7 +275,7 @@ namespace XboxDownload
                                                         XboxGameDownload.PackageFiles? packageFiles = null;
                                                         try
                                                         {
-                                                            var json = JsonSerializer.Deserialize<XboxGameDownload.Game>(html, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                                                            var json = JsonSerializer.Deserialize<XboxGameDownload.Game>(html, Form1.options);
                                                             if (json != null && json.PackageFound)
                                                             {
                                                                 contentId = json.ContentId;
@@ -409,24 +409,15 @@ namespace XboxDownload
 
         public void Close()
         {
-            if (socket != null)
-            {
-                socket.Close();
-                socket.Dispose();
-                socket = null;
+            socket?.Close();
+            socket?.Dispose();
+            socket = null;
 
-                X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
-                store.Open(OpenFlags.ReadWrite);
-                foreach (var item in store.Certificates)
-                {
-                    if (item.SubjectName.Name == "CN=Xbox下载助手" || item.SubjectName.Name == "CN=XboxDownload")
-                    {
-                        store.Remove(item);
-                        break;
-                    }
-                }
-                store.Close();
-            }
+            using X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadWrite);
+            X509Certificate2Collection certificates = store.Certificates.Find(X509FindType.FindBySubjectDistinguishedName, "CN=XboxDownload", false);
+            if (certificates.Count > 0) store.RemoveRange(certificates);
+            store.Close();
         }
     }
 }

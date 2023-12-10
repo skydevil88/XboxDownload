@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -16,7 +17,7 @@ namespace XboxDownload
     internal class ClassWeb
     {
         public static string language = Thread.CurrentThread.CurrentCulture.Name;
-        public static string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36";
+        public static string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
         private static IHttpClientFactory? httpClientFactory;
 
         public static void HttpClientFactory()
@@ -32,14 +33,10 @@ namespace XboxDownload
             });
             services.AddHttpClient("XboxDownload").ConfigureHttpClient(httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "XboxDownloadV2");
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "XboxDownload/" + Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version);
                 httpClient.DefaultRequestHeaders.Add("X-Organization", "XboxDownload");
                 httpClient.DefaultRequestHeaders.Add("X-Author", "Devil");
             }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.All
-            });
-            services.AddHttpClient("Nothing").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.All
             });

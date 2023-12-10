@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -998,9 +998,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1008,9 +1008,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1018,9 +1018,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2901,13 +2901,6 @@
         private LinkLabel linkUsbDevice;
         private LinkLabel linkLabel4;
         private LinkLabel linkAppGamingServices;
-        private DataGridViewCheckBoxColumn Col_Check;
-        private DataGridViewTextBoxColumn Col_IP;
-        private DataGridViewTextBoxColumn Col_Location;
-        private DataGridViewCheckBoxColumn Col_302;
-        private DataGridViewTextBoxColumn Col_TTL;
-        private DataGridViewTextBoxColumn Col_RoundtripTime;
-        private DataGridViewTextBoxColumn Col_Speed;
         private LinkLabel linkConsoleInstall;
         private CheckBox ckbXboxStopped;
         private DataGridViewCheckBoxColumn Col_Enable;
@@ -2915,5 +2908,12 @@
         private DataGridViewTextBoxColumn Col_IPv4;
         private DataGridViewTextBoxColumn Col_Remark;
         private CheckBox ckbGameLink;
+        private DataGridViewCheckBoxColumn Col_Check;
+        private DataGridViewTextBoxColumn Col_IP;
+        private DataGridViewTextBoxColumn Col_Location;
+        private DataGridViewCheckBoxColumn Col_302;
+        private DataGridViewTextBoxColumn Col_TTL;
+        private DataGridViewTextBoxColumn Col_RoundtripTime;
+        private DataGridViewTextBoxColumn Col_Speed;
     }
 }
