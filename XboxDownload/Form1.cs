@@ -258,6 +258,38 @@ namespace XboxDownload
                 tsmUpdate.Enabled = false;
                 ThreadPool.QueueUserWorkItem(delegate { UpdateFile.Start(true, this); });
             }
+            if (Environment.OSVersion.Version.Major >= 10)
+            {
+                Task.Run(() =>
+                {
+                    string outputString = "";
+                    try
+                    {
+                        using Process p = new();
+                        p.StartInfo.FileName = "powershell.exe";
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.RedirectStandardInput = true;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.StartInfo.CreateNoWindow = true;
+                        p.Start();
+                        p.StandardInput.WriteLine("Get-DOConfig");
+                        p.StandardInput.Close();
+                        outputString = p.StandardOutput.ReadToEnd();
+                        p.WaitForExit();
+                    }
+                    catch { }
+                    Match result = Regex.Match(outputString, @"DownBackLimitBps\s+:\s+(\d+)\r\n[a-zA-Z]+\s+:\s+[a-zA-Z]+\r\nDownloadForegroundLimitBps\s+:\s+(\d+)");
+                    if (result.Success)
+                    {
+                        int DownBackLimitBps = int.Parse(result.Groups[1].Value);
+                        int DownloadForegroundLimitBps = int.Parse(result.Groups[2].Value);
+                        if (DownBackLimitBps > 0 || DownloadForegroundLimitBps > 0)
+                        {
+                            SaveLog("警告信息", "系统设置限速，后台下载被限制" + (DownBackLimitBps / 131072) + "Mbps，前台下载被限制" + (DownloadForegroundLimitBps / 131072) + "Mbps，请在Windows系统搜索“传递优化高级设置”解除限速。", "localhost", 0xFF0000);
+                        }
+                    }
+                });
+            }
         }
 
         private void TsmUpdate_Click(object sender, EventArgs e)
