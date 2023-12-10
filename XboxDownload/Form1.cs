@@ -1516,7 +1516,7 @@ namespace XboxDownload
                         Label lbTip = new()
                         {
                             ForeColor = Color.Green,
-                            Text = "主下载域名(PC主机共用)",
+                            Text = "主下载域名",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
@@ -1560,7 +1560,7 @@ namespace XboxDownload
                         Label lbTip = new()
                         {
                             ForeColor = Color.Green,
-                            Text = "应用和部分游戏使用此域名下载",
+                            Text = "应用和部分游戏",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
