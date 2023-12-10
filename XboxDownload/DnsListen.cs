@@ -489,7 +489,7 @@ namespace XboxDownload
         readonly ConcurrentDictionary<String, List<ResouceRecord>> dicService2 = new();
         public void SetXboxDownloadIP(string? ip)
         {
-            string[] hosts = new string[] { "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn", "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com" };
+            string[] hosts = { "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn", "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com" };
             if (string.IsNullOrEmpty(ip))
             {
                 foreach (string host in hosts)

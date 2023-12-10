@@ -96,7 +96,9 @@ namespace XboxDownload
                 HttpRequestMessage httpRequestMessage = new()
                 {
                     Method = new HttpMethod(method),
-                    RequestUri = new Uri(url)
+                    RequestUri = new Uri(url),
+                    Version = HttpVersion.Version11,
+                    VersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
                 };
                 if (postData != null && httpRequestMessage.Method == HttpMethod.Post)
                     httpRequestMessage.Content = new StringContent(postData, Encoding.UTF8, contentType ?? "application/x-www-form-urlencoded");

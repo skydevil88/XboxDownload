@@ -258,7 +258,7 @@ namespace XboxDownload
                 tsmUpdate.Enabled = false;
                 ThreadPool.QueueUserWorkItem(delegate { UpdateFile.Start(true, this); });
             }
-            if (Environment.OSVersion.Version.Major >= 10)
+            if (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build >= 1803)
             {
                 Task.Run(() =>
                 {
@@ -281,11 +281,16 @@ namespace XboxDownload
                     Match result = Regex.Match(outputString, @"DownBackLimitBps\s+:\s+(\d+)\r\n[a-zA-Z]+\s+:\s+[a-zA-Z]+\r\nDownloadForegroundLimitBps\s+:\s+(\d+)");
                     if (result.Success)
                     {
-                        int DownBackLimitBps = int.Parse(result.Groups[1].Value);
-                        int DownloadForegroundLimitBps = int.Parse(result.Groups[2].Value);
+                        double DownBackLimitBps = double.Parse(result.Groups[1].Value);
+                        double DownloadForegroundLimitBps = double.Parse(result.Groups[2].Value);
                         if (DownBackLimitBps > 0 || DownloadForegroundLimitBps > 0)
                         {
-                            SaveLog("警告信息", "系统设置限速，后台下载被限制" + (DownBackLimitBps / 131072) + "Mbps，前台下载被限制" + (DownloadForegroundLimitBps / 131072) + "Mbps，请在Windows系统搜索“传递优化高级设置”解除限速。", "localhost", 0xFF0000);
+                            StringBuilder sb = new();
+                            sb.Append("系统设置限速，");
+                            if (DownBackLimitBps > 0) sb.Append("后台下载被限制" + Math.Round(DownBackLimitBps / 131072, 1, MidpointRounding.AwayFromZero) + "Mbps，");
+                            if (DownloadForegroundLimitBps > 0) sb.Append("前台下载被限制" + Math.Round(DownloadForegroundLimitBps / 131072, 1, MidpointRounding.AwayFromZero) + "Mbps，");
+                            sb.Append("请在Windows系统搜索“传递优化高级设置”解除限速。");
+                            SaveLog("警告信息", sb.ToString(), "localhost", 0xFF0000);
                         }
                     }
                 });
@@ -1508,13 +1513,19 @@ namespace XboxDownload
                             };
                             lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         }
-                        _ = new Label()
+                        Label lbTip = new()
                         {
                             ForeColor = Color.Green,
                             Text = "主下载域名(PC主机共用)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
+                        ToolTip toolTip1 = new()
+                        {
+                            AutoPopDelay = 30000,
+                            IsBalloon = true
+                        };
+                        toolTip1.SetToolTip(lbTip, "小部分PC游戏、XboxOne老游戏会使用应用下载域名。");
                     }
                     break;
                 case "dl.delivery.mp.microsoft.com":
@@ -1546,13 +1557,19 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        _ = new Label()
+                        Label lbTip = new()
                         {
                             ForeColor = Color.Green,
                             Text = "应用和部分游戏使用此域名下载",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
+                        ToolTip toolTip1 = new()
+                        {
+                            AutoPopDelay = 30000,
+                            IsBalloon = true
+                        };
+                        toolTip1.SetToolTip(lbTip, "Xbox app 提示“此游戏不支持安装到特定文件夹。它将与其他 Windows 应用一起安装。”，这些都是使用应用下载域名。\n小部分 XboxOne 老游戏使用 dlassets.xboxlive.cn 域名下载。");
                     }
                     break;
                 case "gst.prod.dl.playstation.net":

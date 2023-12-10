@@ -259,7 +259,7 @@
     <value>客户端 IP</value>
   </data>
   <data name="Col_ClientIP.Width" type="System.Int32, mscorlib">
-    <value>100</value>
+    <value>105</value>
   </data>
   <data name="Col_Time.Text" xml:space="preserve">
     <value>时间</value>
