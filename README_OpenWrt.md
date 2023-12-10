@@ -114,10 +114,10 @@ server {
         listen 80;
         server_name assets1.xboxlive.com assets2.xboxlive.com d1.xboxlive.com d2.xboxlive.com xvcf1.xboxlive.com xvcf2.xboxlive.com dlassets.xboxlive.com dlassets2.xboxlive.com;
         if ($host !~* "^dlassets2?\.xboxlive\.com$") {
-                return 301 http://assets1.xboxlive.cn$request_uri;
+                return 302 http://assets1.xboxlive.cn$request_uri;
         }
         if ($host ~* "^dlassets2?\.xboxlive\.com$") {
-                return 301 http://dlassets.xboxlive.cn$request_uri;
+                return 302 http://dlassets.xboxlive.cn$request_uri;
         }
 }
 
