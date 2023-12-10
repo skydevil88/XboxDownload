@@ -709,6 +709,7 @@
             resources.ApplyResources(ckbHttpService, "ckbHttpService");
             ckbHttpService.Name = "ckbHttpService";
             ckbHttpService.UseVisualStyleBackColor = true;
+            ckbHttpService.CheckedChanged += CkbHttpService_CheckedChanged;
             // 
             // ckbDnsService
             // 

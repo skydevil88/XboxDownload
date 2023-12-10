@@ -446,7 +446,17 @@ namespace XboxDownload
         private void CkbDnsService_CheckedChanged(object sender, EventArgs e)
         {
             if (!ckbDnsService.Checked)
+            {
                 ckbSetDns.Checked = false;
+            }
+        }
+
+        private void CkbHttpService_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!ckbHttpService.Checked)
+            {
+                ckbGameLink.Checked = false;
+            }
         }
 
         private void CkbGameLink_CheckedChanged(object? sender, EventArgs? e)
@@ -454,6 +464,10 @@ namespace XboxDownload
             if (!ckbGameLink.Checked)
             {
                 ckbLocalUpload.Checked = false;
+            }
+            else
+            {
+                ckbHttpService.Checked = true;
             }
         }
 
@@ -830,7 +844,7 @@ namespace XboxDownload
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
                     if (response != null && response.IsSuccessStatusCode)
                     {
-                        SaveLog("提示信息", "检测到使用IPv6联网，如果用在Xbox主机下载加速，必需关闭。", "localhost", 0x0000FF);
+                        SaveLog("提示信息", "检测到使用IPv6联网，如果用在Xbox|PS主机下载加速，必需关闭。", "localhost", 0x0000FF);
                     }
                 });
                 UpdateHosts(true);
@@ -1385,7 +1399,7 @@ namespace XboxDownload
                         dgvr.Cells[0].Value = ckbChinaUnicom.Checked;
                     if (location.Contains("移动"))
                         dgvr.Cells[0].Value = ckbChinaMobile.Checked;
-                    if (location.Contains("香港"))
+                    if (location.Contains("香港") || location.Contains("澳门"))
                         dgvr.Cells[0].Value = ckbHK.Checked;
                     if (location.Contains("台湾"))
                         dgvr.Cells[0].Value = ckbTW.Checked;
@@ -1395,7 +1409,7 @@ namespace XboxDownload
                         dgvr.Cells[0].Value = ckbKorea.Checked;
                     if (location.Contains("新加坡"))
                         dgvr.Cells[0].Value = ckbSG.Checked;
-                    if (!Regex.IsMatch(location, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
+                    if (!Regex.IsMatch(location, "电信|联通|移动|香港|澳门|台湾|日本|韩国|新加坡"))
                         dgvr.Cells[0].Value = ckbOther.Checked;
                     dgvr.Cells[1].Value = ip;
                     dgvr.Cells[2].Value = location;
@@ -1494,8 +1508,8 @@ namespace XboxDownload
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb3 = new()
                         {
-                            Tag = "http://dlassets.xboxlive.com/public/content/1b5a4a08-06f0-49d6-b25f-d7322c11f3c8/372e2966-b158-4488-8bc8-15ef23db1379/1.5.0.1018.88cd7a5d-f56a-40c7-afd8-85cd4940b891/ACUEU771E1BF7_1.5.0.1018_x64__b6krnev7r9sf8",
-                            Text = "刺客教條:大革命(XboxOne)",
+                            Tag = "http://dlassets.xboxlive.cn/public/content/1b5a4a08-06f0-49d6-b25f-d7322c11f3c8/372e2966-b158-4488-8bc8-15ef23db1379/1.5.0.1018.88cd7a5d-f56a-40c7-afd8-85cd4940b891/ACUEU771E1BF7_1.5.0.1018_x64__b6krnev7r9sf8",
+                            Text = "刺客信条:大革命(XboxOne)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
@@ -1801,7 +1815,7 @@ namespace XboxDownload
                         dgvr.Cells[0].Value = ckbChinaUnicom.Checked;
                     if (location.Contains("移动"))
                         dgvr.Cells[0].Value = ckbChinaMobile.Checked;
-                    if (location.Contains("香港"))
+                    if (location.Contains("香港") || location.Contains("澳门"))
                         dgvr.Cells[0].Value = ckbHK.Checked;
                     if (location.Contains("台湾"))
                         dgvr.Cells[0].Value = ckbTW.Checked;
@@ -1811,7 +1825,7 @@ namespace XboxDownload
                         dgvr.Cells[0].Value = ckbKorea.Checked;
                     if (location.Contains("新加坡"))
                         dgvr.Cells[0].Value = ckbSG.Checked;
-                    if (!Regex.IsMatch(location, "电信|联通|移动|香港|台湾|日本|韩国|新加坡"))
+                    if (!Regex.IsMatch(location, "电信|联通|移动|香港|澳门|台湾|日本|韩国|新加坡"))
                         dgvr.Cells[0].Value = ckbOther.Checked;
                     dgvr.Cells[1].Value = dr["IP"];
                     dgvr.Cells[2].Value = dr["Location"];
@@ -4048,7 +4062,7 @@ namespace XboxDownload
                                 string html = response.Content.ReadAsStringAsync().Result;
                                 if (Regex.IsMatch(html, @"^{.+}$"))
                                 {
-                                    XboxGameDownload.PackageFiles? packageFiles = null; 
+                                    XboxGameDownload.PackageFiles? packageFiles = null;
                                     try
                                     {
                                         var json2 = JsonSerializer.Deserialize<XboxGameDownload.Game>(html, Form1.jsOptions);
