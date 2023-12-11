@@ -194,8 +194,7 @@ namespace XboxDownload
                                                 {
                                                     bFileFound = true;
                                                     byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
-                                                    string str = "HTTP/1.1 200 OK\r\n" + Regex.Replace(response.Content.Headers.ToString(), @"Content-Length: .+\r\n", "") + "Content-Length: " + buffer.Length + "\r\n" + response.Headers;
-                                                    Byte[] _headers = Encoding.ASCII.GetBytes(str.Trim() + "\r\n\r\n");
+                                                    Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers.ToString() + response.Headers + "\r\n");
                                                     ssl.Write(_headers);
                                                     ssl.Write(buffer);
                                                     ssl.Flush();

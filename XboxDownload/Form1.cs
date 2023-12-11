@@ -540,7 +540,7 @@ namespace XboxDownload
             }
         }
 
-        public void ButStart_Click(object? sender, EventArgs? e)
+        public async void ButStart_Click(object? sender, EventArgs? e)
         {
             if (bServiceFlag)
             {
@@ -559,7 +559,6 @@ namespace XboxDownload
                 if (string.IsNullOrEmpty(Properties.Settings.Default.EpicIP)) tbEpicIP.Clear();
                 pictureBox1.Image = Properties.Resource.Xbox1;
                 linkTestDns.Enabled = false;
-                butStart.Text = "开始监听";
                 foreach (Control control in this.groupBox1.Controls)
                 {
                     if ((control is TextBox || control is CheckBox || control is Button || control is ComboBox) && control != butStart)
@@ -572,6 +571,28 @@ namespace XboxDownload
                 httpListen.Close();
                 httpsListen.Close();
                 Program.SystemSleep.RestoreForCurrentThread();
+                if (ckbSetDns.Checked)
+                {
+                    butStart.Text = "正在停止...";
+                    await Task.Run(() =>
+                    {
+                        string[] hosts = { "www.xbox.com", "www.playstation.com", "www.nintendo.com" };
+                        for (int i = 0; i < 15; i++)
+                        {
+                            IPHostEntry? hostEntry = null;
+                            try
+                            {
+                                hostEntry = Dns.GetHostEntry(hosts[i % hosts.Length]);
+                            }
+                            catch { }
+                            if (hostEntry == null)
+                                Thread.Sleep(1000);
+                            else
+                                break;
+                        }
+                    });
+                }
+                butStart.Text = "开始监听";
             }
             else
             {
@@ -876,7 +897,7 @@ namespace XboxDownload
                 }
                 ckbXboxStopped.Enabled = true;
                 cbLocalIP.Enabled = false;
-                Task.Run(() =>
+                _ = Task.Run(() =>
                 {
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
                     if (response != null && response.IsSuccessStatusCode)
@@ -1325,15 +1346,20 @@ namespace XboxDownload
             }
             switch (tsmi.Name)
             {
+                case "tsmUseIPCom":
+                    tabControl1.SelectedTab = tabService;
+                    tbComIP.Text = ip;
+                    tbComIP.Focus();
+                    break;
                 case "tsmUseIPCn":
                     tabControl1.SelectedTab = tabService;
                     tbCnIP.Text = ip;
                     tbCnIP.Focus();
                     break;
-                case "tsmUseIPCom":
+                case "tsmUseIPXbox":
                     tabControl1.SelectedTab = tabService;
-                    tbComIP.Text = ip;
-                    tbComIP.Focus();
+                    tbComIP.Text = tbCnIP.Text = ip;
+                    tbCnIP.Focus();
                     break;
                 case "tsmUseIPApp":
                     tabControl1.SelectedTab = tabService;
@@ -1526,7 +1552,7 @@ namespace XboxDownload
                             AutoPopDelay = 30000,
                             IsBalloon = true
                         };
-                        toolTip1.SetToolTip(lbTip, "小部分PC游戏、XboxOne老游戏会使用应用下载域名。");
+                        toolTip1.SetToolTip(lbTip, "一部分PC Xbox游戏会使用应用下载域名。");
                     }
                     break;
                 case "dl.delivery.mp.microsoft.com":
@@ -1570,7 +1596,7 @@ namespace XboxDownload
                             AutoPopDelay = 30000,
                             IsBalloon = true
                         };
-                        toolTip1.SetToolTip(lbTip, "Xbox app 提示“此游戏不支持安装到特定文件夹。它将与其他 Windows 应用一起安装。”，这些都是使用应用下载域名。\n小部分 XboxOne 老游戏使用 dlassets.xboxlive.cn 域名下载。");
+                        toolTip1.SetToolTip(lbTip, "Xbox app 提示 “此游戏不支持安装到特定文件夹。\n它将与其他 Windows 应用一起安装。”，\n以上游戏都是使用应用域名下载。\n\n小部分 XboxOne 老游戏使用 dlassets.xboxlive.cn 域名下载。");
                     }
                     break;
                 case "gst.prod.dl.playstation.net":
