@@ -142,7 +142,7 @@ namespace XboxDownload
                 }
                 else
                 {
-                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("tlu.dl.delivery.mp.microsoft.com") : ClassDNS.HostToIP("tlu.dl.delivery.mp.microsoft.com", Properties.Settings.Default.DnsIP);
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("dl.delivery.mp.microsoft.com") : ClassDNS.HostToIP("dl.delivery.mp.microsoft.com", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbAppIP, ip);
@@ -263,7 +263,8 @@ namespace XboxDownload
                 {
                     List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                     dicService.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
-                    dicService.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                    dicService.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsLocalIP);
+                    dicService.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
                     dicService.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
                 }
             }
@@ -294,6 +295,7 @@ namespace XboxDownload
                     List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                     dicService.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
                     dicService.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                    dicService.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
                     dicService.TryAdd("dlassets.xboxlive.cn", lsAppIP);
                     dicService.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
                 }
@@ -489,7 +491,7 @@ namespace XboxDownload
         readonly ConcurrentDictionary<String, List<ResouceRecord>> dicService2 = new();
         public void SetXboxDownloadIP(string? ip)
         {
-            string[] hosts = { "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn", "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com" };
+            string[] hosts = { "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn", "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com" };
             if (string.IsNullOrEmpty(ip))
             {
                 foreach (string host in hosts)

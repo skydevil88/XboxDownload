@@ -905,7 +905,7 @@
     <value>24</value>
   </data>
   <data name="ckbTruncation.Text" xml:space="preserve">
-    <value>Xbox360主机本地上传防爆头(Xbox360主机 本地上传游戏、监听下载地址 需要在域名标签页中添加Xbox360主机下载域名)</value>
+    <value>Xbox360主机本地上传防爆头(Xbox360主机 本地上传游戏、监听下载链接 需要在域名标签页中添加Xbox360主机下载域名)</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.Name" xml:space="preserve">
     <value>ckbTruncation</value>
@@ -1490,7 +1490,7 @@
     <value>19</value>
   </data>
   <data name="label12.Text" xml:space="preserve">
-    <value>留空使用DNS服务器查询 (本地上传游戏、监听下载地址，请填写本机IP)
+    <value>留空使用DNS服务器查询 (本地上传游戏、监听下载链接，请填写本机IP)
 </value>
   </data>
   <data name="&gt;&gt;label12.Name" xml:space="preserve">

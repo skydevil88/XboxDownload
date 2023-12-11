@@ -1032,8 +1032,11 @@ namespace XboxDownload
                             }
                             if (!string.IsNullOrEmpty(appIP))
                             {
+                                sb.AppendLine(appIP + " dl.delivery.mp.microsoft.com");
+                                sb.AppendLine(appIP + " 2.tlu.dl.delivery.mp.microsoft.com");
                                 sb.AppendLine(appIP + " dlassets2.xboxlive.cn");
                             }
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " tlu.dl.delivery.mp.microsoft.com");
                         }
                         else
                         {
@@ -1054,14 +1057,12 @@ namespace XboxDownload
                             }
                             if (!string.IsNullOrEmpty(appIP))
                             {
+                                sb.AppendLine(appIP + " dl.delivery.mp.microsoft.com");
+                                sb.AppendLine(appIP + " tlu.dl.delivery.mp.microsoft.com");
+                                sb.AppendLine(appIP + " 2.tlu.dl.delivery.mp.microsoft.com");
                                 sb.AppendLine(appIP + " dlassets.xboxlive.cn");
                                 sb.AppendLine(appIP + " dlassets2.xboxlive.cn");
                             }
-                        }
-                        if (!string.IsNullOrEmpty(appIP))
-                        {
-                            sb.AppendLine(appIP + " dl.delivery.mp.microsoft.com");
-                            sb.AppendLine(appIP + " tlu.dl.delivery.mp.microsoft.com");
                         }
                         if (Properties.Settings.Default.HttpService)
                         {
@@ -4149,7 +4150,7 @@ namespace XboxDownload
                             {
                                 Properties.Settings.Default.Authorization = null;
                                 Properties.Settings.Default.Save();
-                                url = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载地址即可更新授权。";
+                                url = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载链接即可更新授权。";
                             }
                         }
                     }
@@ -4164,7 +4165,7 @@ namespace XboxDownload
                 {
                     this.Invoke(new Action(() =>
                     {
-                        item.SubItems[3].Text = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载地址即可更新授权。";
+                        item.SubItems[3].Text = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载链接即可更新授权。";
                     }));
                 }
             }

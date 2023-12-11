@@ -3,14 +3,12 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Text.Json;
 
 namespace XboxDownload
 {
     internal class HttpListen
     {
         private readonly Form1 parentForm;
-        private readonly ConcurrentDictionary<String, String> dicAppLocalUploadFile = new();
         private bool redirect;
         Socket? socket = null;
 
@@ -84,11 +82,6 @@ namespace XboxDownload
                             _localPath = Properties.Settings.Default.LocalPath + _tmpPath.Replace("/", "\\");
                         else if (File.Exists(Properties.Settings.Default.LocalPath + "\\" + Path.GetFileName(_tmpPath)))
                             _localPath = Properties.Settings.Default.LocalPath + "\\" + Path.GetFileName(_tmpPath);
-                        else if (dicAppLocalUploadFile.ContainsKey(_filePath) && File.Exists(Properties.Settings.Default.LocalPath + "\\" + dicAppLocalUploadFile[_filePath]))
-                        {
-                            _tmpPath = dicAppLocalUploadFile[_filePath];
-                            _localPath = Properties.Settings.Default.LocalPath + "\\" + _tmpPath;
-                        }
                     }
                     string _extension = Path.GetExtension(_tmpPath).ToLowerInvariant();
                     if (Properties.Settings.Default.LocalUpload && !string.IsNullOrEmpty(_localPath))
@@ -288,70 +281,24 @@ namespace XboxDownload
                         }
                         else
                         {
-                            bool bFileNotFound = true;
+                            bool bFileFound = false;
                             string _url = "http://" + _hosts + _filePath;
-                            if (_hosts == "dl.delivery.mp.microsoft.com" || _extension == ".phf" || _extension == ".json") //代理 Xbox|PS 下载索引
+                            if (_hosts == "tlu.dl.delivery.mp.microsoft.com")
                             {
-                                string? ip = ClassDNS.DoH(_hosts);
-                                if (!string.IsNullOrEmpty(ip))
-                                {
-                                    var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
-                                    if (response != null && response.IsSuccessStatusCode)
-                                    {
-                                        bFileNotFound = false;
-                                        byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
-                                        string str = "HTTP/1.1 200 OK\r\n" + Regex.Replace(response.Content.Headers.ToString(), @"^Content-Length: .+\r\n", "") + "Content-Length: " + buffer.Length + "\r\n" + response.Headers;
-                                        Byte[] _headers = Encoding.ASCII.GetBytes(str);
-                                        mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                        mySocket.Send(buffer, 0, buffer.Length, SocketFlags.None, out _);
-                                        if (Properties.Settings.Default.RecordLog)
-                                        {
-                                            parentForm.SaveLog("HTTP " + ((int)response.StatusCode), _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
-                                            if (_hosts.EndsWith(".prod.dl.playstation.net") && _extension == ".json") //分析PS4游戏下载地址
-                                            {
-                                                string html = response.Content.ReadAsStringAsync().Result;
-                                                if (Regex.IsMatch(html, @"^{.+}$"))
-                                                {
-                                                    try
-                                                    {
-                                                        var json = JsonSerializer.Deserialize<PsGame.Game>(html, Form1.jsOptions);
-                                                        if (json != null && json.Pieces != null && json.Pieces.Count >= 1)
-                                                        {
-                                                            StringBuilder sbFile = new();
-                                                            sbFile.AppendLine("下载文件总数：" + json.NumberOfSplitFiles + "，容量：" + ClassMbr.ConvertBytes(Convert.ToUInt64(json.OriginalFileSize)) + "，下载地址：");
-                                                            foreach (var pieces in json.Pieces)
-                                                                sbFile.AppendLine(pieces.Url);
-                                                            parentForm.SaveLog("下载地址", sbFile.ToString(), mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
-                                                        }
-                                                    }
-                                                    catch { }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else if (Properties.Settings.Default.LocalUpload && _hosts == "tlu.dl.delivery.mp.microsoft.com" && !dicAppLocalUploadFile.ContainsKey(_filePath)) //识别本地上传应用文件名
-                            {
-                                string? ip = ClassDNS.DoH(_hosts);
-                                if (!string.IsNullOrEmpty(ip))
-                                {
-                                    var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "HEAD", null, null, headers);
-                                    if (response != null && response.IsSuccessStatusCode)
-                                    {
-                                        if (response.Content.Headers.TryGetValues("Content-Disposition", out IEnumerable<string>? values))
-                                        {
-                                            string filename = Regex.Replace(values.FirstOrDefault() ?? string.Empty, @".+filename=", "");
-                                            dicAppLocalUploadFile.AddOrUpdate(_filePath, filename, (oldkey, oldvalue) => filename);
-                                        }
-                                    }
-                                }
+                                bFileFound = true;
+                                string _tmp = "http://2.tlu.dl.delivery.mp.microsoft.com" + _filePath;
+                                StringBuilder sb = new();
+                                sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
+                                sb.Append("Content-Type: text/html\r\n");
+                                sb.Append("Location: " + _tmp + "\r\n");
+                                sb.Append("Content-Length: 0\r\n\r\n");
+                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("下载链接", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
                             }
                             else if (_hosts == "www.msftconnecttest.com" && _tmpPath.ToLower() == "/connecttest.txt") // 网络连接 (NCSI)，修复 Xbox、Windows 系统网络正常却显示离线
                             {
-                                bFileNotFound = false;
+                                bFileFound = true;
                                 Byte[] _response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
                                 StringBuilder sb = new();
                                 sb.Append("HTTP/1.1 200 OK\r\n");
@@ -364,7 +311,7 @@ namespace XboxDownload
                             }
                             else if (_hosts == "ctest.cdn.nintendo.net" && _tmpPath.ToLower() == "/")
                             {
-                                bFileNotFound = false;
+                                bFileFound = true;
                                 if (Properties.Settings.Default.NSBrowser)
                                 {
                                     StringBuilder sb = new();
@@ -389,7 +336,7 @@ namespace XboxDownload
                                     if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
                                 }
                             }
-                            if (bFileNotFound)
+                            if (!bFileFound)
                             {
                                 Byte[] _response = Encoding.ASCII.GetBytes("File not found.");
                                 StringBuilder sb = new();
@@ -399,43 +346,7 @@ namespace XboxDownload
                                 Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
                                 mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
                                 mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
-                                if (Properties.Settings.Default.RecordLog)
-                                {
-
-                                    int argb = 0;
-                                    switch (_hosts)
-                                    {
-                                        case "assets1.xboxlive.com":
-                                        case "assets2.xboxlive.com":
-                                        case "dlassets.xboxlive.com":
-                                        case "dlassets2.xboxlive.com":
-                                        case "d1.xboxlive.com":
-                                        case "d2.xboxlive.com":
-                                        case "xvcf1.xboxlive.com":
-                                        case "xvcf2.xboxlive.com":
-                                        case "assets1.xboxlive.cn":
-                                        case "assets2.xboxlive.cn":
-                                        case "dlassets.xboxlive.cn":
-                                        case "dlassets2.xboxlive.cn":
-                                        case "d1.xboxlive.cn":
-                                        case "d2.xboxlive.cn":
-                                            argb = 0x008000;
-                                            if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                                ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                            break;
-                                        case "tlu.dl.delivery.mp.microsoft.com":
-                                        case "download.xbox.com":
-                                        case "download.xbox.com.edgesuite.net":
-                                        case "xbox-ecn102.vo.msecnd.net":
-                                        case "gst.prod.dl.playstation.net":
-                                        case "gs2.ww.prod.dl.playstation.net":
-                                        case "zeus.dl.playstation.net":
-                                        case "ares.dl.playstation.net":
-                                            argb = 0x008000;
-                                            break;
-                                    }
-                                    parentForm.SaveLog("HTTP 404", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, argb);
-                                }
+                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 404", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
                             }
                         }
                     }
