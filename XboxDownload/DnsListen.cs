@@ -17,8 +17,8 @@ namespace XboxDownload
         private readonly string dohServer = "https://223.5.5.5";
         private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
-        public static ConcurrentDictionary<String, List<ResouceRecord>> dicService = new(), dicHosts1 = new(), dicCdn1 = new();
-        public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new(), dicCdn2 = new();
+        public static ConcurrentDictionary<String, List<ResouceRecord>> dicService = new(), dicHosts1 = new();
+        public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new();
         public static ConcurrentDictionary<String, Dns> dicDns = new();
         
         public class Dns
@@ -322,6 +322,7 @@ namespace XboxDownload
                 List<ResouceRecord> lsEaIP = new() { new ResouceRecord { Datas = eaIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                 dicService.TryAdd("origin-a.akamaihd.net", lsEaIP);
             }
+            dicService.TryAdd("ssl-lvlt.cdn.ea.com", new List<ResouceRecord>());
             if (battleIP != null)
             {
                 List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
@@ -368,52 +369,27 @@ namespace XboxDownload
                                     }
                                     if (dicHosts1.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
                                     {
+                                        List<ResouceRecord> lsResouceRecord = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
                                         dns.QR = 1;
                                         dns.RA = 1;
                                         dns.RD = 1;
-                                        dns.ResouceRecords = lsHostsIp;
+                                        dns.ResouceRecords = lsResouceRecord;
                                         socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsHostsIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                         return;
                                     }
                                     var lsHostsIp2 = dicHosts2.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
                                     if(lsHostsIp2 != null)
                                     {
                                         dicHosts1.TryAdd(queryName, lsHostsIp2);
+                                        List<ResouceRecord> lsResouceRecord = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
                                         dns.QR = 1;
                                         dns.RA = 1;
                                         dns.RD = 1;
-                                        dns.ResouceRecords = lsHostsIp2;
+                                        dns.ResouceRecords = lsResouceRecord;
                                         socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                         return;
-                                    }
-                                    if (Properties.Settings.Default.EnableCdnIP)
-                                    {
-                                        if (dicCdn1.TryGetValue(queryName, out List<ResouceRecord>? lsCdn))
-                                        {
-                                            List<ResouceRecord> lsResouceRecord = lsCdn.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
-                                            dns.QR = 1;
-                                            dns.RA = 1;
-                                            dns.RD = 1;
-                                            dns.ResouceRecords = lsResouceRecord;
-                                            socket?.SendTo(dns.ToBytes(), client);
-                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
-                                            return;
-                                        }
-                                        var lsCdn2 = dicCdn2.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
-                                        if (lsCdn2 != null)
-                                        {
-                                            dicCdn1.TryAdd(queryName, lsCdn2);
-                                            List<ResouceRecord> lsResouceRecord = lsCdn2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
-                                            dns.QR = 1;
-                                            dns.RA = 1;
-                                            dns.RD = 1;
-                                            dns.ResouceRecords = lsResouceRecord;
-                                            socket?.SendTo(dns.ToBytes(), client);
-                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
-                                            return;
-                                        }
                                     }
                                     if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
                                     {
@@ -526,6 +502,138 @@ namespace XboxDownload
             socket?.Close();
             socket?.Dispose();
             socket = null;
+        }
+
+        public static void UpdateHosts()
+        {
+            dicHosts1.Clear();
+            dicHosts2.Clear();
+            DataTable dt = Form1.dtHosts.Clone();
+            if (File.Exists(Form1.resourcePath + "\\Hosts.xml"))
+            {
+                try
+                {
+                    dt.ReadXml(Form1.resourcePath + "\\Hosts.xml");
+                }
+                catch { }
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr.RowState == DataRowState.Deleted) continue;
+                if (Convert.ToBoolean(dr["Enable"]))
+                {
+                    string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
+                    if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IPv4"].ToString()?.Trim(), out IPAddress? ip))
+                    {
+                        if (hostName.StartsWith("*."))
+                        {
+                            hostName = Regex.Replace(hostName, @"^\*\.", "");
+                            Regex re = new("\\." + hostName.Replace(".", "\\.") + "$");
+                            if (!dicHosts2.ContainsKey(re) && reHosts.IsMatch(hostName))
+                            {
+                                List<ResouceRecord> lsIp = new()
+                                {
+                                    new ResouceRecord
+                                    {
+                                        Datas = ip.GetAddressBytes(),
+                                        TTL = 100,
+                                        QueryClass = 1,
+                                        QueryType = QueryType.A
+                                    }
+                                };
+                                dicHosts2.TryAdd(re, lsIp);
+                            }
+                        }
+                        else if (!dicHosts1.ContainsKey(hostName) && reHosts.IsMatch(hostName))
+                        {
+                            List<ResouceRecord> lsIp = new()
+                            {
+                                new ResouceRecord
+                                {
+                                    Datas = ip.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.A
+                                }
+                            };
+                            dicHosts1.TryAdd(hostName, lsIp);
+                        }
+                    }
+                }
+            }
+
+            if (Properties.Settings.Default.EnableCdnIP)
+            {
+                List<string> lsIpTmp = new();
+                List<ResouceRecord> lsIp = new();
+                foreach (string str in Properties.Settings.Default.IpsAkamai.Replace("，", ",").Split(','))
+                {
+                    if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
+                    {
+                        string ip = address.ToString();
+                        if (!lsIpTmp.Contains(ip))
+                        {
+                            lsIpTmp.Add(ip);
+                            lsIp.Add(new ResouceRecord
+                            {
+                                Datas = address.GetAddressBytes(),
+                                TTL = 100,
+                                QueryClass = 1,
+                                QueryType = QueryType.A
+                            });
+                        }
+                    }
+                }
+                if (lsIp.Count >= 1)
+                {
+                    foreach (string str in Properties.Resource.Akamai.Split('\n'))
+                    {
+                        string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
+                        if (string.IsNullOrEmpty(host)) continue;
+                        if (host.StartsWith("*."))
+                        {
+                            host = Regex.Replace(host, @"^\*\.", "");
+                            if (reHosts.IsMatch(host))
+                            {
+                                dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp);
+                            }
+                        }
+                        else if (reHosts.IsMatch(host))
+                        {
+                            dicHosts1.TryAdd(host, lsIp);
+                        }
+                    }
+                    if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
+                    {
+                        foreach (string str in File.ReadAllText(Form1.resourcePath + "\\Akamai.txt").Split('\n'))
+                        {
+                            string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
+                            if (string.IsNullOrEmpty(host)) continue;
+                            if (host.StartsWith("*."))
+                            {
+                                host = Regex.Replace(host, @"^\*\.", "");
+                                if (reHosts.IsMatch(host))
+                                {
+                                    dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp);
+                                }
+                            }
+                            else if (host.StartsWith("*"))
+                            {
+                                host = Regex.Replace(host, @"^\*", "");
+                                if (reHosts.IsMatch(host))
+                                {
+                                    dicHosts1.TryAdd(host, lsIp);
+                                    dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp);
+                                }
+                            }
+                            else if (reHosts.IsMatch(host))
+                            {
+                                dicHosts1.TryAdd(host, lsIp);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

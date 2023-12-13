@@ -1,6 +1,7 @@
 ##################### Microsoft ######################
 catalog.gamepass.com	#XGP游戏库
 download.xbox.com		#Xbox360主机下载域名
+*.video.microsoft.com	#商店电影和电视
 
 ###################### Nintendo ######################
 *.hac.lp1.d4c.nintendo.net

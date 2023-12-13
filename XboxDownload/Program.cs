@@ -71,14 +71,14 @@ namespace XboxDownload
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("User32.dll", CharSet = CharSet.Unicode)]
-        private static extern IntPtr FindWindow(string IpClassName, string? IpWindowName);
+        private static extern IntPtr FindWindow(string? IpClassName, string? IpWindowName);
 
         private const int SW_SHOWNOMAL = 1;
         private static void HandleRunningInstance(Process instance)
         {
             IntPtr ihand = instance.MainWindowHandle;
             if (ihand == IntPtr.Zero)
-                ihand = Program.FindWindow("WindowsForms10.Window.8.app.0.297b065_r3_ad1", null);
+                ihand = Program.FindWindow(null, "Xbox下载助手 v2");
             if (ihand == IntPtr.Zero)
             {
                 MessageBox.Show("已经启动了此程序，请不要同时运行多个本程序。", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
