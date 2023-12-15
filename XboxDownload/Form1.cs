@@ -70,6 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
+            toolTip1.SetToolTip(this.ckbXboxStopped, "Xbox安装停止通常是CDN缓存有坏块，\n勾选此选项将会临时把下载IP全部改为Akamai CDN，\n从国外下载损坏数据（关闭代理软件），\n下载几分钟后请手动取消此勾选。\n\n注：勾选此选项后需要暂定下载，然后重新恢复安装。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -528,7 +529,6 @@ namespace XboxDownload
                 string akamai = "223.119.50.144";
                 dnsListen.SetXboxDownloadIP(akamai);
                 UpdateHosts(true, akamai);
-                MessageBox.Show("Xbox安装停止通常是CDN缓存有坏块，勾选此选项将会临时把下载IP全部改为Akamai CDN，从国外下载损坏数据（关闭代理软件），下载几分钟后请手动取消此勾选。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (bServiceFlag)
             {
@@ -1112,6 +1112,36 @@ namespace XboxDownload
             {
                 if (add) MessageBox.Show("修改系统Hosts文件失败，错误信息：" + ex.Message + "\n\n解决方法：手动删除\"" + Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts\"文件，点击开始监听会新建一个。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            if (Properties.Settings.Default.MicrosoftStore) ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
+        }
+
+        private static void RestartService(string servicename)
+        {
+            Task.Run(() =>
+            {
+                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == servicename).SingleOrDefault();
+                if (service != null)
+                {
+                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
+                    try
+                    {
+                        if (service.Status == ServiceControllerStatus.Running)
+                        {
+                            service.Stop();
+                            service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                        }
+                        if (service.Status != ServiceControllerStatus.Running)
+                        {
+                            service.Start();
+                            service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+            });
         }
 
         private void LvLog_MouseClick(object sender, MouseEventArgs e)
