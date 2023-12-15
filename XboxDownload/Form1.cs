@@ -1112,36 +1112,6 @@ namespace XboxDownload
             {
                 if (add) MessageBox.Show("修改系统Hosts文件失败，错误信息：" + ex.Message + "\n\n解决方法：手动删除\"" + Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts\"文件，点击开始监听会新建一个。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if (Properties.Settings.Default.MicrosoftStore) ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
-        }
-
-        private static void RestartService(string servicename)
-        {
-            Task.Run(() =>
-            {
-                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == servicename).SingleOrDefault();
-                if (service != null)
-                {
-                    TimeSpan timeout = TimeSpan.FromMilliseconds(30000);
-                    try
-                    {
-                        if (service.Status == ServiceControllerStatus.Running)
-                        {
-                            service.Stop();
-                            service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-                        }
-                        if (service.Status != ServiceControllerStatus.Running)
-                        {
-                            service.Start();
-                            service.WaitForStatus(ServiceControllerStatus.Running, timeout);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }
-                }
-            });
         }
 
         private void LvLog_MouseClick(object sender, MouseEventArgs e)
@@ -2339,7 +2309,7 @@ namespace XboxDownload
                             ls[0].Cells["Col_Speed"].Value = null;
                         }
                         url = tbDlUrl.Text;
-                        if (Regex.IsMatch(url, @"^https?://"))
+                        if (!Regex.IsMatch(url, @"^https?://"))
                         {
                             url = flpTestUrl.Controls[2].Tag.ToString() ?? string.Empty;
                             SetTextBox(tbDlUrl, url);
