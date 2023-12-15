@@ -194,7 +194,7 @@ namespace XboxDownload
                                                 {
                                                     bFileFound = true;
                                                     byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
-                                                    Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers.ToString() + response.Headers + "\r\n");
+                                                    Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
                                                     ssl.Write(_headers);
                                                     ssl.Write(buffer);
                                                     ssl.Flush();
@@ -209,7 +209,7 @@ namespace XboxDownload
                                                             if (json != null && json.PackageFound)
                                                             {
                                                                 contentId = json.ContentId;
-                                                                packageFiles = json.PackageFiles.Where(x => x.RelativeUrl.ToLower().EndsWith(".msixvc")).FirstOrDefault();
+                                                                packageFiles = json.PackageFiles.Where(x => x.RelativeUrl.EndsWith(".msixvc", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                                                             }
                                                         }
                                                         catch { }

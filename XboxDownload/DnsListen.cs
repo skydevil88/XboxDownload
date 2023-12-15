@@ -35,7 +35,7 @@ namespace XboxDownload
 
         public void Listen()
         {
-            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback && (x.NetworkInterfaceType == NetworkInterfaceType.Ethernet || x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211) && !x.Description.Contains("Virtual")).ToArray();
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces().Where(x => x.OperationalStatus == OperationalStatus.Up && x.NetworkInterfaceType != NetworkInterfaceType.Loopback && (x.NetworkInterfaceType == NetworkInterfaceType.Ethernet || x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211) && !x.Description.Contains("Virtual", StringComparison.OrdinalIgnoreCase)).ToArray();
             if (Properties.Settings.Default.SetDns)
             {
                 dicDns.Clear();
@@ -508,43 +508,19 @@ namespace XboxDownload
         {
             dicHosts1.Clear();
             dicHosts2.Clear();
-            DataTable dt = Form1.dtHosts.Clone();
-            if (File.Exists(Form1.resourcePath + "\\Hosts.xml"))
-            {
-                try
-                {
-                    dt.ReadXml(Form1.resourcePath + "\\Hosts.xml");
-                }
-                catch { }
-            }
+            DataTable dt = Form1.dtHosts.Copy();
+            dt.RejectChanges();
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr.RowState == DataRowState.Deleted) continue;
-                if (Convert.ToBoolean(dr["Enable"]))
+                if (!Convert.ToBoolean(dr["Enable"])) continue;
+                string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
+                if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IPv4"].ToString()?.Trim(), out IPAddress? ip))
                 {
-                    string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
-                    if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IPv4"].ToString()?.Trim(), out IPAddress? ip))
+                    if (hostName.StartsWith("*."))
                     {
-                        if (hostName.StartsWith("*."))
-                        {
-                            hostName = Regex.Replace(hostName, @"^\*\.", "");
-                            Regex re = new("\\." + hostName.Replace(".", "\\.") + "$");
-                            if (!dicHosts2.ContainsKey(re) && reHosts.IsMatch(hostName))
-                            {
-                                List<ResouceRecord> lsIp = new()
-                                {
-                                    new ResouceRecord
-                                    {
-                                        Datas = ip.GetAddressBytes(),
-                                        TTL = 100,
-                                        QueryClass = 1,
-                                        QueryType = QueryType.A
-                                    }
-                                };
-                                dicHosts2.TryAdd(re, lsIp);
-                            }
-                        }
-                        else if (!dicHosts1.ContainsKey(hostName) && reHosts.IsMatch(hostName))
+                        hostName = Regex.Replace(hostName, @"^\*\.", "");
+                        Regex re = new("\\." + hostName.Replace(".", "\\.") + "$");
+                        if (!dicHosts2.ContainsKey(re) && reHosts.IsMatch(hostName))
                         {
                             List<ResouceRecord> lsIp = new()
                             {
@@ -556,8 +532,22 @@ namespace XboxDownload
                                     QueryType = QueryType.A
                                 }
                             };
-                            dicHosts1.TryAdd(hostName, lsIp);
+                            dicHosts2.TryAdd(re, lsIp);
                         }
+                    }
+                    else if (!dicHosts1.ContainsKey(hostName) && reHosts.IsMatch(hostName))
+                    {
+                        List<ResouceRecord> lsIp = new()
+                        {
+                            new ResouceRecord
+                            {
+                                Datas = ip.GetAddressBytes(),
+                                TTL = 100,
+                                QueryClass = 1,
+                                QueryType = QueryType.A
+                            }
+                        };
+                        dicHosts1.TryAdd(hostName, lsIp);
                     }
                 }
             }
