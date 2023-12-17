@@ -369,26 +369,26 @@ namespace XboxDownload
                                     }
                                     if (dicHosts1.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
                                     {
-                                        List<ResouceRecord> lsResouceRecord = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                        if (lsHostsIp.Count >= 2) lsHostsIp = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
                                         dns.QR = 1;
                                         dns.RA = 1;
                                         dns.RD = 1;
-                                        dns.ResouceRecords = lsResouceRecord;
+                                        dns.ResouceRecords = lsHostsIp;
                                         socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsHostsIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                         return;
                                     }
                                     var lsHostsIp2 = dicHosts2.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
                                     if(lsHostsIp2 != null)
                                     {
                                         dicHosts1.TryAdd(queryName, lsHostsIp2);
-                                        List<ResouceRecord> lsResouceRecord = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                        if (lsHostsIp2.Count >= 2) lsHostsIp2 = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
                                         dns.QR = 1;
                                         dns.RA = 1;
                                         dns.RD = 1;
-                                        dns.ResouceRecords = lsResouceRecord;
+                                        dns.ResouceRecords = lsHostsIp2;
                                         socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsResouceRecord.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                         return;
                                     }
                                     if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))

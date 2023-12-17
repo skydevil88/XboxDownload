@@ -4044,7 +4044,7 @@ namespace XboxDownload
                     }));
                 }
             }
-            if (!succeed && platform == 2)
+            if (!succeed && (platform == 0 || platform == 2))
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.Authorization))
                 {
@@ -4067,31 +4067,30 @@ namespace XboxDownload
                                         var json2 = JsonSerializer.Deserialize<XboxGameDownload.Game>(html, Form1.jsOptions);
                                         if (json2 != null && json2.PackageFound)
                                         {
-                                            contentId = json2.ContentId;
-                                            packageFiles = json2.PackageFiles.Where(x => x.RelativeUrl.ToLower().EndsWith(".msixvc")).FirstOrDefault();
+                                            packageFiles = json2.PackageFiles.Where(x => Regex.IsMatch(x.RelativeUrl, @"(\.msixvc|\.xvc)$", RegexOptions.IgnoreCase)).FirstOrDefault();
+                                            if (packageFiles != null) packageFiles = json2.PackageFiles.Where(x => !Regex.IsMatch(x.RelativeUrl, @"(\.xsp|\.phf)$", RegexOptions.IgnoreCase)).FirstOrDefault();
                                         }
                                     }
                                     catch { }
                                     if (packageFiles != null)
                                     {
-                                        url = packageFiles.CdnRootPaths[0] + packageFiles.RelativeUrl;
-                                        Version version;
-                                        Match result = Regex.Match(url, @"(?<version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
+                                        Match result = Regex.Match(packageFiles.RelativeUrl, @"(?<version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
                                         if (result.Success)
-                                            version = new Version(result.Groups["version"].Value);
-                                        else
-                                            version = new Version();
-                                        XboxGameDownload.Products XboxGame = new()
                                         {
-                                            Version = version,
-                                            FileSize = packageFiles.FileSize,
-                                            Url = url
-                                        };
-                                        filesize = packageFiles.FileSize;
-                                        XboxGameDownload.dicXboxGame.AddOrUpdate(contentId.ToLower(), XboxGame, (oldkey, oldvalue) => XboxGame);
-                                        packages.MaxDownloadSizeInBytes = filesize;
-                                        packages.PackageDownloadUris[0].Uri = url;
-                                        XboxGameDownload.SaveXboxGame();
+                                            url = packageFiles.CdnRootPaths[0] + packageFiles.RelativeUrl;
+                                            Version version = new(result.Groups["version"].Value);
+                                            XboxGameDownload.Products XboxGame = new()
+                                            {
+                                                Version = version,
+                                                FileSize = packageFiles.FileSize,
+                                                Url = url
+                                            };
+                                            filesize = packageFiles.FileSize;
+                                            XboxGameDownload.dicXboxGame.AddOrUpdate(key, XboxGame, (oldkey, oldvalue) => XboxGame);
+                                            packages.MaxDownloadSizeInBytes = filesize;
+                                            packages.PackageDownloadUris[0].Uri = url;
+                                            XboxGameDownload.SaveXboxGame();
+                                        }
                                     }
                                 }
                             }
@@ -4099,18 +4098,22 @@ namespace XboxDownload
                             {
                                 Properties.Settings.Default.Authorization = null;
                                 Properties.Settings.Default.Save();
-                                url = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载链接即可更新授权。";
+                                if (platform == 2) url = "授权已失效，请使用监听方式打开Xbox app，随便找一个游戏点击安装（无需实际安装），等待日志显示下载链接即可更新授权。";
                             }
                         }
                     }
                     this.Invoke(new Action(() =>
                     {
-                        if (filesize > 0) item.SubItems[2].Text = ClassMbr.ConvertBytes(filesize);
-                        item.SubItems[3].Text = Path.GetFileName(url);
+                        if (filesize > 0)
+                        {
+                            item.ForeColor = Color.Empty;
+                            item.SubItems[2].Text = ClassMbr.ConvertBytes(filesize);
+                        }
+                        if (string.IsNullOrEmpty(url)) item.SubItems[3].Text = Path.GetFileName(url);
                     }));
                     if (Regex.IsMatch(url, @"^https?://")) _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(url), "PUT", null, null, null, 30000, "XboxDownload");
                 }
-                else
+                else if (platform == 2)
                 {
                     this.Invoke(new Action(() =>
                     {
