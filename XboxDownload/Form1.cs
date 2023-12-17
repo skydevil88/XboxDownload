@@ -4109,7 +4109,7 @@ namespace XboxDownload
                             item.ForeColor = Color.Empty;
                             item.SubItems[2].Text = ClassMbr.ConvertBytes(filesize);
                         }
-                        if (string.IsNullOrEmpty(url)) item.SubItems[3].Text = Path.GetFileName(url);
+                        if (!string.IsNullOrEmpty(url)) item.SubItems[3].Text = Path.GetFileName(url);
                     }));
                     if (Regex.IsMatch(url, @"^https?://")) _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(url), "PUT", null, null, null, 30000, "XboxDownload");
                 }
