@@ -4068,7 +4068,7 @@ namespace XboxDownload
                                         if (json2 != null && json2.PackageFound)
                                         {
                                             packageFiles = json2.PackageFiles.Where(x => Regex.IsMatch(x.RelativeUrl, @"(\.msixvc|\.xvc)$", RegexOptions.IgnoreCase)).FirstOrDefault();
-                                            if (packageFiles != null) packageFiles = json2.PackageFiles.Where(x => !Regex.IsMatch(x.RelativeUrl, @"(\.xsp|\.phf)$", RegexOptions.IgnoreCase)).FirstOrDefault();
+                                            if (packageFiles == null) packageFiles = json2.PackageFiles.Where(x => !Regex.IsMatch(x.RelativeUrl, @"(\.xsp|\.phf)$", RegexOptions.IgnoreCase)).FirstOrDefault();
                                         }
                                     }
                                     catch { }
