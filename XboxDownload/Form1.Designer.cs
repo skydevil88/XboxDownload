@@ -1122,7 +1122,7 @@
             // 
             cbImportIP.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImportIP.FormattingEnabled = true;
-            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4") });
+            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5") });
             resources.ApplyResources(cbImportIP, "cbImportIP");
             cbImportIP.Name = "cbImportIP";
             cbImportIP.SelectedIndexChanged += CbImportIP_SelectedIndexChanged;

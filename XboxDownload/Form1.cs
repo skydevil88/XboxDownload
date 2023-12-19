@@ -1262,17 +1262,6 @@ namespace XboxDownload
             tssUseIP1.Visible = false;
             switch (host)
             {
-                case "xvcf1.xboxlive.com":
-                case "xvcf2.xboxlive.com":
-                case "assets1.xboxlive.com":
-                case "assets2.xboxlive.com":
-                case "d1.xboxlive.com":
-                case "d2.xboxlive.com":
-                case "dlassets.xboxlive.com":
-                case "dlassets2.xboxlive.com":
-                    tsmUseIPCom.Visible = true;
-                    tsmUseIPApp.Visible = true;
-                    break;
                 case "assets1.xboxlive.cn":
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
@@ -1412,6 +1401,9 @@ namespace XboxDownload
                 case 4:
                     host = "Akamai";
                     break;
+                case 5:
+                    host = "AkamaiV6";
+                    break;
             }
             dgvIpList.Tag = host;
             gbIPList.Text = "IP 列表 (" + host + ")";
@@ -1431,7 +1423,7 @@ namespace XboxDownload
             }
 
             List<DataGridViewRow> list = new();
-            Match result = Regex.Match(content, @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]+)\)|(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>.+)\dms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$", RegexOptions.Multiline);
+            Match result = FormImportIP.rMatchIP.Match(content);
             if (result.Success)
             {
                 while (result.Success)
@@ -1632,14 +1624,15 @@ namespace XboxDownload
                     }
                     break;
                 case "Akamai":
+                case "AkamaiV6":
                 case "origin-a.akamaihd.net":
                 case "blzddist1-a.akamaihd.net":
                 case "atum.hac.lp1.d4c.nintendo.net":
                     {
                         LinkLabel lb1 = new()
                         {
-                            Tag = "http://ctest-dl-lp1.cdn.nintendo.net/30m",
-                            Text = "Switch测速文件",
+                            Tag = "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
+                            Text = "Xbox测速文件",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
@@ -1652,14 +1645,17 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        LinkLabel lb3 = new()
+                        if (host != "AkamaiV6")
                         {
-                            Tag = "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
-                            Text = "Xbox测速文件",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                            LinkLabel lb3 = new()
+                            {
+                                Tag = "http://ctest-dl-lp1.cdn.nintendo.net/30m",
+                                Text = "Switch测速文件",
+                                AutoSize = true,
+                                Parent = this.flpTestUrl
+                            };
+                            lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        }
                         LinkLabel lb4 = new()
                         {
                             Tag = "http://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe",
@@ -1964,6 +1960,7 @@ namespace XboxDownload
                         sb.AppendLine(ip + " ares.dl.playstation.net # XboxDownload");
                         break;
                     case "Akamai":
+                    case "AkamaiV6":
                     case "atum.hac.lp1.d4c.nintendo.net":
                     case "origin-a.akamaihd.net":
                     case "blzddist1-a.akamaihd.net":
@@ -1982,11 +1979,14 @@ namespace XboxDownload
                         sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # XboxDownload");
                         sb.AppendLine(ip + " zeus.dl.playstation.net # XboxDownload");
                         sb.AppendLine(ip + " ares.dl.playstation.net # XboxDownload");
-                        sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # XboxDownload");
-                        sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net # XboxDownload");
-                        sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net # XboxDownload");
-                        sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net # XboxDownload");
-                        sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net # XboxDownload");
+                        if (host != "AkamaiV6")
+                        {
+                            sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # XboxDownload");
+                            sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net # XboxDownload");
+                            sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net # XboxDownload");
+                            sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net # XboxDownload");
+                            sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net # XboxDownload");
+                        }
                         sb.AppendLine(ip + " origin-a.akamaihd.net # XboxDownload");
                         sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # XboxDownload");
                         sb.AppendLine(ip + " blzddist1-a.akamaihd.net # XboxDownload");
@@ -2081,6 +2081,7 @@ namespace XboxDownload
                     }
                     break;
                 case "Akamai":
+                case "AkamaiV6":
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
                 case "blzddist1-a.akamaihd.net":
@@ -2104,13 +2105,16 @@ namespace XboxDownload
                         sb.AppendLine("address=/zeus.dl.playstation.net/" + ip);
                         sb.AppendLine("address=/ares.dl.playstation.net/" + ip);
                         sb.AppendLine();
-                        sb.AppendLine("# Nintendo Switch");
-                        sb.AppendLine("address=/atum.hac.lp1.d4c.nintendo.net/" + ip);
-                        sb.AppendLine("address=/bugyo.hac.lp1.eshop.nintendo.net/" + ip);
-                        sb.AppendLine("address=/ctest-ul-lp1.cdn.nintendo.net/" + ip);
-                        sb.AppendLine("address=/ctest-dl-lp1.cdn.nintendo.net/" + ip);
-                        sb.AppendLine("address=/atum-eda.hac.lp1.d4c.nintendo.net/0.0.0.0");
-                        sb.AppendLine();
+                        if (host != "AkamaiV6")
+                        {
+                            sb.AppendLine("# Nintendo Switch");
+                            sb.AppendLine("address=/atum.hac.lp1.d4c.nintendo.net/" + ip);
+                            sb.AppendLine("address=/bugyo.hac.lp1.eshop.nintendo.net/" + ip);
+                            sb.AppendLine("address=/ctest-ul-lp1.cdn.nintendo.net/" + ip);
+                            sb.AppendLine("address=/ctest-dl-lp1.cdn.nintendo.net/" + ip);
+                            sb.AppendLine("address=/atum-eda.hac.lp1.d4c.nintendo.net/0.0.0.0");
+                            sb.AppendLine();
+                        }
                         sb.AppendLine("# EA、战网国际服");
                         sb.AppendLine("address=/origin-a.akamaihd.net/" + ip);
                         sb.AppendLine("address=/ssl-lvlt.cdn.ea.com/0.0.0.0");
@@ -2136,13 +2140,16 @@ namespace XboxDownload
                         sb.AppendLine(ip + " zeus.dl.playstation.net");
                         sb.AppendLine(ip + " ares.dl.playstation.net");
                         sb.AppendLine();
-                        sb.AppendLine("# Nintendo Switch");
-                        sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net");
-                        sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net");
-                        sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net");
-                        sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net");
-                        sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net");
-                        sb.AppendLine();
+                        if (host != "AkamaiV6")
+                        {
+                            sb.AppendLine("# Nintendo Switch");
+                            sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net");
+                            sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net");
+                            sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net");
+                            sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net");
+                            sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net");
+                            sb.AppendLine();
+                        }
                         sb.AppendLine("# EA、战网国际服");
                         sb.AppendLine(ip + " origin-a.akamaihd.net");
                         sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
@@ -2212,7 +2219,7 @@ namespace XboxDownload
                 {
                     sHosts = sw.ReadToEnd();
                 }
-                string newHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                string newHosts = Regex.Replace(sHosts, @"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                 if (String.Equals(sHosts, newHosts))
                 {
                     MessageBox.Show("Hosts文件没有写入任何规则，无需清除。\n\n注：只清除Xbox下载助手写入的规则。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -2220,7 +2227,7 @@ namespace XboxDownload
                 else
                 {
                     StringBuilder sb = new();
-                    Match result = Regex.Match(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n");
+                    Match result = Regex.Match(sHosts, @"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n");
                     while (result.Success)
                     {
                         sb.Append(result.Groups[0].Value);
@@ -2358,7 +2365,7 @@ namespace XboxDownload
             }
             if (uri != null)
             {
-                int range = 104857599;                  //100M
+                int range = Regex.IsMatch(gbIPList.Text, @"Akamai") ? 31457250 : 104857599;  //国外IP测试下载30M，国内IP测试下载100M
                 //if (Form1.debug) range = 1048575;     //1M
 
                 string userAgent = uri.Host.EndsWith(".nintendo.net") ? "XboxDownload (Nintendo NX)" : "XboxDownload";

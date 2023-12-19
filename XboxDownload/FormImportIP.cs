@@ -1,12 +1,14 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 
 namespace XboxDownload
 {
     public partial class FormImportIP : Form
     {
+        public static readonly Regex rMatchIP = new(@"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]*)\)|^[^\d]+(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>[^\d|<]+)\d+ms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$|(?<IP>([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s*\((?<Location>[^\)]*)\)", RegexOptions.Multiline);
         public String host = string.Empty;
         public DataTable dt;
 
@@ -16,12 +18,9 @@ namespace XboxDownload
 
             dt = new DataTable();
             dt.Columns.Add("IP", typeof(string));
-            dt.Columns.Add("IpFilter", typeof(string));
+            dt.PrimaryKey = new DataColumn[] { dt.Columns.Add("IpFilter", typeof(string)) };
             dt.Columns.Add("Location", typeof(string));
             dt.Columns.Add("IpLong", typeof(ulong));
-            var col = dt.Columns["IpFilter"];
-            if (col != null) dt.PrimaryKey = new DataColumn[] { col };
-
             comboBox1.SelectedIndex = 0;
         }
 
@@ -80,22 +79,25 @@ namespace XboxDownload
                 MessageBox.Show("提交内容不符合条件。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            Match result = Regex.Match(content, @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]*)\)|^[^\d]+(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>[^\d|<]+)\d+ms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$", RegexOptions.Multiline);
+            Match result = rMatchIP.Match(content);
             while (result.Success)
             {
-                string ip = result.Groups["IP"].Value;
-                UInt64 ipLong = IpToLong(ip);
-                if (ipLong == 0) return;
-                string IpFilter = Regex.Replace(ip, @"\d{0,3}$", "");
-                DataRow? dr = dt.Rows.Find(IpFilter);
-                if (dr == null)
+                if (IPAddress.TryParse(result.Groups["IP"].Value, out IPAddress? address))
                 {
-                    dr = dt.NewRow();
-                    dr["IP"] = ip;
-                    dr["IpFilter"] = IpFilter;
-                    dr["Location"] = Regex.Replace(result.Groups["Location"].Value.Trim(), @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", "");
-                    dr["IpLong"] = ipLong;
-                    dt.Rows.Add(dr);
+                    string location = result.Groups["Location"].Value.Trim();
+                    ulong ipLong = IpToLong(address);
+                    string ip = address.ToString();
+                    string IpFilter = address.AddressFamily == AddressFamily.InterNetwork ? Regex.Replace(ip, @"\d{0,3}$", "") : Regex.Replace(GetFullIPv6(ip), @"(:[\da-fA-F]{4}){4}$", "");
+                    DataRow? dr = dt.Rows.Find(IpFilter);
+                    if (dr == null)
+                    {
+                        dr = dt.NewRow();
+                        dr["IP"] = ip;
+                        dr["IpFilter"] = IpFilter;
+                        dr["Location"] = Regex.Replace(location, @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", "");
+                        dr["IpLong"] = ipLong;
+                        dt.Rows.Add(dr);
+                    }
                 }
                 result = result.NextMatch();
             }
@@ -118,15 +120,59 @@ namespace XboxDownload
             }
         }
 
-        private static ulong IpToLong(string ip)
+        private static ulong IpToLong(IPAddress address)
         {
-            ulong IntIp = 0;
-            if (IPAddress.TryParse(ip, out IPAddress? ipaddress))
+            ulong num;
+            byte[] addrBytes = address.GetAddressBytes();
+            if (BitConverter.IsLittleEndian)
             {
-                string[] ips = ipaddress.ToString().Split('.');
-                IntIp = ulong.Parse(ips[0]) << 0x18 | ulong.Parse(ips[1]) << 0x10 | ulong.Parse(ips[2]) << 0x8 | ulong.Parse(ips[3]);
+                List<byte> byteList = new(addrBytes);
+                byteList.Reverse();
+                addrBytes = byteList.ToArray();
             }
-            return IntIp;
+            if (addrBytes.Length > 8) //IPv6
+            {
+                num = BitConverter.ToUInt64(addrBytes, 8);
+                num <<= 64;
+                num += BitConverter.ToUInt64(addrBytes, 0);
+            }
+            else //IPv4
+            {
+                num = BitConverter.ToUInt32(addrBytes, 0);
+            }
+            return num;
+        }
+
+        private static string GetFullIPv6(string ip)
+        {
+            if (ip == "::")
+            {
+                return "0000:0000:0000:0000:0000:0000:0000:0000";
+            }
+            if (ip.EndsWith("::"))
+            {
+                ip += "0";
+            }
+            var arrs = ip.Split(':');
+            var symbol = "::";
+            var arrleng = arrs.Length;
+            while (arrleng < 8)
+            {
+                symbol += ":";
+                arrleng++;
+            }
+            ip = ip.Replace("::", symbol);
+            var fullip = "";
+            var arr = ip.Split(':');
+            for (var i = 0; i < arr.Length; i++)
+            {
+                if (arr[i].Length < 4)
+                {
+                    arr[i] = arr[i].PadLeft(4, '0');
+                }
+                fullip += arr[i] + ':';
+            }
+            return fullip[..^1].ToUpper();
         }
     }
 }

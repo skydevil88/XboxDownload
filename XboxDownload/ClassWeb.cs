@@ -28,7 +28,6 @@ namespace XboxDownload
                 httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
             }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
-                //ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; },
                 AutomaticDecompression = DecompressionMethods.All
             });
             services.AddHttpClient("XboxDownload").ConfigureHttpClient(httpClient =>
@@ -170,7 +169,7 @@ namespace XboxDownload
             String contentencoding = string.Empty;
             List<Byte> list = new();
             DateTime endtime = DateTime.Now.AddMilliseconds(timeout);
-            using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            using (Socket mySocket = new(host != null && Regex.IsMatch(host, @"^([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4}$") ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
@@ -311,7 +310,7 @@ namespace XboxDownload
             String contentencoding = string.Empty;
             List<Byte> list = new();
             DateTime endtime = DateTime.Now.AddMilliseconds(timeout);
-            using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            using (Socket mySocket = new(host != null && Regex.IsMatch(host, @"^([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4}$") ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);

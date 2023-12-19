@@ -1953,13 +1953,13 @@
     <value>True</value>
   </metadata>
   <data name="Col_IP.HeaderText" xml:space="preserve">
-    <value>IPv4 地址 (右键使用)</value>
+    <value>IP 地址 (右键使用)</value>
   </data>
   <data name="Col_IP.MinimumWidth" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="Col_IP.Width" type="System.Int32, mscorlib">
-    <value>200</value>
+    <value>250</value>
   </data>
   <metadata name="Col_Location.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -1971,7 +1971,7 @@
     <value>8</value>
   </data>
   <data name="Col_Location.Width" type="System.Int32, mscorlib">
-    <value>320</value>
+    <value>270</value>
   </data>
   <metadata name="Col_302.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -2396,6 +2396,9 @@
   </data>
   <data name="cbImportIP.Items4" xml:space="preserve">
     <value>4.Xbox、PS 、NS、EA 、战网 (Akamai)</value>
+  </data>
+  <data name="cbImportIP.Items5" xml:space="preserve">
+    <value>3.Akamai (IPv6)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>934, 4</value>
