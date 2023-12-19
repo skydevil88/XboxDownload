@@ -899,7 +899,7 @@ namespace XboxDownload
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
                     if (response != null && response.IsSuccessStatusCode)
                     {
-                        SaveLog("提示信息", "检测到使用IPv6联网，如果用在Xbox|PS主机下载加速，必需关闭。", "localhost", 0x0000FF);
+                        SaveLog("提示信息", "检测到使用IPv6联网，如果用在Xbox|PS主机下载加速，必需关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
                     }
                 });
                 UpdateHosts(true);
@@ -1537,7 +1537,7 @@ namespace XboxDownload
                             AutoPopDelay = 30000,
                             IsBalloon = true
                         };
-                        toolTip1.SetToolTip(lbTip, "一部分 Xbox 游戏会使用应用下载域名。");
+                        toolTip1.SetToolTip(lbTip, "部分 PC Xbox 游戏会使用应用下载域名。");
                     }
                     break;
                 case "dl.delivery.mp.microsoft.com":
@@ -1581,7 +1581,7 @@ namespace XboxDownload
                             AutoPopDelay = 30000,
                             IsBalloon = true
                         };
-                        toolTip1.SetToolTip(lbTip, "Xbox app 提示 “此游戏不支持安装到特定文件夹。\n它将与其他 Windows 应用一起安装。”，\n以上游戏都是使用 tlu.dl.delivery.mp.microsoft.com 应用域名下载。\n\n小部分 XboxOne 老游戏使用 dlassets.xboxlive.cn 域名下载。");
+                        toolTip1.SetToolTip(lbTip, "Xbox app 提示 “此游戏不支持安装到特定文件夹。\n它将与其他 Windows 应用一起安装。”，\n以上游戏都是使用 tlu.dl.delivery.mp.microsoft.com 应用域名下载。\n\n部分 XboxOne 老游戏使用 dlassets.xboxlive.cn 域名下载。");
                     }
                     break;
                 case "gst.prod.dl.playstation.net":
@@ -2363,132 +2363,74 @@ namespace XboxDownload
 
                 string userAgent = uri.Host.EndsWith(".nintendo.net") ? "XboxDownload (Nintendo NX)" : "XboxDownload";
                 Stopwatch sw = new();
-                if (gbIPList.Text.Contains(".dl.playstation.net"))
+                StringBuilder sb = new();
+                sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
+                sb.AppendLine("Host: " + uri.Host);
+                sb.AppendLine("User-Agent: " + userAgent);
+                sb.AppendLine("Range: bytes=0-" + range);
+                sb.AppendLine();
+                byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
+
+                foreach (DataGridViewRow dgvr in ls)
                 {
-                    foreach (DataGridViewRow dgvr in ls)
+                    if (ctsSpeedTest.IsCancellationRequested) break;
+                    string? ip = dgvr.Cells["Col_IP"].Value.ToString();
+                    if (string.IsNullOrEmpty(ip)) continue;
+                    dgvr.Cells["Col_302"].Value = false;
+                    dgvr.Cells["Col_TTL"].Value = null;
+                    dgvr.Cells["Col_RoundtripTime"].Value = null;
+                    dgvr.Cells["Col_Speed"].Value = "正在测试";
+                    dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
+                    dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
+                    dgvr.Tag = null;
+
+                    using (Ping p1 = new())
                     {
-                        if (ctsSpeedTest.IsCancellationRequested) break;
-                        string? ip = dgvr.Cells["Col_IP"].Value.ToString();
-                        if (string.IsNullOrEmpty(ip)) continue;
-                        dgvr.Cells["Col_302"].Value = false;
-                        dgvr.Cells["Col_TTL"].Value = null;
-                        dgvr.Cells["Col_RoundtripTime"].Value = null;
-                        dgvr.Cells["Col_Speed"].Value = "正在测试";
-                        dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
-                        dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
-                        dgvr.Tag = null;
-
-                        using (Ping p1 = new())
+                        try
                         {
-                            try
+                            PingReply reply = p1.Send(ip);
+                            if (reply.Status == IPStatus.Success)
                             {
-                                PingReply reply = p1.Send(ip);
-                                if (reply.Status == IPStatus.Success)
-                                {
-                                    dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
-                                    dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
-                                }
+                                dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
+                                dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
                             }
-                            catch { }
                         }
-
-                        Uri uri2 = new(uri.Scheme + "://" + ip + ":" + uri.Port + "/" + uri.Host + uri.PathAndQuery);
-                        StringBuilder sb = new();
-                        sb.AppendLine("GET " + uri2.PathAndQuery + " HTTP/1.1");
-                        sb.AppendLine("Host: " + uri2.Host);
-                        sb.AppendLine("User-Agent: " + userAgent);
-                        sb.AppendLine("Range: bytes=0-" + range);
-                        sb.AppendLine();
-                        byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-
-                        sw.Restart();
-                        SocketPackage socketPackage = uri.Scheme == "https" ? ClassWeb.TlsRequest(uri2, buffer, null, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri2, buffer, null, false, null, timeout, ctsSpeedTest);
-                        sw.Stop();
-                        dgvr.Tag = string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
-                        if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
+                        catch { }
+                    }
+                    sw.Restart();
+                    SocketPackage socketPackage = uri.Scheme == "https" ? ClassWeb.TlsRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
+                    sw.Stop();
+                    if (socketPackage.Headers.StartsWith("HTTP/1.1 302"))
+                    {
+                        dgvr.Cells["Col_302"].Value = true;
+                        Match result = Regex.Match(socketPackage.Headers, @"Location: (.+)");
+                        if (result.Success)
                         {
-                            double speed = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
-                            dgvr.Cells["Col_Speed"].Value = speed;
-                            dgvr.Tag += "下载：" + ClassMbr.ConvertBytes((ulong)socketPackage.Buffer.Length) + "，耗时：" + sw.ElapsedMilliseconds.ToString("N0") + " 毫秒，平均速度：" + speed + " MB/s";
-                        }
-                        else
-                        {
-                            dgvr.Cells["Col_Speed"].Value = (double)0;
-                            dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
+                            Uri uri2 = new(uri, result.Groups[1].Value);
+                            dgvr.Tag = socketPackage.Headers + "===============临时性重定向(302)===============\n" + uri2.OriginalString + "\n\n";
+                            sb.Clear();
+                            sb.AppendLine("GET " + uri2.PathAndQuery + " HTTP/1.1");
+                            sb.AppendLine("Host: " + uri2.Host);
+                            sb.AppendLine("User-Agent: " + userAgent);
+                            sb.AppendLine("Range: bytes=0-" + range);
+                            sb.AppendLine();
+                            byte[] buffer2 = Encoding.ASCII.GetBytes(sb.ToString());
+                            sw.Restart();
+                            socketPackage = uri2.Scheme == "https" ? ClassWeb.TlsRequest(uri2, buffer2, null, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri2, buffer2, null, false, null, timeout, ctsSpeedTest);
+                            sw.Stop();
                         }
                     }
-                }
-                else
-                {
-                    StringBuilder sb = new();
-                    sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
-                    sb.AppendLine("Host: " + uri.Host);
-                    sb.AppendLine("User-Agent: " + userAgent);
-                    sb.AppendLine("Range: bytes=0-" + range);
-                    sb.AppendLine();
-                    byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-
-                    foreach (DataGridViewRow dgvr in ls)
+                    dgvr.Tag += string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
+                    if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
                     {
-                        if (ctsSpeedTest.IsCancellationRequested) break;
-                        string? ip = dgvr.Cells["Col_IP"].Value.ToString();
-                        if (string.IsNullOrEmpty(ip)) continue;
-                        dgvr.Cells["Col_302"].Value = false;
-                        dgvr.Cells["Col_TTL"].Value = null;
-                        dgvr.Cells["Col_RoundtripTime"].Value = null;
-                        dgvr.Cells["Col_Speed"].Value = "正在测试";
-                        dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
-                        dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
-                        dgvr.Tag = null;
-
-                        using (Ping p1 = new())
-                        {
-                            try
-                            {
-                                PingReply reply = p1.Send(ip);
-                                if (reply.Status == IPStatus.Success)
-                                {
-                                    dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
-                                    dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
-                                }
-                            }
-                            catch { }
-                        }
-                        sw.Restart();
-                        SocketPackage socketPackage = uri.Scheme == "https" ? ClassWeb.TlsRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
-                        sw.Stop();
-                        if (socketPackage.Headers.StartsWith("HTTP/1.1 302"))
-                        {
-                            dgvr.Cells["Col_302"].Value = true;
-                            Match result = Regex.Match(socketPackage.Headers, @"Location: (.+)");
-                            if (result.Success)
-                            {
-                                Uri uri2 = new(uri, result.Groups[1].Value);
-                                dgvr.Tag = socketPackage.Headers + "===============临时性重定向(302)===============\n" + uri2.OriginalString + "\n\n";
-                                sb.Clear();
-                                sb.AppendLine("GET " + uri2.PathAndQuery + " HTTP/1.1");
-                                sb.AppendLine("Host: " + uri2.Host);
-                                sb.AppendLine("User-Agent: " + userAgent);
-                                sb.AppendLine("Range: bytes=0-" + range);
-                                sb.AppendLine();
-                                byte[] buffer2 = Encoding.ASCII.GetBytes(sb.ToString());
-                                sw.Restart();
-                                socketPackage = uri2.Scheme == "https" ? ClassWeb.TlsRequest(uri2, buffer2, null, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri2, buffer2, null, false, null, timeout, ctsSpeedTest);
-                                sw.Stop();
-                            }
-                        }
-                        dgvr.Tag += string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
-                        if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
-                        {
-                            double speed = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
-                            dgvr.Cells["Col_Speed"].Value = speed;
-                            dgvr.Tag += "下载：" + ClassMbr.ConvertBytes((ulong)socketPackage.Buffer.Length) + "，耗时：" + sw.ElapsedMilliseconds.ToString("N0") + " 毫秒，平均速度：" + speed + " MB/s";
-                        }
-                        else
-                        {
-                            dgvr.Cells["Col_Speed"].Value = (double)0;
-                            dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
-                        }
+                        double speed = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
+                        dgvr.Cells["Col_Speed"].Value = speed;
+                        dgvr.Tag += "下载：" + ClassMbr.ConvertBytes((ulong)socketPackage.Buffer.Length) + "，耗时：" + sw.ElapsedMilliseconds.ToString("N0") + " 毫秒，平均速度：" + speed + " MB/s";
+                    }
+                    else
+                    {
+                        dgvr.Cells["Col_Speed"].Value = (double)0;
+                        dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
                     }
                 }
             }
@@ -4067,8 +4009,7 @@ namespace XboxDownload
                                         var json2 = JsonSerializer.Deserialize<XboxGameDownload.Game>(html, Form1.jsOptions);
                                         if (json2 != null && json2.PackageFound)
                                         {
-                                            packageFiles = json2.PackageFiles.Where(x => Regex.IsMatch(x.RelativeUrl, @"(\.msixvc|\.xvc)$", RegexOptions.IgnoreCase)).FirstOrDefault();
-                                            if (packageFiles == null) packageFiles = json2.PackageFiles.Where(x => !Regex.IsMatch(x.RelativeUrl, @"(\.xsp|\.phf)$", RegexOptions.IgnoreCase)).FirstOrDefault();
+                                            packageFiles = json2.PackageFiles.Where(x => Regex.IsMatch(x.RelativeUrl, @"(\.msixvc|\.xvc)$", RegexOptions.IgnoreCase)).FirstOrDefault() ?? json2.PackageFiles.Where(x => !Regex.IsMatch(x.RelativeUrl, @"(\.xsp|\.phf)$", RegexOptions.IgnoreCase)).FirstOrDefault();
                                         }
                                     }
                                     catch { }

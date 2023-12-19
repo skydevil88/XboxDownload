@@ -32,37 +32,37 @@ namespace XboxDownload
             List<Market> lsMarket = new();
             lsMarket.AddRange(new List<Market>
             {
-                new Market("Algeria", "阿尔及利亚", "DZ", "ar-DZ"),
-                new Market("Oman", "阿曼", "OM", "ar-OM"),
-                new Market("Egypt", "埃及", "EG", "ar-EG"),
-                new Market("Pakistan", "巴基斯坦", "PK", "en-PK"),
-                new Market("Bahrain", "巴林", "BH", "ar-BH"),
-                new Market("Bulgaria", "保加利亚", "BG", "bg-BG"),
-                new Market("Iceland", "冰岛","IS",  "is-IS"),
-                new Market("Philippines", "菲律宾", "PH", "en-PH"),
-                new Market("Costa Rica", "哥斯达黎加", "CR", "es-CR"),
-                new Market("Kazakhstan", "哈萨克斯坦", "KZ", "ru-KZ"),
-                new Market("Qatar", "卡塔尔", "QA", "en-QA"),
-                new Market("Kuwait", "科威特", "KW", "ar-KW"),
-                new Market("Kenya", "肯尼亚", "KE", "en-KE"),
-                new Market("Lebanon", "黎巴嫩", "LB", "ar-LB"),
-                new Market("Liechtenstein", "列支敦士登", "LI", "de-LI"),
-                new Market("Romania", "罗马尼亚", "RO", "ro-RO"),
-                new Market("Malaysia", "马来西亚", "MY", "en-MY"),
-                new Market("Mauritania", "毛里塔尼亚乌吉亚", "MR", "ar-MR"),
-                new Market("Bengal", "孟加拉", "BD", "en-BD"),
-                new Market("Peru", "秘鲁", "PE", "es-PE"),
-                new Market("Nigeria", "尼日利亚", "NG", "en-NG"),
-                new Market("Serbia", "塞尔维亚", "RS", "en-RS"),
-                new Market("Thailand", "泰国", "TH", "th-TH"),
-                new Market("Trinidad and Tobago", "特立尼达和多巴哥", "TT", "en-TT"),
-                new Market("Tunisia", "突尼斯", "TN", "ar-TN"),
-                new Market("Guatemala", "危地马拉", "GT", "es-GT"),
-                new Market("Ukraine", "乌克兰", "UA", "uk-UA"),
-                new Market("Iraq", "伊拉克", "IQ", "ar-IQ"),
-                new Market("Indonesia", "印度尼西亚", "ID", "id-ID"),
-                new Market("Jordan", "约旦", "JO", "ar-JO"),
-                new Market("Vietnam", "越南", "VN", "vi-VN")
+                new("Algeria", "阿尔及利亚", "DZ", "ar-DZ"),
+                new("Oman", "阿曼", "OM", "ar-OM"),
+                new("Egypt", "埃及", "EG", "ar-EG"),
+                new("Pakistan", "巴基斯坦", "PK", "en-PK"),
+                new("Bahrain", "巴林", "BH", "ar-BH"),
+                new("Bulgaria", "保加利亚", "BG", "bg-BG"),
+                new("Iceland", "冰岛","IS",  "is-IS"),
+                new("Philippines", "菲律宾", "PH", "en-PH"),
+                new("Costa Rica", "哥斯达黎加", "CR", "es-CR"),
+                new("Kazakhstan", "哈萨克斯坦", "KZ", "ru-KZ"),
+                new("Qatar", "卡塔尔", "QA", "en-QA"),
+                new("Kuwait", "科威特", "KW", "ar-KW"),
+                new("Kenya", "肯尼亚", "KE", "en-KE"),
+                new("Lebanon", "黎巴嫩", "LB", "ar-LB"),
+                new("Liechtenstein", "列支敦士登", "LI", "de-LI"),
+                new("Romania", "罗马尼亚", "RO", "ro-RO"),
+                new("Malaysia", "马来西亚", "MY", "en-MY"),
+                new("Mauritania", "毛里塔尼亚乌吉亚", "MR", "ar-MR"),
+                new("Bengal", "孟加拉", "BD", "en-BD"),
+                new("Peru", "秘鲁", "PE", "es-PE"),
+                new("Nigeria", "尼日利亚", "NG", "en-NG"),
+                new("Serbia", "塞尔维亚", "RS", "en-RS"),
+                new("Thailand", "泰国", "TH", "th-TH"),
+                new("Trinidad and Tobago", "特立尼达和多巴哥", "TT", "en-TT"),
+                new("Tunisia", "突尼斯", "TN", "ar-TN"),
+                new("Guatemala", "危地马拉", "GT", "es-GT"),
+                new("Ukraine", "乌克兰", "UA", "uk-UA"),
+                new("Iraq", "伊拉克", "IQ", "ar-IQ"),
+                new("Indonesia", "印度尼西亚", "ID", "id-ID"),
+                new("Jordan", "约旦", "JO", "ar-JO"),
+                new("Vietnam", "越南", "VN", "vi-VN")
             }.ToArray());
 
             List<Market> ls = Form1.lsMarket.Union(lsMarket).ToList<Market>();
@@ -104,11 +104,7 @@ namespace XboxDownload
                 dgvr.Resizable = DataGridViewTriState.False;
                 dgvr.Cells[0].Value = code;
                 dgvr.Cells[1].Value = lang;
-                dgvr.Cells[2].Value = code switch
-                {
-                    "AR" or "EG" or "RU" or "TR" => name + " (锁)",
-                    _ => name,
-                };
+                dgvr.Cells[2].Value = name;
                 dgvr.Cells[11].Value = "双击前往";
                 cb.Tag = dgvr;
                 dicDgvr.TryAdd(code, dgvr);

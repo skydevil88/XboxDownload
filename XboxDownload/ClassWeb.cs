@@ -28,7 +28,7 @@ namespace XboxDownload
                 httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
             }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; },
+                //ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; },
                 AutomaticDecompression = DecompressionMethods.All
             });
             services.AddHttpClient("XboxDownload").ConfigureHttpClient(httpClient =>

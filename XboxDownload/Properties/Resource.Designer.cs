@@ -70,6 +70,7 @@ namespace XboxDownload.Properties {
         ///*.hac.lp1.d4c.nintendo.net
         ///*.hac.lp1.eshop.nintendo.net
         ///*.hac.lp1.dragons.nintendo.net
+        ///*.cdn.nintendo.net
         ///
         ///######################## Epic ########################
         ///*.ak.epicgames.com
@@ -77,9 +78,7 @@ namespace XboxDownload.Properties {
         ///shared-static-prod.epicgames.com
         ///
         ///##################### Riot Games #####################
-        ///*.dyn.riotcdn.net
-        ///
-        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///* [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Akamai {
             get {

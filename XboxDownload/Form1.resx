@@ -872,13 +872,13 @@
     <value>8, 406</value>
   </data>
   <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1409, 24</value>
+    <value>1397, 24</value>
   </data>
   <data name="label22.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
   </data>
   <data name="label22.Text" xml:space="preserve">
-    <value>使用说明：点击开始监听，然后在 Xbox|PS|NS 中把 DNS IP 设为本机IP，辅助 DNS 留空。 注意：如果你的 Xbox 正在使用 IPv6 联网，必需要在路由器管理页面中关闭 IPv6。</value>
+    <value>主机使用说明：点击开始监听，然后在 Xbox|PS|NS 中把 DNS IP 设为本机IP，辅助DNS留空。 注意：Xbox|PS 主机用户如果使用了 IPv6 联网，必需要进入路由器后台关闭。</value>
   </data>
   <data name="&gt;&gt;label22.Name" xml:space="preserve">
     <value>label22</value>
@@ -8616,19 +8616,19 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>804, 17</value>
   </metadata>
   <data name="tsmCopyUrl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>323, 30</value>
+    <value>296, 30</value>
   </data>
   <data name="tsmCopyUrl1.Text" xml:space="preserve">
-    <value>复制下载链接(.com 域名) 推荐</value>
+    <value>复制下载链接(.com 域名)</value>
   </data>
   <data name="tsmCopyUrl2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>323, 30</value>
+    <value>296, 30</value>
   </data>
   <data name="tsmCopyUrl2.Text" xml:space="preserve">
     <value>复制下载链接(.cn 域名) </value>
   </data>
   <data name="tsmAllUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>323, 30</value>
+    <value>296, 30</value>
   </data>
   <data name="tsmAllUrl.Text" xml:space="preserve">
     <value>查看运行库等所有相关下载</value>
@@ -8646,13 +8646,13 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>打开光环：无限</value>
   </data>
   <data name="tsmAuthorization.Size" type="System.Drawing.Size, System.Drawing">
-    <value>323, 30</value>
+    <value>296, 30</value>
   </data>
   <data name="tsmAuthorization.Text" xml:space="preserve">
     <value>启动 Xbox App 更新授权</value>
   </data>
   <data name="cmsCopyUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>324, 124</value>
+    <value>297, 124</value>
   </data>
   <data name="&gt;&gt;cmsCopyUrl.Name" xml:space="preserve">
     <value>cmsCopyUrl</value>
