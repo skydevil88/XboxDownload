@@ -2398,7 +2398,7 @@
     <value>4.Xbox、PS 、NS、EA 、战网 (Akamai)</value>
   </data>
   <data name="cbImportIP.Items5" xml:space="preserve">
-    <value>3.Akamai (IPv6)</value>
+    <value>5.Akamai (IPv6)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>934, 4</value>
