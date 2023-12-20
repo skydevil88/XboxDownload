@@ -543,9 +543,9 @@ namespace XboxDownload
                     string ip = ips[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 6000, ctsSpeedTest);
+                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 6000, cts);
                         if (string.IsNullOrEmpty(akamai) && socketPackage.Headers.StartsWith("HTTP/1.1 206")) akamai = ip;
-                        else Task.Delay(6000, cts.Token);
+                        else if (!cts.IsCancellationRequested) Task.Delay(6000, cts.Token);
                     });
                 }
                 Array.ForEach(tasks, x => x.Start());
@@ -2971,7 +2971,7 @@ namespace XboxDownload
             tbFilePath.Text = string.Empty;
             tbContentId.Text = tbProductID.Text = tbBuildID.Text = tbFileTimeCreated.Text = tbDriveSize.Text = tbPackageVersion.Text = string.Empty;
             butAnalyze.Enabled = butOpenFile.Enabled = linkCopyContentID.Enabled = linkRename.Enabled = linkProductID.Visible = false;
-            Dictionary<string, string> headers = new() { { "Range", "0-4095" } };
+            Dictionary<string, string> headers = new() { { "Range", "bytes=0-4095" } };
             using HttpResponseMessage? response = await Task.Run(() => ClassWeb.HttpResponseMessage(url, "GET", null, null, headers));
             if (response != null && response.IsSuccessStatusCode)
             {
