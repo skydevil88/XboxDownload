@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbXboxStopped, "Xbox安装停止通常是CDN缓存有坏块，\n勾选此选项将会临时把下载IP全部改为Akamai CDN，\n从国外下载损坏数据（关闭代理软件），\n下载几分钟后请手动取消此勾选。\n\n注：勾选此选项后需要暂定下载，然后重新恢复安装。");
+            toolTip1.SetToolTip(this.ckbXboxStopped, "Xbox安装停止通常是CDN缓存有坏块，\n勾选此选项将会临时把下载IP全部改为Akamai CDN，\n从国外下载损坏数据（关闭代理软件），\n下载速度慢也可以勾选试试。\n\n注：勾选此选项后需要暂定下载，然后重新恢复安装。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -522,13 +522,39 @@ namespace XboxDownload
             }
         }
 
-        private void CkbXboxStopped_CheckedChanged(object sender, EventArgs e)
+        private async void CkbXboxStopped_CheckedChanged(object sender, EventArgs e)
         {
             if (ckbXboxStopped.Checked)
             {
-                string akamai = "223.119.50.144";
+                string? akamai = null;
+                string[] ips = { "23.216.159.66", "23.15.14.187", "23.53.248.155", "23.78.141.176", "23.197.49.161", "23.219.39.82", "223.119.50.144" };
+                Uri uri = new("http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt");
+                StringBuilder sb = new();
+                sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
+                sb.AppendLine("Host: " + uri.Host);
+                sb.AppendLine("User-Agent: XboxDownload");
+                sb.AppendLine("Range: bytes=0-1048575");
+                sb.AppendLine();
+                byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
+                CancellationTokenSource cts = new();
+                Task[] tasks = new Task[ips.Length];
+                for (int i = 0; i <= tasks.Length - 1; i++)
+                {
+                    string ip = ips[i];
+                    tasks[i] = new Task(() =>
+                    {
+                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 6000, ctsSpeedTest);
+                        if (string.IsNullOrEmpty(akamai) && socketPackage.Headers.StartsWith("HTTP/1.1 206")) akamai = ip;
+                        else Task.Delay(6000, cts.Token);
+                    });
+                }
+                Array.ForEach(tasks, x => x.Start());
+                await Task.WhenAny(tasks);
+                cts.Cancel();
+                akamai ??= ips[^1];
                 dnsListen.SetXboxDownloadIP(akamai);
                 UpdateHosts(true, akamai);
+                SaveLog("提示信息", "Xbox下载域名IP临时改为 “" + akamai + "”。", "localhost", 0x0000FF);
             }
             else if (bServiceFlag)
             {

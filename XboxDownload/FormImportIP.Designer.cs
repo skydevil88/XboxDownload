@@ -205,6 +205,7 @@
             textBox1.ScrollBars = ScrollBars.Vertical;
             textBox1.Size = new Size(975, 444);
             textBox1.TabIndex = 2;
+            textBox1.TextChanged += TextBox1_TextChanged;
             // 
             // FormImportIP
             // 

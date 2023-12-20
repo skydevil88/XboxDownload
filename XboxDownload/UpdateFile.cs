@@ -76,10 +76,12 @@ namespace XboxDownload
                             byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
                             if (buffer.Length > 0)
                             {
-                                using FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                                fs.Write(buffer, 0, buffer.Length);
-                                fs.Flush();
-                                fs.Close();
+                                using (FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                                {
+                                    fs.Write(buffer, 0, buffer.Length);
+                                    fs.Flush();
+                                    fs.Close();
+                                }
                                 string tempDir = Form1.resourcePath + @"\.Temp";
                                 if (Directory.Exists(tempDir))
                                     Directory.Delete(tempDir, true);

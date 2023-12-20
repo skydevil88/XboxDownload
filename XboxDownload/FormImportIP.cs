@@ -49,6 +49,10 @@ namespace XboxDownload
                 {
                     this.host = "Akamai";
                 }
+                else if (String.Equals(array[0].Trim(), "AkamaiV6", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    this.host = "AkamaiV6";
+                }
                 else
                 {
                     foreach (string str in array)
@@ -76,7 +80,7 @@ namespace XboxDownload
             }
             if (string.IsNullOrEmpty(this.host))
             {
-                MessageBox.Show("提交内容不符合条件。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("提交内容不符合规则。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             Match result = rMatchIP.Match(content);
@@ -120,6 +124,11 @@ namespace XboxDownload
             }
         }
 
+        private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            textBox1.Text = Regex.Replace(textBox1.Text, @"\r?\n", "\r\n");
+        }
+
         private static ulong IpToLong(IPAddress address)
         {
             ulong num;
@@ -149,30 +158,20 @@ namespace XboxDownload
             {
                 return "0000:0000:0000:0000:0000:0000:0000:0000";
             }
-            if (ip.EndsWith("::"))
+            string[] arrs = ip.Split(':');
+            if (arrs.Length < 8)
             {
-                ip += "0";
+                ip = ip.Replace("::", string.Empty.PadLeft(10 - arrs.Length, ':'));
+                arrs = ip.Split(':');
             }
-            var arrs = ip.Split(':');
-            var symbol = "::";
-            var arrleng = arrs.Length;
-            while (arrleng < 8)
+            for (var i = 0; i < arrs.Length; i++)
             {
-                symbol += ":";
-                arrleng++;
-            }
-            ip = ip.Replace("::", symbol);
-            var fullip = "";
-            var arr = ip.Split(':');
-            for (var i = 0; i < arr.Length; i++)
-            {
-                if (arr[i].Length < 4)
+                if (arrs[i].Length < 4)
                 {
-                    arr[i] = arr[i].PadLeft(4, '0');
+                    arrs[i] = arrs[i].PadLeft(4, '0');
                 }
-                fullip += arr[i] + ':';
             }
-            return fullip[..^1].ToUpper();
+            return string.Join(':', arrs).ToUpper();
         }
     }
 }

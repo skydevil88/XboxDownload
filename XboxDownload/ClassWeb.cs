@@ -81,7 +81,7 @@ namespace XboxDownload
                                 break;
                             case "Range":
                                 {
-                                    Match result = Regex.Match(header.Value, @"^(\d+)-(\d+)$");
+                                    Match result = Regex.Match(header.Value, @"^bytes=(\d+)-(\d+)$");
                                     if (result.Success)
                                         client.DefaultRequestHeaders.Range = new RangeHeaderValue(long.Parse(result.Groups[1].Value), long.Parse(result.Groups[2].Value));
                                 }
