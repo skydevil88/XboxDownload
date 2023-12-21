@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbXboxStopped, "Xbox安装停止通常是CDN缓存有坏块，\n勾选此选项将会临时把下载IP全部改为Akamai CDN，\n从国外下载损坏数据（关闭代理软件），\n下载速度慢也可以勾选试试。\n\n注：勾选此选项后需要暂定下载，然后重新恢复安装。");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n\n提示：\n勾选此选项后需要暂定下载，然后重新恢复安装。\nEA app 如果没效果，可以点击右下角“修复 EA app”\n优选IP使用广东电信测速，如果您有其它地区速度快的IP欢迎提供");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -524,42 +524,55 @@ namespace XboxDownload
 
         private async void CkbXboxStopped_CheckedChanged(object sender, EventArgs e)
         {
-            if (ckbXboxStopped.Checked)
+            if (ckbOptimalAkamaiIP.Checked)
             {
-                string? akamai = null;
-                string[] ips = { "23.216.159.66", "23.15.14.187", "23.53.248.155", "23.78.141.176", "23.197.49.161", "23.219.39.82", "223.119.50.144" };
-                Uri uri = new("http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt");
+                // 以下IP使用广东电信测速，如果您有其它地区速度快的IP欢迎提供
+                string[] ips = {
+                    "23.43.165.18", "23.200.75.28", "23.206.175.185", "23.216.159.66", "72.246.103.11", "211.239.236.18", "220.90.198.73",  //韩国
+                    "128.22.12.153", "23.197.49.161", "23.78.141.176", "210.176.33.74", "23.15.14.187", "23.32.248.9", "23.33.32.155", "23.33.33.121", "23.44.51.34", "23.45.51.153", "23.53.248.155", "23.77.204.160", "23.206.250.96", "23.219.39.82", "125.56.201.104", //日本
+                    "223.119.50.144" //香港
+                };
+
+                string[] test = { "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt", "http://gst.prod.dl.playstation.net/networktest/get_192m", "http://ctest-dl-lp1.cdn.nintendo.net/30m" };
+                Random ran = new();
+                Uri uri = new(test[ran.Next(test.Length)]);
                 StringBuilder sb = new();
                 sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
                 sb.AppendLine("Host: " + uri.Host);
-                sb.AppendLine("User-Agent: XboxDownload");
-                sb.AppendLine("Range: bytes=0-1048575");
+                sb.AppendLine("User-Agent: XboxDownload (Nintendo NX)");
+                sb.AppendLine("Range: bytes=0-10485750");
                 sb.AppendLine();
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
                 CancellationTokenSource cts = new();
                 Task[] tasks = new Task[ips.Length];
+                string? akamai = null;
                 for (int i = 0; i <= tasks.Length - 1; i++)
                 {
                     string ip = ips[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 6000, cts);
+                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 15000, cts);
                         if (string.IsNullOrEmpty(akamai) && socketPackage.Headers.StartsWith("HTTP/1.1 206")) akamai = ip;
-                        else if (!cts.IsCancellationRequested) Task.Delay(6000, cts.Token);
+                        else if (!cts.IsCancellationRequested) Task.Delay(15000, cts.Token);
                     });
                 }
                 Array.ForEach(tasks, x => x.Start());
                 await Task.WhenAny(tasks);
                 cts.Cancel();
-                akamai ??= ips[^1];
-                dnsListen.SetXboxDownloadIP(akamai);
+                if (akamai == null)
+                {
+                    akamai = ips[^1];
+                    SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定。", "localhost", 0xFF0000);
+                }
+                dnsListen.SetAkamaiIP(akamai);
                 UpdateHosts(true, akamai);
-                SaveLog("提示信息", "Xbox下载域名IP临时改为 “" + akamai + "”。", "localhost", 0x0000FF);
+                SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网 全部游戏下载域名)", "localhost", 0x008000);
             }
             else if (bServiceFlag)
             {
-                dnsListen.SetXboxDownloadIP(null);
+                dnsListen.SetAkamaiIP(null);
                 UpdateHosts(true);
+                SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
         }
 
@@ -581,14 +594,15 @@ namespace XboxDownload
                 if (string.IsNullOrEmpty(Properties.Settings.Default.BattleIP)) tbBattleIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.EpicIP)) tbEpicIP.Clear();
                 pictureBox1.Image = Properties.Resource.Xbox1;
-                linkTestDns.Enabled = false;
+                linkTestDns.Enabled = linkRestartEABackgroundService.Enabled = false;
+
                 foreach (Control control in this.groupBox1.Controls)
                 {
                     if ((control is TextBox || control is CheckBox || control is Button || control is ComboBox) && control != butStart)
                         control.Enabled = true;
                 }
-                ckbXboxStopped.Checked = false;
-                ckbXboxStopped.Enabled = false;
+                ckbOptimalAkamaiIP.Checked = false;
+                ckbOptimalAkamaiIP.Enabled = false;
                 cbLocalIP.Enabled = true;
                 dnsListen.Close();
                 httpListen.Close();
@@ -918,7 +932,7 @@ namespace XboxDownload
                     if (control is TextBox || control is CheckBox || control is Button || control is ComboBox)
                         control.Enabled = false;
                 }
-                ckbXboxStopped.Enabled = true;
+                ckbOptimalAkamaiIP.Enabled = true;
                 cbLocalIP.Enabled = false;
                 _ = Task.Run(() =>
                 {
@@ -929,6 +943,7 @@ namespace XboxDownload
                     }
                 });
                 UpdateHosts(true);
+                if (Properties.Settings.Default.EAStore) linkRestartEABackgroundService.Enabled = true;
                 if (Properties.Settings.Default.DnsService)
                 {
                     linkTestDns.Enabled = true;
@@ -1076,7 +1091,14 @@ namespace XboxDownload
                         }
                         if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
                         {
-                            sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
+                            if (!string.IsNullOrEmpty(akamai))
+                            {
+                                sb.AppendLine(akamai + " origin-a.akamaihd.net");
+                            }
+                            else
+                            {
+                                sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
+                            }
                         }
                     }
                     if (Properties.Settings.Default.BattleStore)
@@ -1091,9 +1113,18 @@ namespace XboxDownload
                         }
                         if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
                         {
-                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
-                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist2-a.akamaihd.net");
-                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist3-a.akamaihd.net");
+                            if (!string.IsNullOrEmpty(akamai))
+                            {
+                                sb.AppendLine(akamai + " blzddist1-a.akamaihd.net");
+                                sb.AppendLine(akamai + " blzddist2-a.akamaihd.net");
+                                sb.AppendLine(akamai + " blzddist3-a.akamaihd.net");
+                            }
+                            else
+                            {
+                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
+                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist2-a.akamaihd.net");
+                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist3-a.akamaihd.net");
+                            }
                         }
                     }
                     if (Properties.Settings.Default.EpicStore)
@@ -1240,6 +1271,49 @@ namespace XboxDownload
             FormDns dialog = new();
             dialog.ShowDialog();
             dialog.Dispose();
+        }
+
+        private void LinkRestartEABackgroundService_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string? path = null;
+            using (var key = Microsoft.Win32.Registry.LocalMachine)
+            {
+                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Electronic Arts\EA Desktop");
+                if (rk != null)
+                {
+                    path = rk.GetValue("DesktopAppPath", null)?.ToString();
+                    rk.Close();
+                }
+            }
+            if (path != null && File.Exists(path))
+            {
+                if (MessageBox.Show("此操作将会重启 EA app，是否继续？", "修复 EA app", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EADesktop").SingleOrDefault();
+                    if (processes != null)
+                    {
+                        try
+                        {
+                            processes.Kill();
+                        }
+                        catch { }
+                    }
+                    ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "EABackgroundService").SingleOrDefault();
+                    if (service != null)
+                    {
+                        if (service.Status == ServiceControllerStatus.Running)
+                        {
+                            service.Stop();
+                            service.WaitForStatus(ServiceControllerStatus.Stopped);
+                        }
+                    }
+                    Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+                }
+            }
+            else
+            {
+                MessageBox.Show("没有找到 EA app。", "修复 EA app", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void CkbRecordLog_CheckedChanged(object? sender, EventArgs? e)
@@ -2671,7 +2745,7 @@ namespace XboxDownload
             DnsListen.UpdateHosts();
             if (bServiceFlag)
             {
-                if (ckbXboxStopped.Checked) ckbXboxStopped.Checked = false;
+                if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
                 else UpdateHosts(true);
             }
         }

@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -57,6 +57,7 @@
             Col_ClientIP = new ColumnHeader();
             Col_Time = new ColumnHeader();
             panel1 = new Panel();
+            linkRestartEABackgroundService = new LinkLabel();
             linkClearLog = new LinkLabel();
             ckbRecordLog = new CheckBox();
             label25 = new Label();
@@ -65,7 +66,7 @@
             label24 = new Label();
             groupBox1 = new GroupBox();
             ckbGameLink = new CheckBox();
-            ckbXboxStopped = new CheckBox();
+            ckbOptimalAkamaiIP = new CheckBox();
             butStart = new Button();
             ckbEpicStore = new CheckBox();
             ckbBattleStore = new CheckBox();
@@ -540,6 +541,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(linkRestartEABackgroundService);
             panel1.Controls.Add(linkClearLog);
             panel1.Controls.Add(ckbRecordLog);
             panel1.Controls.Add(label25);
@@ -548,6 +550,13 @@
             panel1.Controls.Add(label24);
             resources.ApplyResources(panel1, "panel1");
             panel1.Name = "panel1";
+            // 
+            // linkRestartEABackgroundService
+            // 
+            resources.ApplyResources(linkRestartEABackgroundService, "linkRestartEABackgroundService");
+            linkRestartEABackgroundService.Name = "linkRestartEABackgroundService";
+            linkRestartEABackgroundService.TabStop = true;
+            linkRestartEABackgroundService.LinkClicked += LinkRestartEABackgroundService_LinkClicked;
             // 
             // linkClearLog
             // 
@@ -590,7 +599,7 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(ckbGameLink);
-            groupBox1.Controls.Add(ckbXboxStopped);
+            groupBox1.Controls.Add(ckbOptimalAkamaiIP);
             groupBox1.Controls.Add(butStart);
             groupBox1.Controls.Add(ckbEpicStore);
             groupBox1.Controls.Add(ckbBattleStore);
@@ -651,13 +660,13 @@
             ckbGameLink.Name = "ckbGameLink";
             ckbGameLink.UseVisualStyleBackColor = true;
             // 
-            // ckbXboxStopped
+            // ckbOptimalAkamaiIP
             // 
-            resources.ApplyResources(ckbXboxStopped, "ckbXboxStopped");
-            ckbXboxStopped.ForeColor = Color.Red;
-            ckbXboxStopped.Name = "ckbXboxStopped";
-            ckbXboxStopped.UseVisualStyleBackColor = true;
-            ckbXboxStopped.CheckedChanged += CkbXboxStopped_CheckedChanged;
+            resources.ApplyResources(ckbOptimalAkamaiIP, "ckbOptimalAkamaiIP");
+            ckbOptimalAkamaiIP.ForeColor = Color.Red;
+            ckbOptimalAkamaiIP.Name = "ckbOptimalAkamaiIP";
+            ckbOptimalAkamaiIP.UseVisualStyleBackColor = true;
+            ckbOptimalAkamaiIP.CheckedChanged += CkbXboxStopped_CheckedChanged;
             // 
             // butStart
             // 
@@ -999,9 +1008,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1009,9 +1018,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1019,9 +1028,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2903,7 +2912,7 @@
         private LinkLabel linkLabel4;
         private LinkLabel linkAppGamingServices;
         private LinkLabel linkConsoleInstall;
-        private CheckBox ckbXboxStopped;
+        private CheckBox ckbOptimalAkamaiIP;
         private DataGridViewCheckBoxColumn Col_Enable;
         private DataGridViewTextBoxColumn Col_HostName;
         private DataGridViewTextBoxColumn Col_IPv4;
@@ -2916,5 +2925,6 @@
         private DataGridViewTextBoxColumn Col_TTL;
         private DataGridViewTextBoxColumn Col_RoundtripTime;
         private DataGridViewTextBoxColumn Col_Speed;
+        private LinkLabel linkRestartEABackgroundService;
     }
 }
