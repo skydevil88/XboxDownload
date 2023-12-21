@@ -522,7 +522,7 @@ namespace XboxDownload
             }
         }
 
-        private async void CkbXboxStopped_CheckedChanged(object sender, EventArgs e)
+        private async void CkbOptimalAkamaiIP_CheckedChanged(object sender, EventArgs e)
         {
             if (ckbOptimalAkamaiIP.Checked)
             {

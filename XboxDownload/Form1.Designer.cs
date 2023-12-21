@@ -666,7 +666,7 @@
             ckbOptimalAkamaiIP.ForeColor = Color.Red;
             ckbOptimalAkamaiIP.Name = "ckbOptimalAkamaiIP";
             ckbOptimalAkamaiIP.UseVisualStyleBackColor = true;
-            ckbOptimalAkamaiIP.CheckedChanged += CkbXboxStopped_CheckedChanged;
+            ckbOptimalAkamaiIP.CheckedChanged += CkbOptimalAkamaiIP_CheckedChanged;
             // 
             // butStart
             // 
