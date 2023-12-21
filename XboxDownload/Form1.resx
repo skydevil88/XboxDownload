@@ -323,7 +323,7 @@
     <value>True</value>
   </data>
   <data name="labelTraffic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>898, 9</value>
+    <value>908, 9</value>
   </data>
   <data name="labelTraffic.Size" type="System.Drawing.Size, System.Drawing">
     <value>212, 24</value>
@@ -2242,7 +2242,7 @@
   </data>
   <data name="tbDlUrl.PlaceholderText" xml:space="preserve">
     <value>请关闭加速器、代理软件再开始测速，国内IP一般只需测本省IP，可以使用查找功能筛选；下载速度换算公式：1 MB/s = 8 Mbps。
-实际下载速度跟CDN有没有该游戏的缓存有关，你也可以填写需要下载的游戏链接测速。</value>
+测速使用单线程，实际下载各家厂商会用到4线程或以上，正常情况下实际下载速度会比测速快。</value>
   </data>
   <data name="tbDlUrl.ScrollBars" type="System.Windows.Forms.ScrollBars, System.Windows.Forms">
     <value>Both</value>

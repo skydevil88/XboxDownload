@@ -266,27 +266,6 @@ namespace XboxDownload
             }
         }
 
-        NetworkInterface? adapter = null;
-        private long OldUp { get; set; }
-        private long OldDown { get; set; }
-
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            if (adapter != null)
-            {
-                long nowUp = adapter.GetIPStatistics().BytesSent;
-                long nowDown = adapter.GetIPStatistics().BytesReceived;
-                if (OldUp > 0 || OldDown > 0)
-                {
-                    long up = nowUp - OldUp;
-                    long down = nowDown - OldDown;
-                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBytes((ulong)up), ClassMbr.ConvertBytes((ulong)down));
-                }
-                OldUp = nowUp;
-                OldDown = nowDown;
-            }
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             if (DateTime.Compare(DateTime.Now, new DateTime(Properties.Settings.Default.NextUpdate)) >= 0)
@@ -492,6 +471,27 @@ namespace XboxDownload
         }
 
         #region 选项卡-服务
+        NetworkInterface? adapter = null;
+        private long OldUp { get; set; }
+        private long OldDown { get; set; }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (adapter != null)
+            {
+                long nowUp = adapter.GetIPStatistics().BytesSent;
+                long nowDown = adapter.GetIPStatistics().BytesReceived;
+                if (OldUp > 0 || OldDown > 0)
+                {
+                    long up = nowUp - OldUp;
+                    long down = nowDown - OldDown;
+                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBytes((ulong)up), ClassMbr.ConvertBytes((ulong)down));
+                }
+                OldUp = nowUp;
+                OldDown = nowDown;
+            }
+        }
+
         private void CkbNSBrowser_CheckedChanged(object sender, EventArgs e)
         {
             linkNSHomepage.Enabled = ckbNSBrowser.Checked;
