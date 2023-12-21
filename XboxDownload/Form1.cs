@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app 如果没效果，可以点击右下角“修复 EA app”");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -117,7 +117,14 @@ namespace XboxDownload
                 foreach (UnicastIPAddressInformation ipadd in ipCollection)
                 {
                     if (ipadd.Address.AddressFamily == AddressFamily.InterNetwork)
-                        cbLocalIP.Items.Add(ipadd.Address.ToString());
+                    {
+                        ComboboxItem item = new()
+                        {
+                            Text = ipadd.Address.ToString(),
+                            Value = adapter
+                        };
+                        cbLocalIP.Items.Add(item);
+                    }
                 }
             }
             if (cbLocalIP.Items.Count >= 1)
@@ -246,6 +253,37 @@ namespace XboxDownload
             if (bAutoStartup)
             {
                 ButStart_Click(null, null);
+            }
+        }
+
+        private class ComboboxItem
+        {
+            public string? Text { get; set; }
+            public object? Value { get; set; }
+            public override string? ToString()
+            {
+                return Text;
+            }
+        }
+
+        NetworkInterface? adapter = null;
+        private long OldUp { get; set; }
+        private long OldDown { get; set; }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (adapter != null)
+            {
+                long nowUp = adapter.GetIPStatistics().BytesSent;
+                long nowDown = adapter.GetIPStatistics().BytesReceived;
+                if (OldUp > 0 || OldDown > 0)
+                {
+                    long up = nowUp - OldUp;
+                    long down = nowDown - OldDown;
+                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBytes((ulong)up), ClassMbr.ConvertBytes((ulong)down));
+                }
+                OldUp = nowUp;
+                OldDown = nowDown;
             }
         }
 
@@ -1264,6 +1302,11 @@ namespace XboxDownload
         {
             Properties.Settings.Default.LocalIP = cbLocalIP.Text;
             Properties.Settings.Default.Save();
+
+            timer1.Stop();
+            adapter = (cbLocalIP.SelectedItem as ComboboxItem)?.Value as NetworkInterface;
+            OldUp = OldDown = 0;
+            timer1.Start();
         }
 
         private void LinkTestDns_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2392,8 +2435,16 @@ namespace XboxDownload
                 butSpeedTest.Text = "停止测速";
                 foreach (Control control in this.panelSpeedTest.Controls)
                 {
-                    if ((control is TextBox || control is CheckBox || control is Button || control is ComboBox || control is LinkLabel || control is FlowLayoutPanel) && control != butSpeedTest)
-                        control.Enabled = false;
+                    switch (control.Name)
+                    {
+                        case "linkHostsClear":
+                        case "linkHostsEdit":
+                        case "butSpeedTest":
+                            break;
+                        default:
+                            control.Enabled = false;
+                            break;
+                    }
                 }
                 Col_IP.SortMode = Col_Location.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = Col_Speed.SortMode = DataGridViewColumnSortMode.NotSortable;
                 Col_Check.ReadOnly = true;

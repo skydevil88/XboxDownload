@@ -77,6 +77,7 @@ namespace XboxDownload
 
         public static string ConvertBytes(ulong len)
         {
+            if (len == 0) return "0.00 Bytes";
             double leng = Convert.ToDouble(len);
             string[] sizes = { "Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
             int order = 0;

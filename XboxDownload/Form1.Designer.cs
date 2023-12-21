@@ -50,14 +50,14 @@
             toolStripButton1 = new ToolStripButton();
             tabControl1 = new TabControl();
             tabService = new TabPage();
-            groupBox11 = new GroupBox();
+            gbLog = new GroupBox();
             lvLog = new DoubleBufferListView();
             Col_Request = new ColumnHeader();
             Col_Content = new ColumnHeader();
             Col_ClientIP = new ColumnHeader();
             Col_Time = new ColumnHeader();
             panel1 = new Panel();
-            linkRestartEABackgroundService = new LinkLabel();
+            labelTraffic = new Label();
             linkClearLog = new LinkLabel();
             ckbRecordLog = new CheckBox();
             label25 = new Label();
@@ -66,6 +66,7 @@
             label24 = new Label();
             groupBox1 = new GroupBox();
             ckbGameLink = new CheckBox();
+            linkRestartEABackgroundService = new LinkLabel();
             ckbOptimalAkamaiIP = new CheckBox();
             butStart = new Button();
             ckbEpicStore = new CheckBox();
@@ -336,10 +337,11 @@
             tsmAuthorization = new ToolStripMenuItem();
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
+            timer1 = new System.Windows.Forms.Timer(components);
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
-            groupBox11.SuspendLayout();
+            gbLog.SuspendLayout();
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -497,19 +499,19 @@
             // 
             // tabService
             // 
-            tabService.Controls.Add(groupBox11);
+            tabService.Controls.Add(gbLog);
             tabService.Controls.Add(panel1);
             tabService.Controls.Add(groupBox1);
             resources.ApplyResources(tabService, "tabService");
             tabService.Name = "tabService";
             tabService.UseVisualStyleBackColor = true;
             // 
-            // groupBox11
+            // gbLog
             // 
-            groupBox11.Controls.Add(lvLog);
-            resources.ApplyResources(groupBox11, "groupBox11");
-            groupBox11.Name = "groupBox11";
-            groupBox11.TabStop = false;
+            gbLog.Controls.Add(lvLog);
+            resources.ApplyResources(gbLog, "gbLog");
+            gbLog.Name = "gbLog";
+            gbLog.TabStop = false;
             // 
             // lvLog
             // 
@@ -541,7 +543,7 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(linkRestartEABackgroundService);
+            panel1.Controls.Add(labelTraffic);
             panel1.Controls.Add(linkClearLog);
             panel1.Controls.Add(ckbRecordLog);
             panel1.Controls.Add(label25);
@@ -551,12 +553,11 @@
             resources.ApplyResources(panel1, "panel1");
             panel1.Name = "panel1";
             // 
-            // linkRestartEABackgroundService
+            // labelTraffic
             // 
-            resources.ApplyResources(linkRestartEABackgroundService, "linkRestartEABackgroundService");
-            linkRestartEABackgroundService.Name = "linkRestartEABackgroundService";
-            linkRestartEABackgroundService.TabStop = true;
-            linkRestartEABackgroundService.LinkClicked += LinkRestartEABackgroundService_LinkClicked;
+            resources.ApplyResources(labelTraffic, "labelTraffic");
+            labelTraffic.ForeColor = Color.Green;
+            labelTraffic.Name = "labelTraffic";
             // 
             // linkClearLog
             // 
@@ -599,6 +600,7 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(ckbGameLink);
+            groupBox1.Controls.Add(linkRestartEABackgroundService);
             groupBox1.Controls.Add(ckbOptimalAkamaiIP);
             groupBox1.Controls.Add(butStart);
             groupBox1.Controls.Add(ckbEpicStore);
@@ -659,6 +661,13 @@
             resources.ApplyResources(ckbGameLink, "ckbGameLink");
             ckbGameLink.Name = "ckbGameLink";
             ckbGameLink.UseVisualStyleBackColor = true;
+            // 
+            // linkRestartEABackgroundService
+            // 
+            resources.ApplyResources(linkRestartEABackgroundService, "linkRestartEABackgroundService");
+            linkRestartEABackgroundService.Name = "linkRestartEABackgroundService";
+            linkRestartEABackgroundService.TabStop = true;
+            linkRestartEABackgroundService.LinkClicked += LinkRestartEABackgroundService_LinkClicked;
             // 
             // ckbOptimalAkamaiIP
             // 
@@ -2550,6 +2559,11 @@
             tsmAuthorization2.Tag = "9PP5G1F0C2B6";
             tsmAuthorization2.Click += TsmAuthorization_Click;
             // 
+            // timer1
+            // 
+            timer1.Interval = 1000;
+            timer1.Tick += Timer1_Tick;
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -2565,7 +2579,7 @@
             toolStrip1.PerformLayout();
             tabControl1.ResumeLayout(false);
             tabService.ResumeLayout(false);
-            groupBox11.ResumeLayout(false);
+            gbLog.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             groupBox1.ResumeLayout(false);
@@ -2881,7 +2895,7 @@
         private LinkLabel linkRestartGamingServices;
         private Label label50;
         private LinkLabel linkReInstallGamingServices;
-        private GroupBox groupBox11;
+        private GroupBox gbLog;
         private DataGridViewTextBoxColumn Col_DeviceID;
         private DataGridViewTextBoxColumn Col_Model;
         private DataGridViewTextBoxColumn Col_InterfaceType;
@@ -2926,5 +2940,7 @@
         private DataGridViewTextBoxColumn Col_RoundtripTime;
         private DataGridViewTextBoxColumn Col_Speed;
         private LinkLabel linkRestartEABackgroundService;
+        private System.Windows.Forms.Timer timer1;
+        private Label labelTraffic;
     }
 }
