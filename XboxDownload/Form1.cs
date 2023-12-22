@@ -1127,16 +1127,13 @@ namespace XboxDownload
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " api1.origin.com");
                             sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
                         }
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
+                        if (!string.IsNullOrEmpty(akamai))
                         {
-                            if (!string.IsNullOrEmpty(akamai))
-                            {
-                                sb.AppendLine(akamai + " origin-a.akamaihd.net");
-                            }
-                            else
-                            {
-                                sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
-                            }
+                            sb.AppendLine(akamai + " origin-a.akamaihd.net");
+                        }
+                        else if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
+                        {
+                            sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
                         }
                     }
                     if (Properties.Settings.Default.BattleStore)
@@ -1149,20 +1146,17 @@ namespace XboxDownload
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
                         }
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
+                        if (!string.IsNullOrEmpty(akamai))
                         {
-                            if (!string.IsNullOrEmpty(akamai))
-                            {
-                                sb.AppendLine(akamai + " blzddist1-a.akamaihd.net");
-                                sb.AppendLine(akamai + " blzddist2-a.akamaihd.net");
-                                sb.AppendLine(akamai + " blzddist3-a.akamaihd.net");
-                            }
-                            else
-                            {
-                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
-                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist2-a.akamaihd.net");
-                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist3-a.akamaihd.net");
-                            }
+                            sb.AppendLine(akamai + " blzddist1-a.akamaihd.net");
+                            sb.AppendLine(akamai + " blzddist2-a.akamaihd.net");
+                            sb.AppendLine(akamai + " blzddist3-a.akamaihd.net");
+                        }
+                        else if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
+                        {
+                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
+                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist2-a.akamaihd.net");
+                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist3-a.akamaihd.net");
                         }
                     }
                     if (Properties.Settings.Default.EpicStore)
