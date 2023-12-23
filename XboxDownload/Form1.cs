@@ -69,8 +69,8 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
-            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
+            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -2069,7 +2069,7 @@ namespace XboxDownload
                     case "assets2.xboxlive.cn":
                     case "d1.xboxlive.cn":
                     case "d2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+(assets1|assets2|d1|d2)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+(assets1|assets2|d1|d2)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " assets1.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " assets2.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " d1.xboxlive.cn # XboxDownload");
@@ -2080,7 +2080,7 @@ namespace XboxDownload
                     case "tlu.dl.delivery.mp.microsoft.com":
                     case "dlassets.xboxlive.cn":
                     case "dlassets2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.delivery\.mp\.microsoft\.com\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+[^\s]+\.delivery\.mp\.microsoft\.com\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # XboxDownload");
                         sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # XboxDownload");
                         sb.AppendLine(ip + " dlassets.xboxlive.cn # XboxDownload");
@@ -2090,7 +2090,7 @@ namespace XboxDownload
                     case "gs2.ww.prod.dl.playstation.net":
                     case "zeus.dl.playstation.net":
                     case "ares.dl.playstation.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+\.dl\.playstation\.net\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+[^\s]+\.dl\.playstation\.net\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " gst.prod.dl.playstation.net # XboxDownload");
                         sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # XboxDownload");
                         sb.AppendLine(ip + " zeus.dl.playstation.net # XboxDownload");
@@ -2101,7 +2101,7 @@ namespace XboxDownload
                     case "atum.hac.lp1.d4c.nintendo.net":
                     case "origin-a.akamaihd.net":
                     case "blzddist1-a.akamaihd.net":
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+[^\s]+(\.xboxlive\.com|\.delivery\.mp\.microsoft\.com|\.dl\.playstation\.net|\.nintendo\.net|\.cdn\.ea\.com|\.akamaihd\.net)\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+[^\s]+(\.xboxlive\.com|\.delivery\.mp\.microsoft\.com|\.dl\.playstation\.net|\.nintendo\.net|\.cdn\.ea\.com|\.akamaihd\.net)\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " xvcf1.xboxlive.com # XboxDownload");
                         sb.AppendLine(ip + " xvcf2.xboxlive.com # XboxDownload");
                         sb.AppendLine(ip + " assets1.xboxlive.com # XboxDownload");
@@ -2130,7 +2130,7 @@ namespace XboxDownload
                         msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网只能用监听方式加速。";
                         break;
                     default:
-                        sHosts = Regex.Replace(sHosts, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s+" + host + @"\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+" + host + @"\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " " + host + " # XboxDownload");
                         break;
                 }
@@ -2356,7 +2356,7 @@ namespace XboxDownload
                 {
                     sHosts = sw.ReadToEnd();
                 }
-                string newHosts = Regex.Replace(sHosts, @"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                string newHosts = Regex.Replace(sHosts, @".+# (XboxDownload|Xbox下载助手)\r\n", "");
                 if (String.Equals(sHosts, newHosts))
                 {
                     MessageBox.Show("Hosts文件没有写入任何规则，无需清除。\n\n注：只清除Xbox下载助手写入的规则。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -2364,7 +2364,7 @@ namespace XboxDownload
                 else
                 {
                     StringBuilder sb = new();
-                    Match result = Regex.Match(sHosts, @"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s+.+\s+# (XboxDownload|Xbox下载助手)\r\n");
+                    Match result = Regex.Match(sHosts, @".+# (XboxDownload|Xbox下载助手)\r\n");
                     while (result.Success)
                     {
                         sb.Append(result.Groups[0].Value);

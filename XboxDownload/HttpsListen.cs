@@ -115,11 +115,11 @@ namespace XboxDownload
                                 }
                                 catch (Exception ex)
                                 {
-                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", ex.Message, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0xFF0000);
+                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", ex.Message, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0xFF0000);
                                 }
                                 if (fs != null)
                                 {
-                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
+                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("本地上传", _localPath, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
                                     using BinaryReader br = new(fs);
                                     string _contentRange = string.Empty, _status = "200 OK";
                                     long _fileLength = br.BaseStream.Length, _startPosition = 0;
@@ -216,7 +216,7 @@ namespace XboxDownload
                                                         if (packageFiles != null)
                                                         {
                                                             string url = packageFiles.CdnRootPaths[0] + packageFiles.RelativeUrl;
-                                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("下载链接", url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
+                                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("下载链接", url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                             Match m2 = Regex.Match(url, @"(?<version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
                                                             if (m2.Success)
                                                             {
@@ -275,11 +275,11 @@ namespace XboxDownload
                                                     if (Properties.Settings.Default.RecordLog)
                                                     {
                                                         Match m1 = Regex.Match(socketPackage.Headers, @"^HTTP[^\s]+\s([^\s]+)");
-                                                        if (m1.Success) parentForm.SaveLog("HTTP " + m1.Groups[1].Value, _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
+                                                        if (m1.Success) parentForm.SaveLog("HTTP " + m1.Groups[1].Value, _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
                                                         if (_filePath.StartsWith("/ecommerce2/downloadURL"))
                                                         {
                                                             m1 = Regex.Match(socketPackage.Html, @"<url>(?<url>.+)</url>");
-                                                            if (m1.Success) parentForm.SaveLog("下载链接", m1.Groups["url"].Value, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty, 0x008000);
+                                                            if (m1.Success) parentForm.SaveLog("下载链接", m1.Groups["url"].Value, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                         }
                                                     }
                                                 }
@@ -298,7 +298,7 @@ namespace XboxDownload
                                             Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
                                             ssl.Write(_headers);
                                             ssl.Flush();
-                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
+                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
                                         }
                                         break;
                                 }
@@ -314,7 +314,7 @@ namespace XboxDownload
                                     ssl.Write(_headers);
                                     ssl.Write(_response);
                                     ssl.Flush();
-                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 404", _url, mySocket.RemoteEndPoint != null ? ((IPEndPoint)mySocket.RemoteEndPoint).Address.ToString() : string.Empty);
+                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 404", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
                                 }
                             }
                         }
