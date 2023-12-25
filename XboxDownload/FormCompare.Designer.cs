@@ -28,294 +28,282 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Col_Code = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Lang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Store = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_CurrencyCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_MSRP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_ListPrice_1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_ListPrice_2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_CNY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_CNYExchangeRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_WholesalePrice_1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_WholesalePrice_2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Purchase = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.panel1.SuspendLayout();
-            this.SuspendLayout();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            groupBox1 = new GroupBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            groupBox2 = new GroupBox();
+            dataGridView1 = new DataGridView();
+            Col_Code = new DataGridViewTextBoxColumn();
+            Col_Lang = new DataGridViewTextBoxColumn();
+            Col_Store = new DataGridViewTextBoxColumn();
+            Col_CurrencyCode = new DataGridViewTextBoxColumn();
+            Col_MSRP = new DataGridViewTextBoxColumn();
+            Col_ListPrice_1 = new DataGridViewTextBoxColumn();
+            Col_ListPrice_2 = new DataGridViewTextBoxColumn();
+            Col_CNY = new DataGridViewTextBoxColumn();
+            Col_CNYExchangeRate = new DataGridViewTextBoxColumn();
+            Col_WholesalePrice_1 = new DataGridViewTextBoxColumn();
+            Col_WholesalePrice_2 = new DataGridViewTextBoxColumn();
+            Col_Purchase = new DataGridViewTextBoxColumn();
+            panel1 = new Panel();
+            button1 = new Button();
+            linkLabel2 = new LinkLabel();
+            linkLabel1 = new LinkLabel();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            panel1.SuspendLayout();
+            SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.flowLayoutPanel1);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new System.Drawing.Size(1328, 172);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "选择商店 (0)";
+            groupBox1.Controls.Add(flowLayoutPanel1);
+            groupBox1.Dock = DockStyle.Top;
+            groupBox1.Location = new Point(0, 0);
+            groupBox1.Margin = new Padding(4);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new Padding(4);
+            groupBox1.Size = new Size(1328, 172);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "选择商店 (0)";
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 27);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1320, 141);
-            this.flowLayoutPanel1.TabIndex = 0;
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.Location = new Point(4, 27);
+            flowLayoutPanel1.Margin = new Padding(4);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(1320, 141);
+            flowLayoutPanel1.TabIndex = 0;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.dataGridView1);
-            this.groupBox2.Controls.Add(this.panel1);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(0, 172);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox2.Size = new System.Drawing.Size(1328, 612);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "信息";
+            groupBox2.Controls.Add(dataGridView1);
+            groupBox2.Controls.Add(panel1);
+            groupBox2.Dock = DockStyle.Fill;
+            groupBox2.Location = new Point(0, 172);
+            groupBox2.Margin = new Padding(4);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new Padding(4);
+            groupBox2.Size = new Size(1328, 612);
+            groupBox2.TabIndex = 1;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "信息";
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_Code,
-            this.Col_Lang,
-            this.Col_Store,
-            this.Col_CurrencyCode,
-            this.Col_MSRP,
-            this.Col_ListPrice_1,
-            this.Col_ListPrice_2,
-            this.Col_CNY,
-            this.Col_CNYExchangeRate,
-            this.Col_WholesalePrice_1,
-            this.Col_WholesalePrice_2,
-            this.Col_Purchase});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(4, 27);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 40;
-            this.dataGridView1.Size = new System.Drawing.Size(1320, 530);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellDoubleClick);
-            this.dataGridView1.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridView1_RowPostPaint);
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Col_Code, Col_Lang, Col_Store, Col_CurrencyCode, Col_MSRP, Col_ListPrice_1, Col_ListPrice_2, Col_CNY, Col_CNYExchangeRate, Col_WholesalePrice_1, Col_WholesalePrice_2, Col_Purchase });
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(4, 27);
+            dataGridView1.Margin = new Padding(4);
+            dataGridView1.MultiSelect = false;
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersWidth = 40;
+            dataGridView1.Size = new Size(1320, 530);
+            dataGridView1.TabIndex = 1;
+            dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
+            dataGridView1.RowPostPaint += DataGridView1_RowPostPaint;
             // 
             // Col_Code
             // 
-            this.Col_Code.HeaderText = "Code";
-            this.Col_Code.MinimumWidth = 8;
-            this.Col_Code.Name = "Col_Code";
-            this.Col_Code.ReadOnly = true;
-            this.Col_Code.Visible = false;
-            this.Col_Code.Width = 150;
+            Col_Code.HeaderText = "Code";
+            Col_Code.MinimumWidth = 8;
+            Col_Code.Name = "Col_Code";
+            Col_Code.ReadOnly = true;
+            Col_Code.Visible = false;
+            Col_Code.Width = 150;
             // 
             // Col_Lang
             // 
-            this.Col_Lang.HeaderText = "Lang";
-            this.Col_Lang.MinimumWidth = 8;
-            this.Col_Lang.Name = "Col_Lang";
-            this.Col_Lang.ReadOnly = true;
-            this.Col_Lang.Visible = false;
-            this.Col_Lang.Width = 150;
+            Col_Lang.HeaderText = "Lang";
+            Col_Lang.MinimumWidth = 8;
+            Col_Lang.Name = "Col_Lang";
+            Col_Lang.ReadOnly = true;
+            Col_Lang.Visible = false;
+            Col_Lang.Width = 150;
             // 
             // Col_Store
             // 
-            this.Col_Store.HeaderText = "商店";
-            this.Col_Store.MinimumWidth = 8;
-            this.Col_Store.Name = "Col_Store";
-            this.Col_Store.ReadOnly = true;
-            this.Col_Store.Width = 110;
+            Col_Store.HeaderText = "商店";
+            Col_Store.MinimumWidth = 8;
+            Col_Store.Name = "Col_Store";
+            Col_Store.ReadOnly = true;
+            Col_Store.Width = 110;
             // 
             // Col_CurrencyCode
             // 
-            this.Col_CurrencyCode.HeaderText = "币种";
-            this.Col_CurrencyCode.MinimumWidth = 8;
-            this.Col_CurrencyCode.Name = "Col_CurrencyCode";
-            this.Col_CurrencyCode.ReadOnly = true;
-            this.Col_CurrencyCode.Width = 55;
+            Col_CurrencyCode.HeaderText = "币种";
+            Col_CurrencyCode.MinimumWidth = 8;
+            Col_CurrencyCode.Name = "Col_CurrencyCode";
+            Col_CurrencyCode.ReadOnly = true;
+            Col_CurrencyCode.Width = 55;
             // 
             // Col_MSRP
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle1.Format = "N2";
-            this.Col_MSRP.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Col_MSRP.HeaderText = "建议零售价";
-            this.Col_MSRP.MinimumWidth = 8;
-            this.Col_MSRP.Name = "Col_MSRP";
-            this.Col_MSRP.ReadOnly = true;
-            this.Col_MSRP.Width = 98;
+            Col_MSRP.DefaultCellStyle = dataGridViewCellStyle1;
+            Col_MSRP.HeaderText = "建议零售价";
+            Col_MSRP.MinimumWidth = 8;
+            Col_MSRP.Name = "Col_MSRP";
+            Col_MSRP.ReadOnly = true;
+            Col_MSRP.Width = 98;
             // 
             // Col_ListPrice_1
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle2.Format = "N2";
-            this.Col_ListPrice_1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Col_ListPrice_1.HeaderText = "普通折扣";
-            this.Col_ListPrice_1.MinimumWidth = 8;
-            this.Col_ListPrice_1.Name = "Col_ListPrice_1";
-            this.Col_ListPrice_1.ReadOnly = true;
-            this.Col_ListPrice_1.Width = 98;
+            Col_ListPrice_1.DefaultCellStyle = dataGridViewCellStyle2;
+            Col_ListPrice_1.HeaderText = "普通折扣";
+            Col_ListPrice_1.MinimumWidth = 8;
+            Col_ListPrice_1.Name = "Col_ListPrice_1";
+            Col_ListPrice_1.ReadOnly = true;
+            Col_ListPrice_1.Width = 98;
             // 
             // Col_ListPrice_2
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle3.Format = "N2";
-            this.Col_ListPrice_2.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Col_ListPrice_2.HeaderText = "会员折扣";
-            this.Col_ListPrice_2.MinimumWidth = 8;
-            this.Col_ListPrice_2.Name = "Col_ListPrice_2";
-            this.Col_ListPrice_2.ReadOnly = true;
-            this.Col_ListPrice_2.Width = 98;
+            Col_ListPrice_2.DefaultCellStyle = dataGridViewCellStyle3;
+            Col_ListPrice_2.HeaderText = "会员折扣";
+            Col_ListPrice_2.MinimumWidth = 8;
+            Col_ListPrice_2.Name = "Col_ListPrice_2";
+            Col_ListPrice_2.ReadOnly = true;
+            Col_ListPrice_2.Width = 98;
             // 
             // Col_CNY
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle4.Format = "N2";
-            this.Col_CNY.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Col_CNY.HeaderText = "CNY售价";
-            this.Col_CNY.MinimumWidth = 8;
-            this.Col_CNY.Name = "Col_CNY";
-            this.Col_CNY.ReadOnly = true;
-            this.Col_CNY.Width = 98;
+            Col_CNY.DefaultCellStyle = dataGridViewCellStyle4;
+            Col_CNY.HeaderText = "CNY售价";
+            Col_CNY.MinimumWidth = 8;
+            Col_CNY.Name = "Col_CNY";
+            Col_CNY.ReadOnly = true;
+            Col_CNY.Width = 98;
             // 
             // Col_CNYExchangeRate
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Col_CNYExchangeRate.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Col_CNYExchangeRate.HeaderText = "CNY汇率";
-            this.Col_CNYExchangeRate.MinimumWidth = 8;
-            this.Col_CNYExchangeRate.Name = "Col_CNYExchangeRate";
-            this.Col_CNYExchangeRate.ReadOnly = true;
-            this.Col_CNYExchangeRate.Width = 98;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            Col_CNYExchangeRate.DefaultCellStyle = dataGridViewCellStyle5;
+            Col_CNYExchangeRate.HeaderText = "CNY汇率";
+            Col_CNYExchangeRate.MinimumWidth = 8;
+            Col_CNYExchangeRate.Name = "Col_CNYExchangeRate";
+            Col_CNYExchangeRate.ReadOnly = true;
+            Col_CNYExchangeRate.Width = 98;
             // 
             // Col_WholesalePrice_1
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle6.Format = "N2";
-            this.Col_WholesalePrice_1.DefaultCellStyle = dataGridViewCellStyle6;
-            this.Col_WholesalePrice_1.HeaderText = "批发价";
-            this.Col_WholesalePrice_1.MinimumWidth = 8;
-            this.Col_WholesalePrice_1.Name = "Col_WholesalePrice_1";
-            this.Col_WholesalePrice_1.ReadOnly = true;
-            this.Col_WholesalePrice_1.Width = 98;
+            Col_WholesalePrice_1.DefaultCellStyle = dataGridViewCellStyle6;
+            Col_WholesalePrice_1.HeaderText = "批发价";
+            Col_WholesalePrice_1.MinimumWidth = 8;
+            Col_WholesalePrice_1.Name = "Col_WholesalePrice_1";
+            Col_WholesalePrice_1.ReadOnly = true;
+            Col_WholesalePrice_1.Width = 98;
             // 
             // Col_WholesalePrice_2
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle7.Format = "N2";
-            this.Col_WholesalePrice_2.DefaultCellStyle = dataGridViewCellStyle7;
-            this.Col_WholesalePrice_2.HeaderText = "批发价折扣";
-            this.Col_WholesalePrice_2.MinimumWidth = 8;
-            this.Col_WholesalePrice_2.Name = "Col_WholesalePrice_2";
-            this.Col_WholesalePrice_2.ReadOnly = true;
-            this.Col_WholesalePrice_2.Width = 98;
+            Col_WholesalePrice_2.DefaultCellStyle = dataGridViewCellStyle7;
+            Col_WholesalePrice_2.HeaderText = "批发价折扣";
+            Col_WholesalePrice_2.MinimumWidth = 8;
+            Col_WholesalePrice_2.Name = "Col_WholesalePrice_2";
+            Col_WholesalePrice_2.ReadOnly = true;
+            Col_WholesalePrice_2.Width = 98;
             // 
             // Col_Purchase
             // 
-            this.Col_Purchase.HeaderText = "官网";
-            this.Col_Purchase.MinimumWidth = 8;
-            this.Col_Purchase.Name = "Col_Purchase";
-            this.Col_Purchase.ReadOnly = true;
-            this.Col_Purchase.Width = 65;
+            Col_Purchase.HeaderText = "官网";
+            Col_Purchase.MinimumWidth = 8;
+            Col_Purchase.Name = "Col_Purchase";
+            Col_Purchase.ReadOnly = true;
+            Col_Purchase.Width = 65;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.linkLabel2);
-            this.panel1.Controls.Add(this.linkLabel1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(4, 557);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1320, 51);
-            this.panel1.TabIndex = 0;
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(linkLabel2);
+            panel1.Controls.Add(linkLabel1);
+            panel1.Dock = DockStyle.Bottom;
+            panel1.Location = new Point(4, 557);
+            panel1.Margin = new Padding(4);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1320, 51);
+            panel1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(603, 9);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 36);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "查询";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            button1.Location = new Point(603, 9);
+            button1.Margin = new Padding(4);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 36);
+            button1.TabIndex = 2;
+            button1.Text = "查询";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += Button1_Click;
             // 
             // linkLabel2
             // 
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(58, 16);
-            this.linkLabel2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(82, 24);
-            this.linkLabel2.TabIndex = 1;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "取消选择";
-            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel2_LinkClicked);
+            linkLabel2.AutoSize = true;
+            linkLabel2.Location = new Point(58, 16);
+            linkLabel2.Margin = new Padding(4, 0, 4, 0);
+            linkLabel2.Name = "linkLabel2";
+            linkLabel2.Size = new Size(82, 24);
+            linkLabel2.TabIndex = 1;
+            linkLabel2.TabStop = true;
+            linkLabel2.Text = "取消选择";
+            linkLabel2.LinkClicked += LinkLabel2_LinkClicked;
             // 
             // linkLabel1
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(9, 16);
-            this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(46, 24);
-            this.linkLabel1.TabIndex = 0;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "全选";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(9, 16);
+            linkLabel1.Margin = new Padding(4, 0, 4, 0);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(46, 24);
+            linkLabel1.TabIndex = 0;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "全选";
+            linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
             // 
             // FormCompare
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1328, 784);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FormCompare";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "比价";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormCompare_FormClosing);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            ClientSize = new Size(1328, 784);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(4);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FormCompare";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "比价";
+            FormClosing += FormCompare_FormClosing;
+            Load += FormCompare_Load;
+            groupBox1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace XboxDownload
         private readonly string dohServer = "https://223.5.5.5";
         private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
-        public static ConcurrentDictionary<String, List<ResouceRecord>> dicService = new(), dicHosts1 = new();
+        public static ConcurrentDictionary<String, List<ResouceRecord>> dicService = new(), dicService2 = new(), dicHosts1 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new();
         public static ConcurrentDictionary<String, Dns> dicDns = new();
         
@@ -464,7 +464,6 @@ namespace XboxDownload
             }
         }
 
-        readonly ConcurrentDictionary<String, List<ResouceRecord>> dicService2 = new();
         public void SetAkamaiIP(string? ip)
         {
             string[] hosts = { 

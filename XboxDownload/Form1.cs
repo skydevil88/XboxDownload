@@ -577,7 +577,7 @@ namespace XboxDownload
                 StringBuilder sb = new();
                 sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
                 sb.AppendLine("Host: " + uri.Host);
-                sb.AppendLine("User-Agent: XboxDownload (Nintendo NX)");
+                sb.AppendLine("User-Agent: XboxDownload" + (uri.Host.Contains("nintendo") ? "/Nintendo NX" : ""));
                 sb.AppendLine("Range: bytes=0-10485750");
                 sb.AppendLine();
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
@@ -604,10 +604,25 @@ namespace XboxDownload
                 }
                 dnsListen.SetAkamaiIP(akamai);
                 UpdateHosts(true, akamai);
+                tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbBattleIP.Text = akamai;
                 SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网 全部游戏下载域名)", "localhost", 0x008000);
             }
             else if (bServiceFlag)
             {
+                DnsListen.dicService2.TryGetValue("xvcf2.xboxlive.com", out List<ResouceRecord>? lsComIp);
+                tbComIP.Text = lsComIp != null ? new IPAddress(lsComIp?[0].Datas!).ToString() : "";
+                DnsListen.dicService2.TryGetValue("assets2.xboxlive.cn", out List<ResouceRecord>? lsCnIp);
+                tbCnIP.Text = lsComIp != null ? new IPAddress(lsCnIp?[0].Datas!).ToString() : "";
+                DnsListen.dicService2.TryGetValue("2.tlu.dl.delivery.mp.microsoft.com", out List<ResouceRecord>? lsAppIp);
+                tbAppIP.Text = lsAppIp != null ? new IPAddress(lsAppIp?[0].Datas!).ToString() : "";
+                DnsListen.dicService2.TryGetValue("gst.prod.dl.playstation.net", out List<ResouceRecord>? lsPSIp);
+                tbPSIP.Text = lsPSIp != null ? new IPAddress(lsPSIp?[0].Datas!).ToString() : "";
+                DnsListen.dicService2.TryGetValue("atum.hac.lp1.d4c.nintendo.net", out List<ResouceRecord>? lsNSIp);
+                tbNSIP.Text = lsNSIp != null ? new IPAddress(lsNSIp?[0].Datas!).ToString() : "";
+                DnsListen.dicService2.TryGetValue("origin-a.akamaihd.net", out List<ResouceRecord>? lsEAIp);
+                tbEAIP.Text = lsEAIp != null ? new IPAddress(lsEAIp?[0].Datas!).ToString() : "";
+                DnsListen.dicService2.TryGetValue("blzddist1-a.akamaihd.net", out List<ResouceRecord>? lstbBattleIp);
+                tbBattleIP.Text = lstbBattleIp != null ? new IPAddress(lstbBattleIp?[0].Datas!).ToString() : "";
                 dnsListen.SetAkamaiIP(null);
                 UpdateHosts(true);
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
@@ -2624,8 +2639,7 @@ namespace XboxDownload
                 butSpeedTest.Text = "开始测速";
                 foreach (Control control in this.panelSpeedTest.Controls)
                 {
-                    if (control is TextBox || control is CheckBox || control is Button || control is ComboBox || control is LinkLabel || control is FlowLayoutPanel)
-                        control.Enabled = true;
+                    control.Enabled = true;
                 }
                 Col_IP.SortMode = Col_Location.SortMode = Col_Speed.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = DataGridViewColumnSortMode.Automatic;
                 Col_Check.ReadOnly = false;

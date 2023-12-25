@@ -155,6 +155,11 @@ namespace XboxDownload
                 groupBox2.Text = product.LocalizedProperties[0].ProductTitle;
         }
 
+        private void FormCompare_Load(object sender, EventArgs e)
+        {
+            LinkLabel1_LinkClicked(sender, null);
+        }
+
         private void CheckBox_CheckedChanged(object? sender, EventArgs? e)
         {
             if (sender is CheckBox cb)
@@ -184,7 +189,7 @@ namespace XboxDownload
             TextRenderer.DrawText(e.Graphics, (e.RowIndex + 1).ToString(), dgv.RowHeadersDefaultCellStyle.Font, rectangle, dgv.RowHeadersDefaultCellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
 
-        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs? e)
         {
             foreach (Control control in flowLayoutPanel1.Controls)
             {
