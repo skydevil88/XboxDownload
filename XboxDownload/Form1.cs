@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n注：如果退出下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n同时还能解决Xbox安装停止问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -566,8 +566,8 @@ namespace XboxDownload
             {
                 // 以下IP使用广东电信测速，如果您有其它地区速度快的IP欢迎提供
                 string[] ips = {
-                    "23.43.165.18", "23.200.75.28", "23.206.175.185", "23.216.159.66", "72.246.103.11", "211.239.236.18", "220.90.198.73",  //韩国
-                    "128.22.12.153", "23.197.49.161", "23.78.141.176", "210.176.33.74", "23.15.14.187", "23.32.248.9", "23.33.32.155", "23.33.33.121", "23.44.51.34", "23.45.51.153", "23.53.248.155", "23.77.204.160", "23.206.250.96", "23.219.39.82", "125.56.201.104", //日本
+                    "23.43.165.18", "23.206.175.185", "23.216.159.66", "211.239.236.18", "220.90.198.73",  //韩国
+                    "128.22.12.153", "210.176.33.74", "23.15.14.187", "23.32.248.9", "23.33.32.155", "23.33.33.121", "23.44.51.34", "23.45.51.153", "23.53.248.155", "23.77.204.160", "23.206.250.96", "23.219.39.82", "125.56.201.104", //日本
                     "223.119.50.144" //香港
                 };
 
@@ -578,7 +578,7 @@ namespace XboxDownload
                 sb.AppendLine("GET " + uri.PathAndQuery + " HTTP/1.1");
                 sb.AppendLine("Host: " + uri.Host);
                 sb.AppendLine("User-Agent: XboxDownload" + (uri.Host.Contains("nintendo") ? "/Nintendo NX" : ""));
-                sb.AppendLine("Range: bytes=0-10485750");
+                sb.AppendLine("Range: bytes=0-10485759");
                 sb.AppendLine();
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
                 CancellationTokenSource cts = new();
@@ -590,7 +590,7 @@ namespace XboxDownload
                     tasks[i] = new Task(() =>
                     {
                         SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 15000, cts);
-                        if (string.IsNullOrEmpty(akamai) && socketPackage.Headers.StartsWith("HTTP/1.1 206")) akamai = ip;
+                        if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer.Length == 10485760) akamai = ip;
                         else if (!cts.IsCancellationRequested) Task.Delay(15000, cts.Token);
                     });
                 }
@@ -604,6 +604,7 @@ namespace XboxDownload
                 }
                 dnsListen.SetAkamaiIP(akamai);
                 UpdateHosts(true, akamai);
+                if (Properties.Settings.Default.EnableCdnIP) DnsListen.UpdateHosts(akamai);
                 tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbBattleIP.Text = akamai;
                 SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网 全部游戏下载域名)", "localhost", 0x008000);
             }
@@ -623,8 +624,9 @@ namespace XboxDownload
                 tbEAIP.Text = lsEAIp != null ? new IPAddress(lsEAIp?[0].Datas!).ToString() : "";
                 DnsListen.dicService2.TryGetValue("blzddist1-a.akamaihd.net", out List<ResouceRecord>? lstbBattleIp);
                 tbBattleIP.Text = lstbBattleIp != null ? new IPAddress(lstbBattleIp?[0].Datas!).ToString() : "";
-                dnsListen.SetAkamaiIP(null);
+                dnsListen.SetAkamaiIP();
                 UpdateHosts(true);
+                if (Properties.Settings.Default.EnableCdnIP) DnsListen.UpdateHosts();
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
         }
@@ -992,7 +994,7 @@ namespace XboxDownload
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
                     if (response != null && response.IsSuccessStatusCode)
                     {
-                        SaveLog("提示信息", "检测到使用IPv6联网，如果用在Xbox|PS主机下载加速，必需关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
+                        SaveLog("提示信息", "检测到使用IPv6联网，如果加速Xbox、PS主机下载，必需关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
                     }
                 });
                 UpdateHosts(true);
@@ -2525,7 +2527,7 @@ namespace XboxDownload
             }
             if (uri != null)
             {
-                int range = Regex.IsMatch(gbIPList.Text, @"Akamai") ? 31457250 : 104857599;  //国外IP测试下载30M，国内IP测试下载100M
+                int range = Regex.IsMatch(gbIPList.Text, @"Akamai") ? 31457250 : 52428799;  //国外IP测试下载30M，国内IP测试下载50M
                 //if (Form1.debug) range = 1048575;     //1M
 
                 string userAgent = uri.Host.EndsWith(".nintendo.net") ? "XboxDownload (Nintendo NX)" : "XboxDownload";

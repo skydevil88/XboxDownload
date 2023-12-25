@@ -464,7 +464,7 @@ namespace XboxDownload
             }
         }
 
-        public void SetAkamaiIP(string? ip)
+        public void SetAkamaiIP(string? ip = null)
         {
             string[] hosts = { 
                 "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", 
@@ -510,7 +510,7 @@ namespace XboxDownload
             socket = null;
         }
 
-        public static void UpdateHosts()
+        public static void UpdateHosts(string? akamai = null)
         {
             dicHosts1.Clear();
             dicHosts2.Clear();
@@ -560,25 +560,38 @@ namespace XboxDownload
 
             if (Properties.Settings.Default.EnableCdnIP)
             {
-                List<string> lsIpTmp = new();
                 List<ResouceRecord> lsIp = new();
-                foreach (string str in Properties.Settings.Default.IpsAkamai.Replace("，", ",").Split(','))
+                if (string.IsNullOrEmpty(akamai))
                 {
-                    if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
+                    List<string> lsIpTmp = new();
+                    foreach (string str in Properties.Settings.Default.IpsAkamai.Replace("，", ",").Split(','))
                     {
-                        string ip = address.ToString();
-                        if (!lsIpTmp.Contains(ip))
+                        if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
                         {
-                            lsIpTmp.Add(ip);
-                            lsIp.Add(new ResouceRecord
+                            string ip = address.ToString();
+                            if (!lsIpTmp.Contains(ip))
                             {
-                                Datas = address.GetAddressBytes(),
-                                TTL = 100,
-                                QueryClass = 1,
-                                QueryType = QueryType.A
-                            });
+                                lsIpTmp.Add(ip);
+                                lsIp.Add(new ResouceRecord
+                                {
+                                    Datas = address.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.A
+                                });
+                            }
                         }
                     }
+                }
+                else
+                {
+                    lsIp.Add(new ResouceRecord
+                    {
+                        Datas = IPAddress.Parse(akamai).GetAddressBytes(),
+                        TTL = 100,
+                        QueryClass = 1,
+                        QueryType = QueryType.A
+                    });
                 }
                 if (lsIp.Count >= 1)
                 {
