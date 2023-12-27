@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -228,8 +228,9 @@
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             panel6 = new Panel();
+            linkPcInstall1 = new LinkLabel();
             linkConsoleInstall = new LinkLabel();
-            linkPcInstall = new LinkLabel();
+            linkPcInstall2 = new LinkLabel();
             linkAppxAdd = new LinkLabel();
             linkWebPage = new LinkLabel();
             linkCompare = new LinkLabel();
@@ -1017,9 +1018,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1027,9 +1028,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1037,9 +1038,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1782,8 +1783,9 @@
             // 
             // panel6
             // 
+            panel6.Controls.Add(linkPcInstall1);
             panel6.Controls.Add(linkConsoleInstall);
-            panel6.Controls.Add(linkPcInstall);
+            panel6.Controls.Add(linkPcInstall2);
             panel6.Controls.Add(linkAppxAdd);
             panel6.Controls.Add(linkWebPage);
             panel6.Controls.Add(linkCompare);
@@ -1808,6 +1810,15 @@
             resources.ApplyResources(panel6, "panel6");
             panel6.Name = "panel6";
             // 
+            // linkPcInstall1
+            // 
+            resources.ApplyResources(linkPcInstall1, "linkPcInstall1");
+            linkPcInstall1.LinkColor = Color.Red;
+            linkPcInstall1.Name = "linkPcInstall1";
+            linkPcInstall1.TabStop = true;
+            linkPcInstall1.Tag = "https://www.bilibili.com/read/cv22153030/";
+            linkPcInstall1.LinkClicked += Link_LinkClicked;
+            // 
             // linkConsoleInstall
             // 
             resources.ApplyResources(linkConsoleInstall, "linkConsoleInstall");
@@ -1817,14 +1828,14 @@
             linkConsoleInstall.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
             linkConsoleInstall.LinkClicked += Link_LinkClicked;
             // 
-            // linkPcInstall
+            // linkPcInstall2
             // 
-            resources.ApplyResources(linkPcInstall, "linkPcInstall");
-            linkPcInstall.LinkColor = Color.Red;
-            linkPcInstall.Name = "linkPcInstall";
-            linkPcInstall.TabStop = true;
-            linkPcInstall.Tag = "https://www.bilibili.com/video/BV1Bj411P7uE/";
-            linkPcInstall.LinkClicked += Link_LinkClicked;
+            resources.ApplyResources(linkPcInstall2, "linkPcInstall2");
+            linkPcInstall2.LinkColor = Color.Red;
+            linkPcInstall2.Name = "linkPcInstall2";
+            linkPcInstall2.TabStop = true;
+            linkPcInstall2.Tag = "https://www.bilibili.com/video/BV1Bj411P7uE/";
+            linkPcInstall2.LinkClicked += Link_LinkClicked;
             // 
             // linkAppxAdd
             // 
@@ -2906,7 +2917,7 @@
         private ToolStripMenuItem tsmAuthorization;
         private ToolStripMenuItem tsmAuthorization1;
         private ToolStripMenuItem tsmAuthorization2;
-        private LinkLabel linkPcInstall;
+        private LinkLabel linkPcInstall2;
         private Label labelInstallationLocation;
         private LinkLabel linkFixAppxDrive;
         private ToolStripMenuItem tsmConnectTest;
@@ -2942,5 +2953,6 @@
         private LinkLabel linkRestartEABackgroundService;
         private System.Windows.Forms.Timer timer1;
         private Label labelTraffic;
+        private LinkLabel linkPcInstall1;
     }
 }
