@@ -102,7 +102,6 @@ namespace XboxDownload
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
-            ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
 
             ckbGameLink.CheckedChanged += new EventHandler(CkbGameLink_CheckedChanged);
             ckbLocalUpload.CheckedChanged += new EventHandler(CkbLocalUpload_CheckedChanged);
@@ -347,9 +346,7 @@ namespace XboxDownload
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                TsmiShow_Click(sender, EventArgs.Empty);
             }
         }
 
@@ -358,6 +355,8 @@ namespace XboxDownload
             this.Show();
             this.WindowState = FormWindowState.Normal;
             this.Activate();
+            OldUp = OldDown = 0;
+            timer1.Start();
         }
 
         private void TsmiExit_Click(object sender, EventArgs e)
@@ -376,6 +375,7 @@ namespace XboxDownload
             {
                 bTips = false;
                 this.notifyIcon1.ShowBalloonTip(5, "Xbox下载助手", "最小化到系统托盘", ToolTipIcon.Info);
+                timer1.Stop();
             }
             e.Cancel = true;
         }
@@ -603,11 +603,11 @@ namespace XboxDownload
                     akamai = ips[^1];
                     SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定。", "localhost", 0xFF0000);
                 }
-                dnsListen.SetAkamaiIP(akamai);
+                DnsListen.SetAkamaiIP(akamai);
                 UpdateHosts(true, akamai);
-                if (Properties.Settings.Default.EnableCdnIP) DnsListen.UpdateHosts(akamai);
+                DnsListen.UpdateHosts(akamai);
                 tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbBattleIP.Text = akamai;
-                SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网 全部游戏下载域名)", "localhost", 0x008000);
+                SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 全部游戏下载域名)", "localhost", 0x008000);
                 ckbOptimalAkamaiIP.Enabled = true;
             }
             else if (bServiceFlag)
@@ -626,9 +626,9 @@ namespace XboxDownload
                 tbEAIP.Text = lsEAIp != null ? new IPAddress(lsEAIp?[0].Datas!).ToString() : "";
                 DnsListen.dicService2.TryGetValue("blzddist1-a.akamaihd.net", out List<ResouceRecord>? lstbBattleIp);
                 tbBattleIP.Text = lstbBattleIp != null ? new IPAddress(lstbBattleIp?[0].Datas!).ToString() : "";
-                dnsListen.SetAkamaiIP();
+                DnsListen.SetAkamaiIP();
                 UpdateHosts(true);
-                if (Properties.Settings.Default.EnableCdnIP) DnsListen.UpdateHosts();
+                DnsListen.UpdateHosts();
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
         }
@@ -2964,7 +2964,6 @@ namespace XboxDownload
                 File.WriteAllText(resourcePath + "\\" + "Akamai.txt", tbHosts2Akamai.Text.Trim() + "\r\n");
             }
             Properties.Settings.Default.IpsAkamai = tbCdnAkamai.Text;
-            Properties.Settings.Default.EnableCdnIP = ckbEnableCdnIP.Checked;
             Properties.Settings.Default.Save();
             DnsListen.UpdateHosts();
         }
@@ -2978,7 +2977,6 @@ namespace XboxDownload
                 tbHosts2Akamai.Text = sr.ReadToEnd().Trim() + "\r\n";
             }
             else tbHosts2Akamai.Clear();
-            ckbEnableCdnIP.Checked = Properties.Settings.Default.EnableCdnIP;
         }
         #endregion
 

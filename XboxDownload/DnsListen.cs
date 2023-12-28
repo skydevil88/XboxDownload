@@ -464,7 +464,7 @@ namespace XboxDownload
             }
         }
 
-        public void SetAkamaiIP(string? ip = null)
+        public static void SetAkamaiIP(string? ip = null)
         {
             string[] hosts = { 
                 "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", 
@@ -558,44 +558,61 @@ namespace XboxDownload
                 }
             }
 
-            if (Properties.Settings.Default.EnableCdnIP)
+            List<ResouceRecord> lsIp2 = new();
+            if (string.IsNullOrEmpty(akamai))
             {
-                List<ResouceRecord> lsIp = new();
-                if (string.IsNullOrEmpty(akamai))
+                List<string> lsIpTmp = new();
+                foreach (string str in Properties.Settings.Default.IpsAkamai.Replace("，", ",").Split(','))
                 {
-                    List<string> lsIpTmp = new();
-                    foreach (string str in Properties.Settings.Default.IpsAkamai.Replace("，", ",").Split(','))
+                    if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
                     {
-                        if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
+                        string ip = address.ToString();
+                        if (!lsIpTmp.Contains(ip))
                         {
-                            string ip = address.ToString();
-                            if (!lsIpTmp.Contains(ip))
+                            lsIpTmp.Add(ip);
+                            lsIp2.Add(new ResouceRecord
                             {
-                                lsIpTmp.Add(ip);
-                                lsIp.Add(new ResouceRecord
-                                {
-                                    Datas = address.GetAddressBytes(),
-                                    TTL = 100,
-                                    QueryClass = 1,
-                                    QueryType = QueryType.A
-                                });
-                            }
+                                Datas = address.GetAddressBytes(),
+                                TTL = 100,
+                                QueryClass = 1,
+                                QueryType = QueryType.A
+                            });
                         }
                     }
                 }
-                else
+            }
+            else
+            {
+                lsIp2.Add(new ResouceRecord
                 {
-                    lsIp.Add(new ResouceRecord
+                    Datas = IPAddress.Parse(akamai).GetAddressBytes(),
+                    TTL = 100,
+                    QueryClass = 1,
+                    QueryType = QueryType.A
+                });
+            }
+            if (lsIp2.Count >= 1)
+            {
+                foreach (string str in Properties.Resource.Akamai.Split('\n'))
+                {
+                    string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
+                    if (string.IsNullOrEmpty(host)) continue;
+                    if (host.StartsWith("*."))
                     {
-                        Datas = IPAddress.Parse(akamai).GetAddressBytes(),
-                        TTL = 100,
-                        QueryClass = 1,
-                        QueryType = QueryType.A
-                    });
+                        host = Regex.Replace(host, @"^\*\.", "");
+                        if (reHosts.IsMatch(host))
+                        {
+                            dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2);
+                        }
+                    }
+                    else if (reHosts.IsMatch(host))
+                    {
+                        dicHosts1.TryAdd(host, lsIp2);
+                    }
                 }
-                if (lsIp.Count >= 1)
+                if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
                 {
-                    foreach (string str in Properties.Resource.Akamai.Split('\n'))
+                    foreach (string str in File.ReadAllText(Form1.resourcePath + "\\Akamai.txt").Split('\n'))
                     {
                         string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
                         if (string.IsNullOrEmpty(host)) continue;
@@ -604,41 +621,21 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*\.", "");
                             if (reHosts.IsMatch(host))
                             {
-                                dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp);
+                                dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2);
+                            }
+                        }
+                        else if (host.StartsWith("*"))
+                        {
+                            host = Regex.Replace(host, @"^\*", "");
+                            if (reHosts.IsMatch(host))
+                            {
+                                dicHosts1.TryAdd(host, lsIp2);
+                                dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2);
                             }
                         }
                         else if (reHosts.IsMatch(host))
                         {
-                            dicHosts1.TryAdd(host, lsIp);
-                        }
-                    }
-                    if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
-                    {
-                        foreach (string str in File.ReadAllText(Form1.resourcePath + "\\Akamai.txt").Split('\n'))
-                        {
-                            string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
-                            if (string.IsNullOrEmpty(host)) continue;
-                            if (host.StartsWith("*."))
-                            {
-                                host = Regex.Replace(host, @"^\*\.", "");
-                                if (reHosts.IsMatch(host))
-                                {
-                                    dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp);
-                                }
-                            }
-                            else if (host.StartsWith("*"))
-                            {
-                                host = Regex.Replace(host, @"^\*", "");
-                                if (reHosts.IsMatch(host))
-                                {
-                                    dicHosts1.TryAdd(host, lsIp);
-                                    dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp);
-                                }
-                            }
-                            else if (reHosts.IsMatch(host))
-                            {
-                                dicHosts1.TryAdd(host, lsIp);
-                            }
+                            dicHosts1.TryAdd(host, lsIp2);
                         }
                     }
                 }
