@@ -600,7 +600,7 @@ namespace XboxDownload
                 cts.Cancel();
                 GC.Collect();
                 if (!bServiceFlag) return;
-                if (akamai == null)
+                if (string.IsNullOrEmpty(akamai))
                 {
                     akamai = ips[^1];
                     SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定。", "localhost", 0xFF0000);
@@ -1061,22 +1061,36 @@ namespace XboxDownload
                     {
                         if (!string.IsNullOrEmpty(akamai))
                         {
-                            sb.AppendLine(akamai + " xvcf1.xboxlive.com");
+                            if (Properties.Settings.Default.GameLink)
+                            {
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " xvcf1.xboxlive.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.cn");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.cn");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.cn");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " tlu.dl.delivery.mp.microsoft.com");
+                            }
+                            else
+                            {
+                                sb.AppendLine(akamai + " xvcf1.xboxlive.com");
+                                sb.AppendLine(akamai + " assets1.xboxlive.com");
+                                sb.AppendLine(akamai + " d1.xboxlive.com");
+                                sb.AppendLine(akamai + " dlassets.xboxlive.com");
+                                sb.AppendLine(akamai + " assets1.xboxlive.cn");
+                                sb.AppendLine(akamai + " d1.xboxlive.cn");
+                                sb.AppendLine(akamai + " dlassets.xboxlive.cn");
+                                sb.AppendLine(akamai + " tlu.dl.delivery.mp.microsoft.com");
+                            }
                             sb.AppendLine(akamai + " xvcf2.xboxlive.com");
-                            sb.AppendLine(akamai + " assets1.xboxlive.com");
                             sb.AppendLine(akamai + " assets2.xboxlive.com");
-                            sb.AppendLine(akamai + " d1.xboxlive.com");
                             sb.AppendLine(akamai + " d2.xboxlive.com");
-                            sb.AppendLine(akamai + " dlassets.xboxlive.com");
                             sb.AppendLine(akamai + " dlassets2.xboxlive.com");
-                            sb.AppendLine(akamai + " assets1.xboxlive.cn");
                             sb.AppendLine(akamai + " assets2.xboxlive.cn");
-                            sb.AppendLine(akamai + " d1.xboxlive.cn");
                             sb.AppendLine(akamai + " d2.xboxlive.cn");
-                            sb.AppendLine(akamai + " dlassets.xboxlive.cn");
                             sb.AppendLine(akamai + " dlassets2.xboxlive.cn");
                             sb.AppendLine(akamai + " dl.delivery.mp.microsoft.com");
-                            sb.AppendLine(akamai + " tlu.dl.delivery.mp.microsoft.com");
                             sb.AppendLine(akamai + " 2.tlu.dl.delivery.mp.microsoft.com");
                         }
                         else

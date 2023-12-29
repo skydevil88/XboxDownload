@@ -466,14 +466,29 @@ namespace XboxDownload
 
         public static void SetAkamaiIP(string? ip = null)
         {
-            string[] hosts = { 
-                "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com", 
-                "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn", 
-                "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
-                "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
-                "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net"
-            };
+            string[] hosts;
+            if (Properties.Settings.Default.GameLink)
+            {
+                hosts = new string[]{
+                    "xvcf2.xboxlive.com", "assets2.xboxlive.com", "d2.xboxlive.com", "dlassets2.xboxlive.com",
+                    "assets2.xboxlive.cn","d2.xboxlive.cn", "dlassets2.xboxlive.cn",
+                    "dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
+                    "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
+                    "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net"
+                };
+            }
+            else
+            {
+                hosts = new string[]{
+                    "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com",
+                    "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn",
+                    "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
+                    "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
+                    "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net"
+                };
+            }
             if (string.IsNullOrEmpty(ip))
             {
                 foreach (string host in hosts)
