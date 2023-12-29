@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -479,13 +479,13 @@ namespace XboxDownload
         {
             if (adapter != null)
             {
-                long nowUp = adapter.GetIPStatistics().BytesSent * 8;
-                long nowDown = adapter.GetIPStatistics().BytesReceived * 8;
+                long nowUp = adapter.GetIPStatistics().BytesSent;
+                long nowDown = adapter.GetIPStatistics().BytesReceived;
                 if (OldUp > 0 || OldDown > 0)
                 {
                     long up = nowUp - OldUp;
                     long down = nowDown - OldDown;
-                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBps((ulong)up), ClassMbr.ConvertBps((ulong)down));
+                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBps(up), ClassMbr.ConvertBps(down));
                 }
                 OldUp = nowUp;
                 OldDown = nowDown;
@@ -590,13 +590,15 @@ namespace XboxDownload
                     tasks[i] = new Task(() =>
                     {
                         SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 15000, cts);
-                        if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer.Length == 10485760) akamai = ip;
+                        if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer?.Length == 10485760) akamai = ip;
                         else if (!cts.IsCancellationRequested) Task.Delay(15000, cts.Token);
+                        socketPackage.Buffer = null;
                     });
                 }
                 Array.ForEach(tasks, x => x.Start());
                 await Task.WhenAny(tasks);
                 cts.Cancel();
+                GC.Collect();
                 if (!bServiceFlag) return;
                 if (akamai == null)
                 {
@@ -2592,7 +2594,7 @@ namespace XboxDownload
                         }
                     }
                     dgvr.Tag += string.IsNullOrEmpty(socketPackage.Err) ? socketPackage.Headers : socketPackage.Err;
-                    if (socketPackage.Headers.StartsWith("HTTP/1.1 206"))
+                    if (socketPackage.Headers.StartsWith("HTTP/1.1 206") && socketPackage.Buffer != null)
                     {
                         double speed = Math.Round((double)(socketPackage.Buffer.Length) / sw.ElapsedMilliseconds * 1000 / 1024 / 1024, 2, MidpointRounding.AwayFromZero);
                         dgvr.Cells["Col_Speed"].Value = speed;
@@ -2603,6 +2605,7 @@ namespace XboxDownload
                         dgvr.Cells["Col_Speed"].Value = (double)0;
                         dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Red;
                     }
+                    socketPackage.Buffer = null;
                 }
             }
             else

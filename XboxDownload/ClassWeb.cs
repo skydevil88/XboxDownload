@@ -587,7 +587,7 @@ namespace XboxDownload
     {
         public Uri? Uri;
         public String Err = "", Headers = "", Html = "";
-        public Byte[] Buffer = Array.Empty<Byte>();
+        public Byte[]? Buffer;
 
         public String All
         {
