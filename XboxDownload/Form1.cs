@@ -69,8 +69,8 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
-            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后改回自动获取，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n同时还能解决Xbox安装停止问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
+            toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -356,7 +356,7 @@ namespace XboxDownload
             this.WindowState = FormWindowState.Normal;
             this.Activate();
             OldUp = OldDown = 0;
-            timer1.Start();
+            timerTraffic.Start();
         }
 
         private void TsmiExit_Click(object sender, EventArgs e)
@@ -375,7 +375,7 @@ namespace XboxDownload
             {
                 bTips = false;
                 this.notifyIcon1.ShowBalloonTip(5, "Xbox下载助手", "最小化到系统托盘", ToolTipIcon.Info);
-                timer1.Stop();
+                timerTraffic.Stop();
             }
             e.Cancel = true;
         }
@@ -475,17 +475,17 @@ namespace XboxDownload
         private long OldUp { get; set; }
         private long OldDown { get; set; }
 
-        private void Timer1_Tick(object sender, EventArgs e)
+        private void TimerTraffic_Tick(object sender, EventArgs e)
         {
             if (adapter != null)
             {
-                long nowUp = adapter.GetIPStatistics().BytesSent;
-                long nowDown = adapter.GetIPStatistics().BytesReceived;
+                long nowUp = adapter.GetIPStatistics().BytesSent * 8;
+                long nowDown = adapter.GetIPStatistics().BytesReceived * 8;
                 if (OldUp > 0 || OldDown > 0)
                 {
                     long up = nowUp - OldUp;
                     long down = nowDown - OldDown;
-                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBytes((ulong)up), ClassMbr.ConvertBytes((ulong)down));
+                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBps((ulong)up), ClassMbr.ConvertBps((ulong)down));
                 }
                 OldUp = nowUp;
                 OldDown = nowDown;
@@ -1316,10 +1316,10 @@ namespace XboxDownload
             Properties.Settings.Default.LocalIP = cbLocalIP.Text;
             Properties.Settings.Default.Save();
 
-            timer1.Stop();
+            timerTraffic.Stop();
             adapter = (cbLocalIP.SelectedItem as ComboboxItem)?.Value as NetworkInterface;
             OldUp = OldDown = 0;
-            timer1.Start();
+            timerTraffic.Start();
         }
 
         private void LinkTestDns_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
