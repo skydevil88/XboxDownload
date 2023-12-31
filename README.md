@@ -10,6 +10,7 @@
 
 使用PC下载Xbox主机游戏：https://www.bilibili.com/video/BV1CN4y197Js
 
+一键解决EA下载速度慢：https://www.bilibili.com/video/BV1KC4y1i7ZK
 
 使用说明
 ---
