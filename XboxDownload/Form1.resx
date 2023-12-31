@@ -149,10 +149,16 @@
     <value>选项</value>
   </data>
   <data name="tsmProductManual.Size" type="System.Drawing.Size, System.Drawing">
-    <value>266, 34</value>
+    <value>270, 34</value>
   </data>
   <data name="tsmProductManual.Text" xml:space="preserve">
     <value>使用说明</value>
+  </data>
+  <data name="tsmTeachingEA.Size" type="System.Drawing.Size, System.Drawing">
+    <value>370, 34</value>
+  </data>
+  <data name="tsmTeachingEA.Text" xml:space="preserve">
+    <value>一键解决EA下载速度慢</value>
   </data>
   <data name="tsmTeaching4.Size" type="System.Drawing.Size, System.Drawing">
     <value>370, 34</value>
@@ -185,13 +191,13 @@
     <value>校园网IPv6免流量下载Xbox游戏</value>
   </data>
   <data name="tsmTeaching.Size" type="System.Drawing.Size, System.Drawing">
-    <value>266, 34</value>
+    <value>270, 34</value>
   </data>
   <data name="tsmTeaching.Text" xml:space="preserve">
-    <value>视频教程(网友制作)</value>
+    <value>视频教程</value>
   </data>
   <data name="tsmAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>266, 34</value>
+    <value>270, 34</value>
   </data>
   <data name="tsmAbout.Text" xml:space="preserve">
     <value>关于</value>
@@ -10292,6 +10298,12 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   </data>
   <data name="&gt;&gt;timerTraffic.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmTeachingEA.Name" xml:space="preserve">
+    <value>tsmTeachingEA</value>
+  </data>
+  <data name="&gt;&gt;tsmTeachingEA.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

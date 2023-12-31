@@ -485,7 +485,7 @@ namespace XboxDownload
                 {
                     long up = nowUp - OldUp;
                     long down = nowDown - OldDown;
-                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBps(up), ClassMbr.ConvertBps(down));
+                    labelTraffic.Text = String.Format("流量: ↑ {0} ↓ {1}", ClassMbr.ConvertBps(up * 8), ClassMbr.ConvertBps(down * 8));
                 }
                 OldUp = nowUp;
                 OldDown = nowDown;
@@ -608,6 +608,7 @@ namespace XboxDownload
                 DnsListen.SetAkamaiIP(akamai);
                 UpdateHosts(true, akamai);
                 DnsListen.UpdateHosts(akamai);
+                if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
                 tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbBattleIP.Text = akamai;
                 SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 全部游戏下载域名)", "localhost", 0x008000);
                 ckbOptimalAkamaiIP.Enabled = true;
@@ -631,6 +632,7 @@ namespace XboxDownload
                 DnsListen.SetAkamaiIP();
                 UpdateHosts(true);
                 DnsListen.UpdateHosts();
+                if(ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = true;
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
         }
@@ -642,7 +644,7 @@ namespace XboxDownload
                 butStart.Enabled = false;
                 bServiceFlag = false;
                 UpdateHosts(false);
-                if (Properties.Settings.Default.SetDns) ClassDNS.SetDns(null);
+                if (Properties.Settings.Default.SetDns) ClassDNS.SetDns();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.DnsIP)) tbDnsIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.ComIP)) tbComIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.CnIP)) tbCnIP.Clear();

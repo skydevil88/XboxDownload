@@ -338,6 +338,7 @@
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
             timerTraffic = new System.Windows.Forms.Timer(components);
+            tsmTeachingEA = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
@@ -429,7 +430,7 @@
             // 
             // tsmTeaching
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
+            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeachingEA, tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
             tsmTeaching.Name = "tsmTeaching";
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
@@ -2567,6 +2568,13 @@
             timerTraffic.Interval = 1000;
             timerTraffic.Tick += TimerTraffic_Tick;
             // 
+            // tsmTeachingEA
+            // 
+            tsmTeachingEA.Name = "tsmTeachingEA";
+            resources.ApplyResources(tsmTeachingEA, "tsmTeachingEA");
+            tsmTeachingEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
+            tsmTeachingEA.Click += TsmOpenSite_Click;
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -2945,5 +2953,6 @@
         private System.Windows.Forms.Timer timerTraffic;
         private Label labelTraffic;
         private LinkLabel linkPcInstall1;
+        private ToolStripMenuItem tsmTeachingEA;
     }
 }

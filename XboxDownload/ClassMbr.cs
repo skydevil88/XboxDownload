@@ -88,10 +88,10 @@ namespace XboxDownload
             return String.Format(order > 0 ? "{0:#.00} {1}" : "{0} {1}", leng, sizes[order]);
         }
 
-        public static string ConvertBps(long bytes)
+        public static string ConvertBps(long bps)
         {
-            if (bytes <= 0) return "0 bps";
-            double leng = Convert.ToDouble(bytes) * 8;
+            if (bps <= 0) return "0 bps";
+            double leng = Convert.ToDouble(bps);
             string[] sizes = { "bps", "Kbps", "Mbps", "Gbps" };
             int order = 0;
             while (leng >= 1000 && order + 1 < sizes.Length)
