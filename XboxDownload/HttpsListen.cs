@@ -242,50 +242,6 @@ namespace XboxDownload
                                             }
                                         }
                                         break;
-                                    case "api1.origin.com":
-                                        //if (Properties.Settings.Default.EAStore)
-                                        {
-                                            string? ip = ClassDNS.DoH(_hosts);
-                                            if (ip != null)
-                                            {
-                                                bool decode = false;
-                                                if (_filePath.StartsWith("/ecommerce2/downloadURL"))
-                                                {
-                                                    decode = true;
-                                                    if (Properties.Settings.Default.EACDN)
-                                                    {
-                                                        _filePath = Regex.Replace(_filePath, @"&cdnOverride=[^&]+", "");
-                                                        _filePath += "&cdnOverride=akamai";
-                                                    }
-                                                    _buffer = Regex.Replace(_buffer, @"^" + _method + " .+", _method + " " + _filePath + " HTTP/1.1");
-                                                }
-                                                string _url = "https://" + _hosts + _filePath;
-                                                Uri uri = new(_url);
-                                                SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer), ip, decode);
-                                                if (string.IsNullOrEmpty(socketPackage.Err))
-                                                {
-                                                    bFileFound = true;
-                                                    string str = socketPackage.Headers;
-                                                    str = Regex.Replace(str, @"(Content-Encoding|Transfer-Encoding|Content-Length): .+\r\n", "");
-                                                    str = Regex.Replace(str, @"\r\n\r\n", "\r\nContent-Length: " + socketPackage.Buffer.Length + "\r\n\r\n");
-                                                    Byte[] _headers = Encoding.ASCII.GetBytes(str);
-                                                    ssl.Write(_headers);
-                                                    ssl.Write(socketPackage.Buffer);
-                                                    ssl.Flush();
-                                                    if (Properties.Settings.Default.RecordLog)
-                                                    {
-                                                        Match m1 = Regex.Match(socketPackage.Headers, @"^HTTP[^\s]+\s([^\s]+)");
-                                                        if (m1.Success) parentForm.SaveLog("HTTP " + m1.Groups[1].Value, _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
-                                                        if (_filePath.StartsWith("/ecommerce2/downloadURL"))
-                                                        {
-                                                            m1 = Regex.Match(socketPackage.Html, @"<url>(?<url>.+)</url>");
-                                                            if (m1.Success) parentForm.SaveLog("下载链接", m1.Groups["url"].Value, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        break;
                                     case "epicgames-download1.akamaized.net":
                                         {
                                             bFileFound = true;

@@ -70,7 +70,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox|PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -80,7 +80,6 @@ namespace XboxDownload
             tbNSIP.Text = Properties.Settings.Default.NSIP;
             ckbNSBrowser.Checked = Properties.Settings.Default.NSBrowser;
             tbEAIP.Text = Properties.Settings.Default.EAIP;
-            ckbEACDN.Checked = Properties.Settings.Default.EACDN;
             tbBattleIP.Text = Properties.Settings.Default.BattleIP;
             ckbBattleCDN.Checked = Properties.Settings.Default.BattleCDN;
             tbEpicIP.Text = Properties.Settings.Default.EpicIP;
@@ -830,7 +829,6 @@ namespace XboxDownload
                 Properties.Settings.Default.NSIP = nsIP;
                 Properties.Settings.Default.NSBrowser = ckbNSBrowser.Checked;
                 Properties.Settings.Default.EAIP = eaIP;
-                Properties.Settings.Default.EACDN = ckbEACDN.Checked;
                 Properties.Settings.Default.BattleIP = battleIP;
                 Properties.Settings.Default.BattleCDN = ckbBattleCDN.Checked;
                 Properties.Settings.Default.EpicIP = epicIP;
@@ -1159,11 +1157,6 @@ namespace XboxDownload
                     }
                     if (Properties.Settings.Default.EAStore)
                     {
-                        if (Properties.Settings.Default.EACDN)
-                        {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api1.origin.com");
-                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
-                        }
                         if (!string.IsNullOrEmpty(akamai))
                         {
                             sb.AppendLine(akamai + " origin-a.akamaihd.net");
@@ -1172,6 +1165,7 @@ namespace XboxDownload
                         {
                             sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
                         }
+                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
                     }
                     if (Properties.Settings.Default.BattleStore)
                     {

@@ -41,13 +41,14 @@
             toolStripDropDownButton2 = new ToolStripDropDownButton();
             tsmProductManual = new ToolStripMenuItem();
             tsmTeaching = new ToolStripMenuItem();
+            tsmTeachingEA = new ToolStripMenuItem();
             tsmTeaching4 = new ToolStripMenuItem();
             tsmTeaching3 = new ToolStripMenuItem();
             tsmTeaching2 = new ToolStripMenuItem();
             tsmTeaching1 = new ToolStripMenuItem();
             tsmTeaching5 = new ToolStripMenuItem();
             tsmAbout = new ToolStripMenuItem();
-            toolStripButton1 = new ToolStripButton();
+            tsbAbout = new ToolStripButton();
             tabControl1 = new TabControl();
             tabService = new TabPage();
             gbLog = new GroupBox();
@@ -65,6 +66,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            linkEA = new LinkLabel();
             ckbGameLink = new CheckBox();
             linkRestartEABackgroundService = new LinkLabel();
             ckbOptimalAkamaiIP = new CheckBox();
@@ -93,7 +95,6 @@
             label18 = new Label();
             tbBattleIP = new TextBox();
             labelBattle = new Label();
-            ckbEACDN = new CheckBox();
             label16 = new Label();
             tbEAIP = new TextBox();
             labelEA = new Label();
@@ -338,7 +339,6 @@
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
             timerTraffic = new System.Windows.Forms.Timer(components);
-            tsmTeachingEA = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
@@ -384,7 +384,7 @@
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(24, 24);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripDropDownButton2, toolStripButton1 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripDropDownButton2, tsbAbout });
             resources.ApplyResources(toolStrip1, "toolStrip1");
             toolStrip1.Name = "toolStrip1";
             // 
@@ -435,6 +435,13 @@
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
             // 
+            // tsmTeachingEA
+            // 
+            tsmTeachingEA.Name = "tsmTeachingEA";
+            resources.ApplyResources(tsmTeachingEA, "tsmTeachingEA");
+            tsmTeachingEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
+            tsmTeachingEA.Click += TsmOpenSite_Click;
+            // 
             // tsmTeaching4
             // 
             tsmTeaching4.Name = "tsmTeaching4";
@@ -476,13 +483,13 @@
             resources.ApplyResources(tsmAbout, "tsmAbout");
             tsmAbout.Click += TsmAbout_Click;
             // 
-            // toolStripButton1
+            // tsbAbout
             // 
-            toolStripButton1.Alignment = ToolStripItemAlignment.Right;
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            resources.ApplyResources(toolStripButton1, "toolStripButton1");
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Click += TsmAbout_Click;
+            tsbAbout.Alignment = ToolStripItemAlignment.Right;
+            tsbAbout.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(tsbAbout, "tsbAbout");
+            tsbAbout.Name = "tsbAbout";
+            tsbAbout.Click += TsmAbout_Click;
             // 
             // tabControl1
             // 
@@ -600,6 +607,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(linkEA);
             groupBox1.Controls.Add(ckbGameLink);
             groupBox1.Controls.Add(linkRestartEABackgroundService);
             groupBox1.Controls.Add(ckbOptimalAkamaiIP);
@@ -628,7 +636,6 @@
             groupBox1.Controls.Add(label18);
             groupBox1.Controls.Add(tbBattleIP);
             groupBox1.Controls.Add(labelBattle);
-            groupBox1.Controls.Add(ckbEACDN);
             groupBox1.Controls.Add(label16);
             groupBox1.Controls.Add(tbEAIP);
             groupBox1.Controls.Add(labelEA);
@@ -656,6 +663,14 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // linkEA
+            // 
+            resources.ApplyResources(linkEA, "linkEA");
+            linkEA.Name = "linkEA";
+            linkEA.TabStop = true;
+            linkEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
+            linkEA.LinkClicked += Link_LinkClicked;
             // 
             // ckbGameLink
             // 
@@ -827,12 +842,6 @@
             // 
             resources.ApplyResources(labelBattle, "labelBattle");
             labelBattle.Name = "labelBattle";
-            // 
-            // ckbEACDN
-            // 
-            resources.ApplyResources(ckbEACDN, "ckbEACDN");
-            ckbEACDN.Name = "ckbEACDN";
-            ckbEACDN.UseVisualStyleBackColor = true;
             // 
             // label16
             // 
@@ -2568,13 +2577,6 @@
             timerTraffic.Interval = 1000;
             timerTraffic.Tick += TimerTraffic_Tick;
             // 
-            // tsmTeachingEA
-            // 
-            tsmTeachingEA.Name = "tsmTeachingEA";
-            resources.ApplyResources(tsmTeachingEA, "tsmTeachingEA");
-            tsmTeachingEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
-            tsmTeachingEA.Click += TsmOpenSite_Click;
-            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -2663,7 +2665,7 @@
         private ToolStripMenuItem tsmTeaching3;
         private ToolStripMenuItem tsmTeaching2;
         private ToolStripMenuItem tsmTeaching1;
-        private ToolStripButton toolStripButton1;
+        private ToolStripButton tsbAbout;
         private TabPage tabSpeedTest;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem tsmiShow;
@@ -2688,7 +2690,6 @@
         private LinkLabel linkNSHomepage;
         private Label labelEA;
         private Label labelBattle;
-        private CheckBox ckbEACDN;
         private Label label16;
         private CheckBox ckbBattleCDN;
         private Label label18;
@@ -2954,5 +2955,6 @@
         private Label labelTraffic;
         private LinkLabel linkPcInstall1;
         private ToolStripMenuItem tsmTeachingEA;
+        private LinkLabel linkEA;
     }
 }

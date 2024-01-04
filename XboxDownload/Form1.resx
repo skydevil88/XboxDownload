@@ -149,7 +149,7 @@
     <value>选项</value>
   </data>
   <data name="tsmProductManual.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmProductManual.Text" xml:space="preserve">
     <value>使用说明</value>
@@ -191,13 +191,13 @@
     <value>校园网IPv6免流量下载Xbox游戏</value>
   </data>
   <data name="tsmTeaching.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmTeaching.Text" xml:space="preserve">
     <value>视频教程</value>
   </data>
   <data name="tsmAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmAbout.Text" xml:space="preserve">
     <value>关于</value>
@@ -211,13 +211,13 @@
   <data name="toolStripDropDownButton2.Text" xml:space="preserve">
     <value>帮助</value>
   </data>
-  <data name="toolStripButton1.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+  <data name="tsbAbout.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
-  <data name="toolStripButton1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tsbAbout.Size" type="System.Drawing.Size, System.Drawing">
     <value>86, 28</value>
   </data>
-  <data name="toolStripButton1.Text" xml:space="preserve">
+  <data name="tsbAbout.Text" xml:space="preserve">
     <value>打赏作者</value>
   </data>
   <data name="toolStrip1.Location" type="System.Drawing.Point, System.Drawing">
@@ -538,6 +538,33 @@
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="linkEA.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="linkEA.Location" type="System.Drawing.Point, System.Drawing">
+    <value>772, 237</value>
+  </data>
+  <data name="linkEA.Size" type="System.Drawing.Size, System.Drawing">
+    <value>358, 24</value>
+  </data>
+  <data name="linkEA.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="linkEA.Text" xml:space="preserve">
+    <value>EA加速教程 (NS、战网、Riot Games 同理)</value>
+  </data>
+  <data name="&gt;&gt;linkEA.Name" xml:space="preserve">
+    <value>linkEA</value>
+  </data>
+  <data name="&gt;&gt;linkEA.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;linkEA.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;linkEA.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="ckbGameLink.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -563,7 +590,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbGameLink.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="linkRestartEABackgroundService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -593,7 +620,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEABackgroundService.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="ckbOptimalAkamaiIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -623,7 +650,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbOptimalAkamaiIP.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="butStart.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 11pt</value>
@@ -650,7 +677,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butStart.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="ckbEpicStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -677,7 +704,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEpicStore.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="ckbBattleStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -704,7 +731,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="ckbEAStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -731,7 +758,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEAStore.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="ckbMicrosoftStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -758,7 +785,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbMicrosoftStore.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="ckbSetDns.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -785,7 +812,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbSetDns.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="ckbDoH.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -812,7 +839,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDoH.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="ckbHttpService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -842,7 +869,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbHttpService.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="ckbDnsService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -869,7 +896,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDnsService.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="cbListenIP.Items" xml:space="preserve">
     <value>本机IP</value>
@@ -896,7 +923,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cbListenIP.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="label23.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -926,7 +953,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="label22.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -935,13 +962,13 @@
     <value>8, 406</value>
   </data>
   <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1397, 24</value>
+    <value>1400, 24</value>
   </data>
   <data name="label22.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
   </data>
   <data name="label22.Text" xml:space="preserve">
-    <value>主机使用说明：点击开始监听，然后在 Xbox|PS|NS 中把 DNS IP 设为本机IP，辅助DNS留空。 注意：Xbox|PS 主机用户如果使用了 IPv6 联网，必需要进入路由器后台关闭。</value>
+    <value>主机使用：点击开始监听，然后在 Xbox、PS、NS 中把 DNS IP 设为本机IP，辅助DNS留空。 注意：Xbox、PS 主机用户如果使用了 IPv6 联网，必需要进入路由器后台关闭。</value>
   </data>
   <data name="&gt;&gt;label22.Name" xml:space="preserve">
     <value>label22</value>
@@ -953,7 +980,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="ckbTruncation.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -980,7 +1007,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="butBrowse.Location" type="System.Drawing.Point, System.Drawing">
     <value>1020, 338</value>
@@ -1007,7 +1034,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butBrowse.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="tbLocalPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>406, 339</value>
@@ -1028,7 +1055,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="label21.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1058,7 +1085,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="ckbLocalUpload.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1085,7 +1112,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbLocalUpload.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="ckbEpicCDN.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1115,7 +1142,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEpicCDN.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="label20.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1142,7 +1169,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label20.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="tbEpicIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 303</value>
@@ -1163,7 +1190,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="labelEpic.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1190,7 +1217,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEpic.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>24</value>
   </data>
   <data name="ckbBattleCDN.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1220,7 +1247,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleCDN.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="label18.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1247,7 +1274,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label18.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>26</value>
   </data>
   <data name="tbBattleIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>320, 267</value>
@@ -1268,7 +1295,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>27</value>
   </data>
   <data name="labelBattle.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1295,36 +1322,6 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelBattle.ZOrder" xml:space="preserve">
-    <value>27</value>
-  </data>
-  <data name="ckbEACDN.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbEACDN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>788, 236</value>
-  </data>
-  <data name="ckbEACDN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ckbEACDN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 28</value>
-  </data>
-  <data name="ckbEACDN.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="ckbEACDN.Text" xml:space="preserve">
-    <value>指定CDN Akamai</value>
-  </data>
-  <data name="&gt;&gt;ckbEACDN.Name" xml:space="preserve">
-    <value>ckbEACDN</value>
-  </data>
-  <data name="&gt;&gt;ckbEACDN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbEACDN.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;ckbEACDN.ZOrder" xml:space="preserve">
     <value>28</value>
   </data>
   <data name="label16.AutoSize" type="System.Boolean, mscorlib">
@@ -9915,6 +9912,12 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="&gt;&gt;tsmTeaching.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tsmTeachingEA.Name" xml:space="preserve">
+    <value>tsmTeachingEA</value>
+  </data>
+  <data name="&gt;&gt;tsmTeachingEA.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tsmTeaching4.Name" xml:space="preserve">
     <value>tsmTeaching4</value>
   </data>
@@ -9951,10 +9954,10 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="&gt;&gt;tsmAbout.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripButton1.Name" xml:space="preserve">
-    <value>toolStripButton1</value>
+  <data name="&gt;&gt;tsbAbout.Name" xml:space="preserve">
+    <value>tsbAbout</value>
   </data>
-  <data name="&gt;&gt;toolStripButton1.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsbAbout.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Col_Request.Name" xml:space="preserve">
@@ -10298,12 +10301,6 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   </data>
   <data name="&gt;&gt;timerTraffic.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmTeachingEA.Name" xml:space="preserve">
-    <value>tsmTeachingEA</value>
-  </data>
-  <data name="&gt;&gt;tsmTeachingEA.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

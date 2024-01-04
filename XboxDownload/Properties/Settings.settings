@@ -32,9 +32,6 @@
     <Setting Name="EAIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EACDN" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="BattleIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
