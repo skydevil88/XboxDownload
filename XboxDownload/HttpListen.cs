@@ -187,6 +187,7 @@ namespace XboxDownload
                                 case "eu.cdn.blizzard.com":
                                 case "kr.cdn.blizzard.com":
                                 case "level3.blizzard.com":
+                                case "blizzard.gcdn.cloudn.co.kr":
                                     if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
                                     {
                                         _redirect = true;
@@ -246,6 +247,7 @@ namespace XboxDownload
                                 case "eu.cdn.blizzard.com":
                                 case "kr.cdn.blizzard.com":
                                 case "level3.blizzard.com":
+                                case "blizzard.gcdn.cloudn.co.kr":
                                     if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
                                     {
                                         _redirect = true;

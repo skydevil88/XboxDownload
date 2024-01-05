@@ -323,12 +323,28 @@ namespace XboxDownload
                 dicService.TryAdd("origin-a.akamaihd.net", lsEaIP);
             }
             dicService.TryAdd("ssl-lvlt.cdn.ea.com", new List<ResouceRecord>());
+            if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+            {
+                dicService.TryAdd("us.cdn.blizzard.com", lsLocalIP);
+                dicService.TryAdd("eu.cdn.blizzard.com", lsLocalIP);
+                dicService.TryAdd("kr.cdn.blizzard.com", lsLocalIP);
+                dicService.TryAdd("level3.blizzard.com", lsLocalIP);
+                dicService.TryAdd("blizzard.gcdn.cloudn.co.kr", lsLocalIP);
+            }
             if (battleIP != null)
             {
                 List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                 dicService.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
                 dicService.TryAdd("blzddist2-a.akamaihd.net", lsBattleIP);
                 dicService.TryAdd("blzddist3-a.akamaihd.net", lsBattleIP);
+            }
+            if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
+            {
+                dicService.TryAdd("download.epicgames.com", lsLocalIP);
+                dicService.TryAdd("download2.epicgames.com", lsLocalIP);
+                dicService.TryAdd("download3.epicgames.com", lsLocalIP);
+                dicService.TryAdd("download4.epicgames.com", lsLocalIP);
+                dicService.TryAdd("fastly-download.epicgames.com", lsLocalIP);
             }
             if (epicIP != null)
             {
