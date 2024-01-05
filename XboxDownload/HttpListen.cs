@@ -193,7 +193,6 @@ namespace XboxDownload
                                         _newHosts = "blzddist1-a.akamaihd.net";
                                     }
                                     break;
-                                case "epicgames-download1.akamaized.net":
                                 case "download.epicgames.com":
                                 case "download2.epicgames.com":
                                 case "download3.epicgames.com":
@@ -202,7 +201,7 @@ namespace XboxDownload
                                     if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
                                     {
                                         _redirect = true;
-                                        _newHosts = "epicgames-download1-1251447533.file.myqcloud.com";
+                                        _newHosts = "epicgames-download1.akamaized.net"; 
                                     }
                                     break;
                             }
@@ -253,7 +252,6 @@ namespace XboxDownload
                                         _newHosts = "blzddist1-a.akamaihd.net";
                                     }
                                     break;
-                                case "epicgames-download1.akamaized.net":
                                 case "download.epicgames.com":
                                 case "download2.epicgames.com":
                                 case "download3.epicgames.com":
@@ -262,7 +260,7 @@ namespace XboxDownload
                                     if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
                                     {
                                         _redirect = true;
-                                        _newHosts = "epicgames-download1-1251447533.file.myqcloud.com";
+                                        _newHosts = "epicgames-download1.akamaized.net";
                                     }
                                     break;
                             }
