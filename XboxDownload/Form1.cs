@@ -2257,6 +2257,7 @@ namespace XboxDownload
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
                 case "blzddist1-a.akamaihd.net":
+                case "epicgames-download1.akamaized.net":
                     if (tsmi.Name == "tsmDNSmasp")
                     {
                         sb.AppendLine("# Xbox 国际域名");
@@ -2291,6 +2292,7 @@ namespace XboxDownload
                         sb.AppendLine("address=/origin-a.akamaihd.net/" + ip);
                         sb.AppendLine("address=/ssl-lvlt.cdn.ea.com/0.0.0.0");
                         sb.AppendLine("address=/blzddist1-a.akamaihd.net/" + ip);
+                        sb.AppendLine("address=/epicgames-download1.akamaized.net/" + ip);
                     }
                     else
                     {
@@ -2326,8 +2328,9 @@ namespace XboxDownload
                         sb.AppendLine(ip + " origin-a.akamaihd.net");
                         sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
                         sb.AppendLine(ip + " blzddist1-a.akamaihd.net");
+                        sb.AppendLine(ip + " epicgames-download1.akamaized.net");
                     }
-                    msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网只能用监听方式加速。";
+                    msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网、Epic 可能需要用用监听方式跳转。";
                     break;
                 default:
                     if (tsmi.Name == "tsmDNSmasp")
