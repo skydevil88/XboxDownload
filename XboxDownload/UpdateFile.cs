@@ -12,6 +12,8 @@ namespace XboxDownload
         public const string project = "https://github.com/skydevil88/XboxDownload";
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
+            { "proxy", "https://gh.api.99988866.xyz/" },
+            { "proxy", "https://ghps.cc/" },
             { "direct", "" }
         };
 
