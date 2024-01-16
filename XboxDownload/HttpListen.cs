@@ -194,17 +194,6 @@ namespace XboxDownload
                                         _newHosts = "blzddist1-a.akamaihd.net";
                                     }
                                     break;
-                                case "download.epicgames.com":
-                                case "download2.epicgames.com":
-                                case "download3.epicgames.com":
-                                case "download4.epicgames.com":
-                                case "fastly-download.epicgames.com":
-                                    if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "epicgames-download1.akamaized.net"; 
-                                    }
-                                    break;
                             }
                         }
                         else
@@ -243,6 +232,7 @@ namespace XboxDownload
                                     if (dicFilePath.TryAdd(_filePath, string.Empty))
                                         ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
                                     break;
+
                                 case "us.cdn.blizzard.com":
                                 case "eu.cdn.blizzard.com":
                                 case "kr.cdn.blizzard.com":
@@ -252,17 +242,6 @@ namespace XboxDownload
                                     {
                                         _redirect = true;
                                         _newHosts = "blzddist1-a.akamaihd.net";
-                                    }
-                                    break;
-                                case "download.epicgames.com":
-                                case "download2.epicgames.com":
-                                case "download3.epicgames.com":
-                                case "download4.epicgames.com":
-                                case "fastly-download.epicgames.com":
-                                    if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "epicgames-download1.akamaized.net";
                                     }
                                     break;
                             }
@@ -283,58 +262,100 @@ namespace XboxDownload
                         {
                             bool bFileFound = false;
                             string _url = "http://" + _hosts + _filePath;
-                            if (_hosts == "tlu.dl.delivery.mp.microsoft.com")
+                            switch (_hosts)
                             {
-                                bFileFound = true;
-                                string _tmp = "http://2.tlu.dl.delivery.mp.microsoft.com" + _filePath;
-                                StringBuilder sb = new();
-                                sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                sb.Append("Content-Type: text/html\r\n");
-                                sb.Append("Location: " + _tmp + "\r\n");
-                                sb.Append("Content-Length: 0\r\n\r\n");
-                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("下载链接", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                            }
-                            else if (_hosts == "www.msftconnecttest.com" && _tmpPath.ToLower() == "/connecttest.txt") // 网络连接 (NCSI)，修复 Xbox、Windows 系统网络正常却显示离线
-                            {
-                                bFileFound = true;
-                                Byte[] _response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
-                                StringBuilder sb = new();
-                                sb.Append("HTTP/1.1 200 OK\r\n");
-                                sb.Append("Content-Type: text/plain\r\n");
-                                sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
-                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
-                            }
-                            else if (_hosts == "ctest.cdn.nintendo.net" && _tmpPath.ToLower() == "/")
-                            {
-                                bFileFound = true;
-                                if (Properties.Settings.Default.NSBrowser)
-                                {
-                                    StringBuilder sb = new();
-                                    sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                    sb.Append("Content-Type: text/html\r\n");
-                                    sb.Append("Location: " + Properties.Settings.Default.NSHomepage + "\r\n");
-                                    sb.Append("Content-Length: 0\r\n\r\n");
-                                    Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                    mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                }
-                                else
-                                {
-                                    Byte[] _response = Encoding.ASCII.GetBytes("ok");
-                                    StringBuilder sb = new();
-                                    sb.Append("HTTP/1.1 200 OK\r\n");
-                                    sb.Append("Content-Type: text/plain\r\n");
-                                    sb.Append("X-Organization: Nintendo\r\n");
-                                    sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                    Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                    mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                    mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
-                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
-                                }
+                                case "tlu.dl.delivery.mp.microsoft.com":
+                                    {
+                                        bFileFound = true;
+                                        string _tmp = "http://2.tlu.dl.delivery.mp.microsoft.com" + _filePath;
+                                        StringBuilder sb = new();
+                                        sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
+                                        sb.Append("Content-Type: text/html\r\n");
+                                        sb.Append("Location: " + _tmp + "\r\n");
+                                        sb.Append("Content-Length: 0\r\n\r\n");
+                                        Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                        mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("下载链接", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                    }
+                                    break;
+                                case "www.msftconnecttest.com":
+                                    if (_tmpPath.ToLower() == "/connecttest.txt") // 网络连接 (NCSI)，修复 Xbox、Windows 系统网络正常却显示离线
+                                    {
+                                        bFileFound = true;
+                                        Byte[] _response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
+                                        StringBuilder sb = new();
+                                        sb.Append("HTTP/1.1 200 OK\r\n");
+                                        sb.Append("Content-Type: text/plain\r\n");
+                                        sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                        Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                        mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                        mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
+                                    }
+                                    break;
+                                case "test.cdn.nintendo.net":
+                                    if (_tmpPath.ToLower() == "/")
+                                    {
+                                        bFileFound = true;
+                                        if (Properties.Settings.Default.NSBrowser)
+                                        {
+                                            StringBuilder sb = new();
+                                            sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
+                                            sb.Append("Content-Type: text/html\r\n");
+                                            sb.Append("Location: " + Properties.Settings.Default.NSHomepage + "\r\n");
+                                            sb.Append("Content-Length: 0\r\n\r\n");
+                                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                            mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                        }
+                                        else
+                                        {
+                                            Byte[] _response = Encoding.ASCII.GetBytes("ok");
+                                            StringBuilder sb = new();
+                                            sb.Append("HTTP/1.1 200 OK\r\n");
+                                            sb.Append("Content-Type: text/plain\r\n");
+                                            sb.Append("X-Organization: Nintendo\r\n");
+                                            sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                            mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                            mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
+                                        }
+                                    }
+                                    break;
+                                case "fastly-download.epicgames.com":
+                                case "download.epicgames.com":
+                                case "epicgames-download1.akamaized.net":
+                                    bFileFound = true;
+                                    if (_filePath.Contains(".manifest"))
+                                    {
+                                        string? ip = ClassDNS.DoH(_hosts);
+                                        if (!string.IsNullOrEmpty(ip))
+                                        {
+                                            var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
+                                            if (response != null && response.IsSuccessStatusCode)
+                                            {
+                                                bFileFound = true;
+                                                Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
+                                                byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
+                                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _url = "http://epicgames-download1-1251447533.file.myqcloud.com" + _filePath;
+                                        StringBuilder sb = new();
+                                        sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
+                                        sb.Append("Content-Type: text/html\r\n");
+                                        sb.Append("Location: " + _url + "\r\n");
+                                        sb.Append("Content-Length: 0\r\n\r\n");
+                                        Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                        mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                    }
+                                    break;
                             }
                             if (!bFileFound)
                             {
@@ -381,7 +402,7 @@ namespace XboxDownload
             if (result.Success)
             {
                 string key = result.Groups["ContentId"].Value.ToLower();
-                if (Regex.IsMatch(_filePath, @"_xs\.xvc$", RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(_filePath, @"_xs(-\d+)?\.xvc$", RegexOptions.IgnoreCase))
                     key += "_xs";
                 else if (!Regex.IsMatch(_filePath, @"\.msixvc$", RegexOptions.IgnoreCase))
                     key += "_x";

@@ -1124,13 +1124,13 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="ckbEpicCDN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 28</value>
+    <value>167, 28</value>
   </data>
   <data name="ckbEpicCDN.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
   </data>
   <data name="ckbEpicCDN.Text" xml:space="preserve">
-    <value>跳转 Akamai CDN</value>
+    <value>跳转腾讯云CDN</value>
   </data>
   <data name="&gt;&gt;ckbEpicCDN.Name" xml:space="preserve">
     <value>ckbEpicCDN</value>
@@ -8351,7 +8351,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>491, 34</value>
   </data>
   <data name="tsmUseIPXbox.Text" xml:space="preserve">
-    <value>同时指定 com 和 cn (解决Xbox安装已停止)</value>
+    <value>同时指定 com 和 cn</value>
   </data>
   <data name="tsmUseIPApp.Size" type="System.Drawing.Size, System.Drawing">
     <value>491, 34</value>

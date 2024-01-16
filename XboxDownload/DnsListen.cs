@@ -222,7 +222,7 @@ namespace XboxDownload
                 }
                 else
                 {
-                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("epicgames-download1.akamaized.net") : ClassDNS.HostToIP("epicgames-download1.akamaized.net", Properties.Settings.Default.DnsIP); 
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("epicgames-download1-1251447533.file.myqcloud.com") : ClassDNS.HostToIP("epicgames-download1-1251447533.file.myqcloud.com", Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbEpicIP, ip);
@@ -340,16 +340,14 @@ namespace XboxDownload
             }
             if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
             {
+                dicService.TryAdd("epicgames-download1.akamaized.net", lsLocalIP);
                 dicService.TryAdd("download.epicgames.com", lsLocalIP);
-                dicService.TryAdd("download2.epicgames.com", lsLocalIP);
-                dicService.TryAdd("download3.epicgames.com", lsLocalIP);
-                dicService.TryAdd("download4.epicgames.com", lsLocalIP);
                 dicService.TryAdd("fastly-download.epicgames.com", lsLocalIP);
             }
             if (epicIP != null)
             {
                 List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("epicgames-download1.akamaized.net", lsEpicIP); 
+                dicService.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP); 
             }
             if (Properties.Settings.Default.HttpService)
             {
@@ -491,7 +489,7 @@ namespace XboxDownload
                     "dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net", "epicgames-download1.akamaized.net"
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net"
                 };
             }
             else
@@ -502,7 +500,7 @@ namespace XboxDownload
                     "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net", "epicgames-download1.akamaized.net"
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net",
                 };
             }
             if (string.IsNullOrEmpty(ip))
