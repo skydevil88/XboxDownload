@@ -325,12 +325,12 @@ namespace XboxDownload
                                 case "fastly-download.epicgames.com":
                                 case "download.epicgames.com":
                                 case "epicgames-download1.akamaized.net":
-                                    bFileFound = true;
                                     if (_filePath.Contains(".manifest"))
                                     {
                                         string? ip = ClassDNS.DoH(_hosts);
                                         if (!string.IsNullOrEmpty(ip))
                                         {
+                                            bFileFound = true;
                                             var headers = new Dictionary<string, string>() { { "Host", _hosts } };
                                             using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
                                             if (response != null && response.IsSuccessStatusCode)
@@ -345,6 +345,7 @@ namespace XboxDownload
                                     }
                                     else
                                     {
+                                        bFileFound = true;
                                         _url = "http://epicgames-download1-1251447533.file.myqcloud.com" + _filePath;
                                         StringBuilder sb = new();
                                         sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
