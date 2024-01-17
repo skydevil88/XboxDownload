@@ -90,7 +90,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="UbiStore" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="LocalIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
