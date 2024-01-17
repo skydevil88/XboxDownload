@@ -11,6 +11,9 @@
     <Setting Name="ComIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="GameLink" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
     <Setting Name="CnIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -44,7 +47,10 @@
     <Setting Name="EpicCDN" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="GameLink" Type="System.Boolean" Scope="User">
+    <Setting Name="UbiIP" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UbiCDN" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Truncation" Type="System.Boolean" Scope="User">
@@ -82,6 +88,9 @@
     </Setting>
     <Setting Name="EpicStore" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UbiStore" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LocalIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

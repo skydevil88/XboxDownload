@@ -194,6 +194,13 @@ namespace XboxDownload
                                         _newHosts = "blzddist1-a.akamaihd.net";
                                     }
                                     break;
+                                case "uplaypc-s-ubisoft.cdn.ubi.com":
+                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
+                                    }
+                                    break;
                             }
                         }
                         else
@@ -242,6 +249,13 @@ namespace XboxDownload
                                     {
                                         _redirect = true;
                                         _newHosts = "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "uplaypc-s-ubisoft.cdn.ubi.com":
+                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
                                     }
                                     break;
                             }

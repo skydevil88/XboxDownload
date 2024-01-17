@@ -61,6 +61,18 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool GameLink {
+            get {
+                return ((bool)(this["GameLink"]));
+            }
+            set {
+                this["GameLink"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string CnIP {
             get {
@@ -193,13 +205,25 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool GameLink {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UbiIP {
             get {
-                return ((bool)(this["GameLink"]));
+                return ((string)(this["UbiIP"]));
             }
             set {
-                this["GameLink"] = value;
+                this["UbiIP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UbiCDN {
+            get {
+                return ((bool)(this["UbiCDN"]));
+            }
+            set {
+                this["UbiCDN"] = value;
             }
         }
         
@@ -344,6 +368,18 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["EpicStore"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UbiStore {
+            get {
+                return ((bool)(this["UbiStore"]));
+            }
+            set {
+                this["UbiStore"] = value;
             }
         }
         

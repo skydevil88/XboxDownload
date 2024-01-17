@@ -107,7 +107,7 @@ namespace XboxDownload
             }
 
             Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
-            Byte[]? comIP = null, cnIP = null, appIP = null, psIP = null, nsIP = null, eaIP = null, battleIP = null, epicIP = null;
+            Byte[]? comIP = null, cnIP = null, appIP = null, psIP = null, nsIP = null, eaIP = null, battleIP = null, epicIP = null, ubiIP = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
             {
                 comIP = IPAddress.Parse(Properties.Settings.Default.ComIP).GetAddressBytes();
@@ -117,7 +117,7 @@ namespace XboxDownload
                 if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbComIP, Properties.Settings.Default.LocalIP);
                 comIP = localIP;
             }
-            Task[] tasks = new Task[7];
+            Task[] tasks = new Task[8];
             tasks[0] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
@@ -227,6 +227,22 @@ namespace XboxDownload
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbEpicIP, ip);
                         epicIP = IPAddress.Parse(ip).GetAddressBytes();
+                    }
+                }
+            });
+            tasks[7] = new Task(() =>
+            {
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.UbiIP))
+                {
+                    ubiIP = IPAddress.Parse(Properties.Settings.Default.UbiIP).GetAddressBytes();
+                }
+                else
+                {
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("uplaypc-s-ubisoft.cdn.ubionline.com.cn") : ClassDNS.HostToIP("uplaypc-s-ubisoft.cdn.ubionline.com.cn", Properties.Settings.Default.DnsIP);
+                    if (!string.IsNullOrEmpty(ip))
+                    {
+                        if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbUbiIP, ip);
+                        ubiIP = IPAddress.Parse(ip).GetAddressBytes();
                     }
                 }
             });
@@ -351,6 +367,24 @@ namespace XboxDownload
             {
                 List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                 dicService.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP); 
+            }
+            if (Properties.Settings.Default.UbiStore && Properties.Settings.Default.UbiCDN)
+            {
+                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsLocalIP);
+            }
+            if (ubiIP != null)
+            {
+                List<ResouceRecord> lsUbisoftIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbisoftIP);
+            }
+            if (Properties.Settings.Default.UbiStore && Properties.Settings.Default.UbiCDN)
+            {
+                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsLocalIP);
+            }
+            if (ubiIP != null)
+            {
+                List<ResouceRecord> lsUbisoftIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbisoftIP);
             }
             if (Properties.Settings.Default.HttpService)
             {

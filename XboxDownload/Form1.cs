@@ -68,12 +68,14 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nblzddist2-a.akamaihd.net\nblzddist3-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com");
+            toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP并禁用IPv6 DNS，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、育碧、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复\n其它客户端可能需要手动重启生效。\n育碧、拳头游戏需要勾选“设置本机 DNS”");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复\n其它客户端可能需要手动重启生效。\n拳头游戏需要勾选“设置本机 DNS”");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
+            ckbGameLink.Checked = Properties.Settings.Default.GameLink;
             tbCnIP.Text = Properties.Settings.Default.CnIP;
             tbAppIP.Text = Properties.Settings.Default.AppIP;
             tbPSIP.Text = Properties.Settings.Default.PSIP;
@@ -84,7 +86,8 @@ namespace XboxDownload
             ckbBattleCDN.Checked = Properties.Settings.Default.BattleCDN;
             tbEpicIP.Text = Properties.Settings.Default.EpicIP;
             ckbEpicCDN.Checked = Properties.Settings.Default.EpicCDN;
-            ckbGameLink.Checked = Properties.Settings.Default.GameLink;
+            tbUbiIP.Text = Properties.Settings.Default.UbiIP;
+            ckbUbiCDN.Checked = Properties.Settings.Default.UbiCDN;
             ckbTruncation.Checked = Properties.Settings.Default.Truncation;
             ckbLocalUpload.Checked = Properties.Settings.Default.LocalUpload;
             if (string.IsNullOrEmpty(Properties.Settings.Default.LocalPath))
@@ -99,6 +102,7 @@ namespace XboxDownload
             ckbEAStore.Checked = Properties.Settings.Default.EAStore;
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
+            ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -654,6 +658,7 @@ namespace XboxDownload
                 if (string.IsNullOrEmpty(Properties.Settings.Default.EAIP)) tbEAIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.BattleIP)) tbBattleIP.Clear();
                 if (string.IsNullOrEmpty(Properties.Settings.Default.EpicIP)) tbEpicIP.Clear();
+                if (string.IsNullOrEmpty(Properties.Settings.Default.UbiIP)) tbUbiIP.Clear();
                 pictureBox1.Image = Properties.Resource.Xbox1;
                 linkTestDns.Enabled = linkRestartEABackgroundService.Enabled = false;
 
@@ -801,7 +806,7 @@ namespace XboxDownload
                     }
                     else
                     {
-                        MessageBox.Show("指定 战网国际服域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("指定 战网国际服 域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbBattleIP.Focus();
                         return;
                     }
@@ -820,6 +825,20 @@ namespace XboxDownload
                         return;
                     }
                 }
+                string? ubiIP = null;
+                if (!string.IsNullOrWhiteSpace(tbUbiIP.Text))
+                {
+                    if (IPAddress.TryParse(tbUbiIP.Text.Trim(), out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        ubiIP = tbUbiIP.Text = ipAddress.ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("指定 育碧 下载域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tbUbiIP.Focus();
+                        return;
+                    }
+                }
                 butStart.Enabled = false;
 
                 Properties.Settings.Default.DnsIP = dnsIP;
@@ -834,6 +853,8 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleCDN = ckbBattleCDN.Checked;
                 Properties.Settings.Default.EpicIP = epicIP;
                 Properties.Settings.Default.EpicCDN = ckbEpicCDN.Checked;
+                Properties.Settings.Default.UbiIP = ubiIP;
+                Properties.Settings.Default.UbiCDN = ckbUbiCDN.Checked;
                 Properties.Settings.Default.GameLink = ckbGameLink.Checked;
                 Properties.Settings.Default.Truncation = ckbTruncation.Checked;
                 Properties.Settings.Default.LocalUpload = ckbLocalUpload.Checked;
@@ -847,6 +868,7 @@ namespace XboxDownload
                 Properties.Settings.Default.EAStore = ckbEAStore.Checked;
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
+                Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1030,7 +1052,7 @@ namespace XboxDownload
 
         private void UpdateHosts(bool add, string? akamai = null)
         {
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore)) return;
 
             StringBuilder sb = new();
             string sHostsPath = Environment.SystemDirectory + "\\drivers\\etc\\hosts";
@@ -1205,6 +1227,17 @@ namespace XboxDownload
                         if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
                         {
                             sb.AppendLine(Properties.Settings.Default.EpicIP + " epicgames-download1-1251447533.file.myqcloud.com");
+                        }
+                    }
+                    if (Properties.Settings.Default.UbiStore)
+                    {
+                        if (Properties.Settings.Default.UbiCDN)
+                        {
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubi.com");
+                        }
+                        if (!string.IsNullOrEmpty(Properties.Settings.Default.UbiIP))
+                        {
+                            sb.AppendLine(Properties.Settings.Default.UbiIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
                         }
                     }
                     DataTable dt = Form1.dtHosts.Copy();
@@ -1463,9 +1496,6 @@ namespace XboxDownload
                     tsmUseAkamai.Visible = true;
                     tsmUseIPBattle.Visible = true;
                     break;
-                case "epicgames-download1-1251447533.file.myqcloud.com":
-                    tsmUseIPEpic.Visible = true;
-                    break;
                 default:
                     break;
             }
@@ -1528,11 +1558,6 @@ namespace XboxDownload
                     tabControl1.SelectedTab = tabService;
                     tbBattleIP.Text = ip;
                     tbBattleIP.Focus();
-                    break;
-                case "tsmUseIPEpic":
-                    tabControl1.SelectedTab = tabService;
-                    tbEpicIP.Text = ip;
-                    tbEpicIP.Focus();
                     break;
                 case "tsmUseAkamai":
                     tabControl1.SelectedTab = tabCND;
@@ -2325,7 +2350,7 @@ namespace XboxDownload
                         sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
                         sb.AppendLine(ip + " blzddist1-a.akamaihd.net");
                     }
-                    msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网、Epic 可能需要用用监听方式跳转。";
+                    msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网、Epic、育碧 可能需要用用监听方式跳转。";
                     break;
                 default:
                     if (tsmi.Name == "tsmDNSmasp")

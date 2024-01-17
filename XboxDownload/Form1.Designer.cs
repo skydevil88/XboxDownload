@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -65,6 +65,11 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            ckbUbiStore = new CheckBox();
+            ckbUbiCDN = new CheckBox();
+            label34 = new Label();
+            tbUbiIP = new TextBox();
+            labelUbi = new Label();
             linkXbox3 = new LinkLabel();
             linkXbox2 = new LinkLabel();
             linkXbox1 = new LinkLabel();
@@ -602,6 +607,11 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckbUbiStore);
+            groupBox1.Controls.Add(ckbUbiCDN);
+            groupBox1.Controls.Add(label34);
+            groupBox1.Controls.Add(tbUbiIP);
+            groupBox1.Controls.Add(labelUbi);
             groupBox1.Controls.Add(linkXbox3);
             groupBox1.Controls.Add(linkXbox2);
             groupBox1.Controls.Add(linkXbox1);
@@ -661,6 +671,33 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // ckbUbiStore
+            // 
+            resources.ApplyResources(ckbUbiStore, "ckbUbiStore");
+            ckbUbiStore.Name = "ckbUbiStore";
+            ckbUbiStore.UseVisualStyleBackColor = true;
+            // 
+            // ckbUbiCDN
+            // 
+            resources.ApplyResources(ckbUbiCDN, "ckbUbiCDN");
+            ckbUbiCDN.Name = "ckbUbiCDN";
+            ckbUbiCDN.UseVisualStyleBackColor = true;
+            // 
+            // label34
+            // 
+            resources.ApplyResources(label34, "label34");
+            label34.Name = "label34";
+            // 
+            // tbUbiIP
+            // 
+            resources.ApplyResources(tbUbiIP, "tbUbiIP");
+            tbUbiIP.Name = "tbUbiIP";
+            // 
+            // labelUbi
+            // 
+            resources.ApplyResources(labelUbi, "labelUbi");
+            labelUbi.Name = "labelUbi";
             // 
             // linkXbox3
             // 
@@ -1049,9 +1086,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1059,9 +1096,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1069,9 +1106,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2980,5 +3017,10 @@
         private LinkLabel linkXbox3;
         private LinkLabel linkXbox2;
         private LinkLabel linkXbox1;
+        public TextBox tbUbiIP;
+        private Label labelUbi;
+        private CheckBox ckbUbiCDN;
+        private Label label34;
+        private CheckBox ckbUbiStore;
     }
 }
