@@ -307,7 +307,7 @@ namespace XboxDownload
                                         if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString());
                                     }
                                     break;
-                                case "test.cdn.nintendo.net":
+                                case "ctest.cdn.nintendo.net":
                                     if (_tmpPath.ToLower() == "/")
                                     {
                                         bFileFound = true;
