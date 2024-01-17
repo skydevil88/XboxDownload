@@ -614,7 +614,7 @@ namespace XboxDownload
                 DnsListen.UpdateHosts(akamai);
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
                 tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbBattleIP.Text = akamai;
-                SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、育碧、Riot Games 全部游戏下载域名)", "localhost", 0x008000);
+                SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 全部游戏下载域名)", "localhost", 0x008000);
                 ckbOptimalAkamaiIP.Enabled = true;
             }
             else if (bServiceFlag)
