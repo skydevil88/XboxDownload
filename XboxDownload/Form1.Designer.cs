@@ -68,7 +68,7 @@
             linkXbox3 = new LinkLabel();
             linkXbox2 = new LinkLabel();
             linkXbox1 = new LinkLabel();
-            linkEA = new LinkLabel();
+            linkEA1 = new LinkLabel();
             ckbGameLink = new CheckBox();
             linkRestartEABackgroundService = new LinkLabel();
             ckbOptimalAkamaiIP = new CheckBox();
@@ -605,7 +605,7 @@
             groupBox1.Controls.Add(linkXbox3);
             groupBox1.Controls.Add(linkXbox2);
             groupBox1.Controls.Add(linkXbox1);
-            groupBox1.Controls.Add(linkEA);
+            groupBox1.Controls.Add(linkEA1);
             groupBox1.Controls.Add(ckbGameLink);
             groupBox1.Controls.Add(linkRestartEABackgroundService);
             groupBox1.Controls.Add(ckbOptimalAkamaiIP);
@@ -686,13 +686,13 @@
             linkXbox1.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
             linkXbox1.LinkClicked += Link_LinkClicked;
             // 
-            // linkEA
+            // linkEA1
             // 
-            resources.ApplyResources(linkEA, "linkEA");
-            linkEA.Name = "linkEA";
-            linkEA.TabStop = true;
-            linkEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
-            linkEA.LinkClicked += Link_LinkClicked;
+            resources.ApplyResources(linkEA1, "linkEA1");
+            linkEA1.Name = "linkEA1";
+            linkEA1.TabStop = true;
+            linkEA1.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
+            linkEA1.LinkClicked += Link_LinkClicked;
             // 
             // ckbGameLink
             // 
@@ -2976,7 +2976,7 @@
         private Label labelTraffic;
         private LinkLabel linkPcInstall1;
         private ToolStripMenuItem tsmTeachingEA;
-        private LinkLabel linkEA;
+        private LinkLabel linkEA1;
         private LinkLabel linkXbox3;
         private LinkLabel linkXbox2;
         private LinkLabel linkXbox1;

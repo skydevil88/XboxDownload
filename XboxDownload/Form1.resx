@@ -613,31 +613,31 @@
   <data name="&gt;&gt;linkXbox1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="linkEA.AutoSize" type="System.Boolean, mscorlib">
+  <data name="linkEA1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="linkEA.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="linkEA1.Location" type="System.Drawing.Point, System.Drawing">
     <value>726, 237</value>
   </data>
-  <data name="linkEA.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="linkEA1.Size" type="System.Drawing.Size, System.Drawing">
     <value>422, 24</value>
   </data>
-  <data name="linkEA.TabIndex" type="System.Int32, mscorlib">
+  <data name="linkEA1.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
   </data>
-  <data name="linkEA.Text" xml:space="preserve">
-    <value>EA下载加速教程 (NS、战网、Epic、拳头游戏 同理)</value>
+  <data name="linkEA1.Text" xml:space="preserve">
+    <value>EA下载加速教程 (NS、战网、育碧、拳头游戏 同理)</value>
   </data>
-  <data name="&gt;&gt;linkEA.Name" xml:space="preserve">
-    <value>linkEA</value>
+  <data name="&gt;&gt;linkEA1.Name" xml:space="preserve">
+    <value>linkEA1</value>
   </data>
-  <data name="&gt;&gt;linkEA.Type" xml:space="preserve">
+  <data name="&gt;&gt;linkEA1.Type" xml:space="preserve">
     <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;linkEA.Parent" xml:space="preserve">
+  <data name="&gt;&gt;linkEA1.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;linkEA.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;linkEA1.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
   <data name="ckbGameLink.AutoSize" type="System.Boolean, mscorlib">
@@ -1202,7 +1202,7 @@
     <value>167, 28</value>
   </data>
   <data name="ckbEpicCDN.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="ckbEpicCDN.Text" xml:space="preserve">
     <value>跳转腾讯云CDN</value>
@@ -1253,7 +1253,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbEpicIP.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.Name" xml:space="preserve">
     <value>tbEpicIP</value>
@@ -1307,7 +1307,7 @@
     <value>188, 28</value>
   </data>
   <data name="ckbBattleCDN.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="ckbBattleCDN.Text" xml:space="preserve">
     <value>跳转 Akamai CDN</value>
@@ -1358,7 +1358,7 @@
     <value>188, 30</value>
   </data>
   <data name="tbBattleIP.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.Name" xml:space="preserve">
     <value>tbBattleIP</value>

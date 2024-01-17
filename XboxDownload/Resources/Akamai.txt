@@ -20,6 +20,9 @@ shared-static-prod.epicgames.com
 ####################### Steam ########################
 *.akamai.steamstatic.com
 
+#################### Ubisoft Connect ###################
+uplaypc-s-ubisoft.cdn.ubi.com
+
 ####################### Other ########################
 *.akamai.net
 *.akamaihd.net
