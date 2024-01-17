@@ -374,17 +374,8 @@ namespace XboxDownload
             }
             if (ubiIP != null)
             {
-                List<ResouceRecord> lsUbisoftIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbisoftIP);
-            }
-            if (Properties.Settings.Default.UbiStore && Properties.Settings.Default.UbiCDN)
-            {
-                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsLocalIP);
-            }
-            if (ubiIP != null)
-            {
-                List<ResouceRecord> lsUbisoftIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbisoftIP);
+                List<ResouceRecord> lsUbiIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbiIP);
             }
             if (Properties.Settings.Default.HttpService)
             {
