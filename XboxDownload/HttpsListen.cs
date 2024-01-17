@@ -174,6 +174,7 @@ namespace XboxDownload
                             else
                             {
                                 bool bFileFound = false;
+                                string _url = "https://" + _hosts + _filePath;
                                 switch (_hosts)
                                 {
                                     case "packagespc.xboxlive.com":
@@ -187,7 +188,6 @@ namespace XboxDownload
                                                     Properties.Settings.Default.Authorization = m1.Groups[1].Value.Trim();
                                                     Properties.Settings.Default.Save();
                                                 }
-                                                string _url = "https://" + _hosts + _filePath;
                                                 var headers = new Dictionary<string, string>() { { "Host", _hosts }, { "Authorization", Properties.Settings.Default.Authorization } };
                                                 using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
                                                 if (response != null && response.IsSuccessStatusCode)
@@ -242,32 +242,35 @@ namespace XboxDownload
                                             }
                                         }
                                         break;
-                                    case "fastly-download.epicgames.com":
                                     case "download.epicgames.com":
+                                    case "download2.epicgames.com":
+                                    case "download3.epicgames.com":
+                                    case "download4.epicgames.com":
+                                    case "fastly-download.epicgames.com":
                                     case "epicgames-download1.akamaized.net":
                                         if (_filePath.Contains(".manifest"))
                                         {
                                             string? ip = ClassDNS.DoH(_hosts);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
-                                                bFileFound = true;
-                                                string _url = "https://" + _hosts + _filePath;
                                                 var headers = new Dictionary<string, string>() { { "Host", _hosts } };
                                                 using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
                                                 if (response != null && response.IsSuccessStatusCode)
                                                 {
+                                                    bFileFound = true;
                                                     Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
                                                     byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
                                                     ssl.Write(_headers);
                                                     ssl.Write(_response);
                                                     ssl.Flush();
+                                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 }
                                             }
                                         }
                                         else
                                         {
                                             bFileFound = true;
-                                            string _url = "https://epicgames-download1-1251447533.file.myqcloud.com" + _filePath;
+                                            _url = "https://epicgames-download1-1251447533.file.myqcloud.com" + _filePath;
                                             StringBuilder sb = new();
                                             sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                                             sb.Append("Content-Type: text/html\r\n");
@@ -282,7 +285,6 @@ namespace XboxDownload
                                 }
                                 if (!bFileFound)
                                 {
-                                    string _url = "https://" + _hosts + _filePath;
                                     Byte[] _response = Encoding.ASCII.GetBytes("File not found.");
                                     StringBuilder sb = new();
                                     sb.Append("HTTP/1.1 404 Not Found\r\n");

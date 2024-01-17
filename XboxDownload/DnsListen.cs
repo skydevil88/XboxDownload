@@ -340,9 +340,12 @@ namespace XboxDownload
             }
             if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
             {
-                dicService.TryAdd("epicgames-download1.akamaized.net", lsLocalIP);
                 dicService.TryAdd("download.epicgames.com", lsLocalIP);
+                dicService.TryAdd("download2.epicgames.com", lsLocalIP);
+                dicService.TryAdd("download3.epicgames.com", lsLocalIP);
+                dicService.TryAdd("download4.epicgames.com", lsLocalIP);
                 dicService.TryAdd("fastly-download.epicgames.com", lsLocalIP);
+                dicService.TryAdd("epicgames-download1.akamaized.net", lsLocalIP);
             }
             if (epicIP != null)
             {

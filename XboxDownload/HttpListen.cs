@@ -322,15 +322,17 @@ namespace XboxDownload
                                         }
                                     }
                                     break;
-                                case "fastly-download.epicgames.com":
                                 case "download.epicgames.com":
+                                case "download2.epicgames.com":
+                                case "download3.epicgames.com":
+                                case "download4.epicgames.com":
+                                case "fastly-download.epicgames.com":
                                 case "epicgames-download1.akamaized.net":
                                     if (_filePath.Contains(".manifest"))
                                     {
                                         string? ip = ClassDNS.DoH(_hosts);
                                         if (!string.IsNullOrEmpty(ip))
                                         {
-                                            bFileFound = true;
                                             var headers = new Dictionary<string, string>() { { "Host", _hosts } };
                                             using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
                                             if (response != null && response.IsSuccessStatusCode)
@@ -340,6 +342,7 @@ namespace XboxDownload
                                                 byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
                                                 mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
                                                 mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                             }
                                         }
                                     }

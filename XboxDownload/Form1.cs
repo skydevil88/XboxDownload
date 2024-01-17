@@ -1053,7 +1053,7 @@ namespace XboxDownload
                 {
                     sHosts = sw.ReadToEnd();
                 }
-                sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)+# End of (XboxDownload|Xbox下载助手)\r\n", "");
+                sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)*# End of (XboxDownload|Xbox下载助手)\r\n", "");
                 if (add)
                 {
                     if (string.IsNullOrEmpty(Properties.Settings.Default.ComIP)) tbComIP.Text = Properties.Settings.Default.LocalIP;
@@ -1195,9 +1195,12 @@ namespace XboxDownload
                     {
                         if(Properties.Settings.Default.EpicCDN)
                         {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " epicgames-download1.akamaized.net");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " download.epicgames.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download2.epicgames.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download3.epicgames.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download4.epicgames.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " fastly-download.epicgames.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " epicgames-download1.akamaized.net");
                         }
                         if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
                         {
@@ -1570,6 +1573,7 @@ namespace XboxDownload
                 case 5:
                     host = "AkamaiV6";
                     break;
+
             }
             dgvIpList.Tag = host;
             gbIPList.Text = "IP 列表 (" + host + ")";

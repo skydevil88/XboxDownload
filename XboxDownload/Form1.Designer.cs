@@ -42,7 +42,6 @@
             tsmProductManual = new ToolStripMenuItem();
             tsmTeaching = new ToolStripMenuItem();
             tsmTeachingEA = new ToolStripMenuItem();
-            tsmTeaching4 = new ToolStripMenuItem();
             tsmTeaching3 = new ToolStripMenuItem();
             tsmTeaching2 = new ToolStripMenuItem();
             tsmTeaching1 = new ToolStripMenuItem();
@@ -66,6 +65,9 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            linkXbox3 = new LinkLabel();
+            linkXbox2 = new LinkLabel();
+            linkXbox1 = new LinkLabel();
             linkEA = new LinkLabel();
             ckbGameLink = new CheckBox();
             linkRestartEABackgroundService = new LinkLabel();
@@ -430,7 +432,7 @@
             // 
             // tsmTeaching
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeachingEA, tsmTeaching4, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
+            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeachingEA, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
             tsmTeaching.Name = "tsmTeaching";
             resources.ApplyResources(tsmTeaching, "tsmTeaching");
             tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
@@ -441,13 +443,6 @@
             resources.ApplyResources(tsmTeachingEA, "tsmTeachingEA");
             tsmTeachingEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
             tsmTeachingEA.Click += TsmOpenSite_Click;
-            // 
-            // tsmTeaching4
-            // 
-            tsmTeaching4.Name = "tsmTeaching4";
-            resources.ApplyResources(tsmTeaching4, "tsmTeaching4");
-            tsmTeaching4.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
-            tsmTeaching4.Click += TsmOpenSite_Click;
             // 
             // tsmTeaching3
             // 
@@ -607,6 +602,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(linkXbox3);
+            groupBox1.Controls.Add(linkXbox2);
+            groupBox1.Controls.Add(linkXbox1);
             groupBox1.Controls.Add(linkEA);
             groupBox1.Controls.Add(ckbGameLink);
             groupBox1.Controls.Add(linkRestartEABackgroundService);
@@ -663,6 +661,30 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // linkXbox3
+            // 
+            resources.ApplyResources(linkXbox3, "linkXbox3");
+            linkXbox3.Name = "linkXbox3";
+            linkXbox3.TabStop = true;
+            linkXbox3.Tag = "https://www.bilibili.com/video/BV1MA411m7pq";
+            linkXbox3.LinkClicked += Link_LinkClicked;
+            // 
+            // linkXbox2
+            // 
+            resources.ApplyResources(linkXbox2, "linkXbox2");
+            linkXbox2.Name = "linkXbox2";
+            linkXbox2.TabStop = true;
+            linkXbox2.Tag = "https://www.bilibili.com/video/BV1Xe411k7dp";
+            linkXbox2.LinkClicked += Link_LinkClicked;
+            // 
+            // linkXbox1
+            // 
+            resources.ApplyResources(linkXbox1, "linkXbox1");
+            linkXbox1.Name = "linkXbox1";
+            linkXbox1.TabStop = true;
+            linkXbox1.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
+            linkXbox1.LinkClicked += Link_LinkClicked;
             // 
             // linkEA
             // 
@@ -2661,7 +2683,6 @@
         private ToolStripMenuItem tsmProductManual;
         private ToolStripMenuItem tsmTeaching;
         private ToolStripMenuItem tsmAbout;
-        private ToolStripMenuItem tsmTeaching4;
         private ToolStripMenuItem tsmTeaching3;
         private ToolStripMenuItem tsmTeaching2;
         private ToolStripMenuItem tsmTeaching1;
@@ -2956,5 +2977,8 @@
         private LinkLabel linkPcInstall1;
         private ToolStripMenuItem tsmTeachingEA;
         private LinkLabel linkEA;
+        private LinkLabel linkXbox3;
+        private LinkLabel linkXbox2;
+        private LinkLabel linkXbox1;
     }
 }
