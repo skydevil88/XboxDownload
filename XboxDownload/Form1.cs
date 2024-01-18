@@ -1065,202 +1065,205 @@ namespace XboxDownload
                     sw.Close();
                     fi.Refresh();
                 }
-                FileSecurity fSecurity = fi.GetAccessControl();
-                fSecurity.AddAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
-                fi.SetAccessControl(fSecurity);
-                if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
-                    fi.Attributes = FileAttributes.Normal;
-                string sHosts = string.Empty;
+                string sHosts;
                 using (StreamReader sw = new(sHostsPath))
                 {
                     sHosts = sw.ReadToEnd();
                 }
-                sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)*# End of (XboxDownload|Xbox下载助手)\r\n", "");
-                if (add)
+                if (!(Properties.Settings.Default.SetDns && string.IsNullOrEmpty(Regex.Replace(sHosts, "#.*", "").Trim())))
                 {
-                    if (string.IsNullOrEmpty(Properties.Settings.Default.ComIP)) tbComIP.Text = Properties.Settings.Default.LocalIP;
-                    sb.AppendLine("# Added by XboxDownload");
-                    if (Properties.Settings.Default.MicrosoftStore)
+                    sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)*# End of (XboxDownload|Xbox下载助手)\r\n", "");
+                    if (add)
                     {
-                        if (!string.IsNullOrEmpty(akamai))
+                        if (string.IsNullOrEmpty(Properties.Settings.Default.ComIP)) tbComIP.Text = Properties.Settings.Default.LocalIP;
+                        sb.AppendLine("# Added by XboxDownload");
+                        if (Properties.Settings.Default.MicrosoftStore)
                         {
-                            if (Properties.Settings.Default.GameLink)
+                            if (!string.IsNullOrEmpty(akamai))
                             {
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " xvcf1.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.cn");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.cn");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.cn");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " tlu.dl.delivery.mp.microsoft.com");
+                                if (Properties.Settings.Default.GameLink)
+                                {
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " xvcf1.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.cn");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.cn");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.cn");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " tlu.dl.delivery.mp.microsoft.com");
+                                }
+                                else
+                                {
+                                    sb.AppendLine(akamai + " xvcf1.xboxlive.com");
+                                    sb.AppendLine(akamai + " assets1.xboxlive.com");
+                                    sb.AppendLine(akamai + " d1.xboxlive.com");
+                                    sb.AppendLine(akamai + " dlassets.xboxlive.com");
+                                    sb.AppendLine(akamai + " assets1.xboxlive.cn");
+                                    sb.AppendLine(akamai + " d1.xboxlive.cn");
+                                    sb.AppendLine(akamai + " dlassets.xboxlive.cn");
+                                    sb.AppendLine(akamai + " tlu.dl.delivery.mp.microsoft.com");
+                                }
+                                sb.AppendLine(akamai + " xvcf2.xboxlive.com");
+                                sb.AppendLine(akamai + " assets2.xboxlive.com");
+                                sb.AppendLine(akamai + " d2.xboxlive.com");
+                                sb.AppendLine(akamai + " dlassets2.xboxlive.com");
+                                sb.AppendLine(akamai + " assets2.xboxlive.cn");
+                                sb.AppendLine(akamai + " d2.xboxlive.cn");
+                                sb.AppendLine(akamai + " dlassets2.xboxlive.cn");
+                                sb.AppendLine(akamai + " dl.delivery.mp.microsoft.com");
+                                sb.AppendLine(akamai + " 2.tlu.dl.delivery.mp.microsoft.com");
                             }
                             else
                             {
-                                sb.AppendLine(akamai + " xvcf1.xboxlive.com");
-                                sb.AppendLine(akamai + " assets1.xboxlive.com");
-                                sb.AppendLine(akamai + " d1.xboxlive.com");
-                                sb.AppendLine(akamai + " dlassets.xboxlive.com");
-                                sb.AppendLine(akamai + " assets1.xboxlive.cn");
-                                sb.AppendLine(akamai + " d1.xboxlive.cn");
-                                sb.AppendLine(akamai + " dlassets.xboxlive.cn");
-                                sb.AppendLine(akamai + " tlu.dl.delivery.mp.microsoft.com");
+                                string comIP = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) ? Properties.Settings.Default.LocalIP : Properties.Settings.Default.ComIP;
+                                if (Properties.Settings.Default.GameLink)
+                                {
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " xvcf1.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.com");
+                                    sb.AppendLine(comIP + " xvcf2.xboxlive.com");
+                                    sb.AppendLine(comIP + " assets2.xboxlive.com");
+                                    sb.AppendLine(comIP + " d2.xboxlive.com");
+                                    sb.AppendLine(comIP + " dlassets2.xboxlive.com");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.cn");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.cn");
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.cn");
+                                    if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
+                                    {
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
+                                    }
+                                    if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
+                                    {
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dl.delivery.mp.microsoft.com");
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " 2.tlu.dl.delivery.mp.microsoft.com");
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets2.xboxlive.cn");
+                                    }
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " tlu.dl.delivery.mp.microsoft.com");
+                                }
+                                else
+                                {
+                                    sb.AppendLine(comIP + " xvcf1.xboxlive.com");
+                                    sb.AppendLine(comIP + " xvcf2.xboxlive.com");
+                                    sb.AppendLine(comIP + " assets1.xboxlive.com");
+                                    sb.AppendLine(comIP + " assets2.xboxlive.com");
+                                    sb.AppendLine(comIP + " d1.xboxlive.com");
+                                    sb.AppendLine(comIP + " d2.xboxlive.com");
+                                    sb.AppendLine(comIP + " dlassets.xboxlive.com");
+                                    sb.AppendLine(comIP + " dlassets2.xboxlive.com");
+                                    if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
+                                    {
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " assets1.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " d1.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
+                                    }
+                                    if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
+                                    {
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dl.delivery.mp.microsoft.com");
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " tlu.dl.delivery.mp.microsoft.com");
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " 2.tlu.dl.delivery.mp.microsoft.com");
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets2.xboxlive.cn");
+                                    }
+                                }
                             }
-                            sb.AppendLine(akamai + " xvcf2.xboxlive.com");
-                            sb.AppendLine(akamai + " assets2.xboxlive.com");
-                            sb.AppendLine(akamai + " d2.xboxlive.com");
-                            sb.AppendLine(akamai + " dlassets2.xboxlive.com");
-                            sb.AppendLine(akamai + " assets2.xboxlive.cn");
-                            sb.AppendLine(akamai + " d2.xboxlive.cn");
-                            sb.AppendLine(akamai + " dlassets2.xboxlive.cn");
-                            sb.AppendLine(akamai + " dl.delivery.mp.microsoft.com");
-                            sb.AppendLine(akamai + " 2.tlu.dl.delivery.mp.microsoft.com");
-                        }
-                        else
-                        {
-                            string comIP = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) ? Properties.Settings.Default.LocalIP : Properties.Settings.Default.ComIP;
-                            if (Properties.Settings.Default.GameLink)
+                            if (Properties.Settings.Default.HttpService)
                             {
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " xvcf1.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.com");
-                                sb.AppendLine(comIP + " xvcf2.xboxlive.com");
-                                sb.AppendLine(comIP + " assets2.xboxlive.com");
-                                sb.AppendLine(comIP + " d2.xboxlive.com");
-                                sb.AppendLine(comIP + " dlassets2.xboxlive.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " assets1.xboxlive.cn");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " d1.xboxlive.cn");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " dlassets.xboxlive.cn");
-                                if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
-                                {
-                                    sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
-                                    sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
-                                }
-                                if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
-                                {
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " dl.delivery.mp.microsoft.com");
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " 2.tlu.dl.delivery.mp.microsoft.com");
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets2.xboxlive.cn");
-                                }
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " tlu.dl.delivery.mp.microsoft.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " www.msftconnecttest.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " packagespc.xboxlive.com");
                             }
-                            else
+                        }
+                        if (Properties.Settings.Default.EAStore)
+                        {
+                            if (!string.IsNullOrEmpty(akamai))
                             {
-                                sb.AppendLine(comIP + " xvcf1.xboxlive.com");
-                                sb.AppendLine(comIP + " xvcf2.xboxlive.com");
-                                sb.AppendLine(comIP + " assets1.xboxlive.com");
-                                sb.AppendLine(comIP + " assets2.xboxlive.com");
-                                sb.AppendLine(comIP + " d1.xboxlive.com");
-                                sb.AppendLine(comIP + " d2.xboxlive.com");
-                                sb.AppendLine(comIP + " dlassets.xboxlive.com");
-                                sb.AppendLine(comIP + " dlassets2.xboxlive.com");
-                                if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
-                                {
-                                    sb.AppendLine(Properties.Settings.Default.CnIP + " assets1.xboxlive.cn");
-                                    sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
-                                    sb.AppendLine(Properties.Settings.Default.CnIP + " d1.xboxlive.cn");
-                                    sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
-                                }
-                                if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
-                                {
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " dl.delivery.mp.microsoft.com");
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " tlu.dl.delivery.mp.microsoft.com");
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " 2.tlu.dl.delivery.mp.microsoft.com");
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets.xboxlive.cn");
-                                    sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets2.xboxlive.cn");
-                                }
+                                sb.AppendLine(akamai + " origin-a.akamaihd.net");
+                            }
+                            else if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
+                            {
+                                sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
+                            }
+                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
+                        }
+                        if (Properties.Settings.Default.BattleStore)
+                        {
+                            if (Properties.Settings.Default.BattleCDN)
+                            {
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " us.cdn.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " eu.cdn.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " kr.cdn.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
+                            }
+                            if (!string.IsNullOrEmpty(akamai))
+                            {
+                                sb.AppendLine(akamai + " blzddist1-a.akamaihd.net");
+                                sb.AppendLine(akamai + " blzddist2-a.akamaihd.net");
+                                sb.AppendLine(akamai + " blzddist3-a.akamaihd.net");
+                            }
+                            else if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
+                            {
+                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
+                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist2-a.akamaihd.net");
+                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist3-a.akamaihd.net");
                             }
                         }
-                        if (Properties.Settings.Default.HttpService)
+                        if (Properties.Settings.Default.EpicStore)
                         {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " www.msftconnecttest.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " packagespc.xboxlive.com");
+                            if (Properties.Settings.Default.EpicCDN)
+                            {
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " download.epicgames.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " download2.epicgames.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " download3.epicgames.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " download4.epicgames.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " fastly-download.epicgames.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " epicgames-download1.akamaized.net");
+                            }
+                            if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
+                            {
+                                sb.AppendLine(Properties.Settings.Default.EpicIP + " epicgames-download1-1251447533.file.myqcloud.com");
+                            }
                         }
+                        if (Properties.Settings.Default.UbiStore)
+                        {
+                            if (Properties.Settings.Default.UbiCDN)
+                            {
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubi.com");
+                            }
+                            if (!string.IsNullOrEmpty(Properties.Settings.Default.UbiIP))
+                            {
+                                sb.AppendLine(Properties.Settings.Default.UbiIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
+                            }
+                        }
+                        DataTable dt = Form1.dtHosts.Copy();
+                        dt.RejectChanges();
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (!Convert.ToBoolean(dr["Enable"])) continue;
+                            string? hostName = dr["HostName"].ToString()?.ToLower();
+                            string? ip = dr["IPv4"].ToString()?.Trim();
+                            if (!string.IsNullOrEmpty(hostName) && !hostName.StartsWith("*.") && !string.IsNullOrEmpty(ip))
+                            {
+                                sb.AppendLine(ip + " " + hostName);
+                            }
+                        }
+                        sb.AppendLine("# End of XboxDownload");
+                        sHosts = sb.ToString() + sHosts;
                     }
-                    if (Properties.Settings.Default.EAStore)
+                    FileSecurity fSecurity = fi.GetAccessControl();
+                    fSecurity.AddAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
+                    fi.SetAccessControl(fSecurity);
+                    if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
+                        fi.Attributes = FileAttributes.Normal;
+                    using (StreamWriter sw = new(sHostsPath, false))
                     {
-                        if (!string.IsNullOrEmpty(akamai))
-                        {
-                            sb.AppendLine(akamai + " origin-a.akamaihd.net");
-                        }
-                        else if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
-                        {
-                            sb.AppendLine(Properties.Settings.Default.EAIP + " origin-a.akamaihd.net");
-                        }
-                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
+                        sw.Write(sHosts.Trim() + "\r\n");
                     }
-                    if (Properties.Settings.Default.BattleStore)
-                    {
-                        if (Properties.Settings.Default.BattleCDN)
-                        {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " us.cdn.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " eu.cdn.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " kr.cdn.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
-                        }
-                        if (!string.IsNullOrEmpty(akamai))
-                        {
-                            sb.AppendLine(akamai + " blzddist1-a.akamaihd.net");
-                            sb.AppendLine(akamai + " blzddist2-a.akamaihd.net");
-                            sb.AppendLine(akamai + " blzddist3-a.akamaihd.net");
-                        }
-                        else if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
-                        {
-                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
-                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist2-a.akamaihd.net");
-                            sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist3-a.akamaihd.net");
-                        }
-                    }
-                    if (Properties.Settings.Default.EpicStore)
-                    {
-                        if(Properties.Settings.Default.EpicCDN)
-                        {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download.epicgames.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download2.epicgames.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download3.epicgames.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " download4.epicgames.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " fastly-download.epicgames.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " epicgames-download1.akamaized.net");
-                        }
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
-                        {
-                            sb.AppendLine(Properties.Settings.Default.EpicIP + " epicgames-download1-1251447533.file.myqcloud.com");
-                        }
-                    }
-                    if (Properties.Settings.Default.UbiStore)
-                    {
-                        if (Properties.Settings.Default.UbiCDN)
-                        {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubi.com");
-                        }
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.UbiIP))
-                        {
-                            sb.AppendLine(Properties.Settings.Default.UbiIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
-                        }
-                    }
-                    DataTable dt = Form1.dtHosts.Copy();
-                    dt.RejectChanges();
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        if (!Convert.ToBoolean(dr["Enable"])) continue;
-                        string? hostName = dr["HostName"].ToString()?.ToLower();
-                        string? ip = dr["IPv4"].ToString()?.Trim();
-                        if (!string.IsNullOrEmpty(hostName) && !hostName.StartsWith("*.") && !string.IsNullOrEmpty(ip))
-                        {
-                            sb.AppendLine(ip + " " + hostName);
-                        }
-                    }
-                    sb.AppendLine("# End of XboxDownload");
-                    sHosts = sb.ToString() + sHosts;
+                    fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
+                    fi.SetAccessControl(fSecurity);
                 }
-                using (StreamWriter sw = new(sHostsPath, false))
-                {
-                    sw.Write(sHosts.Trim() + "\r\n");
-                }
-                fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
-                fi.SetAccessControl(fSecurity);
             }
             catch (Exception ex)
             {
