@@ -65,6 +65,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            ckbDisableIPv6DNS = new CheckBox();
             ckbUbiStore = new CheckBox();
             ckbUbiCDN = new CheckBox();
             label34 = new Label();
@@ -130,7 +131,7 @@
             gbIPList = new GroupBox();
             dgvIpList = new DataGridView();
             Col_Check = new DataGridViewCheckBoxColumn();
-            Col_IP = new DataGridViewTextBoxColumn();
+            Col_IPAddress = new DataGridViewTextBoxColumn();
             Col_Location = new DataGridViewTextBoxColumn();
             Col_302 = new DataGridViewCheckBoxColumn();
             Col_TTL = new DataGridViewTextBoxColumn();
@@ -165,7 +166,7 @@
             dgvHosts = new DataGridView();
             Col_Enable = new DataGridViewCheckBoxColumn();
             Col_HostName = new DataGridViewTextBoxColumn();
-            Col_IPv4 = new DataGridViewTextBoxColumn();
+            Col_IP = new DataGridViewTextBoxColumn();
             Col_Remark = new DataGridViewTextBoxColumn();
             panel2 = new Panel();
             linkHostsConnectTest = new LinkLabel();
@@ -330,6 +331,7 @@
             tsmUseIPEa = new ToolStripMenuItem();
             tsmUseIPBattle = new ToolStripMenuItem();
             tsmUseIPEpic = new ToolStripMenuItem();
+            tsmUseIPUbi = new ToolStripMenuItem();
             tssUseIP2 = new ToolStripSeparator();
             tsmUseAkamai = new ToolStripMenuItem();
             tsmUseIPHosts = new ToolStripMenuItem();
@@ -607,6 +609,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckbDisableIPv6DNS);
             groupBox1.Controls.Add(ckbUbiStore);
             groupBox1.Controls.Add(ckbUbiCDN);
             groupBox1.Controls.Add(label34);
@@ -671,6 +674,13 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // ckbDisableIPv6DNS
+            // 
+            resources.ApplyResources(ckbDisableIPv6DNS, "ckbDisableIPv6DNS");
+            ckbDisableIPv6DNS.ForeColor = Color.Red;
+            ckbDisableIPv6DNS.Name = "ckbDisableIPv6DNS";
+            ckbDisableIPv6DNS.UseVisualStyleBackColor = true;
             // 
             // ckbUbiStore
             // 
@@ -1049,7 +1059,7 @@
             dgvIpList.AllowUserToAddRows = false;
             dgvIpList.AllowUserToDeleteRows = false;
             dgvIpList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvIpList.Columns.AddRange(new DataGridViewColumn[] { Col_Check, Col_IP, Col_Location, Col_302, Col_TTL, Col_RoundtripTime, Col_Speed });
+            dgvIpList.Columns.AddRange(new DataGridViewColumn[] { Col_Check, Col_IPAddress, Col_Location, Col_302, Col_TTL, Col_RoundtripTime, Col_Speed });
             resources.ApplyResources(dgvIpList, "dgvIpList");
             dgvIpList.MultiSelect = false;
             dgvIpList.Name = "dgvIpList";
@@ -1063,12 +1073,12 @@
             resources.ApplyResources(Col_Check, "Col_Check");
             Col_Check.Name = "Col_Check";
             // 
-            // Col_IP
+            // Col_IPAddress
             // 
-            resources.ApplyResources(Col_IP, "Col_IP");
-            Col_IP.Name = "Col_IP";
-            Col_IP.ReadOnly = true;
-            Col_IP.Resizable = DataGridViewTriState.True;
+            resources.ApplyResources(Col_IPAddress, "Col_IPAddress");
+            Col_IPAddress.Name = "Col_IPAddress";
+            Col_IPAddress.ReadOnly = true;
+            Col_IPAddress.Resizable = DataGridViewTriState.True;
             // 
             // Col_Location
             // 
@@ -1209,7 +1219,7 @@
             // 
             cbImportIP.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImportIP.FormattingEnabled = true;
-            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5") });
+            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5"), resources.GetString("cbImportIP.Items6") });
             resources.ApplyResources(cbImportIP, "cbImportIP");
             cbImportIP.Name = "cbImportIP";
             cbImportIP.SelectedIndexChanged += CbImportIP_SelectedIndexChanged;
@@ -1313,7 +1323,7 @@
             // dgvHosts
             // 
             dgvHosts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvHosts.Columns.AddRange(new DataGridViewColumn[] { Col_Enable, Col_HostName, Col_IPv4, Col_Remark });
+            dgvHosts.Columns.AddRange(new DataGridViewColumn[] { Col_Enable, Col_HostName, Col_IP, Col_Remark });
             resources.ApplyResources(dgvHosts, "dgvHosts");
             dgvHosts.MultiSelect = false;
             dgvHosts.Name = "dgvHosts";
@@ -1339,12 +1349,12 @@
             Col_HostName.Name = "Col_HostName";
             Col_HostName.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
-            // Col_IPv4
+            // Col_IP
             // 
-            Col_IPv4.DataPropertyName = "IPv4";
-            resources.ApplyResources(Col_IPv4, "Col_IPv4");
-            Col_IPv4.Name = "Col_IPv4";
-            Col_IPv4.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Col_IP.DataPropertyName = "IP";
+            resources.ApplyResources(Col_IP, "Col_IP");
+            Col_IP.Name = "Col_IP";
+            Col_IP.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // Col_Remark
             // 
@@ -2473,7 +2483,7 @@
             // 
             // tsmUseIP
             // 
-            tsmUseIP.DropDownItems.AddRange(new ToolStripItem[] { tsmUseIPCn, tsmUseIPCom, tsmUseIPXbox, tsmUseIPApp, tssUseIP1, tsmUseIPPS, tsmUseIPNS, tsmUseIPEa, tsmUseIPBattle, tsmUseIPEpic, tssUseIP2, tsmUseAkamai, tsmUseIPHosts });
+            tsmUseIP.DropDownItems.AddRange(new ToolStripItem[] { tsmUseIPCn, tsmUseIPCom, tsmUseIPXbox, tsmUseIPApp, tssUseIP1, tsmUseIPPS, tsmUseIPNS, tsmUseIPEa, tsmUseIPBattle, tsmUseIPEpic, tsmUseIPUbi, tssUseIP2, tsmUseAkamai, tsmUseIPHosts });
             tsmUseIP.Name = "tsmUseIP";
             resources.ApplyResources(tsmUseIP, "tsmUseIP");
             // 
@@ -2539,6 +2549,12 @@
             resources.ApplyResources(tsmUseIPEpic, "tsmUseIPEpic");
             tsmUseIPEpic.Name = "tsmUseIPEpic";
             tsmUseIPEpic.Click += TsmUseIP_Click;
+            // 
+            // tsmUseIPUbi
+            // 
+            resources.ApplyResources(tsmUseIPUbi, "tsmUseIPUbi");
+            tsmUseIPUbi.Name = "tsmUseIPUbi";
+            tsmUseIPUbi.Click += TsmUseIP_Click;
             // 
             // tssUseIP2
             // 
@@ -2996,18 +3012,7 @@
         private LinkLabel linkAppGamingServices;
         private LinkLabel linkConsoleInstall;
         private CheckBox ckbOptimalAkamaiIP;
-        private DataGridViewCheckBoxColumn Col_Enable;
-        private DataGridViewTextBoxColumn Col_HostName;
-        private DataGridViewTextBoxColumn Col_IPv4;
-        private DataGridViewTextBoxColumn Col_Remark;
         private CheckBox ckbGameLink;
-        private DataGridViewCheckBoxColumn Col_Check;
-        private DataGridViewTextBoxColumn Col_IP;
-        private DataGridViewTextBoxColumn Col_Location;
-        private DataGridViewCheckBoxColumn Col_302;
-        private DataGridViewTextBoxColumn Col_TTL;
-        private DataGridViewTextBoxColumn Col_RoundtripTime;
-        private DataGridViewTextBoxColumn Col_Speed;
         private LinkLabel linkRestartEABackgroundService;
         private System.Windows.Forms.Timer timerTraffic;
         private Label labelTraffic;
@@ -3022,5 +3027,18 @@
         private CheckBox ckbUbiCDN;
         private Label label34;
         private CheckBox ckbUbiStore;
+        private DataGridViewCheckBoxColumn Col_Check;
+        private DataGridViewTextBoxColumn Col_IPAddress;
+        private DataGridViewTextBoxColumn Col_Location;
+        private DataGridViewCheckBoxColumn Col_302;
+        private DataGridViewTextBoxColumn Col_TTL;
+        private DataGridViewTextBoxColumn Col_RoundtripTime;
+        private DataGridViewTextBoxColumn Col_Speed;
+        private DataGridViewCheckBoxColumn Col_Enable;
+        private DataGridViewTextBoxColumn Col_HostName;
+        private DataGridViewTextBoxColumn Col_IP;
+        private DataGridViewTextBoxColumn Col_Remark;
+        private CheckBox ckbDisableIPv6DNS;
+        private ToolStripMenuItem tsmUseIPUbi;
     }
 }

@@ -44,7 +44,7 @@ namespace XboxDownload
                 p.Close();
             }
             SetMsg(resultInfo);
-            MatchCollection mc = Regex.Matches(resultInfo, @":\s*(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
+            MatchCollection mc = Regex.Matches(resultInfo, @":\s+(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})");
             if (mc.Count >= 2)
             {
                 string ip = mc[^1].Groups["ip"].Value;

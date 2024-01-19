@@ -16,11 +16,13 @@ namespace XboxDownload
         private readonly Form1 parentForm;
         private readonly string dohServer = "https://223.5.5.5";
         private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
+        public static readonly List<ResouceRecord> lsEmptyIP = new();
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
-        public static ConcurrentDictionary<String, List<ResouceRecord>> dicService = new(), dicService2 = new(), dicHosts1 = new();
-        public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2 = new();
+        public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
+        public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2V4 = new(), dicHosts2V6 = new();
         public static ConcurrentDictionary<String, Dns> dicDns = new();
         
+
         public class Dns
         {
             public string IPv4 { get; set; } = "";
@@ -250,137 +252,371 @@ namespace XboxDownload
             Task.WaitAll(tasks);
             if (!Form1.bServiceFlag) return;
 
-            dicService.Clear();
+            dicServiceV4.Clear();
+            dicServiceV6.Clear();
             List<ResouceRecord> lsLocalIP = new() { new ResouceRecord { Datas = localIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
             if (Properties.Settings.Default.GameLink)
             {
-                dicService.TryAdd("xvcf1.xboxlive.com", lsLocalIP);
-                dicService.TryAdd("assets1.xboxlive.com", lsLocalIP);
-                dicService.TryAdd("d1.xboxlive.com", lsLocalIP);
-                dicService.TryAdd("dlassets.xboxlive.com", lsLocalIP);
-                dicService.TryAdd("assets1.xboxlive.cn", lsLocalIP);
-                dicService.TryAdd("d1.xboxlive.cn", lsLocalIP);
-                dicService.TryAdd("dlassets.xboxlive.cn", lsLocalIP);
+                _ = dicServiceV4.TryAdd("xvcf1.xboxlive.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("assets1.xboxlive.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("d1.xboxlive.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("dlassets.xboxlive.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("assets1.xboxlive.cn", lsLocalIP);
+                _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsLocalIP);
+                _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsLocalIP);
+                _ = dicServiceV6.TryAdd("xvcf1.xboxlive.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("assets1.xboxlive.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("d1.xboxlive.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("dlassets.xboxlive.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
                 if (comIP != null)
                 {
-                    List<ResouceRecord> lsComIP = new() { new ResouceRecord { Datas = comIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    dicService.TryAdd("xvcf2.xboxlive.com", lsComIP);
-                    dicService.TryAdd("assets2.xboxlive.com", lsComIP);
-                    dicService.TryAdd("d2.xboxlive.com", lsComIP);
-                    dicService.TryAdd("dlassets2.xboxlive.com", lsComIP);
+                    if ((new IPAddress(comIP)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsComIP = new() { new ResouceRecord { Datas = comIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("xvcf2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("xvcf2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.com", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsComIP = new() { new ResouceRecord { Datas = comIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("xvcf2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("xvcf2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.com", lsEmptyIP);
+                    }
                 }
                 if (cnIP != null)
                 {
-                    List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    dicService.TryAdd("assets2.xboxlive.cn", lsCnIP);
-                    dicService.TryAdd("d2.xboxlive.cn", lsCnIP);
+                    if ((new IPAddress(cnIP)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                    }
                 }
                 if (appIP != null)
                 {
-                    List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    dicService.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
-                    dicService.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsLocalIP);
-                    dicService.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                    dicService.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
+                    if ((new IPAddress(appIP)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsLocalIP);
+                        _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
+                        _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsLocalIP);
+                        _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
+                        _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+                    }
                 }
             }
             else
             {
                 if (comIP != null)
                 {
-                    List<ResouceRecord> lsComIP = new() { new ResouceRecord { Datas = comIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    dicService.TryAdd("xvcf1.xboxlive.com", lsComIP);
-                    dicService.TryAdd("xvcf2.xboxlive.com", lsComIP);
-                    dicService.TryAdd("assets1.xboxlive.com", lsComIP);
-                    dicService.TryAdd("assets2.xboxlive.com", lsComIP);
-                    dicService.TryAdd("d1.xboxlive.com", lsComIP);
-                    dicService.TryAdd("d2.xboxlive.com", lsComIP);
-                    dicService.TryAdd("dlassets.xboxlive.com", lsComIP);
-                    dicService.TryAdd("dlassets2.xboxlive.com", lsComIP);
+                    if ((new IPAddress(comIP)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsComIP = new() { new ResouceRecord { Datas = comIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("xvcf1.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("xvcf2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("assets1.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("d1.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("xvcf1.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("xvcf2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("assets1.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("d1.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.com", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsComIP = new() { new ResouceRecord { Datas = comIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("xvcf1.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("xvcf2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("assets1.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("d1.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.com", lsComIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.com", lsComIP);
+                        _ = dicServiceV4.TryAdd("xvcf1.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("xvcf2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("assets1.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("d1.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.com", lsEmptyIP);
+                    }
                 }
                 if (cnIP != null)
                 {
-                    List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    dicService.TryAdd("assets1.xboxlive.cn", lsCnIP);
-                    dicService.TryAdd("assets2.xboxlive.cn", lsCnIP);
-                    dicService.TryAdd("d1.xboxlive.cn", lsCnIP);
-                    dicService.TryAdd("d2.xboxlive.cn", lsCnIP);
+                    if ((new IPAddress(cnIP)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("assets1.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("assets1.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                    }
                 }
                 if (appIP != null)
                 {
-                    List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    dicService.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
-                    dicService.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                    dicService.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                    dicService.TryAdd("dlassets.xboxlive.cn", lsAppIP);
-                    dicService.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
+                    if ((new IPAddress(appIP)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsAppIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
+                        _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsAppIP = new() { new ResouceRecord { Datas = appIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsAppIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
+                        _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+                    }
                 }
             }
             if (psIP != null)
             {
-                List<ResouceRecord> lsPsIP = new() { new ResouceRecord { Datas = psIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("gst.prod.dl.playstation.net", lsPsIP);
-                dicService.TryAdd("gs2.ww.prod.dl.playstation.net", lsPsIP);
-                dicService.TryAdd("zeus.dl.playstation.net", lsPsIP);
-                dicService.TryAdd("ares.dl.playstation.net", lsPsIP);
+                if ((new IPAddress(psIP)).AddressFamily == AddressFamily.InterNetwork)
+                {
+                    List<ResouceRecord> lsPsIP = new() { new ResouceRecord { Datas = psIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                    _ = dicServiceV4.TryAdd("gst.prod.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV4.TryAdd("gs2.ww.prod.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV4.TryAdd("zeus.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV4.TryAdd("ares.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV6.TryAdd("gst.prod.dl.playstation.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("gs2.ww.prod.dl.playstation.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("zeus.dl.playstation.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("ares.dl.playstation.net", lsEmptyIP);
+                }
+                else
+                {
+                    List<ResouceRecord> lsPsIP = new() { new ResouceRecord { Datas = psIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                    _ = dicServiceV6.TryAdd("gst.prod.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV6.TryAdd("gs2.ww.prod.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV6.TryAdd("zeus.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV6.TryAdd("ares.dl.playstation.net", lsPsIP);
+                    _ = dicServiceV4.TryAdd("gst.prod.dl.playstation.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("gs2.ww.prod.dl.playstation.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("zeus.dl.playstation.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("ares.dl.playstation.net", lsEmptyIP);
+                }
+                    
             }
             if (nsIP != null) 
             {
-                List<ResouceRecord> lsNsIP = new() { new ResouceRecord { Datas = nsIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("atum.hac.lp1.d4c.nintendo.net", lsNsIP);
-                dicService.TryAdd("bugyo.hac.lp1.eshop.nintendo.net", lsNsIP);
-                dicService.TryAdd("ctest-dl-lp1.cdn.nintendo.net", lsNsIP);
-                dicService.TryAdd("ctest-ul-lp1.cdn.nintendo.net", lsNsIP);
+                if ((new IPAddress(nsIP)).AddressFamily == AddressFamily.InterNetwork)
+                {
+                    List<ResouceRecord> lsNsIP = new() { new ResouceRecord { Datas = nsIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                    _ = dicServiceV4.TryAdd("atum.hac.lp1.d4c.nintendo.net", lsNsIP);
+                    _ = dicServiceV4.TryAdd("bugyo.hac.lp1.eshop.nintendo.net", lsNsIP);
+                    _ = dicServiceV4.TryAdd("ctest-dl-lp1.cdn.nintendo.net", lsNsIP);
+                    _ = dicServiceV4.TryAdd("ctest-ul-lp1.cdn.nintendo.net", lsNsIP);
+                    _ = dicServiceV6.TryAdd("atum.hac.lp1.d4c.nintendo.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("bugyo.hac.lp1.eshop.nintendo.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("ctest-dl-lp1.cdn.nintendo.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("ctest-ul-lp1.cdn.nintendo.net", lsEmptyIP);
+                }
+                else
+                {
+                    List<ResouceRecord> lsNsIP = new() { new ResouceRecord { Datas = nsIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                    _ = dicServiceV6.TryAdd("atum.hac.lp1.d4c.nintendo.net", lsNsIP);
+                    _ = dicServiceV6.TryAdd("bugyo.hac.lp1.eshop.nintendo.net", lsNsIP);
+                    _ = dicServiceV6.TryAdd("ctest-dl-lp1.cdn.nintendo.net", lsNsIP);
+                    _ = dicServiceV6.TryAdd("ctest-ul-lp1.cdn.nintendo.net", lsNsIP);
+                    _ = dicServiceV4.TryAdd("atum.hac.lp1.d4c.nintendo.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("bugyo.hac.lp1.eshop.nintendo.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("ctest-dl-lp1.cdn.nintendo.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("ctest-ul-lp1.cdn.nintendo.net", lsEmptyIP);
+                }  
             }
-            dicService.TryAdd("atum-eda.hac.lp1.d4c.nintendo.net", new List<ResouceRecord>());
+            _ = dicServiceV4.TryAdd("atum-eda.hac.lp1.d4c.nintendo.net", lsEmptyIP);
+            _ = dicServiceV6.TryAdd("atum-eda.hac.lp1.d4c.nintendo.net", lsEmptyIP);
             if (eaIP != null)
             {
-                List<ResouceRecord> lsEaIP = new() { new ResouceRecord { Datas = eaIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("origin-a.akamaihd.net", lsEaIP);
+                if ((new IPAddress(eaIP)).AddressFamily == AddressFamily.InterNetwork)
+                {
+                    List<ResouceRecord> lsEaIP = new() { new ResouceRecord { Datas = eaIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                    _ = dicServiceV4.TryAdd("origin-a.akamaihd.net", lsEaIP);
+                    _ = dicServiceV6.TryAdd("origin-a.akamaihd.net", lsEmptyIP);
+                }
+                else
+                {
+                    List<ResouceRecord> lsEaIP = new() { new ResouceRecord { Datas = eaIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                    _ = dicServiceV6.TryAdd("origin-a.akamaihd.net", lsEaIP);
+                    _ = dicServiceV4.TryAdd("origin-a.akamaihd.net", lsEmptyIP);
+                }
             }
-            dicService.TryAdd("ssl-lvlt.cdn.ea.com", new List<ResouceRecord>());
+            _ = dicServiceV4.TryAdd("ssl-lvlt.cdn.ea.com", lsEmptyIP);
+            _ = dicServiceV6.TryAdd("ssl-lvlt.cdn.ea.com", lsEmptyIP);
             if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
             {
-                dicService.TryAdd("us.cdn.blizzard.com", lsLocalIP);
-                dicService.TryAdd("eu.cdn.blizzard.com", lsLocalIP);
-                dicService.TryAdd("kr.cdn.blizzard.com", lsLocalIP);
-                dicService.TryAdd("level3.blizzard.com", lsLocalIP);
-                dicService.TryAdd("blizzard.gcdn.cloudn.co.kr", lsLocalIP);
+                _ = dicServiceV4.TryAdd("us.cdn.blizzard.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("eu.cdn.blizzard.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("kr.cdn.blizzard.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("level3.blizzard.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("blizzard.gcdn.cloudn.co.kr", lsLocalIP);
+                _ = dicServiceV6.TryAdd("us.cdn.blizzard.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("eu.cdn.blizzard.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("kr.cdn.blizzard.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("level3.blizzard.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("blizzard.gcdn.cloudn.co.kr", lsEmptyIP);
             }
             if (battleIP != null)
             {
-                List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
-                dicService.TryAdd("blzddist2-a.akamaihd.net", lsBattleIP);
-                dicService.TryAdd("blzddist3-a.akamaihd.net", lsBattleIP);
+                if ((new IPAddress(battleIP)).AddressFamily == AddressFamily.InterNetwork)
+                {
+                    List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                    _ = dicServiceV4.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
+                    _ = dicServiceV4.TryAdd("blzddist2-a.akamaihd.net", lsBattleIP);
+                    _ = dicServiceV4.TryAdd("blzddist3-a.akamaihd.net", lsBattleIP);
+                    _ = dicServiceV6.TryAdd("blzddist1-a.akamaihd.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("blzddist2-a.akamaihd.net", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd("blzddist3-a.akamaihd.net", lsEmptyIP);
+                }
+                else
+                {
+                    List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                    _ = dicServiceV6.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
+                    _ = dicServiceV6.TryAdd("blzddist2-a.akamaihd.net", lsBattleIP);
+                    _ = dicServiceV6.TryAdd("blzddist3-a.akamaihd.net", lsBattleIP);
+                    _ = dicServiceV4.TryAdd("blzddist1-a.akamaihd.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("blzddist2-a.akamaihd.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("blzddist3-a.akamaihd.net", lsEmptyIP);
+                }
             }
             if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
             {
-                dicService.TryAdd("download.epicgames.com", lsLocalIP);
-                dicService.TryAdd("download2.epicgames.com", lsLocalIP);
-                dicService.TryAdd("download3.epicgames.com", lsLocalIP);
-                dicService.TryAdd("download4.epicgames.com", lsLocalIP);
-                dicService.TryAdd("fastly-download.epicgames.com", lsLocalIP);
-                dicService.TryAdd("epicgames-download1.akamaized.net", lsLocalIP);
+                _ = dicServiceV4.TryAdd("download.epicgames.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("download2.epicgames.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("download3.epicgames.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("download4.epicgames.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("fastly-download.epicgames.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("epicgames-download1.akamaized.net", lsLocalIP);
+                _ = dicServiceV6.TryAdd("download.epicgames.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("download2.epicgames.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("download3.epicgames.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("download4.epicgames.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("fastly-download.epicgames.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("epicgames-download1.akamaized.net", lsEmptyIP);
             }
             if (epicIP != null)
             {
-                List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP); 
+                if ((new IPAddress(epicIP)).AddressFamily == AddressFamily.InterNetwork)
+                {
+                    List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                    _ = dicServiceV4.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP);
+                    _ = dicServiceV6.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEmptyIP);
+                }
+                else
+                {
+                    List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                    _ = dicServiceV6.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP);
+                    _ = dicServiceV4.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEmptyIP);
+                }
             }
             if (Properties.Settings.Default.UbiStore && Properties.Settings.Default.UbiCDN)
             {
-                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsLocalIP);
+                _ = dicServiceV6.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsEmptyIP);
             }
             if (ubiIP != null)
             {
-                List<ResouceRecord> lsUbiIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                dicService.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbiIP);
+                if ((new IPAddress(ubiIP)).AddressFamily == AddressFamily.InterNetwork)
+                {
+                    List<ResouceRecord> lsUbiIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                    _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbiIP);
+                    _ = dicServiceV6.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsEmptyIP);
+                }
+                else
+                {
+                    List<ResouceRecord> lsUbiIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                    _ = dicServiceV6.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbiIP);
+                    _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsEmptyIP);
+                }
             }
             if (Properties.Settings.Default.HttpService)
             {
-                dicService.TryAdd("www.msftconnecttest.com", lsLocalIP);
-                dicService.TryAdd("ctest.cdn.nintendo.net", lsLocalIP);
+                _ = dicServiceV4.TryAdd("packagespc.xboxlive.com", lsLocalIP); 
+                _ = dicServiceV4.TryAdd("www.msftconnecttest.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("ctest.cdn.nintendo.net", lsLocalIP);
+                _ = dicServiceV6.TryAdd("packagespc.xboxlive.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("www.msftconnecttest.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("ctest.cdn.nintendo.net", lsEmptyIP);
             }
             if (Properties.Settings.Default.SetDns) ClassDNS.SetDns(Properties.Settings.Default.LocalIP);
             while (Form1.bServiceFlag)
@@ -399,92 +635,177 @@ namespace XboxDownload
                             switch (dns.Querys[0].QueryType)
                             {
                                 case QueryType.A:
-                                    if (dicService.TryGetValue(queryName, out List<ResouceRecord>? lsServiceIp))
                                     {
-                                        dns.QR = 1;
-                                        dns.RA = 1;
-                                        dns.RD = 1;
-                                        dns.ResouceRecords = lsServiceIp;
-                                        socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsServiceIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x008000);
-                                        return;
-                                    }
-                                    if (dicHosts1.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
-                                    {
-                                        if (lsHostsIp.Count >= 2) lsHostsIp = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
-                                        dns.QR = 1;
-                                        dns.RA = 1;
-                                        dns.RD = 1;
-                                        dns.ResouceRecords = lsHostsIp;
-                                        socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsHostsIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
-                                        return;
-                                    }
-                                    var lsHostsIp2 = dicHosts2.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
-                                    if(lsHostsIp2 != null)
-                                    {
-                                        dicHosts1.TryAdd(queryName, lsHostsIp2);
-                                        if (lsHostsIp2.Count >= 2) lsHostsIp2 = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
-                                        dns.QR = 1;
-                                        dns.RA = 1;
-                                        dns.RD = 1;
-                                        dns.ResouceRecords = lsHostsIp2;
-                                        socket?.SendTo(dns.ToBytes(), client);
-                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
-                                        return;
-                                    }
-                                    if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
-                                    {
-                                        string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
-                                        if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
+                                        if (dicServiceV4.TryGetValue(queryName, out List<ResouceRecord>? lsServiceIp))
                                         {
-                                            ClassDNS.Api? json = null;
-                                            try
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsServiceIp;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog && lsServiceIp.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsServiceIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x008000);
+                                            return;
+                                        }
+                                        if (dicHosts1V4.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
+                                        {
+                                            if (lsHostsIp.Count >= 2) lsHostsIp = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsHostsIp;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog && lsHostsIp.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsHostsIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                            return;
+                                        }
+                                        var lsHostsIp2 = dicHosts2V4.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
+                                        if (lsHostsIp2 != null)
+                                        {
+                                            dicHosts1V4.TryAdd(queryName, lsHostsIp2);
+                                            if (lsHostsIp2.Count >= 2) lsHostsIp2 = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsHostsIp2;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog && lsHostsIp2.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                            return;
+                                        }
+                                        if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
+                                        {
+                                            string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
+                                            if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                             {
-                                                json = JsonSerializer.Deserialize<ClassDNS.Api>(html, Form1.jsOptions);
-                                            }
-                                            catch { }
-                                            if (json != null && json.Answer != null)
-                                            {
-                                                if (json.Status == 0)
+                                                ClassDNS.Api? json = null;
+                                                try
                                                 {
-                                                    dns.QR = 1;
-                                                    dns.RA = 1;
-                                                    dns.RD = 1;
-                                                    dns.ResouceRecords = new List<ResouceRecord>();
-                                                    foreach (var answer in json.Answer)
+                                                    json = JsonSerializer.Deserialize<ClassDNS.Api>(html, Form1.jsOptions);
+                                                }
+                                                catch { }
+                                                if (json != null)
+                                                {
+                                                    if (json.Status == 0 && json.Answer != null)
                                                     {
-                                                        if (answer.Type == 1 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress))
+                                                        dns.QR = 1;
+                                                        dns.RA = 1;
+                                                        dns.RD = 1;
+                                                        dns.ResouceRecords = new List<ResouceRecord>();
+                                                        foreach (var answer in json.Answer)
                                                         {
-                                                            dns.ResouceRecords.Add(new ResouceRecord
+                                                            if (answer.Type == 1 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetwork)
                                                             {
-                                                                Datas = ipAddress.GetAddressBytes(),
-                                                                TTL = answer.TTL,
-                                                                QueryClass = 1,
-                                                                QueryType = QueryType.A
-                                                            });
+                                                                dns.ResouceRecords.Add(new ResouceRecord
+                                                                {
+                                                                    Datas = ipAddress.GetAddressBytes(),
+                                                                    TTL = answer.TTL,
+                                                                    QueryName = answer.Name,
+                                                                    QueryClass = 1,
+                                                                    QueryType = QueryType.A
+                                                                });
+                                                            }
+                                                            if (dns.ResouceRecords.Count >= 16) break;
                                                         }
-                                                    }
-                                                    socket?.SendTo(dns.ToBytes(), client);
-                                                    var arrIp = json.Answer.Where(x => x.Type == 1).Select(x => x.Data);
-                                                    if (arrIp != null)
-                                                    {
-                                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName + " -> " + string.Join(", ", arrIp.ToArray()), ((IPEndPoint)client).Address.ToString());
+                                                        socket?.SendTo(dns.ToBytes(), client);
+                                                        if (Properties.Settings.Default.RecordLog && dns.ResouceRecords.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", json.Answer.Where(x => x.Type == 1).Select(x => x.Data)), ((IPEndPoint)client).Address.ToString());
                                                     }
                                                     return;
                                                 }
                                             }
                                         }
                                     }
-                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNS 查询", queryName, ((IPEndPoint)client).Address.ToString());
+                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNSv4 查询", queryName, ((IPEndPoint)client).Address.ToString());
                                     break;
                                 case QueryType.AAAA:
-                                    dns.QR = 1;
-                                    dns.RA = 1;
-                                    dns.RD = 1;
-                                    dns.ResouceRecords = new List<ResouceRecord>();
-                                    socket?.SendTo(dns.ToBytes(), client);
-                                    return;
+                                    {
+                                        if (dicServiceV6.TryGetValue(queryName, out List<ResouceRecord>? lsServiceIp))
+                                        {
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsServiceIp;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog && lsServiceIp.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", lsServiceIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x008000);
+                                            return;
+                                        }
+                                        if (dicHosts1V6.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
+                                        {
+                                            if (lsHostsIp.Count >= 2) lsHostsIp = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsHostsIp;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog && lsHostsIp.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", lsHostsIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                            return;
+                                        }
+                                        var lsHostsIp2 = dicHosts2V6.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
+                                        if (lsHostsIp2 != null)
+                                        {
+                                            dicHosts1V4.TryAdd(queryName, lsHostsIp2);
+                                            if (lsHostsIp2.Count >= 2) lsHostsIp2 = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsHostsIp2;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog && lsHostsIp2.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
+                                            return;
+                                        }
+                                        if (!Properties.Settings.Default.DisableIPv6DNS)
+                                        {
+                                            if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
+                                            {
+                                                string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, null, 6000);
+                                                if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
+                                                {
+                                                    ClassDNS.Api? json = null;
+                                                    try
+                                                    {
+                                                        json = JsonSerializer.Deserialize<ClassDNS.Api>(html, Form1.jsOptions);
+                                                    }
+                                                    catch { }
+                                                    if (json != null)
+                                                    {
+                                                        if (json.Status == 0 && json.Answer != null)
+                                                        {
+                                                            dns.QR = 1;
+                                                            dns.RA = 1;
+                                                            dns.RD = 1;
+                                                            dns.ResouceRecords = new List<ResouceRecord>();
+                                                            foreach (var answer in json.Answer)
+                                                            {
+                                                                if (answer.Type == 28 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetworkV6)
+                                                                {
+                                                                    dns.ResouceRecords.Add(new ResouceRecord
+                                                                    {
+                                                                        Datas = ipAddress.GetAddressBytes(),
+                                                                        TTL = answer.TTL,
+                                                                        QueryName = answer.Name,
+                                                                        QueryClass = 1,
+                                                                        QueryType = QueryType.AAAA
+                                                                    });
+                                                                }
+                                                                if (dns.ResouceRecords.Count >= 16) break;
+                                                            }
+                                                            socket?.SendTo(dns.ToBytes(), client);
+                                                            if (Properties.Settings.Default.RecordLog && dns.ResouceRecords.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", json.Answer.Where(x => x.Type == 28).Select(x => x.Data)), ((IPEndPoint)client).Address.ToString());
+                                                        }
+                                                        return;
+                                                    }
+                                                }
+                                            }
+                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNSv6 查询", queryName, ((IPEndPoint)client).Address.ToString());
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsEmptyIP;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            return;
+                                        }
+                                    }
                             }
                         }
                         try
@@ -535,27 +856,41 @@ namespace XboxDownload
             {
                 foreach (string host in hosts)
                 {
-                    if (dicService2.TryGetValue(host, out List<ResouceRecord>? vlaue))
+                    if (dicService2V4.TryGetValue(host, out List<ResouceRecord>? vlaue))
                     {
-                        dicService.AddOrUpdate(host, vlaue, (oldkey, oldvalue) => vlaue);
+                        dicServiceV4.AddOrUpdate(host, vlaue, (oldkey, oldvalue) => vlaue);
                     }
                     else
                     {
-                        dicService.TryRemove(host, out _);
+                        dicServiceV4.TryRemove(host, out _);
+                    }
+                    if (dicService2V6.TryGetValue(host, out List<ResouceRecord>? vlaueV6))
+                    {
+                        dicServiceV6.AddOrUpdate(host, vlaueV6, (oldkey, oldvalue) => vlaueV6);
+                    }
+                    else
+                    {
+                        dicServiceV6.TryRemove(host, out _);
                     }
                 }
             }
             else
             {
-                dicService2.Clear();
+                dicService2V4.Clear();
+                dicService2V6.Clear();
                 List<ResouceRecord> lsIP = new() { new ResouceRecord { Datas = IPAddress.Parse(ip).GetAddressBytes(), TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                 foreach (string host in hosts)
                 {
-                    if (dicService.TryGetValue(host, out List<ResouceRecord>? vlaue))
+                    if (dicServiceV4.TryGetValue(host, out List<ResouceRecord>? vlaue))
                     {
-                        dicService2.TryAdd(host, vlaue);
+                        dicService2V4.TryAdd(host, vlaue);
                     }
-                    dicService.AddOrUpdate(host, lsIP, (oldkey, oldvalue) => lsIP);
+                    dicServiceV4.AddOrUpdate(host, lsIP, (oldkey, oldvalue) => lsIP);
+                    if (dicServiceV6.TryGetValue(host, out List<ResouceRecord>? vlaueV6))
+                    {
+                        dicService2V6.TryAdd(host, vlaueV6);
+                    }
+                    dicServiceV6.AddOrUpdate(host, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                 }
             }
         }
@@ -569,21 +904,62 @@ namespace XboxDownload
 
         public static void UpdateHosts(string? akamai = null)
         {
-            dicHosts1.Clear();
-            dicHosts2.Clear();
+            dicHosts1V4.Clear();
+            dicHosts2V4.Clear();
+            dicHosts1V6.Clear();
+            dicHosts2V6.Clear();
             DataTable dt = Form1.dtHosts.Copy();
             dt.RejectChanges();
             foreach (DataRow dr in dt.Rows)
             {
                 if (!Convert.ToBoolean(dr["Enable"])) continue;
                 string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
-                if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IPv4"].ToString()?.Trim(), out IPAddress? ip))
+                if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IP"].ToString()?.Trim(), out IPAddress? ip))
                 {
                     if (hostName.StartsWith("*."))
                     {
                         hostName = Regex.Replace(hostName, @"^\*\.", "");
                         Regex re = new("\\." + hostName.Replace(".", "\\.") + "$");
-                        if (!dicHosts2.ContainsKey(re) && reHosts.IsMatch(hostName))
+                        if (ip.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            if (!dicHosts2V4.ContainsKey(re) && reHosts.IsMatch(hostName))
+                            {
+                                List<ResouceRecord> lsIp = new()
+                                {
+                                    new ResouceRecord
+                                    {
+                                        Datas = ip.GetAddressBytes(),
+                                        TTL = 100,
+                                        QueryClass = 1,
+                                        QueryType = QueryType.A
+                                    }
+                                };
+                                dicHosts2V4.TryAdd(re, lsIp);
+                                dicHosts2V6.TryAdd(re, lsEmptyIP);
+                            }
+                        }
+                        else
+                        {
+                            if (!dicHosts2V6.ContainsKey(re) && reHosts.IsMatch(hostName))
+                            {
+                                List<ResouceRecord> lsIp = new()
+                                {
+                                    new ResouceRecord
+                                    {
+                                        Datas = ip.GetAddressBytes(),
+                                        TTL = 100,
+                                        QueryClass = 1,
+                                        QueryType = QueryType.AAAA
+                                    }
+                                };
+                                dicHosts2V6.TryAdd(re, lsIp);
+                                dicHosts2V4.TryAdd(re, lsEmptyIP);
+                            }
+                        }
+                    }
+                    else if (!dicHosts1V4.ContainsKey(hostName) && reHosts.IsMatch(hostName))
+                    {
+                        if (ip.AddressFamily == AddressFamily.InterNetwork)
                         {
                             List<ResouceRecord> lsIp = new()
                             {
@@ -595,52 +971,66 @@ namespace XboxDownload
                                     QueryType = QueryType.A
                                 }
                             };
-                            dicHosts2.TryAdd(re, lsIp);
+                            dicHosts1V4.TryAdd(hostName, lsIp);
+                            dicHosts1V6.TryAdd(hostName, lsEmptyIP);
                         }
-                    }
-                    else if (!dicHosts1.ContainsKey(hostName) && reHosts.IsMatch(hostName))
-                    {
-                        List<ResouceRecord> lsIp = new()
+                        else
                         {
-                            new ResouceRecord
+                            List<ResouceRecord> lsIp = new()
                             {
-                                Datas = ip.GetAddressBytes(),
-                                TTL = 100,
-                                QueryClass = 1,
-                                QueryType = QueryType.A
-                            }
-                        };
-                        dicHosts1.TryAdd(hostName, lsIp);
+                                new ResouceRecord
+                                {
+                                    Datas = ip.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.AAAA
+                                }
+                            };
+                            dicHosts1V6.TryAdd(hostName, lsIp);
+                            dicHosts1V4.TryAdd(hostName, lsEmptyIP);
+                        }
                     }
                 }
             }
 
-            List<ResouceRecord> lsIp2 = new();
+            List<ResouceRecord> lsIp2V4 = new(), lsIp2V6 = new();
             if (string.IsNullOrEmpty(akamai))
             {
-                List<string> lsIpTmp = new();
+                List<IPAddress> lsIpTmp = new();
                 foreach (string str in Properties.Settings.Default.IpsAkamai.Replace("，", ",").Split(','))
                 {
-                    if (IPAddress.TryParse(str.Trim(), out IPAddress? address))
+                    if (IPAddress.TryParse(str.Trim(), out IPAddress? ip))
                     {
-                        string ip = address.ToString();
                         if (!lsIpTmp.Contains(ip))
                         {
                             lsIpTmp.Add(ip);
-                            lsIp2.Add(new ResouceRecord
+                            if (ip.AddressFamily == AddressFamily.InterNetwork)
                             {
-                                Datas = address.GetAddressBytes(),
-                                TTL = 100,
-                                QueryClass = 1,
-                                QueryType = QueryType.A
-                            });
+                                lsIp2V4.Add(new ResouceRecord
+                                {
+                                    Datas = ip.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.A
+                                });
+                            }
+                            else
+                            {
+                                lsIp2V6.Add(new ResouceRecord
+                                {
+                                    Datas = ip.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.AAAA
+                                });
+                            }
                         }
                     }
                 }
             }
             else
             {
-                lsIp2.Add(new ResouceRecord
+                lsIp2V4.Add(new ResouceRecord
                 {
                     Datas = IPAddress.Parse(akamai).GetAddressBytes(),
                     TTL = 100,
@@ -648,7 +1038,7 @@ namespace XboxDownload
                     QueryType = QueryType.A
                 });
             }
-            if (lsIp2.Count >= 1)
+            if (lsIp2V6.Count >= 1)
             {
                 foreach (string str in Properties.Resource.Akamai.Split('\n'))
                 {
@@ -659,12 +1049,13 @@ namespace XboxDownload
                         host = Regex.Replace(host, @"^\*\.", "");
                         if (reHosts.IsMatch(host))
                         {
-                            dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2);
+                            dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                            dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
                         }
                     }
                     else if (reHosts.IsMatch(host))
                     {
-                        dicHosts1.TryAdd(host, lsIp2);
+                        dicHosts1V6.TryAdd(host, lsIp2V6);
                     }
                 }
                 if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
@@ -678,7 +1069,8 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*\.", "");
                             if (reHosts.IsMatch(host))
                             {
-                                dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2);
+                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
                             }
                         }
                         else if (host.StartsWith("*"))
@@ -686,13 +1078,71 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*", "");
                             if (reHosts.IsMatch(host))
                             {
-                                dicHosts1.TryAdd(host, lsIp2);
-                                dicHosts2.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2);
+                                dicHosts1V6.TryAdd(host, lsIp2V6);
+                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                dicHosts1V4.TryAdd(host, lsEmptyIP);
+                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
                             }
                         }
                         else if (reHosts.IsMatch(host))
                         {
-                            dicHosts1.TryAdd(host, lsIp2);
+                            dicHosts1V6.TryAdd(host, lsIp2V6);
+                            dicHosts1V4.TryAdd(host, lsEmptyIP);
+                        }
+                    }
+                }
+            }
+            else if (lsIp2V4.Count >= 1)
+            {
+                foreach (string str in Properties.Resource.Akamai.Split('\n'))
+                {
+                    string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
+                    if (string.IsNullOrEmpty(host)) continue;
+                    if (host.StartsWith("*."))
+                    {
+                        host = Regex.Replace(host, @"^\*\.", "");
+                        if (reHosts.IsMatch(host))
+                        {
+                            dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
+                            dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
+                        }
+                    }
+                    else if (reHosts.IsMatch(host))
+                    {
+                        dicHosts1V4.TryAdd(host, lsIp2V4);
+                        dicHosts1V6.TryAdd(host, lsEmptyIP);
+                    }
+                }
+                if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
+                {
+                    foreach (string str in File.ReadAllText(Form1.resourcePath + "\\Akamai.txt").Split('\n'))
+                    {
+                        string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
+                        if (string.IsNullOrEmpty(host)) continue;
+                        if (host.StartsWith("*."))
+                        {
+                            host = Regex.Replace(host, @"^\*\.", "");
+                            if (reHosts.IsMatch(host))
+                            {
+                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
+                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
+                            }
+                        }
+                        else if (host.StartsWith("*"))
+                        {
+                            host = Regex.Replace(host, @"^\*", "");
+                            if (reHosts.IsMatch(host))
+                            {
+                                dicHosts1V4.TryAdd(host, lsIp2V4);
+                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
+                                dicHosts1V6.TryAdd(host, lsEmptyIP);
+                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
+                            }
+                        }
+                        else if (reHosts.IsMatch(host))
+                        {
+                            dicHosts1V4.TryAdd(host, lsIp2V4);
+                            dicHosts1V6.TryAdd(host, lsEmptyIP);
                         }
                     }
                 }
@@ -978,10 +1428,10 @@ namespace XboxDownload
         {
             if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
             string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 6000);
-            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>[^<]*)</span>\n<a[^>]*>上报纠错</a>\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>[^<]+)</span></td></tr>");
+            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>");
             if (result.Success)
             {
-                return result.Groups["location1"].Value.Trim() + result.Groups["location2"].Value.Trim() + " (来源：ip138.com)";
+                return Regex.Replace(result.Groups["location1"].Value.Trim() + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "") + " (来源：ip138.com)";
             }
             else
             {
