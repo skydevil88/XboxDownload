@@ -820,9 +820,18 @@ namespace XboxDownload
                 string? nsIP = null;
                 if (!string.IsNullOrWhiteSpace(tbNSIP.Text))
                 {
-                    if (IPAddress.TryParse(tbNSIP.Text.Trim(), out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                    if (IPAddress.TryParse(tbNSIP.Text.Trim(), out IPAddress? ipAddress))
                     {
-                        nsIP = tbNSIP.Text = ipAddress.ToString();
+                        if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            nsIP = tbNSIP.Text = ipAddress.ToString();
+                        }
+                        else
+                        {
+                            MessageBox.Show("NS 主机不支持 IPv6", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            tbNSIP.Focus();
+                            return;
+                        }
                     }
                     else
                     {
@@ -876,7 +885,7 @@ namespace XboxDownload
                 string? ubiIP = null;
                 if (!string.IsNullOrWhiteSpace(tbUbiIP.Text))
                 {
-                    if (IPAddress.TryParse(tbUbiIP.Text.Trim(), out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                    if (IPAddress.TryParse(tbUbiIP.Text.Trim(), out IPAddress? ipAddress))
                     {
                         ubiIP = tbUbiIP.Text = ipAddress.ToString();
                     }
@@ -1287,7 +1296,7 @@ namespace XboxDownload
                         {
                             if (!Convert.ToBoolean(dr["Enable"])) continue;
                             string? hostName = dr["HostName"].ToString()?.ToLower();
-                            string? ip = dr["IPv4"].ToString()?.Trim();
+                            string? ip = dr["IP"].ToString()?.Trim();
                             if (!string.IsNullOrEmpty(hostName) && !hostName.StartsWith("*.") && !string.IsNullOrEmpty(ip))
                             {
                                 sb.AppendLine(ip + " " + hostName);
@@ -2868,7 +2877,7 @@ namespace XboxDownload
                         if (rows.Length >= 1)
                         {
                             rows[0]["Enable"] = true;
-                            rows[0]["IPv4"] = Properties.Settings.Default.LocalIP;
+                            rows[0]["IP"] = Properties.Settings.Default.LocalIP;
                             rows[0]["Remark"] = "Xbox360主机下载域名";
                         }
                         else
@@ -2876,7 +2885,7 @@ namespace XboxDownload
                             DataRow dr = dtHosts.NewRow();
                             dr["Enable"] = true;
                             dr["HostName"] = hostName;
-                            dr["IPv4"] = Properties.Settings.Default.LocalIP;
+                            dr["IP"] = Properties.Settings.Default.LocalIP;
                             dr["Remark"] = "Xbox360主机下载域名";
                             dtHosts.Rows.Add(dr);
                         }

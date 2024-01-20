@@ -351,7 +351,7 @@ namespace XboxDownload
                                             {
                                                 bFileFound = true;
                                                 Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
-                                                byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
+                                                Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
                                                 mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
                                                 mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 200", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
@@ -370,6 +370,25 @@ namespace XboxDownload
                                         Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
                                         mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
                                         if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                    }
+                                    break;
+                                case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
+                                    if (Properties.Settings.Default.UbiIP != Properties.Settings.Default.LocalIP)
+                                    {
+                                        var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + Properties.Settings.Default.UbiIP + "]"), "GET", null, null, headers);
+                                        if (response != null && response.IsSuccessStatusCode)
+                                        {
+                                            bFileFound = true;
+                                            Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
+                                            StringBuilder sb = new();
+                                            sb.Append("HTTP/1.1 200 OK\r\n");
+                                            sb.Append("Content-Type: text/plain\r\n");
+                                            sb.Append("Content-Length: "+ _response.Length + "\r\n\r\n");
+                                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                            mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                            mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                        }
                                     }
                                     break;
                             }

@@ -7,7 +7,6 @@ using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Net.NetworkInformation;
 using System.Data;
-using System.Collections.Generic;
 
 namespace XboxDownload
 {
@@ -16,7 +15,7 @@ namespace XboxDownload
         Socket? socket = null;
         private readonly Form1 parentForm;
         private readonly string dohServer = "https://223.5.5.5";
-        private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter");
+        private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter|github");
         public static readonly List<ResouceRecord> lsEmptyIP = new();
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
@@ -595,7 +594,7 @@ namespace XboxDownload
                 {
                     List<ResouceRecord> lsUbiIP = new() { new ResouceRecord { Datas = ubiIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
                     _ = dicServiceV6.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsUbiIP);
-                    _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsLocalIP);
                 }
             }
             if (Properties.Settings.Default.HttpService)
