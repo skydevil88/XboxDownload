@@ -242,13 +242,11 @@ namespace XboxDownload
                                             }
                                         }
                                         break;
-                                    case "download.epicgames.com":
-                                    case "download2.epicgames.com":
-                                    case "download3.epicgames.com":
-                                    case "download4.epicgames.com":
-                                    case "fastly-download.epicgames.com":
+                                    case "epicgames-download1-1251447533.file.myqcloud.com":
                                     case "epicgames-download1.akamaized.net":
-                                        if (_filePath.Contains(".manifest"))
+                                    case "download.epicgames.com":
+                                    case "fastly-download.epicgames.com":
+                                        if (_filePath.Contains(".manifest") && _hosts != "epicgames-download1-1251447533.file.myqcloud.com")
                                         {
                                             string? ip = ClassDNS.DoH(_hosts);
                                             if (!string.IsNullOrEmpty(ip))
@@ -270,7 +268,7 @@ namespace XboxDownload
                                         else
                                         {
                                             bFileFound = true;
-                                            _url = "https://epicgames-download1-1251447533.file.myqcloud.com" + _filePath;
+                                            _url = "https://" + (Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net") + _filePath;
                                             StringBuilder sb = new();
                                             sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                                             sb.Append("Content-Type: text/html\r\n");

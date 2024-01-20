@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Net.NetworkInformation;
 using System.Data;
+using System.Collections.Generic;
 
 namespace XboxDownload
 {
@@ -21,7 +22,7 @@ namespace XboxDownload
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2V4 = new(), dicHosts2V6 = new();
         public static ConcurrentDictionary<String, Dns> dicDns = new();
-        
+
 
         public class Dns
         {
@@ -110,6 +111,7 @@ namespace XboxDownload
 
             Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
             Byte[]? comIP = null, cnIP = null, appIP = null, psIP = null, nsIP = null, eaIP = null, battleIP = null, epicIP = null, ubiIP = null;
+            string epicHosts = Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
             {
                 comIP = IPAddress.Parse(Properties.Settings.Default.ComIP).GetAddressBytes();
@@ -224,7 +226,7 @@ namespace XboxDownload
                 }
                 else
                 {
-                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("epicgames-download1-1251447533.file.myqcloud.com") : ClassDNS.HostToIP("epicgames-download1-1251447533.file.myqcloud.com", Properties.Settings.Default.DnsIP);
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH(epicHosts) : ClassDNS.HostToIP(epicHosts, Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbEpicIP, ip);
@@ -475,9 +477,9 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd("zeus.dl.playstation.net", lsEmptyIP);
                     _ = dicServiceV4.TryAdd("ares.dl.playstation.net", lsEmptyIP);
                 }
-                    
+
             }
-            if (nsIP != null) 
+            if (nsIP != null)
             {
                 if ((new IPAddress(nsIP)).AddressFamily == AddressFamily.InterNetwork)
                 {
@@ -502,7 +504,7 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd("bugyo.hac.lp1.eshop.nintendo.net", lsEmptyIP);
                     _ = dicServiceV4.TryAdd("ctest-dl-lp1.cdn.nintendo.net", lsEmptyIP);
                     _ = dicServiceV4.TryAdd("ctest-ul-lp1.cdn.nintendo.net", lsEmptyIP);
-                }  
+                }
             }
             _ = dicServiceV4.TryAdd("atum-eda.hac.lp1.d4c.nintendo.net", lsEmptyIP);
             _ = dicServiceV6.TryAdd("atum-eda.hac.lp1.d4c.nintendo.net", lsEmptyIP);
@@ -542,51 +544,38 @@ namespace XboxDownload
                 {
                     List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                     _ = dicServiceV4.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
-                    _ = dicServiceV4.TryAdd("blzddist2-a.akamaihd.net", lsBattleIP);
-                    _ = dicServiceV4.TryAdd("blzddist3-a.akamaihd.net", lsBattleIP);
                     _ = dicServiceV6.TryAdd("blzddist1-a.akamaihd.net", lsEmptyIP);
-                    _ = dicServiceV6.TryAdd("blzddist2-a.akamaihd.net", lsEmptyIP);
-                    _ = dicServiceV6.TryAdd("blzddist3-a.akamaihd.net", lsEmptyIP);
                 }
                 else
                 {
                     List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
                     _ = dicServiceV6.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
-                    _ = dicServiceV6.TryAdd("blzddist2-a.akamaihd.net", lsBattleIP);
-                    _ = dicServiceV6.TryAdd("blzddist3-a.akamaihd.net", lsBattleIP);
                     _ = dicServiceV4.TryAdd("blzddist1-a.akamaihd.net", lsEmptyIP);
-                    _ = dicServiceV4.TryAdd("blzddist2-a.akamaihd.net", lsEmptyIP);
-                    _ = dicServiceV4.TryAdd("blzddist3-a.akamaihd.net", lsEmptyIP);
                 }
             }
-            if (Properties.Settings.Default.EpicStore && Properties.Settings.Default.EpicCDN)
+            if (Properties.Settings.Default.EpicStore)
             {
+                string localHosts = !Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
+                _ = dicServiceV4.TryAdd(localHosts, lsLocalIP);
                 _ = dicServiceV4.TryAdd("download.epicgames.com", lsLocalIP);
-                _ = dicServiceV4.TryAdd("download2.epicgames.com", lsLocalIP);
-                _ = dicServiceV4.TryAdd("download3.epicgames.com", lsLocalIP);
-                _ = dicServiceV4.TryAdd("download4.epicgames.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("fastly-download.epicgames.com", lsLocalIP);
-                _ = dicServiceV4.TryAdd("epicgames-download1.akamaized.net", lsLocalIP);
+                _ = dicServiceV6.TryAdd(localHosts, lsEmptyIP);
                 _ = dicServiceV6.TryAdd("download.epicgames.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("download2.epicgames.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("download3.epicgames.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("download4.epicgames.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("fastly-download.epicgames.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("epicgames-download1.akamaized.net", lsEmptyIP);
             }
             if (epicIP != null)
             {
                 if ((new IPAddress(epicIP)).AddressFamily == AddressFamily.InterNetwork)
                 {
                     List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-                    _ = dicServiceV4.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP);
-                    _ = dicServiceV6.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd(epicHosts, lsEpicIP);
+                    _ = dicServiceV6.TryAdd(epicHosts, lsEmptyIP);
                 }
                 else
                 {
                     List<ResouceRecord> lsEpicIP = new() { new ResouceRecord { Datas = epicIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
-                    _ = dicServiceV6.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEpicIP);
-                    _ = dicServiceV4.TryAdd("epicgames-download1-1251447533.file.myqcloud.com", lsEmptyIP);
+                    _ = dicServiceV6.TryAdd(epicHosts, lsEpicIP);
+                    _ = dicServiceV4.TryAdd(epicHosts, lsEmptyIP);
                 }
             }
             if (Properties.Settings.Default.UbiStore && Properties.Settings.Default.UbiCDN)
@@ -611,7 +600,7 @@ namespace XboxDownload
             }
             if (Properties.Settings.Default.HttpService)
             {
-                _ = dicServiceV4.TryAdd("packagespc.xboxlive.com", lsLocalIP); 
+                _ = dicServiceV4.TryAdd("packagespc.xboxlive.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("www.msftconnecttest.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("ctest.cdn.nintendo.net", lsLocalIP);
                 _ = dicServiceV6.TryAdd("packagespc.xboxlive.com", lsEmptyIP);
@@ -829,29 +818,31 @@ namespace XboxDownload
 
         public static void SetAkamaiIP(string? ip = null)
         {
-            string[] hosts;
+            List<string> hosts;
             if (Properties.Settings.Default.GameLink)
             {
-                hosts = new string[]{
+                hosts = new List<string>() {
                     "xvcf2.xboxlive.com", "assets2.xboxlive.com", "d2.xboxlive.com", "dlassets2.xboxlive.com",
                     "assets2.xboxlive.cn","d2.xboxlive.cn", "dlassets2.xboxlive.cn",
                     "dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net"
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net"
                 };
             }
             else
             {
-                hosts = new string[]{
+                hosts = new List<string>()
+                {
                     "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com",
                     "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn",
                     "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "blzddist2-a.akamaihd.net", "blzddist3-a.akamaihd.net",
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net"
                 };
             }
+            if (!Properties.Settings.Default.EpicCDN) hosts.Add("epicgames-download1.akamaized.net");
             if (string.IsNullOrEmpty(ip))
             {
                 foreach (string host in hosts)
@@ -1428,10 +1419,10 @@ namespace XboxDownload
         {
             if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
             string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 6000);
-            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>");
+            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>");
             if (result.Success)
             {
-                return Regex.Replace(result.Groups["location1"].Value.Trim() + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "") + " (来源：ip138.com)";
+                return Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "") + " (来源：ip138.com)";
             }
             else
             {

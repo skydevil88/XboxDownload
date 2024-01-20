@@ -65,9 +65,12 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            ckbUbiCDN = new CheckBox();
+            panelEpic = new Panel();
+            rbEpicCDN1 = new RadioButton();
+            rbEpicCDN2 = new RadioButton();
             ckbDisableIPv6DNS = new CheckBox();
             ckbUbiStore = new CheckBox();
-            ckbUbiCDN = new CheckBox();
             label34 = new Label();
             tbUbiIP = new TextBox();
             labelUbi = new Label();
@@ -95,7 +98,6 @@
             tbLocalPath = new TextBox();
             label21 = new Label();
             ckbLocalUpload = new CheckBox();
-            ckbEpicCDN = new CheckBox();
             label20 = new Label();
             tbEpicIP = new TextBox();
             labelEpic = new Label();
@@ -354,6 +356,7 @@
             gbLog.SuspendLayout();
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
+            panelEpic.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tabSpeedTest.SuspendLayout();
             gbIPList.SuspendLayout();
@@ -609,9 +612,10 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(ckbUbiCDN);
+            groupBox1.Controls.Add(panelEpic);
             groupBox1.Controls.Add(ckbDisableIPv6DNS);
             groupBox1.Controls.Add(ckbUbiStore);
-            groupBox1.Controls.Add(ckbUbiCDN);
             groupBox1.Controls.Add(label34);
             groupBox1.Controls.Add(tbUbiIP);
             groupBox1.Controls.Add(labelUbi);
@@ -639,7 +643,6 @@
             groupBox1.Controls.Add(tbLocalPath);
             groupBox1.Controls.Add(label21);
             groupBox1.Controls.Add(ckbLocalUpload);
-            groupBox1.Controls.Add(ckbEpicCDN);
             groupBox1.Controls.Add(label20);
             groupBox1.Controls.Add(tbEpicIP);
             groupBox1.Controls.Add(labelEpic);
@@ -675,6 +678,33 @@
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
             // 
+            // ckbUbiCDN
+            // 
+            resources.ApplyResources(ckbUbiCDN, "ckbUbiCDN");
+            ckbUbiCDN.Name = "ckbUbiCDN";
+            ckbUbiCDN.UseVisualStyleBackColor = true;
+            // 
+            // panelEpic
+            // 
+            panelEpic.Controls.Add(rbEpicCDN1);
+            panelEpic.Controls.Add(rbEpicCDN2);
+            resources.ApplyResources(panelEpic, "panelEpic");
+            panelEpic.Name = "panelEpic";
+            // 
+            // rbEpicCDN1
+            // 
+            resources.ApplyResources(rbEpicCDN1, "rbEpicCDN1");
+            rbEpicCDN1.Name = "rbEpicCDN1";
+            rbEpicCDN1.TabStop = true;
+            rbEpicCDN1.UseVisualStyleBackColor = true;
+            // 
+            // rbEpicCDN2
+            // 
+            resources.ApplyResources(rbEpicCDN2, "rbEpicCDN2");
+            rbEpicCDN2.Name = "rbEpicCDN2";
+            rbEpicCDN2.TabStop = true;
+            rbEpicCDN2.UseVisualStyleBackColor = true;
+            // 
             // ckbDisableIPv6DNS
             // 
             resources.ApplyResources(ckbDisableIPv6DNS, "ckbDisableIPv6DNS");
@@ -687,12 +717,6 @@
             resources.ApplyResources(ckbUbiStore, "ckbUbiStore");
             ckbUbiStore.Name = "ckbUbiStore";
             ckbUbiStore.UseVisualStyleBackColor = true;
-            // 
-            // ckbUbiCDN
-            // 
-            resources.ApplyResources(ckbUbiCDN, "ckbUbiCDN");
-            ckbUbiCDN.Name = "ckbUbiCDN";
-            ckbUbiCDN.UseVisualStyleBackColor = true;
             // 
             // label34
             // 
@@ -869,12 +893,6 @@
             resources.ApplyResources(ckbLocalUpload, "ckbLocalUpload");
             ckbLocalUpload.Name = "ckbLocalUpload";
             ckbLocalUpload.UseVisualStyleBackColor = true;
-            // 
-            // ckbEpicCDN
-            // 
-            resources.ApplyResources(ckbEpicCDN, "ckbEpicCDN");
-            ckbEpicCDN.Name = "ckbEpicCDN";
-            ckbEpicCDN.UseVisualStyleBackColor = true;
             // 
             // label20
             // 
@@ -2672,6 +2690,8 @@
             panel1.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            panelEpic.ResumeLayout(false);
+            panelEpic.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             tabSpeedTest.ResumeLayout(false);
             gbIPList.ResumeLayout(false);
@@ -2767,7 +2787,6 @@
         private Label label16;
         private CheckBox ckbBattleCDN;
         private Label label18;
-        private CheckBox ckbEpicCDN;
         private Label label20;
         private Label labelEpic;
         private CheckBox ckbLocalUpload;
@@ -3024,7 +3043,6 @@
         private LinkLabel linkXbox1;
         public TextBox tbUbiIP;
         private Label labelUbi;
-        private CheckBox ckbUbiCDN;
         private Label label34;
         private CheckBox ckbUbiStore;
         private DataGridViewCheckBoxColumn Col_Check;
@@ -3040,5 +3058,9 @@
         private DataGridViewTextBoxColumn Col_Remark;
         private CheckBox ckbDisableIPv6DNS;
         private ToolStripMenuItem tsmUseIPUbi;
+        private RadioButton rbEpicCDN1;
+        private RadioButton rbEpicCDN2;
+        private Panel panelEpic;
+        private CheckBox ckbUbiCDN;
     }
 }

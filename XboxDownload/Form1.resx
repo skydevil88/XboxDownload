@@ -532,63 +532,6 @@
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="ckbDisableIPv6DNS.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbDisableIPv6DNS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1214, 140</value>
-  </data>
-  <data name="ckbDisableIPv6DNS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 28</value>
-  </data>
-  <data name="ckbDisableIPv6DNS.TabIndex" type="System.Int32, mscorlib">
-    <value>35</value>
-  </data>
-  <data name="ckbDisableIPv6DNS.Text" xml:space="preserve">
-    <value>过滤 IPv6 域名查询</value>
-  </data>
-  <data name="&gt;&gt;ckbDisableIPv6DNS.Name" xml:space="preserve">
-    <value>ckbDisableIPv6DNS</value>
-  </data>
-  <data name="&gt;&gt;ckbDisableIPv6DNS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbDisableIPv6DNS.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;ckbDisableIPv6DNS.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="ckbUbiStore.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbUbiStore.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="ckbUbiStore.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1214, 308</value>
-  </data>
-  <data name="ckbUbiStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 28</value>
-  </data>
-  <data name="ckbUbiStore.TabIndex" type="System.Int32, mscorlib">
-    <value>42</value>
-  </data>
-  <data name="ckbUbiStore.Text" xml:space="preserve">
-    <value>加速育碧 (PC)</value>
-  </data>
-  <data name="&gt;&gt;ckbUbiStore.Name" xml:space="preserve">
-    <value>ckbUbiStore</value>
-  </data>
-  <data name="&gt;&gt;ckbUbiStore.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbUbiStore.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;ckbUbiStore.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="ckbUbiCDN.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -620,7 +563,139 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbUbiCDN.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbEpicCDN1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbEpicCDN1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 2</value>
+  </data>
+  <data name="rbEpicCDN1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>166, 28</value>
+  </data>
+  <data name="rbEpicCDN1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbEpicCDN1.Text" xml:space="preserve">
+    <value>跳转腾讯云CDN</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN1.Name" xml:space="preserve">
+    <value>rbEpicCDN1</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN1.Parent" xml:space="preserve">
+    <value>panelEpic</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbEpicCDN2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbEpicCDN2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>175, 2</value>
+  </data>
+  <data name="rbEpicCDN2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>187, 28</value>
+  </data>
+  <data name="rbEpicCDN2.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="rbEpicCDN2.Text" xml:space="preserve">
+    <value>跳转 Akamai CDN</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN2.Name" xml:space="preserve">
+    <value>rbEpicCDN2</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN2.Parent" xml:space="preserve">
+    <value>panelEpic</value>
+  </data>
+  <data name="&gt;&gt;rbEpicCDN2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panelEpic.Location" type="System.Drawing.Point, System.Drawing">
+    <value>794, 303</value>
+  </data>
+  <data name="panelEpic.Size" type="System.Drawing.Size, System.Drawing">
+    <value>389, 30</value>
+  </data>
+  <data name="panelEpic.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="&gt;&gt;panelEpic.Name" xml:space="preserve">
+    <value>panelEpic</value>
+  </data>
+  <data name="&gt;&gt;panelEpic.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelEpic.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;panelEpic.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ckbDisableIPv6DNS.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ckbDisableIPv6DNS.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1214, 140</value>
+  </data>
+  <data name="ckbDisableIPv6DNS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>190, 28</value>
+  </data>
+  <data name="ckbDisableIPv6DNS.TabIndex" type="System.Int32, mscorlib">
+    <value>35</value>
+  </data>
+  <data name="ckbDisableIPv6DNS.Text" xml:space="preserve">
+    <value>过滤 IPv6 域名查询</value>
+  </data>
+  <data name="&gt;&gt;ckbDisableIPv6DNS.Name" xml:space="preserve">
+    <value>ckbDisableIPv6DNS</value>
+  </data>
+  <data name="&gt;&gt;ckbDisableIPv6DNS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckbDisableIPv6DNS.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;ckbDisableIPv6DNS.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="ckbUbiStore.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ckbUbiStore.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="ckbUbiStore.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1214, 308</value>
+  </data>
+  <data name="ckbUbiStore.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 28</value>
+  </data>
+  <data name="ckbUbiStore.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="ckbUbiStore.Text" xml:space="preserve">
+    <value>加速育碧 (PC)</value>
+  </data>
+  <data name="&gt;&gt;ckbUbiStore.Name" xml:space="preserve">
+    <value>ckbUbiStore</value>
+  </data>
+  <data name="&gt;&gt;ckbUbiStore.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckbUbiStore.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;ckbUbiStore.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="label34.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -650,7 +725,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label34.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tbUbiIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 339</value>
@@ -671,7 +746,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbUbiIP.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="labelUbi.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -698,7 +773,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelUbi.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="linkXbox3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -725,7 +800,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox3.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="linkXbox2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -752,7 +827,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox2.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="linkXbox1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -779,7 +854,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox1.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="linkEA1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -806,7 +881,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA1.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="ckbGameLink.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -833,7 +908,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbGameLink.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="linkRestartEABackgroundService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -863,7 +938,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEABackgroundService.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="ckbOptimalAkamaiIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -893,7 +968,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbOptimalAkamaiIP.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="butStart.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 11pt</value>
@@ -920,7 +995,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butStart.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="ckbEpicStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -947,7 +1022,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEpicStore.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="ckbBattleStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -974,7 +1049,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="ckbEAStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1001,7 +1076,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEAStore.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="ckbMicrosoftStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1028,7 +1103,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbMicrosoftStore.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="ckbSetDns.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1055,7 +1130,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbSetDns.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="ckbDoH.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1082,7 +1157,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDoH.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="ckbHttpService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1112,7 +1187,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbHttpService.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="ckbDnsService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1139,7 +1214,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDnsService.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="cbListenIP.Items" xml:space="preserve">
     <value>本机IP</value>
@@ -1166,7 +1241,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cbListenIP.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="label23.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1196,7 +1271,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>24</value>
   </data>
   <data name="label22.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1223,7 +1298,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="ckbTruncation.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1250,7 +1325,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>26</value>
   </data>
   <data name="butBrowse.Location" type="System.Drawing.Point, System.Drawing">
     <value>1020, 374</value>
@@ -1277,7 +1352,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butBrowse.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>27</value>
   </data>
   <data name="tbLocalPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>406, 375</value>
@@ -1298,7 +1373,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>28</value>
   </data>
   <data name="label21.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1328,7 +1403,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>29</value>
   </data>
   <data name="ckbLocalUpload.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1355,36 +1430,6 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbLocalUpload.ZOrder" xml:space="preserve">
-    <value>29</value>
-  </data>
-  <data name="ckbEpicCDN.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ckbEpicCDN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>797, 307</value>
-  </data>
-  <data name="ckbEpicCDN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ckbEpicCDN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 28</value>
-  </data>
-  <data name="ckbEpicCDN.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="ckbEpicCDN.Text" xml:space="preserve">
-    <value>跳转腾讯云CDN</value>
-  </data>
-  <data name="&gt;&gt;ckbEpicCDN.Name" xml:space="preserve">
-    <value>ckbEpicCDN</value>
-  </data>
-  <data name="&gt;&gt;ckbEpicCDN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ckbEpicCDN.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;ckbEpicCDN.ZOrder" xml:space="preserve">
     <value>30</value>
   </data>
   <data name="label20.AutoSize" type="System.Boolean, mscorlib">
@@ -2704,7 +2749,7 @@
     <value>5.Akamai (IPv6)</value>
   </data>
   <data name="cbImportIP.Items6" xml:space="preserve">
-    <value>5.Ubisoft Connect (cn 游戏下载)</value>
+    <value>6.Ubisoft Connect (cn 游戏下载)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>934, 4</value>
