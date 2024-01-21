@@ -888,6 +888,11 @@ namespace XboxDownload
                     if (IPAddress.TryParse(tbUbiIP.Text.Trim(), out IPAddress? ipAddress))
                     {
                         ubiIP = tbUbiIP.Text = ipAddress.ToString();
+                        if (ipAddress.AddressFamily == AddressFamily.InterNetworkV6 && !ckbSetDns.Checked && ckbUbiStore.Checked)
+                        {
+                            MessageBox.Show("育碧客户端 使用 IPv6 下载必需勾选“设置本机 DNS”，并且系统 Hosts 文件不能有任何数据写入。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ckbSetDns.Checked = true;
+                        }
                     }
                     else
                     {
@@ -1643,7 +1648,7 @@ namespace XboxDownload
                     tbUbiIP.Focus();
                     break;
                 case "tsmUseAkamai":
-                    tabControl1.SelectedTab = tabCND;
+                    tabControl1.SelectedTab = tabCDN;
                     string ips = string.Join(", ", tbCdnAkamai.Text.Replace("，", ",").Split(',').Select(a => a.Trim()).Where(a => !a.Equals(ip)).ToArray());
                     tbCdnAkamai.Text = string.IsNullOrEmpty(ips) ? ip : ip + ", " + ips;
                     tbCdnAkamai.Focus();

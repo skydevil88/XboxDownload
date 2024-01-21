@@ -373,10 +373,10 @@ namespace XboxDownload
                                     }
                                     break;
                                 case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
-                                    if (Properties.Settings.Default.UbiIP != Properties.Settings.Default.LocalIP)
+                                    if (DnsListen.dicServiceV6.TryGetValue(_hosts, out List<ResouceRecord>? lsServiceIp) && lsServiceIp.Count >= 1)
                                     {
                                         var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + Properties.Settings.Default.UbiIP + "]"), "GET", null, null, headers);
+                                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + (new IPAddress(lsServiceIp[0].Datas!)) + "]"), "GET", null, null, headers);
                                         if (response != null && response.IsSuccessStatusCode)
                                         {
                                             bFileFound = true;
@@ -384,7 +384,7 @@ namespace XboxDownload
                                             StringBuilder sb = new();
                                             sb.Append("HTTP/1.1 200 OK\r\n");
                                             sb.Append("Content-Type: text/plain\r\n");
-                                            sb.Append("Content-Length: "+ _response.Length + "\r\n\r\n");
+                                            sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
                                             Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
                                             mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
                                             mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);

@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -65,6 +65,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            linkEA2 = new LinkLabel();
             ckbUbiCDN = new CheckBox();
             panelEpic = new Panel();
             rbEpicCDN1 = new RadioButton();
@@ -178,7 +179,7 @@
             butHostSave = new Button();
             cbDohDNS = new ComboBox();
             cbHosts = new ComboBox();
-            tabCND = new TabPage();
+            tabCDN = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox4 = new GroupBox();
             tbHosts1Akamai = new TextBox();
@@ -366,7 +367,7 @@
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvHosts).BeginInit();
             panel2.SuspendLayout();
-            tabCND.SuspendLayout();
+            tabCDN.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             groupBox4.SuspendLayout();
             groupBox5.SuspendLayout();
@@ -501,7 +502,7 @@
             tabControl1.Controls.Add(tabService);
             tabControl1.Controls.Add(tabSpeedTest);
             tabControl1.Controls.Add(tabHosts);
-            tabControl1.Controls.Add(tabCND);
+            tabControl1.Controls.Add(tabCDN);
             tabControl1.Controls.Add(tabHardDisk);
             tabControl1.Controls.Add(tabStore);
             tabControl1.Controls.Add(tabTools);
@@ -612,6 +613,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(linkEA2);
             groupBox1.Controls.Add(ckbUbiCDN);
             groupBox1.Controls.Add(panelEpic);
             groupBox1.Controls.Add(ckbDisableIPv6DNS);
@@ -677,6 +679,14 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // linkEA2
+            // 
+            resources.ApplyResources(linkEA2, "linkEA2");
+            linkEA2.Name = "linkEA2";
+            linkEA2.TabStop = true;
+            linkEA2.Tag = "https://www.bilibili.com/video/BV1Se411H723";
+            linkEA2.LinkClicked += Link_LinkClicked;
             // 
             // ckbUbiCDN
             // 
@@ -1114,9 +1124,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1124,9 +1134,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1134,9 +1144,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1446,14 +1456,14 @@
             cbHosts.Name = "cbHosts";
             cbHosts.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
             // 
-            // tabCND
+            // tabCDN
             // 
-            tabCND.Controls.Add(tableLayoutPanel1);
-            tabCND.Controls.Add(panel4);
-            tabCND.Controls.Add(groupBox3);
-            resources.ApplyResources(tabCND, "tabCND");
-            tabCND.Name = "tabCND";
-            tabCND.UseVisualStyleBackColor = true;
+            tabCDN.Controls.Add(tableLayoutPanel1);
+            tabCDN.Controls.Add(panel4);
+            tabCDN.Controls.Add(groupBox3);
+            resources.ApplyResources(tabCDN, "tabCDN");
+            tabCDN.Name = "tabCDN";
+            tabCDN.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -2703,7 +2713,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvHosts).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            tabCND.ResumeLayout(false);
+            tabCDN.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
@@ -2884,7 +2894,7 @@
         private ToolStripMenuItem tsmHosts;
         private ComboBox cbSpeedTestTimeOut;
         private Label label7;
-        private TabPage tabCND;
+        private TabPage tabCDN;
         private GroupBox groupBox3;
         private Label label11;
         private LinkLabel linkCdnSpeedTest;
@@ -3062,5 +3072,6 @@
         private RadioButton rbEpicCDN2;
         private Panel panelEpic;
         private CheckBox ckbUbiCDN;
+        private LinkLabel linkEA2;
     }
 }
