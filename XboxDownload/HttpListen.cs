@@ -372,22 +372,45 @@ namespace XboxDownload
                                         if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                     }
                                     break;
-                                case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
-                                    if (IPAddress.TryParse(Properties.Settings.Default.UbiIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
+                                case "blzddist1-a.akamaihd.net":
                                     {
-                                        var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
-                                        if (response != null && response.IsSuccessStatusCode)
+                                        if (IPAddress.TryParse(Properties.Settings.Default.BattleIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                                         {
-                                            bFileFound = true;
-                                            Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
-                                            StringBuilder sb = new();
-                                            sb.Append("HTTP/1.1 200 OK\r\n");
-                                            sb.Append("Content-Type: text/plain\r\n");
-                                            sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                            mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                            mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                            var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
+                                            if (response != null && response.IsSuccessStatusCode)
+                                            {
+                                                bFileFound = true;
+                                                Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
+                                                StringBuilder sb = new();
+                                                sb.Append("HTTP/1.1 200 OK\r\n");
+                                                sb.Append("Content-Type: text/plain\r\n");
+                                                sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
+                                    {
+                                        if (IPAddress.TryParse(Properties.Settings.Default.UbiIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
+                                        {
+                                            var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
+                                            if (response != null && response.IsSuccessStatusCode)
+                                            {
+                                                bFileFound = true;
+                                                Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
+                                                StringBuilder sb = new();
+                                                sb.Append("HTTP/1.1 200 OK\r\n");
+                                                sb.Append("Content-Type: text/plain\r\n");
+                                                sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                                mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+                                            }
                                         }
                                     }
                                     break;

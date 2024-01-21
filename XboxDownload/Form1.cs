@@ -1261,7 +1261,10 @@ namespace XboxDownload
                             }
                             else if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
                             {
-                                sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
+                                if (Regex.IsMatch(Properties.Settings.Default.UbiIP, @"^\d+\.\d+\.\d+\.\d+$"))
+                                    sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
+                                else
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " blzddist1-a.akamaihd.net");
                             }
                         }
                         if (Properties.Settings.Default.EpicStore)

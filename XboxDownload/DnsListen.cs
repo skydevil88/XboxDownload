@@ -549,7 +549,7 @@ namespace XboxDownload
                 {
                     List<ResouceRecord> lsBattleIP = new() { new ResouceRecord { Datas = battleIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
                     _ = dicServiceV6.TryAdd("blzddist1-a.akamaihd.net", lsBattleIP);
-                    _ = dicServiceV4.TryAdd("blzddist1-a.akamaihd.net", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("blzddist1-a.akamaihd.net", lsLocalIP);
                 }
             }
             if (Properties.Settings.Default.EpicStore)
