@@ -1028,7 +1028,7 @@ namespace XboxDownload
                     QueryType = QueryType.A
                 });
             }
-            if (lsIp2V6.Count >= 1)
+            if (lsIp2V4.Count >= 1 || lsIp2V6.Count >= 1)
             {
                 foreach (string str in Properties.Resource.Akamai.Split('\n'))
                 {
@@ -1039,12 +1039,13 @@ namespace XboxDownload
                         host = Regex.Replace(host, @"^\*\.", "");
                         if (reHosts.IsMatch(host))
                         {
+                            dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
                             dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
-                            dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
                         }
                     }
                     else if (reHosts.IsMatch(host))
                     {
+                        dicHosts1V4.TryAdd(host, lsIp2V4);
                         dicHosts1V6.TryAdd(host, lsIp2V6);
                     }
                 }
@@ -1059,63 +1060,8 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*\.", "");
                             if (reHosts.IsMatch(host))
                             {
-                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
-                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
-                            }
-                        }
-                        else if (host.StartsWith("*"))
-                        {
-                            host = Regex.Replace(host, @"^\*", "");
-                            if (reHosts.IsMatch(host))
-                            {
-                                dicHosts1V6.TryAdd(host, lsIp2V6);
-                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
-                                dicHosts1V4.TryAdd(host, lsEmptyIP);
-                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
-                            }
-                        }
-                        else if (reHosts.IsMatch(host))
-                        {
-                            dicHosts1V6.TryAdd(host, lsIp2V6);
-                            dicHosts1V4.TryAdd(host, lsEmptyIP);
-                        }
-                    }
-                }
-            }
-            else if (lsIp2V4.Count >= 1)
-            {
-                foreach (string str in Properties.Resource.Akamai.Split('\n'))
-                {
-                    string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
-                    if (string.IsNullOrEmpty(host)) continue;
-                    if (host.StartsWith("*."))
-                    {
-                        host = Regex.Replace(host, @"^\*\.", "");
-                        if (reHosts.IsMatch(host))
-                        {
-                            dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                            dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
-                        }
-                    }
-                    else if (reHosts.IsMatch(host))
-                    {
-                        dicHosts1V4.TryAdd(host, lsIp2V4);
-                        dicHosts1V6.TryAdd(host, lsEmptyIP);
-                    }
-                }
-                if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
-                {
-                    foreach (string str in File.ReadAllText(Form1.resourcePath + "\\Akamai.txt").Split('\n'))
-                    {
-                        string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
-                        if (string.IsNullOrEmpty(host)) continue;
-                        if (host.StartsWith("*."))
-                        {
-                            host = Regex.Replace(host, @"^\*\.", "");
-                            if (reHosts.IsMatch(host))
-                            {
                                 dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
+                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
                             }
                         }
                         else if (host.StartsWith("*"))
@@ -1124,15 +1070,16 @@ namespace XboxDownload
                             if (reHosts.IsMatch(host))
                             {
                                 dicHosts1V4.TryAdd(host, lsIp2V4);
+                                dicHosts1V6.TryAdd(host, lsIp2V6);
                                 dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                                dicHosts1V6.TryAdd(host, lsEmptyIP);
-                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsEmptyIP);
+                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                
                             }
                         }
                         else if (reHosts.IsMatch(host))
                         {
                             dicHosts1V4.TryAdd(host, lsIp2V4);
-                            dicHosts1V6.TryAdd(host, lsEmptyIP);
+                            dicHosts1V6.TryAdd(host, lsIp2V6);
                         }
                     }
                 }
@@ -1418,19 +1365,10 @@ namespace XboxDownload
         {
             if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
             string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 6000);
-            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>");
+            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>\n?.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>");
             if (result.Success)
             {
                 return Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "") + " (来源：ip138.com)";
-            }
-            else
-            {
-                html = ClassWeb.HttpResponseContent("https://www.ip.cn/ip/" + ip + ".html", "GET", null, null, null, 6000);
-                result = Regex.Match(html, @"<div id=""tab0_address"">(?<location>[^<]*)</div>");
-                if (result.Success)
-                {
-                    return result.Groups["location"].Value.Trim() + " (来源：ip.cn)";
-                }
             }
             return "";
         }

@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -40,12 +40,9 @@
             tsmiExit = new ToolStripMenuItem();
             toolStripDropDownButton2 = new ToolStripDropDownButton();
             tsmProductManual = new ToolStripMenuItem();
-            tsmTeaching = new ToolStripMenuItem();
-            tsmTeachingEA = new ToolStripMenuItem();
-            tsmTeaching3 = new ToolStripMenuItem();
-            tsmTeaching2 = new ToolStripMenuItem();
-            tsmTeaching1 = new ToolStripMenuItem();
-            tsmTeaching5 = new ToolStripMenuItem();
+            tsmVideo = new ToolStripMenuItem();
+            tsmVideoOpenWRT = new ToolStripMenuItem();
+            tsmVideoFree = new ToolStripMenuItem();
             tsmAbout = new ToolStripMenuItem();
             tsbAbout = new ToolStripButton();
             tabControl1 = new TabControl();
@@ -431,7 +428,7 @@
             // 
             toolStripDropDownButton2.AutoToolTip = false;
             toolStripDropDownButton2.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripDropDownButton2.DropDownItems.AddRange(new ToolStripItem[] { tsmProductManual, tsmTeaching, tsmAbout });
+            toolStripDropDownButton2.DropDownItems.AddRange(new ToolStripItem[] { tsmProductManual, tsmVideo, tsmAbout });
             resources.ApplyResources(toolStripDropDownButton2, "toolStripDropDownButton2");
             toolStripDropDownButton2.Name = "toolStripDropDownButton2";
             // 
@@ -441,47 +438,26 @@
             resources.ApplyResources(tsmProductManual, "tsmProductManual");
             tsmProductManual.Click += TsmProductManual_Click;
             // 
-            // tsmTeaching
+            // tsmVideo
             // 
-            tsmTeaching.DropDownItems.AddRange(new ToolStripItem[] { tsmTeachingEA, tsmTeaching3, tsmTeaching2, tsmTeaching1, tsmTeaching5 });
-            tsmTeaching.Name = "tsmTeaching";
-            resources.ApplyResources(tsmTeaching, "tsmTeaching");
-            tsmTeaching.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
+            tsmVideo.DropDownItems.AddRange(new ToolStripItem[] { tsmVideoOpenWRT, tsmVideoFree });
+            tsmVideo.Name = "tsmVideo";
+            resources.ApplyResources(tsmVideo, "tsmVideo");
+            tsmVideo.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
             // 
-            // tsmTeachingEA
+            // tsmVideoOpenWRT
             // 
-            tsmTeachingEA.Name = "tsmTeachingEA";
-            resources.ApplyResources(tsmTeachingEA, "tsmTeachingEA");
-            tsmTeachingEA.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
-            tsmTeachingEA.Click += TsmOpenSite_Click;
+            tsmVideoOpenWRT.Name = "tsmVideoOpenWRT";
+            resources.ApplyResources(tsmVideoOpenWRT, "tsmVideoOpenWRT");
+            tsmVideoOpenWRT.Tag = "https://www.bilibili.com/video/BV1wP4y1G7zf";
+            tsmVideoOpenWRT.Click += TsmOpenSite_Click;
             // 
-            // tsmTeaching3
+            // tsmVideoFree
             // 
-            tsmTeaching3.Name = "tsmTeaching3";
-            resources.ApplyResources(tsmTeaching3, "tsmTeaching3");
-            tsmTeaching3.Tag = "https://www.bilibili.com/video/BV1834y16784";
-            tsmTeaching3.Click += TsmOpenSite_Click;
-            // 
-            // tsmTeaching2
-            // 
-            tsmTeaching2.Name = "tsmTeaching2";
-            resources.ApplyResources(tsmTeaching2, "tsmTeaching2");
-            tsmTeaching2.Tag = "https://www.bilibili.com/video/BV1xM4y1c7j1";
-            tsmTeaching2.Click += TsmOpenSite_Click;
-            // 
-            // tsmTeaching1
-            // 
-            tsmTeaching1.Name = "tsmTeaching1";
-            resources.ApplyResources(tsmTeaching1, "tsmTeaching1");
-            tsmTeaching1.Tag = "https://www.bilibili.com/video/BV1wP4y1G7zf";
-            tsmTeaching1.Click += TsmOpenSite_Click;
-            // 
-            // tsmTeaching5
-            // 
-            tsmTeaching5.Name = "tsmTeaching5";
-            resources.ApplyResources(tsmTeaching5, "tsmTeaching5");
-            tsmTeaching5.Tag = "https://www.bilibili.com/video/BV1TN411k7qf";
-            tsmTeaching5.Click += TsmOpenSite_Click;
+            tsmVideoFree.Name = "tsmVideoFree";
+            resources.ApplyResources(tsmVideoFree, "tsmVideoFree");
+            tsmVideoFree.Tag = "https://www.bilibili.com/video/BV1TN411k7qf";
+            tsmVideoFree.Click += TsmOpenSite_Click;
             // 
             // tsmAbout
             // 
@@ -1124,9 +1100,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1134,9 +1110,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1144,9 +1120,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -2764,11 +2740,9 @@
         private TabPage tabService;
         private TabPage tabHosts;
         private ToolStripMenuItem tsmProductManual;
-        private ToolStripMenuItem tsmTeaching;
+        private ToolStripMenuItem tsmVideo;
         private ToolStripMenuItem tsmAbout;
-        private ToolStripMenuItem tsmTeaching3;
-        private ToolStripMenuItem tsmTeaching2;
-        private ToolStripMenuItem tsmTeaching1;
+        private ToolStripMenuItem tsmVideoOpenWRT;
         private ToolStripButton tsbAbout;
         private TabPage tabSpeedTest;
         private ContextMenuStrip contextMenuStrip1;
@@ -3034,7 +3008,7 @@
         private Label labelStatusEACdn;
         private LinkLabel linkEaOriginRepair;
         private LinkLabel linkEaOriginNoUpdate;
-        private ToolStripMenuItem tsmTeaching5;
+        private ToolStripMenuItem tsmVideoFree;
         private LinkLabel linkLabel3;
         private LinkLabel linkUsbDevice;
         private LinkLabel linkLabel4;
@@ -3046,7 +3020,6 @@
         private System.Windows.Forms.Timer timerTraffic;
         private Label labelTraffic;
         private LinkLabel linkPcInstall1;
-        private ToolStripMenuItem tsmTeachingEA;
         private LinkLabel linkEA1;
         private LinkLabel linkXbox3;
         private LinkLabel linkXbox2;
