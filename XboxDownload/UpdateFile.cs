@@ -144,7 +144,7 @@ namespace XboxDownload
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string tmpUrl = proxy + UpdateFile.project.Replace("github.com", "raw.githubusercontent.com") +"/master/IP/" + fi.Name;
+                    string tmpUrl = proxy + UpdateFile.project.Replace("github.com", "raw.githubusercontent.com") + "/master/IP/" + fi.Name;
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(fileUrl))
                         fileUrl = tmpUrl;

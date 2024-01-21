@@ -1073,7 +1073,7 @@ namespace XboxDownload
                                 dicHosts1V6.TryAdd(host, lsIp2V6);
                                 dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
                                 dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
-                                
+
                             }
                         }
                         else if (reHosts.IsMatch(host))

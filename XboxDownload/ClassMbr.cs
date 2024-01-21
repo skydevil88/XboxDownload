@@ -64,7 +64,7 @@ namespace XboxDownload
 
         public static string ByteToHex(byte[] bytes)
         {
-            StringBuilder sb = new ();
+            StringBuilder sb = new();
             if (bytes.Length > 0)
             {
                 foreach (var item in bytes)

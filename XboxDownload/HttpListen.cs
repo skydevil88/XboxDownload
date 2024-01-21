@@ -373,10 +373,10 @@ namespace XboxDownload
                                     }
                                     break;
                                 case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
-                                    if (DnsListen.dicServiceV6.TryGetValue(_hosts, out List<ResouceRecord>? lsServiceIp) && lsServiceIp.Count >= 1)
+                                    if (IPAddress.TryParse(Properties.Settings.Default.UbiIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                                     {
                                         var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + (new IPAddress(lsServiceIp[0].Datas!)) + "]"), "GET", null, null, headers);
+                                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
                                         if (response != null && response.IsSuccessStatusCode)
                                         {
                                             bFileFound = true;
@@ -486,7 +486,7 @@ namespace XboxDownload
                             _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(XboxGame.Url), "PUT", null, null, null, 30000, "XboxDownload");
                         }
                     }
-                } 
+                }
             }
         }
     }

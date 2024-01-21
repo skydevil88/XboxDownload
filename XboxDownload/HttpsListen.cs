@@ -40,13 +40,13 @@ namespace XboxDownload
                 }));
                 return;
             }
-            
+
             X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
             X509Certificate2 certificate = new(Properties.Resource.Certificate1);
             store.Open(OpenFlags.ReadWrite);
             store.Add(certificate);
             store.Close();
-            
+
             while (Form1.bServiceFlag)
             {
                 try

@@ -199,12 +199,12 @@ namespace XboxDownload
             public string Value { get; set; } = "";
         }
 
-       public static void ExchangeRate(string CurrencyCode)
+        public static void ExchangeRate(string CurrencyCode)
         {
             if (CurrencyCode == "CNY") return;
             string html;
             Match result;
-            
+
             html = ClassWeb.HttpResponseContent("https://hq.sinajs.cn/list=fx_s" + CurrencyCode.ToLowerInvariant() + "cny", "GET", null, null, new() { { "Referer", "https://finance.sina.com.cn/" } });
             result = Regex.Match(html, @"\d{2}:\d{2}:\d{2}(,[^,]*){7},(?<ExchangeRate>[^,]+)");
             if (result.Success)
@@ -225,7 +225,7 @@ namespace XboxDownload
                     return;
                 }
             }
-            
+
             html = ClassWeb.HttpResponseContent("https://www.convertworld.com/zh-hans/currency/mauritania/" + CurrencyCode.ToLowerInvariant() + "-cny.html");
             result = Regex.Match(html, @"一个" + CurrencyCode + "是(?<ExchangeRate>.+) CNY");
             if (result.Success)
