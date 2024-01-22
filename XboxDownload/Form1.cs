@@ -1545,6 +1545,7 @@ namespace XboxDownload
                     tsmUseIPPS.Visible = true;
                     break;
                 case "Akamai":
+                case "AkamaiV6":
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
                 case "blzddist1-a.akamaihd.net":
@@ -1555,17 +1556,8 @@ namespace XboxDownload
                     tsmUseIPXbox.Visible = true;
                     tsmUseIPApp.Visible = true;
                     tsmUseIPPS.Visible = true;
-                    tsmUseIPNS.Visible = true;
-                    tsmUseIPEa.Visible = true;
-                    tsmUseAkamai.Visible = true;
-                    tsmUseIPBattle.Visible = true;
-                    tsmUseIPEpic.Visible = true;
-                    break;
-                case "AkamaiV6":
-                    tssUseIP1.Visible = true;
-                    tsmUseIPCom.Visible = true;
-                    tsmUseIPXbox.Visible = true;
-                    tsmUseIPApp.Visible = true;
+                    if (host != "AkamaiV6")
+                        tsmUseIPNS.Visible = true;
                     tsmUseIPEa.Visible = true;
                     tsmUseAkamai.Visible = true;
                     tsmUseIPBattle.Visible = true;

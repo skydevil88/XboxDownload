@@ -728,7 +728,7 @@ namespace XboxDownload
                                         var lsHostsIp2 = dicHosts2V6.Where(kvp => kvp.Key.IsMatch(queryName)).Select(x => x.Value).FirstOrDefault();
                                         if (lsHostsIp2 != null)
                                         {
-                                            dicHosts1V4.TryAdd(queryName, lsHostsIp2);
+                                            dicHosts1V6.TryAdd(queryName, lsHostsIp2);
                                             if (lsHostsIp2.Count >= 2) lsHostsIp2 = lsHostsIp2.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
                                             dns.QR = 1;
                                             dns.RA = 1;

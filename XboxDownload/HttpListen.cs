@@ -162,10 +162,15 @@ namespace XboxDownload
                             switch (_hosts)
                             {
                                 case "xvcf1.xboxlive.com":
-                                case "xvcf2.xboxlive.com":
                                 case "assets1.xboxlive.com":
-                                case "assets2.xboxlive.com":
                                 case "d1.xboxlive.com":
+                                    _redirect = true;
+                                    _newHosts = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP ? "assets2.xboxlive.cn" : "assets2.xboxlive.com";
+                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    break;
+                                case "xvcf2.xboxlive.com":
+                                case "assets2.xboxlive.com":
                                 case "d2.xboxlive.com":
                                 case "assets1.xboxlive.cn":
                                 case "d1.xboxlive.cn":
@@ -415,6 +420,7 @@ namespace XboxDownload
                                                 StringBuilder sb = new();
                                                 sb.Append("HTTP/1.1 200 OK\r\n");
                                                 sb.Append("Content-Type: text/plain\r\n");
+                                                sb.Append("Connection: keep-alive\r\n");
                                                 sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
                                                 Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
                                                 mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
