@@ -1955,7 +1955,7 @@ namespace XboxDownload
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb5 = new()
                         {
-                            Tag = "http://blzddist1-a.akamaihd.net/tpr/odin/data/e9/07/e9079f76b9939f279dd2cb04f3b28143",
+                            Tag = "http://blzddist1-a.akamaihd.net/tpr/odin/data/15/fb/15fb20d02f83de4f82d00441a5d427ad",
                             Text = "Call of Duty: Warzone(Õ½Íø)",
                             AutoSize = true,
                             Parent = this.flpTestUrl
@@ -3569,7 +3569,7 @@ namespace XboxDownload
             if (this.query != query) return;
             string language = ClassWeb.language;
             if (language == "zh-CN") language = "zh-TW";
-            string url = "https://www.microsoft.com/msstoreapiprod/api/autosuggest?market=" + language + "&clientId=7F27B536-CF6B-4C65-8638-A0F8CBDFCA65&sources=Microsoft-Terms,Iris-Products,DCatAll-Products&filter=+ClientType:StoreWeb&counts=5,1,5&query=" + ClassWeb.UrlEncode(query);
+            string url = "https://www.microsoft.com/msstoreapiprod/api/autosuggest?market=" + language + "&clientId=7F27B536-CF6B-4C65-8638-A0F8CBDFCA65&sources=Microsoft-Terms,Iris-Products,xSearch-Products&filter=+ClientType:StoreWeb&counts=5,1,5&query=" + ClassWeb.UrlEncode(query);
             string html = ClassWeb.HttpResponseContent(url);
             if (this.query != query) return;
             List<ListViewItem> ls = new();

@@ -48,7 +48,7 @@ namespace XboxDownload
             }
         }
 
-        private void TcpThread(Socket mySocket)
+        private async void TcpThread(Socket mySocket)
         {
             if (mySocket.Connected)
             {
@@ -377,18 +377,27 @@ namespace XboxDownload
                                         if (IPAddress.TryParse(Properties.Settings.Default.BattleIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                                         {
                                             var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
+                                            result = Regex.Match(_buffer, @"Range: (bytes=.+)");
+                                            if (result.Success) headers.Add("Range", result.Groups[1].Value.Trim());
+                                            using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
                                             if (response != null && response.IsSuccessStatusCode)
                                             {
                                                 bFileFound = true;
-                                                Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
-                                                StringBuilder sb = new();
-                                                sb.Append("HTTP/1.1 200 OK\r\n");
-                                                sb.Append("Content-Type: text/plain\r\n");
-                                                sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                                Byte[] _headers;
+                                                if (response.StatusCode == HttpStatusCode.PartialContent)
+                                                    _headers = Encoding.ASCII.GetBytes("HTTP/1.1 206 Partial Content\r\n" + response.Content.Headers + response.Headers + "\r\n");
+                                                else
+                                                    _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
                                                 mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
-                                                mySocket.Send(_response, 0, _response.Length, SocketFlags.None, out _);
+
+                                                byte[] buffer = new byte[65536];
+                                                var httpStream = await response.Content.ReadAsStreamAsync();
+                                                int readLength = 0;
+                                                while ((readLength = await httpStream.ReadAsync(buffer)) > 0)
+                                                {
+                                                    if (!mySocket.Connected) break;
+                                                    mySocket.Send(buffer, 0, readLength, SocketFlags.None, out _);
+                                                }
                                             }
                                         }
                                     }

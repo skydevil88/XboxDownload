@@ -120,32 +120,63 @@ namespace XboxDownload
             return response;
         }
 
-        public static async Task DownloadFile(string url, FileInfo fi)
+
+        public static async Task<HttpResponseMessage?> HttpResponseMessageAsync(string url, string method = "GET", string? postData = null, string? contentType = null, Dictionary<string, string>? headers = null, int timeOut = 30000, string? name = null, CancellationToken? cts = null)
         {
-            var client = httpClientFactory?.CreateClient("default");
+            HttpResponseMessage? response = null;
+            var client = httpClientFactory?.CreateClient(name ?? "default");
             if (client != null)
             {
-                using var response = await client.GetAsync(url);
-                if (response != null && response.IsSuccessStatusCode)
+                client.Timeout = TimeSpan.FromMilliseconds(timeOut);
+                if (headers != null)
                 {
-                    using var stream = await response.Content.ReadAsStreamAsync();
-                    if (stream.Length > 0)
+                    foreach (var header in headers)
                     {
-                        try
+                        if (string.IsNullOrEmpty(header.Value)) continue;
+                        switch (header.Key)
                         {
-                            if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
-                                Directory.CreateDirectory(fi.DirectoryName);
-                            using var fileStream = fi.Create();
-                            await stream.CopyToAsync(fileStream);
-                            fi.Refresh();
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message);
+                            case "Host":
+                                client.DefaultRequestHeaders.Host = header.Value;
+                                break;
+                            case "Range":
+                                {
+                                    Match result = Regex.Match(header.Value, @"^bytes=(\d+)-(\d+)$");
+                                    if (result.Success)
+                                        client.DefaultRequestHeaders.Range = new RangeHeaderValue(long.Parse(result.Groups[1].Value), long.Parse(result.Groups[2].Value));
+                                }
+                                break;
+                            default:
+                                client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                                break;
                         }
                     }
                 }
+                HttpRequestMessage httpRequestMessage = new()
+                {
+                    Method = new HttpMethod(method),
+                    RequestUri = new Uri(url),
+                    Version = HttpVersion.Version11,
+                    VersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+                };
+                if (postData != null && httpRequestMessage.Method == HttpMethod.Post)
+                    httpRequestMessage.Content = new StringContent(postData, Encoding.UTF8, contentType ?? "application/x-www-form-urlencoded");
+                try
+                {
+                    if (cts == null)
+                    response = await client.SendAsync(httpRequestMessage);
+                else
+                    response = await client.SendAsync(httpRequestMessage, (CancellationToken)cts);
+                }
+                catch (Exception ex)
+                {
+                    response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+                    {
+                        ReasonPhrase = ex.Message
+                    };
+                    Debug.WriteLine(ex.Message + " " + httpRequestMessage.RequestUri);
+                }
             }
+            return response;
         }
 
         public static String UrlEncode(string str)
