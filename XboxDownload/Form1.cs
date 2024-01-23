@@ -12,7 +12,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 using NetFwTypeLib;
-using static XboxDownload.ClassGame;
 
 namespace XboxDownload
 {
@@ -1364,7 +1363,6 @@ namespace XboxDownload
         {
             if (e.Button == MouseButtons.Right && lvLog.SelectedItems.Count == 1)
             {
-                tsmConnectTest.Visible = lvLog.SelectedItems[0].SubItems[0].Text == "DNS 查询" && Regex.IsMatch(lvLog.SelectedItems[0].SubItems[1].Text, @" -> \d+.\d+.\d+.\d+");
                 cmsLog.Show(MousePosition.X, MousePosition.Y);
             }
         }
@@ -2184,6 +2182,7 @@ namespace XboxDownload
             DataGridViewRow dgvr = dgvIpList.SelectedRows[0];
             string? host = dgvIpList.Tag.ToString();
             string? ip = dgvr.Cells["Col_IPAddress"].Value.ToString();
+            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(ip)) return;
 
             string sHostsPath = Environment.SystemDirectory + "\\drivers\\etc\\hosts";
             try
@@ -2200,7 +2199,7 @@ namespace XboxDownload
                 fi.SetAccessControl(fSecurity);
                 if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
                     fi.Attributes = FileAttributes.Normal;
-                string sHosts = string.Empty;
+                string sHosts;
                 using (StreamReader sw = new(sHostsPath))
                 {
                     sHosts = sw.ReadToEnd();
@@ -2262,29 +2261,50 @@ namespace XboxDownload
                         sb.AppendLine(ip + " gs2.ww.prod.dl.playstation.net # XboxDownload");
                         sb.AppendLine(ip + " zeus.dl.playstation.net # XboxDownload");
                         sb.AppendLine(ip + " ares.dl.playstation.net # XboxDownload");
-                        if (host != "AkamaiV6")
+                        if (Regex.IsMatch(ip, @"\d+\.\d+\.\d+\.\d+"))
                         {
                             sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net # XboxDownload");
                             sb.AppendLine(ip + " bugyo.hac.lp1.eshop.nintendo.net # XboxDownload");
                             sb.AppendLine(ip + " ctest-ul-lp1.cdn.nintendo.net # XboxDownload");
                             sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net # XboxDownload");
                             sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net # XboxDownload");
+                            sb.AppendLine(ip + " origin-a.akamaihd.net # XboxDownload");
+                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # XboxDownload");
+                            sb.AppendLine(ip + " blzddist1-a.akamaihd.net # XboxDownload");
+                            sb.AppendLine(ip + " epicgames-download1.akamaized.net # XboxDownload");
+                            sb.AppendLine(ip + " uplaypc-s-ubisoft.cdn.ubi.com # XboxDownload");
+                            msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n战网、Epic、育碧 需要使用监听方式跳转。";
                         }
-                        sb.AppendLine(ip + " origin-a.akamaihd.net # XboxDownload");
-                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # XboxDownload");
-                        sb.AppendLine(ip + " blzddist1-a.akamaihd.net # XboxDownload");
-                        sb.AppendLine(ip + " epicgames-download1.akamaized.net # XboxDownload");
-                        sb.AppendLine(ip + " uplaypc-s-ubisoft.cdn.ubi.com # XboxDownload");
-                        msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网只能用监听方式加速。";
+                        else
+                        {
+                            sb.AppendLine(ip + " origin-a.akamaihd.net # XboxDownload");
+                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com # XboxDownload");
+                            sb.AppendLine(ip + " epicgames-download1.akamaized.net # XboxDownload");
+                            msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\nNS主机、战网客户端、育碧客户端 不支持使用 IPv6。";
+                        }
+                        break;
+                    case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
+                        if (Regex.IsMatch(ip, @"\d+\.\d+\.\d+\.\d+"))
+                        {
+                            sHosts = Regex.Replace(sHosts, @"[^\s]+\s+[^\s]+\.cdn\.ubionline\.com\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                            sb.AppendLine(ip + " " + host + " # XboxDownload");
+                        }
+                        else
+                        {
+                            MessageBox.Show("育碧客户端不支持使用IPv6，请使用监听方式。", "客户端不支持", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                         break;
                     default:
                         sHosts = Regex.Replace(sHosts, @"[^\s]+\s+" + host + @"\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " " + host + " # XboxDownload");
                         break;
                 }
+                sHosts = sHosts.Trim();
+                if (!string.IsNullOrEmpty(sHosts)) sHosts += "\r\n";
                 using (StreamWriter sw = new(sHostsPath, false))
                 {
-                    sw.Write(sHosts.Trim() + "\r\n" + sb.ToString());
+                    sw.Write(sHosts + sb.ToString());
                 }
                 fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
                 fi.SetAccessControl(fSecurity);
@@ -2302,6 +2322,8 @@ namespace XboxDownload
             DataGridViewRow dgvr = dgvIpList.SelectedRows[0];
             string? host = dgvIpList.Tag.ToString();
             string? ip = dgvr.Cells["Col_IPAddress"].Value.ToString();
+            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(ip)) return;
+
             StringBuilder sb = new();
             if (sender is not ToolStripMenuItem tsmi) return;
             string msg = string.Empty;
@@ -2392,7 +2414,7 @@ namespace XboxDownload
                         sb.AppendLine("address=/zeus.dl.playstation.net/" + ip);
                         sb.AppendLine("address=/ares.dl.playstation.net/" + ip);
                         sb.AppendLine();
-                        if (host != "AkamaiV6")
+                        if (Regex.IsMatch(ip, @"\d+\.\d+\.\d+\.\d+"))
                         {
                             sb.AppendLine("# Nintendo Switch");
                             sb.AppendLine("address=/atum.hac.lp1.d4c.nintendo.net/" + ip);
@@ -2401,13 +2423,22 @@ namespace XboxDownload
                             sb.AppendLine("address=/ctest-dl-lp1.cdn.nintendo.net/" + ip);
                             sb.AppendLine("address=/atum-eda.hac.lp1.d4c.nintendo.net/0.0.0.0");
                             sb.AppendLine();
+                            sb.AppendLine("# EA、战网国际服、Epic、育碧");
+                            sb.AppendLine("address=/origin-a.akamaihd.net/" + ip);
+                            sb.AppendLine("address=/ssl-lvlt.cdn.ea.com/0.0.0.0");
+                            sb.AppendLine("address=/blzddist1-a.akamaihd.net/" + ip);
+                            sb.AppendLine("address=/epicgames-download1.akamaized.net/" + ip);
+                            sb.AppendLine("address=/uplaypc-s-ubisoft.cdn.ubi.com/" + ip);
+                            msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n战网、Epic、育碧 需要使用监听方式跳转。";
                         }
-                        sb.AppendLine("# EA、战网国际服、Epic、育碧");
-                        sb.AppendLine("address=/origin-a.akamaihd.net/" + ip);
-                        sb.AppendLine("address=/ssl-lvlt.cdn.ea.com/0.0.0.0");
-                        sb.AppendLine("address=/blzddist1-a.akamaihd.net/" + ip);
-                        sb.AppendLine("address=/epicgames-download1.akamaized.net/" + ip);
-                        sb.AppendLine("address=/uplaypc-s-ubisoft.cdn.ubi.com/" + ip);
+                        else
+                        {
+                            sb.AppendLine("# EA、Epic");
+                            sb.AppendLine("address=/origin-a.akamaihd.net/" + ip);
+                            sb.AppendLine("address=/ssl-lvlt.cdn.ea.com/0.0.0.0");
+                            sb.AppendLine("address=/epicgames-download1.akamaized.net/" + ip);
+                            msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\nNS主机、战网客户端、育碧客户端 不支持使用 IPv6。";
+                        }
                     }
                     else
                     {
@@ -2429,7 +2460,7 @@ namespace XboxDownload
                         sb.AppendLine(ip + " zeus.dl.playstation.net");
                         sb.AppendLine(ip + " ares.dl.playstation.net");
                         sb.AppendLine();
-                        if (host != "AkamaiV6")
+                        if (Regex.IsMatch(ip, @"\d+\.\d+\.\d+\.\d+"))
                         {
                             sb.AppendLine("# Nintendo Switch");
                             sb.AppendLine(ip + " atum.hac.lp1.d4c.nintendo.net");
@@ -2438,15 +2469,38 @@ namespace XboxDownload
                             sb.AppendLine(ip + " ctest-dl-lp1.cdn.nintendo.net");
                             sb.AppendLine("0.0.0.0 atum-eda.hac.lp1.d4c.nintendo.net");
                             sb.AppendLine();
+                            sb.AppendLine("# EA、战网国际服、Epic、育碧");
+                            sb.AppendLine(ip + " origin-a.akamaihd.net");
+                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
+                            sb.AppendLine(ip + " blzddist1-a.akamaihd.net");
+                            sb.AppendLine(ip + " epicgames-download1.akamaized.net");
+                            sb.AppendLine(ip + " uplaypc-s-ubisoft.cdn.ubi.com");
+                            msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n战网、Epic、育碧 需要使用监听方式跳转。";
                         }
-                        sb.AppendLine("# EA、战网国际服、Epic、育碧");
-                        sb.AppendLine(ip + " origin-a.akamaihd.net");
-                        sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
-                        sb.AppendLine(ip + " blzddist1-a.akamaihd.net");
-                        sb.AppendLine(ip + " epicgames-download1.akamaized.net");
-                        sb.AppendLine(ip + " uplaypc-s-ubisoft.cdn.ubi.com");
+                        else
+                        {
+                            sb.AppendLine("# EA、战网国际服、Epic、育碧");
+                            sb.AppendLine(ip + " origin-a.akamaihd.net");
+                            sb.AppendLine("0.0.0.0 ssl-lvlt.cdn.ea.com");
+                            sb.AppendLine(ip + " epicgames-download1.akamaized.net");
+                            msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\nNS主机、战网客户端、育碧客户端 不支持使用 IPv6。";
+                        }
                     }
-                    msg = "\nOrigin 的用户可以在“工具 -> EA Origin 切换CDN服务器”中指定使用 Akamai。\n\n暴雪战网、Epic、育碧 可能需要用用监听方式跳转。";
+                    break;
+                case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
+                    if (Regex.IsMatch(ip, @"\d+\.\d+\.\d+\.\d+"))
+                    {
+                        sb.AppendLine("# 育碧");
+                        if (tsmi.Name == "tsmDNSmasp")
+                            sb.AppendLine("address=/" + host + "/" + ip);
+                        else
+                            sb.AppendLine(ip + " " + host);
+                    }
+                    else
+                    {
+                        MessageBox.Show("育碧客户端不支持使用IPv6，请使用监听方式。", "客户端不支持", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     break;
                 default:
                     if (tsmi.Name == "tsmDNSmasp")
@@ -2526,8 +2580,10 @@ namespace XboxDownload
                     }
                     if (MessageBox.Show("是否确认清除以下写入规则？\n\n" + sb.ToString(), "清除系统Hosts文件", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                     {
+                        newHosts = newHosts.Trim();
+                        if (!string.IsNullOrEmpty(newHosts)) newHosts += "\r\n";
                         using StreamWriter sw = new(sHostsPath, false);
-                        sw.Write(newHosts.Trim() + "\r\n");
+                        sw.Write(newHosts);
                     }
                 }
                 fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));

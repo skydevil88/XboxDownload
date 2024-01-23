@@ -129,7 +129,7 @@ address=/d2.xboxlive.com/Akamai IP
 address=/dlassets.xboxlive.com/Akamai IP
 address=/dlassets2.xboxlive.com/Akamai IP
 ```
-注意：不少人直接把 com 域名指定到 cn ip、或者使用 CNAME 解释到 cn IP，这两种方法都是错误的，服务器会返回403错误。 com域名不能使用cn IP，反过来cn域名可以使用部Akamai IP.
+注意：不少人直接把 com 域名指定到 cn ip、或者使用 CNAME 解释到 cn IP，这两种方法都是错误的，服务器会返回403错误。 com域名不能使用cn IP，反过来cn域名可以使用Akamai IP.
 
 关于
 ---

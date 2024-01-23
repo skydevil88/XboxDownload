@@ -318,7 +318,6 @@
             cmsLog = new ContextMenuStrip(components);
             tsmCopyLog = new ToolStripMenuItem();
             tsmExportLog = new ToolStripMenuItem();
-            tsmConnectTest = new ToolStripMenuItem();
             cmsIP = new ContextMenuStrip(components);
             tsmUseIP = new ToolStripMenuItem();
             tsmUseIPCn = new ToolStripMenuItem();
@@ -2456,7 +2455,7 @@
             // cmsLog
             // 
             cmsLog.ImageScalingSize = new Size(24, 24);
-            cmsLog.Items.AddRange(new ToolStripItem[] { tsmCopyLog, tsmExportLog, tsmConnectTest });
+            cmsLog.Items.AddRange(new ToolStripItem[] { tsmCopyLog, tsmExportLog });
             cmsLog.Name = "tsmExportLog";
             resources.ApplyResources(cmsLog, "cmsLog");
             // 
@@ -2471,12 +2470,6 @@
             tsmExportLog.Name = "tsmExportLog";
             resources.ApplyResources(tsmExportLog, "tsmExportLog");
             tsmExportLog.Click += TsmExportLog_Click;
-            // 
-            // tsmConnectTest
-            // 
-            tsmConnectTest.Name = "tsmConnectTest";
-            resources.ApplyResources(tsmConnectTest, "tsmConnectTest");
-            tsmConnectTest.Click += TsmConnectTest_Click;
             // 
             // cmsIP
             // 
@@ -2997,7 +2990,6 @@
         private LinkLabel linkPcInstall2;
         private Label labelInstallationLocation;
         private LinkLabel linkFixAppxDrive;
-        private ToolStripMenuItem tsmConnectTest;
         private LinkLabel linkHostsConnectTest;
         private GroupBox gpEACdn;
         private Button butEACdn;
