@@ -815,18 +815,11 @@ namespace XboxDownload
             }
         }
 
-        public static void ClearDnsCache()
+        public void Close()
         {
-            using Process p = new();
-            p.StartInfo.FileName = "cmd.exe";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardInput = true;
-            p.StartInfo.CreateNoWindow = true;
-            p.Start();
-
-            p.StandardInput.WriteLine("ipconfig /flushdns");
-            p.StandardInput.WriteLine("exit");
-            p.StandardInput.Close();
+            socket?.Close();
+            socket?.Dispose();
+            socket = null;
         }
 
         public static void SetAkamaiIP(string? ip = null)
@@ -899,13 +892,6 @@ namespace XboxDownload
             }
         }
 
-        public void Close()
-        {
-            socket?.Close();
-            socket?.Dispose();
-            socket = null;
-        }
-
         public static void UpdateHosts(string? akamai = null)
         {
             dicHosts1V4.Clear();
@@ -917,16 +903,16 @@ namespace XboxDownload
             foreach (DataRow dr in dt.Rows)
             {
                 if (!Convert.ToBoolean(dr["Enable"])) continue;
-                string? hostName = dr["HostName"].ToString()?.Trim().ToLower();
-                if (!string.IsNullOrEmpty(hostName) && IPAddress.TryParse(dr["IP"].ToString()?.Trim(), out IPAddress? ip))
+                string? host = dr["HostName"].ToString()?.Trim().ToLower();
+                if (!string.IsNullOrEmpty(host) && IPAddress.TryParse(dr["IP"].ToString()?.Trim(), out IPAddress? ip))
                 {
-                    if (hostName.StartsWith("*."))
+                    if (host.StartsWith("*."))
                     {
-                        hostName = Regex.Replace(hostName, @"^\*\.", "");
-                        Regex re = new("\\." + hostName.Replace(".", "\\.") + "$");
+                        host = Regex.Replace(host, @"^\*\.", "");
+                        Regex re = new("\\." + host.Replace(".", "\\.") + "$");
                         if (ip.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            if (!dicHosts2V4.ContainsKey(re) && reHosts.IsMatch(hostName))
+                            if (!dicHosts2V4.ContainsKey(re) && reHosts.IsMatch(host))
                             {
                                 List<ResouceRecord> lsIp = new()
                                 {
@@ -939,12 +925,11 @@ namespace XboxDownload
                                     }
                                 };
                                 dicHosts2V4.TryAdd(re, lsIp);
-                                dicHosts2V6.TryAdd(re, lsEmptyIP);
                             }
                         }
                         else
                         {
-                            if (!dicHosts2V6.ContainsKey(re) && reHosts.IsMatch(hostName))
+                            if (!dicHosts2V6.ContainsKey(re) && reHosts.IsMatch(host))
                             {
                                 List<ResouceRecord> lsIp = new()
                                 {
@@ -957,14 +942,14 @@ namespace XboxDownload
                                     }
                                 };
                                 dicHosts2V6.TryAdd(re, lsIp);
-                                dicHosts2V4.TryAdd(re, lsEmptyIP);
                             }
                         }
                     }
-                    else if (!dicHosts1V4.ContainsKey(hostName) && reHosts.IsMatch(hostName))
+                    else if (reHosts.IsMatch(host))
                     {
                         if (ip.AddressFamily == AddressFamily.InterNetwork)
                         {
+                            if (dicHosts1V4.ContainsKey(host)) continue;
                             List<ResouceRecord> lsIp = new()
                             {
                                 new ResouceRecord
@@ -975,11 +960,11 @@ namespace XboxDownload
                                     QueryType = QueryType.A
                                 }
                             };
-                            dicHosts1V4.TryAdd(hostName, lsIp);
-                            dicHosts1V6.TryAdd(hostName, lsEmptyIP);
+                            dicHosts1V4.TryAdd(host, lsIp);
                         }
                         else
                         {
+                            if (dicHosts1V6.ContainsKey(host)) continue;
                             List<ResouceRecord> lsIp = new()
                             {
                                 new ResouceRecord
@@ -990,11 +975,20 @@ namespace XboxDownload
                                     QueryType = QueryType.AAAA
                                 }
                             };
-                            dicHosts1V6.TryAdd(hostName, lsIp);
-                            dicHosts1V4.TryAdd(hostName, lsEmptyIP);
+                            dicHosts1V6.TryAdd(host, lsIp);
                         }
                     }
                 }
+            }
+            foreach (string host in dicHosts1V4.Keys)
+            {
+                if (!dicHosts1V6.ContainsKey(host))
+                    dicHosts1V6.TryAdd(host, lsEmptyIP);
+            }
+            foreach (string host in dicHosts1V6.Keys)
+            {
+                if (!dicHosts1V4.ContainsKey(host))
+                    dicHosts1V4.TryAdd(host, lsEmptyIP);
             }
 
             List<ResouceRecord> lsIp2V4 = new(), lsIp2V6 = new();
@@ -1098,6 +1092,20 @@ namespace XboxDownload
                     }
                 }
             }
+        }
+
+        public static void FlushDns()
+        {
+            using Process p = new();
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+
+            p.StandardInput.WriteLine("ipconfig /flushdns");
+            p.StandardInput.WriteLine("exit");
+            p.StandardInput.Close();
         }
     }
 

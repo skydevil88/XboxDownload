@@ -71,7 +71,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 客户端需要暂定下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。\n拳头游戏需要勾选“设置本机 DNS”");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -686,7 +686,7 @@ namespace XboxDownload
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = true;
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
-            DnsListen.ClearDnsCache();
+            DnsListen.FlushDns();
         }
 
         public async void ButStart_Click(object? sender, EventArgs? e)
@@ -1106,7 +1106,7 @@ namespace XboxDownload
                 }
                 Program.SystemSleep.PreventForCurrentThread(false);
             }
-            DnsListen.ClearDnsCache();
+            DnsListen.FlushDns();
             butStart.Enabled = true;
         }
 
@@ -3044,7 +3044,7 @@ namespace XboxDownload
             {
                 if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
                 else UpdateHosts(true);
-                DnsListen.ClearDnsCache();
+                DnsListen.FlushDns();
             }
         }
 
@@ -3205,10 +3205,11 @@ namespace XboxDownload
             }
             Properties.Settings.Default.IpsAkamai = tbCdnAkamai.Text;
             Properties.Settings.Default.Save();
+            DnsListen.UpdateHosts();
             if (bServiceFlag)
             {
-                DnsListen.UpdateHosts();
-                DnsListen.ClearDnsCache();
+                if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
+                DnsListen.FlushDns();
             }
             if (lsIpV6.Count >= 1 && lsIpV4.Count >= 1)
             {
