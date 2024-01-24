@@ -815,6 +815,20 @@ namespace XboxDownload
             }
         }
 
+        public static void ClearDnsCache()
+        {
+            using Process p = new();
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+
+            p.StandardInput.WriteLine("ipconfig /flushdns");
+            p.StandardInput.WriteLine("exit");
+            p.StandardInput.Close();
+        }
+
         public static void SetAkamaiIP(string? ip = null)
         {
             List<string> hosts;

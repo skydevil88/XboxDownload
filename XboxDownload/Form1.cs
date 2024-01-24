@@ -71,7 +71,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请手动把电脑DNS改回自动获取。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n勾选此选项后正在下载的游戏需要暂定下载，然后重新恢复安装。\nEA app可能需要等1分钟才能生效，也可以点击“加速 EA”旁边修复\n其它客户端可能需要手动重启生效。\n拳头游戏需要勾选“设置本机 DNS”");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 客户端需要暂定下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。\n拳头游戏需要勾选“设置本机 DNS”");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -686,6 +686,7 @@ namespace XboxDownload
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = true;
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
+            DnsListen.ClearDnsCache();
         }
 
         public async void ButStart_Click(object? sender, EventArgs? e)
@@ -707,7 +708,7 @@ namespace XboxDownload
                 tbEpicIP.Text = Properties.Settings.Default.EpicIP;
                 tbUbiIP.Text = Properties.Settings.Default.UbiIP;
                 pictureBox1.Image = Properties.Resource.Xbox1;
-                linkTestDns.Enabled = linkRestartEABackgroundService.Enabled = false;
+                linkTestDns.Enabled = linkRestartEABackgroundService.Enabled = linkRestartEpic.Enabled = false;
 
                 foreach (Control control in this.groupBox1.Controls)
                 {
@@ -1083,6 +1084,7 @@ namespace XboxDownload
                 });
                 UpdateHosts(true);
                 if (Properties.Settings.Default.EAStore) linkRestartEABackgroundService.Enabled = true;
+                if (Properties.Settings.Default.EpicStore) linkRestartEpic.Enabled = true;
                 if (Properties.Settings.Default.DnsService)
                 {
                     linkTestDns.Enabled = true;
@@ -1104,6 +1106,7 @@ namespace XboxDownload
                 }
                 Program.SystemSleep.PreventForCurrentThread(false);
             }
+            DnsListen.ClearDnsCache();
             butStart.Enabled = true;
         }
 
@@ -1443,7 +1446,7 @@ namespace XboxDownload
                 var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Electronic Arts\EA Desktop");
                 if (rk != null)
                 {
-                    path = rk.GetValue("DesktopAppPath", null)?.ToString();
+                    path = rk.GetValue("LauncherAppPath", null)?.ToString();
                     rk.Close();
                 }
             }
@@ -1451,7 +1454,7 @@ namespace XboxDownload
             {
                 if (MessageBox.Show("此操作将会重启 EA app，是否继续？", "修复 EA app", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
-                    Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EADesktop").SingleOrDefault();
+                    Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EADesktop").FirstOrDefault();
                     if (processes != null)
                     {
                         try
@@ -1460,7 +1463,7 @@ namespace XboxDownload
                         }
                         catch { }
                     }
-                    ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "EABackgroundService").SingleOrDefault();
+                    ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "EABackgroundService").FirstOrDefault();
                     if (service != null)
                     {
                         if (service.Status == ServiceControllerStatus.Running)
@@ -1475,6 +1478,45 @@ namespace XboxDownload
             else
             {
                 MessageBox.Show("没有找到 EA app。", "修复 EA app", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void LinkRestartEpic_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string? path = null;
+            using (var key = Microsoft.Win32.Registry.LocalMachine)
+            {
+                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Epic Games\EOS\InstallHelper");
+                if (rk != null)
+                {
+                    path = rk.GetValue("Path", null)?.ToString();
+                    rk.Close();
+                }
+                if (path != null)
+                {
+                    Match result = Regex.Match(path, @"(^.+\\Epic Games\\)");
+                    if (result.Success) path = result.Groups[1].Value + "Launcher\\Portal\\Binaries\\Win32\\EpicGamesLauncher.exe";
+                }
+            }
+            if (path != null && File.Exists(path))
+            {
+                if (MessageBox.Show("此操作将会重启Epic客户端，是否继续？", "重启Epic客户端", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EpicGamesLauncher").FirstOrDefault();
+                    if (processes != null)
+                    {
+                        try
+                        {
+                            processes.Kill();
+                        }
+                        catch { }
+                    }
+                    Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+                }
+            }
+            else
+            {
+                MessageBox.Show("没有找到Epic客户端。", "重启Epic客户端", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -3002,6 +3044,7 @@ namespace XboxDownload
             {
                 if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
                 else UpdateHosts(true);
+                DnsListen.ClearDnsCache();
             }
         }
 
@@ -3162,7 +3205,11 @@ namespace XboxDownload
             }
             Properties.Settings.Default.IpsAkamai = tbCdnAkamai.Text;
             Properties.Settings.Default.Save();
-            DnsListen.UpdateHosts();
+            if (bServiceFlag)
+            {
+                DnsListen.UpdateHosts();
+                DnsListen.ClearDnsCache();
+            }
             if (lsIpV6.Count >= 1 && lsIpV4.Count >= 1)
             {
                 MessageBox.Show("指定IP同时存在 IPv4 和 IPv6，通常 IPv6 会被优先使用！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -5549,5 +5596,7 @@ namespace XboxDownload
             });
         }
         #endregion
+
+
     }
 }

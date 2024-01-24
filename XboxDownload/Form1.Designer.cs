@@ -62,6 +62,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            linkRestartEpic = new LinkLabel();
             linkEA2 = new LinkLabel();
             ckbUbiCDN = new CheckBox();
             panelEpic = new Panel();
@@ -588,6 +589,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(linkRestartEpic);
             groupBox1.Controls.Add(linkEA2);
             groupBox1.Controls.Add(ckbUbiCDN);
             groupBox1.Controls.Add(panelEpic);
@@ -654,6 +656,13 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // linkRestartEpic
+            // 
+            resources.ApplyResources(linkRestartEpic, "linkRestartEpic");
+            linkRestartEpic.Name = "linkRestartEpic";
+            linkRestartEpic.TabStop = true;
+            linkRestartEpic.LinkClicked += LinkRestartEpic_LinkClicked;
             // 
             // linkEA2
             // 
@@ -3038,5 +3047,6 @@
         private Panel panelEpic;
         private CheckBox ckbUbiCDN;
         private LinkLabel linkEA2;
+        private LinkLabel linkRestartEpic;
     }
 }
