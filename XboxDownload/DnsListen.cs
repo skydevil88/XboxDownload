@@ -671,12 +671,12 @@ namespace XboxDownload
                                                 catch { }
                                                 if (json != null)
                                                 {
+                                                    dns.QR = 1;
+                                                    dns.RA = 1;
+                                                    dns.RD = 1;
+                                                    dns.ResouceRecords = new List<ResouceRecord>();
                                                     if (json.Status == 0 && json.Answer != null)
                                                     {
-                                                        dns.QR = 1;
-                                                        dns.RA = 1;
-                                                        dns.RD = 1;
-                                                        dns.ResouceRecords = new List<ResouceRecord>();
                                                         foreach (var answer in json.Answer)
                                                         {
                                                             if (answer.Type == 1 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetwork)
@@ -692,9 +692,9 @@ namespace XboxDownload
                                                             }
                                                             if (dns.ResouceRecords.Count >= 16) break;
                                                         }
-                                                        socket?.SendTo(dns.ToBytes(), client);
-                                                        if (Properties.Settings.Default.RecordLog && dns.ResouceRecords.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", json.Answer.Where(x => x.Type == 1).Select(x => x.Data)), ((IPEndPoint)client).Address.ToString());
                                                     }
+                                                    socket?.SendTo(dns.ToBytes(), client);
+                                                    if (Properties.Settings.Default.RecordLog && dns.ResouceRecords.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", json.Answer!.Where(x => x.Type == 1).Select(x => x.Data)), ((IPEndPoint)client).Address.ToString());
                                                     return;
                                                 }
                                             }
@@ -753,12 +753,12 @@ namespace XboxDownload
                                                     catch { }
                                                     if (json != null)
                                                     {
+                                                        dns.QR = 1;
+                                                        dns.RA = 1;
+                                                        dns.RD = 1;
+                                                        dns.ResouceRecords = new List<ResouceRecord>();
                                                         if (json.Status == 0 && json.Answer != null)
                                                         {
-                                                            dns.QR = 1;
-                                                            dns.RA = 1;
-                                                            dns.RD = 1;
-                                                            dns.ResouceRecords = new List<ResouceRecord>();
                                                             foreach (var answer in json.Answer)
                                                             {
                                                                 if (answer.Type == 28 && IPAddress.TryParse(answer.Data, out IPAddress? ipAddress) && ipAddress.AddressFamily == AddressFamily.InterNetworkV6)
@@ -774,9 +774,9 @@ namespace XboxDownload
                                                                 }
                                                                 if (dns.ResouceRecords.Count >= 16) break;
                                                             }
-                                                            socket?.SendTo(dns.ToBytes(), client);
-                                                            if (Properties.Settings.Default.RecordLog && dns.ResouceRecords.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", json.Answer.Where(x => x.Type == 28).Select(x => x.Data)), ((IPEndPoint)client).Address.ToString());
                                                         }
+                                                        socket?.SendTo(dns.ToBytes(), client);
+                                                        if (Properties.Settings.Default.RecordLog && dns.ResouceRecords.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", json.Answer!.Where(x => x.Type == 28).Select(x => x.Data)), ((IPEndPoint)client).Address.ToString());
                                                         return;
                                                     }
                                                 }
@@ -924,7 +924,7 @@ namespace XboxDownload
                                         QueryType = QueryType.A
                                     }
                                 };
-                                dicHosts2V4.TryAdd(re, lsIp);
+                                _ = dicHosts2V4.TryAdd(re, lsIp);
                             }
                         }
                         else
@@ -941,7 +941,7 @@ namespace XboxDownload
                                         QueryType = QueryType.AAAA
                                     }
                                 };
-                                dicHosts2V6.TryAdd(re, lsIp);
+                                _ = dicHosts2V6.TryAdd(re, lsIp);
                             }
                         }
                     }
@@ -949,33 +949,35 @@ namespace XboxDownload
                     {
                         if (ip.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            if (dicHosts1V4.ContainsKey(host)) continue;
-                            List<ResouceRecord> lsIp = new()
+                            if (!dicHosts1V4.TryGetValue(host, out List<ResouceRecord>? lsIp))
                             {
-                                new ResouceRecord
-                                {
-                                    Datas = ip.GetAddressBytes(),
-                                    TTL = 100,
-                                    QueryClass = 1,
-                                    QueryType = QueryType.A
-                                }
-                            };
-                            dicHosts1V4.TryAdd(host, lsIp);
+                                lsIp = new List<ResouceRecord>();
+                                _ = dicHosts1V4.TryAdd(host, lsIp);
+                            }
+                            else if (lsIp.Where(x => new IPAddress(x.Datas!).ToString() == ip.ToString()).FirstOrDefault() != null) continue;
+                            lsIp.Add(new ResouceRecord
+                            {
+                                Datas = ip.GetAddressBytes(),
+                                TTL = 100,
+                                QueryClass = 1,
+                                QueryType = QueryType.A
+                            });
                         }
                         else
                         {
-                            if (dicHosts1V6.ContainsKey(host)) continue;
-                            List<ResouceRecord> lsIp = new()
+                            if (!dicHosts1V6.TryGetValue(host, out List<ResouceRecord>? lsIp))
                             {
-                                new ResouceRecord
-                                {
-                                    Datas = ip.GetAddressBytes(),
-                                    TTL = 100,
-                                    QueryClass = 1,
-                                    QueryType = QueryType.AAAA
-                                }
-                            };
-                            dicHosts1V6.TryAdd(host, lsIp);
+                                lsIp = new List<ResouceRecord>();
+                                _ = dicHosts1V6.TryAdd(host, lsIp);
+                            }
+                            else if (lsIp.Where(x => new IPAddress(x.Datas!).ToString() == ip.ToString()).FirstOrDefault() != null) continue;
+                            lsIp.Add(new ResouceRecord
+                            {
+                                Datas = ip.GetAddressBytes(),
+                                TTL = 100,
+                                QueryClass = 1,
+                                QueryType = QueryType.AAAA
+                            });
                         }
                     }
                 }
@@ -983,12 +985,12 @@ namespace XboxDownload
             foreach (string host in dicHosts1V4.Keys)
             {
                 if (!dicHosts1V6.ContainsKey(host))
-                    dicHosts1V6.TryAdd(host, lsEmptyIP);
+                    _ = dicHosts1V6.TryAdd(host, lsEmptyIP);
             }
             foreach (string host in dicHosts1V6.Keys)
             {
                 if (!dicHosts1V4.ContainsKey(host))
-                    dicHosts1V4.TryAdd(host, lsEmptyIP);
+                    _ = dicHosts1V4.TryAdd(host, lsEmptyIP);
             }
 
             List<ResouceRecord> lsIp2V4 = new(), lsIp2V6 = new();
@@ -1047,14 +1049,14 @@ namespace XboxDownload
                         host = Regex.Replace(host, @"^\*\.", "");
                         if (reHosts.IsMatch(host))
                         {
-                            dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                            dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                            _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
+                            _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
                         }
                     }
                     else if (reHosts.IsMatch(host))
                     {
-                        dicHosts1V4.TryAdd(host, lsIp2V4);
-                        dicHosts1V6.TryAdd(host, lsIp2V6);
+                        _ = dicHosts1V4.TryAdd(host, lsIp2V4);
+                        _ = dicHosts1V6.TryAdd(host, lsIp2V6);
                     }
                 }
                 if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
@@ -1068,8 +1070,8 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*\.", "");
                             if (reHosts.IsMatch(host))
                             {
-                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
+                                _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
                             }
                         }
                         else if (host.StartsWith("*"))
@@ -1077,17 +1079,17 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*", "");
                             if (reHosts.IsMatch(host))
                             {
-                                dicHosts1V4.TryAdd(host, lsIp2V4);
-                                dicHosts1V6.TryAdd(host, lsIp2V6);
-                                dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                                dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                _ = dicHosts1V4.TryAdd(host, lsIp2V4);
+                                _ = dicHosts1V6.TryAdd(host, lsIp2V6);
+                                _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
+                                _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
 
                             }
                         }
                         else if (reHosts.IsMatch(host))
                         {
-                            dicHosts1V4.TryAdd(host, lsIp2V4);
-                            dicHosts1V6.TryAdd(host, lsIp2V6);
+                            _ = dicHosts1V4.TryAdd(host, lsIp2V4);
+                            _ = dicHosts1V6.TryAdd(host, lsIp2V6);
                         }
                     }
                 }
@@ -1387,10 +1389,10 @@ namespace XboxDownload
         {
             if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
             string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 6000);
-            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>\n?.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>");
+            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>(\n?.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>)?");
             if (result.Success)
             {
-                return Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "") + " (来源：ip138.com)";
+                return Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "").Trim() + " (来源：ip138.com)";
             }
             return "";
         }
