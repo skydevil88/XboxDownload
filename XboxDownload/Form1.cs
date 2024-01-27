@@ -1119,14 +1119,14 @@ namespace XboxDownload
             {
                 string sHosts;
                 FileInfo fi = new(Environment.SystemDirectory + "\\drivers\\etc\\hosts");
-                using (FileStream fsRead = fi.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (FileStream fs = fi.Open(FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using StreamReader sr = new(fsRead);
+                    using StreamReader sr = new(fs);
                     sHosts = sr.ReadToEnd();
                 }
                 if (!(Properties.Settings.Default.SetDns && string.IsNullOrEmpty(Regex.Replace(sHosts, "#.*", "").Trim())))
                 {
-                    sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r?\n(.*\r?\n)*# End of (XboxDownload|Xbox下载助手)\r?\n", "");
+                    sHosts = Regex.Replace(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)*# End of (XboxDownload|Xbox下载助手)\r\n", "");
                     if (add)
                     {
                         if (string.IsNullOrEmpty(Properties.Settings.Default.ComIP)) tbComIP.Text = Properties.Settings.Default.LocalIP;
@@ -1312,13 +1312,13 @@ namespace XboxDownload
                     fi.SetAccessControl(fSecurity);
                     if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
                         fi.Attributes = FileAttributes.Normal;
-                    using (FileStream fsWrite = fi.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                    using (FileStream fs = fi.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        fsWrite.Seek(0, SeekOrigin.Begin);
-                        fsWrite.SetLength(0);
+                        fs.Seek(0, SeekOrigin.Begin);
+                        fs.SetLength(0);
                         if (!string.IsNullOrEmpty(sHosts.Trim()))
                         {
-                            using StreamWriter sw = new(fsWrite);
+                            using StreamWriter sw = new(fs);
                             sw.WriteLine(sHosts.Trim());
                         }
                     }
@@ -2230,9 +2230,9 @@ namespace XboxDownload
             {
                 string sHosts;
                 FileInfo fi = new(Environment.SystemDirectory + "\\drivers\\etc\\hosts");
-                using (FileStream fsRead = fi.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (FileStream fs = fi.Open(FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using StreamReader sr = new(fsRead);
+                    using StreamReader sr = new(fs);
                     sHosts = sr.ReadToEnd();
                 }
                 StringBuilder sb = new();
@@ -2337,13 +2337,13 @@ namespace XboxDownload
                 fi.SetAccessControl(fSecurity);
                 if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
                     fi.Attributes = FileAttributes.Normal;
-                using (FileStream fsWrite = fi.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (FileStream fs = fi.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
                 {
-                    fsWrite.Seek(0, SeekOrigin.Begin);
-                    fsWrite.SetLength(0);
+                    fs.Seek(0, SeekOrigin.Begin);
+                    fs.SetLength(0);
                     if (!string.IsNullOrEmpty(sHosts.Trim()))
                     {
-                        using StreamWriter sw = new(fsWrite);
+                        using StreamWriter sw = new(fs);
                         sw.WriteLine(sHosts.Trim());
                     }
                 }
@@ -2589,45 +2589,45 @@ namespace XboxDownload
             {
                 string sHosts;
                 FileInfo fi = new(Environment.SystemDirectory + "\\drivers\\etc\\hosts");
-                using (FileStream fsRead = fi.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (FileStream fs = fi.Open(FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using StreamReader sr = new(fsRead);
+                    using StreamReader sr = new(fs);
                     sHosts = sr.ReadToEnd();
                 }
-                string newHosts = Regex.Replace(sHosts, @".+# (XboxDownload|Xbox下载助手)\r\n", "");
-                if (String.Equals(sHosts, newHosts))
+
+                StringBuilder sb1 = new(), sb2 = new();
+                foreach (string str in sHosts.Split('\n'))
                 {
-                    MessageBox.Show("Hosts文件没有写入任何规则，无需清除。\n\n注：只清除Xbox下载助手写入的规则。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    string tmp = str.Trim();
+                    if (tmp.StartsWith("#") || string.IsNullOrEmpty(tmp))
+                        sb1.AppendLine(tmp);
+                    else
+                        sb2.AppendLine(tmp);
                 }
-                else
+                if(sb2.Length == 0)
                 {
-                    StringBuilder sb = new();
-                    Match result = Regex.Match(sHosts, @".+# (XboxDownload|Xbox下载助手)\r\n");
-                    while (result.Success)
+                    MessageBox.Show("Hosts文件没有写入任何规则，无需清除。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
+                }
+                else if (MessageBox.Show("是否确认清除以下写入规则？\n\n" + sb2.ToString(), "清除系统Hosts文件", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    FileSecurity fSecurity = fi.GetAccessControl();
+                    fSecurity.AddAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
+                    fi.SetAccessControl(fSecurity);
+                    if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
+                        fi.Attributes = FileAttributes.Normal;
+                    using (FileStream fs = fi.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        sb.Append(result.Groups[0].Value);
-                        result = result.NextMatch();
-                    }
-                    if (MessageBox.Show("是否确认清除以下写入规则？\n\n" + sb.ToString(), "清除系统Hosts文件", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-                    {
-                        FileSecurity fSecurity = fi.GetAccessControl();
-                        fSecurity.AddAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
-                        fi.SetAccessControl(fSecurity);
-                        if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
-                            fi.Attributes = FileAttributes.Normal;
-                        using (FileStream fsWrite = fi.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+                        fs.Seek(0, SeekOrigin.Begin);
+                        fs.SetLength(0);
+                        string hosts = sb1.ToString().Trim();
+                        if (!string.IsNullOrEmpty(hosts))
                         {
-                            fsWrite.Seek(0, SeekOrigin.Begin);
-                            fsWrite.SetLength(0);
-                            if (!string.IsNullOrEmpty(newHosts.Trim()))
-                            {
-                                using StreamWriter sw = new(fsWrite);
-                                sw.WriteLine(newHosts.Trim());
-                            }
+                            using StreamWriter sw = new(fs);
+                            sw.WriteLine(hosts);
                         }
-                        fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
-                        fi.SetAccessControl(fSecurity);
                     }
+                    fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
+                    fi.SetAccessControl(fSecurity);
                 }
             }
             catch (Exception ex)
@@ -3209,10 +3209,6 @@ namespace XboxDownload
             {
                 if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
                 DnsListen.FlushDns();
-            }
-            if (lsIpV6.Count >= 1 && lsIpV4.Count >= 1)
-            {
-                MessageBox.Show("指定IP同时存在 IPv4 和 IPv6，通常 IPv6 会被优先使用！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
