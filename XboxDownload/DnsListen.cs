@@ -15,7 +15,7 @@ namespace XboxDownload
         Socket? socket = null;
         private readonly Form1 parentForm;
         private readonly string dohServer = "https://223.5.5.5";
-        private readonly Regex reDoHBlacklist = new("google|youtube|facebook|twitter|github");
+        private readonly Regex reDoHFilter = new("google|youtube|facebook|twitter|github");
         public static readonly List<ResouceRecord> lsEmptyIP = new();
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
@@ -554,11 +554,11 @@ namespace XboxDownload
             }
             if (Properties.Settings.Default.EpicStore)
             {
-                string localHosts = !Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
-                _ = dicServiceV4.TryAdd(localHosts, lsLocalIP);
+                string localHost = !Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
+                _ = dicServiceV4.TryAdd(localHost, lsLocalIP);
                 _ = dicServiceV4.TryAdd("download.epicgames.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("fastly-download.epicgames.com", lsLocalIP);
-                _ = dicServiceV6.TryAdd(localHosts, lsEmptyIP);
+                _ = dicServiceV6.TryAdd(localHost, lsEmptyIP);
                 _ = dicServiceV6.TryAdd("download.epicgames.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("fastly-download.epicgames.com", lsEmptyIP);
             }
@@ -658,7 +658,7 @@ namespace XboxDownload
                                             if (Properties.Settings.Default.RecordLog && lsHostsIp2.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                             return;
                                         }
-                                        if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
+                                        if (Properties.Settings.Default.DoH && !reDoHFilter.IsMatch(queryName))
                                         {
                                             string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
                                             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
@@ -740,7 +740,7 @@ namespace XboxDownload
                                         }
                                         if (!Properties.Settings.Default.DisableIPv6DNS)
                                         {
-                                            if (Properties.Settings.Default.DoH && !reDoHBlacklist.IsMatch(queryName))
+                                            if (Properties.Settings.Default.DoH && !reDoHFilter.IsMatch(queryName))
                                             {
                                                 string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, null, 6000);
                                                 if (Regex.IsMatch(html.Trim(), @"^{.+}$"))

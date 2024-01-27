@@ -235,13 +235,13 @@
     <value>内容 (右键复制)</value>
   </data>
   <data name="Col_Content.Width" type="System.Int32, mscorlib">
-    <value>650</value>
+    <value>660</value>
   </data>
   <data name="Col_ClientIP.Text" xml:space="preserve">
     <value>客户端 IP</value>
   </data>
   <data name="Col_ClientIP.Width" type="System.Int32, mscorlib">
-    <value>105</value>
+    <value>100</value>
   </data>
   <data name="Col_Time.Text" xml:space="preserve">
     <value>时间</value>
