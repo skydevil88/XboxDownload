@@ -1312,10 +1312,8 @@ namespace XboxDownload
                     fi.SetAccessControl(fSecurity);
                     if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
                         fi.Attributes = FileAttributes.Normal;
-                    using (FileStream fs = fi.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+                    using (FileStream fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        fs.Seek(0, SeekOrigin.Begin);
-                        fs.SetLength(0);
                         if (!string.IsNullOrEmpty(sHosts.Trim()))
                         {
                             using StreamWriter sw = new(fs);
@@ -2337,10 +2335,8 @@ namespace XboxDownload
                 fi.SetAccessControl(fSecurity);
                 if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
                     fi.Attributes = FileAttributes.Normal;
-                using (FileStream fs = fi.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+                using (FileStream fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                 {
-                    fs.Seek(0, SeekOrigin.Begin);
-                    fs.SetLength(0);
                     if (!string.IsNullOrEmpty(sHosts.Trim()))
                     {
                         using StreamWriter sw = new(fs);
@@ -2594,8 +2590,19 @@ namespace XboxDownload
                     using StreamReader sr = new(fs);
                     sHosts = sr.ReadToEnd();
                 }
-
                 StringBuilder sb1 = new(), sb2 = new();
+                string header = string.Empty;
+                Match result = Regex.Match(sHosts, @"# Added by (XboxDownload|Xbox下载助手)\r\n(.*\r\n)*# End of (XboxDownload|Xbox下载助手)\r\n");
+                if (result.Success)
+                {
+                    header = result.Groups[0].Value;
+                    sHosts = sHosts.Replace(header, "");
+                    if (!bServiceFlag)
+                    {
+                        sb2.Append(header);
+                        header = string.Empty;
+                    }
+                }
                 foreach (string str in sHosts.Split('\n'))
                 {
                     string tmp = str.Trim();
@@ -2615,11 +2622,9 @@ namespace XboxDownload
                     fi.SetAccessControl(fSecurity);
                     if ((fi.Attributes & FileAttributes.ReadOnly) != 0)
                         fi.Attributes = FileAttributes.Normal;
-                    using (FileStream fs = fi.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+                    using (FileStream fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        fs.Seek(0, SeekOrigin.Begin);
-                        fs.SetLength(0);
-                        string hosts = sb1.ToString().Trim();
+                        string hosts = (header + sb1.ToString()).Trim();
                         if (!string.IsNullOrEmpty(hosts))
                         {
                             using StreamWriter sw = new(fs);
