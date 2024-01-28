@@ -2,6 +2,7 @@
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace XboxDownload
@@ -12,8 +13,12 @@ namespace XboxDownload
         public const string project = "https://github.com/skydevil88/XboxDownload";
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
-            { "proxy", "https://gh.api.99988866.xyz/" },
+            //{ "proxy", "https://gh.api.99988866.xyz/" },
             { "proxy", "https://ghps.cc/" },
+            { "mirror", "https://hub.fgit.cf/" },
+            { "mirror", "https://aaa.julianaubreytrt.tk/" },
+            { "mirror", "https://github.jingkela.com/" },
+            { "mirror", "https://github.com.myleap.cn/" },
             { "direct", "" }
         };
 
@@ -28,12 +33,13 @@ namespace XboxDownload
             {
                 string proxy = proxys[i, 0] switch
                 {
-                    "proxy" => proxys[i, 1],
-                    _ => ""
+                    "proxy" => proxys[i, 1] + UpdateFile.project,
+                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.project, @"^https?://[^/]+/", ""),
+                    _ => UpdateFile.project
                 };
                 tasks[i] = new Task(() =>
                 {
-                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + UpdateFile.project + "/releases/latest", "HEAD", null, null, null, 6000, "XboxDownload");
+                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + "/releases/latest", "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(releases))
                         releases = response.RequestMessage?.RequestUri?.ToString();
                     else
@@ -139,12 +145,13 @@ namespace XboxDownload
             {
                 string proxy = proxys[i, 0] switch
                 {
-                    "proxy" => proxys[i, 1],
-                    _ => ""
+                    "proxy" => proxys[i, 1] + UpdateFile.project,
+                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.project, @"^https?://[^/]+/", ""),
+                    _ => UpdateFile.project
                 };
                 tasks[i] = new Task(() =>
                 {
-                    string tmpUrl = proxy + UpdateFile.project.Replace("github.com", "raw.githubusercontent.com") + "/master/IP/" + fi.Name;
+                    string tmpUrl = proxy + "/blob/master/IP/" + fi.Name;
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(fileUrl))
                         fileUrl = tmpUrl;
@@ -159,16 +166,31 @@ namespace XboxDownload
                 using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(fileUrl, "GET", null, null, null, 60000, "XboxDownload");
                 if (response != null && response.IsSuccessStatusCode)
                 {
-                    byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
-                    if (buffer.Length > 0)
+                    string html = response.Content.ReadAsStringAsync().Result;
+                    Match result = Regex.Match(html, @"""rawLines"":(\[[^\]]+\])");
+                    if (result.Success)
                     {
-                        if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
-                            Directory.CreateDirectory(fi.DirectoryName);
-                        using FileStream fs = new(fi.FullName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        fs.Write(buffer, 0, buffer.Length);
-                        fs.Flush();
-                        fs.Close();
-                        fi.Refresh();
+                        JsonDocument document = JsonDocument.Parse(result.Groups[1].Value);
+                        JsonElement root = document.RootElement;
+                        if (root.ValueKind == JsonValueKind.Array)
+                        {
+                            StringBuilder sb = new();
+                            foreach (JsonElement element in root.EnumerateArray())
+                            {
+                                sb.AppendLine(element.GetString());
+                            }
+                            if (sb.Length > 0)
+                            {
+                                if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
+                                    Directory.CreateDirectory(fi.DirectoryName);
+                                using (FileStream fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                                {
+                                    using StreamWriter sw = new(fs);
+                                    sw.Write(sb.ToString().Trim());
+                                }
+                                fi.Refresh();
+                            }
+                        }
                     }
                 }
             }
