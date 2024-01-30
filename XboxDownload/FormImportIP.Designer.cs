@@ -200,6 +200,7 @@
             textBox1.Dock = DockStyle.Fill;
             textBox1.Location = new Point(0, 98);
             textBox1.Margin = new Padding(4);
+            textBox1.MaxLength = 327670;
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ScrollBars = ScrollBars.Vertical;

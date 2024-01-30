@@ -2611,7 +2611,7 @@ namespace XboxDownload
                     else
                         sb2.AppendLine(tmp);
                 }
-                if(sb2.Length == 0)
+                if (sb2.Length == 0)
                 {
                     MessageBox.Show("Hosts文件没有写入任何规则，无需清除。", "清除系统Hosts文件", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
@@ -3072,8 +3072,8 @@ namespace XboxDownload
             string hosts = dialog.hosts;
             dialog.Dispose();
             if (string.IsNullOrEmpty(hosts)) return;
-            Regex regex = new(@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s+(?<hostname>[^\s+]+)(?<remark>.*)|^address=/(?<hostname>[^/+]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})(?<remark>.*)$");
-            string[] array = hosts.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            Regex regex = new(@"^(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s+(?<hostname>[^\s]+)(?<remark>.*)|^address=/(?<hostname>[^/]+)/(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})(?<remark>.*)$");
+            string[] array = hosts.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             foreach (string str in array)
             {
                 Match result = regex.Match(str.Trim());
@@ -5597,7 +5597,5 @@ namespace XboxDownload
             });
         }
         #endregion
-
-
     }
 }

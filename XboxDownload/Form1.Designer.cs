@@ -36,6 +36,9 @@
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
+            tsmDownload = new ToolStripMenuItem();
+            tsmDownload1 = new ToolStripMenuItem();
+            tsmDownload2 = new ToolStripMenuItem();
             tsmiStartup = new ToolStripMenuItem();
             tsmiExit = new ToolStripMenuItem();
             toolStripDropDownButton2 = new ToolStripDropDownButton();
@@ -402,7 +405,7 @@
             // 
             toolStripDropDownButton1.AutoToolTip = false;
             toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { tsmUpdate, tsmiStartup, tsmiExit });
+            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { tsmUpdate, tsmDownload, tsmiStartup, tsmiExit });
             resources.ApplyResources(toolStripDropDownButton1, "toolStripDropDownButton1");
             toolStripDropDownButton1.Name = "toolStripDropDownButton1";
             // 
@@ -411,6 +414,27 @@
             tsmUpdate.Name = "tsmUpdate";
             resources.ApplyResources(tsmUpdate, "tsmUpdate");
             tsmUpdate.Click += TsmUpdate_Click;
+            // 
+            // tsmDownload
+            // 
+            tsmDownload.DropDownItems.AddRange(new ToolStripItem[] { tsmDownload1, tsmDownload2 });
+            tsmDownload.Name = "tsmDownload";
+            resources.ApplyResources(tsmDownload, "tsmDownload");
+            tsmDownload.Tag = "https://github.com/skydevil88/XboxDownload/releases";
+            // 
+            // tsmDownload1
+            // 
+            tsmDownload1.Name = "tsmDownload1";
+            resources.ApplyResources(tsmDownload1, "tsmDownload1");
+            tsmDownload1.Tag = "https://github.com/skydevil88/XboxDownload/releases";
+            tsmDownload1.Click += TsmOpenSite_Click;
+            // 
+            // tsmDownload2
+            // 
+            tsmDownload2.Name = "tsmDownload2";
+            resources.ApplyResources(tsmDownload2, "tsmDownload2");
+            tsmDownload2.Tag = "https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp";
+            tsmDownload2.Click += TsmOpenSite_Click;
             // 
             // tsmiStartup
             // 
@@ -3048,5 +3072,8 @@
         private CheckBox ckbUbiCDN;
         private LinkLabel linkEA2;
         private LinkLabel linkRestartEpic;
+        private ToolStripMenuItem tsmDownload;
+        private ToolStripMenuItem tsmDownload1;
+        private ToolStripMenuItem tsmDownload2;
     }
 }

@@ -13,13 +13,10 @@ namespace XboxDownload
         public const string project = "https://github.com/skydevil88/XboxDownload";
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
-            //{ "proxy", "https://gh.api.99988866.xyz/" },
-            { "proxy", "https://ghps.cc/" },
+            { "proxy", "https://py2.skydevil.xyz/"},
+            { "proxy", "https://mirror.ghproxy.com/"},
             { "mirror", "https://hub.fgit.cf/" },
-            { "mirror", "https://aaa.julianaubreytrt.tk/" },
-            { "mirror", "https://github.jingkela.com/" },
-            { "mirror", "https://github.com.myleap.cn/" },
-            { "direct", "" }
+            { "direct", "" },
         };
 
         public static void Start(bool autoupdate, Form1 parentForm)
@@ -75,7 +72,7 @@ namespace XboxDownload
                         return;
                     }
                     string download = releases.Replace("tag", "download") + "/XboxDownload.zip";
-                    using (HttpResponseMessage? response = ClassWeb.HttpResponseMessage(download, "GET", null, null, null, 60000, "XboxDownload"))
+                    using (HttpResponseMessage? response = ClassWeb.HttpResponseMessage(download, "GET", null, null, null, 6000, "XboxDownload"))
                     {
                         if (response != null && response.IsSuccessStatusCode)
                         {
@@ -125,6 +122,7 @@ namespace XboxDownload
                         if (!autoupdate) MessageBox.Show("下载更新包出错。请稍后再试。", "更新失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         parentForm.tsmUpdate.Enabled = true;
                     }));
+                    return;
                 }
             }
             if (!autoupdate)
@@ -163,7 +161,7 @@ namespace XboxDownload
             await Task.WhenAny(tasks);
             if (!string.IsNullOrEmpty(fileUrl))
             {
-                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(fileUrl, "GET", null, null, null, 60000, "XboxDownload");
+                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(fileUrl, "GET", null, null, null, 6000, "XboxDownload");
                 if (response != null && response.IsSuccessStatusCode)
                 {
                     string html = response.Content.ReadAsStringAsync().Result;
@@ -191,6 +189,17 @@ namespace XboxDownload
                                 fi.Refresh();
                             }
                         }
+                    }
+                    else if (Regex.IsMatch(html, @"([^\s]+\s+\([^\)]+\)\r?\n){10,}"))
+                    {
+                        if (fi.DirectoryName != null && !Directory.Exists(fi.DirectoryName))
+                            Directory.CreateDirectory(fi.DirectoryName);
+                        using (FileStream fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                        {
+                            using StreamWriter sw = new(fs);
+                            sw.Write(html.Trim());
+                        }
+                        fi.Refresh();
                     }
                 }
             }
