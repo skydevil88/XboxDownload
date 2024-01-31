@@ -103,7 +103,7 @@ namespace XboxDownload
                 parentForm.Invoke(new Action(() =>
                 {
                     parentForm.pictureBox1.Image = Properties.Resource.Xbox3;
-                    MessageBox.Show($"启用DNS服务失败!\n错误信息: {ex.Message}\n\n解决方法：1、停用占用 {port} 端口的服务。2、监听IP选择(Any)", "启用DNS服务失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"启用DNS服务失败!\n错误信息: {ex.Message}\n\n两种解决方法：\n1、监听IP选择(Any)。\n2、使用netstat查看并解除 {port} 端口占用。", "启用DNS服务失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }));
                 return;
             }
@@ -1397,12 +1397,15 @@ namespace XboxDownload
 
         public static string QueryLocation(string ip)
         {
-            if (Regex.IsMatch(ip, @"^((127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3}))$")) return "本地局域网IP";
-            string html = ClassWeb.HttpResponseContent("https://ip.zxinc.org/api.php?type=json&ip=" + ip, "GET", null, null, null, 3000);
-            Match result = Regex.Match(html, @"""location"":""(?<location>[^""]+)""");
-            if (result.Success)
+            if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
+            string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 3000);
+            Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>(\n?.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>)?");
+            if (result.Success) return Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "").Trim() + " (来源：ip138.com)";
+            else
             {
-                return Regex.Replace(result.Groups["location"].Value.Trim(), @"\\t", " ").Trim();
+                html = ClassWeb.HttpResponseContent("https://ip.zxinc.org/api.php?type=json&ip=" + ip, "GET", null, null, null, 3000);
+                result = Regex.Match(html, @"""location"":""(?<location>[^""]+)""");
+                if (result.Success) return Regex.Replace(result.Groups["location"].Value.Trim(), @"\\t", " ").Trim();
             }
             return "";
         }
