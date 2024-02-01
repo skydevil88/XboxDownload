@@ -758,6 +758,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("DNS 服务器 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbDnsIP.Focus();
+                        tbDnsIP.SelectAll();
                         return;
                     }
                 }
@@ -772,6 +773,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 com 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbComIP.Focus();
+                        tbComIP.SelectAll();
                         return;
                     }
                 }
@@ -786,6 +788,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 cn 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbCnIP.Focus();
+                        tbCnIP.SelectAll();
                         return;
                     }
                 }
@@ -800,6 +803,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定应用下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbAppIP.Focus();
+                        tbAppIP.SelectAll();
                         return;
                     }
                 }
@@ -814,6 +818,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 PS 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbPSIP.Focus();
+                        tbPSIP.SelectAll();
                         return;
                     }
                 }
@@ -830,6 +835,7 @@ namespace XboxDownload
                         {
                             MessageBox.Show("NS 主机不支持 IPv6", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             tbNSIP.Focus();
+                            tbNSIP.SelectAll();
                             return;
                         }
                     }
@@ -837,6 +843,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 NS 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbNSIP.Focus();
+                        tbNSIP.SelectAll();
                         return;
                     }
                 }
@@ -851,6 +858,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 EA 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbEAIP.Focus();
+                        tbEAIP.SelectAll();
                         return;
                     }
                 }
@@ -865,20 +873,32 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 战网国际服 域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbBattleIP.Focus();
+                        tbBattleIP.SelectAll();
                         return;
                     }
                 }
                 string? epicIP = null;
                 if (!string.IsNullOrWhiteSpace(tbEpicIP.Text))
                 {
-                    if (IPAddress.TryParse(tbEpicIP.Text.Trim(), out IPAddress? ipAddress))
+                    if (rbEpicCDN2.Checked)
                     {
-                        epicIP = tbEpicIP.Text = ipAddress.ToString();
+                        if (IPAddress.TryParse(tbEpicIP.Text.Trim(), out IPAddress? ipAddress))
+                        {
+                            epicIP = tbEpicIP.Text = ipAddress.ToString();
+                        }
+                        else
+                        {
+                            MessageBox.Show("指定 Epic 下载域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            tbEpicIP.Focus();
+                            tbEpicIP.SelectAll();
+                            return;
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("指定 Epic 下载域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("腾讯云CDN会自动重定向分配下载服务器，无需指定IP。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tbEpicIP.Focus();
+                        tbEpicIP.SelectAll();
                         return;
                     }
                 }
@@ -893,6 +913,7 @@ namespace XboxDownload
                     {
                         MessageBox.Show("指定 育碧 下载域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbUbiIP.Focus();
+                        tbUbiIP.SelectAll();
                         return;
                     }
                 }
