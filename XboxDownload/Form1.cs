@@ -1468,7 +1468,7 @@ namespace XboxDownload
                     p.Start();
                     p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ResetServerAddresses");
                     p.StandardInput.WriteLine("exit");
-                    MessageBox.Show("修复 DNS 成功！", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    MessageBox.Show("修复 DNS 成功，如有其它问题可以在测速选项卡中点击“清除系统Hosts文件”。", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 catch (Exception ex)
                 {
