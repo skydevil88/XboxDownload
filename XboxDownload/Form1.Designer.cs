@@ -65,6 +65,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            linkRepairDNS = new LinkLabel();
             linkRestartEpic = new LinkLabel();
             linkEA2 = new LinkLabel();
             ckbUbiCDN = new CheckBox();
@@ -614,6 +615,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(linkRepairDNS);
             groupBox1.Controls.Add(linkRestartEpic);
             groupBox1.Controls.Add(linkEA2);
             groupBox1.Controls.Add(ckbUbiCDN);
@@ -681,6 +683,13 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // linkRepairDNS
+            // 
+            resources.ApplyResources(linkRepairDNS, "linkRepairDNS");
+            linkRepairDNS.Name = "linkRepairDNS";
+            linkRepairDNS.TabStop = true;
+            linkRepairDNS.LinkClicked += LinkRepairDNS_LinkClicked;
             // 
             // linkRestartEpic
             // 
@@ -3076,5 +3085,6 @@
         private ToolStripMenuItem tsmDownload;
         private ToolStripMenuItem tsmDownload1;
         private ToolStripMenuItem tsmDownload2;
+        private LinkLabel linkRepairDNS;
     }
 }
