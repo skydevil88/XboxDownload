@@ -122,37 +122,37 @@
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="tsmUpdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmUpdate.Text" xml:space="preserve">
     <value>检查更新</value>
   </data>
   <data name="tsmDownload1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmDownload1.Text" xml:space="preserve">
     <value>GitHub</value>
   </data>
   <data name="tsmDownload2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmDownload2.Text" xml:space="preserve">
     <value>百度网盘</value>
   </data>
   <data name="tsmDownload.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmDownload.Text" xml:space="preserve">
     <value>软件下载</value>
   </data>
   <data name="tsmiStartup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmiStartup.Text" xml:space="preserve">
     <value>开机启动</value>
   </data>
   <data name="tsmiExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>270, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="tsmiExit.Text" xml:space="preserve">
     <value>退出 </value>

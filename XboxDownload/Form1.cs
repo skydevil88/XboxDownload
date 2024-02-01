@@ -26,6 +26,11 @@ namespace XboxDownload
         private readonly DnsListen dnsListen;
         private readonly HttpListen httpListen;
         private readonly HttpsListen httpsListen;
+        private readonly ToolTip toolTip1 = new()
+        {
+            AutoPopDelay = 30000,
+            IsBalloon = true
+        };
 
         public Form1()
         {
@@ -54,11 +59,6 @@ namespace XboxDownload
             httpListen = new HttpListen(this);
             httpsListen = new HttpsListen(this);
 
-            ToolTip toolTip1 = new()
-            {
-                AutoPopDelay = 30000,
-                IsBalloon = true
-            };
             toolTip1.SetToolTip(this.labelDNS, "常用 DNS 服务器\n114.114.114.114 (114)\n180.76.76.76 (百度)\n223.5.5.5 (阿里)\n119.29.29.29 (腾讯)\n208.67.220.220 (OpenDns)\n8.8.8.8 (Google)\n168.126.63.1 (韩国)");
             toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\nassets1.xboxlive.com\nassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\n\n以上域名不能使用 cn IP");
             toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn");
@@ -311,7 +311,7 @@ namespace XboxDownload
                             sb.Append("系统设置限速，");
                             if (DownBackLimitBps > 0) sb.Append("后台下载被限制" + Math.Round(DownBackLimitBps / 131072, 1, MidpointRounding.AwayFromZero) + "Mbps，");
                             if (DownloadForegroundLimitBps > 0) sb.Append("前台下载被限制" + Math.Round(DownloadForegroundLimitBps / 131072, 1, MidpointRounding.AwayFromZero) + "Mbps，");
-                            sb.Append("请在Windows系统搜索“传递优化高级设置”解除限速。");
+                            sb.Append("请在Windows系统搜索“传递优化高级设置”解除限制。");
                             SaveLog("警告信息", sb.ToString(), "localhost", 0xFF0000);
                         }
                     }
@@ -482,6 +482,7 @@ namespace XboxDownload
         NetworkInterface? adapter = null;
         private long OldUp { get; set; }
         private long OldDown { get; set; }
+
 
         private void TimerTraffic_Tick(object sender, EventArgs e)
         {
@@ -888,7 +889,7 @@ namespace XboxDownload
                         }
                         else
                         {
-                            MessageBox.Show("指定 Epic 下载域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("指定 Epic 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             tbEpicIP.Focus();
                             tbEpicIP.SelectAll();
                             return;
@@ -911,7 +912,7 @@ namespace XboxDownload
                     }
                     else
                     {
-                        MessageBox.Show("指定 育碧 下载域名IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("指定 育碧 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbUbiIP.Focus();
                         tbUbiIP.SelectAll();
                         return;
@@ -1430,15 +1431,6 @@ namespace XboxDownload
             }
         }
 
-        private void TsmConnectTest_Click(object sender, EventArgs e)
-        {
-            string[] strArray = Regex.Split(lvLog.SelectedItems[0].SubItems[1].Text, " -> ");
-            if (strArray.Length != 2) return;
-            FormConnectTest dialog = new(strArray[0], strArray[1]);
-            dialog.ShowDialog();
-            dialog.Dispose();
-        }
-
         private void CbLocalIP_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LocalIP = cbLocalIP.Text;
@@ -1455,6 +1447,11 @@ namespace XboxDownload
             FormDns dialog = new();
             dialog.ShowDialog();
             dialog.Dispose();
+        }
+
+        private void LabelTraffic_MouseEnter(object sender, EventArgs e)
+        {
+            if (adapter != null) toolTip1.SetToolTip(this.labelTraffic, "名称：" + adapter.Name + "\n描述：" + adapter.Description + "\n速度：" + ClassMbr.ConvertBps(adapter.Speed));
         }
 
         private void LinkRestartEABackgroundService_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

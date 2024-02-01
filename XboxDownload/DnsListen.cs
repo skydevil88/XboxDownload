@@ -798,7 +798,7 @@ namespace XboxDownload
                         }
                         try
                         {
-                            var proxy = new UdpClient();
+                            using UdpClient proxy = new(iPEndPoint.Address.AddressFamily);
                             proxy.Client.ReceiveTimeout = 6000;
                             proxy.Connect(iPEndPoint);
                             proxy.Send(buff, read);
@@ -1439,9 +1439,8 @@ namespace XboxDownload
                     resultInfo = p.StandardOutput.ReadToEnd();
                     p.Close();
                 }
-                MatchCollection mc = Regex.Matches(resultInfo, @":\s*(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
-                if (mc.Count == 2)
-                    ip = mc[1].Groups["ip"].Value;
+                MatchCollection mc = Regex.Matches(resultInfo, @":\s+(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})");
+                if (mc.Count >= 1) ip = mc[^1].Groups["ip"].Value;
             }
             return ip;
         }

@@ -45,7 +45,7 @@ namespace XboxDownload
             }
             SetMsg(resultInfo);
             MatchCollection mc = Regex.Matches(resultInfo, @":\s+(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})");
-            if (mc.Count >= 2)
+            if (mc.Count >= 1)
             {
                 string ip = mc[^1].Groups["ip"].Value;
                 SetMsg("\n//IP地址: " + ip + " " + ClassDNS.QueryLocation(ip));

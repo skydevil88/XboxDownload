@@ -572,6 +572,7 @@
             resources.ApplyResources(labelTraffic, "labelTraffic");
             labelTraffic.ForeColor = Color.Green;
             labelTraffic.Name = "labelTraffic";
+            labelTraffic.MouseEnter += LabelTraffic_MouseEnter;
             // 
             // linkClearLog
             // 
