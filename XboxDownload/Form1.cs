@@ -687,7 +687,7 @@ namespace XboxDownload
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = true;
                 SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
-            DnsListen.FlushDns();
+            if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
         }
 
         public async void ButStart_Click(object? sender, EventArgs? e)
@@ -1128,7 +1128,7 @@ namespace XboxDownload
                 }
                 Program.SystemSleep.PreventForCurrentThread(false);
             }
-            DnsListen.FlushDns();
+            if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
             butStart.Enabled = true;
         }
 
@@ -1460,14 +1460,16 @@ namespace XboxDownload
             {
                 try
                 {
-                    using Process p = new();
-                    p.StartInfo.FileName = @"powershell.exe";
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.RedirectStandardInput = true;
-                    p.StartInfo.CreateNoWindow = true;
-                    p.Start();
-                    p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ResetServerAddresses");
-                    p.StandardInput.WriteLine("exit");
+                    using (Process p = new())
+                    {
+                        p.StartInfo.FileName = @"powershell.exe";
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.RedirectStandardInput = true;
+                        p.StartInfo.CreateNoWindow = true;
+                        p.Start();
+                        p.StandardInput.WriteLine("Get-NetAdapter -Physical | Set-DnsClientServerAddress -ResetServerAddresses");
+                        p.StandardInput.WriteLine("exit");
+                    }
                     MessageBox.Show("修复 DNS 成功，如有其它问题可以在测速选项卡中点击“清除系统Hosts文件”。", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 catch (Exception ex)
@@ -1493,6 +1495,7 @@ namespace XboxDownload
             {
                 if (MessageBox.Show("此操作将会重启 EA app，是否继续？", "修复 EA app", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
+                    if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
                     Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EADesktop").FirstOrDefault();
                     if (processes != null)
                     {
@@ -1541,6 +1544,7 @@ namespace XboxDownload
             {
                 if (MessageBox.Show("此操作将会重启Epic客户端，是否继续？", "重启Epic客户端", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
+                    if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
                     Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EpicGamesLauncher").FirstOrDefault();
                     if (processes != null)
                     {
@@ -3033,7 +3037,7 @@ namespace XboxDownload
                         dgvHosts.ClearSelection();
                     }
                     DataGridViewRow? dgvr = dgvHosts.Rows.Cast<DataGridViewRow>().Where(r => r.Cells["Col_HostName"].Value.ToString() == hostNames[0]).Select(r => r).FirstOrDefault();
-                    if (dgvr != null) dgvr.Cells["Col_IPv4"].Selected = true;
+                    if (dgvr != null) dgvr.Cells["Col_IP"].Selected = true;
                 }
                 else
                 {
@@ -3089,7 +3093,7 @@ namespace XboxDownload
             {
                 if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
                 else UpdateHosts(true);
-                DnsListen.FlushDns();
+                if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
             }
         }
 
@@ -3254,7 +3258,7 @@ namespace XboxDownload
             if (bServiceFlag)
             {
                 if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
-                DnsListen.FlushDns();
+                if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
             }
         }
 
