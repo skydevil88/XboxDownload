@@ -14,9 +14,7 @@ namespace XboxDownload
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
             { "proxy", "https://py2.skydevil.xyz/"},
-            { "proxy", "https://mirror.ghproxy.com/"},
-            { "mirror", "https://hub.fgit.cf/" },
-            { "direct", "" },
+            { "direct", "" }
         };
 
         public static void Start(bool autoupdate, Form1 parentForm)

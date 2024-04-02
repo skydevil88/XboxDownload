@@ -474,14 +474,14 @@
             // 
             tsmVideoOpenWRT.Name = "tsmVideoOpenWRT";
             resources.ApplyResources(tsmVideoOpenWRT, "tsmVideoOpenWRT");
-            tsmVideoOpenWRT.Tag = "https://www.bilibili.com/video/BV1wP4y1G7zf";
+            tsmVideoOpenWRT.Tag = "https://www.bilibili.com/video/BV1wP4y1G7zf/";
             tsmVideoOpenWRT.Click += TsmOpenSite_Click;
             // 
             // tsmVideoFree
             // 
             tsmVideoFree.Name = "tsmVideoFree";
             resources.ApplyResources(tsmVideoFree, "tsmVideoFree");
-            tsmVideoFree.Tag = "https://www.bilibili.com/video/BV1TN411k7qf";
+            tsmVideoFree.Tag = "https://www.bilibili.com/video/BV1TN411k7qf/";
             tsmVideoFree.Click += TsmOpenSite_Click;
             // 
             // tsmAbout
@@ -703,7 +703,7 @@
             resources.ApplyResources(linkEA2, "linkEA2");
             linkEA2.Name = "linkEA2";
             linkEA2.TabStop = true;
-            linkEA2.Tag = "https://www.bilibili.com/video/BV1Se411H723";
+            linkEA2.Tag = "https://www.bilibili.com/video/BV1Se411H723/";
             linkEA2.LinkClicked += Link_LinkClicked;
             // 
             // ckbUbiCDN
@@ -766,7 +766,7 @@
             resources.ApplyResources(linkXbox3, "linkXbox3");
             linkXbox3.Name = "linkXbox3";
             linkXbox3.TabStop = true;
-            linkXbox3.Tag = "https://www.bilibili.com/video/BV1MA411m7pq";
+            linkXbox3.Tag = "https://www.bilibili.com/video/BV1MA411m7pq/";
             linkXbox3.LinkClicked += Link_LinkClicked;
             // 
             // linkXbox2
@@ -774,7 +774,7 @@
             resources.ApplyResources(linkXbox2, "linkXbox2");
             linkXbox2.Name = "linkXbox2";
             linkXbox2.TabStop = true;
-            linkXbox2.Tag = "https://www.bilibili.com/video/BV1Xe411k7dp";
+            linkXbox2.Tag = "https://www.bilibili.com/video/BV1Xe411k7dp/";
             linkXbox2.LinkClicked += Link_LinkClicked;
             // 
             // linkXbox1
@@ -782,7 +782,7 @@
             resources.ApplyResources(linkXbox1, "linkXbox1");
             linkXbox1.Name = "linkXbox1";
             linkXbox1.TabStop = true;
-            linkXbox1.Tag = "https://www.bilibili.com/video/BV1i94y1y71p";
+            linkXbox1.Tag = "https://www.bilibili.com/video/BV1i94y1y71p/";
             linkXbox1.LinkClicked += Link_LinkClicked;
             // 
             // linkEA1
@@ -790,7 +790,7 @@
             resources.ApplyResources(linkEA1, "linkEA1");
             linkEA1.Name = "linkEA1";
             linkEA1.TabStop = true;
-            linkEA1.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK";
+            linkEA1.Tag = "https://www.bilibili.com/video/BV1KC4y1i7ZK/";
             linkEA1.LinkClicked += Link_LinkClicked;
             // 
             // ckbGameLink

@@ -4237,7 +4237,10 @@ namespace XboxDownload
                                     string? filename = item.SubItems[3].Tag.ToString();
                                     if (filename != null && dicAppPackage.TryGetValue(filename.ToLower(), out AppPackage? appPackage) && (DateTime.Now - appPackage.Date).TotalSeconds <= 300)
                                     {
-                                        item.SubItems[3].Text = filename;
+                                        string expire = string.Empty;
+                                        Match result = Regex.Match(appPackage.Url, @"P1=(\d+)");
+                                        if (result.Success) expire = " (Expire: " + DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(result.Groups[1].Value) * 1000).DateTime.ToLocalTime() + ")";
+                                        item.SubItems[3].Text = filename + expire;
                                     }
                                     else
                                     {
@@ -4584,7 +4587,13 @@ namespace XboxDownload
                             }
                         }
                     }
-                    item.SubItems[3].Text = filename;
+                    string expire = string.Empty;
+                    if (dicAppPackage.TryGetValue(filename.ToLower(), out AppPackage? appPackage))
+                    {
+                        Match result = Regex.Match(appPackage.Url, @"P1=(\d+)");
+                        if (result.Success) expire = " (Expire: " + DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(result.Groups[1].Value) * 1000).DateTime.ToLocalTime() + ")";
+                    }
+                    item.SubItems[3].Text = filename + expire;
                 }
             }));
         }
@@ -4644,7 +4653,13 @@ namespace XboxDownload
                     {
                         if (Regex.IsMatch(item.SubItems[3].Text, @"^https?://"))
                         {
-                            item.SubItems[3].Text = item.SubItems[3].Tag.ToString();
+                            string expire = string.Empty;
+                            if (dicAppPackage.TryGetValue((item.SubItems[3].Tag.ToString() ?? string.Empty).ToLower(), out AppPackage? appPackage))
+                            {
+                                Match result = Regex.Match(appPackage.Url, @"P1=(\d+)");
+                                if (result.Success) expire = " (Expire: " + DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(result.Groups[1].Value) * 1000).DateTime.ToLocalTime() + ")";
+                            }
+                            item.SubItems[3].Text = item.SubItems[3].Tag.ToString() + expire;
                         }
                         else if (dicAppPackage.TryGetValue((item.SubItems[3].Tag.ToString() ?? string.Empty).ToLower(), out AppPackage? appPackage))
                         {
