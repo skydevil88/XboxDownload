@@ -558,9 +558,11 @@ namespace XboxDownload
                 _ = dicServiceV4.TryAdd(localHost, lsLocalIP);
                 _ = dicServiceV4.TryAdd("download.epicgames.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("fastly-download.epicgames.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("cloudflare.epicgamescdn.com", lsLocalIP); 
                 _ = dicServiceV6.TryAdd(localHost, lsEmptyIP);
                 _ = dicServiceV6.TryAdd("download.epicgames.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("fastly-download.epicgames.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("cloudflare.epicgamescdn.com", lsEmptyIP);
             }
             if (epicIP != null)
             {
@@ -945,7 +947,7 @@ namespace XboxDownload
                             }
                         }
                     }
-                    else if (reHosts.IsMatch(host))
+                    else
                     {
                         if (ip.AddressFamily == AddressFamily.InterNetwork)
                         {

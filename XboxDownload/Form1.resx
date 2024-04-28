@@ -7130,7 +7130,7 @@ HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名�
     <value>True</value>
   </data>
   <data name="linkUsbDevice.Location" type="System.Drawing.Point, System.Drawing">
-    <value>272, 71</value>
+    <value>272, 72</value>
   </data>
   <data name="linkUsbDevice.Size" type="System.Drawing.Size, System.Drawing">
     <value>77, 24</value>

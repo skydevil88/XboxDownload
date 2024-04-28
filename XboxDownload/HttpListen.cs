@@ -345,6 +345,7 @@ namespace XboxDownload
                                 case "epicgames-download1.akamaized.net":
                                 case "download.epicgames.com":
                                 case "fastly-download.epicgames.com":
+                                case "cloudflare.epicgamescdn.com":
                                     if (_filePath.Contains(".manifest") && _hosts != "epicgames-download1-1251447533.file.myqcloud.com")
                                     {
                                         string? ip = ClassDNS.DoH(_hosts);

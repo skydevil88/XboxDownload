@@ -4,8 +4,7 @@
 com域名不能使用cn IP，反过来cn域名可以使用部分com IP(Akamai). 
 
 提速原理请参考PC [Xbox下载助手](https://github.com/skydevil88/XboxDownload "Xbox下载助手")，同时支持PC微软商店加速。
-其它路由器如果能安装 [Lighttpd](#方法一lighttpd "Lighttpd") 或者 [Nginx](#方法二nginx "Lighttpd") 也可以按照教程操作。
-小米等支持改 Hosts 路由器可以同时把 com 和 cn 下载域名测速后找出最快 IP 分别写进 Hosts 中，这样子不管 Xbox 用那个域名下载都能加速。 
+支持Docker路由器(小米、TP-LINK等部分型号)也可以通过Docker使用macvlan创建独立ip安装Nginx实现跳转国内下载。
 
 Xbox使用此方法需要关闭路由器IPv6功能，如果有其它设备需要用到IPv6，可以在 网络->防火墙->自定义规则 中添加以下两条规则屏蔽掉Xbox的IPv6地址。（XBOX_MAC替换成Xbox Mac地址，地址之间要用“:”号分隔，不能用“-”，用有线网络就两个都填有线mac, 用无线网络就两个都填无线mac）
 ```bash

@@ -66,12 +66,12 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
-            toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net");
-            toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com");
+            toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr");
+            toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com");
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\n本功能需要配合“启用 DNS 服务”使用，主机玩家无需设置。\n\n注：如果退出Xbox下载助手后没网络，请点击旁边“修复”。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏（关闭加速器、代理软件）\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
+            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -1289,6 +1289,7 @@ namespace XboxDownload
                         {
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " download.epicgames.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " fastly-download.epicgames.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " cloudflare.epicgamescdn.com"); 
                             if (Properties.Settings.Default.EpicCDN)
                             {
                                 sb.AppendLine(Properties.Settings.Default.LocalIP + " epicgames-download1.akamaized.net");
@@ -1451,6 +1452,11 @@ namespace XboxDownload
 
         private void LabelTraffic_MouseEnter(object sender, EventArgs e)
         {
+            if (adapter != null && adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211) //Refresh Wireless adapter Speed
+            {
+                adapter = NetworkInterface.GetAllNetworkInterfaces().Where(s => s.Id == adapter!.Id).FirstOrDefault();
+                OldUp = OldDown = 0;
+            }
             if (adapter != null) toolTip1.SetToolTip(this.labelTraffic, "名称：" + adapter.Name + "\n描述：" + adapter.Description + "\n速度：" + ClassMbr.ConvertBps(adapter.Speed));
         }
 
@@ -1848,8 +1854,8 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环: 无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5_xs", "/13/9305271e-b25d-4485-a5d5-1bff018e88f5/0698b936-d300-4451-b9a0-0be0514bbbe5/1.3952.24438.0.3ad74083-e46a-48fe-b9b6-a79d7234c33b/Microsoft.254428597CFE2_1.3952.24438.0_neutral__8wekyb3d8bbwe_xs.xvc" },
-                            {"极限竞速: 地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/1/163098b7-a55a-4f60-9f08-7db946d7ad3e/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.629.845.0.e4244781-d2ef-4409-b9ef-5f86bc0d39dd/Microsoft.624F8B84B80_3.629.845.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"光环: 无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5_xs", "/3/c0803de8-4dec-4e4d-9c69-1ede40930644/0698b936-d300-4451-b9a0-0be0514bbbe5/1.4002.19362.0.3ada2730-3748-4293-92ef-a553f359525e/Microsoft.254428597CFE2_1.4002.19362.0_neutral__8wekyb3d8bbwe_xs.xvc" },
+                            {"极限竞速: 地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/8/0366a270-dbe3-4c2a-865b-5f4668a6a227/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.642.644.0.47979e0a-9300-4d55-975c-37aa7d039767/Microsoft.624F8B84B80_3.642.644.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -2036,6 +2042,18 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb5.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        if (host == "AkamaiV6")
+                        {
+                            LinkLabel lbV6 = new()
+                            {
+                                Tag = "https://www.test-ipv6.com/",
+                                Text = "IPv6 连接测试",
+                                AutoSize = true,
+                                Parent = this.flpTestUrl,
+                                LinkColor = Color.Red
+                            };
+                            lbV6.LinkClicked += new LinkLabelLinkClickedEventHandler(this.Link_LinkClicked);
+                        }
                     }
                     break;
             }
@@ -2947,25 +2965,6 @@ namespace XboxDownload
             if (dgvHosts.Rows[e.RowIndex].IsNewRow) return;
             switch (dgvHosts.Columns[e.ColumnIndex].Name)
             {
-                case "Col_HostName":
-                    string? hostName = e.FormattedValue.ToString()?.Trim();
-                    if (!string.IsNullOrEmpty(hostName))
-                    {
-                        if (hostName.StartsWith("*."))
-                        {
-                            if (!DnsListen.reHosts.IsMatch(Regex.Replace(hostName, @"^\*\.", "")))
-                            {
-                                e.Cancel = true;
-                                dgvHosts.Rows[e.RowIndex].ErrorText = "域名格式不正确";
-                            }
-                        }
-                        else if (!DnsListen.reHosts.IsMatch(Regex.Replace((e.FormattedValue.ToString() ?? string.Empty).Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2")))
-                        {
-                            e.Cancel = true;
-                            dgvHosts.Rows[e.RowIndex].ErrorText = "域名格式不正确";
-                        }
-                    }
-                    break;
                 case "Col_IP":
                     if (!string.IsNullOrWhiteSpace(e.FormattedValue.ToString()))
                     {
