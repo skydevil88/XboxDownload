@@ -347,6 +347,7 @@
             cmsCopyUrl = new ContextMenuStrip(components);
             tsmCopyUrl1 = new ToolStripMenuItem();
             tsmCopyUrl2 = new ToolStripMenuItem();
+            tsmCopyUrl3 = new ToolStripMenuItem();
             tsmAllUrl = new ToolStripMenuItem();
             tsmAuthorization = new ToolStripMenuItem();
             tsmAuthorization1 = new ToolStripMenuItem();
@@ -2646,7 +2647,7 @@
             // cmsCopyUrl
             // 
             cmsCopyUrl.ImageScalingSize = new Size(24, 24);
-            cmsCopyUrl.Items.AddRange(new ToolStripItem[] { tsmCopyUrl1, tsmCopyUrl2, tsmAllUrl, tsmAuthorization });
+            cmsCopyUrl.Items.AddRange(new ToolStripItem[] { tsmCopyUrl1, tsmCopyUrl2, tsmCopyUrl3, tsmAllUrl, tsmAuthorization });
             cmsCopyUrl.Name = "cmsCopyUrl";
             resources.ApplyResources(cmsCopyUrl, "cmsCopyUrl");
             // 
@@ -2661,6 +2662,12 @@
             tsmCopyUrl2.Name = "tsmCopyUrl2";
             resources.ApplyResources(tsmCopyUrl2, "tsmCopyUrl2");
             tsmCopyUrl2.Click += TsmCopyUrl_Click;
+            // 
+            // tsmCopyUrl3
+            // 
+            tsmCopyUrl3.Name = "tsmCopyUrl3";
+            resources.ApplyResources(tsmCopyUrl3, "tsmCopyUrl3");
+            tsmCopyUrl3.Click += TsmCopyUrl_Click;
             // 
             // tsmAllUrl
             // 
@@ -3086,5 +3093,6 @@
         private ToolStripMenuItem tsmDownload1;
         private ToolStripMenuItem tsmDownload2;
         private LinkLabel linkRepairDNS;
+        private ToolStripMenuItem tsmCopyUrl3;
     }
 }

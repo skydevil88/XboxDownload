@@ -179,7 +179,11 @@ namespace XboxDownload
                                 {
                                     case "packagespc.xboxlive.com":
                                         {
-                                            string? ip = ClassDNS.DoH(_hosts);
+                                            string? ip = string.Empty;
+                                            if (DnsListen.dicHosts1V4.TryGetValue(_hosts, out List<ResouceRecord>? lsHostsIp))
+                                                ip = new IPAddress(lsHostsIp[0].Datas!).ToString();
+                                            else
+                                                ip = ClassDNS.DoH(_hosts);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
                                                 Match m1 = Regex.Match(_buffer, @"Authorization:(.+)");

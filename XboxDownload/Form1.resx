@@ -9498,6 +9498,12 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="tsmCopyUrl2.Text" xml:space="preserve">
     <value>复制下载链接(.cn 域名) </value>
   </data>
+  <data name="tsmCopyUrl3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>296, 30</value>
+  </data>
+  <data name="tsmCopyUrl3.Text" xml:space="preserve">
+    <value>复制下载链接(Azure) </value>
+  </data>
   <data name="tsmAllUrl.Size" type="System.Drawing.Size, System.Drawing">
     <value>296, 30</value>
   </data>
@@ -9523,7 +9529,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>启动 Xbox App 更新授权</value>
   </data>
   <data name="cmsCopyUrl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>297, 124</value>
+    <value>297, 154</value>
   </data>
   <data name="&gt;&gt;cmsCopyUrl.Name" xml:space="preserve">
     <value>cmsCopyUrl</value>
@@ -11078,6 +11084,12 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>tsmCopyUrl2</value>
   </data>
   <data name="&gt;&gt;tsmCopyUrl2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmCopyUrl3.Name" xml:space="preserve">
+    <value>tsmCopyUrl3</value>
+  </data>
+  <data name="&gt;&gt;tsmCopyUrl3.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmAllUrl.Name" xml:space="preserve">
