@@ -4516,7 +4516,11 @@ namespace XboxDownload
                             item.ForeColor = Color.Empty;
                             item.SubItems[2].Text = ClassMbr.ConvertBytes(filesize);
                         }
-                        if (!string.IsNullOrEmpty(url)) item.SubItems[3].Text = Path.GetFileName(url);
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            item.SubItems[3].Tag = url;
+                            item.SubItems[3].Text = Path.GetFileName(url);
+                        }
                     }));
                     if (Regex.IsMatch(url, @"^https?://")) _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(url), "PUT", null, null, null, 30000, "XboxDownload");
                 }
@@ -4672,7 +4676,7 @@ namespace XboxDownload
                         bool isGame = item.Tag.ToString() == "Game";
                         tsmCopyUrl1.Visible = true;
                         tsmCopyUrl2.Visible = tsmCopyUrl3.Visible = isGame;
-                        tsmCopyUrl3.Enabled = isGame && Regex.IsMatch(item.SubItems[3].Tag.ToString() ?? string.Empty, @"http://[^\.]+\.xboxlive\.com/(\d{1,2}|Z)/");
+                        tsmCopyUrl3.Enabled = isGame && item.SubItems[3].Tag != null && Regex.IsMatch(item.SubItems[3].Tag.ToString() ?? string.Empty, @"http://[^\.]+\.xboxlive\.com/(\d{1,2}|Z)/");
                         tsmAllUrl.Visible = !isGame && lvGame.Tag != null && item.SubItems[0].Text == "Windows PC";
                         tsmAuthorization.Visible = false;
                     }

@@ -472,6 +472,7 @@ namespace XboxDownload
         private static void UpdateGameUrl(string _hosts, string _filePath, string _extension)
         {
             if (Regex.IsMatch(_extension, @"\.(phf|xsp)$")) return;
+            _filePath = Regex.Replace(_filePath, @"\?.*$", "");
             Match result = Regex.Match(_filePath, @"/(?<ContentId>\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/(?<Version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
             if (result.Success)
             {
