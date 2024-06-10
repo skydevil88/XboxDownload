@@ -633,9 +633,9 @@ namespace XboxDownload
                     string ip = ips[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 15000, cts);
+                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 30000, cts);
                         if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer?.Length == 10485760) akamai = ip;
-                        else if (!cts.IsCancellationRequested) Task.Delay(15000, cts.Token);
+                        else if (!cts.IsCancellationRequested) Task.Delay(30000, cts.Token);
                         socketPackage.Buffer = null;
                     });
                 }
@@ -646,7 +646,7 @@ namespace XboxDownload
                 if (!bServiceFlag) return;
                 if (string.IsNullOrEmpty(akamai))
                 {
-                    akamai = ips[^1];
+                    akamai = "23.33.32.155"; //ips[^1];
                     SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定。", "localhost", 0xFF0000);
                 }
                 DnsListen.SetAkamaiIP(akamai);

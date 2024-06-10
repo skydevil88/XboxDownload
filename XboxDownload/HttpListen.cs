@@ -157,139 +157,84 @@ namespace XboxDownload
                     {
                         bool _redirect = false;
                         string _newHosts = string.Empty;
-                        if (Properties.Settings.Default.GameLink)
+                        switch (_hosts)
                         {
-                            switch (_hosts)
-                            {
-                                case "xvcf1.xboxlive.com":
-                                case "assets1.xboxlive.com":
-                                case "d1.xboxlive.com":
-                                    _redirect = true;
-                                    _newHosts = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP ? "assets2.xboxlive.cn" : "assets2.xboxlive.com";
-                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                    break;
-                                case "xvcf2.xboxlive.com":
-                                case "assets2.xboxlive.com":
-                                case "d2.xboxlive.com":
-                                case "assets1.xboxlive.cn":
-                                case "d1.xboxlive.cn":
+                            case "xvcf1.xboxlive.com":
+                            case "xvcf2.xboxlive.com":
+                            case "assets1.xboxlive.com":
+                            case "assets2.xboxlive.com":
+                            case "d1.xboxlive.com":
+                            case "d2.xboxlive.com":
+                                _redirect = true;
+                                if (Properties.Settings.Default.GameLink)
+                                    _newHosts = (string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP) && DnsListen.dicService2V4.IsEmpty ? "assets2.xboxlive.cn" : "assets2.xboxlive.com";
+                                else
+                                    _newHosts = "assets1.xboxlive.cn";
+                                if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                break;
+                            case "dlassets.xboxlive.com":
+                            case "dlassets2.xboxlive.com":
+                                _redirect = true;
+                                if (Properties.Settings.Default.GameLink)
+                                    _newHosts = (string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP) && DnsListen.dicService2V4.IsEmpty ? "dlassets2.xboxlive.cn" : "dlassets2.xboxlive.com";
+                                else
+                                    _newHosts = "dlassets1.xboxlive.cn";
+                                if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                break;
+                            case "assets1.xboxlive.cn":
+                            case "d1.xboxlive.cn":
+                                if (Properties.Settings.Default.GameLink)
+                                {
                                     _redirect = true;
                                     _newHosts = "assets2.xboxlive.cn";
-                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                    break;
-                                case "dlassets.xboxlive.com":
-                                case "dlassets2.xboxlive.com":
-                                case "dlassets.xboxlive.cn":
+                                }
+                                if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                break;
+                            case "dlassets.xboxlive.cn":
+                                if (Properties.Settings.Default.GameLink)
+                                {
                                     _redirect = true;
                                     _newHosts = "dlassets2.xboxlive.cn";
-                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                    break;
-                                case "us.cdn.blizzard.com":
-                                case "eu.cdn.blizzard.com":
-                                case "kr.cdn.blizzard.com":
-                                case "level3.blizzard.com":
-                                case "blizzard.gcdn.cloudn.co.kr":
-                                    if (Properties.Settings.Default.BattleStore)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
-                                    }
-                                    break;
-                                case "blzdist-wow.necdn.leihuo.netease.com":
-                                    if (Properties.Settings.Default.BattleStore && !Properties.Settings.Default.BattleCDN)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "blzddist1-a.akamaihd.net";
-                                    }
-                                    break;
-                                case "blzddist1-a.akamaihd.net":
-                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "blzdist-wow.necdn.leihuo.netease.com";
-                                    }
-                                    break;
-                                case "uplaypc-s-ubisoft.cdn.ubi.com":
-                                    if (Properties.Settings.Default.UbiStore)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
-                                    }
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (_hosts)
-                            {
-                                case "assets1.xboxlive.com":
-                                case "assets2.xboxlive.com":
-                                case "dlassets.xboxlive.com":
-                                case "dlassets2.xboxlive.com":
-                                case "d1.xboxlive.com":
-                                case "d2.xboxlive.com":
-                                    if (redirect)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = Regex.Replace(_hosts, @"\.com$", ".cn");
-                                    }
-                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                    break;
-                                case "xvcf1.xboxlive.com":
-                                    if (redirect)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "assets1.xboxlive.cn";
-                                    }
-                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                    break;
-                                case "xvcf2.xboxlive.com":
-                                    if (redirect)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "assets2.xboxlive.cn";
-                                    }
-                                    if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                        ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
-                                    break;
-                                case "us.cdn.blizzard.com":
-                                case "eu.cdn.blizzard.com":
-                                case "kr.cdn.blizzard.com":
-                                case "level3.blizzard.com":
-                                case "blizzard.gcdn.cloudn.co.kr":
-                                    if (Properties.Settings.Default.BattleStore)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = !Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
-                                    }
-                                    break;
-                                case "blzdist-wow.necdn.leihuo.netease.com":
-                                    if (Properties.Settings.Default.BattleStore && !Properties.Settings.Default.BattleCDN)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "blzddist1-a.akamaihd.net";
-                                    }
-                                    break;
-                                case "blzddist1-a.akamaihd.net":
-                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "blzdist-wow.necdn.leihuo.netease.com";
-                                    }
-                                    break;
-                                case "uplaypc-s-ubisoft.cdn.ubi.com":
-                                    if (Properties.Settings.Default.UbiStore)
-                                    {
-                                        _redirect = true;
-                                        _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
-                                    }
-                                    break;
-                            }
+                                }
+                                if (dicFilePath.TryAdd(_filePath, string.Empty))
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                break;
+
+                            case "us.cdn.blizzard.com":
+                            case "eu.cdn.blizzard.com":
+                            case "kr.cdn.blizzard.com":
+                            case "level3.blizzard.com":
+                            case "blizzard.gcdn.cloudn.co.kr":
+                                if (Properties.Settings.Default.BattleStore)
+                                {
+                                    _redirect = true;
+                                    _newHosts = !Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
+                                }
+                                break;
+                            case "blzdist-wow.necdn.leihuo.netease.com":
+                                if (Properties.Settings.Default.BattleStore && !Properties.Settings.Default.BattleCDN)
+                                {
+                                    _redirect = true;
+                                    _newHosts = "blzddist1-a.akamaihd.net";
+                                }
+                                break;
+                            case "blzddist1-a.akamaihd.net":
+                                if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                {
+                                    _redirect = true;
+                                    _newHosts = "blzdist-wow.necdn.leihuo.netease.com";
+                                }
+                                break;
+                            case "uplaypc-s-ubisoft.cdn.ubi.com":
+                                if (Properties.Settings.Default.UbiStore)
+                                {
+                                    _redirect = true;
+                                    _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
+                                }
+                                break;
                         }
                         if (_redirect)
                         {

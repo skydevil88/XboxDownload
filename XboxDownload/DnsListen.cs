@@ -477,7 +477,6 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd("zeus.dl.playstation.net", lsEmptyIP);
                     _ = dicServiceV4.TryAdd("ares.dl.playstation.net", lsEmptyIP);
                 }
-
             }
             if (nsIP != null)
             {
@@ -562,7 +561,7 @@ namespace XboxDownload
                 _ = dicServiceV4.TryAdd(localHost, lsLocalIP);
                 _ = dicServiceV4.TryAdd("download.epicgames.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("fastly-download.epicgames.com", lsLocalIP);
-                _ = dicServiceV4.TryAdd("cloudflare.epicgamescdn.com", lsLocalIP); 
+                _ = dicServiceV4.TryAdd("cloudflare.epicgamescdn.com", lsLocalIP);
                 _ = dicServiceV6.TryAdd(localHost, lsEmptyIP);
                 _ = dicServiceV6.TryAdd("download.epicgames.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("fastly-download.epicgames.com", lsEmptyIP);
@@ -839,7 +838,7 @@ namespace XboxDownload
                     "dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net",
+                    "origin-a.akamaihd.net",
                     "uplaypc-s-ubisoft.cdn.ubionline.com.cn","uplaypc-s-ubisoft.cdn.ubi.com"
                 };
             }
@@ -852,10 +851,11 @@ namespace XboxDownload
                     "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net",
+                    "origin-a.akamaihd.net",
                     "uplaypc-s-ubisoft.cdn.ubionline.com.cn","uplaypc-s-ubisoft.cdn.ubi.com"
                 };
             }
+            if (!Properties.Settings.Default.BattleCDN) hosts.Add("blzddist1-a.akamaihd.net");
             if (!Properties.Settings.Default.EpicCDN) hosts.Add("epicgames-download1.akamaized.net");
             if (string.IsNullOrEmpty(ip))
             {
@@ -878,6 +878,8 @@ namespace XboxDownload
                         dicServiceV6.TryRemove(host, out _);
                     }
                 }
+                dicService2V4.Clear();
+                dicService2V6.Clear();
             }
             else
             {
