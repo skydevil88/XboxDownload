@@ -65,10 +65,12 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            panel3 = new Panel();
+            rbBattleCDN1 = new RadioButton();
+            rbBattleCDN2 = new RadioButton();
             linkRepairDNS = new LinkLabel();
             linkRestartEpic = new LinkLabel();
             linkEA2 = new LinkLabel();
-            ckbUbiCDN = new CheckBox();
             panelEpic = new Panel();
             rbEpicCDN1 = new RadioButton();
             rbEpicCDN2 = new RadioButton();
@@ -104,7 +106,6 @@
             label20 = new Label();
             tbEpicIP = new TextBox();
             labelEpic = new Label();
-            ckbBattleCDN = new CheckBox();
             label18 = new Label();
             tbBattleIP = new TextBox();
             labelBattle = new Label();
@@ -359,6 +360,7 @@
             gbLog.SuspendLayout();
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
+            panel3.SuspendLayout();
             panelEpic.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tabSpeedTest.SuspendLayout();
@@ -616,10 +618,10 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(panel3);
             groupBox1.Controls.Add(linkRepairDNS);
             groupBox1.Controls.Add(linkRestartEpic);
             groupBox1.Controls.Add(linkEA2);
-            groupBox1.Controls.Add(ckbUbiCDN);
             groupBox1.Controls.Add(panelEpic);
             groupBox1.Controls.Add(ckbDisableIPv6DNS);
             groupBox1.Controls.Add(ckbUbiStore);
@@ -653,7 +655,6 @@
             groupBox1.Controls.Add(label20);
             groupBox1.Controls.Add(tbEpicIP);
             groupBox1.Controls.Add(labelEpic);
-            groupBox1.Controls.Add(ckbBattleCDN);
             groupBox1.Controls.Add(label18);
             groupBox1.Controls.Add(tbBattleIP);
             groupBox1.Controls.Add(labelBattle);
@@ -685,6 +686,27 @@
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
             // 
+            // panel3
+            // 
+            panel3.Controls.Add(rbBattleCDN1);
+            panel3.Controls.Add(rbBattleCDN2);
+            resources.ApplyResources(panel3, "panel3");
+            panel3.Name = "panel3";
+            // 
+            // rbBattleCDN1
+            // 
+            resources.ApplyResources(rbBattleCDN1, "rbBattleCDN1");
+            rbBattleCDN1.Name = "rbBattleCDN1";
+            rbBattleCDN1.TabStop = true;
+            rbBattleCDN1.UseVisualStyleBackColor = true;
+            // 
+            // rbBattleCDN2
+            // 
+            resources.ApplyResources(rbBattleCDN2, "rbBattleCDN2");
+            rbBattleCDN2.Name = "rbBattleCDN2";
+            rbBattleCDN2.TabStop = true;
+            rbBattleCDN2.UseVisualStyleBackColor = true;
+            // 
             // linkRepairDNS
             // 
             resources.ApplyResources(linkRepairDNS, "linkRepairDNS");
@@ -706,12 +728,6 @@
             linkEA2.TabStop = true;
             linkEA2.Tag = "https://www.bilibili.com/video/BV1Se411H723/";
             linkEA2.LinkClicked += Link_LinkClicked;
-            // 
-            // ckbUbiCDN
-            // 
-            resources.ApplyResources(ckbUbiCDN, "ckbUbiCDN");
-            ckbUbiCDN.Name = "ckbUbiCDN";
-            ckbUbiCDN.UseVisualStyleBackColor = true;
             // 
             // panelEpic
             // 
@@ -937,12 +953,6 @@
             // 
             resources.ApplyResources(labelEpic, "labelEpic");
             labelEpic.Name = "labelEpic";
-            // 
-            // ckbBattleCDN
-            // 
-            resources.ApplyResources(ckbBattleCDN, "ckbBattleCDN");
-            ckbBattleCDN.Name = "ckbBattleCDN";
-            ckbBattleCDN.UseVisualStyleBackColor = true;
             // 
             // label18
             // 
@@ -2719,6 +2729,8 @@
             panel1.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             panelEpic.ResumeLayout(false);
             panelEpic.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -2812,7 +2824,6 @@
         private Label labelEA;
         private Label labelBattle;
         private Label label16;
-        private CheckBox ckbBattleCDN;
         private Label label18;
         private Label label20;
         private Label labelEpic;
@@ -3086,7 +3097,6 @@
         private RadioButton rbEpicCDN1;
         private RadioButton rbEpicCDN2;
         private Panel panelEpic;
-        private CheckBox ckbUbiCDN;
         private LinkLabel linkEA2;
         private LinkLabel linkRestartEpic;
         private ToolStripMenuItem tsmDownload;
@@ -3094,5 +3104,8 @@
         private ToolStripMenuItem tsmDownload2;
         private LinkLabel linkRepairDNS;
         private ToolStripMenuItem tsmCopyUrl3;
+        private Panel panel3;
+        private RadioButton rbBattleCDN1;
+        private RadioButton rbBattleCDN2;
     }
 }

@@ -187,16 +187,29 @@ namespace XboxDownload
                                     if (dicFilePath.TryAdd(_filePath, string.Empty))
                                         ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
                                     break;
-
                                 case "us.cdn.blizzard.com":
                                 case "eu.cdn.blizzard.com":
                                 case "kr.cdn.blizzard.com":
                                 case "level3.blizzard.com":
                                 case "blizzard.gcdn.cloudn.co.kr":
-                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    if (Properties.Settings.Default.BattleStore)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "blzdist-wow.necdn.leihuo.netease.com":
+                                    if (Properties.Settings.Default.BattleStore && !Properties.Settings.Default.BattleCDN)
                                     {
                                         _redirect = true;
                                         _newHosts = "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "blzddist1-a.akamaihd.net":
+                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "blzdist-wow.necdn.leihuo.netease.com";
                                     }
                                     break;
                                 case "uplaypc-s-ubisoft.cdn.ubi.com":
@@ -244,16 +257,29 @@ namespace XboxDownload
                                     if (dicFilePath.TryAdd(_filePath, string.Empty))
                                         ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
                                     break;
-
                                 case "us.cdn.blizzard.com":
                                 case "eu.cdn.blizzard.com":
                                 case "kr.cdn.blizzard.com":
                                 case "level3.blizzard.com":
                                 case "blizzard.gcdn.cloudn.co.kr":
-                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    if (Properties.Settings.Default.BattleStore)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = !Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "blzdist-wow.necdn.leihuo.netease.com":
+                                    if (Properties.Settings.Default.BattleStore && !Properties.Settings.Default.BattleCDN)
                                     {
                                         _redirect = true;
                                         _newHosts = "blzddist1-a.akamaihd.net";
+                                    }
+                                    break;
+                                case "blzddist1-a.akamaihd.net":
+                                    if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                                    {
+                                        _redirect = true;
+                                        _newHosts = "blzdist-wow.necdn.leihuo.netease.com";
                                     }
                                     break;
                                 case "uplaypc-s-ubisoft.cdn.ubi.com":
@@ -378,6 +404,7 @@ namespace XboxDownload
                                         if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                     }
                                     break;
+                                case "blzdist-wow.necdn.leihuo.netease.com":
                                 case "blzddist1-a.akamaihd.net":
                                     {
                                         if (IPAddress.TryParse(Properties.Settings.Default.BattleIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)

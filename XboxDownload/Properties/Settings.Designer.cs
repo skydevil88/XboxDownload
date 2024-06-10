@@ -12,7 +12,7 @@ namespace XboxDownload.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.8.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -169,7 +169,7 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool BattleCDN {
             get {
                 return ((bool)(this["BattleCDN"]));
@@ -212,18 +212,6 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["UbiIP"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UbiCDN {
-            get {
-                return ((bool)(this["UbiCDN"]));
-            }
-            set {
-                this["UbiCDN"] = value;
             }
         }
         
@@ -308,6 +296,18 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["DoH"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableIPv6DNS {
+            get {
+                return ((bool)(this["DisableIPv6DNS"]));
+            }
+            set {
+                this["DisableIPv6DNS"] = value;
             }
         }
         
@@ -440,18 +440,6 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["Authorization"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DisableIPv6DNS {
-            get {
-                return ((bool)(this["DisableIPv6DNS"]));
-            }
-            set {
-                this["DisableIPv6DNS"] = value;
             }
         }
     }

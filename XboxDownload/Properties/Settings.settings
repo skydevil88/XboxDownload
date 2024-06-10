@@ -39,7 +39,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="BattleCDN" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="EpicIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -49,9 +49,6 @@
     </Setting>
     <Setting Name="UbiIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="UbiCDN" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Truncation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -74,7 +71,7 @@
     <Setting Name="DoH" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-        <Setting Name="DisableIPv6DNS" Type="System.Boolean" Scope="User">
+    <Setting Name="DisableIPv6DNS" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="SetDns" Type="System.Boolean" Scope="User">

@@ -110,7 +110,6 @@ namespace XboxDownload
 
             Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
             Byte[]? comIP = null, cnIP = null, appIP = null, psIP = null, nsIP = null, eaIP = null, battleIP = null, epicIP = null, ubiIP = null;
-            string epicHosts = Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
             {
                 comIP = IPAddress.Parse(Properties.Settings.Default.ComIP).GetAddressBytes();
@@ -201,6 +200,7 @@ namespace XboxDownload
                     }
                 }
             });
+            string battleHosts = Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
             tasks[5] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
@@ -209,7 +209,7 @@ namespace XboxDownload
                 }
                 else
                 {
-                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("blzddist1-a.akamaihd.net") : ClassDNS.HostToIP("blzddist1-a.akamaihd.net", Properties.Settings.Default.DnsIP);
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH(battleHosts) : ClassDNS.HostToIP(battleHosts, Properties.Settings.Default.DnsIP);
                     if (!string.IsNullOrEmpty(ip))
                     {
                         if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbBattleIP, ip);
@@ -217,6 +217,7 @@ namespace XboxDownload
                     }
                 }
             });
+            string epicHosts = Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
             tasks[6] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
@@ -524,13 +525,16 @@ namespace XboxDownload
             }
             _ = dicServiceV4.TryAdd("ssl-lvlt.cdn.ea.com", lsEmptyIP);
             _ = dicServiceV6.TryAdd("ssl-lvlt.cdn.ea.com", lsEmptyIP);
-            if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+            if (Properties.Settings.Default.BattleStore)
             {
+                string localHost = !Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
+                _ = dicServiceV4.TryAdd(localHost, lsLocalIP);
                 _ = dicServiceV4.TryAdd("us.cdn.blizzard.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("eu.cdn.blizzard.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("kr.cdn.blizzard.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("level3.blizzard.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("blizzard.gcdn.cloudn.co.kr", lsLocalIP);
+                _ = dicServiceV6.TryAdd(localHost, lsEmptyIP);
                 _ = dicServiceV6.TryAdd("us.cdn.blizzard.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("eu.cdn.blizzard.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("kr.cdn.blizzard.com", lsEmptyIP);
@@ -579,7 +583,7 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd(epicHosts, lsEmptyIP);
                 }
             }
-            if (Properties.Settings.Default.UbiStore && Properties.Settings.Default.UbiCDN)
+            if (Properties.Settings.Default.UbiStore)
             {
                 _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsLocalIP);
                 _ = dicServiceV6.TryAdd("uplaypc-s-ubisoft.cdn.ubi.com", lsEmptyIP);
@@ -835,7 +839,8 @@ namespace XboxDownload
                     "dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net"
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net",
+                    "uplaypc-s-ubisoft.cdn.ubionline.com.cn","uplaypc-s-ubisoft.cdn.ubi.com"
                 };
             }
             else
@@ -847,7 +852,8 @@ namespace XboxDownload
                     "dl.delivery.mp.microsoft.com", "tlu.dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
                     "gst.prod.dl.playstation.net", "gs2.ww.prod.dl.playstation.net", "zeus.dl.playstation.net", "ares.dl.playstation.net",
                     "atum.hac.lp1.d4c.nintendo.net", "bugyo.hac.lp1.eshop.nintendo.net", "ctest-dl-lp1.cdn.nintendo.net", "ctest-ul-lp1.cdn.nintendo.net",
-                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net"
+                    "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net",
+                    "uplaypc-s-ubisoft.cdn.ubionline.com.cn","uplaypc-s-ubisoft.cdn.ubi.com"
                 };
             }
             if (!Properties.Settings.Default.EpicCDN) hosts.Add("epicgames-download1.akamaized.net");
