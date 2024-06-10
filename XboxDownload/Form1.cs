@@ -1328,7 +1328,8 @@ namespace XboxDownload
                             else
                             {
                                 sb.AppendLine(Properties.Settings.Default.LocalIP + " epicgames-download1-1251447533.file.myqcloud.com");
-                                if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP)) sb.AppendLine(Properties.Settings.Default.EpicIP + " epicgames-download1.akamaized.net");
+                                string ip = !string.IsNullOrEmpty(akamai) ? akamai : Properties.Settings.Default.EpicIP;
+                                if (!string.IsNullOrEmpty(ip)) sb.AppendLine(ip + " epicgames-download1.akamaized.net");
                             }
                         }
                         if (Properties.Settings.Default.UbiStore)
