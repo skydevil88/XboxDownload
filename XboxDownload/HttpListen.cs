@@ -211,7 +211,7 @@ namespace XboxDownload
                                 if (Properties.Settings.Default.BattleStore)
                                 {
                                     _redirect = true;
-                                    _newHosts = !Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
+                                    _newHosts = Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
                                 }
                                 break;
                             case "blzdist-wow.necdn.leihuo.netease.com":
