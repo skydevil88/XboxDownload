@@ -688,6 +688,7 @@
             resources.ApplyResources(ckbBattleNetease, "ckbBattleNetease");
             ckbBattleNetease.Name = "ckbBattleNetease";
             ckbBattleNetease.UseVisualStyleBackColor = true;
+            ckbBattleNetease.CheckedChanged += CkbBattleNetease_CheckedChanged;
             // 
             // linkRepairDNS
             // 
@@ -797,6 +798,7 @@
             resources.ApplyResources(ckbGameLink, "ckbGameLink");
             ckbGameLink.Name = "ckbGameLink";
             ckbGameLink.UseVisualStyleBackColor = true;
+            ckbGameLink.CheckedChanged += CkbGameLink_CheckedChanged;
             // 
             // linkRestartEABackgroundService
             // 
@@ -850,6 +852,7 @@
             ckbSetDns.ForeColor = Color.Red;
             ckbSetDns.Name = "ckbSetDns";
             ckbSetDns.UseVisualStyleBackColor = true;
+            ckbSetDns.CheckedChanged += CkbSetDns_CheckedChanged;
             // 
             // ckbDoH
             // 
@@ -920,6 +923,7 @@
             resources.ApplyResources(ckbLocalUpload, "ckbLocalUpload");
             ckbLocalUpload.Name = "ckbLocalUpload";
             ckbLocalUpload.UseVisualStyleBackColor = true;
+            ckbLocalUpload.CheckedChanged += CkbLocalUpload_CheckedChanged;
             // 
             // label20
             // 

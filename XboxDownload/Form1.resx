@@ -1109,13 +1109,13 @@
     <value>1214, 252</value>
   </data>
   <data name="ckbBattleStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>202, 28</value>
+    <value>148, 28</value>
   </data>
   <data name="ckbBattleStore.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
   </data>
   <data name="ckbBattleStore.Text" xml:space="preserve">
-    <value>加速战网国际服 (PC)</value>
+    <value>加速战网 (PC)</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.Name" xml:space="preserve">
     <value>ckbBattleStore</value>

@@ -206,8 +206,6 @@ namespace XboxDownload
                             case "kr.cdn.blizzard.com":
                             case "level3.blizzard.com":
                             case "blizzard.gcdn.cloudn.co.kr":
-                            case "blzdist-wow.necdn.leihuo.netease.com":    //魔兽世界
-                            case "blzdist-hs.necdn.leihuo.netease.com":     //炉石传说
                                 if (Properties.Settings.Default.BattleStore)
                                 {
                                     _redirect = true;
@@ -219,6 +217,13 @@ namespace XboxDownload
                                 {
                                     _redirect = true;
                                     _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
+                                }
+                                break;
+                            default:
+                                if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleNetease && _hosts.EndsWith(".necdn.leihuo.netease.com"))
+                                {
+                                    _redirect = true;
+                                    _newHosts = "blzddist1-a.akamaihd.net";
                                 }
                                 break;
                         }

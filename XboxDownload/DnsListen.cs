@@ -537,13 +537,6 @@ namespace XboxDownload
                 _ = dicServiceV6.TryAdd("level3.blizzard.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("blizzard.gcdn.cloudn.co.kr", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("level3.ssl.blizzard.com", lsEmptyIP);
-                if (Properties.Settings.Default.BattleNetease)
-                {
-                    _ = dicServiceV4.TryAdd("blzdist-wow.necdn.leihuo.netease.com", lsLocalIP);
-                    _ = dicServiceV6.TryAdd("blzdist-wow.necdn.leihuo.netease.com", lsEmptyIP);
-                    _ = dicServiceV4.TryAdd("blzdist-hs.necdn.leihuo.netease.com", lsLocalIP);
-                    _ = dicServiceV6.TryAdd("blzdist-hs.necdn.leihuo.netease.com", lsEmptyIP);
-                }
             }
             if (battleIP != null)
             {
@@ -644,6 +637,16 @@ namespace XboxDownload
                                             if (Properties.Settings.Default.RecordLog && lsServiceIp.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsServiceIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x008000);
                                             return;
                                         }
+                                        if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleNetease && queryName.EndsWith(".necdn.leihuo.netease.com"))
+                                        {
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsLocalIP;
+                                            socket?.SendTo(dns.ToBytes(), client);
+                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsLocalIP.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x008000);
+                                            return;
+                                        }
                                         if (dicHosts1V4.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
                                         {
                                             if (lsHostsIp.Count >= 2) lsHostsIp = lsHostsIp.OrderBy(a => Guid.NewGuid()).Take(16).ToList();
@@ -722,6 +725,15 @@ namespace XboxDownload
                                             dns.ResouceRecords = lsServiceIp;
                                             socket?.SendTo(dns.ToBytes(), client);
                                             if (Properties.Settings.Default.RecordLog && lsServiceIp.Count >= 1) parentForm.SaveLog("DNSv6 查询", queryName + " -> " + string.Join(", ", lsServiceIp.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x008000);
+                                            return;
+                                        }
+                                        if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleNetease && queryName.EndsWith(".necdn.leihuo.netease.com"))
+                                        {
+                                            dns.QR = 1;
+                                            dns.RA = 1;
+                                            dns.RD = 1;
+                                            dns.ResouceRecords = lsEmptyIP;
+                                            socket?.SendTo(dns.ToBytes(), client);
                                             return;
                                         }
                                         if (dicHosts1V6.TryGetValue(queryName, out List<ResouceRecord>? lsHostsIp))
