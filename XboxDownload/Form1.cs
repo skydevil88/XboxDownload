@@ -66,7 +66,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
-            toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr");
+            toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr\n\n#网易国服(校园网可指定Akamai IPv6免流下载)\nblzdist-wow.necdn.leihuo.netease.com\nblzdist-hs.necdn.leihuo.netease.com");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com");
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
@@ -83,7 +83,7 @@ namespace XboxDownload
             ckbNSBrowser.Checked = Properties.Settings.Default.NSBrowser;
             tbEAIP.Text = Properties.Settings.Default.EAIP;
             tbBattleIP.Text = Properties.Settings.Default.BattleIP;
-            ckbBattleCDN.Checked = Properties.Settings.Default.BattleCDN;
+            ckbBattleNetease.Checked = Properties.Settings.Default.BattleNetease;
             tbEpicIP.Text = Properties.Settings.Default.EpicIP;
             if (Properties.Settings.Default.EpicCDN) rbEpicCDN1.Checked = true;
             else rbEpicCDN2.Checked = true;
@@ -932,7 +932,7 @@ namespace XboxDownload
                 Properties.Settings.Default.NSBrowser = ckbNSBrowser.Checked;
                 Properties.Settings.Default.EAIP = eaIP;
                 Properties.Settings.Default.BattleIP = battleIP;
-                Properties.Settings.Default.BattleCDN = ckbBattleCDN.Checked;
+                Properties.Settings.Default.BattleNetease = ckbBattleNetease.Checked;
                 Properties.Settings.Default.EpicIP = epicIP;
                 Properties.Settings.Default.EpicCDN = rbEpicCDN1.Checked;
                 Properties.Settings.Default.UbiIP = ubiIP;
@@ -1267,14 +1267,16 @@ namespace XboxDownload
                         }
                         if (Properties.Settings.Default.BattleStore)
                         {
-                            if (Properties.Settings.Default.BattleCDN)
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " us.cdn.blizzard.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " eu.cdn.blizzard.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " kr.cdn.blizzard.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
+                            sb.AppendLine("0.0.0.0 level3.ssl.blizzard.com");
+                            if (Properties.Settings.Default.BattleNetease)
                             {
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " us.cdn.blizzard.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " eu.cdn.blizzard.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " kr.cdn.blizzard.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
-                                sb.AppendLine("0.0.0.0 level3.ssl.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blzdist-wow.necdn.leihuo.netease.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blzdist-hs.necdn.leihuo.netease.com");
                             }
                             if (!string.IsNullOrEmpty(akamai))
                             {
@@ -1717,7 +1719,6 @@ namespace XboxDownload
                     break;
                 case "tsmUseIPBattle":
                     tabControl1.SelectedTab = tabService;
-                    ckbBattleCDN.Checked = true;
                     tbBattleIP.Text = ip;
                     tbBattleIP.Focus();
                     break;
@@ -2844,7 +2845,7 @@ namespace XboxDownload
                 sb.AppendLine("Range: bytes=0-" + range);
                 sb.AppendLine();
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-
+                using Ping p1 = new();
                 foreach (DataGridViewRow dgvr in ls)
                 {
                     if (ctsSpeedTest.IsCancellationRequested) break;
@@ -2857,20 +2858,16 @@ namespace XboxDownload
                     dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
                     dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
                     dgvr.Tag = null;
-
-                    using (Ping p1 = new())
+                    try
                     {
-                        try
+                        PingReply reply = p1.Send(ip);
+                        if (reply.Status == IPStatus.Success)
                         {
-                            PingReply reply = p1.Send(ip);
-                            if (reply.Status == IPStatus.Success)
-                            {
-                                dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
-                                dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
-                            }
+                            dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
+                            dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
                         }
-                        catch { }
                     }
+                    catch { }
                     sw.Restart();
                     SocketPackage socketPackage = uri.Scheme == "https" ? ClassWeb.TlsRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest) : ClassWeb.TcpRequest(uri, buffer, ip, false, null, timeout, ctsSpeedTest);
                     sw.Stop();
@@ -2911,6 +2908,7 @@ namespace XboxDownload
             }
             else
             {
+                using Ping p1 = new();
                 foreach (DataGridViewRow dgvr in ls)
                 {
                     if (ctsSpeedTest.IsCancellationRequested) break;
@@ -2923,20 +2921,16 @@ namespace XboxDownload
                     dgvr.Cells["Col_RoundtripTime"].Style.ForeColor = Color.Empty;
                     dgvr.Cells["Col_Speed"].Style.ForeColor = Color.Empty;
                     dgvr.Tag = null;
-
-                    using (Ping p1 = new())
+                    try
                     {
-                        try
+                        PingReply reply = p1.Send(ip);
+                        if (reply.Status == IPStatus.Success)
                         {
-                            PingReply reply = p1.Send(ip);
-                            if (reply.Status == IPStatus.Success)
-                            {
-                                dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
-                                dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
-                            }
+                            dgvr.Cells["Col_TTL"].Value = reply.Options?.Ttl;
+                            dgvr.Cells["Col_RoundtripTime"].Value = reply.RoundtripTime;
                         }
-                        catch { }
                     }
+                    catch { }
                     dgvr.Cells["Col_Speed"].Value = null;
                 }
             }

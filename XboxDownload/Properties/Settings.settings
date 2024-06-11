@@ -38,8 +38,8 @@
     <Setting Name="BattleIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="BattleCDN" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="BattleNetease" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="EpicIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

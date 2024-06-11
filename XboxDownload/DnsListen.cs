@@ -523,7 +523,7 @@ namespace XboxDownload
             }
             _ = dicServiceV4.TryAdd("ssl-lvlt.cdn.ea.com", lsEmptyIP);
             _ = dicServiceV6.TryAdd("ssl-lvlt.cdn.ea.com", lsEmptyIP);
-            if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+            if (Properties.Settings.Default.BattleStore)
             {
                 _ = dicServiceV4.TryAdd("us.cdn.blizzard.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("eu.cdn.blizzard.com", lsLocalIP);
@@ -537,6 +537,13 @@ namespace XboxDownload
                 _ = dicServiceV6.TryAdd("level3.blizzard.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("blizzard.gcdn.cloudn.co.kr", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("level3.ssl.blizzard.com", lsEmptyIP);
+                if (Properties.Settings.Default.BattleNetease)
+                {
+                    _ = dicServiceV4.TryAdd("blzdist-wow.necdn.leihuo.netease.com", lsLocalIP);
+                    _ = dicServiceV6.TryAdd("blzdist-wow.necdn.leihuo.netease.com", lsEmptyIP);
+                    _ = dicServiceV4.TryAdd("blzdist-hs.necdn.leihuo.netease.com", lsLocalIP);
+                    _ = dicServiceV6.TryAdd("blzdist-hs.necdn.leihuo.netease.com", lsEmptyIP);
+                }
             }
             if (battleIP != null)
             {

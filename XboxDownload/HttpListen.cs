@@ -206,7 +206,9 @@ namespace XboxDownload
                             case "kr.cdn.blizzard.com":
                             case "level3.blizzard.com":
                             case "blizzard.gcdn.cloudn.co.kr":
-                                if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
+                            case "blzdist-wow.necdn.leihuo.netease.com":    //魔兽世界
+                            case "blzdist-hs.necdn.leihuo.netease.com":     //炉石传说
+                                if (Properties.Settings.Default.BattleStore)
                                 {
                                     _redirect = true;
                                     _newHosts = "blzddist1-a.akamaihd.net";

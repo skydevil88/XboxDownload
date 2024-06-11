@@ -169,13 +169,13 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool BattleCDN {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BattleNetease {
             get {
-                return ((bool)(this["BattleCDN"]));
+                return ((bool)(this["BattleNetease"]));
             }
             set {
-                this["BattleCDN"] = value;
+                this["BattleNetease"] = value;
             }
         }
         
