@@ -66,7 +66,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
-            toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzdist-wow.necdn.leihuo.netease.com\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr\n\n国内CDN不一定有外服游戏数据缓存，\n强行跳转国内下载速度可能不及使用Akamai优选IP");
+            toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com");
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
@@ -83,8 +83,7 @@ namespace XboxDownload
             ckbNSBrowser.Checked = Properties.Settings.Default.NSBrowser;
             tbEAIP.Text = Properties.Settings.Default.EAIP;
             tbBattleIP.Text = Properties.Settings.Default.BattleIP;
-            if (Properties.Settings.Default.BattleCDN) rbBattleCDN1.Checked = true;
-            else rbBattleCDN2.Checked = true;
+            ckbBattleCDN.Checked = Properties.Settings.Default.BattleCDN;
             tbEpicIP.Text = Properties.Settings.Default.EpicIP;
             if (Properties.Settings.Default.EpicCDN) rbEpicCDN1.Checked = true;
             else rbEpicCDN2.Checked = true;
@@ -109,8 +108,6 @@ namespace XboxDownload
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
             ckbGameLink.CheckedChanged += new EventHandler(CkbGameLink_CheckedChanged);
-            rbBattleCDN1.CheckedChanged += RbCDN_CheckedChanged;
-            rbBattleCDN2.CheckedChanged += RbCDN_CheckedChanged;
             rbEpicCDN1.CheckedChanged += RbCDN_CheckedChanged;
             rbEpicCDN2.CheckedChanged += RbCDN_CheckedChanged;
             ckbLocalUpload.CheckedChanged += new EventHandler(CkbLocalUpload_CheckedChanged);
@@ -522,18 +519,6 @@ namespace XboxDownload
             if (!control.Checked) return;
             switch (control.Name)
             {
-                case "rbBattleCDN1":
-                    if (!Properties.Settings.Default.BattleCDN)
-                        tbBattleIP.Clear();
-                    else
-                        tbBattleIP.Text = Properties.Settings.Default.BattleIP;
-                    break;
-                case "rbBattleCDN2":
-                    if (Properties.Settings.Default.BattleCDN)
-                        tbBattleIP.Clear();
-                    else
-                        tbBattleIP.Text = Properties.Settings.Default.BattleIP;
-                    break;
                 case "rbEpicCDN1":
                     if (!Properties.Settings.Default.EpicCDN)
                         tbEpicIP.Clear();
@@ -653,8 +638,7 @@ namespace XboxDownload
                 UpdateHosts(true, akamai);
                 DnsListen.UpdateHosts(akamai);
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
-                tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = akamai;
-                if (!Properties.Settings.Default.BattleCDN) tbBattleIP.Text = akamai;
+                tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai;
                 if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai;
                 SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 等全部游戏下载域名)", "localhost", 0x008000);
                 ckbOptimalAkamaiIP.Enabled = true;
@@ -685,13 +669,10 @@ namespace XboxDownload
                     tbEAIP.Text = Properties.Settings.Default.EAIP;
                 else if (DnsListen.dicService2V4.TryGetValue("origin-a.akamaihd.net", out List<ResouceRecord>? lsEAIp))
                     tbEAIP.Text = lsEAIp.Count >= 1 ? new IPAddress(lsEAIp?[0].Datas!).ToString() : "";
-                if (!Properties.Settings.Default.BattleCDN)
-                {
-                    if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
-                        tbBattleIP.Text = Properties.Settings.Default.BattleIP;
-                    else if (DnsListen.dicService2V4.TryGetValue("blzddist1-a.akamaihd.net", out List<ResouceRecord>? lsBattleIp))
-                        tbBattleIP.Text = lsBattleIp.Count >= 1 ? new IPAddress(lsBattleIp?[0].Datas!).ToString() : "";
-                }
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
+                    tbBattleIP.Text = Properties.Settings.Default.BattleIP;
+                else if (DnsListen.dicService2V4.TryGetValue("blzddist1-a.akamaihd.net", out List<ResouceRecord>? lsBattleIp))
+                    tbBattleIP.Text = lsBattleIp.Count >= 1 ? new IPAddress(lsBattleIp?[0].Datas!).ToString() : "";
                 if (!Properties.Settings.Default.EpicCDN)
                 {
                     if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
@@ -951,7 +932,7 @@ namespace XboxDownload
                 Properties.Settings.Default.NSBrowser = ckbNSBrowser.Checked;
                 Properties.Settings.Default.EAIP = eaIP;
                 Properties.Settings.Default.BattleIP = battleIP;
-                Properties.Settings.Default.BattleCDN = rbBattleCDN1.Checked;
+                Properties.Settings.Default.BattleCDN = ckbBattleCDN.Checked;
                 Properties.Settings.Default.EpicIP = epicIP;
                 Properties.Settings.Default.EpicCDN = rbEpicCDN1.Checked;
                 Properties.Settings.Default.UbiIP = ubiIP;
@@ -1286,33 +1267,25 @@ namespace XboxDownload
                         }
                         if (Properties.Settings.Default.BattleStore)
                         {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " us.cdn.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " eu.cdn.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " kr.cdn.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
                             if (Properties.Settings.Default.BattleCDN)
                             {
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blzddist1-a.akamaihd.net");
-                                if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
-                                {
-                                    if (Regex.IsMatch(Properties.Settings.Default.BattleIP, @"^\d+\.\d+\.\d+\.\d+$"))
-                                        sb.AppendLine(Properties.Settings.Default.BattleIP + " blzdist-wow.necdn.leihuo.netease.com");
-                                    else
-                                        sb.AppendLine(Properties.Settings.Default.LocalIP + " blzdist-wow.necdn.leihuo.netease.com");
-                                }
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " us.cdn.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " eu.cdn.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " kr.cdn.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " level3.blizzard.com");
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blizzard.gcdn.cloudn.co.kr");
+                                sb.AppendLine("0.0.0.0 level3.ssl.blizzard.com");
                             }
-                            else
+                            if (!string.IsNullOrEmpty(akamai))
                             {
-                                sb.AppendLine(Properties.Settings.Default.LocalIP + " blzdist-wow.necdn.leihuo.netease.com");
-                                string ip = !string.IsNullOrEmpty(akamai) ? akamai : Properties.Settings.Default.BattleIP;
-                                if (!string.IsNullOrEmpty(ip))
-                                {
-                                    if (Regex.IsMatch(ip, @"^\d+\.\d+\.\d+\.\d+$"))
-                                        sb.AppendLine(ip + " blzddist1-a.akamaihd.net");
-                                    else
-                                        sb.AppendLine(Properties.Settings.Default.LocalIP + " blzddist1-a.akamaihd.net");
-                                }
+                                sb.AppendLine(akamai + " blzddist1-a.akamaihd.net");
+                            }
+                            else if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
+                            {
+                                if (Regex.IsMatch(Properties.Settings.Default.BattleIP, @"^\d+\.\d+\.\d+\.\d+$"))
+                                    sb.AppendLine(Properties.Settings.Default.BattleIP + " blzddist1-a.akamaihd.net");
+                                else
+                                    sb.AppendLine(Properties.Settings.Default.LocalIP + " blzddist1-a.akamaihd.net");
                             }
                         }
                         if (Properties.Settings.Default.EpicStore)
@@ -1744,7 +1717,7 @@ namespace XboxDownload
                     break;
                 case "tsmUseIPBattle":
                     tabControl1.SelectedTab = tabService;
-                    rbBattleCDN2.Checked = true;
+                    ckbBattleCDN.Checked = true;
                     tbBattleIP.Text = ip;
                     tbBattleIP.Focus();
                     break;

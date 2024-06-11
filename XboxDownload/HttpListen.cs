@@ -9,7 +9,6 @@ namespace XboxDownload
     internal class HttpListen
     {
         private readonly Form1 parentForm;
-        private bool redirect;
         Socket? socket = null;
 
         public HttpListen(Form1 parentForm)
@@ -36,7 +35,6 @@ namespace XboxDownload
                 }));
                 return;
             }
-            redirect = string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP;
             while (Form1.bServiceFlag)
             {
                 try
@@ -208,24 +206,10 @@ namespace XboxDownload
                             case "kr.cdn.blizzard.com":
                             case "level3.blizzard.com":
                             case "blizzard.gcdn.cloudn.co.kr":
-                                if (Properties.Settings.Default.BattleStore)
-                                {
-                                    _redirect = true;
-                                    _newHosts = Properties.Settings.Default.BattleCDN ? "blzdist-wow.necdn.leihuo.netease.com" : "blzddist1-a.akamaihd.net";
-                                }
-                                break;
-                            case "blzdist-wow.necdn.leihuo.netease.com":
-                                if (Properties.Settings.Default.BattleStore && !Properties.Settings.Default.BattleCDN)
-                                {
-                                    _redirect = true;
-                                    _newHosts = "blzddist1-a.akamaihd.net";
-                                }
-                                break;
-                            case "blzddist1-a.akamaihd.net":
                                 if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleCDN)
                                 {
                                     _redirect = true;
-                                    _newHosts = "blzdist-wow.necdn.leihuo.netease.com";
+                                    _newHosts = "blzddist1-a.akamaihd.net";
                                 }
                                 break;
                             case "uplaypc-s-ubisoft.cdn.ubi.com":
@@ -349,7 +333,6 @@ namespace XboxDownload
                                         if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                     }
                                     break;
-                                case "blzdist-wow.necdn.leihuo.netease.com":
                                 case "blzddist1-a.akamaihd.net":
                                     {
                                         if (IPAddress.TryParse(Properties.Settings.Default.BattleIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)

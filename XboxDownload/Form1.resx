@@ -532,85 +532,31 @@
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="rbBattleCDN1.AutoSize" type="System.Boolean, mscorlib">
+  <data name="ckbBattleCDN.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="rbBattleCDN1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="ckbBattleCDN.Location" type="System.Drawing.Point, System.Drawing">
+    <value>797, 269</value>
   </data>
-  <data name="rbBattleCDN1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 2</value>
+  <data name="ckbBattleCDN.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 28</value>
   </data>
-  <data name="rbBattleCDN1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 28</value>
-  </data>
-  <data name="rbBattleCDN1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rbBattleCDN1.Text" xml:space="preserve">
-    <value>跳转国内CDN</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN1.Name" xml:space="preserve">
-    <value>rbBattleCDN1</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN1.Parent" xml:space="preserve">
-    <value>panel3</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rbBattleCDN2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbBattleCDN2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rbBattleCDN2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>157, 2</value>
-  </data>
-  <data name="rbBattleCDN2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 28</value>
-  </data>
-  <data name="rbBattleCDN2.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rbBattleCDN2.Text" xml:space="preserve">
-    <value>跳转 Akamai CDN</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN2.Name" xml:space="preserve">
-    <value>rbBattleCDN2</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN2.Parent" xml:space="preserve">
-    <value>panel3</value>
-  </data>
-  <data name="&gt;&gt;rbBattleCDN2.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>794, 269</value>
-  </data>
-  <data name="panel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>352, 30</value>
-  </data>
-  <data name="panel3.TabIndex" type="System.Int32, mscorlib">
+  <data name="ckbBattleCDN.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
   </data>
-  <data name="&gt;&gt;panel3.Name" xml:space="preserve">
-    <value>panel3</value>
+  <data name="ckbBattleCDN.Text" xml:space="preserve">
+    <value>跳转 Akamai CDN</value>
   </data>
-  <data name="&gt;&gt;panel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;ckbBattleCDN.Name" xml:space="preserve">
+    <value>ckbBattleCDN</value>
   </data>
-  <data name="&gt;&gt;panel3.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ckbBattleCDN.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckbBattleCDN.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;ckbBattleCDN.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="linkRepairDNS.AutoSize" type="System.Boolean, mscorlib">
@@ -1163,13 +1109,13 @@
     <value>1214, 252</value>
   </data>
   <data name="ckbBattleStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 28</value>
+    <value>202, 28</value>
   </data>
   <data name="ckbBattleStore.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
   </data>
   <data name="ckbBattleStore.Text" xml:space="preserve">
-    <value>加速战网 (PC)</value>
+    <value>加速战网国际服 (PC)</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.Name" xml:space="preserve">
     <value>ckbBattleStore</value>
