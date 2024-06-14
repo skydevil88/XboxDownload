@@ -12,16 +12,15 @@ namespace XboxDownload
 {
     internal class DnsListen
     {
-        Socket? socket = null;
+        private Socket? socket = null;
         private readonly Form1 parentForm;
-        private readonly string dohServer = "https://223.5.5.5";
-        private readonly Regex reDoHFilter = new("google|youtube|facebook|twitter|github");
+        public static readonly string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve" }, { "腾讯云DoH", "https://1.12.12.12/resolve" }, { "360 DoH", "https://180.163.249.75/resolve" }, { "DNS.SB(国外)", "https://45.11.45.11/dns-query" }, { "谷哥DoH(科学)", "https://8.8.8.8/resolve" } };
+        public static string dohServer = "";
         public static readonly List<ResouceRecord> lsEmptyIP = new();
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2V4 = new(), dicHosts2V6 = new();
         public static ConcurrentDictionary<String, Dns> dicDns = new();
-
 
         public class Dns
         {
@@ -671,9 +670,9 @@ namespace XboxDownload
                                             if (Properties.Settings.Default.RecordLog && lsHostsIp2.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                             return;
                                         }
-                                        if (Properties.Settings.Default.DoH && !reDoHFilter.IsMatch(queryName))
+                                        if (Properties.Settings.Default.DoH)
                                         {
-                                            string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
+                                            string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
                                             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                             {
                                                 ClassDNS.Api? json = null;
@@ -762,9 +761,9 @@ namespace XboxDownload
                                         }
                                         if (!Properties.Settings.Default.DisableIPv6DNS)
                                         {
-                                            if (Properties.Settings.Default.DoH && !reDoHFilter.IsMatch(queryName))
+                                            if (Properties.Settings.Default.DoH)
                                             {
-                                                string html = ClassWeb.HttpResponseContent(this.dohServer + "/resolve?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, null, 6000);
+                                                string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, null, 6000);
                                                 if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                                 {
                                                     ClassDNS.Api? json = null;
@@ -1471,10 +1470,15 @@ namespace XboxDownload
             return ip;
         }
 
-        public static string? DoH(string hostName, string dohServer = "223.5.5.5")
+        public static string? DoH(string hostName)
+        {
+            return DoH(hostName, DnsListen.dohServer);
+        }
+
+        public static string? DoH(string hostName, string dohServer, int timeout = 6000)
         {
             string? ip = null;
-            string html = ClassWeb.HttpResponseContent("https://" + dohServer + "/resolve?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, null, 6000);
+            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, null, timeout);
             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 try

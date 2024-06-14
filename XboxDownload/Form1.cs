@@ -69,7 +69,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr\n\n#网易国服(校园网可指定Akamai IPv6免流下载)\n*.necdn.leihuo.netease.com");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com");
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
-            toolTip1.SetToolTip(this.ckbDoH, "使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nXbox各种联网问题可以勾选此选项。\n需要在PC使用可以勾选“设置本机 DNS”。");
+            toolTip1.SetToolTip(this.ckbDoH, "默认使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nPC用户使用此功能，需要勾选“设置本机 DNS”\n\n注：网络正常可以不勾选。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\nPC用户建议勾选，主机用户无需设置。\n\n注：如果退出Xbox下载助手后没网络，请点击旁边“修复”。");
             toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
 
@@ -106,6 +106,12 @@ namespace XboxDownload
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
+
+            DnsListen.dohServer = DnsListen.dohs[Properties.Settings.Default.DoHServer >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHServer, 1];
+            for (int i = 0; i <= DnsListen.dohs.GetLongLength(0) - 1; i++)
+            {
+                cbDoh.Items.Add(DnsListen.dohs[i, 0]);
+            }
 
             rbEpicCDN1.CheckedChanged += RbCDN_CheckedChanged;
             rbEpicCDN2.CheckedChanged += RbCDN_CheckedChanged;
@@ -160,7 +166,7 @@ namespace XboxDownload
 
             cbHosts.SelectedIndex = 0;
             cbSpeedTestTimeOut.SelectedIndex = 0;
-            cbDohDNS.SelectedIndex = 0;
+            cbDoh.SelectedIndex = 0;
             cbImportIP.SelectedIndex = 0;
 
             dtHosts.Columns.Add("Enable", typeof(Boolean));
@@ -571,6 +577,18 @@ namespace XboxDownload
             }
         }
 
+        private void CkbDoH_CheckedChanged(object sender, EventArgs e)
+        {
+            linkDoHServer.Enabled = ckbDoH.Checked;
+        }
+
+        private void LinkDoHServer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FormDoH dialog = new();
+            dialog.ShowDialog();
+            dialog.Dispose();
+        }
+
         private void CkbSetDns_CheckedChanged(object sender, EventArgs e)
         {
             if (ckbSetDns.Checked)
@@ -610,9 +628,8 @@ namespace XboxDownload
             {
                 ckbOptimalAkamaiIP.Enabled = false;
                 string[] ips = {
-                    "23.43.165.18", "23.206.175.185", "23.216.159.66", "211.239.236.18", "220.90.198.73",  //韩国
-                    "128.22.12.153",  "23.197.49.161", "23.211.178.216", "23.78.141.176", "210.176.33.74", "23.15.14.187", "23.32.248.9", "23.33.32.155", "23.33.33.121", "23.44.51.34", "23.45.51.153", "23.53.248.155", "23.77.204.160", "23.206.250.96", "23.219.39.82", "125.56.201.104", //日本
-                    "223.119.50.144" //香港
+                    "23.43.165.18", "23.206.175.185", "23.216.159.66", "211.239.236.18",  //韩国
+                    "128.22.12.153",  "23.197.49.161", "23.211.178.216", "23.78.141.176", "104.102.24.114", "210.176.33.74", "23.33.32.155", "23.33.33.121", "23.44.51.34", "23.45.51.153", "23.53.248.155", "23.77.204.160", "23.206.250.96", "125.56.201.104", //日本
                 };
                 string[] test = { "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt", "http://gst.prod.dl.playstation.net/networktest/get_192m", "http://ctest-dl-lp1.cdn.nintendo.net/30m" };
                 Random ran = new();
@@ -2028,17 +2045,14 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        if (host != "AkamaiV6")
+                        LinkLabel lb3 = new()
                         {
-                            LinkLabel lb3 = new()
-                            {
-                                Tag = "http://ctest-dl-lp1.cdn.nintendo.net/30m",
-                                Text = "Switch测速文件",
-                                AutoSize = true,
-                                Parent = this.flpTestUrl
-                            };
-                            lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        }
+                            Tag = "http://ctest-dl-lp1.cdn.nintendo.net/30m",
+                            Text = "Switch测速文件",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb4 = new()
                         {
                             Tag = "http://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe",
@@ -2047,14 +2061,6 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        LinkLabel lb5 = new()
-                        {
-                            Tag = "http://blzddist1-a.akamaihd.net/tpr/odin/data/15/fb/15fb20d02f83de4f82d00441a5d427ad",
-                            Text = "Call of Duty: Warzone(战网)",
-                            AutoSize = true,
-                            Parent = this.flpTestUrl
-                        };
-                        lb5.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         if (host == "AkamaiV6")
                         {
                             LinkLabel lbV6 = new()
@@ -2076,7 +2082,7 @@ namespace XboxDownload
         {
             SetTextBox(tbDlUrl, "正在获取下载链接，请稍候...");
             string? url = null;
-            string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload", cts);
+            string html = ClassWeb.HttpResponseContent(UpdateFile.website + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload", cts);
             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 XboxPackage.App? json = null;
@@ -3046,13 +3052,7 @@ namespace XboxDownload
                 }
                 else
                 {
-                    string dnsServer = cbDohDNS.SelectedIndex switch
-                    {
-                        1 => "1.12.12.12",      //doh.pub
-                        2 => "180.163.249.75",  //doh.360.cn
-                        3 => "8.8.8.8",
-                        _ => "223.5.5.5",       //dns.alidns.com
-                    };
+                    string dnsServer = DnsListen.dohs[cbDoh.SelectedIndex, 1];
                     string hostname = result.Groups["hostname"].Value.ToLower();
                     DataRow[] rows = dtHosts.Select("HostName='" + hostname + "'");
                     DataRow dr;
@@ -4397,7 +4397,7 @@ namespace XboxDownload
             XboxPackage.Game? json = null;
             if (!dicGetGamePackage.ContainsKey(key) || DateTime.Compare(dicGetGamePackage[key], DateTime.Now) < 0)
             {
-                string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetGamePackage?contentId=" + contentId + "&platform=" + platform, "GET", null, null, null, 30000, "XboxDownload");
+                string html = ClassWeb.HttpResponseContent(UpdateFile.website + "/Game/GetGamePackage?contentId=" + contentId + "&platform=" + platform, "GET", null, null, null, 30000, "XboxDownload");
                 if (Regex.IsMatch(html, @"^{.+}$", RegexOptions.Singleline))
                 {
                     try
@@ -4528,7 +4528,7 @@ namespace XboxDownload
                             item.SubItems[3].Text = Path.GetFileName(url);
                         }
                     }));
-                    if (Regex.IsMatch(url, @"^https?://")) _ = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(url), "PUT", null, null, null, 30000, "XboxDownload");
+                    if (Regex.IsMatch(url, @"^https?://")) _ = ClassWeb.HttpResponseContent(UpdateFile.website + "/Game/AddGameUrl?url=" + ClassWeb.UrlEncode(url), "PUT", null, null, null, 30000, "XboxDownload");
                 }
                 else if (platform == 2)
                 {
@@ -4549,7 +4549,7 @@ namespace XboxDownload
 
         private void GetAppPackage(string wuCategoryId, List<ListViewItem> lsAppItems)
         {
-            string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload");
+            string html = ClassWeb.HttpResponseContent(UpdateFile.website + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload");
             XboxPackage.App? json = null;
             if (Regex.IsMatch(html, @"^{.+}$", RegexOptions.Singleline))
             {
@@ -4750,7 +4750,7 @@ namespace XboxDownload
             }
             Task.Factory.StartNew(() =>
             {
-                string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetAppPackage2?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload");
+                string html = ClassWeb.HttpResponseContent(UpdateFile.website + "/Game/GetAppPackage2?WuCategoryId=" + wuCategoryId, "GET", null, null, null, 30000, "XboxDownload");
                 XboxPackage.App? json = null;
                 if (Regex.IsMatch(html, @"^{.+}$", RegexOptions.Singleline))
                 {
@@ -5386,7 +5386,7 @@ namespace XboxDownload
         private void ReInstallGamingServices()
         {
             XboxPackage.Data? data = null;
-            string html = ClassWeb.HttpResponseContent(UpdateFile.homePage + "/Game/GetAppPackage?WuCategoryId=f2ea4abe-4e1e-48ff-9022-a8a758303181", "GET", null, null, null, 30000, "XboxDownload");
+            string html = ClassWeb.HttpResponseContent(UpdateFile.website + "/Game/GetAppPackage?WuCategoryId=f2ea4abe-4e1e-48ff-9022-a8a758303181", "GET", null, null, null, 30000, "XboxDownload");
             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 XboxPackage.App? json = null;

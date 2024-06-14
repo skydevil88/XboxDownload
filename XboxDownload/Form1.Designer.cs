@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -65,6 +65,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            linkDoHServer = new LinkLabel();
             ckbBattleNetease = new CheckBox();
             linkRepairDNS = new LinkLabel();
             linkRestartEpic = new LinkLabel();
@@ -178,7 +179,7 @@
             linkHostsImport = new LinkLabel();
             butHostReset = new Button();
             butHostSave = new Button();
-            cbDohDNS = new ComboBox();
+            cbDoh = new ComboBox();
             cbHosts = new ComboBox();
             tabCDN = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -615,6 +616,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(linkDoHServer);
             groupBox1.Controls.Add(ckbBattleNetease);
             groupBox1.Controls.Add(linkRepairDNS);
             groupBox1.Controls.Add(linkRestartEpic);
@@ -682,6 +684,13 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // linkDoHServer
+            // 
+            resources.ApplyResources(linkDoHServer, "linkDoHServer");
+            linkDoHServer.Name = "linkDoHServer";
+            linkDoHServer.TabStop = true;
+            linkDoHServer.LinkClicked += LinkDoHServer_LinkClicked;
             // 
             // ckbBattleNetease
             // 
@@ -860,6 +869,7 @@
             ckbDoH.ForeColor = Color.Red;
             ckbDoH.Name = "ckbDoH";
             ckbDoH.UseVisualStyleBackColor = true;
+            ckbDoH.CheckedChanged += CkbDoH_CheckedChanged;
             // 
             // ckbHttpService
             // 
@@ -1139,9 +1149,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1149,9 +1159,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1159,9 +1169,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1413,7 +1423,7 @@
             panel2.Controls.Add(linkHostsImport);
             panel2.Controls.Add(butHostReset);
             panel2.Controls.Add(butHostSave);
-            panel2.Controls.Add(cbDohDNS);
+            panel2.Controls.Add(cbDoh);
             panel2.Controls.Add(cbHosts);
             resources.ApplyResources(panel2, "panel2");
             panel2.Name = "panel2";
@@ -1453,14 +1463,13 @@
             butHostSave.UseVisualStyleBackColor = true;
             butHostSave.Click += ButHostSave_Click;
             // 
-            // cbDohDNS
+            // cbDoh
             // 
-            cbDohDNS.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbDohDNS.FormattingEnabled = true;
-            cbDohDNS.Items.AddRange(new object[] { resources.GetString("cbDohDNS.Items"), resources.GetString("cbDohDNS.Items1"), resources.GetString("cbDohDNS.Items2"), resources.GetString("cbDohDNS.Items3") });
-            resources.ApplyResources(cbDohDNS, "cbDohDNS");
-            cbDohDNS.Name = "cbDohDNS";
-            cbDohDNS.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
+            cbDoh.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbDoh.FormattingEnabled = true;
+            resources.ApplyResources(cbDoh, "cbDoh");
+            cbDoh.Name = "cbDoh";
+            cbDoh.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
             // 
             // cbHosts
             // 
@@ -2850,7 +2859,7 @@
         private DataGridView dgvHosts;
         private Panel panel2;
         private ComboBox cbHosts;
-        private ComboBox cbDohDNS;
+        private ComboBox cbDoh;
         private Button butHostSave;
         private Button butHostReset;
         private LinkLabel linkHostClear;
@@ -3089,5 +3098,6 @@
         private LinkLabel linkRepairDNS;
         private ToolStripMenuItem tsmCopyUrl3;
         private CheckBox ckbBattleNetease;
+        private LinkLabel linkDoHServer;
     }
 }

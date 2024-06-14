@@ -9,7 +9,7 @@ namespace XboxDownload
 {
     internal class UpdateFile
     {
-        public const string homePage = "https://xbox.skydevil.xyz";
+        public const string website = "https://xbox.skydevil.xyz";
         public const string project = "https://github.com/skydevil88/XboxDownload";
         private static readonly string[,] proxys = {
             { "proxy", "https://py.skydevil.xyz/"},
@@ -29,11 +29,11 @@ namespace XboxDownload
                 string proxy = proxys[i, 0] switch
                 {
                     "proxy" => proxys[i, 1] + UpdateFile.project,
-                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.project, @"^https?://[^/]+/", ""),
                     _ => UpdateFile.project
                 };
                 tasks[i] = new Task(() =>
                 {
+                    if (proxy.StartsWith("https://py2.skydevil.xyz/")) Thread.Sleep(1000);
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + "/releases/latest", "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(releases))
                         releases = response.RequestMessage?.RequestUri?.ToString();
@@ -142,11 +142,11 @@ namespace XboxDownload
                 string proxy = proxys[i, 0] switch
                 {
                     "proxy" => proxys[i, 1] + UpdateFile.project,
-                    "mirror" => proxys[i, 1] + Regex.Replace(UpdateFile.project, @"^https?://[^/]+/", ""),
                     _ => UpdateFile.project
                 };
                 tasks[i] = new Task(() =>
                 {
+                    if (proxy.StartsWith("https://py2.skydevil.xyz/")) Thread.Sleep(1000);
                     string tmpUrl = proxy + "/blob/master/IP/" + fi.Name;
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(fileUrl))
