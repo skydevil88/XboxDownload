@@ -17,6 +17,7 @@ namespace XboxDownload
         public static string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve", "" }, { "腾讯云DoH", "https://1.12.12.12/resolve", "" }, { "360 DoH", "https://180.163.249.75/resolve", "" }, { "DNS.SB(国外)", "https://45.11.45.11/dns-query", "" } };
         public static string dohServer = "";
         public static Dictionary<string, string>? dohHeaders = null;
+        public static Dictionary<string, DoH> dicUseDoH = new();
         public static readonly List<ResouceRecord> lsEmptyIP = new();
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
@@ -28,6 +29,35 @@ namespace XboxDownload
             public string IPv4 { get; set; } = "";
 
             public string IPv6 { get; set; } = "";
+        }
+
+        public class DoH
+        {
+            public string Server { get; set; } = "";
+            public Dictionary<string, string>? Headers { get; set; } = null;
+        }
+
+        public static void UseDoH()
+        {
+            dicUseDoH.Clear();
+            foreach (DataRow row in Form1.dtDoH.Rows)
+            {
+                if (!Convert.ToBoolean(row["Enable"])) continue;
+                string? host = row["Host"]?.ToString();
+                if (string.IsNullOrEmpty(host)) continue;
+                int index = Convert.ToInt32(row["DoHServer"].ToString());
+                if (index > DnsListen.dohs.GetLongLength(0)) index = 0;
+                string dohHost = DnsListen.dohs[index, 2];
+                DoH headers = new()
+                {
+                    Server = DnsListen.dohs[index, 1]
+                };
+                if (!string.IsNullOrEmpty(dohHost))
+                {
+                    headers.Headers = new Dictionary<string, string> { { "Host", dohHost } };
+                }
+                dicUseDoH.Add(host, headers);
+            }
         }
 
         public DnsListen(Form1 parentForm)
@@ -671,9 +701,9 @@ namespace XboxDownload
                                             if (Properties.Settings.Default.RecordLog && lsHostsIp2.Count >= 1) parentForm.SaveLog("DNSv4 查询", queryName + " -> " + string.Join(", ", lsHostsIp2.Select(a => new IPAddress(a.Datas ?? Array.Empty<byte>()).ToString()).ToArray()), ((IPEndPoint)client).Address.ToString(), 0x0000FF);
                                             return;
                                         }
-                                        if (Properties.Settings.Default.DoH)
+                                        if (dicUseDoH.TryGetValue(queryName, out DoH? doh) || Properties.Settings.Default.DoH)
                                         {
-                                            string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, DnsListen.dohHeaders, 6000);
+                                            string html = ClassWeb.HttpResponseContent((doh?.Server ?? DnsListen.dohServer) + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, (doh != null ? doh.Headers : DnsListen.dohHeaders), 6000);
                                             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                             {
                                                 ClassDNS.Api? json = null;
@@ -762,9 +792,9 @@ namespace XboxDownload
                                         }
                                         if (!Properties.Settings.Default.DisableIPv6DNS)
                                         {
-                                            if (Properties.Settings.Default.DoH)
+                                            if (dicUseDoH.TryGetValue(queryName, out DoH? doh) || Properties.Settings.Default.DoH)
                                             {
-                                                string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, DnsListen.dohHeaders, 6000);
+                                                string html = ClassWeb.HttpResponseContent((doh?.Server ?? DnsListen.dohServer) + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, (doh != null ? doh.Headers : DnsListen.dohHeaders), 6000);
                                                 if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                                 {
                                                     ClassDNS.Api? json = null;

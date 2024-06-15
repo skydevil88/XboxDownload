@@ -22,7 +22,7 @@ namespace XboxDownload
         internal static List<Market> lsMarket = new();
         internal static float dpixRatio = 1;
         internal static JsonSerializerOptions jsOptions = new() { PropertyNameCaseInsensitive = true };
-        internal static DataTable dtHosts = new("Hosts");
+        internal static DataTable dtHosts = new("Hosts"), dtDoH = new("DoH");
         private readonly DnsListen dnsListen;
         private readonly HttpListen httpListen;
         private readonly HttpsListen httpsListen;
@@ -121,7 +121,7 @@ namespace XboxDownload
                     {
                         string? name = arr.GetProperty("name").GetString();
                         string? url = arr.GetProperty("url").GetString();
-                        string? hosts = arr.GetProperty("hosts").GetString();
+                        string? host = arr.GetProperty("host").GetString();
                         if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
                         {
                             int originalRows = DnsListen.dohs.GetLength(0);
@@ -138,7 +138,7 @@ namespace XboxDownload
                             }
                             newArray[originalRows, 0] = name;
                             newArray[originalRows, 1] = url;
-                            newArray[originalRows, 2] = hosts ?? "";
+                            newArray[originalRows, 2] = host ?? "";
                             DnsListen.dohs = newArray;
                         }
                     }
@@ -231,6 +231,21 @@ namespace XboxDownload
                 dtHosts.AcceptChanges();
             }
             dgvHosts.DataSource = dtHosts;
+
+            dtDoH.Columns.Add("Enable", typeof(Boolean));
+            dtDoH.Columns.Add("Host", typeof(String));
+            dtDoH.Columns.Add("DoHServer", typeof(Int32));
+            dtDoH.Columns.Add("Remark", typeof(String));
+            if (File.Exists(resourcePath + "\\DoH.xml"))
+            {
+                try
+                {
+                    dtDoH.ReadXml(resourcePath + "\\DoH.xml");
+                }
+                catch { }
+                dtDoH.AcceptChanges();
+            }
+            DnsListen.UseDoH();
 
             Form1.lsMarket.AddRange((new List<Market>
             {
@@ -605,11 +620,6 @@ namespace XboxDownload
             {
                 tbLocalPath.Text = dlg.SelectedPath;
             }
-        }
-
-        private void CkbDoH_CheckedChanged(object sender, EventArgs e)
-        {
-            linkDoHServer.Enabled = ckbDoH.Checked;
         }
 
         private void LinkDoHServer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

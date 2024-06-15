@@ -1,5 +1,8 @@
 ﻿
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Windows.Forms.VisualStyles;
+using static XboxDownload.DnsListen;
 
 namespace XboxDownload
 {
@@ -15,12 +18,13 @@ namespace XboxDownload
                 dataGridView1.RowHeadersWidth = (int)(dataGridView1.RowHeadersWidth * Form1.dpixRatio);
                 foreach (DataGridViewColumn col in dataGridView1.Columns)
                     col.Width = (int)(col.Width * Form1.dpixRatio);
+                dataGridView2.RowHeadersWidth = (int)(dataGridView2.RowHeadersWidth * Form1.dpixRatio);
+                foreach (DataGridViewColumn col in dataGridView2.Columns)
+                    col.Width = (int)(col.Width * Form1.dpixRatio);
             }
-        }
 
-        private void FormDoH_Load(object sender, EventArgs e)
-        {
-            List<DataGridViewRow> list = new();
+            List<DataGridViewRow> listDgvr = new();
+            List<KeyValuePair<int, string>> listKvp = new();
             for (int i = 0; i <= DnsListen.dohs.GetLongLength(0) - 1; i++)
             {
                 cbDoh.Items.Add(DnsListen.dohs[i, 0]);
@@ -30,14 +34,26 @@ namespace XboxDownload
                 string name = DnsListen.dohs[i, 0];
                 dgvr.Cells[0].Value = true;
                 dgvr.Cells[1].Value = name;
-                list.Add(dgvr);
+                listDgvr.Add(dgvr);
+                listKvp.Add(new KeyValuePair<int, string>(i, name));
             }
             cbDoh.SelectedIndex = Properties.Settings.Default.DoHServer >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHServer;
-            if (list.Count >= 1)
+            if (listDgvr.Count >= 1)
             {
-                dataGridView1.Rows.AddRange(list.ToArray());
+                dataGridView1.Rows.AddRange(listDgvr.ToArray());
                 dataGridView1.ClearSelection();
             }
+            Col_DoHServer.ValueMember = "key";
+            Col_DoHServer.DisplayMember = "value";
+            Col_DoHServer.DataSource = listKvp;
+            dataGridView2.DataSource = Form1.dtDoH;
+        }
+
+        private void Dgv_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridView dgv = (DataGridView)sender;
+            Rectangle rectangle = new(e.RowBounds.Location.X, e.RowBounds.Location.Y, dgv.RowHeadersWidth - 1, e.RowBounds.Height);
+            TextRenderer.DrawText(e.Graphics, (e.RowIndex + 1).ToString(), dgv.RowHeadersDefaultCellStyle.Font, rectangle, dgv.RowHeadersDefaultCellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
 
         private void ButSave_Click(object sender, EventArgs e)
@@ -116,6 +132,45 @@ namespace XboxDownload
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(new ProcessStartInfo("https://github.com/skydevil88/XboxDownload/discussions/96") { UseShellExecute = true });
+        }
+
+        private void DataGridView2_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            int i = dataGridView2.Rows.Count - 2;
+            dataGridView2.Rows[i].Cells["Col_Enable"].Value = true;
+            dataGridView2.Rows[i].Cells["Col_DoHServer"].Value = 0;
+        }
+
+        private void ButDoHSave_Click(object sender, EventArgs e)
+        {
+            Form1.dtDoH.AcceptChanges();
+            if (Form1.dtDoH.Rows.Count >= 1)
+            {
+                if (!Directory.Exists(Form1.resourcePath)) Directory.CreateDirectory(Form1.resourcePath);
+                Form1.dtDoH.WriteXml(Form1.resourcePath + "\\DoH.xml");
+            }
+            else if (File.Exists(Form1.resourcePath + "\\DoH.xml"))
+            {
+                File.Delete(Form1.resourcePath + "\\DoH.xml");
+            }
+            DnsListen.UseDoH();
+            this.Close();
+        }
+
+        private void ButDohReset_Click(object sender, EventArgs e)
+        {
+            Form1.dtDoH.RejectChanges();
+            dataGridView2.ClearSelection();
+        }
+
+        private void DataGridView2_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            switch (dataGridView2.Columns[e.ColumnIndex].Name)
+            {
+                case "Col_Host":
+                    dataGridView2.CurrentCell.Value = Regex.Replace((dataGridView2.CurrentCell.FormattedValue.ToString() ?? string.Empty).Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2");
+                    break;
+            }
         }
     }
 }
