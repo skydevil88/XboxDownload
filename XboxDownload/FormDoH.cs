@@ -1,7 +1,5 @@
 ﻿
-using System;
 using System.Diagnostics;
-using System.Security.Policy;
 
 namespace XboxDownload
 {
@@ -29,9 +27,8 @@ namespace XboxDownload
                 DataGridViewRow dgvr = new();
                 dgvr.CreateCells(dataGridView1);
                 dgvr.Resizable = DataGridViewTriState.False;
-                dgvr.Tag = DnsListen.dohs[i, 1];
                 string name = DnsListen.dohs[i, 0];
-                dgvr.Cells[0].Value = !name.Contains("(科学)");
+                dgvr.Cells[0].Value = true;
                 dgvr.Cells[1].Value = name;
                 list.Add(dgvr);
             }
@@ -48,6 +45,15 @@ namespace XboxDownload
             Properties.Settings.Default.DoHServer = cbDoh.SelectedIndex;
             Properties.Settings.Default.Save();
             DnsListen.dohServer = DnsListen.dohs[cbDoh.SelectedIndex, 1];
+            string dohHost = DnsListen.dohs[cbDoh.SelectedIndex, 2];
+            if (!string.IsNullOrEmpty(dohHost))
+            {
+                DnsListen.dohHeaders = new Dictionary<string, string>
+                {
+                    { "Host", dohHost }
+                };
+            }
+            else DnsListen.dohHeaders = null;
             this.Close();
         }
 
@@ -69,26 +75,33 @@ namespace XboxDownload
                         dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = dgvr.Cells[4].Style.ForeColor = Color.Empty;
                         if (Convert.ToBoolean(dgvr.Cells[0].Value))
                         {
-                            string? doh = dgvr.Tag?.ToString();
-                            if (!string.IsNullOrEmpty(doh))
+                            string dohServer = DnsListen.dohs[tmp, 1];
+                            string dohHost = DnsListen.dohs[tmp, 2];
+                            Dictionary<string, string>? dohHeaders = null;
+                            if (!string.IsNullOrEmpty(dohHost))
                             {
-                                _ = ClassDNS.DoH("www.baidu.com", doh, 1000);
-                                Stopwatch sw = new();
-                                for (int x = 0; x <= hosts.Length - 1; x++)
+                                dohHeaders = new Dictionary<string, string>
                                 {
-                                    string host = hosts[x];
-                                    sw.Restart();
-                                    string? ip = ClassDNS.DoH(host, doh, 3000);
-                                    sw.Stop();
-                                    if (!string.IsNullOrEmpty(ip))
-                                    {
-                                        dgvr.Cells[x + 2].Value = sw.ElapsedMilliseconds;
-                                    }
-                                    else
-                                    {
-                                        dgvr.Cells[x + 2].Value = "error";
-                                        dgvr.Cells[x + 2].Style.ForeColor = Color.Red;
-                                    }
+                                    { "Host", dohHost }
+                                };
+                            }
+
+                            _ = ClassDNS.DoH("www.baidu.com", dohServer, dohHeaders, 1000);
+                            Stopwatch sw = new();
+                            for (int x = 0; x <= hosts.Length - 1; x++)
+                            {
+                                string host = hosts[x];
+                                sw.Restart();
+                                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, 3000);
+                                sw.Stop();
+                                if (!string.IsNullOrEmpty(ip))
+                                {
+                                    dgvr.Cells[x + 2].Value = sw.ElapsedMilliseconds;
+                                }
+                                else
+                                {
+                                    dgvr.Cells[x + 2].Value = "error";
+                                    dgvr.Cells[x + 2].Style.ForeColor = Color.Red;
                                 }
                             }
                         }
@@ -98,6 +111,11 @@ namespace XboxDownload
                 Task.WaitAll(tasks);
             });
             butTest.Enabled = true;
+        }
+
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://github.com/skydevil88/XboxDownload/discussions/96") { UseShellExecute = true });
         }
     }
 }

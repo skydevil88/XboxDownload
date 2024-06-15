@@ -14,8 +14,9 @@ namespace XboxDownload
     {
         private Socket? socket = null;
         private readonly Form1 parentForm;
-        public static readonly string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve" }, { "腾讯云DoH", "https://1.12.12.12/resolve" }, { "360 DoH", "https://180.163.249.75/resolve" }, { "DNS.SB(国外)", "https://45.11.45.11/dns-query" }, { "谷哥DoH(科学)", "https://8.8.8.8/resolve" } };
+        public static string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve", "" }, { "腾讯云DoH", "https://1.12.12.12/resolve", "" }, { "360 DoH", "https://180.163.249.75/resolve", "" }, { "DNS.SB(国外)", "https://45.11.45.11/dns-query", "" } };
         public static string dohServer = "";
+        public static Dictionary<string, string>? dohHeaders = null;
         public static readonly List<ResouceRecord> lsEmptyIP = new();
         public static Regex reHosts = new(@"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$");
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
@@ -672,7 +673,7 @@ namespace XboxDownload
                                         }
                                         if (Properties.Settings.Default.DoH)
                                         {
-                                            string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, null, 6000);
+                                            string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=A", "GET", null, null, DnsListen.dohHeaders, 6000);
                                             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                             {
                                                 ClassDNS.Api? json = null;
@@ -763,7 +764,7 @@ namespace XboxDownload
                                         {
                                             if (Properties.Settings.Default.DoH)
                                             {
-                                                string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, null, 6000);
+                                                string html = ClassWeb.HttpResponseContent(DnsListen.dohServer + "?name=" + ClassWeb.UrlEncode(queryName) + "&type=AAAA", "GET", null, null, DnsListen.dohHeaders, 6000);
                                                 if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
                                                 {
                                                     ClassDNS.Api? json = null;
@@ -1472,13 +1473,13 @@ namespace XboxDownload
 
         public static string? DoH(string hostName)
         {
-            return DoH(hostName, DnsListen.dohServer);
+            return DoH(hostName, DnsListen.dohServer, DnsListen.dohHeaders);
         }
 
-        public static string? DoH(string hostName, string dohServer, int timeout = 6000)
+        public static string? DoH(string hostName, string dohServer, Dictionary<string, string>? headers, int timeout = 6000)
         {
             string? ip = null;
-            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, null, timeout);
+            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, headers, timeout);
             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 try

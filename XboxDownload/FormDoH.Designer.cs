@@ -46,6 +46,7 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             butTest = new Button();
             label2 = new Label();
+            linkLabel1 = new LinkLabel();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -138,7 +139,7 @@
             // 
             // Column2
             // 
-            Column2.HeaderText = "服务器";
+            Column2.HeaderText = "DoH 服务器";
             Column2.MinimumWidth = 8;
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
@@ -184,14 +185,17 @@
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(butTest, 0, 0);
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel1.Controls.Add(butTest, 1, 0);
+            tableLayoutPanel1.Controls.Add(linkLabel1, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
             tableLayoutPanel1.Location = new Point(3, 194);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(755, 48);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -215,6 +219,18 @@
             label2.TabIndex = 2;
             label2.Text = "DNS over HTTPS (DoH) 是一种使用 HTTPS 加密 DNS 请求和响应的安全协议。通过使用基于 \r\nHTTPS 的 DNS，可以帮助保护您的在线隐私和安全，并确保您的 DNS 请求不被拦截或篡改。";
             // 
+            // linkLabel1
+            // 
+            linkLabel1.Anchor = AnchorStyles.Right;
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(652, 12);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(100, 24);
+            linkLabel1.TabIndex = 1;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "添加服务器";
+            linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
+            // 
             // FormDoH
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
@@ -236,6 +252,7 @@
             groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -256,5 +273,6 @@
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn Column5;
+        private LinkLabel linkLabel1;
     }
 }

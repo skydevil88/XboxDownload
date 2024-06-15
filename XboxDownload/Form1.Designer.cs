@@ -876,14 +876,12 @@
             resources.ApplyResources(ckbHttpService, "ckbHttpService");
             ckbHttpService.Name = "ckbHttpService";
             ckbHttpService.UseVisualStyleBackColor = true;
-            ckbHttpService.CheckedChanged += CkbHttpService_CheckedChanged;
             // 
             // ckbDnsService
             // 
             resources.ApplyResources(ckbDnsService, "ckbDnsService");
             ckbDnsService.Name = "ckbDnsService";
             ckbDnsService.UseVisualStyleBackColor = true;
-            ckbDnsService.CheckedChanged += CkbDnsService_CheckedChanged;
             // 
             // cbListenIP
             // 

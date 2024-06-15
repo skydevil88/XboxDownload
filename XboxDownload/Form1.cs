@@ -107,7 +107,55 @@ namespace XboxDownload
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
-            DnsListen.dohServer = DnsListen.dohs[Properties.Settings.Default.DoHServer >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHServer, 1];
+            if (File.Exists(resourcePath + "\\DohServer.json"))
+            {
+                JsonDocument? jsonDocument = null;
+                try
+                {
+                    jsonDocument = JsonDocument.Parse(File.ReadAllText(resourcePath + "\\DohServer.json"));
+                }
+                catch { }
+                if (jsonDocument != null)
+                {
+                    foreach (JsonElement arr in jsonDocument.RootElement.EnumerateArray())
+                    {
+                        string? name = arr.GetProperty("name").GetString();
+                        string? url = arr.GetProperty("url").GetString();
+                        string? hosts = arr.GetProperty("hosts").GetString();
+                        if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+                        {
+                            int originalRows = DnsListen.dohs.GetLength(0);
+                            int originalColumns = DnsListen.dohs.GetLength(1);
+                            int newRows = originalRows + 1;
+                            int newColumns = originalColumns;
+                            string[,] newArray = new string[newRows, newColumns];
+                            for (int i = 0; i < originalRows; i++)
+                            {
+                                for (int j = 0; j < originalColumns; j++)
+                                {
+                                    newArray[i, j] = DnsListen.dohs[i, j];
+                                }
+                            }
+                            newArray[originalRows, 0] = name;
+                            newArray[originalRows, 1] = url;
+                            newArray[originalRows, 2] = hosts ?? "";
+                            DnsListen.dohs = newArray;
+                        }
+                    }
+                }
+            }
+
+            int iDohServer = Properties.Settings.Default.DoHServer >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHServer;
+            DnsListen.dohServer = DnsListen.dohs[iDohServer, 1];
+            string dohHost = DnsListen.dohs[iDohServer, 2];
+            if (!string.IsNullOrEmpty(dohHost))
+            {
+                DnsListen.dohHeaders = new Dictionary<string, string>
+                {
+                    { "Host", dohHost }
+                };
+            }
+            else DnsListen.dohHeaders = null;
             for (int i = 0; i <= DnsListen.dohs.GetLongLength(0) - 1; i++)
             {
                 cbDoh.Items.Add(DnsListen.dohs[i, 0]);
@@ -556,24 +604,6 @@ namespace XboxDownload
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 tbLocalPath.Text = dlg.SelectedPath;
-            }
-        }
-
-        private void CkbDnsService_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!ckbDnsService.Checked)
-            {
-                ckbSetDns.Checked = false;
-                ckbBattleNetease.Checked = false;
-            }
-        }
-
-        private void CkbHttpService_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!ckbHttpService.Checked)
-            {
-                ckbGameLink.Checked = false;
-                ckbNSBrowser.Checked = false;
             }
         }
 
@@ -3052,7 +3082,16 @@ namespace XboxDownload
                 }
                 else
                 {
-                    string dnsServer = DnsListen.dohs[cbDoh.SelectedIndex, 1];
+                    string dohServer = DnsListen.dohs[cbDoh.SelectedIndex, 1];
+                    string dohHosts = DnsListen.dohs[cbDoh.SelectedIndex, 2];
+                    Dictionary<string, string>? dohHeaders = null;
+                    if (!string.IsNullOrEmpty(dohHosts))
+                    {
+                        dohHeaders = new Dictionary<string, string>
+                        {
+                            { "Host", dohHosts }
+                        };
+                    }
                     string hostname = result.Groups["hostname"].Value.ToLower();
                     DataRow[] rows = dtHosts.Select("HostName='" + hostname + "'");
                     DataRow dr;
@@ -3070,7 +3109,7 @@ namespace XboxDownload
                     dr["IP"] = null;
                     ThreadPool.QueueUserWorkItem(delegate
                     {
-                        dr["IP"] = ClassDNS.DoH(hostname, dnsServer);
+                        dr["IP"] = ClassDNS.DoH(hostname, dohServer, dohHeaders);
                     });
                     dr["Remark"] = remark;
                     dgvHosts.ClearSelection();
