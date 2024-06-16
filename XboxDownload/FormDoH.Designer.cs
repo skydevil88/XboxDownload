@@ -46,8 +46,10 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             butTest = new Button();
             linkLabel1 = new LinkLabel();
+            cbCheckAll = new CheckBox();
             label2 = new Label();
             tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             dataGridView2 = new DataGridView();
             Col_Enable = new DataGridViewCheckBoxColumn();
@@ -58,16 +60,16 @@
             label4 = new Label();
             butDohSave = new Button();
             butDohReset = new Button();
-            tabPage1 = new TabPage();
+            linkLabel2 = new LinkLabel();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             tableLayoutPanel2.SuspendLayout();
-            tabPage1.SuspendLayout();
             SuspendLayout();
             // 
             // butSave
@@ -208,6 +210,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.Controls.Add(butTest, 1, 0);
             tableLayoutPanel1.Controls.Add(linkLabel1, 2, 0);
+            tableLayoutPanel1.Controls.Add(cbCheckAll, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
             tableLayoutPanel1.Location = new Point(3, 219);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -231,13 +234,27 @@
             // 
             linkLabel1.Anchor = AnchorStyles.Right;
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(845, 12);
+            linkLabel1.Location = new Point(791, 12);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(100, 24);
+            linkLabel1.Size = new Size(154, 24);
             linkLabel1.TabIndex = 1;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "添加服务器";
+            linkLabel1.Text = "添加自定义服务器";
             linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
+            // 
+            // cbCheckAll
+            // 
+            cbCheckAll.Anchor = AnchorStyles.Left;
+            cbCheckAll.AutoSize = true;
+            cbCheckAll.Checked = true;
+            cbCheckAll.CheckState = CheckState.Checked;
+            cbCheckAll.Location = new Point(3, 10);
+            cbCheckAll.Name = "cbCheckAll";
+            cbCheckAll.Size = new Size(72, 28);
+            cbCheckAll.TabIndex = 2;
+            cbCheckAll.Text = "全选";
+            cbCheckAll.UseVisualStyleBackColor = true;
+            cbCheckAll.CheckedChanged += CbCheckAll_CheckedChanged;
             // 
             // label2
             // 
@@ -259,6 +276,19 @@
             tabControl1.Size = new Size(978, 444);
             tabControl1.TabIndex = 3;
             // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(groupBox1);
+            tabPage1.Controls.Add(label2);
+            tabPage1.Controls.Add(groupBox2);
+            tabPage1.Location = new Point(4, 33);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(970, 407);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "全局设置";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
             // tabPage2
             // 
             tabPage2.Controls.Add(dataGridView2);
@@ -277,6 +307,7 @@
             dataGridView2.Columns.AddRange(new DataGridViewColumn[] { Col_Enable, Col_Host, Col_DoHServer, Col_Remark });
             dataGridView2.Dock = DockStyle.Fill;
             dataGridView2.Location = new Point(3, 3);
+            dataGridView2.MultiSelect = false;
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 40;
             dataGridView2.RowTemplate.Height = 32;
@@ -301,9 +332,8 @@
             Col_Host.HeaderText = "域名 (无视“加密 DNS”是否勾选)";
             Col_Host.MinimumWidth = 8;
             Col_Host.Name = "Col_Host";
-            Col_Host.Resizable = DataGridViewTriState.False;
             Col_Host.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Col_Host.Width = 240;
+            Col_Host.Width = 220;
             // 
             // Col_DoHServer
             // 
@@ -312,8 +342,7 @@
             Col_DoHServer.HeaderText = "DoH服务器";
             Col_DoHServer.MinimumWidth = 8;
             Col_DoHServer.Name = "Col_DoHServer";
-            Col_DoHServer.Resizable = DataGridViewTriState.False;
-            Col_DoHServer.Width = 120;
+            Col_DoHServer.Width = 110;
             // 
             // Col_Remark
             // 
@@ -321,9 +350,8 @@
             Col_Remark.HeaderText = "备注";
             Col_Remark.MinimumWidth = 8;
             Col_Remark.Name = "Col_Remark";
-            Col_Remark.Resizable = DataGridViewTriState.False;
             Col_Remark.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Col_Remark.Width = 180;
+            Col_Remark.Width = 210;
             // 
             // tableLayoutPanel2
             // 
@@ -335,6 +363,7 @@
             tableLayoutPanel2.Controls.Add(label4, 0, 0);
             tableLayoutPanel2.Controls.Add(butDohSave, 1, 0);
             tableLayoutPanel2.Controls.Add(butDohReset, 2, 0);
+            tableLayoutPanel2.Controls.Add(linkLabel2, 3, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
             tableLayoutPanel2.Location = new Point(3, 356);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -375,18 +404,17 @@
             butDohReset.UseVisualStyleBackColor = true;
             butDohReset.Click += ButDohReset_Click;
             // 
-            // tabPage1
+            // linkLabel2
             // 
-            tabPage1.Controls.Add(groupBox1);
-            tabPage1.Controls.Add(label2);
-            tabPage1.Controls.Add(groupBox2);
-            tabPage1.Location = new Point(4, 33);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(970, 407);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "全局设置";
-            tabPage1.UseVisualStyleBackColor = true;
+            linkLabel2.Anchor = AnchorStyles.Right;
+            linkLabel2.AutoSize = true;
+            linkLabel2.Location = new Point(879, 12);
+            linkLabel2.Name = "linkLabel2";
+            linkLabel2.Size = new Size(82, 24);
+            linkLabel2.TabIndex = 5;
+            linkLabel2.TabStop = true;
+            linkLabel2.Text = "使用说明";
+            linkLabel2.LinkClicked += LinkLabel2_LinkClicked;
             // 
             // FormDoH
             // 
@@ -408,12 +436,12 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
             tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -440,11 +468,13 @@
         private DataGridView dataGridView2;
         private TableLayoutPanel tableLayoutPanel2;
         private Button butDohSave;
+        private Label label4;
+        private Button butDohReset;
         private DataGridViewCheckBoxColumn Col_Enable;
         private DataGridViewTextBoxColumn Col_Host;
         private DataGridViewComboBoxColumn Col_DoHServer;
         private DataGridViewTextBoxColumn Col_Remark;
-        private Label label4;
-        private Button butDohReset;
+        private CheckBox cbCheckAll;
+        private LinkLabel linkLabel2;
     }
 }

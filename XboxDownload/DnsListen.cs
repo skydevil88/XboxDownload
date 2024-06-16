@@ -14,7 +14,7 @@ namespace XboxDownload
     {
         private Socket? socket = null;
         private readonly Form1 parentForm;
-        public static string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve", "" }, { "腾讯云DoH", "https://1.12.12.12/resolve", "" }, { "360 DoH", "https://180.163.249.75/resolve", "" }, { "DNS.SB(国外)", "https://45.11.45.11/dns-query", "" } };
+        public static string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve", "" }, { "腾讯云DoH", "https://1.12.12.12/resolve", "" }, { "360 DoH", "https://180.163.249.75/resolve", "" }, { "DNS.SB(Global)", "https://45.11.45.11/dns-query", "" } };
         public static string dohServer = "";
         public static Dictionary<string, string>? dohHeaders = null;
         public static Dictionary<string, DoH> dicUseDoH = new();
@@ -56,7 +56,7 @@ namespace XboxDownload
                 {
                     headers.Headers = new Dictionary<string, string> { { "Host", dohHost } };
                 }
-                dicUseDoH.Add(host, headers);
+                _ = dicUseDoH.TryAdd(host, headers);
             }
         }
 

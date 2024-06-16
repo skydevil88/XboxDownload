@@ -73,6 +73,15 @@ namespace XboxDownload
             this.Close();
         }
 
+        private void CbCheckAll_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow dgvr in dataGridView1.Rows)
+            {
+                if (dgvr.IsNewRow) break;
+                dgvr.Cells[0].Value = cbCheckAll.Checked;
+            }
+        }
+
         private async void ButTest_Click(object sender, EventArgs e)
         {
             butTest.Enabled = false;
@@ -87,10 +96,10 @@ namespace XboxDownload
                     tasks[tmp] = new Task(() =>
                     {
                         DataGridViewRow dgvr = dataGridView1.Rows[tmp];
-                        dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
-                        dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = dgvr.Cells[4].Style.ForeColor = Color.Empty;
                         if (Convert.ToBoolean(dgvr.Cells[0].Value))
                         {
+                            dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
+                            dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = dgvr.Cells[4].Style.ForeColor = Color.Empty;
                             string dohServer = DnsListen.dohs[tmp, 1];
                             string dohHost = DnsListen.dohs[tmp, 2];
                             Dictionary<string, string>? dohHeaders = null;
@@ -102,7 +111,7 @@ namespace XboxDownload
                                 };
                             }
 
-                            _ = ClassDNS.DoH("www.baidu.com", dohServer, dohHeaders, 1000);
+                            _ = ClassDNS.DoH("www.baidu.com", dohServer, dohHeaders, 3000);
                             Stopwatch sw = new();
                             for (int x = 0; x <= hosts.Length - 1; x++)
                             {
@@ -171,6 +180,11 @@ namespace XboxDownload
                     dataGridView2.CurrentCell.Value = Regex.Replace((dataGridView2.CurrentCell.FormattedValue.ToString() ?? string.Empty).Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2");
                     break;
             }
+        }
+
+        private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://github.com/skydevil88/XboxDownload/discussions/96#discussioncomment-9784721") { UseShellExecute = true });
         }
     }
 }

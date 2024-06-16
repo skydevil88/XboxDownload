@@ -179,7 +179,6 @@
             linkHostsImport = new LinkLabel();
             butHostReset = new Button();
             butHostSave = new Button();
-            cbDoh = new ComboBox();
             cbHosts = new ComboBox();
             tabCDN = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -1420,7 +1419,6 @@
             panel2.Controls.Add(linkHostsImport);
             panel2.Controls.Add(butHostReset);
             panel2.Controls.Add(butHostSave);
-            panel2.Controls.Add(cbDoh);
             panel2.Controls.Add(cbHosts);
             resources.ApplyResources(panel2, "panel2");
             panel2.Name = "panel2";
@@ -1460,19 +1458,11 @@
             butHostSave.UseVisualStyleBackColor = true;
             butHostSave.Click += ButHostSave_Click;
             // 
-            // cbDoh
-            // 
-            cbDoh.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbDoh.FormattingEnabled = true;
-            resources.ApplyResources(cbDoh, "cbDoh");
-            cbDoh.Name = "cbDoh";
-            cbDoh.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
-            // 
             // cbHosts
             // 
             cbHosts.DropDownStyle = ComboBoxStyle.DropDownList;
             cbHosts.FormattingEnabled = true;
-            cbHosts.Items.AddRange(new object[] { resources.GetString("cbHosts.Items"), resources.GetString("cbHosts.Items1"), resources.GetString("cbHosts.Items2"), resources.GetString("cbHosts.Items3"), resources.GetString("cbHosts.Items4"), resources.GetString("cbHosts.Items5") });
+            cbHosts.Items.AddRange(new object[] { resources.GetString("cbHosts.Items"), resources.GetString("cbHosts.Items1") });
             resources.ApplyResources(cbHosts, "cbHosts");
             cbHosts.Name = "cbHosts";
             cbHosts.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
@@ -2856,7 +2846,6 @@
         private DataGridView dgvHosts;
         private Panel panel2;
         private ComboBox cbHosts;
-        private ComboBox cbDoh;
         private Button butHostSave;
         private Button butHostReset;
         private LinkLabel linkHostClear;

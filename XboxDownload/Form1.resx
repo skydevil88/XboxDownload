@@ -3528,46 +3528,10 @@
   <data name="&gt;&gt;butHostSave.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="cbDoh.Location" type="System.Drawing.Point, System.Drawing">
-    <value>456, 9</value>
-  </data>
-  <data name="cbDoh.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="cbDoh.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 32</value>
-  </data>
-  <data name="cbDoh.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;cbDoh.Name" xml:space="preserve">
-    <value>cbDoh</value>
-  </data>
-  <data name="&gt;&gt;cbDoh.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbDoh.Parent" xml:space="preserve">
-    <value>panel2</value>
-  </data>
-  <data name="&gt;&gt;cbDoh.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="cbHosts.Items" xml:space="preserve">
     <value>选择微软服务</value>
   </data>
   <data name="cbHosts.Items1" xml:space="preserve">
-    <value>联机激活和应用许可(licensing.mp.microsoft.com)</value>
-  </data>
-  <data name="cbHosts.Items2" xml:space="preserve">
-    <value>微软商店通信(displaycatalog.mp.microsoft.com)</value>
-  </data>
-  <data name="cbHosts.Items3" xml:space="preserve">
-    <value>微软商店图像(store-images.s-microsoft.com)</value>
-  </data>
-  <data name="cbHosts.Items4" xml:space="preserve">
-    <value>Xbox游戏存储(titlestorage.xboxlive.com)</value>
-  </data>
-  <data name="cbHosts.Items5" xml:space="preserve">
     <value>Xbox360主机本地上传</value>
   </data>
   <data name="cbHosts.Location" type="System.Drawing.Point, System.Drawing">
@@ -3577,7 +3541,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="cbHosts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>445, 32</value>
+    <value>285, 32</value>
   </data>
   <data name="cbHosts.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3592,7 +3556,7 @@
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;cbHosts.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="panel2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
