@@ -184,6 +184,8 @@ namespace XboxDownload
                                                 ip = "[" + new IPAddress(lsHostsIpV6[0].Datas!).ToString() + "]";
                                             else if (DnsListen.dicHosts1V4.TryGetValue(_hosts, out List<ResouceRecord>? lsHostsIpV4) && lsHostsIpV4.Count >= 1)
                                                 ip = new IPAddress(lsHostsIpV4[0].Datas!).ToString();
+                                            else if (DnsListen.dicUseDoH.TryGetValue(_hosts, out DnsListen.DoH? doh))
+                                                ip = ClassDNS.DoH(_hosts, doh.Server, doh.Headers);
                                             else
                                                 ip = ClassDNS.DoH(_hosts);
                                             if (!string.IsNullOrEmpty(ip))

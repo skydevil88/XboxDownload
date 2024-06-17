@@ -1451,19 +1451,32 @@ namespace XboxDownload
             }
         }
 
+        private static readonly ConcurrentDictionary<string, string> dicLocation = new();
+
         public static string QueryLocation(string ip)
         {
+            if (ClassDNS.dicLocation.TryGetValue(ip, out string? _location)) return _location;
             if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
+
+            string location = "";
             string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 3000);
             Match result = Regex.Match(html, @"<tr>\n<td[^>]*>归属地</td>\n<td>\n<span>(?<location1>.+)</span>(\n?.+\n</td>\n</tr>\n<tr><td[^>]*>运营商</td><td><span>(?<location2>.+)</span></td></tr>)?");
-            if (result.Success) return Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "").Trim() + " (来源：ip138.com)";
+            if (result.Success)
+            {
+                location = Regex.Replace(result.Groups["location1"].Value.Trim() + " " + result.Groups["location2"].Value.Trim(), @"<[^>]+>", "").Trim() + " (来源：ip138.com)";
+                ClassDNS.dicLocation.AddOrUpdate(ip, location, (oldkey, oldvalue) => location);
+            }
             else
             {
                 html = ClassWeb.HttpResponseContent("https://ip.zxinc.org/api.php?type=json&ip=" + ip, "GET", null, null, null, 3000);
                 result = Regex.Match(html, @"""location"":""(?<location>[^""]+)""");
-                if (result.Success) return Regex.Replace(result.Groups["location"].Value.Trim(), @"\\t", " ").Trim();
+                if (result.Success)
+                {
+                    location = Regex.Replace(result.Groups["location"].Value.Trim(), @"\\t", " ").Trim();
+                    ClassDNS.dicLocation.AddOrUpdate(ip, location, (oldkey, oldvalue) => location);
+                }
             }
-            return "";
+            return location;
         }
 
         public static string? HostToIP(string hostName, string? dnsServer = null)
@@ -1501,15 +1514,15 @@ namespace XboxDownload
             return ip;
         }
 
-        public static string? DoH(string hostName)
+        public static string? DoH(string hostName, string type = "A")
         {
-            return DoH(hostName, DnsListen.dohServer, DnsListen.dohHeaders);
+            return DoH(hostName, DnsListen.dohServer, DnsListen.dohHeaders, type);
         }
 
-        public static string? DoH(string hostName, string dohServer, Dictionary<string, string>? headers, int timeout = 6000)
+        public static string? DoH(string hostName, string dohServer, Dictionary<string, string>? headers, string type = "A", int timeout = 6000)
         {
             string? ip = null;
-            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(hostName) + "&type=A", "GET", null, null, headers, timeout);
+            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(hostName) + "&type=" + type, "GET", null, null, headers, timeout);
             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 try
@@ -1519,7 +1532,7 @@ namespace XboxDownload
                     {
                         if (json.Status == 0 && json.Answer.Count >= 1)
                         {
-                            ip = json.Answer.Where(x => x.Type == 1).Select(x => x.Data).FirstOrDefault();
+                            ip = json.Answer.Where(x => x.Type == (type == "A" ? 1 : 28)).Select(x => x.Data).FirstOrDefault();
                         }
                     }
                 }

@@ -1,13 +1,12 @@
 ﻿
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Windows.Forms.VisualStyles;
-using static XboxDownload.DnsListen;
 
 namespace XboxDownload
 {
     public partial class FormDoH : Form
     {
+        private readonly string[] hosts = { "www.xbox.com", "www.playstation.com", "www.nintendo.com" };
 
         public FormDoH()
         {
@@ -23,6 +22,21 @@ namespace XboxDownload
                     col.Width = (int)(col.Width * Form1.dpixRatio);
             }
 
+            int w = (int)(135 * Form1.dpixRatio);
+            foreach (string host in hosts)
+            {
+                DataGridViewTextBoxColumn col = new()
+                {
+                    Name = host,
+                    Width = w,
+                    ReadOnly = true,
+                    SortMode = DataGridViewColumnSortMode.NotSortable
+                };
+                col.DefaultCellStyle.Format = "N0";
+                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns.Add(col);
+            }
+
             List<DataGridViewRow> listDgvr = new();
             List<KeyValuePair<int, string>> listKvp = new();
             for (int i = 0; i <= DnsListen.dohs.GetLongLength(0) - 1; i++)
@@ -34,19 +48,27 @@ namespace XboxDownload
                 string name = DnsListen.dohs[i, 0];
                 dgvr.Cells[0].Value = true;
                 dgvr.Cells[1].Value = name;
+                dgvr.Cells[0].ToolTipText = null;
+                dgvr.Cells[1].ToolTipText = null;
+                for (int j = 0; j <= hosts.Length - 1; j++)
+                {
+                    dgvr.Cells[j + 2].ToolTipText = null;
+                }
                 listDgvr.Add(dgvr);
                 listKvp.Add(new KeyValuePair<int, string>(i, name));
             }
             cbDoh.SelectedIndex = Properties.Settings.Default.DoHServer >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHServer;
-            if (listDgvr.Count >= 1)
-            {
-                dataGridView1.Rows.AddRange(listDgvr.ToArray());
-                dataGridView1.ClearSelection();
-            }
+            if (listDgvr.Count >= 1) dataGridView1.Rows.AddRange(listDgvr.ToArray());
             Col_DoHServer.ValueMember = "key";
             Col_DoHServer.DisplayMember = "value";
             Col_DoHServer.DataSource = listKvp;
             dataGridView2.DataSource = Form1.dtDoH;
+        }
+
+        private void FormDoH_Load(object sender, EventArgs e)
+        {
+            dataGridView1.ClearSelection();
+            dataGridView2.ClearSelection();
         }
 
         private void Dgv_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -86,7 +108,7 @@ namespace XboxDownload
         {
             butTest.Enabled = false;
             dataGridView1.ClearSelection();
-            string[] hosts = { "www.xbox.com", "www.playstation.com", "www.nintendo.com" };
+
             await Task.Run(() =>
             {
                 Task[] tasks = new Task[dataGridView1.Rows.Count];
@@ -111,20 +133,22 @@ namespace XboxDownload
                                 };
                             }
 
-                            _ = ClassDNS.DoH("www.baidu.com", dohServer, dohHeaders, 3000);
+                            _ = ClassDNS.DoH("www.baidu.com", dohServer, dohHeaders, "A", 3000);
                             Stopwatch sw = new();
                             for (int x = 0; x <= hosts.Length - 1; x++)
                             {
                                 string host = hosts[x];
                                 sw.Restart();
-                                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, 3000);
+                                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, "A", 3000);
                                 sw.Stop();
                                 if (!string.IsNullOrEmpty(ip))
                                 {
-                                    dgvr.Cells[x + 2].Value = sw.ElapsedMilliseconds;
+                                    dgvr.Cells[x + 2].ToolTipText = "IP: " + ip;
+                                    dgvr.Cells[x + 2].Value = (int)sw.ElapsedMilliseconds;
                                 }
                                 else
                                 {
+                                    dgvr.Cells[x + 2].ToolTipText = null;
                                     dgvr.Cells[x + 2].Value = "error";
                                     dgvr.Cells[x + 2].Style.ForeColor = Color.Red;
                                 }

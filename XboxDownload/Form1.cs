@@ -3118,11 +3118,31 @@ namespace XboxDownload
             dgvHosts.ClearSelection();
         }
 
-        private void LinkHostsConnectTest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkHostsAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormConnectTest dialog = new(string.Empty, string.Empty);
+            FormHost dialog = new();
             dialog.ShowDialog();
             dialog.Dispose();
+            string host = dialog.host, ip = dialog.ip;
+            if(!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(ip))
+            {
+                DataRow[] rows = dtHosts.Select("HostName='" + host + "'");
+                DataRow dr;
+                if (rows.Length >= 1)
+                {
+                    dr = rows[0];
+                }
+                else
+                {
+                    dr = dtHosts.NewRow();
+                    dr["Enable"] = true;
+                    dr["HostName"] = host;
+                    dtHosts.Rows.Add(dr);
+                }
+                dr["IP"] = ip.ToString();
+                DataGridViewRow? dgvr = dgvHosts.Rows.Cast<DataGridViewRow>().Where(r => r.Cells["Col_HostName"].Value.ToString() == host).Select(r => r).FirstOrDefault();
+                if (dgvr != null) dgvr.Cells["Col_IP"].Selected = true;
+            }
         }
 
         private void LinkHostsImport_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

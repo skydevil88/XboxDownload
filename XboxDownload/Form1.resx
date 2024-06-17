@@ -3372,34 +3372,31 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="linkHostsConnectTest.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
-  <data name="linkHostsConnectTest.AutoSize" type="System.Boolean, mscorlib">
+  <data name="linkHostsAdd.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="linkHostsConnectTest.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="linkHostsAdd.Location" type="System.Drawing.Point, System.Drawing">
     <value>1175, 16</value>
   </data>
-  <data name="linkHostsConnectTest.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="linkHostsAdd.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
   </data>
-  <data name="linkHostsConnectTest.TabIndex" type="System.Int32, mscorlib">
+  <data name="linkHostsAdd.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="linkHostsConnectTest.Text" xml:space="preserve">
-    <value>检测连接</value>
+  <data name="linkHostsAdd.Text" xml:space="preserve">
+    <value>添加域名</value>
   </data>
-  <data name="&gt;&gt;linkHostsConnectTest.Name" xml:space="preserve">
-    <value>linkHostsConnectTest</value>
+  <data name="&gt;&gt;linkHostsAdd.Name" xml:space="preserve">
+    <value>linkHostsAdd</value>
   </data>
-  <data name="&gt;&gt;linkHostsConnectTest.Type" xml:space="preserve">
+  <data name="&gt;&gt;linkHostsAdd.Type" xml:space="preserve">
     <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;linkHostsConnectTest.Parent" xml:space="preserve">
+  <data name="&gt;&gt;linkHostsAdd.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
-  <data name="&gt;&gt;linkHostsConnectTest.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;linkHostsAdd.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="linkHostClear.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -10717,6 +10714,30 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="&gt;&gt;tsbAbout.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
+    <value>Col_Enable</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
+    <value>Col_HostName</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_IP.Name" xml:space="preserve">
+    <value>Col_IP</value>
+  </data>
+  <data name="&gt;&gt;Col_IP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
+    <value>Col_Remark</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;Col_Request.Name" xml:space="preserve">
     <value>Col_Request</value>
   </data>
@@ -10781,30 +10802,6 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>Col_Speed</value>
   </data>
   <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
-    <value>Col_Enable</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
-    <value>Col_HostName</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_IP.Name" xml:space="preserve">
-    <value>Col_IP</value>
-  </data>
-  <data name="&gt;&gt;Col_IP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
-    <value>Col_Remark</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Col_DeviceID.Name" xml:space="preserve">
