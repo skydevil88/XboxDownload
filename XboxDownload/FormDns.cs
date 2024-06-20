@@ -13,7 +13,7 @@ namespace XboxDownload
 
         private void ButTest_Click(object sender, EventArgs e)
         {
-            string domainName = cbHostName.Text.Trim();
+            string domainName = cbHost.Text.Trim();
             if (!string.IsNullOrEmpty(domainName))
             {
                 butTest.Enabled = false;
@@ -22,9 +22,9 @@ namespace XboxDownload
             }
         }
 
-        private void CbDomainName_Validating(object sender, CancelEventArgs e)
+        private void cbHost_Validating(object sender, CancelEventArgs e)
         {
-            cbHostName.Text = Regex.Replace(cbHostName.Text.Trim(), @"^(https?://)?([^/|:]+).*$", "$2");
+            cbHost.Text = Regex.Replace(Regex.Replace(cbHost.Text.Trim(), @"^(https?://)?([^/|:]+).*$", "$2"), @"\s.*", "").ToLower();
         }
 
         private void Test(string domainName)

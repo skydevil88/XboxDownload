@@ -67,7 +67,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr\n\n#网易国服(校园网可指定Akamai IPv6免流下载)\n*.necdn.leihuo.netease.com");
-            toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com");
+            toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com\n\n建议优先使用国内CDN，速度不理想再选用 Akamai CDN");
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "默认使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nPC用户使用此功能，需要勾选“设置本机 DNS”\n\n注：网络正常可以不勾选。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\nPC用户建议勾选，主机用户无需设置。\n\n注：如果退出Xbox下载助手后没网络，请点击旁边“修复”。");
@@ -156,7 +156,6 @@ namespace XboxDownload
                     { "Host", dohHost }
                 };
             }
-            else DnsListen.dohHeaders = null;
 
             rbEpicCDN1.CheckedChanged += RbCDN_CheckedChanged;
             rbEpicCDN2.CheckedChanged += RbCDN_CheckedChanged;
@@ -685,13 +684,13 @@ namespace XboxDownload
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
                 CancellationTokenSource cts = new();
                 Task[] tasks = new Task[ips.Length];
-                string? akamai = null;
+                string akamai = string.Empty;
                 for (int i = 0; i <= tasks.Length - 1; i++)
                 {
                     string ip = ips[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = ClassWeb.TcpRequest(uri, buffer, ip, false, null, 30000, cts);
+                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, 30000, cts) : ClassWeb.TlsRequest(uri, buffer, ip, false, null, 30000, cts);
                         if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer?.Length == 10485760) akamai = ip;
                         else if (!cts.IsCancellationRequested) Task.Delay(30000, cts.Token);
                         socketPackage.Buffer = null;
@@ -704,8 +703,30 @@ namespace XboxDownload
                 if (!bServiceFlag) return;
                 if (string.IsNullOrEmpty(akamai))
                 {
-                    akamai = "23.33.32.155"; //ips[^1];
-                    SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定。", "localhost", 0xFF0000);
+                    string url = uri.ToString();
+                    Dictionary<string, string> headers = new() { { "Host", uri.Host }, { "Range", "bytes=0-1023" } };
+                    CancellationTokenSource cts2 = new();
+                    Task[] tasks2 = new Task[ips.Length];
+                    for (int i = 0; i <= tasks2.Length - 1; i++)
+                    {
+                        string ip = ips[i];
+                        tasks2[i] = new Task(() =>
+                        {
+                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(uri.Host, ip), "GET", null, null, headers, 3000, null, cts2.Token);
+                            if (string.IsNullOrEmpty(akamai) && response != null && response.IsSuccessStatusCode && response.Content.ReadAsStream().Length == 1024) akamai = ip;
+                            else if (!cts2.IsCancellationRequested) Task.Delay(30000, cts2.Token);
+                        });
+                    }
+                    Array.ForEach(tasks2, x => x.Start());
+                    await Task.WhenAny(tasks2);
+                    cts2.Cancel();
+                    if (!bServiceFlag) return;
+                    if (string.IsNullOrEmpty(akamai)) akamai = "23.33.32.155";
+                    SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai, "localhost", 0xFF0000);
+                }
+                else
+                {
+                    SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 等全部游戏下载域名)", "localhost", 0x008000);
                 }
                 DnsListen.SetAkamaiIP(akamai);
                 UpdateHosts(true, akamai);
@@ -713,7 +734,6 @@ namespace XboxDownload
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
                 tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai;
                 if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai;
-                SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 等全部游戏下载域名)", "localhost", 0x008000);
                 ckbOptimalAkamaiIP.Enabled = true;
             }
             else if (bServiceFlag)
@@ -1533,7 +1553,7 @@ namespace XboxDownload
 
         private void LinkRepairDNS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (MessageBox.Show("此操作将把 DNS 设置为自动获取，是否继续？", "修复 DNS", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (MessageBox.Show("非正常退出应用可能会造成DNS设置异常无法联网，\n此操作将把DNS设置改为自动获取，是否继续？", "修复 DNS", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 try
                 {
@@ -1927,7 +1947,7 @@ namespace XboxDownload
                         string[,] games = new string[,]
                         {
                             {"光环: 无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5_xs", "/13/2c1ee81e-e917-482f-ad71-4f34a3e26bc1/0698b936-d300-4451-b9a0-0be0514bbbe5/1.4026.37818.0.e88ca19f-5c43-4781-97f9-952a15a0807c/Microsoft.254428597CFE2_1.4026.37818.0_neutral__8wekyb3d8bbwe_xs.xvc" },
-                            {"极限竞速: 地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/3/6b37686e-1ad5-4cb6-b2e8-f464fa5d7ffe/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.646.267.0.ed744eb0-7548-404a-8dfa-51100e18f5eb/Microsoft.624F8B84B80_3.646.267.0_x64__8wekyb3d8bbwe.msixvc" },
+                            {"极限竞速: 地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/8/e082a3b4-d390-4eb3-b73f-6891e32d84b7/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.649.948.0.ac16c93c-78da-41ae-ab69-3e431075b342/Microsoft.624F8B84B80_3.649.948.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };
                         for (int i = 0; i <= games.GetLength(0) - 1; i++)
@@ -2748,12 +2768,14 @@ namespace XboxDownload
                         fi.Attributes = FileAttributes.Normal;
                     using (FileStream fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        string hosts = (header + sb1.ToString()).Trim();
-                        if (!string.IsNullOrEmpty(hosts))
-                        {
-                            using StreamWriter sw = new(fs);
+                        string hosts = string.Empty;
+                        if (bServiceFlag && !Properties.Settings.Default.SetDns) hosts = (header + sb1.ToString()).Trim();
+                        else hosts = sb1.ToString().Trim();
+                        using StreamWriter sw = new(fs);
+                        if (hosts.Length > 0)
                             sw.WriteLine(hosts);
-                        }
+                        else
+                            sw.Write(hosts);
                     }
                     fSecurity.RemoveAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
                     fi.SetAccessControl(fSecurity);
@@ -3124,7 +3146,7 @@ namespace XboxDownload
             dialog.ShowDialog();
             dialog.Dispose();
             string host = dialog.host, ip = dialog.ip;
-            if(!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(ip))
+            if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(ip))
             {
                 DataRow[] rows = dtHosts.Select("HostName='" + host + "'");
                 DataRow dr;
@@ -4520,7 +4542,7 @@ namespace XboxDownload
                                         Match result = Regex.Match(packageFiles.RelativeUrl, @"(?<version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
                                         if (result.Success)
                                         {
-                                            url = packageFiles.CdnRootPaths[0] + packageFiles.RelativeUrl;
+                                            url = packageFiles.CdnRootPaths[0].Replace(".xboxlive.cn", ".xboxlive.com") + packageFiles.RelativeUrl;
                                             Version version = new(result.Groups["version"].Value);
                                             XboxGameDownload.Products XboxGame = new()
                                             {

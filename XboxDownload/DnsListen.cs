@@ -1456,7 +1456,7 @@ namespace XboxDownload
         public static string QueryLocation(string ip)
         {
             if (ClassDNS.dicLocation.TryGetValue(ip, out string? _location)) return _location;
-            if (Regex.IsMatch(ip, @"^(127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3})$")) return "本地局域网IP";
+            if (Regex.IsMatch(ip, @"^((127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3}))$")) return "本地局域网IP";
 
             string location = "";
             string html = ClassWeb.HttpResponseContent("https://www.ipshudi.com/" + ip + ".htm", "GET", null, null, null, 3000);

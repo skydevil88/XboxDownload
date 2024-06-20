@@ -223,7 +223,7 @@ namespace XboxDownload
                                                         catch { }
                                                         if (packageFiles != null)
                                                         {
-                                                            string url = packageFiles.CdnRootPaths[0] + packageFiles.RelativeUrl;
+                                                            string url = packageFiles.CdnRootPaths[0].Replace(".xboxlive.cn", ".xboxlive.com") + packageFiles.RelativeUrl;
                                                             if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("下载链接", url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                             Match m2 = Regex.Match(url, @"(?<version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}");
                                                             if (m2.Success)
@@ -238,7 +238,7 @@ namespace XboxDownload
                                                                 {
                                                                     Version = version,
                                                                     FileSize = packageFiles.FileSize,
-                                                                    Url = url.Replace(".xboxlive.cn", ".xboxlive.com")
+                                                                    Url = url
                                                                 };
                                                                 XboxGameDownload.dicXboxGame.AddOrUpdate(key, XboxGame, (oldkey, oldvalue) => XboxGame);
                                                                 XboxGameDownload.SaveXboxGame();

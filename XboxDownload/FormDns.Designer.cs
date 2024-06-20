@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            cbHostName = new ComboBox();
+            cbHost = new ComboBox();
             butTest = new Button();
             textBox1 = new TextBox();
             SuspendLayout();
@@ -44,16 +44,16 @@
             label1.TabIndex = 0;
             label1.Text = "域名";
             // 
-            // cbHostName
+            // cbHost
             // 
-            cbHostName.FormattingEnabled = true;
-            cbHostName.Items.AddRange(new object[] { "assets2.xboxlive.cn", "dl.delivery.mp.microsoft.com", "gst.prod.dl.playstation.net", "atum.hac.lp1.d4c.nintendo.net", "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "epicgames-download1-1251447533.file.myqcloud.com", "uplaypc-s-ubisoft.cdn.ubionline.com.cn", "www.baidu.com" });
-            cbHostName.Location = new Point(69, 18);
-            cbHostName.Margin = new Padding(4);
-            cbHostName.Name = "cbHostName";
-            cbHostName.Size = new Size(510, 32);
-            cbHostName.TabIndex = 1;
-            cbHostName.Validating += CbDomainName_Validating;
+            cbHost.FormattingEnabled = true;
+            cbHost.Items.AddRange(new object[] { "assets2.xboxlive.cn", "dl.delivery.mp.microsoft.com", "gst.prod.dl.playstation.net", "atum.hac.lp1.d4c.nintendo.net", "origin-a.akamaihd.net", "blzddist1-a.akamaihd.net", "epicgames-download1-1251447533.file.myqcloud.com", "uplaypc-s-ubisoft.cdn.ubionline.com.cn", "www.baidu.com" });
+            cbHost.Location = new Point(69, 18);
+            cbHost.Margin = new Padding(4);
+            cbHost.Name = "cbHost";
+            cbHost.Size = new Size(510, 32);
+            cbHost.TabIndex = 1;
+            cbHost.Validating += cbHost_Validating;
             // 
             // butTest
             // 
@@ -86,7 +86,7 @@
             ClientSize = new Size(698, 318);
             Controls.Add(textBox1);
             Controls.Add(butTest);
-            Controls.Add(cbHostName);
+            Controls.Add(cbHost);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(4);
@@ -103,7 +103,7 @@
         #endregion
 
         private Label label1;
-        private ComboBox cbHostName;
+        private ComboBox cbHost;
         private Button butTest;
         private TextBox textBox1;
     }

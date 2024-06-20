@@ -132,8 +132,7 @@ namespace XboxDownload
                                     { "Host", dohHost }
                                 };
                             }
-
-                            _ = ClassDNS.DoH("www.baidu.com", dohServer, dohHeaders, "A", 3000);
+                            _ = ClassWeb.HttpResponseMessage(dohServer, "HEAD", null, null, dohHeaders, 3000);
                             Stopwatch sw = new();
                             for (int x = 0; x <= hosts.Length - 1; x++)
                             {
