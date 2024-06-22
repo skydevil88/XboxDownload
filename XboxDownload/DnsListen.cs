@@ -23,6 +23,7 @@ namespace XboxDownload
         public static ConcurrentDictionary<String, List<ResouceRecord>> dicServiceV4 = new(), dicService2V4 = new(), dicHosts1V4 = new(), dicServiceV6 = new(), dicService2V6 = new(), dicHosts1V6 = new();
         public static ConcurrentDictionary<Regex, List<ResouceRecord>> dicHosts2V4 = new(), dicHosts2V6 = new();
         public static ConcurrentDictionary<String, Dns> dicDns = new();
+        private static readonly Regex reMsAppHost = new ("\\.dl\\.delivery\\.mp\\.microsoft\\.com$");
 
         public class Dns
         {
@@ -361,6 +362,9 @@ namespace XboxDownload
                         _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+
+                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsAppIP, (oldkey, oldvalue) => lsAppIP);
+                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                     }
                     else
                     {
@@ -373,6 +377,9 @@ namespace XboxDownload
                         _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+
+                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsAppIP, (oldkey, oldvalue) => lsAppIP);
                     }
                 }
             }
@@ -905,6 +912,7 @@ namespace XboxDownload
             if (!Properties.Settings.Default.EpicCDN) hosts.Add("epicgames-download1.akamaized.net");
             if (string.IsNullOrEmpty(ip))
             {
+
                 foreach (string host in hosts)
                 {
                     if (dicService2V4.TryGetValue(host, out List<ResouceRecord>? vlaue))
@@ -1059,7 +1067,7 @@ namespace XboxDownload
                     _ = dicHosts1V4.TryAdd(host, lsEmptyIP);
             }
 
-            List<ResouceRecord> lsIp2V4 = new(), lsIp2V6 = new();
+            List<ResouceRecord> lsIpV4 = new(), lsIpV6 = new();
             if (string.IsNullOrEmpty(akamai))
             {
                 List<IPAddress> lsIpTmp = new();
@@ -1072,7 +1080,7 @@ namespace XboxDownload
                             lsIpTmp.Add(ip);
                             if (ip.AddressFamily == AddressFamily.InterNetwork)
                             {
-                                lsIp2V4.Add(new ResouceRecord
+                                lsIpV4.Add(new ResouceRecord
                                 {
                                     Datas = ip.GetAddressBytes(),
                                     TTL = 100,
@@ -1082,7 +1090,7 @@ namespace XboxDownload
                             }
                             else
                             {
-                                lsIp2V6.Add(new ResouceRecord
+                                lsIpV6.Add(new ResouceRecord
                                 {
                                     Datas = ip.GetAddressBytes(),
                                     TTL = 100,
@@ -1093,18 +1101,38 @@ namespace XboxDownload
                         }
                     }
                 }
+                if (Form1.bServiceFlag)
+                {
+                    if (dicServiceV4.TryGetValue("dl.delivery.mp.microsoft.com", out List<ResouceRecord>? _lsIpV4) && _lsIpV4.Count >= 1)
+                    {
+                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, _lsIpV4, (oldkey, oldvalue) => _lsIpV4);
+                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                    }
+                    else if (dicServiceV6.TryGetValue("dl.delivery.mp.microsoft.com", out List<ResouceRecord>? _lsIpV6) && _lsIpV6.Count >= 1)
+                    {
+                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, _lsIpV6, (oldkey, oldvalue) => _lsIpV6);
+                    }
+                    else
+                    {
+                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                    }
+                }
             }
             else
             {
-                lsIp2V4.Add(new ResouceRecord
+                lsIpV4.Add(new ResouceRecord
                 {
                     Datas = IPAddress.Parse(akamai).GetAddressBytes(),
                     TTL = 100,
                     QueryClass = 1,
                     QueryType = QueryType.A
                 });
+                _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsIpV4, (oldkey, oldvalue) => lsIpV4);
+                _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
             }
-            if (lsIp2V4.Count >= 1 || lsIp2V6.Count >= 1)
+            if (lsIpV4.Count >= 1 || lsIpV6.Count >= 1)
             {
                 foreach (string str in Properties.Resource.Akamai.Split('\n'))
                 {
@@ -1115,14 +1143,14 @@ namespace XboxDownload
                         host = Regex.Replace(host, @"^\*\.", "");
                         if (reHosts.IsMatch(host))
                         {
-                            _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                            _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                            _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIpV4);
+                            _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIpV6);
                         }
                     }
                     else if (reHosts.IsMatch(host))
                     {
-                        _ = dicHosts1V4.TryAdd(host, lsIp2V4);
-                        _ = dicHosts1V6.TryAdd(host, lsIp2V6);
+                        _ = dicHosts1V4.TryAdd(host, lsIpV4);
+                        _ = dicHosts1V6.TryAdd(host, lsIpV6);
                     }
                 }
                 if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
@@ -1136,8 +1164,8 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*\.", "");
                             if (reHosts.IsMatch(host))
                             {
-                                _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                                _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIpV4);
+                                _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIpV6);
                             }
                         }
                         else if (host.StartsWith("*"))
@@ -1145,17 +1173,17 @@ namespace XboxDownload
                             host = Regex.Replace(host, @"^\*", "");
                             if (reHosts.IsMatch(host))
                             {
-                                _ = dicHosts1V4.TryAdd(host, lsIp2V4);
-                                _ = dicHosts1V6.TryAdd(host, lsIp2V6);
-                                _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V4);
-                                _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIp2V6);
+                                _ = dicHosts1V4.TryAdd(host, lsIpV4);
+                                _ = dicHosts1V6.TryAdd(host, lsIpV6);
+                                _ = dicHosts2V4.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIpV4);
+                                _ = dicHosts2V6.TryAdd(new Regex("\\." + host.Replace(".", "\\.") + "$"), lsIpV6);
 
                             }
                         }
                         else if (reHosts.IsMatch(host))
                         {
-                            _ = dicHosts1V4.TryAdd(host, lsIp2V4);
-                            _ = dicHosts1V6.TryAdd(host, lsIp2V6);
+                            _ = dicHosts1V4.TryAdd(host, lsIpV4);
+                            _ = dicHosts1V6.TryAdd(host, lsIpV6);
                         }
                     }
                 }

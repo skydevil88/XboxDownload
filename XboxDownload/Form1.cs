@@ -62,7 +62,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelDNS, "常用 DNS 服务器\n114.114.114.114 (114)\n180.76.76.76 (百度)\n223.5.5.5 (阿里)\n119.29.29.29 (腾讯)\n208.67.220.220 (OpenDns)\n8.8.8.8 (Google)\n168.126.63.1 (韩国)");
             toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\nassets1.xboxlive.com\nassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\n\n以上域名不能使用 cn IP");
             toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn");
-            toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
+            toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\n*.dl.delivery.mp.microsoft.com\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
@@ -1590,7 +1590,7 @@ namespace XboxDownload
             }
             if (path != null && File.Exists(path))
             {
-                if (MessageBox.Show("此操作将会重启 EA app，是否继续？", "修复 EA app", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                if (MessageBox.Show("EA app 还没开始下载或者停止下载超过一分钟，可以不用修复。\n\n点击 “是” 将会立即更新 IP 并且重启 EA app，是否继续？", "修复 EA app", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
                     Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EADesktop").FirstOrDefault();
@@ -1639,7 +1639,7 @@ namespace XboxDownload
             }
             if (path != null && File.Exists(path))
             {
-                if (MessageBox.Show("此操作将会重启Epic客户端，是否继续？", "重启Epic客户端", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                if (MessageBox.Show("已要下载列表中的游戏需要重启客户端才能保证使用新 IP。\n\n点击 “是” 将会立即重启 Epic 客户端，是否继续？", "重启Epic客户端", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
                     if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
                     Process? processes = Process.GetProcesses().Where(s => s.ProcessName == "EpicGamesLauncher").FirstOrDefault();

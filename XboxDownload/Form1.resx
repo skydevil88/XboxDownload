@@ -275,7 +275,7 @@
     <value>3, 26</value>
   </data>
   <data name="lvLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1430, 266</value>
+    <value>1430, 265</value>
   </data>
   <data name="lvLog.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -296,10 +296,10 @@
     <value>Fill</value>
   </data>
   <data name="gbLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 475</value>
+    <value>0, 476</value>
   </data>
   <data name="gbLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 295</value>
+    <value>1436, 294</value>
   </data>
   <data name="gbLog.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -563,7 +563,7 @@
     <value>True</value>
   </data>
   <data name="ckbBattleNetease.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1021, 272</value>
+    <value>1022, 272</value>
   </data>
   <data name="ckbBattleNetease.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
@@ -647,7 +647,7 @@
     <value>True</value>
   </data>
   <data name="linkEA2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>995, 237</value>
+    <value>994, 237</value>
   </data>
   <data name="linkEA2.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 24</value>
@@ -701,7 +701,7 @@
     <value>True</value>
   </data>
   <data name="rbEpicCDN2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>157, 2</value>
+    <value>158, 2</value>
   </data>
   <data name="rbEpicCDN2.Size" type="System.Drawing.Size, System.Drawing">
     <value>187, 28</value>
@@ -809,7 +809,7 @@
     <value>NoControl</value>
   </data>
   <data name="label34.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 341</value>
+    <value>580, 340</value>
   </data>
   <data name="label34.Size" type="System.Drawing.Size, System.Drawing">
     <value>396, 24</value>
@@ -911,7 +911,7 @@
     <value>True</value>
   </data>
   <data name="linkXbox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>893, 93</value>
+    <value>892, 93</value>
   </data>
   <data name="linkXbox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 24</value>
@@ -938,7 +938,7 @@
     <value>True</value>
   </data>
   <data name="linkXbox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>797, 93</value>
+    <value>796, 93</value>
   </data>
   <data name="linkXbox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>90, 24</value>
@@ -965,7 +965,7 @@
     <value>True</value>
   </data>
   <data name="linkEA1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>797, 237</value>
+    <value>796, 237</value>
   </data>
   <data name="linkEA1.Size" type="System.Drawing.Size, System.Drawing">
     <value>192, 24</value>
@@ -992,7 +992,7 @@
     <value>True</value>
   </data>
   <data name="ckbGameLink.Location" type="System.Drawing.Point, System.Drawing">
-    <value>937, 56</value>
+    <value>938, 56</value>
   </data>
   <data name="ckbGameLink.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
@@ -1769,7 +1769,7 @@
     <value>False</value>
   </data>
   <data name="linkNSHomepage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>985, 201</value>
+    <value>986, 201</value>
   </data>
   <data name="linkNSHomepage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1799,7 +1799,7 @@
     <value>True</value>
   </data>
   <data name="ckbNSBrowser.Location" type="System.Drawing.Point, System.Drawing">
-    <value>797, 200</value>
+    <value>796, 200</value>
   </data>
   <data name="ckbNSBrowser.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2316,7 +2316,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 475</value>
+    <value>1436, 476</value>
   </data>
   <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2749,7 +2749,7 @@
     <value>True</value>
   </data>
   <data name="linkImportIPManual.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1361, 10</value>
+    <value>1360, 10</value>
   </data>
   <data name="linkImportIPManual.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -3376,7 +3376,7 @@
     <value>True</value>
   </data>
   <data name="linkHostsAdd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1175, 16</value>
+    <value>1174, 16</value>
   </data>
   <data name="linkHostsAdd.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -3469,7 +3469,7 @@
     <value>None</value>
   </data>
   <data name="butHostReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>724, 8</value>
+    <value>725, 8</value>
   </data>
   <data name="butHostReset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3538,7 +3538,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="cbHosts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 32</value>
+    <value>284, 32</value>
   </data>
   <data name="cbHosts.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3777,14 +3777,11 @@
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBox4" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="groupBox5" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="label13.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
   <data name="label13.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label13.Location" type="System.Drawing.Point, System.Drawing">
-    <value>942, 16</value>
+    <value>955, 13</value>
   </data>
   <data name="label13.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -3814,7 +3811,7 @@
     <value>Top</value>
   </data>
   <data name="butCdnReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>730, 8</value>
+    <value>731, 8</value>
   </data>
   <data name="butCdnReset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3847,7 +3844,7 @@
     <value>NoControl</value>
   </data>
   <data name="butCdnSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>598, 8</value>
+    <value>599, 8</value>
   </data>
   <data name="butCdnSave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -4078,19 +4075,20 @@
     <value>Microsoft YaHei UI, 11pt</value>
   </data>
   <data name="label31.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 376</value>
+    <value>22, 368</value>
   </data>
   <data name="label31.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label31.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1162, 30</value>
+    <value>1184, 60</value>
   </data>
   <data name="label31.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
   </data>
   <data name="label31.Text" xml:space="preserve">
-    <value>PC下载完整文件复制到 Xbox 移动硬盘改名为 Content ID ，接回 Xbox 把游戏移动到主机内部硬盘就可以直接使用。</value>
+    <value>PC下载完整游戏文件复制到 Xbox 移动硬盘并改名为 Content ID ，接回 Xbox 把游戏移动到另外一块硬盘就可以使用。
+注：1、不要在移动硬盘上启动游戏，否则游戏会被重新覆盖下载。2、应用不支持硬盘导入。</value>
   </data>
   <data name="&gt;&gt;label31.Name" xml:space="preserve">
     <value>label31</value>
@@ -4702,7 +4700,7 @@
     <value>Fill</value>
   </data>
   <data name="groupBox7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 370</value>
+    <value>0, 360</value>
   </data>
   <data name="groupBox7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -4711,7 +4709,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 440</value>
+    <value>1436, 450</value>
   </data>
   <data name="groupBox7.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -4804,7 +4802,7 @@
     <value>40</value>
   </data>
   <data name="dgvDevice.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1282, 343</value>
+    <value>1282, 333</value>
   </data>
   <data name="dgvDevice.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -4918,7 +4916,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 343</value>
+    <value>150, 333</value>
   </data>
   <data name="panel5.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -4948,7 +4946,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 370</value>
+    <value>1436, 360</value>
   </data>
   <data name="groupBox6.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -5134,7 +5132,7 @@
     <value>True</value>
   </data>
   <data name="linkPcInstall2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1195, 321</value>
+    <value>1196, 321</value>
   </data>
   <data name="linkPcInstall2.Size" type="System.Drawing.Size, System.Drawing">
     <value>105, 24</value>
@@ -5161,7 +5159,7 @@
     <value>True</value>
   </data>
   <data name="linkAppxAdd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>895, 321</value>
+    <value>896, 321</value>
   </data>
   <data name="linkAppxAdd.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -5188,7 +5186,7 @@
     <value>True</value>
   </data>
   <data name="linkWebPage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>983, 321</value>
+    <value>982, 321</value>
   </data>
   <data name="linkWebPage.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 24</value>
@@ -6284,7 +6282,7 @@
     <value>True</value>
   </data>
   <data name="linkLabel4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>977, 124</value>
+    <value>976, 124</value>
   </data>
   <data name="linkLabel4.Size" type="System.Drawing.Size, System.Drawing">
     <value>315, 24</value>
@@ -6338,7 +6336,7 @@
     <value>True</value>
   </data>
   <data name="linkEaOriginNoUpdate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>341, 124</value>
+    <value>340, 124</value>
   </data>
   <data name="linkEaOriginNoUpdate.Size" type="System.Drawing.Size, System.Drawing">
     <value>308, 24</value>
@@ -6392,7 +6390,7 @@
     <value>True</value>
   </data>
   <data name="label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>750, 19</value>
+    <value>750, 20</value>
   </data>
   <data name="label51.Size" type="System.Drawing.Size, System.Drawing">
     <value>477, 96</value>
@@ -6423,7 +6421,7 @@
     <value>True</value>
   </data>
   <data name="labelStatusEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 83</value>
+    <value>8, 82</value>
   </data>
   <data name="labelStatusEACdn.Size" type="System.Drawing.Size, System.Drawing">
     <value>141, 24</value>
@@ -6480,7 +6478,7 @@
     <value>True</value>
   </data>
   <data name="rbEACdn2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>299, 40</value>
+    <value>298, 40</value>
   </data>
   <data name="rbEACdn2.Size" type="System.Drawing.Size, System.Drawing">
     <value>89, 28</value>
@@ -6564,7 +6562,7 @@
     <value>0, 533</value>
   </data>
   <data name="gpEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 163</value>
+    <value>1436, 164</value>
   </data>
   <data name="gpEACdn.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -6615,7 +6613,7 @@
     <value>True</value>
   </data>
   <data name="label50.Location" type="System.Drawing.Point, System.Drawing">
-    <value>750, 17</value>
+    <value>750, 16</value>
   </data>
   <data name="label50.Size" type="System.Drawing.Size, System.Drawing">
     <value>590, 144</value>
@@ -6707,7 +6705,7 @@
     <value>True</value>
   </data>
   <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>698, 87</value>
+    <value>698, 86</value>
   </data>
   <data name="textBox1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -7351,7 +7349,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>True</value>
   </data>
   <data name="label43.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 35</value>
+    <value>8, 34</value>
   </data>
   <data name="label43.Size" type="System.Drawing.Size, System.Drawing">
     <value>82, 24</value>
@@ -10714,30 +10712,6 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="&gt;&gt;tsbAbout.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
-    <value>Col_Enable</value>
-  </data>
-  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
-    <value>Col_HostName</value>
-  </data>
-  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_IP.Name" xml:space="preserve">
-    <value>Col_IP</value>
-  </data>
-  <data name="&gt;&gt;Col_IP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
-    <value>Col_Remark</value>
-  </data>
-  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;Col_Request.Name" xml:space="preserve">
     <value>Col_Request</value>
   </data>
@@ -10802,6 +10776,30 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>Col_Speed</value>
   </data>
   <data name="&gt;&gt;Col_Speed.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Name" xml:space="preserve">
+    <value>Col_Enable</value>
+  </data>
+  <data name="&gt;&gt;Col_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Name" xml:space="preserve">
+    <value>Col_HostName</value>
+  </data>
+  <data name="&gt;&gt;Col_HostName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_IP.Name" xml:space="preserve">
+    <value>Col_IP</value>
+  </data>
+  <data name="&gt;&gt;Col_IP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Name" xml:space="preserve">
+    <value>Col_Remark</value>
+  </data>
+  <data name="&gt;&gt;Col_Remark.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Col_DeviceID.Name" xml:space="preserve">

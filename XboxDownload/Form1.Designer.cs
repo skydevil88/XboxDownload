@@ -49,20 +49,6 @@
             tsmAbout = new ToolStripMenuItem();
             tsbAbout = new ToolStripButton();
             tabControl1 = new TabControl();
-            tabHosts = new TabPage();
-            groupBox2 = new GroupBox();
-            dgvHosts = new DataGridView();
-            Col_Enable = new DataGridViewCheckBoxColumn();
-            Col_HostName = new DataGridViewTextBoxColumn();
-            Col_IP = new DataGridViewTextBoxColumn();
-            Col_Remark = new DataGridViewTextBoxColumn();
-            panel2 = new Panel();
-            linkHostsAdd = new LinkLabel();
-            linkHostClear = new LinkLabel();
-            linkHostsImport = new LinkLabel();
-            butHostReset = new Button();
-            butHostSave = new Button();
-            cbHosts = new ComboBox();
             tabService = new TabPage();
             gbLog = new GroupBox();
             lvLog = new DoubleBufferListView();
@@ -180,6 +166,20 @@
             ckbChinaUnicom = new CheckBox();
             ckbChinaTelecom = new CheckBox();
             label1 = new Label();
+            tabHosts = new TabPage();
+            groupBox2 = new GroupBox();
+            dgvHosts = new DataGridView();
+            Col_Enable = new DataGridViewCheckBoxColumn();
+            Col_HostName = new DataGridViewTextBoxColumn();
+            Col_IP = new DataGridViewTextBoxColumn();
+            Col_Remark = new DataGridViewTextBoxColumn();
+            panel2 = new Panel();
+            linkHostsAdd = new LinkLabel();
+            linkHostClear = new LinkLabel();
+            linkHostsImport = new LinkLabel();
+            butHostReset = new Button();
+            butHostSave = new Button();
+            cbHosts = new ComboBox();
             tabCDN = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox4 = new GroupBox();
@@ -354,10 +354,6 @@
             timerTraffic = new System.Windows.Forms.Timer(components);
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
-            tabHosts.SuspendLayout();
-            groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvHosts).BeginInit();
-            panel2.SuspendLayout();
             tabService.SuspendLayout();
             gbLog.SuspendLayout();
             panel1.SuspendLayout();
@@ -368,6 +364,10 @@
             gbIPList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvIpList).BeginInit();
             panelSpeedTest.SuspendLayout();
+            tabHosts.SuspendLayout();
+            groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvHosts).BeginInit();
+            panel2.SuspendLayout();
             tabCDN.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -511,119 +511,6 @@
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.SelectedIndexChanged += TabControl1_SelectedIndexChanged;
-            // 
-            // tabHosts
-            // 
-            tabHosts.Controls.Add(groupBox2);
-            tabHosts.Controls.Add(panel2);
-            resources.ApplyResources(tabHosts, "tabHosts");
-            tabHosts.Name = "tabHosts";
-            tabHosts.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(dgvHosts);
-            resources.ApplyResources(groupBox2, "groupBox2");
-            groupBox2.Name = "groupBox2";
-            groupBox2.TabStop = false;
-            // 
-            // dgvHosts
-            // 
-            dgvHosts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvHosts.Columns.AddRange(new DataGridViewColumn[] { Col_Enable, Col_HostName, Col_IP, Col_Remark });
-            resources.ApplyResources(dgvHosts, "dgvHosts");
-            dgvHosts.MultiSelect = false;
-            dgvHosts.Name = "dgvHosts";
-            dgvHosts.ShowCellToolTips = false;
-            dgvHosts.CellDoubleClick += DgvHosts_CellDoubleClick;
-            dgvHosts.CellValidating += DgvHosts_CellValidating;
-            dgvHosts.CellValueChanged += DgvHosts_CellValueChanged;
-            dgvHosts.DefaultValuesNeeded += DgvHosts_DefaultValuesNeeded;
-            dgvHosts.RowPostPaint += Dgv_RowPostPaint;
-            // 
-            // Col_Enable
-            // 
-            Col_Enable.DataPropertyName = "Enable";
-            resources.ApplyResources(Col_Enable, "Col_Enable");
-            Col_Enable.Name = "Col_Enable";
-            Col_Enable.Resizable = DataGridViewTriState.True;
-            // 
-            // Col_HostName
-            // 
-            Col_HostName.DataPropertyName = "HostName";
-            resources.ApplyResources(Col_HostName, "Col_HostName");
-            Col_HostName.MaxInputLength = 64;
-            Col_HostName.Name = "Col_HostName";
-            Col_HostName.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_IP
-            // 
-            Col_IP.DataPropertyName = "IP";
-            resources.ApplyResources(Col_IP, "Col_IP");
-            Col_IP.Name = "Col_IP";
-            Col_IP.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Remark
-            // 
-            Col_Remark.DataPropertyName = "Remark";
-            resources.ApplyResources(Col_Remark, "Col_Remark");
-            Col_Remark.Name = "Col_Remark";
-            Col_Remark.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(linkHostsAdd);
-            panel2.Controls.Add(linkHostClear);
-            panel2.Controls.Add(linkHostsImport);
-            panel2.Controls.Add(butHostReset);
-            panel2.Controls.Add(butHostSave);
-            panel2.Controls.Add(cbHosts);
-            resources.ApplyResources(panel2, "panel2");
-            panel2.Name = "panel2";
-            // 
-            // linkHostsAdd
-            // 
-            resources.ApplyResources(linkHostsAdd, "linkHostsAdd");
-            linkHostsAdd.Name = "linkHostsAdd";
-            linkHostsAdd.TabStop = true;
-            linkHostsAdd.LinkClicked += LinkHostsAdd_LinkClicked;
-            // 
-            // linkHostClear
-            // 
-            resources.ApplyResources(linkHostClear, "linkHostClear");
-            linkHostClear.Name = "linkHostClear";
-            linkHostClear.TabStop = true;
-            linkHostClear.LinkClicked += LinkHostClear_LinkClicked;
-            // 
-            // linkHostsImport
-            // 
-            resources.ApplyResources(linkHostsImport, "linkHostsImport");
-            linkHostsImport.Name = "linkHostsImport";
-            linkHostsImport.TabStop = true;
-            linkHostsImport.LinkClicked += LinkHostsImport_LinkClicked;
-            // 
-            // butHostReset
-            // 
-            resources.ApplyResources(butHostReset, "butHostReset");
-            butHostReset.Name = "butHostReset";
-            butHostReset.UseVisualStyleBackColor = true;
-            butHostReset.Click += ButHostReset_Click;
-            // 
-            // butHostSave
-            // 
-            resources.ApplyResources(butHostSave, "butHostSave");
-            butHostSave.Name = "butHostSave";
-            butHostSave.UseVisualStyleBackColor = true;
-            butHostSave.Click += ButHostSave_Click;
-            // 
-            // cbHosts
-            // 
-            cbHosts.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbHosts.FormattingEnabled = true;
-            cbHosts.Items.AddRange(new object[] { resources.GetString("cbHosts.Items"), resources.GetString("cbHosts.Items1") });
-            resources.ApplyResources(cbHosts, "cbHosts");
-            cbHosts.Name = "cbHosts";
-            cbHosts.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
             // 
             // tabService
             // 
@@ -1466,6 +1353,119 @@
             // 
             resources.ApplyResources(label1, "label1");
             label1.Name = "label1";
+            // 
+            // tabHosts
+            // 
+            tabHosts.Controls.Add(groupBox2);
+            tabHosts.Controls.Add(panel2);
+            resources.ApplyResources(tabHosts, "tabHosts");
+            tabHosts.Name = "tabHosts";
+            tabHosts.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(dgvHosts);
+            resources.ApplyResources(groupBox2, "groupBox2");
+            groupBox2.Name = "groupBox2";
+            groupBox2.TabStop = false;
+            // 
+            // dgvHosts
+            // 
+            dgvHosts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvHosts.Columns.AddRange(new DataGridViewColumn[] { Col_Enable, Col_HostName, Col_IP, Col_Remark });
+            resources.ApplyResources(dgvHosts, "dgvHosts");
+            dgvHosts.MultiSelect = false;
+            dgvHosts.Name = "dgvHosts";
+            dgvHosts.ShowCellToolTips = false;
+            dgvHosts.CellDoubleClick += DgvHosts_CellDoubleClick;
+            dgvHosts.CellValidating += DgvHosts_CellValidating;
+            dgvHosts.CellValueChanged += DgvHosts_CellValueChanged;
+            dgvHosts.DefaultValuesNeeded += DgvHosts_DefaultValuesNeeded;
+            dgvHosts.RowPostPaint += Dgv_RowPostPaint;
+            // 
+            // Col_Enable
+            // 
+            Col_Enable.DataPropertyName = "Enable";
+            resources.ApplyResources(Col_Enable, "Col_Enable");
+            Col_Enable.Name = "Col_Enable";
+            Col_Enable.Resizable = DataGridViewTriState.True;
+            // 
+            // Col_HostName
+            // 
+            Col_HostName.DataPropertyName = "HostName";
+            resources.ApplyResources(Col_HostName, "Col_HostName");
+            Col_HostName.MaxInputLength = 64;
+            Col_HostName.Name = "Col_HostName";
+            Col_HostName.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_IP
+            // 
+            Col_IP.DataPropertyName = "IP";
+            resources.ApplyResources(Col_IP, "Col_IP");
+            Col_IP.Name = "Col_IP";
+            Col_IP.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Remark
+            // 
+            Col_Remark.DataPropertyName = "Remark";
+            resources.ApplyResources(Col_Remark, "Col_Remark");
+            Col_Remark.Name = "Col_Remark";
+            Col_Remark.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(linkHostsAdd);
+            panel2.Controls.Add(linkHostClear);
+            panel2.Controls.Add(linkHostsImport);
+            panel2.Controls.Add(butHostReset);
+            panel2.Controls.Add(butHostSave);
+            panel2.Controls.Add(cbHosts);
+            resources.ApplyResources(panel2, "panel2");
+            panel2.Name = "panel2";
+            // 
+            // linkHostsAdd
+            // 
+            resources.ApplyResources(linkHostsAdd, "linkHostsAdd");
+            linkHostsAdd.Name = "linkHostsAdd";
+            linkHostsAdd.TabStop = true;
+            linkHostsAdd.LinkClicked += LinkHostsAdd_LinkClicked;
+            // 
+            // linkHostClear
+            // 
+            resources.ApplyResources(linkHostClear, "linkHostClear");
+            linkHostClear.Name = "linkHostClear";
+            linkHostClear.TabStop = true;
+            linkHostClear.LinkClicked += LinkHostClear_LinkClicked;
+            // 
+            // linkHostsImport
+            // 
+            resources.ApplyResources(linkHostsImport, "linkHostsImport");
+            linkHostsImport.Name = "linkHostsImport";
+            linkHostsImport.TabStop = true;
+            linkHostsImport.LinkClicked += LinkHostsImport_LinkClicked;
+            // 
+            // butHostReset
+            // 
+            resources.ApplyResources(butHostReset, "butHostReset");
+            butHostReset.Name = "butHostReset";
+            butHostReset.UseVisualStyleBackColor = true;
+            butHostReset.Click += ButHostReset_Click;
+            // 
+            // butHostSave
+            // 
+            resources.ApplyResources(butHostSave, "butHostSave");
+            butHostSave.Name = "butHostSave";
+            butHostSave.UseVisualStyleBackColor = true;
+            butHostSave.Click += ButHostSave_Click;
+            // 
+            // cbHosts
+            // 
+            cbHosts.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbHosts.FormattingEnabled = true;
+            cbHosts.Items.AddRange(new object[] { resources.GetString("cbHosts.Items"), resources.GetString("cbHosts.Items1") });
+            resources.ApplyResources(cbHosts, "cbHosts");
+            cbHosts.Name = "cbHosts";
+            cbHosts.SelectedIndexChanged += CbHosts_SelectedIndexChanged;
             // 
             // tabCDN
             // 
@@ -2705,11 +2705,6 @@
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             tabControl1.ResumeLayout(false);
-            tabHosts.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvHosts).EndInit();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
             tabService.ResumeLayout(false);
             gbLog.ResumeLayout(false);
             panel1.ResumeLayout(false);
@@ -2724,6 +2719,11 @@
             ((System.ComponentModel.ISupportInitialize)dgvIpList).EndInit();
             panelSpeedTest.ResumeLayout(false);
             panelSpeedTest.PerformLayout();
+            tabHosts.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvHosts).EndInit();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             tabCDN.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             groupBox4.ResumeLayout(false);
