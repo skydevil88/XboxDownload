@@ -9,6 +9,7 @@ using System.Security.AccessControl;
 using System.ServiceProcess;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Web;
 using NetFwTypeLib;
@@ -62,7 +63,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelDNS, "常用 DNS 服务器\n114.114.114.114 (114)\n180.76.76.76 (百度)\n223.5.5.5 (阿里)\n119.29.29.29 (腾讯)\n208.67.220.220 (OpenDns)\n8.8.8.8 (Google)\n168.126.63.1 (韩国)");
             toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\nassets1.xboxlive.com\nassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\n\n以上域名不能使用 cn IP");
             toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn");
-            toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\n*.dl.delivery.mp.microsoft.com\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
+            toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\n*.dl.delivery.mp.microsoft.com\n\n#部分Xbox One老游戏使用域名\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
@@ -71,7 +72,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "默认使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nPC用户使用此功能，需要勾选“设置本机 DNS”\n\n注：网络正常可以不勾选。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\nPC用户建议勾选，主机用户无需设置。\n\n注：如果退出Xbox下载助手后没网络，请点击旁边“修复”。");
-            toolTip1.SetToolTip(this.ckbOptimalAkamaiIP, "自动从 韩国、日本、香港 优选出最快 Akamai IP\n支持 Xbox、PS、NS、EA、战网、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
+            toolTip1.SetToolTip(this.ckbBetterAkamaiIP, "自动从 Akamai 优选 IP 列表中找出下载速度最快的节点\n支持 Xbox、PS、NS、EA、战网、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -663,15 +664,32 @@ namespace XboxDownload
             }
         }
 
-        private async void CkbOptimalAkamaiIP_CheckedChanged(object sender, EventArgs e)
+        private async void CkbBetterAkamaiIP_CheckedChanged(object sender, EventArgs e)
         {
-            if (ckbOptimalAkamaiIP.Checked)
+            if (ckbBetterAkamaiIP.Checked)
             {
-                ckbOptimalAkamaiIP.Enabled = false;
-                string[] ips = {
-                    "23.43.165.18", "23.206.175.185", "23.216.159.66", "211.239.236.18",  //韩国
-                    "128.22.12.153",  "23.197.49.161", "23.211.178.216", "23.78.141.176", "104.102.24.114", "210.176.33.74", "23.33.32.155", "23.33.33.121", "23.44.51.34", "23.45.51.153", "23.53.248.155", "23.77.204.160", "23.206.250.96", "125.56.201.104", //日本
-                };
+                bool update = true;
+                FileInfo fi = new(resourcePath + "\\IP.AkamaiV2.txt");
+                if (fi.Exists && fi.Length >= 1) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddDays(30)) >= 0;
+                if (update) await UpdateFile.DownloadIP(fi);
+                List<string> lsIP = new();
+                if (fi.Exists)
+                {
+                    using StreamReader sr = fi.OpenText();
+                    string content = sr.ReadToEnd();
+                    Match result = FormImportIP.rMatchIP.Match(content);
+                    while (result.Success)
+                    {
+                        lsIP.Add(result.Groups["IP"].Value);
+                        result = result.NextMatch();
+                    }
+                }
+                if (lsIP.Count == 0)
+                {
+                    MessageBox.Show("Akamai 优选 IP 列表不存在，请在测速选项卡中导入。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                ckbBetterAkamaiIP.Enabled = false;
                 string[] test = { "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt", "http://gst.prod.dl.playstation.net/networktest/get_192m", "http://ctest-dl-lp1.cdn.nintendo.net/30m" };
                 Random ran = new();
                 Uri uri = new(test[ran.Next(test.Length)]);
@@ -683,16 +701,16 @@ namespace XboxDownload
                 sb.AppendLine();
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
                 CancellationTokenSource cts = new();
-                Task[] tasks = new Task[ips.Length];
+                Task[] tasks = new Task[lsIP.Count];
                 string akamai = string.Empty;
                 for (int i = 0; i <= tasks.Length - 1; i++)
                 {
-                    string ip = ips[i];
+                    string ip = lsIP[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, 30000, cts) : ClassWeb.TlsRequest(uri, buffer, ip, false, null, 30000, cts);
+                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, 60000, cts) : ClassWeb.TlsRequest(uri, buffer, ip, false, null, 60000, cts);
                         if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer?.Length == 10485760) akamai = ip;
-                        else if (!cts.IsCancellationRequested) Task.Delay(30000, cts.Token);
+                        else if (!cts.IsCancellationRequested) Task.Delay(60000, cts.Token);
                         socketPackage.Buffer = null;
                     });
                 }
@@ -703,25 +721,7 @@ namespace XboxDownload
                 if (!bServiceFlag) return;
                 if (string.IsNullOrEmpty(akamai))
                 {
-                    string url = uri.ToString();
-                    Dictionary<string, string> headers = new() { { "Host", uri.Host }, { "Range", "bytes=0-1023" } };
-                    CancellationTokenSource cts2 = new();
-                    Task[] tasks2 = new Task[ips.Length];
-                    for (int i = 0; i <= tasks2.Length - 1; i++)
-                    {
-                        string ip = ips[i];
-                        tasks2[i] = new Task(() =>
-                        {
-                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(url.Replace(uri.Host, ip), "GET", null, null, headers, 3000, null, cts2.Token);
-                            if (string.IsNullOrEmpty(akamai) && response != null && response.IsSuccessStatusCode && response.Content.ReadAsStream().Length == 1024) akamai = ip;
-                            else if (!cts2.IsCancellationRequested) Task.Delay(30000, cts2.Token);
-                        });
-                    }
-                    Array.ForEach(tasks2, x => x.Start());
-                    await Task.WhenAny(tasks2);
-                    cts2.Cancel();
-                    if (!bServiceFlag) return;
-                    if (string.IsNullOrEmpty(akamai)) akamai = "23.33.32.155";
+                    akamai = "23.33.32.155";
                     SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai, "localhost", 0xFF0000);
                 }
                 else
@@ -734,7 +734,7 @@ namespace XboxDownload
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
                 tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai;
                 if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai;
-                ckbOptimalAkamaiIP.Enabled = true;
+                ckbBetterAkamaiIP.Enabled = true;
             }
             else if (bServiceFlag)
             {
@@ -812,8 +812,8 @@ namespace XboxDownload
                     if ((control is TextBox || control is CheckBox || control is Panel || control is Button || control is ComboBox) && control != butStart)
                         control.Enabled = true;
                 }
-                ckbOptimalAkamaiIP.Checked = false;
-                ckbOptimalAkamaiIP.Enabled = false;
+                ckbBetterAkamaiIP.Checked = false;
+                ckbBetterAkamaiIP.Enabled = false;
                 linkRepairDNS.Enabled = cbLocalIP.Enabled = true;
                 dnsListen.Close();
                 httpListen.Close();
@@ -1189,7 +1189,7 @@ namespace XboxDownload
                     if (control is TextBox || control is CheckBox || control is Panel || control is Button || control is ComboBox)
                         control.Enabled = false;
                 }
-                ckbOptimalAkamaiIP.Enabled = true;
+                ckbBetterAkamaiIP.Enabled = true;
                 linkRepairDNS.Enabled = cbLocalIP.Enabled = false;
                 _ = Task.Run(() =>
                 {
@@ -1842,31 +1842,35 @@ namespace XboxDownload
             tbDlUrl.Clear();
             cbImportIP.Enabled = false;
 
-            string host = string.Empty;
+            string display = string.Empty, host = string.Empty;
             switch (cbImportIP.SelectedIndex)
             {
                 case 1:
-                    host = "assets1.xboxlive.cn";
+                    display = host = "assets1.xboxlive.cn";
                     break;
                 case 2:
-                    host = "tlu.dl.delivery.mp.microsoft.com";
+                    display = host = "tlu.dl.delivery.mp.microsoft.com";
                     break;
                 case 3:
-                    host = "gst.prod.dl.playstation.net";
+                    display = host = "gst.prod.dl.playstation.net";
                     break;
                 case 4:
-                    host = "Akamai";
+                    display = host = "Akamai";
                     break;
                 case 5:
-                    host = "AkamaiV6";
+                    display = "Akamai 优选 IP";
+                    host = "AkamaiV2";
                     break;
                 case 6:
-                    host = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
+                    display = "Akamai IPv6";
+                    host = "AkamaiV6";
                     break;
-
+                case 7:
+                    display = host = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
+                    break;
             }
             dgvIpList.Tag = host;
-            gbIPList.Text = "IP 列表 (" + host + ")";
+            gbIPList.Text = "IP 列表 (" + display + ")";
 
             bool update = true;
             FileInfo fi = new(resourcePath + "\\IP." + host + ".txt");
@@ -1881,7 +1885,6 @@ namespace XboxDownload
                 using StreamReader sr = fi.OpenText();
                 content = sr.ReadToEnd();
             }
-
             List<DataGridViewRow> list = new();
             Match result = FormImportIP.rMatchIP.Match(content);
             if (result.Success)
@@ -2084,6 +2087,7 @@ namespace XboxDownload
                     }
                     break;
                 case "Akamai":
+                case "AkamaiV2":
                 case "AkamaiV6":
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
@@ -2123,9 +2127,22 @@ namespace XboxDownload
                             Parent = this.flpTestUrl
                         };
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
-                        if (host == "AkamaiV6")
+                        if (host == "Akamai" || host == "AkamaiV2")
                         {
-                            LinkLabel lbV6 = new()
+                            LinkLabel lb = new()
+                            {
+                                Name = "UploadBetterAkamaiIp",
+                                Text = "上传更新优选IP",
+                                AutoSize = true,
+                                Parent = this.flpTestUrl,
+                                LinkColor = Color.Green,
+                                Enabled = false
+                            };
+                            lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.Link_UploadBetterAkamaiIp);
+                        }
+                        else if (host == "AkamaiV6")
+                        {
+                            LinkLabel lb = new()
                             {
                                 Tag = "https://www.test-ipv6.com/",
                                 Text = "IPv6 连接测试",
@@ -2133,7 +2150,7 @@ namespace XboxDownload
                                 Parent = this.flpTestUrl,
                                 LinkColor = Color.Red
                             };
-                            lbV6.LinkClicked += new LinkLabelLinkClickedEventHandler(this.Link_LinkClicked);
+                            lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.Link_LinkClicked);
                         }
                     }
                     break;
@@ -2283,6 +2300,7 @@ namespace XboxDownload
         {
             if (dgvIpList.Rows.Count == 0) return;
             string? host = dgvIpList.Tag.ToString();
+            if (host == "AkamaiV2") host = "Akamai";
             SaveFileDialog dlg = new()
             {
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
@@ -2723,6 +2741,41 @@ namespace XboxDownload
             if (dgvr.Tag != null) MessageBox.Show(dgvr.Tag.ToString(), "Request Headers", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
+        private void Link_UploadBetterAkamaiIp(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LinkLabel linkLabel = (LinkLabel)sender;
+            string text = Regex.Replace(linkLabel.Text, @"\(.+\)", "").Trim();
+            linkLabel.Text = text;
+            JsonArray ja = new();
+            foreach (DataGridViewRow dgvr in dgvIpList.Rows)
+            {
+                if (dgvr.Cells["Col_Speed"].Value == null) continue;
+                if (double.TryParse(dgvr.Cells["Col_Speed"].Value.ToString(), out double speed) && speed >= 10)
+                {
+                    string? _ip = dgvr.Cells["Col_IPAddress"].Value.ToString();
+                    string? _location = dgvr.Cells["Col_Location"].Value.ToString();
+                    if (!string.IsNullOrEmpty(_ip) && !string.IsNullOrEmpty(_location))
+                    {
+                        ja.Add(new JsonObject()
+                        {
+                            ["ip"] = _ip,
+                            ["location"] = _location,
+                            ["speed"] = speed
+                        });
+                    }
+                }
+            }
+            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区或者使用加速器、\n代理软件测速的用户请不要上传，谢谢合作！\n\n以下 IP 将会上传到 Akamai 优选 IP 列表（下载速度超过10MB/s），是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            {
+                linkLabel.Text = text + " (正在上传)";
+                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(UpdateFile.website + "/Akamai/Better", "POST", ja.ToString(), "application/json", null, 6000, "XboxDownload");
+                if (response != null && response.IsSuccessStatusCode)
+                    linkLabel.Text = text + " (上传成功)";
+                else
+                    linkLabel.Text = text + " (上传失败)";
+            }
+        }
+
         private void LinkHostsClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -2910,6 +2963,7 @@ namespace XboxDownload
                 }
                 catch { }
             }
+            string? _tag = dgvIpList.Tag.ToString();
             if (uri != null)
             {
                 int range = Regex.IsMatch(gbIPList.Text, @"Akamai") ? 31457250 : 52428799;  //国外IP测试下载30M，国内IP测试下载50M
@@ -3015,6 +3069,23 @@ namespace XboxDownload
             }
             GC.Collect();
             ctsSpeedTest = null;
+
+            bool bUploadBetterAkamaiIpEnable = false;
+            LinkLabel? linkUploadBetterAkamaiIp = null;
+            if (_tag == "Akamai" || _tag == "AkamaiV2")
+            {
+                linkUploadBetterAkamaiIp = this.Controls.Find("UploadBetterAkamaiIp", true)[0] as LinkLabel;
+                foreach (DataGridViewRow dgvr in dgvIpList.Rows)
+                {
+                    if (dgvr.Cells["Col_Speed"].Value == null) continue;
+                    if (double.TryParse(dgvr.Cells["Col_Speed"].Value.ToString(), out double speed) && speed >= 10)
+                    {
+                        bUploadBetterAkamaiIpEnable = true;
+                        break;
+                    }
+                }
+            }
+
             this.Invoke(new Action(() =>
             {
                 butSpeedTest.Text = "开始测速";
@@ -3025,6 +3096,7 @@ namespace XboxDownload
                 Col_IPAddress.SortMode = Col_Location.SortMode = Col_Speed.SortMode = Col_TTL.SortMode = Col_RoundtripTime.SortMode = DataGridViewColumnSortMode.Automatic;
                 Col_Check.ReadOnly = false;
                 butSpeedTest.Enabled = true;
+                if (linkUploadBetterAkamaiIp != null) linkUploadBetterAkamaiIp.Enabled = bUploadBetterAkamaiIpEnable;
             }));
         }
         #endregion
@@ -3128,7 +3200,7 @@ namespace XboxDownload
             DnsListen.UpdateHosts();
             if (bServiceFlag)
             {
-                if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
+                if (ckbBetterAkamaiIP.Checked) ckbBetterAkamaiIP.Checked = false;
                 else UpdateHosts(true);
                 if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
             }
@@ -3314,7 +3386,7 @@ namespace XboxDownload
             DnsListen.UpdateHosts();
             if (bServiceFlag)
             {
-                if (ckbOptimalAkamaiIP.Checked) ckbOptimalAkamaiIP.Checked = false;
+                if (ckbBetterAkamaiIP.Checked) ckbBetterAkamaiIP.Checked = false;
                 if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
             }
         }
@@ -3605,7 +3677,7 @@ namespace XboxDownload
 
         private void LinkProductID_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + linkProductID.Text;
+            tbGameUrl.Text = "https://www.microsoft.com/store/productid/" + linkProductID.Text;
             if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             tabControl1.SelectedTab = tabStore;
         }
@@ -3657,7 +3729,7 @@ namespace XboxDownload
                     @"^https?://www\.xbox\.com(/[^/]*)?/games/store/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^https?://www\.microsoft\.com(/[^/]*)?/p/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^https?://www\.microsoft\.com/store/productId/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^https?://apps\.microsoft\.com/store/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^https?://apps\.microsoft\.com(/store)?/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})|" +
                     @"productid=(?<productId>[a-zA-Z0-9]{12})|" +
                     @"^(?<productId>[a-zA-Z0-9]{12})$";
                 Match result = Regex.Match(url, pat, RegexOptions.IgnoreCase);
@@ -3736,7 +3808,7 @@ namespace XboxDownload
                 ListViewItem item = lvGameSearch.SelectedItems[0];
                 string productId = item.SubItems[1].Text;
                 lvGameSearch.Visible = false;
-                tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + productId;
+                tbGameUrl.Text = "https://www.microsoft.com/store/productid/" + productId;
                 if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             }
         }
@@ -3748,7 +3820,7 @@ namespace XboxDownload
                 ListViewItem item = lvGameSearch.SelectedItems[0];
                 string productId = item.SubItems[1].Text;
                 lvGameSearch.Visible = false;
-                tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + productId;
+                tbGameUrl.Text = "https://www.microsoft.com/store/productid/" + productId;
                 if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
             }
         }
@@ -3932,7 +4004,7 @@ namespace XboxDownload
             if (sender is not ComboBox cb || cb.SelectedIndex <= 0) return;
             Product product = (Product)cb.SelectedItem;
             if (product.id == "0") return;
-            tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + product.id;
+            tbGameUrl.Text = "https://www.microsoft.com/store/productid/" + product.id;
             if (butGame.Enabled) ButGame_Click(sender, EventArgs.Empty);
         }
 
@@ -3943,7 +4015,7 @@ namespace XboxDownload
             dialog.Dispose();
             if (!string.IsNullOrEmpty(dialog.productid))
             {
-                tbGameUrl.Text = "https://www.microsoft.com/store/productId/" + dialog.productid.ToUpperInvariant();
+                tbGameUrl.Text = "https://www.microsoft.com/store/productid/" + dialog.productid.ToUpperInvariant();
                 foreach (var item in cbGameMarket.Items)
                 {
                     Market market = (Market)item;

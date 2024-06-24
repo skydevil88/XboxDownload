@@ -72,6 +72,7 @@
             // butConfirm
             // 
             butConfirm.Enabled = false;
+            butConfirm.Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             butConfirm.ForeColor = Color.Green;
             butConfirm.Location = new Point(954, 30);
             butConfirm.Name = "butConfirm";

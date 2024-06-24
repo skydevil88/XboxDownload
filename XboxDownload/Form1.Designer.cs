@@ -84,7 +84,7 @@
             linkEA1 = new LinkLabel();
             ckbGameLink = new CheckBox();
             linkRestartEABackgroundService = new LinkLabel();
-            ckbOptimalAkamaiIP = new CheckBox();
+            ckbBetterAkamaiIP = new CheckBox();
             butStart = new Button();
             ckbEpicStore = new CheckBox();
             ckbBattleStore = new CheckBox();
@@ -632,7 +632,7 @@
             groupBox1.Controls.Add(linkEA1);
             groupBox1.Controls.Add(ckbGameLink);
             groupBox1.Controls.Add(linkRestartEABackgroundService);
-            groupBox1.Controls.Add(ckbOptimalAkamaiIP);
+            groupBox1.Controls.Add(ckbBetterAkamaiIP);
             groupBox1.Controls.Add(butStart);
             groupBox1.Controls.Add(ckbEpicStore);
             groupBox1.Controls.Add(ckbBattleStore);
@@ -815,13 +815,13 @@
             linkRestartEABackgroundService.TabStop = true;
             linkRestartEABackgroundService.LinkClicked += LinkRestartEABackgroundService_LinkClicked;
             // 
-            // ckbOptimalAkamaiIP
+            // ckbBetterAkamaiIP
             // 
-            resources.ApplyResources(ckbOptimalAkamaiIP, "ckbOptimalAkamaiIP");
-            ckbOptimalAkamaiIP.ForeColor = Color.Red;
-            ckbOptimalAkamaiIP.Name = "ckbOptimalAkamaiIP";
-            ckbOptimalAkamaiIP.UseVisualStyleBackColor = true;
-            ckbOptimalAkamaiIP.CheckedChanged += CkbOptimalAkamaiIP_CheckedChanged;
+            resources.ApplyResources(ckbBetterAkamaiIP, "ckbBetterAkamaiIP");
+            ckbBetterAkamaiIP.ForeColor = Color.Red;
+            ckbBetterAkamaiIP.Name = "ckbBetterAkamaiIP";
+            ckbBetterAkamaiIP.UseVisualStyleBackColor = true;
+            ckbBetterAkamaiIP.CheckedChanged += CkbBetterAkamaiIP_CheckedChanged;
             // 
             // butStart
             // 
@@ -1268,7 +1268,7 @@
             // 
             cbImportIP.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImportIP.FormattingEnabled = true;
-            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5"), resources.GetString("cbImportIP.Items6") });
+            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5"), resources.GetString("cbImportIP.Items6"), resources.GetString("cbImportIP.Items7") });
             resources.ApplyResources(cbImportIP, "cbImportIP");
             cbImportIP.Name = "cbImportIP";
             cbImportIP.SelectedIndexChanged += CbImportIP_SelectedIndexChanged;
@@ -3045,7 +3045,7 @@
         private LinkLabel linkLabel4;
         private LinkLabel linkAppGamingServices;
         private LinkLabel linkConsoleInstall;
-        private CheckBox ckbOptimalAkamaiIP;
+        private CheckBox ckbBetterAkamaiIP;
         private CheckBox ckbGameLink;
         private LinkLabel linkRestartEABackgroundService;
         private System.Windows.Forms.Timer timerTraffic;

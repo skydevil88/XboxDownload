@@ -1045,34 +1045,34 @@
   <data name="&gt;&gt;linkRestartEABackgroundService.ZOrder" xml:space="preserve">
     <value>16</value>
   </data>
-  <data name="ckbOptimalAkamaiIP.AutoSize" type="System.Boolean, mscorlib">
+  <data name="ckbBetterAkamaiIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="ckbOptimalAkamaiIP.Enabled" type="System.Boolean, mscorlib">
+  <data name="ckbBetterAkamaiIP.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="ckbOptimalAkamaiIP.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="ckbBetterAkamaiIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>1214, 336</value>
   </data>
-  <data name="ckbOptimalAkamaiIP.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="ckbBetterAkamaiIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>199, 28</value>
   </data>
-  <data name="ckbOptimalAkamaiIP.TabIndex" type="System.Int32, mscorlib">
+  <data name="ckbBetterAkamaiIP.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
   </data>
-  <data name="ckbOptimalAkamaiIP.Text" xml:space="preserve">
+  <data name="ckbBetterAkamaiIP.Text" xml:space="preserve">
     <value>自动优选 Akamai IP</value>
   </data>
-  <data name="&gt;&gt;ckbOptimalAkamaiIP.Name" xml:space="preserve">
-    <value>ckbOptimalAkamaiIP</value>
+  <data name="&gt;&gt;ckbBetterAkamaiIP.Name" xml:space="preserve">
+    <value>ckbBetterAkamaiIP</value>
   </data>
-  <data name="&gt;&gt;ckbOptimalAkamaiIP.Type" xml:space="preserve">
+  <data name="&gt;&gt;ckbBetterAkamaiIP.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ckbOptimalAkamaiIP.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ckbBetterAkamaiIP.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;ckbOptimalAkamaiIP.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;ckbBetterAkamaiIP.ZOrder" xml:space="preserve">
     <value>17</value>
   </data>
   <data name="butStart.Font" type="System.Drawing.Font, System.Drawing">
@@ -2821,10 +2821,13 @@
     <value>4.Akamai (NS、EA 、战网、Epic、育碧)</value>
   </data>
   <data name="cbImportIP.Items5" xml:space="preserve">
-    <value>5.Akamai (IPv6)</value>
+    <value>5.Akamai (优选 IP)</value>
   </data>
   <data name="cbImportIP.Items6" xml:space="preserve">
-    <value>6.Ubisoft Connect (cn 游戏下载)</value>
+    <value>6.Akamai (IPv6)</value>
+  </data>
+  <data name="cbImportIP.Items7" xml:space="preserve">
+    <value>7.Ubisoft Connect (cn 游戏下载)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>934, 4</value>
@@ -6201,13 +6204,13 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label32.Size" type="System.Drawing.Size, System.Drawing">
-    <value>137, 24</value>
+    <value>139, 24</value>
   </data>
   <data name="label32.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="label32.Text" xml:space="preserve">
-    <value>URL/ProductId</value>
+    <value>URL/ProductID</value>
   </data>
   <data name="&gt;&gt;label32.Name" xml:space="preserve">
     <value>label32</value>
