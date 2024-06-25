@@ -689,6 +689,7 @@ namespace XboxDownload
                     MessageBox.Show("Akamai 优选 IP 列表不存在，请在测速选项卡中导入。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                lsIP = lsIP.OrderBy(s => Guid.NewGuid()).Take(20).ToList();
                 ckbBetterAkamaiIP.Enabled = false;
                 string[] test = { "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt", "http://gst.prod.dl.playstation.net/networktest/get_192m", "http://ctest-dl-lp1.cdn.nintendo.net/30m" };
                 Random ran = new();
@@ -2741,7 +2742,7 @@ namespace XboxDownload
             if (dgvr.Tag != null) MessageBox.Show(dgvr.Tag.ToString(), "Request Headers", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
-        private void Link_UploadBetterAkamaiIp(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void Link_UploadBetterAkamaiIp(object sender, LinkLabelLinkClickedEventArgs e)
         {
             LinkLabel linkLabel = (LinkLabel)sender;
             string text = Regex.Replace(linkLabel.Text, @"\(.+\)", "").Trim();
@@ -2765,14 +2766,45 @@ namespace XboxDownload
                     }
                 }
             }
-            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区或者使用加速器、\n代理软件测速的用户请不要上传，谢谢合作！\n\n以下 IP 将会上传到 Akamai 优选 IP 列表（下载速度超过10MB/s），是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区或者使用加速器、\n代理软件测速的用户请不要上传，谢谢合作！\n\n以下 IP （下载速度超过10MB/s）将会上传到 Akamai 优选 IP 列表，是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                linkLabel.Text = text + " (正在上传)";
-                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(UpdateFile.website + "/Akamai/Better", "POST", ja.ToString(), "application/json", null, 6000, "XboxDownload");
-                if (response != null && response.IsSuccessStatusCode)
-                    linkLabel.Text = text + " (上传成功)";
+                linkLabel.Text = text + " (检查位置)";
+                bool bCheckLocation = false;
+                using (HttpResponseMessage? response1 = await ClassWeb.HttpResponseMessageAsync("https://qifu-api.baidubce.com/ip/local/geo/v1/district", "GET", null, null, null, 6000))
+                {
+                    if (response1 != null && response1.IsSuccessStatusCode)
+                    {
+                        JsonDocument? jsonDocument = null;
+                        try
+                        {
+                            jsonDocument = JsonDocument.Parse(response1.Content.ReadAsStringAsync().Result);
+                        }
+                        catch { }
+                        if (jsonDocument != null)
+                        {
+                            JsonElement root = jsonDocument.RootElement;
+                            if (root.TryGetProperty("data", out JsonElement je))
+                            {
+                                string country = je.TryGetProperty("country", out JsonElement jeCountry) ? jeCountry.ToString() : "";
+                                string prov = je.TryGetProperty("prov", out JsonElement jeProv) ? jeProv.ToString() : "";
+                                bCheckLocation = country == "中国" && !Regex.IsMatch(prov, @"香港|澳门|台湾");
+                            }
+                        }
+                    }
+                }
+                if (bCheckLocation)
+                {
+                    linkLabel.Text = text + " (正在上传)";
+                    using HttpResponseMessage? response2 = await ClassWeb.HttpResponseMessageAsync(UpdateFile.website + "/Akamai/Better", "POST", ja.ToString(), "application/json", null, 6000, "XboxDownload");
+                    if (response2 != null && response2.IsSuccessStatusCode)
+                        linkLabel.Text = text + " (上传成功)";
+                    else
+                        linkLabel.Text = text + " (上传失败)";
+                }
                 else
-                    linkLabel.Text = text + " (上传失败)";
+                {
+                    linkLabel.Text = text + " (非中国大陆地区)";
+                }
             }
         }
 
