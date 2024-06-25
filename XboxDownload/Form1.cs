@@ -1688,9 +1688,7 @@ namespace XboxDownload
         private void DgvIpList_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex < 0 || e.Button != MouseButtons.Right) return;
-            string host = string.Empty;
-            Match result = Regex.Match(gbIPList.Text, @"\((?<host>[^\)]+)\)");
-            if (result.Success) host = result.Groups["host"].Value;
+            string? host = dgvIpList.Tag.ToString();
             dgvIpList.ClearSelection();
             DataGridViewRow dgvr = dgvIpList.Rows[e.RowIndex];
             dgvr.Selected = true;
@@ -1726,6 +1724,7 @@ namespace XboxDownload
                     tsmUseIPPS.Visible = true;
                     break;
                 case "Akamai":
+                case "AkamaiV2":
                 case "AkamaiV6":
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
@@ -2588,6 +2587,7 @@ namespace XboxDownload
                     }
                     break;
                 case "Akamai":
+                case "AkamaiV2":
                 case "AkamaiV6":
                 case "atum.hac.lp1.d4c.nintendo.net":
                 case "origin-a.akamaihd.net":
