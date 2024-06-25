@@ -2431,6 +2431,7 @@ namespace XboxDownload
                         sb.AppendLine(ip + " ares.dl.playstation.net # XboxDownload");
                         break;
                     case "Akamai":
+                    case "AkamaiV2":
                     case "AkamaiV6":
                     case "atum.hac.lp1.d4c.nintendo.net":
                     case "origin-a.akamaihd.net":
