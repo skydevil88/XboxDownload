@@ -337,16 +337,20 @@ namespace XboxDownload
                         List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                     else
                     {
                         List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                 }
                 if (appIP != null)
@@ -357,11 +361,9 @@ namespace XboxDownload
                         _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
                         _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsLocalIP);
                         _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
                         _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
 
                         _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsAppIP, (oldkey, oldvalue) => lsAppIP);
                         _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
@@ -372,11 +374,9 @@ namespace XboxDownload
                         _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
                         _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsLocalIP);
                         _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
                         _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
-                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
 
                         _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                         _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsAppIP, (oldkey, oldvalue) => lsAppIP);
@@ -437,10 +437,14 @@ namespace XboxDownload
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                     else
                     {
@@ -449,10 +453,14 @@ namespace XboxDownload
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsCnIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                 }
                 if (appIP != null)
@@ -463,13 +471,9 @@ namespace XboxDownload
                         _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
                         _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
                         _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsAppIP);
-                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
                         _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
-                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                     else
                     {
@@ -477,13 +481,9 @@ namespace XboxDownload
                         _ = dicServiceV6.TryAdd("dl.delivery.mp.microsoft.com", lsAppIP);
                         _ = dicServiceV6.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsAppIP);
                         _ = dicServiceV6.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsAppIP);
-                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsAppIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsAppIP);
                         _ = dicServiceV4.TryAdd("dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("2.tlu.dl.delivery.mp.microsoft.com", lsEmptyIP);
-                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
-                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                 }
             }

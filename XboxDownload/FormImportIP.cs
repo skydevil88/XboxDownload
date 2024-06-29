@@ -8,7 +8,7 @@ namespace XboxDownload
 {
     public partial class FormImportIP : Form
     {
-        public static readonly Regex rMatchIP = new(@"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]*)\)|^[^\d]+(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>[^\d|<]+)\d+ms|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$|(?<IP>([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s*\((?<Location>[^\)]*)\)", RegexOptions.Multiline);
+        public static readonly Regex rMatchIP = new(@"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]*)\)|^[^\d]+(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>[\u4e00-\u9fa5]+).+ms\d+|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$|(?<IP>([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s*\((?<Location>[^\)]*)\)", RegexOptions.Multiline);
         public String host = string.Empty;
         public DataTable dt;
 
@@ -32,9 +32,9 @@ namespace XboxDownload
 
         private void LinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string hosts = Regex.Replace(comboBox1.Text, @"\s.+$", "").Trim();
-            Clipboard.SetDataObject(hosts);
-            MessageBox.Show("域名(" + hosts + ")已复制到剪贴板", "复制域名", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string host = Regex.Replace(comboBox1.Text, @"\s.+$", "").Trim();
+            Clipboard.SetDataObject(host);
+            MessageBox.Show("域名(" + host + ")已复制到剪贴板", "复制域名", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Button1_Click(object sender, EventArgs e)

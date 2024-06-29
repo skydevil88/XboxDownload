@@ -102,7 +102,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="IpLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">广东</Value>
     </Setting>
     <Setting Name="IpsAkamai" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

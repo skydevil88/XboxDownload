@@ -75,11 +75,11 @@ assets1.xboxlive.cn			xxx.xxx.xxx.xxx
 assets2.xboxlive.cn			xxx.xxx.xxx.xxx
 d1.xboxlive.cn				xxx.xxx.xxx.xxx
 d2.xboxlive.cn				xxx.xxx.xxx.xxx
-#第二组，应用和部分游戏使用此域名下载
-dl.delivery.mp.microsoft.com		xxx.xxx.xxx.xxx
-tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 dlassets.xboxlive.cn			xxx.xxx.xxx.xxx
 dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx
+#第二组，应用和部分PC游戏使用此域名下载
+dl.delivery.mp.microsoft.com		xxx.xxx.xxx.xxx
+tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 ```
 
 ![图2](doc/Op3.png)
@@ -146,11 +146,11 @@ assets1.xboxlive.cn			xxx.xxx.xxx.xxx
 assets2.xboxlive.cn			xxx.xxx.xxx.xxx
 d1.xboxlive.cn				xxx.xxx.xxx.xxx
 d2.xboxlive.cn				xxx.xxx.xxx.xxx
-#第二组，应用和部分游戏使用此域名下载
-dl.delivery.mp.microsoft.com		xxx.xxx.xxx.xxx
-tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 dlassets.xboxlive.cn			xxx.xxx.xxx.xxx
 dlassets2.xboxlive.cn			xxx.xxx.xxx.xxx
+#第二组，应用和部分PC游戏使用此域名下载
+dl.delivery.mp.microsoft.com		xxx.xxx.xxx.xxx
+tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 ```
 
 ![图2](doc/Op3.png)

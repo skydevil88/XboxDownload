@@ -62,8 +62,8 @@ namespace XboxDownload
 
             toolTip1.SetToolTip(this.labelDNS, "常用 DNS 服务器\n114.114.114.114 (114)\n180.76.76.76 (百度)\n223.5.5.5 (阿里)\n119.29.29.29 (腾讯)\n208.67.220.220 (OpenDns)\n8.8.8.8 (Google)\n168.126.63.1 (韩国)");
             toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\nassets1.xboxlive.com\nassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\n\n以上域名不能使用 cn IP");
-            toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn");
-            toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\n*.dl.delivery.mp.microsoft.com\n\n#部分Xbox One老游戏使用域名\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
+            toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
+            toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\n*.dl.delivery.mp.microsoft.com");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
@@ -709,9 +709,9 @@ namespace XboxDownload
                     string ip = lsIP[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, 60000, cts) : ClassWeb.TlsRequest(uri, buffer, ip, false, null, 60000, cts);
+                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, 30000, cts) : ClassWeb.TlsRequest(uri, buffer, ip, false, null, 30000, cts);
                         if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer?.Length == 10485760) akamai = ip;
-                        else if (!cts.IsCancellationRequested) Task.Delay(60000, cts.Token);
+                        else if (!cts.IsCancellationRequested) Task.Delay(30000, cts.Token);
                         socketPackage.Buffer = null;
                     });
                 }
@@ -722,8 +722,27 @@ namespace XboxDownload
                 if (!bServiceFlag) return;
                 if (string.IsNullOrEmpty(akamai))
                 {
-                    akamai = "23.33.32.155";
-                    SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai, "localhost", 0xFF0000);
+                    foreach (var ip in lsIP)
+                    {
+                        uri = new(test[ran.Next(test.Length)]);
+                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(uri.ToString().Replace(uri.Host, ip), "HEAD", null, null, new() { { "Host", uri.Host } }, 500);
+                        if (response != null && response.IsSuccessStatusCode)
+                        {
+                            akamai = ip;
+                            break;
+                        }
+                    }
+                    if (!bServiceFlag) return;
+                    if (!string.IsNullOrEmpty(akamai))
+                    {
+                        SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai + "，建议在测速选项卡中手动测速指定。", "localhost", 0xFF0000);
+                    }
+                    else
+                    {
+                        SaveLog("提示信息", "优选 Akamai IP 全部不能连接，请检查网络状况。", "localhost", 0xFF0000);
+                        ckbBetterAkamaiIP.Enabled = true;
+                        return;
+                    }
                 }
                 else
                 {
@@ -1330,14 +1349,14 @@ namespace XboxDownload
                                         sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
                                         sb.AppendLine(Properties.Settings.Default.CnIP + " d1.xboxlive.cn");
                                         sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " dlassets.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP + " dlassets2.xboxlive.cn");
                                     }
                                     if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
                                     {
                                         sb.AppendLine(Properties.Settings.Default.AppIP + " dl.delivery.mp.microsoft.com");
                                         sb.AppendLine(Properties.Settings.Default.AppIP + " tlu.dl.delivery.mp.microsoft.com");
                                         sb.AppendLine(Properties.Settings.Default.AppIP + " 2.tlu.dl.delivery.mp.microsoft.com");
-                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets.xboxlive.cn");
-                                        sb.AppendLine(Properties.Settings.Default.AppIP + " dlassets2.xboxlive.cn");
                                     }
                                 }
                             }
@@ -1709,12 +1728,12 @@ namespace XboxDownload
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
+                case "dlassets.xboxlive.cn":
+                case "dlassets2.xboxlive.cn":
                     tsmUseIPCn.Visible = true;
                     break;
                 case "dl.delivery.mp.microsoft.com":
                 case "tlu.dl.delivery.mp.microsoft.com":
-                case "dlassets.xboxlive.cn":
-                case "dlassets2.xboxlive.cn":
                     tsmUseIPApp.Visible = true;
                     break;
                 case "gst.prod.dl.playstation.net":
@@ -1938,13 +1957,16 @@ namespace XboxDownload
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
+                case "dlassets.xboxlive.cn":
+                case "dlassets2.xboxlive.cn":
                     {
                         LinkLabel lb1 = new()
                         {
                             Tag = "http://assets1.xboxlive.cn/Z/routing/extraextralarge.txt",
                             Text = "Xbox测速文件",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
@@ -1976,58 +1998,65 @@ namespace XboxDownload
                                 Tag = url,
                                 Text = games[i, 0],
                                 AutoSize = true,
-                                Parent = this.flpTestUrl
+                                Parent = this.flpTestUrl,
+                                LinkColor = Color.Green
                             };
                             lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         }
-                        Label lbTip = new()
+                        LinkLabel lb4 = new()
                         {
-                            ForeColor = Color.Green,
-                            Text = "主下载域名",
+                            Tag = "http://dlassets.xboxlive.cn/public/content/1b5a4a08-06f0-49d6-b25f-d7322c11f3c8/372e2966-b158-4488-8bc8-15ef23db1379/1.5.0.1018.88cd7a5d-f56a-40c7-afd8-85cd4940b891/ACUEU771E1BF7_1.5.0.1018_x64__b6krnev7r9sf8",
+                            Text = "刺客信条: 大革命(One)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
-                        ToolTip toolTip1 = new()
-                        {
-                            AutoPopDelay = 30000,
-                            IsBalloon = true
-                        };
-                        toolTip1.SetToolTip(lbTip, "部分 PC Xbox 游戏会使用应用下载域名。");
+                        lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                     }
                     break;
                 case "dl.delivery.mp.microsoft.com":
                 case "tlu.dl.delivery.mp.microsoft.com":
-                case "dlassets.xboxlive.cn":
-                case "dlassets2.xboxlive.cn":
                     {
                         LinkLabel lb1 = new()
                         {
                             Tag = "986a47b3-0085-4c0c-b3b3-3b806f969b00|MsixBundle|9MV0B5HZVK9Z",
                             Text = "Xbox app(PC)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb2 = new()
                         {
-                            Tag = "e0229546-200d-4c66-a693-df9bf799635f|EAppxBundle|9PNQKHFLD2WQ",
-                            Text = "极限竞速: 地平线4(PC)",
+                            Tag = "64293252-5926-453c-9494-2d4021f1c78d|MsixBundle|9WZDNCRFJBMP",
+                            Text = "微软商店(PC)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb3 = new()
                         {
-                            Tag = "http://dlassets.xboxlive.cn/public/content/1b5a4a08-06f0-49d6-b25f-d7322c11f3c8/372e2966-b158-4488-8bc8-15ef23db1379/1.5.0.1018.88cd7a5d-f56a-40c7-afd8-85cd4940b891/ACUEU771E1BF7_1.5.0.1018_x64__b6krnev7r9sf8",
-                            Text = "刺客信条: 大革命(XboxOne)",
+                            Tag = "e0229546-200d-4c66-a693-df9bf799635f|EAppxBundle|9PNQKHFLD2WQ",
+                            Text = "极限竞速: 地平线4(PC)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb4 = new()
+                        {
+                            Tag = "4828c82e-7fe6-4d95-9572-20bbe9721c86|EAppx|9NBLGGH4PBBM",
+                            Text = "战争机器4(PC)",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
+                        };
+                        lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         Label lbTip = new()
                         {
-                            ForeColor = Color.Green,
-                            Text = "应用和部分游戏",
+                            ForeColor = Color.Red,
+                            Text = "应用和部分PC游戏",
                             AutoSize = true,
                             Parent = this.flpTestUrl
                         };
@@ -2036,7 +2065,7 @@ namespace XboxDownload
                             AutoPopDelay = 30000,
                             IsBalloon = true
                         };
-                        toolTip1.SetToolTip(lbTip, "Xbox app 提示 “此游戏不支持安装到特定文件夹。\n它将与其他 Windows 应用一起安装。”，\n以上游戏都是使用 tlu.dl.delivery.mp.microsoft.com 应用域名下载。\n\n部分 XboxOne 老游戏使用 dlassets.xboxlive.cn 域名下载。");
+                        toolTip1.SetToolTip(lbTip, "Xbox app 提示 “此游戏不支持安装到特定文件夹。它将与其他 Windows 应用一起安装。”，\n以上游戏都是使用 tlu.dl.delivery.mp.microsoft.com 应用域名下载。");
                     }
                     break;
                 case "gst.prod.dl.playstation.net":
@@ -2049,7 +2078,8 @@ namespace XboxDownload
                             Tag = "http://gst.prod.dl.playstation.net/networktest/get_192m",
                             Text = "PSN测速文件",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb2 = new()
@@ -2057,7 +2087,8 @@ namespace XboxDownload
                             Tag = "http://gst.prod.dl.playstation.net/gst/prod/00/PPSA04478_00/app/pkg/26/f_f2e4ff2bc3be11cb844dfe2a7ff8df357d7930152fb5984294a794823ec7472b/EP1464-PPSA04478_00-XXXXXXXXXXXXXXXX_0.pkg",
                             Text = "糖豆人(PS5)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb3 = new()
@@ -2065,7 +2096,8 @@ namespace XboxDownload
                             Tag = "http://gs2.ww.prod.dl.playstation.net/gs2/appkgo/prod/CUSA03962_00/4/f_526a2fab32d369a8ca6298b59686bf823fa9edfe95acb85bc140c27f810842ce/f/UP0102-CUSA03962_00-BH70000000000001_0.pkg",
                             Text = "生化危机7(PS4)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb4 = new()
@@ -2073,7 +2105,8 @@ namespace XboxDownload
                             Tag = "http://zeus.dl.playstation.net/cdn/UP1004/NPUB31154_00/eISFknCNDxqSsVVywSenkJdhzOIfZjrqKHcuGBHEGvUxQJksdPvRNYbIyWcxFsvH.pkg",
                             Text = "侠盗猎车手5(PS3)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb5 = new()
@@ -2081,7 +2114,8 @@ namespace XboxDownload
                             Tag = "http://ares.dl.playstation.net/cdn/JP0102/PCSG00350_00/fMBmIgPfrBTVSZCRQFevSzxaPyzFWOuorSKrvdIjDIJwmaGLjpTmRgzLLTJfASFYZMqEpwSknlWocYelXNHMkzXvpbbvtCSymAwWF.pkg",
                             Text = "怪物猎人: 边境G(PSV)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb5.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                     }
@@ -2100,7 +2134,8 @@ namespace XboxDownload
                             Tag = "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
                             Text = "Xbox测速文件",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb2 = new()
@@ -2108,7 +2143,8 @@ namespace XboxDownload
                             Tag = "http://gst.prod.dl.playstation.net/networktest/get_192m",
                             Text = "PSN测速文件",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb3 = new()
@@ -2116,7 +2152,8 @@ namespace XboxDownload
                             Tag = "http://ctest-dl-lp1.cdn.nintendo.net/30m",
                             Text = "Switch测速文件",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         LinkLabel lb4 = new()
@@ -2124,7 +2161,8 @@ namespace XboxDownload
                             Tag = "http://origin-a.akamaihd.net/Origin-Client-Download/origin/live/OriginThinSetup.exe",
                             Text = "Origin(EA)",
                             AutoSize = true,
-                            Parent = this.flpTestUrl
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
                         };
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         if (host == "Akamai" || host == "AkamaiV2")
@@ -2135,7 +2173,7 @@ namespace XboxDownload
                                 Text = "上传更新优选IP",
                                 AutoSize = true,
                                 Parent = this.flpTestUrl,
-                                LinkColor = Color.Green,
+                                LinkColor = Color.Red,
                                 Enabled = false
                             };
                             lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.Link_UploadBetterAkamaiIp);
@@ -2342,8 +2380,7 @@ namespace XboxDownload
                 List<DataGridViewRow> list = new();
                 foreach (DataRow dr in dt.Select("", "Location, IpLong"))
                 {
-                    string? location = dr["Location"].ToString();
-                    if (location == null) continue;
+                    string location = dr["Location"].ToString() ?? string.Empty;
                     DataGridViewRow dgvr = new();
                     dgvr.CreateCells(dgvIpList);
                     dgvr.Resizable = DataGridViewTriState.False;
@@ -2366,7 +2403,7 @@ namespace XboxDownload
                     if (!Regex.IsMatch(location, "电信|联通|移动|香港|澳门|台湾|日本|韩国|新加坡"))
                         dgvr.Cells[0].Value = ckbOther.Checked;
                     dgvr.Cells[1].Value = dr["IP"];
-                    dgvr.Cells[2].Value = dr["Location"];
+                    dgvr.Cells[2].Value = location;
                     list.Add(dgvr);
                 }
                 if (list.Count >= 1)
@@ -2403,22 +2440,22 @@ namespace XboxDownload
                     case "assets2.xboxlive.cn":
                     case "d1.xboxlive.cn":
                     case "d2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+(assets1|assets2|d1|d2)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                    case "dlassets.xboxlive.cn":
+                    case "dlassets2.xboxlive.cn":
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+(assets1|assets2|d1|d2|dlassets2?)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " assets1.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " assets2.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " d1.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " d2.xboxlive.cn # XboxDownload");
+                        sb.AppendLine(ip + " dlassets.xboxlive.cn # XboxDownload");
+                        sb.AppendLine(ip + " dlassets2.xboxlive.cn # XboxDownload");
                         msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
                         break;
                     case "dl.delivery.mp.microsoft.com":
                     case "tlu.dl.delivery.mp.microsoft.com":
-                    case "dlassets.xboxlive.cn":
-                    case "dlassets2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+((tlu\.)?dl\.delivery\.mp\.microsoft\.com|dlassets2?\.xboxlive\.cn)\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+((tlu\.)?dl\.delivery\.mp\.microsoft\.com)\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " dl.delivery.mp.microsoft.com # XboxDownload");
                         sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com # XboxDownload");
-                        sb.AppendLine(ip + " dlassets.xboxlive.cn # XboxDownload");
-                        sb.AppendLine(ip + " dlassets2.xboxlive.cn # XboxDownload");
                         break;
                     case "gst.prod.dl.playstation.net":
                     case "gs2.ww.prod.dl.playstation.net":
@@ -2533,12 +2570,16 @@ namespace XboxDownload
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
+                case "dlassets.xboxlive.cn":
+                case "dlassets2.xboxlive.cn":
                     if (tsmi.Name == "tsmDNSmasp")
                     {
                         sb.AppendLine("address=/assets1.xboxlive.cn/" + ip);
                         sb.AppendLine("address=/assets2.xboxlive.cn/" + ip);
                         sb.AppendLine("address=/d1.xboxlive.cn/" + ip);
                         sb.AppendLine("address=/d2.xboxlive.cn/" + ip);
+                        sb.AppendLine("address=/dlassets.xboxlive.cn/" + ip);
+                        sb.AppendLine("address=/dlassets2.xboxlive.cn/" + ip);
                     }
                     else
                     {
@@ -2546,26 +2587,22 @@ namespace XboxDownload
                         sb.AppendLine(ip + " assets2.xboxlive.cn");
                         sb.AppendLine(ip + " d1.xboxlive.cn");
                         sb.AppendLine(ip + " d2.xboxlive.cn");
+                        sb.AppendLine(ip + " dlassets.xboxlive.cn");
+                        sb.AppendLine(ip + " dlassets2.xboxlive.cn");
                     }
                     msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
                     break;
                 case "dl.delivery.mp.microsoft.com":
                 case "tlu.dl.delivery.mp.microsoft.com":
-                case "dlassets.xboxlive.cn":
-                case "dlassets2.xboxlive.cn":
                     if (tsmi.Name == "tsmDNSmasp")
                     {
                         sb.AppendLine("address=/dl.delivery.mp.microsoft.com/" + ip);
                         sb.AppendLine("address=/tlu.dl.delivery.mp.microsoft.com/" + ip);
-                        sb.AppendLine("address=/dlassets.xboxlive.cn/" + ip);
-                        sb.AppendLine("address=/dlassets2.xboxlive.cn/" + ip);
                     }
                     else
                     {
                         sb.AppendLine(ip + " dl.delivery.mp.microsoft.com");
                         sb.AppendLine(ip + " tlu.dl.delivery.mp.microsoft.com");
-                        sb.AppendLine(ip + " dlassets.xboxlive.cn");
-                        sb.AppendLine(ip + " dlassets2.xboxlive.cn");
                     }
                     break;
                 case "gst.prod.dl.playstation.net":
@@ -2767,7 +2804,7 @@ namespace XboxDownload
                     }
                 }
             }
-            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区或者使用加速器、\n代理软件测速的用户请不要上传，谢谢合作！\n\n以下 IP （下载速度超过10MB/s）将会上传到 Akamai 优选 IP 列表，是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区或者使用加速器、\n代理软件测速的用户请不要上传，谢谢合作！\n\n以下 IP （下载速度超过10MB/s）将会上传到 “Akamai 优选 IP” 列表，是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 linkLabel.Text = text + " (检查位置)";
                 bool bCheckLocation = false;
@@ -2798,7 +2835,10 @@ namespace XboxDownload
                     linkLabel.Text = text + " (正在上传)";
                     using HttpResponseMessage? response2 = await ClassWeb.HttpResponseMessageAsync(UpdateFile.website + "/Akamai/Better", "POST", ja.ToString(), "application/json", null, 6000, "XboxDownload");
                     if (response2 != null && response2.IsSuccessStatusCode)
+                    {
+                        if (File.Exists(resourcePath + "\\IP.AkamaiV2.txt")) File.SetLastWriteTime(resourcePath + "\\IP.AkamaiV2.txt", DateTime.Now.AddDays(-30));
                         linkLabel.Text = text + " (上传成功)";
+                    }
                     else
                         linkLabel.Text = text + " (上传失败)";
                 }

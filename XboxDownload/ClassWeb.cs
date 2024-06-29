@@ -24,7 +24,7 @@ namespace XboxDownload
             ServiceCollection services = new();
             services.AddHttpClient("default").ConfigureHttpClient(httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36");
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
             }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.All
