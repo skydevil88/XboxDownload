@@ -725,7 +725,7 @@ namespace XboxDownload
                     foreach (var ip in lsIP)
                     {
                         uri = new(test[ran.Next(test.Length)]);
-                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(uri.ToString().Replace(uri.Host, ip), "HEAD", null, null, new() { { "Host", uri.Host } }, 500);
+                        using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(uri.ToString().Replace(uri.Host, ip), "HEAD", null, null, new() { { "Host", uri.Host } }, 500);
                         if (response != null && response.IsSuccessStatusCode)
                         {
                             akamai = ip;
