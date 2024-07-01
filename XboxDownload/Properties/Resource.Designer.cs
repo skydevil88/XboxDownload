@@ -87,22 +87,20 @@ namespace XboxDownload.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找类似 var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10)); 的本地化字符串。
         /// </summary>
-        internal static byte[] Certificate1 {
+        internal static string String {
             get {
-                object obj = ResourceManager.GetObject("Certificate1", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("String", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找类似 File.WriteAllBytes(&quot;d:\\XboxDownload.pfx&quot;, cert.Export(X509ContentType.Pfx)); 的本地化字符串。
         /// </summary>
-        internal static byte[] Certificate2 {
+        internal static string String1 {
             get {
-                object obj = ResourceManager.GetObject("Certificate2", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

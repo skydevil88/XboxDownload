@@ -88,7 +88,6 @@ namespace XboxDownload
             {
                 if (IPAddress.TryParse(result.Groups["IP"].Value, out IPAddress? address))
                 {
-                    string location = result.Groups["Location"].Value.Trim();
                     ulong ipLong = IpToLong(address);
                     string ip = address.ToString();
                     string IpFilter = address.AddressFamily == AddressFamily.InterNetwork ? Regex.Replace(ip, @"\d{0,3}$", "") : Regex.Replace(GetFullIPv6(ip), @"(:[\da-fA-F]{4}){4}$", "");
@@ -98,7 +97,7 @@ namespace XboxDownload
                         dr = dt.NewRow();
                         dr["IP"] = ip;
                         dr["IpFilter"] = IpFilter;
-                        dr["Location"] = Regex.Replace(location, @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", "");
+                        dr["Location"] = Regex.Replace(Regex.Replace(result.Groups["Location"].Value.Trim(), @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", ""), @"\s+", " ");
                         dr["IpLong"] = ipLong;
                         dt.Rows.Add(dr);
                     }

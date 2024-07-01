@@ -121,11 +121,11 @@
   <data name="Akamai" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Akamai.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Certificate1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Certificate1.pfx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="String" xml:space="preserve">
+    <value>var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));</value>
   </data>
-  <data name="Certificate2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Certificate2.pfx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="String1" xml:space="preserve">
+    <value>File.WriteAllBytes("d:\\XboxDownload.pfx", cert.Export(X509ContentType.Pfx));</value>
   </data>
   <data name="Task" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Task.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-16</value>

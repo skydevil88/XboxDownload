@@ -2804,7 +2804,7 @@ namespace XboxDownload
                     }
                 }
             }
-            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区或者使用加速器、\n代理软件测速的用户请不要上传，谢谢合作！\n\n以下 IP （下载速度超过10MB/s）将会上传到 “Akamai 优选 IP” 列表，是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+            if (ja.Count >= 1 && MessageBox.Show("此功能针对中国大陆地区用户使用，非中国大陆地区、开通国际精品网、专线 或者使用 加速器、代理软件 测速的用户请不要上传，谢谢合作！\n\n以下 IP （下载速度超过10MB/s）将会上传到 “Akamai 优选 IP” 列表，是否继续？\n" + string.Join("\n", ja.Select(a => a!["ip"] + "\t" + a!["location"] + "\t" + a!["speed"]).ToArray()), "上传更新 Akamai 优选 IP", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 linkLabel.Text = text + " (检查位置)";
                 bool bCheckLocation = false;
@@ -3603,7 +3603,7 @@ namespace XboxDownload
             tbContentId.Text = tbProductID.Text = tbBuildID.Text = tbFileTimeCreated.Text = tbDriveSize.Text = tbPackageVersion.Text = string.Empty;
             butAnalyze.Enabled = butOpenFile.Enabled = linkCopyContentID.Enabled = linkRename.Enabled = linkProductID.Visible = false;
             Dictionary<string, string> headers = new() { { "Range", "bytes=0-4095" } };
-            using HttpResponseMessage? response = await Task.Run(() => ClassWeb.HttpResponseMessage(url, "GET", null, null, headers));
+            using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(url, "GET", null, null, headers);
             if (response != null && response.IsSuccessStatusCode)
             {
                 byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
