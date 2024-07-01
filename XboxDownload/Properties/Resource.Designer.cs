@@ -87,24 +87,6 @@ namespace XboxDownload.Properties {
         }
         
         /// <summary>
-        ///   查找类似 var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10)); 的本地化字符串。
-        /// </summary>
-        internal static string String {
-            get {
-                return ResourceManager.GetString("String", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 File.WriteAllBytes(&quot;d:\\XboxDownload.pfx&quot;, cert.Export(X509ContentType.Pfx)); 的本地化字符串。
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-16&quot;?&gt;
         ///&lt;Task version=&quot;1.2&quot; xmlns=&quot;http://schemas.microsoft.com/windows/2004/02/mit/task&quot;&gt;
         ///  &lt;RegistrationInfo&gt;
