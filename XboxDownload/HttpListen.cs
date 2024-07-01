@@ -72,7 +72,7 @@ namespace XboxDownload
                         continue;
                     }
 
-                    string _hosts = result.Groups[1].Value.Trim().ToLower();
+                    string _host = result.Groups[1].Value.Trim().ToLower();
                     string _tmpPath = Regex.Replace(_filePath, @"\?.+$", ""), _localPath = string.Empty;
                     if (Properties.Settings.Default.LocalUpload)
                     {
@@ -154,8 +154,8 @@ namespace XboxDownload
                     else
                     {
                         bool _redirect = false;
-                        string _newHosts = string.Empty;
-                        switch (_hosts)
+                        string _newHost = string.Empty;
+                        switch (_host)
                         {
                             case "xvcf1.xboxlive.com":
                             case "xvcf2.xboxlive.com":
@@ -165,40 +165,40 @@ namespace XboxDownload
                             case "d2.xboxlive.com":
                                 _redirect = true;
                                 if (Properties.Settings.Default.GameLink)
-                                    _newHosts = (string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP) && DnsListen.dicService2V4.IsEmpty ? "assets2.xboxlive.cn" : "assets2.xboxlive.com";
+                                    _newHost = (string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP) && DnsListen.dicService2V4.IsEmpty ? "assets2.xboxlive.cn" : "assets2.xboxlive.com";
                                 else
-                                    _newHosts = "assets1.xboxlive.cn";
+                                    _newHost = "assets1.xboxlive.cn";
                                 if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_host, _filePath, _extension); });
                                 break;
                             case "dlassets.xboxlive.com":
                             case "dlassets2.xboxlive.com":
                                 _redirect = true;
                                 if (Properties.Settings.Default.GameLink)
-                                    _newHosts = (string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP) && DnsListen.dicService2V4.IsEmpty ? "dlassets2.xboxlive.cn" : "dlassets2.xboxlive.com";
+                                    _newHost = (string.IsNullOrEmpty(Properties.Settings.Default.ComIP) || Properties.Settings.Default.ComIP == Properties.Settings.Default.LocalIP) && DnsListen.dicService2V4.IsEmpty ? "dlassets2.xboxlive.cn" : "dlassets2.xboxlive.com";
                                 else
-                                    _newHosts = "dlassets1.xboxlive.cn";
+                                    _newHost = "dlassets1.xboxlive.cn";
                                 if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_host, _filePath, _extension); });
                                 break;
                             case "assets1.xboxlive.cn":
                             case "d1.xboxlive.cn":
                                 if (Properties.Settings.Default.GameLink)
                                 {
                                     _redirect = true;
-                                    _newHosts = "assets2.xboxlive.cn";
+                                    _newHost = "assets2.xboxlive.cn";
                                 }
                                 if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_host, _filePath, _extension); });
                                 break;
                             case "dlassets.xboxlive.cn":
                                 if (Properties.Settings.Default.GameLink)
                                 {
                                     _redirect = true;
-                                    _newHosts = "dlassets2.xboxlive.cn";
+                                    _newHost = "dlassets2.xboxlive.cn";
                                 }
                                 if (dicFilePath.TryAdd(_filePath, string.Empty))
-                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_hosts, _filePath, _extension); });
+                                    ThreadPool.QueueUserWorkItem(delegate { UpdateGameUrl(_host, _filePath, _extension); });
                                 break;
 
                             case "us.cdn.blizzard.com":
@@ -209,27 +209,27 @@ namespace XboxDownload
                                 if (Properties.Settings.Default.BattleStore)
                                 {
                                     _redirect = true;
-                                    _newHosts = "blzddist1-a.akamaihd.net";
+                                    _newHost = "blzddist1-a.akamaihd.net";
                                 }
                                 break;
                             case "uplaypc-s-ubisoft.cdn.ubi.com":
                                 if (Properties.Settings.Default.UbiStore)
                                 {
                                     _redirect = true;
-                                    _newHosts = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
+                                    _newHost = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
                                 }
                                 break;
                             default:
-                                if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleNetease && _hosts.EndsWith(".necdn.leihuo.netease.com"))
+                                if (Properties.Settings.Default.BattleStore && Properties.Settings.Default.BattleNetease && _host.EndsWith(".necdn.leihuo.netease.com"))
                                 {
                                     _redirect = true;
-                                    _newHosts = "blzddist1-a.akamaihd.net";
+                                    _newHost = "blzddist1-a.akamaihd.net";
                                 }
                                 break;
                         }
                         if (_redirect)
                         {
-                            string _url = "http://" + _newHosts + _filePath;
+                            string _url = "http://" + _newHost + _filePath;
                             StringBuilder sb = new();
                             sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                             sb.Append("Content-Type: text/html\r\n");
@@ -242,8 +242,8 @@ namespace XboxDownload
                         else
                         {
                             bool bFileFound = false;
-                            string _url = "http://" + _hosts + _filePath;
-                            switch (_hosts)
+                            string _url = "http://" + _host + _filePath;
+                            switch (_host)
                             {
                                 case "tlu.dl.delivery.mp.microsoft.com":
                                     {
@@ -308,13 +308,13 @@ namespace XboxDownload
                                 case "download.epicgames.com":
                                 case "fastly-download.epicgames.com":
                                 case "cloudflare.epicgamescdn.com":
-                                    if (_filePath.Contains(".manifest") && _hosts != "epicgames-download1-1251447533.file.myqcloud.com")
+                                    if (_filePath.Contains(".manifest") && _host != "epicgames-download1-1251447533.file.myqcloud.com")
                                     {
-                                        string? ip = ClassDNS.DoH(_hosts);
+                                        string? ip = ClassDNS.DoH(_host);
                                         if (!string.IsNullOrEmpty(ip))
                                         {
-                                            var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
+                                            var headers = new Dictionary<string, string>() { { "Host", _host } };
+                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, headers);
                                             if (response != null && response.IsSuccessStatusCode)
                                             {
                                                 bFileFound = true;
@@ -344,10 +344,10 @@ namespace XboxDownload
                                     {
                                         if (IPAddress.TryParse(Properties.Settings.Default.BattleIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                                         {
-                                            var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                                            var headers = new Dictionary<string, string>() { { "Host", _host } };
                                             result = Regex.Match(_buffer, @"Range: (bytes=.+)");
                                             if (result.Success) headers.Add("Range", result.Groups[1].Value.Trim());
-                                            using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
+                                            using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(_url.Replace(_host, "[" + address + "]"), "GET", null, null, headers);
                                             if (response != null && response.IsSuccessStatusCode)
                                             {
                                                 bFileFound = true;
@@ -374,8 +374,8 @@ namespace XboxDownload
                                     {
                                         if (IPAddress.TryParse(Properties.Settings.Default.UbiIP, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                                         {
-                                            var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, "[" + address + "]"), "GET", null, null, headers);
+                                            var headers = new Dictionary<string, string>() { { "Host", _host } };
+                                            using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, "[" + address + "]"), "GET", null, null, headers);
                                             if (response != null && response.IsSuccessStatusCode)
                                             {
                                                 bFileFound = true;
@@ -431,7 +431,7 @@ namespace XboxDownload
         }
 
         readonly ConcurrentDictionary<String, String> dicFilePath = new();
-        private static void UpdateGameUrl(string _hosts, string _filePath, string _extension)
+        private static void UpdateGameUrl(string _host, string _filePath, string _extension)
         {
             if (Regex.IsMatch(_extension, @"\.(phf|xsp)$")) return;
             _filePath = Regex.Replace(_filePath, @"\?.*$", "");
@@ -448,7 +448,7 @@ namespace XboxDownload
                 {
                     if (XboxGame.Version >= version) return;
                 }
-                switch (_hosts)
+                switch (_host)
                 {
                     case "xvcf1.xboxlive.com":
                     case "xvcf2.xboxlive.com":
@@ -459,18 +459,18 @@ namespace XboxDownload
                     case "assets2.xboxlive.cn":
                     case "d1.xboxlive.cn":
                     case "d2.xboxlive.cn":
-                        _hosts = "assets1.xboxlive.com";
+                        _host = "assets1.xboxlive.com";
                         break;
                     case "dlassets2.xboxlive.com":
                     case "dlassets.xboxlive.cn":
                     case "dlassets2.xboxlive.cn":
-                        _hosts = "dlassets.xboxlive.com";
+                        _host = "dlassets.xboxlive.com";
                         break;
                 }
-                string? ip = ClassDNS.DoH(_hosts);
+                string? ip = ClassDNS.DoH(_host);
                 if (!string.IsNullOrEmpty(ip))
                 {
-                    var headers = new Dictionary<string, string>() { { "Host", _hosts } };
+                    var headers = new Dictionary<string, string>() { { "Host", _host } };
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("http://" + ip + _filePath, "HEAD", null, null, headers);
                     if (response != null && response.IsSuccessStatusCode)
                     {
@@ -481,7 +481,7 @@ namespace XboxDownload
                             {
                                 Version = version,
                                 FileSize = filesize,
-                                Url = "http://" + _hosts + _filePath
+                                Url = "http://" + _host + _filePath
                             };
                             XboxGameDownload.dicXboxGame.AddOrUpdate(key, XboxGame, (oldkey, oldvalue) => XboxGame);
                             XboxGameDownload.SaveXboxGame();

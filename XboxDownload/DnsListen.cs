@@ -637,6 +637,13 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsLocalIP);
                 }
             }
+            if (Properties.Settings.Default.SteamStore)
+            {
+                _ = dicServiceV4.TryAdd("store.steampowered.com", lsLocalIP);
+                _ = dicServiceV6.TryAdd("store.steampowered.com", lsEmptyIP);
+                _ = dicServiceV4.TryAdd("steamcommunity.com", lsLocalIP);
+                _ = dicServiceV6.TryAdd("steamcommunity.com", lsEmptyIP); 
+            }
             if (Properties.Settings.Default.HttpService)
             {
                 _ = dicServiceV4.TryAdd("packagespc.xboxlive.com", lsLocalIP);

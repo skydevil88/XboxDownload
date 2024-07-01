@@ -29,6 +29,8 @@ namespace XboxDownload
             sanBuilder.AddDnsName("epicgames-download1.akamaized.net");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
+            sanBuilder.AddDnsName("store.steampowered.com");
+            sanBuilder.AddDnsName("steamcommunity.com");
             req.CertificateExtensions.Add(sanBuilder.Build());
             var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
             this.certificate = new(cert.Export(X509ContentType.Pfx));
@@ -108,7 +110,7 @@ namespace XboxDownload
                                 mySocket.Close();
                                 continue;
                             }
-                            string _hosts = result.Groups[1].Value.Trim().ToLower();
+                            string _host = result.Groups[1].Value.Trim().ToLower();
                             string _tmpPath = Regex.Replace(_filePath, @"\?.+$", ""), _localPath = string.Empty;
                             if (Properties.Settings.Default.LocalUpload)
                             {
@@ -186,20 +188,20 @@ namespace XboxDownload
                             else
                             {
                                 bool bFileFound = false;
-                                string _url = "https://" + _hosts + _filePath;
-                                switch (_hosts)
+                                string _url = "https://" + _host + _filePath;
+                                switch (_host)
                                 {
                                     case "packagespc.xboxlive.com":
                                         {
                                             string? ip = string.Empty;
-                                            if (DnsListen.dicHosts1V6.TryGetValue(_hosts, out List<ResouceRecord>? lsHostsIpV6) && lsHostsIpV6.Count >= 1)
+                                            if (DnsListen.dicHosts1V6.TryGetValue(_host, out List<ResouceRecord>? lsHostsIpV6) && lsHostsIpV6.Count >= 1)
                                                 ip = "[" + new IPAddress(lsHostsIpV6[0].Datas!).ToString() + "]";
-                                            else if (DnsListen.dicHosts1V4.TryGetValue(_hosts, out List<ResouceRecord>? lsHostsIpV4) && lsHostsIpV4.Count >= 1)
+                                            else if (DnsListen.dicHosts1V4.TryGetValue(_host, out List<ResouceRecord>? lsHostsIpV4) && lsHostsIpV4.Count >= 1)
                                                 ip = new IPAddress(lsHostsIpV4[0].Datas!).ToString();
-                                            else if (DnsListen.dicUseDoH.TryGetValue(_hosts, out DnsListen.DoH? doh))
-                                                ip = ClassDNS.DoH(_hosts, doh.Server, doh.Headers);
+                                            else if (DnsListen.dicUseDoH.TryGetValue(_host, out DnsListen.DoH? doh))
+                                                ip = ClassDNS.DoH(_host, doh.Server, doh.Headers);
                                             else
-                                                ip = ClassDNS.DoH(_hosts);
+                                                ip = ClassDNS.DoH(_host);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
                                                 Match m1 = Regex.Match(_buffer, @"Authorization:(.+)");
@@ -208,8 +210,8 @@ namespace XboxDownload
                                                     Properties.Settings.Default.Authorization = m1.Groups[1].Value.Trim();
                                                     Properties.Settings.Default.Save();
                                                 }
-                                                var headers = new Dictionary<string, string>() { { "Host", _hosts }, { "Authorization", Properties.Settings.Default.Authorization } };
-                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
+                                                var headers = new Dictionary<string, string>() { { "Host", _host }, { "Authorization", Properties.Settings.Default.Authorization } };
+                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, headers);
                                                 if (response != null && response.IsSuccessStatusCode)
                                                 {
                                                     bFileFound = true;
@@ -266,13 +268,13 @@ namespace XboxDownload
                                     case "epicgames-download1.akamaized.net":
                                     case "download.epicgames.com":
                                     case "fastly-download.epicgames.com":
-                                        if (_filePath.Contains(".manifest") && _hosts != "epicgames-download1-1251447533.file.myqcloud.com")
+                                        if (_filePath.Contains(".manifest") && _host != "epicgames-download1-1251447533.file.myqcloud.com")
                                         {
-                                            string? ip = ClassDNS.DoH(_hosts);
+                                            string? ip = ClassDNS.DoH(_host);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
-                                                var headers = new Dictionary<string, string>() { { "Host", _hosts } };
-                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_hosts, ip), "GET", null, null, headers);
+                                                var headers = new Dictionary<string, string>() { { "Host", _host } };
+                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, headers);
                                                 if (response != null && response.IsSuccessStatusCode)
                                                 {
                                                     bFileFound = true;
@@ -298,6 +300,26 @@ namespace XboxDownload
                                             ssl.Write(_headers);
                                             ssl.Flush();
                                             if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                        }
+                                        break;
+                                    case "store.steampowered.com":
+                                    case "steamcommunity.com":
+                                        {
+                                            _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: steam.skydevil.xyz\r\nX-Organization: XboxDownload\r\nX-Author: Devil\r\nX-Host: " + _host);
+                                            Uri uri = new("https://steam.skydevil.xyz/");
+                                            SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer));
+                                            if (string.IsNullOrEmpty(socketPackage.Err))
+                                            {
+                                                bFileFound = true;
+                                                string headers = socketPackage.Headers;
+                                                headers = Regex.Replace(headers, @"(Content-Encoding|Transfer-Encoding|Content-Length): .+\r\n", "");
+                                                headers = Regex.Replace(headers, @"\r\n\r\n", "\r\nContent-Length: " + socketPackage.Buffer!.Length + "\r\n\r\n");
+                                                Byte[] _headers = Encoding.ASCII.GetBytes(headers);
+                                                ssl.Write(_headers);
+                                                ssl.Write(socketPackage.Buffer);
+                                                ssl.Flush();
+                                            }
+                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                         }
                                         break;
                                 }

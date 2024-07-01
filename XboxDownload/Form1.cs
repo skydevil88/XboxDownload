@@ -105,6 +105,7 @@ namespace XboxDownload
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
+            ckbSteamStore.Checked = Properties.Settings.Default.SteamStore;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -1064,6 +1065,7 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
+                Properties.Settings.Default.SteamStore = ckbSteamStore.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1249,7 +1251,7 @@ namespace XboxDownload
 
         private void UpdateHosts(bool add, string? akamai = null)
         {
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.SteamStore)) return;
 
             StringBuilder sb = new();
             try
@@ -1425,6 +1427,11 @@ namespace XboxDownload
                                 else
                                     sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
                             }
+                        }
+                        if (Properties.Settings.Default.SteamStore)
+                        {
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " store.steampowered.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " steamcommunity.com");
                         }
                         DataTable dt = Form1.dtHosts.Copy();
                         dt.RejectChanges();
