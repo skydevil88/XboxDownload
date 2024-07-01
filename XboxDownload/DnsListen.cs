@@ -640,8 +640,12 @@ namespace XboxDownload
             if (Properties.Settings.Default.SteamStore)
             {
                 _ = dicServiceV4.TryAdd("store.steampowered.com", lsLocalIP);
-                _ = dicServiceV6.TryAdd("store.steampowered.com", lsEmptyIP);
+                _ = dicServiceV4.TryAdd("api.steampowered.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("login.steampowered.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("steamcommunity.com", lsLocalIP);
+                _ = dicServiceV6.TryAdd("store.steampowered.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("api.steampowered.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("login.steampowered.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("steamcommunity.com", lsEmptyIP); 
             }
             if (Properties.Settings.Default.HttpService)

@@ -13,6 +13,7 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Web;
 using NetFwTypeLib;
+using Microsoft.VisualBasic.Logging;
 
 namespace XboxDownload
 {
@@ -1431,6 +1432,8 @@ namespace XboxDownload
                         if (Properties.Settings.Default.SteamStore)
                         {
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " store.steampowered.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api.steampowered.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " login.steampowered.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " steamcommunity.com");
                         }
                         DataTable dt = Form1.dtHosts.Copy();

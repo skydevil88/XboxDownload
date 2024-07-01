@@ -29,7 +29,7 @@ namespace XboxDownload
             sanBuilder.AddDnsName("epicgames-download1.akamaized.net");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
-            sanBuilder.AddDnsName("store.steampowered.com");
+            sanBuilder.AddDnsName("*.steampowered.com");
             sanBuilder.AddDnsName("steamcommunity.com");
             req.CertificateExtensions.Add(sanBuilder.Build());
             var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
@@ -303,10 +303,22 @@ namespace XboxDownload
                                         }
                                         break;
                                     case "store.steampowered.com":
+                                    case "api.steampowered.com":
+                                    case "login.steampowered.com":
                                     case "steamcommunity.com":
                                         {
-                                            _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: steam.skydevil.xyz\r\nX-Organization: XboxDownload\r\nX-Author: Devil\r\nX-Host: " + _host);
-                                            Uri uri = new("https://steam.skydevil.xyz/");
+                                            string _hosts2 = string.Empty;
+                                            if (_host == "api.steampowered.com" || _host == "login.steampowered.com" || _host == "steamcommunity.com" || Regex.IsMatch(_filePath, @"^/(login)/"))
+                                            {
+                                                _hosts2 = "steam.skydevil.xyz";
+                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _hosts2 + "\r\nX-Organization: XboxDownload\r\nX-Author: Devil\r\nX-Host: " + _host);
+                                            }
+                                            else
+                                            {
+                                                _hosts2 = "store.cloudflare.steamstatic.com";
+                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _hosts2);
+                                            }
+                                            Uri uri = new("https://" + _hosts2);
                                             SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer));
                                             if (string.IsNullOrEmpty(socketPackage.Err))
                                             {
@@ -318,8 +330,8 @@ namespace XboxDownload
                                                 ssl.Write(_headers);
                                                 ssl.Write(socketPackage.Buffer);
                                                 ssl.Flush();
+                                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                             }
-                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                         }
                                         break;
                                 }
