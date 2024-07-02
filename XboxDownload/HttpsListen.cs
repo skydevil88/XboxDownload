@@ -307,18 +307,18 @@ namespace XboxDownload
                                     case "login.steampowered.com":
                                     case "steamcommunity.com":
                                         {
-                                            string _hosts2 = string.Empty;
-                                            if (_host == "api.steampowered.com" || _host == "login.steampowered.com" || _host == "steamcommunity.com" || Regex.IsMatch(_filePath, @"^/(login)/"))
+                                            string _host2 = string.Empty;
+                                            if (_host == "store.steampowered.com" && !Regex.IsMatch(_filePath, @"^/login/"))
                                             {
-                                                _hosts2 = "steam.skydevil.xyz";
-                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _hosts2 + "\r\nX-Organization: XboxDownload\r\nX-Author: Devil\r\nX-Host: " + _host);
+                                                _host2 = "store.cloudflare.steamstatic.com";
+                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _host2);
                                             }
                                             else
                                             {
-                                                _hosts2 = "store.cloudflare.steamstatic.com";
-                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _hosts2);
+                                                _host2 = "steam.skydevil.xyz";
+                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _host2 + "\r\nX-Organization: XboxDownload\r\nX-Author: Devil\r\nX-Host: " + _host);
                                             }
-                                            Uri uri = new("https://" + _hosts2);
+                                            Uri uri = new("https://" + _host2);
                                             SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer));
                                             if (string.IsNullOrEmpty(socketPackage.Err))
                                             {
