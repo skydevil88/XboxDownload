@@ -190,9 +190,10 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
-        public static bool SniProxy(string ip, Byte[] send, SslStream clent)
+        public static bool SniProxy(string ip, Byte[] send, SslStream clent, out string errMessage)
         {
             bool isOK = true;
+            errMessage = string.Empty;
             String contentencoding = string.Empty;
             List<Byte> list = new();
             using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
@@ -208,7 +209,7 @@ namespace XboxDownload
                 catch (Exception ex)
                 {
                     isOK = false;
-                    Debug.WriteLine(ex.Message);
+                    errMessage = ex.Message;
                 }
                 if (mySocket.Connected)
                 {
@@ -289,7 +290,7 @@ namespace XboxDownload
                     catch (Exception ex)
                     {
                         isOK = false;
-                        Debug.WriteLine(ex.Message);
+                        errMessage = ex.Message;
                     }
                     finally
                     {

@@ -1437,7 +1437,7 @@ namespace XboxDownload
 
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " alive.github.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " api.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " assets - cdn.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " assets-cdn.github.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " central.github.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " codeload.github.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " collector.github.com");

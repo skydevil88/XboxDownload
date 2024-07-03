@@ -312,7 +312,7 @@ namespace XboxDownload
 
                                     case "alive.github.com":
                                     case "api.github.com":
-                                    case "assets - cdn.github.com":
+                                    case "assets-cdn.github.com":
                                     case "central.github.com":
                                     case "codeload.github.com":
                                     case "collector.github.com":
@@ -338,12 +338,24 @@ namespace XboxDownload
                                     case "user-images.githubusercontent.com":
                                     case "private-user-images.githubusercontent.com":
                                         {
-                                            int dohs = 3;
+                                            int dohs = 3; //使用 DNS.SB(GLOBAL) 解释域名 IP
                                             string? ip = ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } });
                                             if (!string.IsNullOrEmpty(ip))
                                             {
+                                                bFileFound = true;
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                                bFileFound = ClassWeb.SniProxy(ip, Encoding.ASCII.GetBytes(_buffer), ssl);
+                                                if (!ClassWeb.SniProxy(ip, Encoding.ASCII.GetBytes(_buffer), ssl, out string errMessae))
+                                                {
+                                                    Byte[] _response = Encoding.ASCII.GetBytes(errMessae);
+                                                    StringBuilder sb = new();
+                                                    sb.Append("HTTP/1.1 500 Server Error\r\n");
+                                                    sb.Append("Content-Type: text/html\r\n");
+                                                    sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                                    Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                                    ssl.Write(_headers);
+                                                    ssl.Write(_response);
+                                                    ssl.Flush();
+                                                }
                                             }
                                         }
                                         break;

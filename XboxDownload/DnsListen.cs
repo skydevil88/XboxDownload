@@ -643,10 +643,14 @@ namespace XboxDownload
                 _ = dicServiceV4.TryAdd("api.steampowered.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("login.steampowered.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("steamcommunity.com", lsLocalIP);
+                _ = dicServiceV6.TryAdd("store.steampowered.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("api.steampowered.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("login.steampowered.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("steamcommunity.com", lsEmptyIP);
 
                 _ = dicServiceV4.TryAdd("alive.github.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("api.github.com", lsLocalIP);
-                _ = dicServiceV4.TryAdd("assets - cdn.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("assets-cdn.github.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("central.github.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("codeload.github.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("collector.github.com", lsLocalIP);
@@ -671,15 +675,9 @@ namespace XboxDownload
                 _ = dicServiceV4.TryAdd("raw.githubusercontent.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("user-images.githubusercontent.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("private-user-images.githubusercontent.com", lsLocalIP);
-
-                _ = dicServiceV6.TryAdd("store.steampowered.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("api.steampowered.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("login.steampowered.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("steamcommunity.com", lsEmptyIP);
-
                 _ = dicServiceV6.TryAdd("alive.github.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("api.github.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("assets - cdn.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("assets-cdn.github.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("central.github.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("codeload.github.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("collector.github.com", lsEmptyIP);
