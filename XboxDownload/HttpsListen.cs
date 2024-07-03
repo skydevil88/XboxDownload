@@ -31,6 +31,9 @@ namespace XboxDownload
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
             sanBuilder.AddDnsName("*.steampowered.com");
             sanBuilder.AddDnsName("steamcommunity.com");
+            sanBuilder.AddDnsName("github.com");
+            sanBuilder.AddDnsName("*.github.com");
+            sanBuilder.AddDnsName("*.githubusercontent.com");
             req.CertificateExtensions.Add(sanBuilder.Build());
             var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
             this.certificate = new(cert.Export(X509ContentType.Pfx));
@@ -306,31 +309,41 @@ namespace XboxDownload
                                     case "api.steampowered.com":
                                     case "login.steampowered.com":
                                     case "steamcommunity.com":
+
+                                    case "alive.github.com":
+                                    case "api.github.com":
+                                    case "assets - cdn.github.com":
+                                    case "central.github.com":
+                                    case "codeload.github.com":
+                                    case "collector.github.com":
+                                    case "gist.github.com":
+                                    case "github.com":
+                                    case "live.github.com":
+                                    case "education.github.com":
+                                    case "avatars.githubusercontent.com":
+                                    case "avatars0.githubusercontent.com":
+                                    case "avatars1.githubusercontent.com":
+                                    case "avatars2.githubusercontent.com":
+                                    case "avatars3.githubusercontent.com":
+                                    case "avatars4.githubusercontent.com":
+                                    case "avatars5.githubusercontent.com":
+                                    case "camo.githubusercontent.com":
+                                    case "cloud.githubusercontent.com":
+                                    case "desktop.githubusercontent.com":
+                                    case "favicons.githubusercontent.com":
+                                    case "media.githubusercontent.com":
+                                    case "objects.githubusercontent.com":
+                                    case "pipelines.actions.githubusercontent.com":
+                                    case "raw.githubusercontent.com":
+                                    case "user-images.githubusercontent.com":
+                                    case "private-user-images.githubusercontent.com":
                                         {
-                                            string _host2 = string.Empty;
-                                            if (_host == "store.steampowered.com" && !Regex.IsMatch(_filePath, @"^/login/"))
+                                            int dohs = 3;
+                                            string? ip = ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } });
+                                            if (!string.IsNullOrEmpty(ip))
                                             {
-                                                _host2 = "store.cloudflare.steamstatic.com";
-                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _host2);
-                                            }
-                                            else
-                                            {
-                                                _host2 = "steam.skydevil.xyz";
-                                                _buffer = Regex.Replace(_buffer, @"Host: .+", "Host: " + _host2 + "\r\nX-Organization: XboxDownload\r\nX-Author: Devil\r\nX-Host: " + _host);
-                                            }
-                                            Uri uri = new("https://" + _host2);
-                                            SocketPackage socketPackage = ClassWeb.TlsRequest(uri, Encoding.ASCII.GetBytes(_buffer));
-                                            if (string.IsNullOrEmpty(socketPackage.Err))
-                                            {
-                                                bFileFound = true;
-                                                string headers = socketPackage.Headers;
-                                                headers = Regex.Replace(headers, @"(Content-Encoding|Transfer-Encoding|Content-Length): .+\r\n", "");
-                                                headers = Regex.Replace(headers, @"\r\n\r\n", "\r\nContent-Length: " + socketPackage.Buffer!.Length + "\r\n\r\n");
-                                                Byte[] _headers = Encoding.ASCII.GetBytes(headers);
-                                                ssl.Write(_headers);
-                                                ssl.Write(socketPackage.Buffer);
-                                                ssl.Flush();
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                                bFileFound = ClassWeb.SniProxy(ip, Encoding.ASCII.GetBytes(_buffer), ssl);
                                             }
                                         }
                                         break;

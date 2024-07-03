@@ -637,16 +637,73 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsLocalIP);
                 }
             }
-            if (Properties.Settings.Default.SteamStore)
+            if (Properties.Settings.Default.SniProxy)
             {
                 _ = dicServiceV4.TryAdd("store.steampowered.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("api.steampowered.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("login.steampowered.com", lsLocalIP);
                 _ = dicServiceV4.TryAdd("steamcommunity.com", lsLocalIP);
+
+                _ = dicServiceV4.TryAdd("alive.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("api.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("assets - cdn.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("central.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("codeload.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("collector.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("gist.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("live.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("education.github.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars0.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars1.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars2.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars3.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars4.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("avatars5.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("camo.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("cloud.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("desktop.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("favicons.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("media.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("objects.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("pipelines.actions.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("raw.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("user-images.githubusercontent.com", lsLocalIP);
+                _ = dicServiceV4.TryAdd("private-user-images.githubusercontent.com", lsLocalIP);
+
                 _ = dicServiceV6.TryAdd("store.steampowered.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("api.steampowered.com", lsEmptyIP);
                 _ = dicServiceV6.TryAdd("login.steampowered.com", lsEmptyIP);
-                _ = dicServiceV6.TryAdd("steamcommunity.com", lsEmptyIP); 
+                _ = dicServiceV6.TryAdd("steamcommunity.com", lsEmptyIP);
+
+                _ = dicServiceV6.TryAdd("alive.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("api.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("assets - cdn.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("central.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("codeload.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("collector.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("gist.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("live.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("education.github.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars0.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars1.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars2.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars3.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars4.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("avatars5.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("camo.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("cloud.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("desktop.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("favicons.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("media.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("objects.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("pipelines.actions.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("raw.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("user-images.githubusercontent.com", lsEmptyIP);
+                _ = dicServiceV6.TryAdd("private-user-images.githubusercontent.com", lsEmptyIP);
             }
             if (Properties.Settings.Default.HttpService)
             {

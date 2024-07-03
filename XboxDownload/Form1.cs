@@ -13,7 +13,6 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Web;
 using NetFwTypeLib;
-using Microsoft.VisualBasic.Logging;
 
 namespace XboxDownload
 {
@@ -106,7 +105,7 @@ namespace XboxDownload
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
-            ckbSteamStore.Checked = Properties.Settings.Default.SteamStore;
+            ckbSniProxy.Checked = Properties.Settings.Default.SniProxy;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -1066,7 +1065,7 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
-                Properties.Settings.Default.SteamStore = ckbSteamStore.Checked;
+                Properties.Settings.Default.SniProxy = ckbSniProxy.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1252,7 +1251,7 @@ namespace XboxDownload
 
         private void UpdateHosts(bool add, string? akamai = null)
         {
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.SteamStore)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.SniProxy)) return;
 
             StringBuilder sb = new();
             try
@@ -1429,12 +1428,40 @@ namespace XboxDownload
                                     sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
                             }
                         }
-                        if (Properties.Settings.Default.SteamStore)
+                        if (Properties.Settings.Default.SniProxy)
                         {
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " store.steampowered.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " api.steampowered.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " login.steampowered.com");
                             sb.AppendLine(Properties.Settings.Default.LocalIP + " steamcommunity.com");
+
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " alive.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " assets - cdn.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " central.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " codeload.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " collector.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " gist.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " live.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " education.github.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars0.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars1.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars2.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars3.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars4.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars5.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " camo.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " cloud.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " desktop.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " favicons.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " media.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " objects.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " pipelines.actions.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " raw.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " user-images.githubusercontent.com");
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " private-user-images.githubusercontent.com");
                         }
                         DataTable dt = Form1.dtHosts.Copy();
                         dt.RejectChanges();
@@ -1981,7 +2008,7 @@ namespace XboxDownload
                         lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         string[,] games = new string[,]
                         {
-                            {"光环: 无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5_xs", "/13/2c1ee81e-e917-482f-ad71-4f34a3e26bc1/0698b936-d300-4451-b9a0-0be0514bbbe5/1.4026.37818.0.e88ca19f-5c43-4781-97f9-952a15a0807c/Microsoft.254428597CFE2_1.4026.37818.0_neutral__8wekyb3d8bbwe_xs.xvc" },
+                            {"光环: 无限(XS)", "0698b936-d300-4451-b9a0-0be0514bbbe5_xs", "/1/c6d465e7-df25-4b5c-987d-ad8dc643c24e/0698b936-d300-4451-b9a0-0be0514bbbe5/1.4036.37830.0.138cc93c-6e75-47aa-891f-54e9f29a54a1/Microsoft.254428597CFE2_1.4036.37830.0_neutral__8wekyb3d8bbwe_xs.xvc" },
                             {"极限竞速: 地平线5(PC)", "3d263e92-93cd-4f9b-90c7-5438150cecbf", "/8/e082a3b4-d390-4eb3-b73f-6891e32d84b7/3d263e92-93cd-4f9b-90c7-5438150cecbf/3.649.948.0.ac16c93c-78da-41ae-ab69-3e431075b342/Microsoft.624F8B84B80_3.649.948.0_x64__8wekyb3d8bbwe.msixvc" },
                             {"战争机器5(PC)", "1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c", "/8/82e2c767-56a2-4cff-9adf-bc901fd81e1a/1e66a3e7-2f7b-461c-9f46-3ee0aec64b8c/1.1.967.0.4e71a28b-d845-42e5-86bf-36afdd5eb82f/Microsoft.HalifaxBaseGame_1.1.967.0_x64__8wekyb3d8bbwe.msixvc"}
                         };

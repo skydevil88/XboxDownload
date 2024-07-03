@@ -190,6 +190,128 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
+        public static bool SniProxy(string ip, Byte[] send, SslStream clent)
+        {
+            bool isOK = true;
+            String contentencoding = string.Empty;
+            List<Byte> list = new();
+            using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
+                mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
+                mySocket.SendTimeout = 6000;
+                mySocket.ReceiveTimeout = 6000;
+                try
+                {
+                    mySocket.Connect(ip, 443);
+                }
+                catch (Exception ex)
+                {
+                    isOK = false;
+                    Debug.WriteLine(ex.Message);
+                }
+                if (mySocket.Connected)
+                {
+                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return true; }), null);
+                    ssl.WriteTimeout = 6000;
+                    ssl.ReadTimeout = 6000;
+                    try
+                    {
+                        ssl.AuthenticateAsClient(ip, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        if (ssl.IsAuthenticated)
+                        {
+                            Byte[] bReceive = new Byte[4096];
+                            long count = 0;
+                            Int32 len = -1;
+                            long ContentLength = -1;
+                            string headers = string.Empty;
+                            String TransferEncoding = "";
+                            ssl.Write(send);
+                            ssl.Flush();
+                            while ((len = ssl.Read(bReceive, 0, bReceive.Length)) > 0)
+                            {
+                                count += len;
+                                Byte[] dest = new Byte[len];
+                                if (len == bReceive.Length)
+                                {
+                                    dest = bReceive;
+                                    if (String.IsNullOrEmpty(headers)) list.AddRange(bReceive);
+                                }
+                                else
+                                {
+                                    Buffer.BlockCopy(bReceive, 0, dest, 0, len);
+                                    if (String.IsNullOrEmpty(headers)) list.AddRange(dest);
+                                }
+                                clent.Write(dest);
+                                if (String.IsNullOrEmpty(headers))
+                                {
+                                    Byte[] bytes = list.ToArray();
+                                    for (int i = 1; i <= bytes.Length - 4; i++)
+                                    {
+                                        if (BitConverter.ToString(bytes, i, 4) == "0D-0A-0D-0A")
+                                        {
+                                            headers = Encoding.ASCII.GetString(bytes, 0, i + 4);
+                                            count = bytes.Length - i - 4;
+                                            list.Clear();
+                                            Match result = Regex.Match(headers, @"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.IgnoreCase);
+                                            if (result.Success)
+                                            {
+                                                ContentLength = Convert.ToInt32(result.Groups["ContentLength"].Value);
+                                            }
+                                            result = Regex.Match(headers, @"Transfer-Encoding:\s*(?<TransferEncoding>.+)", RegexOptions.IgnoreCase);
+                                            if (result.Success)
+                                            {
+                                                TransferEncoding = result.Groups["TransferEncoding"].Value.Trim();
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!String.IsNullOrEmpty(headers))
+                                {
+                                    if (TransferEncoding == "chunked")
+                                    {
+                                        if (dest.Length >= 5 && BitConverter.ToString(dest, dest.Length - 5) == "30-0D-0A-0D-0A")
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else if (ContentLength >= 0)
+                                    {
+                                        if (count == ContentLength) break;
+                                    }
+                                    else break;
+                                }
+                            }
+                            clent.Flush();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        isOK = false;
+                        Debug.WriteLine(ex.Message);
+                    }
+                    finally
+                    {
+                        ssl.Close();
+                    }
+                }
+                if (mySocket.Connected)
+                {
+                    try
+                    {
+                        mySocket.Shutdown(SocketShutdown.Both);
+                    }
+                    finally
+                    {
+                        mySocket.Close();
+                    }
+                }
+                mySocket.Dispose();
+            }
+            return isOK;
+        }
+
         public static SocketPackage TcpRequest(Uri uri, Byte[] send, String? host = null, Boolean decode = false, String? charset = null, Int32 timeout = 30000, CancellationTokenSource? cts = null)
         {
             SocketPackage socketPackage = new()
@@ -359,12 +481,12 @@ namespace XboxDownload
                 }
                 if (mySocket.Connected)
                 {
-                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return true; }), null);
+                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return sslPolicyErrors == SslPolicyErrors.None; }), null);
                     ssl.WriteTimeout = timeout;
                     ssl.ReadTimeout = timeout;
                     try
                     {
-                        ssl.AuthenticateAsClient(uri.Host, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, false);
+                        ssl.AuthenticateAsClient(uri.Host, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
                         if (ssl.IsAuthenticated)
                         {
                             Byte[] bReceive = new Byte[4096];

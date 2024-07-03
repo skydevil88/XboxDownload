@@ -799,16 +799,16 @@
   <data name="&gt;&gt;label24.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.Name" xml:space="preserve">
-    <value>ckbSteamStore</value>
+  <data name="&gt;&gt;ckbSniProxy.Name" xml:space="preserve">
+    <value>ckbSniProxy</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.Type" xml:space="preserve">
+  <data name="&gt;&gt;ckbSniProxy.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ckbSniProxy.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;ckbSniProxy.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;ckbBetterAkamaiIP.Name" xml:space="preserve">
@@ -1621,31 +1621,31 @@
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="ckbSteamStore.AutoSize" type="System.Boolean, mscorlib">
+  <data name="ckbSniProxy.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="ckbSteamStore.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="ckbSniProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>1214, 336</value>
   </data>
-  <data name="ckbSteamStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 28</value>
+  <data name="ckbSniProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>211, 28</value>
   </data>
-  <data name="ckbSteamStore.TabIndex" type="System.Int32, mscorlib">
+  <data name="ckbSniProxy.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
   </data>
-  <data name="ckbSteamStore.Text" xml:space="preserve">
-    <value>修复 Steam 商店社区</value>
+  <data name="ckbSniProxy.Text" xml:space="preserve">
+    <value>修复 Steam、GitHub</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.Name" xml:space="preserve">
-    <value>ckbSteamStore</value>
+  <data name="&gt;&gt;ckbSniProxy.Name" xml:space="preserve">
+    <value>ckbSniProxy</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.Type" xml:space="preserve">
+  <data name="&gt;&gt;ckbSniProxy.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ckbSniProxy.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;ckbSteamStore.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;ckbSniProxy.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="ckbBetterAkamaiIP.AutoSize" type="System.Boolean, mscorlib">

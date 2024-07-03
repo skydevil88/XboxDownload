@@ -65,7 +65,7 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
-            ckbSteamStore = new CheckBox();
+            ckbSniProxy = new CheckBox();
             ckbBetterAkamaiIP = new CheckBox();
             linkDoHServer = new LinkLabel();
             ckbBattleNetease = new CheckBox();
@@ -616,7 +616,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(ckbSteamStore);
+            groupBox1.Controls.Add(ckbSniProxy);
             groupBox1.Controls.Add(ckbBetterAkamaiIP);
             groupBox1.Controls.Add(linkDoHServer);
             groupBox1.Controls.Add(ckbBattleNetease);
@@ -686,11 +686,11 @@
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
             // 
-            // ckbSteamStore
+            // ckbSniProxy
             // 
-            resources.ApplyResources(ckbSteamStore, "ckbSteamStore");
-            ckbSteamStore.Name = "ckbSteamStore";
-            ckbSteamStore.UseVisualStyleBackColor = true;
+            resources.ApplyResources(ckbSniProxy, "ckbSniProxy");
+            ckbSniProxy.Name = "ckbSniProxy";
+            ckbSniProxy.UseVisualStyleBackColor = true;
             // 
             // ckbBetterAkamaiIP
             // 
@@ -3093,6 +3093,6 @@
         private CheckBox ckbBattleNetease;
         private LinkLabel linkDoHServer;
         private LinkLabel linkHostsAdd;
-        private CheckBox ckbSteamStore;
+        private CheckBox ckbSniProxy;
     }
 }

@@ -398,12 +398,12 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SteamStore {
+        public bool SniProxy {
             get {
-                return ((bool)(this["SteamStore"]));
+                return ((bool)(this["SniProxy"]));
             }
             set {
-                this["SteamStore"] = value;
+                this["SniProxy"] = value;
             }
         }
         
