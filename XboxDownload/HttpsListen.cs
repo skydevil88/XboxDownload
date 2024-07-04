@@ -7,19 +7,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Security.Cryptography;
+using System.Collections.Concurrent;
 
 namespace XboxDownload
 {
     class HttpsListen
     {
-        private readonly Form1 parentForm;
-        private readonly X509Certificate2 certificate;
-        Socket? socket = null;
+        public static X509Certificate2? certificate;
+        public static readonly ConcurrentDictionary<String, String?> dicSniHost = new();
 
-        public HttpsListen(Form1 parentForm)
+        public static void CreateCertificate()
         {
-            this.parentForm = parentForm;
-
+            dicSniHost.Clear();
             // 生成证书
             using var rsa = RSA.Create(2048);
             var req = new CertificateRequest("CN=XboxDownload", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
@@ -29,14 +28,34 @@ namespace XboxDownload
             sanBuilder.AddDnsName("epicgames-download1.akamaized.net");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
-            sanBuilder.AddDnsName("*.steampowered.com");
-            sanBuilder.AddDnsName("steamcommunity.com");
-            sanBuilder.AddDnsName("github.com");
-            sanBuilder.AddDnsName("*.github.com");
-            sanBuilder.AddDnsName("*.githubusercontent.com");
+            if (File.Exists(Form1.resourcePath + "\\Proxy.txt"))
+            {
+                foreach (string host in Regex.Split(File.ReadAllText(Form1.resourcePath + "\\Proxy.txt").Trim(), @"\n"))
+                {
+                    string _host = host.Trim();
+                    if (!string.IsNullOrEmpty(_host))
+                    {
+                        try
+                        {
+                            sanBuilder.AddDnsName(_host);
+                            dicSniHost.TryAdd(_host, "");
+                        }
+                        catch { }
+                    }
+                }
+            }
             req.CertificateExtensions.Add(sanBuilder.Build());
             var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
-            this.certificate = new(cert.Export(X509ContentType.Pfx));
+            certificate = new(cert.Export(X509ContentType.Pfx));
+        }
+
+        private readonly Form1 parentForm;
+        Socket? socket = null;
+
+        public HttpsListen(Form1 parentForm)
+        {
+            this.parentForm = parentForm;
+            CreateCertificate();
         }
 
         public void Listen()
@@ -61,7 +80,7 @@ namespace XboxDownload
 
             X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
-            store.Add(this.certificate);
+            store.Add(certificate!);
             store.Close();
 
             while (Form1.bServiceFlag)
@@ -84,7 +103,7 @@ namespace XboxDownload
                 using SslStream ssl = new(new NetworkStream(mySocket), false);
                 try
                 {
-                    ssl.AuthenticateAsServer(this.certificate, false, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, false);
+                    ssl.AuthenticateAsServer(certificate!, false, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, false);
                     ssl.WriteTimeout = 30000;
                     ssl.ReadTimeout = 30000;
                     if (ssl.IsAuthenticated)
@@ -94,7 +113,7 @@ namespace XboxDownload
                             Byte[] _receive = new Byte[4096];
                             int _num = ssl.Read(_receive, 0, _receive.Length);
                             string _buffer = Encoding.ASCII.GetString(_receive, 0, _num);
-                            Match result = Regex.Match(_buffer, @"(?<method>GET|POST|OPTIONS) (?<path>[^\s]+)");
+                            Match result = Regex.Match(_buffer, @"(?<method>GET|POST|OPTIONS|PUP|DELETE) (?<path>[^\s]+)");
                             if (!result.Success)
                             {
                                 mySocket.Close();
@@ -305,48 +324,37 @@ namespace XboxDownload
                                             if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                         }
                                         break;
-                                    case "store.steampowered.com":
-                                    case "api.steampowered.com":
-                                    case "login.steampowered.com":
-                                    case "steamcommunity.com":
-
-                                    case "alive.github.com":
-                                    case "api.github.com":
-                                    case "assets-cdn.github.com":
-                                    case "central.github.com":
-                                    case "codeload.github.com":
-                                    case "collector.github.com":
-                                    case "gist.github.com":
-                                    case "github.com":
-                                    case "live.github.com":
-                                    case "education.github.com":
-                                    case "avatars.githubusercontent.com":
-                                    case "avatars0.githubusercontent.com":
-                                    case "avatars1.githubusercontent.com":
-                                    case "avatars2.githubusercontent.com":
-                                    case "avatars3.githubusercontent.com":
-                                    case "avatars4.githubusercontent.com":
-                                    case "avatars5.githubusercontent.com":
-                                    case "camo.githubusercontent.com":
-                                    case "cloud.githubusercontent.com":
-                                    case "desktop.githubusercontent.com":
-                                    case "favicons.githubusercontent.com":
-                                    case "media.githubusercontent.com":
-                                    case "objects.githubusercontent.com":
-                                    case "pipelines.actions.githubusercontent.com":
-                                    case "raw.githubusercontent.com":
-                                    case "user-images.githubusercontent.com":
-                                    case "private-user-images.githubusercontent.com":
+                                    default:
                                         {
-                                            int dohs = 3; //使用 DNS.SB(GLOBAL) 解释域名 IP
-                                            string? ip = ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } });
-                                            if (!string.IsNullOrEmpty(ip))
+                                            if (Properties.Settings.Default.Proxy && dicSniHost.TryGetValue(_host, out string? ip))
                                             {
                                                 bFileFound = true;
-                                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                                if (!ClassWeb.SniProxy(ip, Encoding.ASCII.GetBytes(_buffer), ssl, out string errMessae))
+                                                if (string.IsNullOrEmpty(ip))
                                                 {
-                                                    Byte[] _response = Encoding.ASCII.GetBytes(errMessae);
+                                                    int dohs = 3; //使用 DNS.SB(GLOBAL) 解释域名 IP
+                                                    ip = ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } });
+                                                    dicSniHost.AddOrUpdate(_host, ip, (oldkey, oldvalue) => ip);
+                                                }
+                                                if (!string.IsNullOrEmpty(ip))
+                                                {
+                                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                                    if (!ClassWeb.Proxy(ip, Encoding.ASCII.GetBytes(_buffer), ssl, out string errMessae))
+                                                    {
+                                                        dicSniHost.AddOrUpdate(_host, "", (oldkey, oldvalue) => "");
+                                                        Byte[] _response = Encoding.ASCII.GetBytes(errMessae);
+                                                        StringBuilder sb = new();
+                                                        sb.Append("HTTP/1.1 500 Server Error\r\n");
+                                                        sb.Append("Content-Type: text/html\r\n");
+                                                        sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
+                                                        Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                                        ssl.Write(_headers);
+                                                        ssl.Write(_response);
+                                                        ssl.Flush();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Byte[] _response = Encoding.ASCII.GetBytes("Unable to query domain " + _host + ".");
                                                     StringBuilder sb = new();
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                     sb.Append("Content-Type: text/html\r\n");

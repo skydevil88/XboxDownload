@@ -799,17 +799,29 @@
   <data name="&gt;&gt;label24.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.Name" xml:space="preserve">
-    <value>ckbSniProxy</value>
+  <data name="&gt;&gt;linkProxy.Name" xml:space="preserve">
+    <value>linkProxy</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;linkProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.Parent" xml:space="preserve">
+  <data name="&gt;&gt;linkProxy.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;linkProxy.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.Name" xml:space="preserve">
+    <value>ckbProxy</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;ckbBetterAkamaiIP.Name" xml:space="preserve">
     <value>ckbBetterAkamaiIP</value>
@@ -821,7 +833,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBetterAkamaiIP.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="&gt;&gt;linkDoHServer.Name" xml:space="preserve">
     <value>linkDoHServer</value>
@@ -833,7 +845,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkDoHServer.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="&gt;&gt;ckbBattleNetease.Name" xml:space="preserve">
     <value>ckbBattleNetease</value>
@@ -845,7 +857,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleNetease.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="&gt;&gt;linkRepairDNS.Name" xml:space="preserve">
     <value>linkRepairDNS</value>
@@ -857,7 +869,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRepairDNS.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="&gt;&gt;linkRestartEpic.Name" xml:space="preserve">
     <value>linkRestartEpic</value>
@@ -869,7 +881,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEpic.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="&gt;&gt;linkEA2.Name" xml:space="preserve">
     <value>linkEA2</value>
@@ -881,7 +893,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA2.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="&gt;&gt;panelEpic.Name" xml:space="preserve">
     <value>panelEpic</value>
@@ -893,7 +905,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;panelEpic.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="&gt;&gt;ckbDisableIPv6DNS.Name" xml:space="preserve">
     <value>ckbDisableIPv6DNS</value>
@@ -905,7 +917,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDisableIPv6DNS.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="&gt;&gt;ckbUbiStore.Name" xml:space="preserve">
     <value>ckbUbiStore</value>
@@ -917,7 +929,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbUbiStore.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="&gt;&gt;label34.Name" xml:space="preserve">
     <value>label34</value>
@@ -929,7 +941,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label34.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="&gt;&gt;tbUbiIP.Name" xml:space="preserve">
     <value>tbUbiIP</value>
@@ -941,7 +953,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbUbiIP.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="&gt;&gt;labelUbi.Name" xml:space="preserve">
     <value>labelUbi</value>
@@ -953,7 +965,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelUbi.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="&gt;&gt;linkXbox3.Name" xml:space="preserve">
     <value>linkXbox3</value>
@@ -965,7 +977,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox3.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="&gt;&gt;linkXbox2.Name" xml:space="preserve">
     <value>linkXbox2</value>
@@ -977,7 +989,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox2.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="&gt;&gt;linkXbox1.Name" xml:space="preserve">
     <value>linkXbox1</value>
@@ -989,7 +1001,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox1.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="&gt;&gt;linkEA1.Name" xml:space="preserve">
     <value>linkEA1</value>
@@ -1001,7 +1013,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA1.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="&gt;&gt;ckbGameLink.Name" xml:space="preserve">
     <value>ckbGameLink</value>
@@ -1013,7 +1025,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbGameLink.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="&gt;&gt;linkRestartEABackgroundService.Name" xml:space="preserve">
     <value>linkRestartEABackgroundService</value>
@@ -1025,7 +1037,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEABackgroundService.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="&gt;&gt;butStart.Name" xml:space="preserve">
     <value>butStart</value>
@@ -1037,7 +1049,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butStart.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="&gt;&gt;ckbEpicStore.Name" xml:space="preserve">
     <value>ckbEpicStore</value>
@@ -1049,7 +1061,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEpicStore.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.Name" xml:space="preserve">
     <value>ckbBattleStore</value>
@@ -1061,7 +1073,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="&gt;&gt;ckbEAStore.Name" xml:space="preserve">
     <value>ckbEAStore</value>
@@ -1073,7 +1085,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEAStore.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="&gt;&gt;ckbMicrosoftStore.Name" xml:space="preserve">
     <value>ckbMicrosoftStore</value>
@@ -1085,7 +1097,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbMicrosoftStore.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>24</value>
   </data>
   <data name="&gt;&gt;ckbSetDns.Name" xml:space="preserve">
     <value>ckbSetDns</value>
@@ -1097,7 +1109,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbSetDns.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="&gt;&gt;ckbDoH.Name" xml:space="preserve">
     <value>ckbDoH</value>
@@ -1109,7 +1121,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDoH.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>26</value>
   </data>
   <data name="&gt;&gt;ckbHttpService.Name" xml:space="preserve">
     <value>ckbHttpService</value>
@@ -1121,7 +1133,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbHttpService.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>27</value>
   </data>
   <data name="&gt;&gt;ckbDnsService.Name" xml:space="preserve">
     <value>ckbDnsService</value>
@@ -1133,7 +1145,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDnsService.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>28</value>
   </data>
   <data name="&gt;&gt;cbListenIP.Name" xml:space="preserve">
     <value>cbListenIP</value>
@@ -1145,7 +1157,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cbListenIP.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>29</value>
   </data>
   <data name="&gt;&gt;label23.Name" xml:space="preserve">
     <value>label23</value>
@@ -1157,7 +1169,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>30</value>
   </data>
   <data name="&gt;&gt;label22.Name" xml:space="preserve">
     <value>label22</value>
@@ -1169,7 +1181,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>31</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.Name" xml:space="preserve">
     <value>ckbTruncation</value>
@@ -1181,7 +1193,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>32</value>
   </data>
   <data name="&gt;&gt;butBrowse.Name" xml:space="preserve">
     <value>butBrowse</value>
@@ -1193,7 +1205,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butBrowse.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>33</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.Name" xml:space="preserve">
     <value>tbLocalPath</value>
@@ -1205,7 +1217,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>34</value>
   </data>
   <data name="&gt;&gt;label21.Name" xml:space="preserve">
     <value>label21</value>
@@ -1217,7 +1229,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>35</value>
   </data>
   <data name="&gt;&gt;ckbLocalUpload.Name" xml:space="preserve">
     <value>ckbLocalUpload</value>
@@ -1229,7 +1241,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbLocalUpload.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>36</value>
   </data>
   <data name="&gt;&gt;label20.Name" xml:space="preserve">
     <value>label20</value>
@@ -1241,7 +1253,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label20.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>37</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.Name" xml:space="preserve">
     <value>tbEpicIP</value>
@@ -1253,7 +1265,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>38</value>
   </data>
   <data name="&gt;&gt;labelEpic.Name" xml:space="preserve">
     <value>labelEpic</value>
@@ -1265,7 +1277,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEpic.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>39</value>
   </data>
   <data name="&gt;&gt;label18.Name" xml:space="preserve">
     <value>label18</value>
@@ -1277,7 +1289,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label18.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>40</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.Name" xml:space="preserve">
     <value>tbBattleIP</value>
@@ -1289,7 +1301,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>41</value>
   </data>
   <data name="&gt;&gt;labelBattle.Name" xml:space="preserve">
     <value>labelBattle</value>
@@ -1301,7 +1313,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelBattle.ZOrder" xml:space="preserve">
-    <value>41</value>
+    <value>42</value>
   </data>
   <data name="&gt;&gt;label16.Name" xml:space="preserve">
     <value>label16</value>
@@ -1313,7 +1325,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
-    <value>42</value>
+    <value>43</value>
   </data>
   <data name="&gt;&gt;tbEAIP.Name" xml:space="preserve">
     <value>tbEAIP</value>
@@ -1325,7 +1337,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEAIP.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>44</value>
   </data>
   <data name="&gt;&gt;labelEA.Name" xml:space="preserve">
     <value>labelEA</value>
@@ -1337,7 +1349,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEA.ZOrder" xml:space="preserve">
-    <value>44</value>
+    <value>45</value>
   </data>
   <data name="&gt;&gt;linkNSHomepage.Name" xml:space="preserve">
     <value>linkNSHomepage</value>
@@ -1349,7 +1361,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkNSHomepage.ZOrder" xml:space="preserve">
-    <value>45</value>
+    <value>46</value>
   </data>
   <data name="&gt;&gt;ckbNSBrowser.Name" xml:space="preserve">
     <value>ckbNSBrowser</value>
@@ -1361,7 +1373,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbNSBrowser.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>47</value>
   </data>
   <data name="&gt;&gt;label14.Name" xml:space="preserve">
     <value>label14</value>
@@ -1373,7 +1385,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>48</value>
   </data>
   <data name="&gt;&gt;tbNSIP.Name" xml:space="preserve">
     <value>tbNSIP</value>
@@ -1385,7 +1397,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbNSIP.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>49</value>
   </data>
   <data name="&gt;&gt;labelNS.Name" xml:space="preserve">
     <value>labelNS</value>
@@ -1397,7 +1409,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelNS.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>50</value>
   </data>
   <data name="&gt;&gt;label12.Name" xml:space="preserve">
     <value>label12</value>
@@ -1409,7 +1421,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label12.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>51</value>
   </data>
   <data name="&gt;&gt;tbPSIP.Name" xml:space="preserve">
     <value>tbPSIP</value>
@@ -1421,7 +1433,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbPSIP.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>52</value>
   </data>
   <data name="&gt;&gt;labelPS.Name" xml:space="preserve">
     <value>labelPS</value>
@@ -1433,7 +1445,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelPS.ZOrder" xml:space="preserve">
-    <value>52</value>
+    <value>53</value>
   </data>
   <data name="&gt;&gt;label10.Name" xml:space="preserve">
     <value>label10</value>
@@ -1445,7 +1457,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>53</value>
+    <value>54</value>
   </data>
   <data name="&gt;&gt;tbAppIP.Name" xml:space="preserve">
     <value>tbAppIP</value>
@@ -1457,7 +1469,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbAppIP.ZOrder" xml:space="preserve">
-    <value>54</value>
+    <value>55</value>
   </data>
   <data name="&gt;&gt;labelApp.Name" xml:space="preserve">
     <value>labelApp</value>
@@ -1469,7 +1481,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelApp.ZOrder" xml:space="preserve">
-    <value>55</value>
+    <value>56</value>
   </data>
   <data name="&gt;&gt;label6.Name" xml:space="preserve">
     <value>label6</value>
@@ -1481,7 +1493,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>56</value>
+    <value>57</value>
   </data>
   <data name="&gt;&gt;tbCnIP.Name" xml:space="preserve">
     <value>tbCnIP</value>
@@ -1493,7 +1505,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbCnIP.ZOrder" xml:space="preserve">
-    <value>57</value>
+    <value>58</value>
   </data>
   <data name="&gt;&gt;labelCn.Name" xml:space="preserve">
     <value>labelCn</value>
@@ -1505,7 +1517,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCn.ZOrder" xml:space="preserve">
-    <value>58</value>
+    <value>59</value>
   </data>
   <data name="&gt;&gt;label4.Name" xml:space="preserve">
     <value>label4</value>
@@ -1517,7 +1529,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>59</value>
+    <value>60</value>
   </data>
   <data name="&gt;&gt;tbComIP.Name" xml:space="preserve">
     <value>tbComIP</value>
@@ -1529,7 +1541,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbComIP.ZOrder" xml:space="preserve">
-    <value>60</value>
+    <value>61</value>
   </data>
   <data name="&gt;&gt;labelCom.Name" xml:space="preserve">
     <value>labelCom</value>
@@ -1541,7 +1553,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCom.ZOrder" xml:space="preserve">
-    <value>61</value>
+    <value>62</value>
   </data>
   <data name="&gt;&gt;label2.Name" xml:space="preserve">
     <value>label2</value>
@@ -1553,7 +1565,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>62</value>
+    <value>63</value>
   </data>
   <data name="&gt;&gt;tbDnsIP.Name" xml:space="preserve">
     <value>tbDnsIP</value>
@@ -1565,7 +1577,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbDnsIP.ZOrder" xml:space="preserve">
-    <value>63</value>
+    <value>64</value>
   </data>
   <data name="&gt;&gt;labelDNS.Name" xml:space="preserve">
     <value>labelDNS</value>
@@ -1577,7 +1589,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelDNS.ZOrder" xml:space="preserve">
-    <value>64</value>
+    <value>65</value>
   </data>
   <data name="&gt;&gt;pictureBox1.Name" xml:space="preserve">
     <value>pictureBox1</value>
@@ -1589,7 +1601,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>65</value>
+    <value>66</value>
   </data>
   <data name="groupBox1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -1621,32 +1633,59 @@
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="ckbSniProxy.AutoSize" type="System.Boolean, mscorlib">
+  <data name="linkProxy.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="ckbSniProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1214, 336</value>
+  <data name="linkProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1372, 337</value>
   </data>
-  <data name="ckbSniProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>211, 28</value>
+  <data name="linkProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 24</value>
   </data>
-  <data name="ckbSniProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>46</value>
+  <data name="linkProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>47</value>
   </data>
-  <data name="ckbSniProxy.Text" xml:space="preserve">
-    <value>修复 Steam、GitHub</value>
+  <data name="linkProxy.Text" xml:space="preserve">
+    <value>设置</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.Name" xml:space="preserve">
-    <value>ckbSniProxy</value>
+  <data name="&gt;&gt;linkProxy.Name" xml:space="preserve">
+    <value>linkProxy</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;linkProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.Parent" xml:space="preserve">
+  <data name="&gt;&gt;linkProxy.Parent" xml:space="preserve">
     <value>groupBox1</value>
   </data>
-  <data name="&gt;&gt;ckbSniProxy.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;linkProxy.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="ckbProxy.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ckbProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1214, 336</value>
+  </data>
+  <data name="ckbProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 28</value>
+  </data>
+  <data name="ckbProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>46</value>
+  </data>
+  <data name="ckbProxy.Text" xml:space="preserve">
+    <value>本地代理服务</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.Name" xml:space="preserve">
+    <value>ckbProxy</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;ckbProxy.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="ckbBetterAkamaiIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1661,7 +1700,7 @@
     <value>199, 28</value>
   </data>
   <data name="ckbBetterAkamaiIP.TabIndex" type="System.Int32, mscorlib">
-    <value>47</value>
+    <value>48</value>
   </data>
   <data name="ckbBetterAkamaiIP.Text" xml:space="preserve">
     <value>自动优选 Akamai IP</value>
@@ -1676,7 +1715,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBetterAkamaiIP.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="linkDoHServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1703,7 +1742,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkDoHServer.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="ckbBattleNetease.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1730,7 +1769,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleNetease.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="linkRepairDNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1757,7 +1796,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRepairDNS.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="linkRestartEpic.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1787,7 +1826,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEpic.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="linkEA2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1814,7 +1853,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA2.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="&gt;&gt;rbEpicCDN1.Name" xml:space="preserve">
     <value>rbEpicCDN1</value>
@@ -1859,7 +1898,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;panelEpic.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="rbEpicCDN1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1940,7 +1979,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDisableIPv6DNS.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="ckbUbiStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1970,7 +2009,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbUbiStore.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="label34.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2000,7 +2039,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label34.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="tbUbiIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 339</value>
@@ -2021,7 +2060,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbUbiIP.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="labelUbi.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2048,7 +2087,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelUbi.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="linkXbox3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2075,7 +2114,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox3.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="linkXbox2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2102,7 +2141,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox2.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="linkXbox1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2129,7 +2168,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox1.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="linkEA1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2156,7 +2195,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA1.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="ckbGameLink.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2183,7 +2222,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbGameLink.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="linkRestartEABackgroundService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2213,7 +2252,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEABackgroundService.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="butStart.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 11pt</value>
@@ -2240,7 +2279,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butStart.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="ckbEpicStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2267,7 +2306,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEpicStore.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="ckbBattleStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2294,7 +2333,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>22</value>
   </data>
   <data name="ckbEAStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2321,7 +2360,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEAStore.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="ckbMicrosoftStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2348,7 +2387,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbMicrosoftStore.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>24</value>
   </data>
   <data name="ckbSetDns.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2375,7 +2414,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbSetDns.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="ckbDoH.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2402,7 +2441,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDoH.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>26</value>
   </data>
   <data name="ckbHttpService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2432,7 +2471,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbHttpService.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>27</value>
   </data>
   <data name="ckbDnsService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2459,7 +2498,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDnsService.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>28</value>
   </data>
   <data name="cbListenIP.Items" xml:space="preserve">
     <value>本机IP</value>
@@ -2486,7 +2525,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cbListenIP.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>29</value>
   </data>
   <data name="label23.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2516,7 +2555,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>30</value>
   </data>
   <data name="label22.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2543,7 +2582,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>31</value>
   </data>
   <data name="ckbTruncation.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2570,7 +2609,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>32</value>
   </data>
   <data name="butBrowse.Location" type="System.Drawing.Point, System.Drawing">
     <value>1020, 374</value>
@@ -2597,7 +2636,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butBrowse.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>33</value>
   </data>
   <data name="tbLocalPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>406, 375</value>
@@ -2618,7 +2657,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>34</value>
   </data>
   <data name="label21.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2648,7 +2687,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>35</value>
   </data>
   <data name="ckbLocalUpload.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2675,7 +2714,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbLocalUpload.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>36</value>
   </data>
   <data name="label20.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2702,7 +2741,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label20.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>37</value>
   </data>
   <data name="tbEpicIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 303</value>
@@ -2723,7 +2762,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>38</value>
   </data>
   <data name="labelEpic.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2750,7 +2789,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEpic.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>39</value>
   </data>
   <data name="label18.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2777,7 +2816,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label18.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>40</value>
   </data>
   <data name="tbBattleIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 267</value>
@@ -2798,7 +2837,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>41</value>
   </data>
   <data name="labelBattle.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2825,7 +2864,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelBattle.ZOrder" xml:space="preserve">
-    <value>41</value>
+    <value>42</value>
   </data>
   <data name="label16.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2852,7 +2891,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
-    <value>42</value>
+    <value>43</value>
   </data>
   <data name="tbEAIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 231</value>
@@ -2873,7 +2912,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEAIP.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>44</value>
   </data>
   <data name="labelEA.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2900,7 +2939,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEA.ZOrder" xml:space="preserve">
-    <value>44</value>
+    <value>45</value>
   </data>
   <data name="linkNSHomepage.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2933,7 +2972,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkNSHomepage.ZOrder" xml:space="preserve">
-    <value>45</value>
+    <value>46</value>
   </data>
   <data name="ckbNSBrowser.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2963,7 +3002,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbNSBrowser.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>47</value>
   </data>
   <data name="label14.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2990,7 +3029,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>48</value>
   </data>
   <data name="tbNSIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 195</value>
@@ -3011,7 +3050,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbNSIP.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>49</value>
   </data>
   <data name="labelNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3038,7 +3077,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelNS.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>50</value>
   </data>
   <data name="label12.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3066,7 +3105,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label12.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>51</value>
   </data>
   <data name="tbPSIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 159</value>
@@ -3087,7 +3126,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbPSIP.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>52</value>
   </data>
   <data name="labelPS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3114,7 +3153,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelPS.ZOrder" xml:space="preserve">
-    <value>52</value>
+    <value>53</value>
   </data>
   <data name="label10.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3141,7 +3180,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>53</value>
+    <value>54</value>
   </data>
   <data name="tbAppIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 123</value>
@@ -3162,7 +3201,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbAppIP.ZOrder" xml:space="preserve">
-    <value>54</value>
+    <value>55</value>
   </data>
   <data name="labelApp.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3189,7 +3228,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelApp.ZOrder" xml:space="preserve">
-    <value>55</value>
+    <value>56</value>
   </data>
   <data name="label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3216,7 +3255,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>56</value>
+    <value>57</value>
   </data>
   <data name="tbCnIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 87</value>
@@ -3237,7 +3276,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbCnIP.ZOrder" xml:space="preserve">
-    <value>57</value>
+    <value>58</value>
   </data>
   <data name="labelCn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3264,7 +3303,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCn.ZOrder" xml:space="preserve">
-    <value>58</value>
+    <value>59</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3291,7 +3330,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>59</value>
+    <value>60</value>
   </data>
   <data name="tbComIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 51</value>
@@ -3312,7 +3351,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbComIP.ZOrder" xml:space="preserve">
-    <value>60</value>
+    <value>61</value>
   </data>
   <data name="labelCom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3339,7 +3378,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCom.ZOrder" xml:space="preserve">
-    <value>61</value>
+    <value>62</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3369,7 +3408,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>62</value>
+    <value>63</value>
   </data>
   <data name="tbDnsIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 15</value>
@@ -3390,7 +3429,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbDnsIP.ZOrder" xml:space="preserve">
-    <value>63</value>
+    <value>64</value>
   </data>
   <data name="labelDNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3417,7 +3456,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelDNS.ZOrder" xml:space="preserve">
-    <value>64</value>
+    <value>65</value>
   </data>
   <data name="pictureBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -3444,7 +3483,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>65</value>
+    <value>66</value>
   </data>
   <data name="&gt;&gt;gbIPList.Name" xml:space="preserve">
     <value>gbIPList</value>

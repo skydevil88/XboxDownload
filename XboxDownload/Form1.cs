@@ -105,7 +105,7 @@ namespace XboxDownload
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
-            ckbSniProxy.Checked = Properties.Settings.Default.SniProxy;
+            ckbProxy.Checked = Properties.Settings.Default.Proxy;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -835,7 +835,7 @@ namespace XboxDownload
                 }
                 ckbBetterAkamaiIP.Checked = false;
                 ckbBetterAkamaiIP.Enabled = false;
-                linkRepairDNS.Enabled = cbLocalIP.Enabled = true;
+                linkRepairDNS.Enabled = linkProxy.Enabled = cbLocalIP.Enabled = true;
                 dnsListen.Close();
                 httpListen.Close();
                 httpsListen.Close();
@@ -1065,7 +1065,7 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
-                Properties.Settings.Default.SniProxy = ckbSniProxy.Checked;
+                Properties.Settings.Default.Proxy = ckbProxy.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1212,7 +1212,7 @@ namespace XboxDownload
                         control.Enabled = false;
                 }
                 ckbBetterAkamaiIP.Enabled = true;
-                linkRepairDNS.Enabled = cbLocalIP.Enabled = false;
+                linkRepairDNS.Enabled = linkProxy.Enabled = cbLocalIP.Enabled =  false;
                 _ = Task.Run(() =>
                 {
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
@@ -1251,7 +1251,7 @@ namespace XboxDownload
 
         private void UpdateHosts(bool add, string? akamai = null)
         {
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.SniProxy)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.Proxy)) return;
 
             StringBuilder sb = new();
             try
@@ -1428,40 +1428,12 @@ namespace XboxDownload
                                     sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
                             }
                         }
-                        if (Properties.Settings.Default.SniProxy)
+                        if (Properties.Settings.Default.Proxy)
                         {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " store.steampowered.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api.steampowered.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " login.steampowered.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " steamcommunity.com");
-
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " alive.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " api.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " assets-cdn.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " central.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " codeload.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " collector.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " gist.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " live.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " education.github.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars0.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars1.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars2.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars3.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars4.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " avatars5.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " camo.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " cloud.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " desktop.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " favicons.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " media.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " objects.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " pipelines.actions.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " raw.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " user-images.githubusercontent.com");
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " private-user-images.githubusercontent.com");
+                            foreach (string host in HttpsListen.dicSniHost.Keys)
+                            {
+                                sb.AppendLine(Properties.Settings.Default.LocalIP + " " + host);
+                            }
                         }
                         DataTable dt = Form1.dtHosts.Copy();
                         dt.RejectChanges();
@@ -1715,6 +1687,13 @@ namespace XboxDownload
             {
                 MessageBox.Show("没有找到Epic客户端。", "重启Epic客户端", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void LinkProxy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FormProxy dialog = new();
+            dialog.ShowDialog();
+            dialog.Dispose();
         }
 
         private void CkbRecordLog_CheckedChanged(object? sender, EventArgs? e)

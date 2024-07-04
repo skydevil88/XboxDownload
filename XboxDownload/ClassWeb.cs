@@ -157,7 +157,7 @@ namespace XboxDownload
                     Version = HttpVersion.Version11,
                     VersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
                 };
-                if (postData != null && httpRequestMessage.Method == HttpMethod.Post)
+                if (postData != null && (httpRequestMessage.Method == HttpMethod.Post || httpRequestMessage.Method == HttpMethod.Put))
                     httpRequestMessage.Content = new StringContent(postData, Encoding.UTF8, contentType ?? "application/x-www-form-urlencoded");
                 try
                 {
@@ -190,7 +190,7 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
-        public static bool SniProxy(string ip, Byte[] send, SslStream clent, out string errMessage)
+        public static bool Proxy(string ip, Byte[] send, SslStream clent, out string errMessage)
         {
             bool isOK = true;
             errMessage = string.Empty;

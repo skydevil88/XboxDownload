@@ -65,7 +65,8 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
-            ckbSniProxy = new CheckBox();
+            linkProxy = new LinkLabel();
+            ckbProxy = new CheckBox();
             ckbBetterAkamaiIP = new CheckBox();
             linkDoHServer = new LinkLabel();
             ckbBattleNetease = new CheckBox();
@@ -616,7 +617,8 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(ckbSniProxy);
+            groupBox1.Controls.Add(linkProxy);
+            groupBox1.Controls.Add(ckbProxy);
             groupBox1.Controls.Add(ckbBetterAkamaiIP);
             groupBox1.Controls.Add(linkDoHServer);
             groupBox1.Controls.Add(ckbBattleNetease);
@@ -686,11 +688,18 @@
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
             // 
-            // ckbSniProxy
+            // linkProxy
             // 
-            resources.ApplyResources(ckbSniProxy, "ckbSniProxy");
-            ckbSniProxy.Name = "ckbSniProxy";
-            ckbSniProxy.UseVisualStyleBackColor = true;
+            resources.ApplyResources(linkProxy, "linkProxy");
+            linkProxy.Name = "linkProxy";
+            linkProxy.TabStop = true;
+            linkProxy.LinkClicked += LinkProxy_LinkClicked;
+            // 
+            // ckbProxy
+            // 
+            resources.ApplyResources(ckbProxy, "ckbProxy");
+            ckbProxy.Name = "ckbProxy";
+            ckbProxy.UseVisualStyleBackColor = true;
             // 
             // ckbBetterAkamaiIP
             // 
@@ -3093,6 +3102,7 @@
         private CheckBox ckbBattleNetease;
         private LinkLabel linkDoHServer;
         private LinkLabel linkHostsAdd;
-        private CheckBox ckbSniProxy;
+        private CheckBox ckbProxy;
+        private LinkLabel linkProxy;
     }
 }
