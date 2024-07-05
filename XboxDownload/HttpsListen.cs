@@ -24,8 +24,10 @@ namespace XboxDownload
             var req = new CertificateRequest("CN=XboxDownload", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             var sanBuilder = new SubjectAlternativeNameBuilder();
             sanBuilder.AddDnsName("packagespc.xboxlive.com");
+            sanBuilder.AddDnsName("*.akamai.net");
+            sanBuilder.AddDnsName("*.akamaihd.net");
+            sanBuilder.AddDnsName("*.akamaized.net");
             sanBuilder.AddDnsName("epicgames-download1-1251447533.file.myqcloud.com");
-            sanBuilder.AddDnsName("epicgames-download1.akamaized.net");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
             if (File.Exists(Form1.resourcePath + "\\Proxy.txt"))
