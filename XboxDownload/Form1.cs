@@ -1430,7 +1430,7 @@ namespace XboxDownload
                         }
                         if (Properties.Settings.Default.Proxy)
                         {
-                            foreach (string host in HttpsListen.dicSniHost.Keys)
+                            foreach (string host in HttpsListen.dicProxy.Keys)
                             {
                                 sb.AppendLine(Properties.Settings.Default.LocalIP + " " + host);
                             }

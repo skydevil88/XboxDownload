@@ -14,11 +14,11 @@ namespace XboxDownload
     class HttpsListen
     {
         public static X509Certificate2? certificate;
-        public static readonly ConcurrentDictionary<String, String?> dicSniHost = new();
+        public static readonly ConcurrentDictionary<String, String?> dicProxy = new();
 
         public static void CreateCertificate()
         {
-            dicSniHost.Clear();
+            dicProxy.Clear();
             // 生成证书
             using var rsa = RSA.Create(2048);
             var req = new CertificateRequest("CN=XboxDownload", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
@@ -38,7 +38,7 @@ namespace XboxDownload
                         try
                         {
                             sanBuilder.AddDnsName(_host);
-                            dicSniHost.TryAdd(_host, "");
+                            dicProxy.TryAdd(_host, "");
                         }
                         catch { }
                     }
@@ -326,21 +326,21 @@ namespace XboxDownload
                                         break;
                                     default:
                                         {
-                                            if (Properties.Settings.Default.Proxy && dicSniHost.TryGetValue(_host, out string? ip))
+                                            if (Properties.Settings.Default.Proxy && dicProxy.TryGetValue(_host, out string? ip))
                                             {
                                                 bFileFound = true;
                                                 if (string.IsNullOrEmpty(ip))
                                                 {
-                                                    int dohs = 3; //使用 DNS.SB(GLOBAL) 解释域名 IP
+                                                    int dohs = Properties.Settings.Default.DoHProxy >= DnsListen.dohs.GetLongLength(0) ? 3 : Properties.Settings.Default.DoHProxy;
                                                     ip = ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } });
-                                                    dicSniHost.AddOrUpdate(_host, ip, (oldkey, oldvalue) => ip);
+                                                    dicProxy.AddOrUpdate(_host, ip, (oldkey, oldvalue) => ip);
                                                 }
                                                 if (!string.IsNullOrEmpty(ip))
                                                 {
                                                     if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                     if (!ClassWeb.Proxy(ip, Encoding.ASCII.GetBytes(_buffer), ssl, out string errMessae))
                                                     {
-                                                        dicSniHost.AddOrUpdate(_host, "", (oldkey, oldvalue) => "");
+                                                        dicProxy.AddOrUpdate(_host, "", (oldkey, oldvalue) => "");
                                                         Byte[] _response = Encoding.ASCII.GetBytes(errMessae);
                                                         StringBuilder sb = new();
                                                         sb.Append("HTTP/1.1 500 Server Error\r\n");

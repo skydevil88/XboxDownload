@@ -13,6 +13,12 @@ namespace XboxDownload
             {
                 textBox1.Text = File.ReadAllText(Form1.resourcePath + "\\Proxy.txt").Trim() + "\r\n";
             }
+
+            for (int i = 0; i <= DnsListen.dohs.GetLongLength(0) - 1; i++)
+            {
+                cbDoh.Items.Add(DnsListen.dohs[i, 0]);
+            }
+            cbDoh.SelectedIndex = Properties.Settings.Default.DoHProxy >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHProxy;
         }
 
         private void CheckedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -68,6 +74,8 @@ namespace XboxDownload
                 File.Delete(Form1.resourcePath + "\\Proxy.txt");
             }
             HttpsListen.CreateCertificate();
+            Properties.Settings.Default.DoHProxy = cbDoh.SelectedIndex;
+            Properties.Settings.Default.Save();
             this.Close();
         }
     }

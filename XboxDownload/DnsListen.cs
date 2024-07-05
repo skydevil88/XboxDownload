@@ -639,7 +639,7 @@ namespace XboxDownload
             }
             if (Properties.Settings.Default.Proxy)
             {
-                foreach (string host in HttpsListen.dicSniHost.Keys)
+                foreach (string host in HttpsListen.dicProxy.Keys)
                 {
                     _ = dicServiceV4.TryAdd(host, lsLocalIP);
                     _ = dicServiceV6.TryAdd(host, lsEmptyIP);
