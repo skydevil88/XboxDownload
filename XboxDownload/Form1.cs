@@ -1469,7 +1469,7 @@ namespace XboxDownload
             }
             catch (Exception ex)
             {
-                if (add) MessageBox.Show("修改系统Hosts文件失败，错误信息：" + ex.Message + "\n\n两种解决方法：\n1、勾选“设置本机 DNS”。\n2、手动删除\"" + Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts\"文件，点击开始监听会新建一个。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (add) MessageBox.Show("修改系统Hosts文件失败，错误信息：" + ex.Message + "\n\n三种解决方法：\n1、勾选“设置本机 DNS”。\n2、临时关闭安全软件或者添加白名单。\n3、手动删除\"" + Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\drivers\\etc\\hosts\"文件，点击开始监听会新建一个。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             if (Properties.Settings.Default.MicrosoftStore) ThreadPool.QueueUserWorkItem(delegate { RestartService("DoSvc"); });
         }

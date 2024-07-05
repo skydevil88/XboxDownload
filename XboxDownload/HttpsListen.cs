@@ -45,7 +45,7 @@ namespace XboxDownload
                 }
             }
             req.CertificateExtensions.Add(sanBuilder.Build());
-            var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
+            var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(1));
             certificate = new(cert.Export(X509ContentType.Pfx));
         }
 

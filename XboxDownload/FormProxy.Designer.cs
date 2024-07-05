@@ -63,7 +63,7 @@
             checkedListBox1.CheckOnClick = true;
             checkedListBox1.Dock = DockStyle.Fill;
             checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区", "amazon.co.jp" });
+            checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区" });
             checkedListBox1.Location = new Point(3, 26);
             checkedListBox1.Name = "checkedListBox1";
             checkedListBox1.Size = new Size(193, 392);
@@ -95,9 +95,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(3, 487);
             label1.Name = "label1";
-            label1.Size = new Size(676, 48);
+            label1.Size = new Size(608, 48);
             label1.TabIndex = 3;
-            label1.Text = "此功能可以改善部分网站访问连接问题，所有流量直连网站，没有经过第三方中转。\r\n其它域名可以自行尝试。";
+            label1.Text = "此功能可以改善部分网站被 SNI 阻断无法访问题，其它域名可以自行尝试。\r\n*所有流量直连网站，没有经过第三方中转。";
             // 
             // FormProxy
             // 

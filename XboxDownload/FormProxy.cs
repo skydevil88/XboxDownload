@@ -23,9 +23,6 @@ namespace XboxDownload
                 case "Steam 商店社区":
                     hosts1 = new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "steamcommunity.com" };
                     break;
-                case "amazon.co.jp":
-                    hosts1 = new string[] { "www.amazon.co.jp" }; 
-                    break;
             }
 
             StringBuilder sb = new();
@@ -51,14 +48,16 @@ namespace XboxDownload
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            StringBuilder sb = new();
+            List<string> lsHosts = new();
             foreach (string host in Regex.Split(textBox1.Text.Trim(), @"\n"))
             {
                 string _host = Regex.Replace(host.Trim().ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2");
-                if (!string.IsNullOrEmpty(_host))
-                    sb.AppendLine(_host);
+                if (!string.IsNullOrEmpty(_host) && !lsHosts.Contains(_host))
+                {
+                    lsHosts.Add(_host);
+                }
             }
-            string hosts = sb.ToString();
+            string hosts = string.Join("\r\n", lsHosts.ToArray());
             if (!string.IsNullOrEmpty(hosts))
             {
                 if (!Directory.Exists(Form1.resourcePath)) Directory.CreateDirectory(Form1.resourcePath);
