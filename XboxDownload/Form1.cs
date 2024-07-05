@@ -1513,7 +1513,7 @@ namespace XboxDownload
 
         private void LvLog_DoubleClick(object sender, EventArgs e)
         {
-            if (lvLog.SelectedItems.Count == 1)
+            if (lvLog.SelectedItems.Count == 1 && lvLog.SelectedItems[0].SubItems[0].Text.StartsWith("DNS"))
             {
                 string[] strArray = Regex.Split(lvLog.SelectedItems[0].SubItems[1].Text, " -> ");
                 if (strArray.Length != 2 || strArray[0].StartsWith("*")) return;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             butConfirm = new Button();
             tbIP = new TextBox();
@@ -39,6 +40,7 @@
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
             Column4 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             butTest = new Button();
@@ -64,7 +66,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1078, 85);
+            groupBox1.Size = new Size(1208, 85);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "域名解释";
@@ -74,7 +76,7 @@
             butConfirm.Enabled = false;
             butConfirm.Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             butConfirm.ForeColor = Color.Green;
-            butConfirm.Location = new Point(954, 30);
+            butConfirm.Location = new Point(1034, 31);
             butConfirm.Name = "butConfirm";
             butConfirm.Size = new Size(112, 34);
             butConfirm.TabIndex = 4;
@@ -85,7 +87,7 @@
             // tbIP
             // 
             tbIP.BackColor = SystemColors.Window;
-            tbIP.Location = new Point(568, 32);
+            tbIP.Location = new Point(648, 32);
             tbIP.Name = "tbIP";
             tbIP.ReadOnly = true;
             tbIP.Size = new Size(380, 30);
@@ -94,7 +96,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(495, 35);
+            label2.Location = new Point(575, 35);
             label2.Name = "label2";
             label2.Size = new Size(67, 24);
             label2.TabIndex = 2;
@@ -104,7 +106,7 @@
             // 
             tbHost.Location = new Point(64, 32);
             tbHost.Name = "tbHost";
-            tbHost.Size = new Size(425, 30);
+            tbHost.Size = new Size(505, 30);
             tbHost.TabIndex = 1;
             tbHost.Validating += TbHost_Validating;
             // 
@@ -122,7 +124,7 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4 });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5 });
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(3, 26);
             dataGridView1.MultiSelect = false;
@@ -130,7 +132,7 @@
             dataGridView1.RowHeadersWidth = 40;
             dataGridView1.RowTemplate.Height = 32;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(1072, 385);
+            dataGridView1.Size = new Size(1202, 385);
             dataGridView1.TabIndex = 2;
             dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
             dataGridView1.RowPostPaint += Dgv_RowPostPaint;
@@ -163,12 +165,23 @@
             // 
             // Column4
             // 
-            Column4.HeaderText = "位置（信息只供参考，不保证准确）";
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column4.DefaultCellStyle = dataGridViewCellStyle1;
+            Column4.HeaderText = "TLS检测";
             Column4.MinimumWidth = 8;
             Column4.Name = "Column4";
             Column4.ReadOnly = true;
             Column4.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column4.Width = 310;
+            Column4.Width = 60;
+            // 
+            // Column5
+            // 
+            Column5.HeaderText = "位置（信息只供参考，不保证准确）";
+            Column5.MinimumWidth = 8;
+            Column5.Name = "Column5";
+            Column5.ReadOnly = true;
+            Column5.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column5.Width = 310;
             // 
             // groupBox2
             // 
@@ -177,7 +190,7 @@
             groupBox2.Dock = DockStyle.Fill;
             groupBox2.Location = new Point(0, 85);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1078, 459);
+            groupBox2.Size = new Size(1208, 459);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "解释域名IP（双击选择）";
@@ -196,13 +209,13 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1072, 45);
+            tableLayoutPanel1.Size = new Size(1202, 45);
             tableLayoutPanel1.TabIndex = 3;
             // 
             // butTest
             // 
             butTest.Anchor = AnchorStyles.None;
-            butTest.Location = new Point(479, 5);
+            butTest.Location = new Point(544, 5);
             butTest.Name = "butTest";
             butTest.Size = new Size(112, 34);
             butTest.TabIndex = 0;
@@ -214,7 +227,7 @@
             // 
             linkLabel1.Anchor = AnchorStyles.Right;
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(920, 10);
+            linkLabel1.Location = new Point(1050, 10);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new Size(149, 24);
             linkLabel1.TabIndex = 1;
@@ -273,7 +286,7 @@
             AcceptButton = butTest;
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1078, 544);
+            ClientSize = new Size(1208, 544);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -316,5 +329,6 @@
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
+        private DataGridViewTextBoxColumn Column5;
     }
 }

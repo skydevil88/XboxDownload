@@ -118,6 +118,7 @@ namespace XboxDownload
             butTest.Enabled = false;
             dataGridView1.ClearSelection();
             string type = rbIPv4.Checked ? "A" : "AAAA";
+            Uri uri = new("https://" + host);
 
             await Task.Run(() =>
             {
@@ -130,8 +131,9 @@ namespace XboxDownload
                         DataGridViewRow dgvr = dataGridView1.Rows[tmp];
                         if (Convert.ToBoolean(dgvr.Cells[0].Value))
                         {
-                            dgvr.Cells[2].Value = dgvr.Cells[3].Value = null;
-                            dgvr.Cells[2].Style.ForeColor = Color.Empty;
+                            dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
+                            dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = Color.Empty;
+                            dgvr.Cells[3].ToolTipText = null;
                             string dohServer = DnsListen.dohs[tmp, 1];
                             string dohHost = DnsListen.dohs[tmp, 2];
                             Dictionary<string, string>? dohHeaders = null;
@@ -143,10 +145,21 @@ namespace XboxDownload
                                 };
                             }
                             string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, type);
-                            if (!string.IsNullOrEmpty(ip))
+                            if(IPAddress.TryParse(ip, out IPAddress? address))
                             {
                                 dgvr.Cells[2].Value = ip;
-                                dgvr.Cells[3].Value = ClassDNS.QueryLocation(ip);
+                                if (ClassWeb.ConnectTest(uri, address, out string errMessage))
+                                {
+                                    dgvr.Cells[3].Value = "√";
+                                    dgvr.Cells[3].Style.ForeColor = Color.Green;
+                                }
+                                else
+                                {
+                                    dgvr.Cells[3].Value = "×";
+                                    dgvr.Cells[3].ToolTipText = errMessage;
+                                    dgvr.Cells[3].Style.ForeColor = Color.Red;
+                                }
+                                dgvr.Cells[4].Value = ClassDNS.QueryLocation(ip);
                             }
                             else
                             {
