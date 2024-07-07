@@ -145,10 +145,13 @@ namespace XboxDownload
                                 };
                             }
                             string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, type);
-                            if(IPAddress.TryParse(ip, out IPAddress? address))
+                            if (this.IsDisposed) return;
+                            if (IPAddress.TryParse(ip, out IPAddress? address))
                             {
                                 dgvr.Cells[2].Value = ip;
-                                if (ClassWeb.ConnectTest(uri, address, out string errMessage))
+                                bool verified = ClassWeb.ConnectTest(uri, address, out string errMessage);
+                                if (this.IsDisposed) return;
+                                if (verified)
                                 {
                                     dgvr.Cells[3].Value = "√";
                                     dgvr.Cells[3].Style.ForeColor = Color.Green;
@@ -156,10 +159,12 @@ namespace XboxDownload
                                 else
                                 {
                                     dgvr.Cells[3].Value = "×";
-                                    dgvr.Cells[3].ToolTipText = errMessage;
+                                    dgvr.Cells[3].ToolTipText = "提示：" + dataGridView1.Columns[3].ToolTipText + "，错误信息：\n" + errMessage;
                                     dgvr.Cells[3].Style.ForeColor = Color.Red;
                                 }
-                                dgvr.Cells[4].Value = ClassDNS.QueryLocation(ip);
+                                string location = ClassDNS.QueryLocation(ip);
+                                if (this.IsDisposed) return;
+                                dgvr.Cells[4].Value = location;
                             }
                             else
                             {

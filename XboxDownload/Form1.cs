@@ -1515,11 +1515,17 @@ namespace XboxDownload
         {
             if (lvLog.SelectedItems.Count == 1 && lvLog.SelectedItems[0].SubItems[0].Text.StartsWith("DNS"))
             {
-                string[] strArray = Regex.Split(lvLog.SelectedItems[0].SubItems[1].Text, " -> ");
-                if (strArray.Length != 2 || strArray[0].StartsWith("*")) return;
-                FormConnectTest dialog = new(strArray[0], strArray[1]);
-                dialog.ShowDialog();
-                dialog.Dispose();
+                Match result = Regex.Match(lvLog.SelectedItems[0].SubItems[1].Text, @"(.+) -> ([^,']+)");
+                if (result.Success)
+                {
+                    string host = result.Groups[1].Value;
+                    string ip = result.Groups[2].Value;
+                    if (Regex.IsMatch(ip, @"^((127\.0\.0\.1)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3}))$"))
+                        return;
+                    FormConnectTest dialog = new(host, ip);
+                    dialog.ShowDialog();
+                    dialog.Dispose();
+                }
             }
         }
 

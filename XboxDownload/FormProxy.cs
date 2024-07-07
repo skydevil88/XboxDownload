@@ -27,7 +27,7 @@ namespace XboxDownload
             switch (checkedListBox1.Items[e.Index].ToString())
             {
                 case "Steam 商店社区":
-                    hosts1 = new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "steamcommunity.com" };
+                    hosts1 = new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "help.steampowered.com", "checkout.steampowered.com", "steamcommunity.com" };
                     break;
             }
 

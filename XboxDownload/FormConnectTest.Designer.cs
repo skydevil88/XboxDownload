@@ -141,7 +141,7 @@
             Name = "FormConnectTest";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "TLS检测（只测试TLS握手，没开放HTTPS服务或者不使用公共证书域名无法通过测试）";
+            Text = "TLS检测（没开放443端口或者使用私有证书域名没法通过检测）";
             ResumeLayout(false);
             PerformLayout();
         }

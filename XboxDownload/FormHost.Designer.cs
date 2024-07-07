@@ -36,11 +36,6 @@
             tbHost = new TextBox();
             label1 = new Label();
             dataGridView1 = new DataGridView();
-            Column1 = new DataGridViewCheckBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
-            Column5 = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             butTest = new Button();
@@ -49,6 +44,11 @@
             rbIPv6 = new RadioButton();
             rbIPv4 = new RadioButton();
             cbCheckAll = new CheckBox();
+            Column1 = new DataGridViewCheckBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox2.SuspendLayout();
@@ -136,52 +136,6 @@
             dataGridView1.TabIndex = 2;
             dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
             dataGridView1.RowPostPaint += Dgv_RowPostPaint;
-            // 
-            // Column1
-            // 
-            Column1.HeaderText = "选择";
-            Column1.MinimumWidth = 8;
-            Column1.Name = "Column1";
-            Column1.Resizable = DataGridViewTriState.False;
-            Column1.Width = 43;
-            // 
-            // Column2
-            // 
-            Column2.HeaderText = "DoH 服务器";
-            Column2.MinimumWidth = 8;
-            Column2.Name = "Column2";
-            Column2.ReadOnly = true;
-            Column2.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column2.Width = 160;
-            // 
-            // Column3
-            // 
-            Column3.HeaderText = "IP 地址";
-            Column3.MinimumWidth = 8;
-            Column3.Name = "Column3";
-            Column3.ReadOnly = true;
-            Column3.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column3.Width = 140;
-            // 
-            // Column4
-            // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column4.DefaultCellStyle = dataGridViewCellStyle1;
-            Column4.HeaderText = "TLS检测";
-            Column4.MinimumWidth = 8;
-            Column4.Name = "Column4";
-            Column4.ReadOnly = true;
-            Column4.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column4.Width = 60;
-            // 
-            // Column5
-            // 
-            Column5.HeaderText = "位置（信息只供参考，不保证准确）";
-            Column5.MinimumWidth = 8;
-            Column5.Name = "Column5";
-            Column5.ReadOnly = true;
-            Column5.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column5.Width = 310;
             // 
             // groupBox2
             // 
@@ -280,6 +234,53 @@
             cbCheckAll.Text = "全选";
             cbCheckAll.UseVisualStyleBackColor = true;
             cbCheckAll.CheckedChanged += CbCheckAll_CheckedChanged;
+            // 
+            // Column1
+            // 
+            Column1.HeaderText = "选择";
+            Column1.MinimumWidth = 8;
+            Column1.Name = "Column1";
+            Column1.Resizable = DataGridViewTriState.False;
+            Column1.Width = 43;
+            // 
+            // Column2
+            // 
+            Column2.HeaderText = "DoH 服务器";
+            Column2.MinimumWidth = 8;
+            Column2.Name = "Column2";
+            Column2.ReadOnly = true;
+            Column2.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column2.Width = 160;
+            // 
+            // Column3
+            // 
+            Column3.HeaderText = "IP 地址";
+            Column3.MinimumWidth = 8;
+            Column3.Name = "Column3";
+            Column3.ReadOnly = true;
+            Column3.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column3.Width = 140;
+            // 
+            // Column4
+            // 
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column4.DefaultCellStyle = dataGridViewCellStyle1;
+            Column4.HeaderText = "TLS检测";
+            Column4.MinimumWidth = 8;
+            Column4.Name = "Column4";
+            Column4.ReadOnly = true;
+            Column4.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column4.ToolTipText = "没开放443端口或者使用私有证书域名没法通过检测";
+            Column4.Width = 60;
+            // 
+            // Column5
+            // 
+            Column5.HeaderText = "位置（信息只供参考，不保证准确）";
+            Column5.MinimumWidth = 8;
+            Column5.Name = "Column5";
+            Column5.ReadOnly = true;
+            Column5.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column5.Width = 310;
             // 
             // FormHost
             // 
