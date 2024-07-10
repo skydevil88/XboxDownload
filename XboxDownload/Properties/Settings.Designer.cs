@@ -445,7 +445,7 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("广东")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string IpLocation {
             get {
                 return ((string)(this["IpLocation"]));

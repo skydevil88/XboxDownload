@@ -72,7 +72,7 @@ namespace XboxDownload
             toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com");
             toolTip1.SetToolTip(this.ckbDoH, "默认使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nPC用户使用此功能，需要勾选“设置本机 DNS”\n\n注：网络正常可以不勾选。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\nPC用户建议勾选，主机用户无需设置。\n\n注：如果退出Xbox下载助手后没网络，请点击旁边“修复”。");
-            toolTip1.SetToolTip(this.ckbBetterAkamaiIP, "自动从 Akamai 优选 IP 列表中找出下载速度最快的节点\n支持 Xbox、PS、NS、EA、战网、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
+            toolTip1.SetToolTip(this.ckbBetterAkamaiIP, "自动从 Akamai 优选 IP 列表中找出下载速度最快的节点\n支持 Xbox、PS、NS、EA、战网、EPIC、育碧、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
 
             tbDnsIP.Text = Properties.Settings.Default.DnsIP;
             tbComIP.Text = Properties.Settings.Default.ComIP;
@@ -671,9 +671,9 @@ namespace XboxDownload
             {
                 bool update = true;
                 FileInfo fi = new(resourcePath + "\\IP.AkamaiV2.txt");
-                if (fi.Exists && fi.Length >= 1) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddDays(30)) >= 0;
+                if (fi.Exists && fi.Length >= 1) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddDays(7)) >= 0;
                 if (update) await UpdateFile.DownloadIP(fi);
-                List<string> lsIP = new();
+                List<string[]> lsIP = new();
                 if (fi.Exists)
                 {
                     using StreamReader sr = fi.OpenText();
@@ -681,7 +681,7 @@ namespace XboxDownload
                     Match result = FormImportIP.rMatchIP.Match(content);
                     while (result.Success)
                     {
-                        lsIP.Add(result.Groups["IP"].Value);
+                        lsIP.Add(new string[] { result.Groups["IP"].Value, result.Groups["Location"].Value });
                         result = result.NextMatch();
                     }
                 }
@@ -704,14 +704,14 @@ namespace XboxDownload
                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
                 CancellationTokenSource cts = new();
                 Task[] tasks = new Task[lsIP.Count];
-                string akamai = string.Empty;
+                string[] akamai = Array.Empty<string>();
                 for (int i = 0; i <= tasks.Length - 1; i++)
                 {
-                    string ip = lsIP[i];
+                    string[] _ip = lsIP[i];
                     tasks[i] = new Task(() =>
                     {
-                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, ip, false, null, 30000, cts) : ClassWeb.TlsRequest(uri, buffer, ip, false, null, 30000, cts);
-                        if (string.IsNullOrEmpty(akamai) && socketPackage.Buffer?.Length == 10485760) akamai = ip;
+                        SocketPackage socketPackage = uri.Scheme == "http" ? ClassWeb.TcpRequest(uri, buffer, _ip[0], false, null, 30000, cts) : ClassWeb.TlsRequest(uri, buffer, _ip[0], false, null, 30000, cts);
+                        if (akamai.Length == 0 && socketPackage.Buffer?.Length == 10485760) akamai = _ip;
                         else if (!cts.IsCancellationRequested) Task.Delay(30000, cts.Token);
                         socketPackage.Buffer = null;
                     });
@@ -721,22 +721,22 @@ namespace XboxDownload
                 cts.Cancel();
                 GC.Collect();
                 if (!bServiceFlag) return;
-                if (string.IsNullOrEmpty(akamai))
+                if (akamai.Length == 0)
                 {
-                    foreach (var ip in lsIP)
+                    foreach (var _ip in lsIP)
                     {
                         uri = new(test[ran.Next(test.Length)]);
-                        using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(uri.ToString().Replace(uri.Host, ip), "HEAD", null, null, new() { { "Host", uri.Host } }, 500);
+                        using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(uri.ToString().Replace(uri.Host, _ip[0]), "HEAD", null, null, new() { { "Host", uri.Host } }, 500);
                         if (response != null && response.IsSuccessStatusCode)
                         {
-                            akamai = ip;
+                            akamai = _ip;
                             break;
                         }
                     }
                     if (!bServiceFlag) return;
-                    if (!string.IsNullOrEmpty(akamai))
+                    if (akamai.Length == 0)
                     {
-                        SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai + "，建议在测速选项卡中手动测速指定。", "localhost", 0xFF0000);
+                        SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai[0] + "，建议在测速选项卡中手动测速指定。", "localhost", 0xFF0000);
                     }
                     else
                     {
@@ -747,14 +747,14 @@ namespace XboxDownload
                 }
                 else
                 {
-                    SaveLog("提示信息", "优选 Akamai IP -> " + akamai + " (包含 Xbox、PS、NS、EA、战网、Riot Games 等全部游戏下载域名)", "localhost", 0x008000);
+                    SaveLog("提示信息", "优选 Akamai IP -> " + akamai[0] + " (" + akamai[1] + ")", "localhost", 0x008000);
                 }
-                DnsListen.SetAkamaiIP(akamai);
-                UpdateHosts(true, akamai);
-                DnsListen.UpdateHosts(akamai);
+                DnsListen.SetAkamaiIP(akamai[0]);
+                UpdateHosts(true, akamai[0]);
+                DnsListen.UpdateHosts(akamai[0]);
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
-                tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai;
-                if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai;
+                tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai[0];
+                if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai[0];
                 ckbBetterAkamaiIP.Enabled = true;
             }
             else if (bServiceFlag)
@@ -2845,8 +2845,8 @@ namespace XboxDownload
                             JsonElement root = jsonDocument.RootElement;
                             if (root.TryGetProperty("data", out JsonElement je))
                             {
-                                string country = je.TryGetProperty("country", out JsonElement jeCountry) ? jeCountry.ToString() : "";
-                                string prov = je.TryGetProperty("prov", out JsonElement jeProv) ? jeProv.ToString() : "";
+                                string country = je.TryGetProperty("country", out JsonElement jeCountry) ? jeCountry.ToString().Trim() : "";
+                                string prov = je.TryGetProperty("prov", out JsonElement jeProv) ? jeProv.ToString().Trim() : "";
                                 bCheckLocation = country == "中国" && !Regex.IsMatch(prov, @"香港|澳门|台湾");
                             }
                         }
@@ -2858,7 +2858,7 @@ namespace XboxDownload
                     using HttpResponseMessage? response2 = await ClassWeb.HttpResponseMessageAsync(UpdateFile.website + "/Akamai/Better", "POST", ja.ToString(), "application/json", null, 6000, "XboxDownload");
                     if (response2 != null && response2.IsSuccessStatusCode)
                     {
-                        if (File.Exists(resourcePath + "\\IP.AkamaiV2.txt")) File.SetLastWriteTime(resourcePath + "\\IP.AkamaiV2.txt", DateTime.Now.AddDays(-30));
+                        if (File.Exists(resourcePath + "\\IP.AkamaiV2.txt")) File.SetLastWriteTime(resourcePath + "\\IP.AkamaiV2.txt", DateTime.Now.AddDays(-7));
                         linkLabel.Text = text + " (上传成功)";
                     }
                     else

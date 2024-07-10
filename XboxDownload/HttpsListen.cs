@@ -40,7 +40,7 @@ namespace XboxDownload
                         try
                         {
                             sanBuilder.AddDnsName(_host);
-                            dicProxy.TryAdd(_host, "");
+                            dicProxy.TryAdd(_host, null);
                         }
                         catch { }
                     }
