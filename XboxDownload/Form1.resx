@@ -896,13 +896,13 @@
     <value>580, 340</value>
   </data>
   <data name="label34.Size" type="System.Drawing.Size, System.Drawing">
-    <value>396, 24</value>
+    <value>617, 24</value>
   </data>
   <data name="label34.TabIndex" type="System.Int32, mscorlib">
     <value>55</value>
   </data>
   <data name="label34.Text" xml:space="preserve">
-    <value>留空使用DNS服务器查询（默认跳转国内CDN）</value>
+    <value>留空使用DNS服务器查询（默认跳转国内CDN，不羁联盟不支持国内CDN）</value>
   </data>
   <data name="&gt;&gt;label34.Name" xml:space="preserve">
     <value>label34</value>
