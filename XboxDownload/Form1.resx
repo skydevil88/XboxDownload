@@ -275,7 +275,7 @@
     <value>3, 26</value>
   </data>
   <data name="lvLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1430, 265</value>
+    <value>1430, 263</value>
   </data>
   <data name="lvLog.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -296,10 +296,10 @@
     <value>Fill</value>
   </data>
   <data name="gbLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 476</value>
+    <value>0, 512</value>
   </data>
   <data name="gbLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 294</value>
+    <value>1436, 292</value>
   </data>
   <data name="gbLog.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -509,7 +509,7 @@
     <value>Bottom</value>
   </data>
   <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 770</value>
+    <value>0, 804</value>
   </data>
   <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -531,6 +531,87 @@
   </data>
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="label8.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label8.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>580, 129</value>
+  </data>
+  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>211, 24</value>
+  </data>
+  <data name="label8.TabIndex" type="System.Int32, mscorlib">
+    <value>103</value>
+  </data>
+  <data name="label8.Text" xml:space="preserve">
+    <value>留空使用DNS服务器查询</value>
+  </data>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
+  </data>
+  <data name="&gt;&gt;label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tbCnIP2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>315, 123</value>
+  </data>
+  <data name="tbCnIP2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>260, 30</value>
+  </data>
+  <data name="tbCnIP2.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;tbCnIP2.Name" xml:space="preserve">
+    <value>tbCnIP2</value>
+  </data>
+  <data name="&gt;&gt;tbCnIP2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbCnIP2.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;tbCnIP2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="labelCn2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelCn2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="labelCn2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>116, 129</value>
+  </data>
+  <data name="labelCn2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>190, 24</value>
+  </data>
+  <data name="labelCn2.TabIndex" type="System.Int32, mscorlib">
+    <value>102</value>
+  </data>
+  <data name="labelCn2.Text" xml:space="preserve">
+    <value>指定  cn2 下载域名  IP</value>
+  </data>
+  <data name="&gt;&gt;labelCn2.Name" xml:space="preserve">
+    <value>labelCn2</value>
+  </data>
+  <data name="&gt;&gt;labelCn2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelCn2.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;labelCn2.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="linkProxy.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -557,7 +638,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="ckbProxy.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -584,7 +665,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbProxy.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="ckbBetterAkamaiIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -614,7 +695,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBetterAkamaiIP.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
   </data>
   <data name="linkDoHServer.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -641,19 +722,22 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkDoHServer.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
   </data>
   <data name="ckbBattleNetease.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="ckbBattleNetease.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="ckbBattleNetease.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1022, 272</value>
+    <value>1022, 308</value>
   </data>
   <data name="ckbBattleNetease.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
   </data>
   <data name="ckbBattleNetease.TabIndex" type="System.Int32, mscorlib">
-    <value>57</value>
+    <value>19</value>
   </data>
   <data name="ckbBattleNetease.Text" xml:space="preserve">
     <value>包括网易国服</value>
@@ -668,7 +752,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleNetease.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>7</value>
   </data>
   <data name="linkRepairDNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -695,7 +779,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRepairDNS.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>8</value>
   </data>
   <data name="linkRestartEpic.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -725,19 +809,22 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEpic.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>9</value>
   </data>
   <data name="linkEA2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="linkEA2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="linkEA2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>994, 237</value>
+    <value>994, 273</value>
   </data>
   <data name="linkEA2.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 24</value>
   </data>
   <data name="linkEA2.TabIndex" type="System.Int32, mscorlib">
-    <value>56</value>
+    <value>16</value>
   </data>
   <data name="linkEA2.Text" xml:space="preserve">
     <value>教程2</value>
@@ -752,10 +839,13 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA2.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>10</value>
   </data>
   <data name="rbEpicCDN1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="rbEpicCDN1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="rbEpicCDN1.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 2</value>
@@ -784,6 +874,9 @@
   <data name="rbEpicCDN2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="rbEpicCDN2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="rbEpicCDN2.Location" type="System.Drawing.Point, System.Drawing">
     <value>158, 2</value>
   </data>
@@ -809,13 +902,13 @@
     <value>1</value>
   </data>
   <data name="panelEpic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>794, 303</value>
+    <value>794, 339</value>
   </data>
   <data name="panelEpic.Size" type="System.Drawing.Size, System.Drawing">
     <value>352, 30</value>
   </data>
   <data name="panelEpic.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
+    <value>21</value>
   </data>
   <data name="&gt;&gt;panelEpic.Name" xml:space="preserve">
     <value>panelEpic</value>
@@ -827,7 +920,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;panelEpic.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>11</value>
   </data>
   <data name="ckbDisableIPv6DNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -854,7 +947,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDisableIPv6DNS.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>12</value>
   </data>
   <data name="ckbUbiStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -884,7 +977,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbUbiStore.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>13</value>
   </data>
   <data name="label34.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -893,7 +986,7 @@
     <value>NoControl</value>
   </data>
   <data name="label34.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 340</value>
+    <value>580, 376</value>
   </data>
   <data name="label34.Size" type="System.Drawing.Size, System.Drawing">
     <value>617, 24</value>
@@ -914,16 +1007,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label34.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>14</value>
   </data>
   <data name="tbUbiIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 339</value>
+    <value>315, 375</value>
   </data>
   <data name="tbUbiIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbUbiIP.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
+    <value>22</value>
   </data>
   <data name="&gt;&gt;tbUbiIP.Name" xml:space="preserve">
     <value>tbUbiIP</value>
@@ -935,13 +1028,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbUbiIP.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>15</value>
   </data>
   <data name="labelUbi.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelUbi.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelUbi.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 342</value>
+    <value>116, 378</value>
   </data>
   <data name="labelUbi.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 24</value>
@@ -962,7 +1058,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelUbi.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>16</value>
   </data>
   <data name="linkXbox3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -989,7 +1085,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox3.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>17</value>
   </data>
   <data name="linkXbox2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1016,7 +1112,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox2.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>18</value>
   </data>
   <data name="linkXbox1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1043,19 +1139,22 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkXbox1.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>19</value>
   </data>
   <data name="linkEA1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="linkEA1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="linkEA1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>796, 237</value>
+    <value>796, 273</value>
   </data>
   <data name="linkEA1.Size" type="System.Drawing.Size, System.Drawing">
     <value>192, 24</value>
   </data>
   <data name="linkEA1.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="linkEA1.Text" xml:space="preserve">
     <value>EA教程 (Akamai 通用)</value>
@@ -1070,7 +1169,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkEA1.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>20</value>
   </data>
   <data name="ckbGameLink.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1097,7 +1196,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbGameLink.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>21</value>
   </data>
   <data name="linkRestartEABackgroundService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1127,7 +1226,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkRestartEABackgroundService.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>22</value>
   </data>
   <data name="butStart.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 11pt</value>
@@ -1136,7 +1235,7 @@
     <value>1214, 398</value>
   </data>
   <data name="butStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 72</value>
+    <value>199, 104</value>
   </data>
   <data name="butStart.TabIndex" type="System.Int32, mscorlib">
     <value>100</value>
@@ -1154,7 +1253,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butStart.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>23</value>
   </data>
   <data name="ckbEpicStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1181,7 +1280,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEpicStore.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>24</value>
   </data>
   <data name="ckbBattleStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1208,7 +1307,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbBattleStore.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>25</value>
   </data>
   <data name="ckbEAStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1235,7 +1334,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbEAStore.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>26</value>
   </data>
   <data name="ckbMicrosoftStore.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1262,7 +1361,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbMicrosoftStore.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>27</value>
   </data>
   <data name="ckbSetDns.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1289,7 +1388,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbSetDns.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>28</value>
   </data>
   <data name="ckbDoH.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1316,7 +1415,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDoH.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>29</value>
   </data>
   <data name="ckbHttpService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1346,7 +1445,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbHttpService.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>30</value>
   </data>
   <data name="ckbDnsService.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1373,7 +1472,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbDnsService.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>31</value>
   </data>
   <data name="cbListenIP.Items" xml:space="preserve">
     <value>本机IP</value>
@@ -1400,7 +1499,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cbListenIP.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>32</value>
   </data>
   <data name="label23.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1430,13 +1529,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label23.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>33</value>
   </data>
   <data name="label22.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label22.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label22.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 442</value>
+    <value>8, 478</value>
   </data>
   <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
     <value>1179, 24</value>
@@ -1457,19 +1559,22 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label22.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>34</value>
   </data>
   <data name="ckbTruncation.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="ckbTruncation.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="ckbTruncation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 411</value>
+    <value>118, 447</value>
   </data>
   <data name="ckbTruncation.Size" type="System.Drawing.Size, System.Drawing">
     <value>1027, 28</value>
   </data>
   <data name="ckbTruncation.TabIndex" type="System.Int32, mscorlib">
-    <value>25</value>
+    <value>26</value>
   </data>
   <data name="ckbTruncation.Text" xml:space="preserve">
     <value>Xbox360主机本地上传防爆头(Xbox360主机 本地上传游戏、监听下载链接 需要在域名标签页中添加Xbox360主机下载域名)</value>
@@ -1484,10 +1589,13 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbTruncation.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>35</value>
+  </data>
+  <data name="butBrowse.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="butBrowse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1020, 374</value>
+    <value>1020, 410</value>
   </data>
   <data name="butBrowse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1496,7 +1604,7 @@
     <value>124, 36</value>
   </data>
   <data name="butBrowse.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
+    <value>25</value>
   </data>
   <data name="butBrowse.Text" xml:space="preserve">
     <value>浏览</value>
@@ -1511,16 +1619,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;butBrowse.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>36</value>
   </data>
   <data name="tbLocalPath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>406, 375</value>
+    <value>406, 411</value>
   </data>
   <data name="tbLocalPath.Size" type="System.Drawing.Size, System.Drawing">
     <value>608, 30</value>
   </data>
   <data name="tbLocalPath.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
+    <value>24</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.Name" xml:space="preserve">
     <value>tbLocalPath</value>
@@ -1532,13 +1640,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbLocalPath.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>37</value>
   </data>
   <data name="label21.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label21.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label21.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 380</value>
+    <value>267, 416</value>
   </data>
   <data name="label21.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1562,19 +1673,22 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label21.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>38</value>
   </data>
   <data name="ckbLocalUpload.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="ckbLocalUpload.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="ckbLocalUpload.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 380</value>
+    <value>118, 416</value>
   </data>
   <data name="ckbLocalUpload.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 28</value>
   </data>
   <data name="ckbLocalUpload.TabIndex" type="System.Int32, mscorlib">
-    <value>22</value>
+    <value>23</value>
   </data>
   <data name="ckbLocalUpload.Text" xml:space="preserve">
     <value>启用本地上传</value>
@@ -1589,13 +1703,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbLocalUpload.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>39</value>
   </data>
   <data name="label20.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label20.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label20.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 308</value>
+    <value>580, 344</value>
   </data>
   <data name="label20.Size" type="System.Drawing.Size, System.Drawing">
     <value>211, 24</value>
@@ -1616,16 +1733,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label20.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>40</value>
   </data>
   <data name="tbEpicIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 303</value>
+    <value>315, 339</value>
   </data>
   <data name="tbEpicIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbEpicIP.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
+    <value>20</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.Name" xml:space="preserve">
     <value>tbEpicIP</value>
@@ -1637,13 +1754,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEpicIP.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>41</value>
   </data>
   <data name="labelEpic.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelEpic.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelEpic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 308</value>
+    <value>116, 344</value>
   </data>
   <data name="labelEpic.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 24</value>
@@ -1664,19 +1784,22 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEpic.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>42</value>
   </data>
   <data name="label18.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label18.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label18.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 273</value>
+    <value>580, 309</value>
   </data>
   <data name="label18.Size" type="System.Drawing.Size, System.Drawing">
     <value>435, 24</value>
   </data>
   <data name="label18.TabIndex" type="System.Int32, mscorlib">
-    <value>32</value>
+    <value>18</value>
   </data>
   <data name="label18.Text" xml:space="preserve">
     <value>留空使用DNS服务器查询（默认跳转 Akamai CDN）</value>
@@ -1691,16 +1814,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label18.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>43</value>
   </data>
   <data name="tbBattleIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 267</value>
+    <value>315, 303</value>
   </data>
   <data name="tbBattleIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbBattleIP.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.Name" xml:space="preserve">
     <value>tbBattleIP</value>
@@ -1712,13 +1835,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbBattleIP.ZOrder" xml:space="preserve">
-    <value>41</value>
+    <value>44</value>
   </data>
   <data name="labelBattle.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelBattle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelBattle.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 273</value>
+    <value>116, 309</value>
   </data>
   <data name="labelBattle.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 24</value>
@@ -1739,13 +1865,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelBattle.ZOrder" xml:space="preserve">
-    <value>42</value>
+    <value>45</value>
   </data>
   <data name="label16.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label16.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label16.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 237</value>
+    <value>580, 273</value>
   </data>
   <data name="label16.Size" type="System.Drawing.Size, System.Drawing">
     <value>211, 24</value>
@@ -1766,16 +1895,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>46</value>
   </data>
   <data name="tbEAIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 231</value>
+    <value>315, 267</value>
   </data>
   <data name="tbEAIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbEAIP.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="&gt;&gt;tbEAIP.Name" xml:space="preserve">
     <value>tbEAIP</value>
@@ -1787,13 +1916,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbEAIP.ZOrder" xml:space="preserve">
-    <value>44</value>
+    <value>47</value>
   </data>
   <data name="labelEA.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelEA.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelEA.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 237</value>
+    <value>116, 273</value>
   </data>
   <data name="labelEA.Size" type="System.Drawing.Size, System.Drawing">
     <value>187, 24</value>
@@ -1814,7 +1946,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelEA.ZOrder" xml:space="preserve">
-    <value>45</value>
+    <value>48</value>
   </data>
   <data name="linkNSHomepage.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1822,8 +1954,11 @@
   <data name="linkNSHomepage.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="linkNSHomepage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="linkNSHomepage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>986, 201</value>
+    <value>986, 237</value>
   </data>
   <data name="linkNSHomepage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1832,7 +1967,7 @@
     <value>161, 24</value>
   </data>
   <data name="linkNSHomepage.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="linkNSHomepage.Text" xml:space="preserve">
     <value>设置NS浏览器主页</value>
@@ -1847,13 +1982,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;linkNSHomepage.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>49</value>
   </data>
   <data name="ckbNSBrowser.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="ckbNSBrowser.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="ckbNSBrowser.Location" type="System.Drawing.Point, System.Drawing">
-    <value>796, 200</value>
+    <value>796, 236</value>
   </data>
   <data name="ckbNSBrowser.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -1862,7 +2000,7 @@
     <value>187, 28</value>
   </data>
   <data name="ckbNSBrowser.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="ckbNSBrowser.Text" xml:space="preserve">
     <value>打开NS隐藏浏览器</value>
@@ -1877,13 +2015,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;ckbNSBrowser.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>50</value>
   </data>
   <data name="label14.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label14.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label14.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 201</value>
+    <value>580, 237</value>
   </data>
   <data name="label14.Size" type="System.Drawing.Size, System.Drawing">
     <value>216, 24</value>
@@ -1904,16 +2045,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label14.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>51</value>
   </data>
   <data name="tbNSIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 195</value>
+    <value>315, 231</value>
   </data>
   <data name="tbNSIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbNSIP.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="&gt;&gt;tbNSIP.Name" xml:space="preserve">
     <value>tbNSIP</value>
@@ -1925,13 +2066,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbNSIP.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>52</value>
   </data>
   <data name="labelNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelNS.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelNS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 201</value>
+    <value>116, 237</value>
   </data>
   <data name="labelNS.Size" type="System.Drawing.Size, System.Drawing">
     <value>189, 24</value>
@@ -1952,13 +2096,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelNS.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>53</value>
   </data>
   <data name="label12.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label12.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label12.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 165</value>
+    <value>580, 201</value>
   </data>
   <data name="label12.Size" type="System.Drawing.Size, System.Drawing">
     <value>605, 24</value>
@@ -1980,16 +2127,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label12.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>54</value>
   </data>
   <data name="tbPSIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 159</value>
+    <value>315, 195</value>
   </data>
   <data name="tbPSIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbPSIP.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="&gt;&gt;tbPSIP.Name" xml:space="preserve">
     <value>tbPSIP</value>
@@ -2001,13 +2148,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbPSIP.ZOrder" xml:space="preserve">
-    <value>52</value>
+    <value>55</value>
   </data>
   <data name="labelPS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelPS.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelPS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 165</value>
+    <value>116, 201</value>
   </data>
   <data name="labelPS.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 24</value>
@@ -2028,13 +2178,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelPS.ZOrder" xml:space="preserve">
-    <value>53</value>
+    <value>56</value>
   </data>
   <data name="label10.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label10.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="label10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 129</value>
+    <value>580, 165</value>
   </data>
   <data name="label10.Size" type="System.Drawing.Size, System.Drawing">
     <value>211, 24</value>
@@ -2055,16 +2208,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>54</value>
+    <value>57</value>
   </data>
   <data name="tbAppIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 123</value>
+    <value>315, 159</value>
   </data>
   <data name="tbAppIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 30</value>
   </data>
   <data name="tbAppIP.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="&gt;&gt;tbAppIP.Name" xml:space="preserve">
     <value>tbAppIP</value>
@@ -2076,13 +2229,16 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbAppIP.ZOrder" xml:space="preserve">
-    <value>55</value>
+    <value>58</value>
   </data>
   <data name="labelApp.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelApp.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelApp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 129</value>
+    <value>116, 165</value>
   </data>
   <data name="labelApp.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 24</value>
@@ -2103,7 +2259,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelApp.ZOrder" xml:space="preserve">
-    <value>56</value>
+    <value>59</value>
   </data>
   <data name="label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2130,7 +2286,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>57</value>
+    <value>60</value>
   </data>
   <data name="tbCnIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 87</value>
@@ -2151,7 +2307,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbCnIP.ZOrder" xml:space="preserve">
-    <value>58</value>
+    <value>61</value>
   </data>
   <data name="labelCn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2160,13 +2316,13 @@
     <value>116, 93</value>
   </data>
   <data name="labelCn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>189, 24</value>
+    <value>190, 24</value>
   </data>
   <data name="labelCn.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
   <data name="labelCn.Text" xml:space="preserve">
-    <value>指定  cn   下载域名  IP</value>
+    <value>指定  cn1 下载域名  IP</value>
   </data>
   <data name="&gt;&gt;labelCn.Name" xml:space="preserve">
     <value>labelCn</value>
@@ -2178,7 +2334,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCn.ZOrder" xml:space="preserve">
-    <value>59</value>
+    <value>62</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2205,7 +2361,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>60</value>
+    <value>63</value>
   </data>
   <data name="tbComIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 51</value>
@@ -2226,7 +2382,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbComIP.ZOrder" xml:space="preserve">
-    <value>61</value>
+    <value>64</value>
   </data>
   <data name="labelCom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2253,7 +2409,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelCom.ZOrder" xml:space="preserve">
-    <value>62</value>
+    <value>65</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2283,7 +2439,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>63</value>
+    <value>66</value>
   </data>
   <data name="tbDnsIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>315, 15</value>
@@ -2304,7 +2460,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;tbDnsIP.ZOrder" xml:space="preserve">
-    <value>64</value>
+    <value>67</value>
   </data>
   <data name="labelDNS.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2331,7 +2487,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;labelDNS.ZOrder" xml:space="preserve">
-    <value>65</value>
+    <value>68</value>
   </data>
   <data name="pictureBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -2358,7 +2514,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>66</value>
+    <value>69</value>
   </data>
   <data name="groupBox1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -2370,7 +2526,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 476</value>
+    <value>1436, 512</value>
   </data>
   <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2394,7 +2550,7 @@
     <value>4, 33</value>
   </data>
   <data name="tabService.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabService.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2511,7 +2667,7 @@
     <value>40</value>
   </data>
   <data name="dgvIpList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1432, 645</value>
+    <value>1432, 679</value>
   </data>
   <data name="dgvIpList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2541,7 +2697,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbIPList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 672</value>
+    <value>1436, 706</value>
   </data>
   <data name="gbIPList.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2863,25 +3019,28 @@
     <value>请选择导入内容</value>
   </data>
   <data name="cbImportIP.Items1" xml:space="preserve">
-    <value>1.Xbox &amp; 微软商店 (cn 游戏下载)</value>
+    <value>1.Xbox &amp; 微软商店 (cn1 游戏下载)</value>
   </data>
   <data name="cbImportIP.Items2" xml:space="preserve">
-    <value>2.Xbox &amp; 微软商店 (cn 应用下载)</value>
+    <value>2.Xbox &amp; 微软商店 (cn2 游戏下载)</value>
   </data>
   <data name="cbImportIP.Items3" xml:space="preserve">
-    <value>3.PlayStation (cn 游戏下载)</value>
+    <value>3.Xbox &amp; 微软商店 (cn 应用下载)</value>
   </data>
   <data name="cbImportIP.Items4" xml:space="preserve">
-    <value>4.Akamai (NS、EA 、战网、Epic、育碧)</value>
+    <value>4.PlayStation (cn 游戏下载)</value>
   </data>
   <data name="cbImportIP.Items5" xml:space="preserve">
-    <value>5.Akamai (优选 IP)</value>
+    <value>5.Akamai (NS、EA 、战网、Epic、育碧)</value>
   </data>
   <data name="cbImportIP.Items6" xml:space="preserve">
-    <value>6.Akamai (IPv6)</value>
+    <value>6.Akamai (优选 IP)</value>
   </data>
   <data name="cbImportIP.Items7" xml:space="preserve">
-    <value>7.Ubisoft Connect (cn 游戏下载)</value>
+    <value>7.Akamai (IPv6)</value>
+  </data>
+  <data name="cbImportIP.Items8" xml:space="preserve">
+    <value>8.Ubisoft Connect (cn 游戏下载)</value>
   </data>
   <data name="cbImportIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>934, 4</value>
@@ -3271,7 +3430,7 @@
     <value>Bottom</value>
   </data>
   <data name="panelSpeedTest.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 672</value>
+    <value>0, 706</value>
   </data>
   <data name="panelSpeedTest.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3298,7 +3457,7 @@
     <value>4, 33</value>
   </data>
   <data name="tabSpeedTest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabSpeedTest.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -3379,7 +3538,7 @@
     <value>40</value>
   </data>
   <data name="dgvHosts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1432, 732</value>
+    <value>1432, 766</value>
   </data>
   <data name="dgvHosts.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3409,7 +3568,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 759</value>
+    <value>1436, 793</value>
   </data>
   <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3616,7 +3775,7 @@
     <value>Bottom</value>
   </data>
   <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 759</value>
+    <value>0, 793</value>
   </data>
   <data name="panel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -3643,7 +3802,7 @@
     <value>4, 33</value>
   </data>
   <data name="tabHosts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabHosts.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3682,7 +3841,7 @@
     <value>Vertical</value>
   </data>
   <data name="tbHosts1Akamai.Size" type="System.Drawing.Size, System.Drawing">
-    <value>710, 624</value>
+    <value>710, 658</value>
   </data>
   <data name="tbHosts1Akamai.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3712,7 +3871,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>714, 651</value>
+    <value>714, 685</value>
   </data>
   <data name="groupBox4.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3751,7 +3910,7 @@
     <value>Vertical</value>
   </data>
   <data name="tbHosts2Akamai.Size" type="System.Drawing.Size, System.Drawing">
-    <value>710, 624</value>
+    <value>710, 658</value>
   </data>
   <data name="tbHosts2Akamai.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3781,7 +3940,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>714, 651</value>
+    <value>714, 685</value>
   </data>
   <data name="groupBox5.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3814,7 +3973,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 655</value>
+    <value>1436, 689</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3931,7 +4090,7 @@
     <value>Bottom</value>
   </data>
   <data name="panel4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 759</value>
+    <value>0, 793</value>
   </data>
   <data name="panel4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -4105,7 +4264,7 @@
     <value>4, 33</value>
   </data>
   <data name="tabCDN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabCDN.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -4766,7 +4925,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="groupBox7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 450</value>
+    <value>1436, 484</value>
   </data>
   <data name="groupBox7.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5027,7 +5186,7 @@
     <value>4, 33</value>
   </data>
   <data name="tabHardDisk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabHardDisk.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -5114,7 +5273,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="lvGame.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1432, 323</value>
+    <value>1432, 357</value>
   </data>
   <data name="lvGame.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -6018,7 +6177,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="gbGameInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 700</value>
+    <value>1436, 734</value>
   </data>
   <data name="gbGameInfo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -6315,7 +6474,7 @@
     <value>4, 33</value>
   </data>
   <data name="tabStore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabStore.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -7460,7 +7619,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>4, 33</value>
   </data>
   <data name="tabTools.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 810</value>
+    <value>1436, 844</value>
   </data>
   <data name="tabTools.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -7490,7 +7649,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tabControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1444, 847</value>
+    <value>1444, 881</value>
   </data>
   <data name="tabControl1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -8705,6 +8864,12 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
   <data name="tsmUseIPCn.Text" xml:space="preserve">
     <value>指定 cn 下载域名 IP</value>
   </data>
+  <data name="tsmUseIPCn2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>491, 34</value>
+  </data>
+  <data name="tsmUseIPCn2.Text" xml:space="preserve">
+    <value>指定 cn2 下载域名 IP</value>
+  </data>
   <data name="tsmUseIPCom.Size" type="System.Drawing.Size, System.Drawing">
     <value>491, 34</value>
   </data>
@@ -9542,7 +9707,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>144, 144</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1444, 880</value>
+    <value>1444, 914</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -10959,6 +11124,12 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>tsmUseIPCn</value>
   </data>
   <data name="&gt;&gt;tsmUseIPCn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmUseIPCn2.Name" xml:space="preserve">
+    <value>tsmUseIPCn2</value>
+  </data>
+  <data name="&gt;&gt;tsmUseIPCn2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmUseIPCom.Name" xml:space="preserve">

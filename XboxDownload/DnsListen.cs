@@ -140,7 +140,7 @@ namespace XboxDownload
             }
 
             Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
-            Byte[]? comIP = null, cnIP = null, appIP = null, psIP = null, nsIP = null, eaIP = null, battleIP = null, epicIP = null, ubiIP = null;
+            Byte[]? comIP = null, cnIP = null, cnIP2 = null, appIP = null, psIP = null, nsIP = null, eaIP = null, battleIP = null, epicIP = null, ubiIP = null;
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
             {
                 comIP = IPAddress.Parse(Properties.Settings.Default.ComIP).GetAddressBytes();
@@ -150,7 +150,7 @@ namespace XboxDownload
                 if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbComIP, Properties.Settings.Default.LocalIP);
                 comIP = localIP;
             }
-            Task[] tasks = new Task[8];
+            Task[] tasks = new Task[9];
             tasks[0] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP))
@@ -169,6 +169,22 @@ namespace XboxDownload
             });
             tasks[1] = new Task(() =>
             {
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP2))
+                {
+                    cnIP2 = IPAddress.Parse(Properties.Settings.Default.CnIP2).GetAddressBytes();
+                }
+                else
+                {
+                    string? ip = Properties.Settings.Default.DoH ? ClassDNS.DoH("dlassets.xboxlive.cn") : ClassDNS.HostToIP("dlassets2.xboxlive.cn", Properties.Settings.Default.DnsIP);
+                    if (!string.IsNullOrEmpty(ip))
+                    {
+                        if (Form1.bServiceFlag) parentForm.SetTextBox(parentForm.tbCnIP2, ip);
+                        cnIP2 = IPAddress.Parse(ip).GetAddressBytes();
+                    }
+                }
+            });
+            tasks[2] = new Task(() =>
+            {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
                 {
                     appIP = IPAddress.Parse(Properties.Settings.Default.AppIP).GetAddressBytes();
@@ -183,7 +199,7 @@ namespace XboxDownload
                     }
                 }
             });
-            tasks[2] = new Task(() =>
+            tasks[3] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.PSIP))
                 {
@@ -199,7 +215,7 @@ namespace XboxDownload
                     }
                 }
             });
-            tasks[3] = new Task(() =>
+            tasks[4] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.NSIP))
                 {
@@ -215,7 +231,7 @@ namespace XboxDownload
                     }
                 }
             });
-            tasks[4] = new Task(() =>
+            tasks[5] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.EAIP))
                 {
@@ -231,7 +247,7 @@ namespace XboxDownload
                     }
                 }
             });
-            tasks[5] = new Task(() =>
+            tasks[6] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.BattleIP))
                 {
@@ -248,7 +264,7 @@ namespace XboxDownload
                 }
             });
             string epicHosts = Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net";
-            tasks[6] = new Task(() =>
+            tasks[7] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.EpicIP))
                 {
@@ -264,7 +280,7 @@ namespace XboxDownload
                     }
                 }
             });
-            tasks[7] = new Task(() =>
+            tasks[8] = new Task(() =>
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.UbiIP))
                 {
@@ -337,19 +353,30 @@ namespace XboxDownload
                         List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsCnIP);
-                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsEmptyIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                     else
                     {
                         List<ResouceRecord> lsCnIP = new() { new ResouceRecord { Datas = cnIP, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsCnIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                    }
+                }
+                if (cnIP2 != null)
+                {
+                    if ((new IPAddress(cnIP2)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsCnIP2 = new() { new ResouceRecord { Datas = cnIP2, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsCnIP2);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsCnIP2 = new() { new ResouceRecord { Datas = cnIP2, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsCnIP2);
                         _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                 }
@@ -437,14 +464,10 @@ namespace XboxDownload
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsCnIP);
-                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsCnIP);
-                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsEmptyIP);
-                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }
                     else
                     {
@@ -453,12 +476,27 @@ namespace XboxDownload
                         _ = dicServiceV6.TryAdd("assets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("d1.xboxlive.cn", lsCnIP);
                         _ = dicServiceV6.TryAdd("d2.xboxlive.cn", lsCnIP);
-                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsCnIP);
-                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsCnIP);
                         _ = dicServiceV4.TryAdd("assets1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("assets2.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("d1.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("d2.xboxlive.cn", lsEmptyIP);
+                    }
+                }
+                if (cnIP2 != null)
+                {
+                    if ((new IPAddress(cnIP2)).AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        List<ResouceRecord> lsCnIP2 = new() { new ResouceRecord { Datas = cnIP2, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                        _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsCnIP2);
+                        _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsCnIP2);
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
+                    }
+                    else
+                    {
+                        List<ResouceRecord> lsCnIP2 = new() { new ResouceRecord { Datas = cnIP2, TTL = 100, QueryClass = 1, QueryType = QueryType.AAAA } };
+                        _ = dicServiceV6.TryAdd("dlassets.xboxlive.cn", lsCnIP2);
+                        _ = dicServiceV6.TryAdd("dlassets2.xboxlive.cn", lsCnIP2);
                         _ = dicServiceV4.TryAdd("dlassets.xboxlive.cn", lsEmptyIP);
                         _ = dicServiceV4.TryAdd("dlassets2.xboxlive.cn", lsEmptyIP);
                     }

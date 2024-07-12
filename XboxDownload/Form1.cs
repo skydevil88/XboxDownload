@@ -62,14 +62,15 @@ namespace XboxDownload
 
             toolTip1.SetToolTip(this.labelDNS, "常用 DNS 服务器\n114.114.114.114 (114)\n180.76.76.76 (百度)\n223.5.5.5 (阿里)\n119.29.29.29 (腾讯)\n208.67.220.220 (OpenDns)\n8.8.8.8 (Google)\n168.126.63.1 (韩国)");
             toolTip1.SetToolTip(this.labelCom, "包括以下com游戏下载域名\nxvcf1.xboxlive.com\nxvcf2.xboxlive.com\nassets1.xboxlive.com\nassets2.xboxlive.com\nd1.xboxlive.com\nd2.xboxlive.com\ndlassets.xboxlive.com\ndlassets2.xboxlive.com\n\n以上域名不能使用 cn IP");
-            toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn");
+            toolTip1.SetToolTip(this.labelCn, "包括以下cn游戏下载域名\nassets1.xboxlive.cn\nassets2.xboxlive.cn\nd1.xboxlive.cn\nd2.xboxlive.cn");
+            toolTip1.SetToolTip(this.labelCn2, "包括以下cn游戏下载域名\ndlassets.xboxlive.cn\ndlassets2.xboxlive.cn\n\n注：XboxOne部分老游戏下载域名，\nPC、主机新游戏都不再使用此域名。");
             toolTip1.SetToolTip(this.labelApp, "包括以下应用下载域名\ndl.delivery.mp.microsoft.com\ntlu.dl.delivery.mp.microsoft.com\n*.dl.delivery.mp.microsoft.com");
             toolTip1.SetToolTip(this.labelPS, "包括以下游戏下载域名\ngst.prod.dl.playstation.net\ngs2.ww.prod.dl.playstation.net\nzeus.dl.playstation.net\nares.dl.playstation.net");
             toolTip1.SetToolTip(this.labelNS, "包括以下游戏下载域名\natum.hac.lp1.d4c.nintendo.net\nbugyo.hac.lp1.eshop.nintendo.net\nctest-dl-lp1.cdn.nintendo.net\nctest-ul-lp1.cdn.nintendo.net");
             toolTip1.SetToolTip(this.labelEA, "包括以下游戏下载域名\norigin-a.akamaihd.net");
             toolTip1.SetToolTip(this.labelBattle, "包括以下游戏下载域名\nblzddist1-a.akamaihd.net\nus.cdn.blizzard.com\neu.cdn.blizzard.com\nkr.cdn.blizzard.com\nlevel3.blizzard.com\nblizzard.gcdn.cloudn.co.kr\n\n#网易国服(校园网可指定Akamai IPv6免流下载)\n*.necdn.leihuo.netease.com");
             toolTip1.SetToolTip(this.labelEpic, "包括以下游戏下载域名\nepicgames-download1-1251447533.file.myqcloud.com\nepicgames-download1.akamaized.net\ndownload.epicgames.com\nfastly-download.epicgames.com\ncloudflare.epicgamescdn.com\n\n建议优先使用国内CDN，速度不理想再选用 Akamai CDN");
-            toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com\n\n注：XDefiant(不羁联盟)不能使用国内CDN，\n可勾选\"自动优选 Akamai IP\"，或者手动指定国外IP");
+            toolTip1.SetToolTip(this.labelUbi, "包括以下游戏下载域名\nuplaypc-s-ubisoft.cdn.ubionline.com.cn\nuplaypc-s-ubisoft.cdn.ubi.com\n\n注：XDefiant(不羁联盟)不支持使用国内CDN，\n可勾选\"自动优选 Akamai IP\"使用国外CDN。");
             toolTip1.SetToolTip(this.ckbDoH, "默认使用 阿里云DoH(加密DNS) 解析域名IP，\n防止上游DNS服务器被劫持污染。\nPC用户使用此功能，需要勾选“设置本机 DNS”\n\n注：网络正常可以不勾选。");
             toolTip1.SetToolTip(this.ckbSetDns, "开始监听将把电脑DNS设置为本机IP，停止监听后恢复默认设置，\nPC用户建议勾选，主机用户无需设置。\n\n注：如果退出Xbox下载助手后没网络，请点击旁边“修复”。");
             toolTip1.SetToolTip(this.ckbBetterAkamaiIP, "自动从 Akamai 优选 IP 列表中找出下载速度最快的节点\n支持 Xbox、PS、NS、EA、战网、EPIC、育碧、拳头游戏\n选中后临时忽略自定义IP（Xbox、PS不使用国内IP）\n同时还能解决Xbox安装停止，冷门游戏国内CDN没缓存下载慢等问题\n\n提示：\n更换IP后，Xbox、战网、育碧 拳头游戏 客户端需要暂停下载，然后重新恢复安装，\nEA app、Epic客户端请点击修复/重启，主机需要等待DNS缓存过期(100秒)。");
@@ -78,6 +79,7 @@ namespace XboxDownload
             tbComIP.Text = Properties.Settings.Default.ComIP;
             ckbGameLink.Checked = Properties.Settings.Default.GameLink;
             tbCnIP.Text = Properties.Settings.Default.CnIP;
+            tbCnIP2.Text = Properties.Settings.Default.CnIP2;
             tbAppIP.Text = Properties.Settings.Default.AppIP;
             tbPSIP.Text = Properties.Settings.Default.PSIP;
             tbNSIP.Text = Properties.Settings.Default.NSIP;
@@ -753,7 +755,7 @@ namespace XboxDownload
                 UpdateHosts(true, akamai[0]);
                 DnsListen.UpdateHosts(akamai[0]);
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
-                tbComIP.Text = tbCnIP.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai[0];
+                tbComIP.Text = tbCnIP.Text = tbCnIP2.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai[0];
                 if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai[0];
                 ckbBetterAkamaiIP.Enabled = true;
             }
@@ -767,6 +769,10 @@ namespace XboxDownload
                     tbCnIP.Text = Properties.Settings.Default.CnIP;
                 else if (DnsListen.dicService2V4.TryGetValue("assets2.xboxlive.cn", out List<ResouceRecord>? lsCnIp))
                     tbCnIP.Text = lsCnIp.Count >= 1 ? new IPAddress(lsCnIp?[0].Datas!).ToString() : "";
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP2))
+                    tbCnIP2.Text = Properties.Settings.Default.CnIP2;
+                else if (DnsListen.dicService2V4.TryGetValue("dlassets2.xboxlive.cn", out List<ResouceRecord>? lsCnIp2))
+                    tbCnIP2.Text = lsCnIp2.Count >= 1 ? new IPAddress(lsCnIp2?[0].Datas!).ToString() : "";
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
                     tbAppIP.Text = Properties.Settings.Default.AppIP;
                 else if (DnsListen.dicService2V4.TryGetValue("2.tlu.dl.delivery.mp.microsoft.com", out List<ResouceRecord>? lsAppIp))
@@ -818,6 +824,7 @@ namespace XboxDownload
                 tbDnsIP.Text = Properties.Settings.Default.DnsIP;
                 tbComIP.Text = Properties.Settings.Default.ComIP;
                 tbCnIP.Text = Properties.Settings.Default.CnIP;
+                tbCnIP2.Text = Properties.Settings.Default.CnIP2;
                 tbAppIP.Text = Properties.Settings.Default.AppIP;
                 tbPSIP.Text = Properties.Settings.Default.PSIP;
                 tbNSIP.Text = Properties.Settings.Default.NSIP;
@@ -904,9 +911,24 @@ namespace XboxDownload
                     }
                     else
                     {
-                        MessageBox.Show("指定 cn 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("指定 cn1 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         tbCnIP.Focus();
                         tbCnIP.SelectAll();
+                        return;
+                    }
+                }
+                string? cnIP2 = null;
+                if (!string.IsNullOrWhiteSpace(tbCnIP2.Text))
+                {
+                    if (IPAddress.TryParse(tbCnIP2.Text.Trim(), out IPAddress? ipAddress))
+                    {
+                        cnIP = tbCnIP2.Text = ipAddress.ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("指定 cn2 下载域名 IP 不正确", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tbCnIP2.Focus();
+                        tbCnIP2.SelectAll();
                         return;
                     }
                 }
@@ -1040,6 +1062,7 @@ namespace XboxDownload
                 Properties.Settings.Default.DnsIP = dnsIP;
                 Properties.Settings.Default.ComIP = comIP;
                 Properties.Settings.Default.CnIP = cnIP;
+                Properties.Settings.Default.CnIP2 = cnIP2;
                 Properties.Settings.Default.AppIP = appIP;
                 Properties.Settings.Default.PSIP = psIP;
                 Properties.Settings.Default.NSIP = nsIP;
@@ -1351,8 +1374,11 @@ namespace XboxDownload
                                         sb.AppendLine(Properties.Settings.Default.CnIP + " assets2.xboxlive.cn");
                                         sb.AppendLine(Properties.Settings.Default.CnIP + " d1.xboxlive.cn");
                                         sb.AppendLine(Properties.Settings.Default.CnIP + " d2.xboxlive.cn");
-                                        sb.AppendLine(Properties.Settings.Default.CnIP + " dlassets.xboxlive.cn");
-                                        sb.AppendLine(Properties.Settings.Default.CnIP + " dlassets2.xboxlive.cn");
+                                    }
+                                    if (!string.IsNullOrEmpty(Properties.Settings.Default.CnIP2))
+                                    {
+                                        sb.AppendLine(Properties.Settings.Default.CnIP2 + " dlassets.xboxlive.cn");
+                                        sb.AppendLine(Properties.Settings.Default.CnIP2 + " dlassets2.xboxlive.cn");
                                     }
                                     if (!string.IsNullOrEmpty(Properties.Settings.Default.AppIP))
                                     {
@@ -1750,9 +1776,11 @@ namespace XboxDownload
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
+                    tsmUseIPCn.Visible = true;
+                    break;
                 case "dlassets.xboxlive.cn":
                 case "dlassets2.xboxlive.cn":
-                    tsmUseIPCn.Visible = true;
+                    tsmUseIPCn2.Visible = true;
                     break;
                 case "dl.delivery.mp.microsoft.com":
                 case "tlu.dl.delivery.mp.microsoft.com":
@@ -1821,10 +1849,15 @@ namespace XboxDownload
                     tbCnIP.Text = ip;
                     tbCnIP.Focus();
                     break;
+                case "tsmUseIPCn2":
+                    tabControl1.SelectedTab = tabService;
+                    tbCnIP2.Text = ip;
+                    tbCnIP2.Focus();
+                    break;
                 case "tsmUseIPXbox":
                     tabControl1.SelectedTab = tabService;
-                    tbComIP.Text = tbCnIP.Text = ip;
-                    tbCnIP.Focus();
+                    tbComIP.Text = tbCnIP.Text = tbCnIP2.Text = ip;
+                    tbCnIP2.Focus();
                     break;
                 case "tsmUseIPApp":
                     tabControl1.SelectedTab = tabService;
@@ -1890,23 +1923,26 @@ namespace XboxDownload
                     display = host = "assets1.xboxlive.cn";
                     break;
                 case 2:
-                    display = host = "tlu.dl.delivery.mp.microsoft.com";
+                    display = host = "dlassets.xboxlive.cn";
                     break;
                 case 3:
-                    display = host = "gst.prod.dl.playstation.net";
+                    display = host = "tlu.dl.delivery.mp.microsoft.com";
                     break;
                 case 4:
-                    display = host = "Akamai";
+                    display = host = "gst.prod.dl.playstation.net";
                     break;
                 case 5:
+                    display = host = "Akamai";
+                    break;
+                case 6:
                     display = "Akamai 优选 IP";
                     host = "AkamaiV2";
                     break;
-                case 6:
+                case 7:
                     display = "Akamai IPv6";
                     host = "AkamaiV6";
                     break;
-                case 7:
+                case 8:
                     display = host = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
                     break;
             }
@@ -1979,8 +2015,6 @@ namespace XboxDownload
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
-                case "dlassets.xboxlive.cn":
-                case "dlassets2.xboxlive.cn":
                     {
                         LinkLabel lb1 = new()
                         {
@@ -2025,15 +2059,67 @@ namespace XboxDownload
                             };
                             lb.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
                         }
-                        LinkLabel lb4 = new()
+                        Label lbTip = new()
+                        {
+                            ForeColor = Color.Red,
+                            Text = "游戏下载主域名",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                    }
+                    break;
+                case "dlassets.xboxlive.cn":
+                case "dlassets2.xboxlive.cn":
+                    {
+                        LinkLabel lb1 = new()
                         {
                             Tag = "http://dlassets.xboxlive.cn/public/content/1b5a4a08-06f0-49d6-b25f-d7322c11f3c8/372e2966-b158-4488-8bc8-15ef23db1379/1.5.0.1018.88cd7a5d-f56a-40c7-afd8-85cd4940b891/ACUEU771E1BF7_1.5.0.1018_x64__b6krnev7r9sf8",
-                            Text = "刺客信条: 大革命(One)",
+                            Text = "刺客信条: 大革命",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
+                        };
+                        lb1.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb2 = new()
+                        {
+                            Tag = "http://dlassets.xboxlive.cn/public/content/1d6640d3-3441-42bd-bffd-953d7d09ff5c/26213de4-885d-4eaa-a433-ed5157116507/1.2.1.0.89417ea8-51b5-408c-9283-60c181763a39/Microsoft.Max_1.2.1.0_neutral__ph1m9x8skttmg",
+                            Text = "麦克斯：兄弟魔咒",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
+                        };
+                        lb2.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb3 = new()
+                        {
+                            Tag = "http://dlassets.xboxlive.cn/public/content/77d0d59a-34b7-4482-a1c7-c0abbed17de2/db7a9163-9c5e-43a8-b8bf-fe0208149792/1.0.0.3.65565c9c-8a1e-438a-b714-2d9965f0485b/ChildOfLight_1.0.0.3_x64__b6krnev7r9sf8",
+                            Text = "光之子",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl,
+                            LinkColor = Color.Green
+                        };
+                        lb3.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        LinkLabel lb4 = new()
+                        {
+                            Tag = "http://dlassets.xboxlive.cn/public/content/1c4b6e60-b2e3-420c-a8a8-540fb14c9286/57f7a51d-e6c2-42b2-967b-6f075e1923a7/1.0.0.5.acd29c4f-6d78-41c8-a705-90de47b8273b/SHPUPWW446612E0_1.0.0.5_x64__zjr0dfhgjwvde",
+                            Text = "型可塑",
                             AutoSize = true,
                             Parent = this.flpTestUrl,
                             LinkColor = Color.Green
                         };
                         lb4.LinkClicked += new LinkLabelLinkClickedEventHandler(this.LinkTestUrl_LinkClicked);
+                        Label lbTip = new()
+                        {
+                            ForeColor = Color.Red,
+                            Text = "XboxOne部分老游戏下载域名",
+                            AutoSize = true,
+                            Parent = this.flpTestUrl
+                        };
+                        ToolTip toolTip1 = new()
+                        {
+                            AutoPopDelay = 30000,
+                            IsBalloon = true
+                        };
+                        toolTip1.SetToolTip(lbTip, "PC、主机新游戏都不再使用此域名。\n下载慢可以勾选“自动优选 Akamai IP”，使用国外CDN服务器。");
                     }
                     break;
                 case "dl.delivery.mp.microsoft.com":
@@ -2462,13 +2548,16 @@ namespace XboxDownload
                     case "assets2.xboxlive.cn":
                     case "d1.xboxlive.cn":
                     case "d2.xboxlive.cn":
-                    case "dlassets.xboxlive.cn":
-                    case "dlassets2.xboxlive.cn":
-                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+(assets1|assets2|d1|d2|dlassets2?)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+(assets1|assets2|d1|d2)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " assets1.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " assets2.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " d1.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " d2.xboxlive.cn # XboxDownload");
+                        msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
+                        break;
+                    case "dlassets.xboxlive.cn":
+                    case "dlassets2.xboxlive.cn":
+                        sHosts = Regex.Replace(sHosts, @"[^\s]+\s+(dlassets2?)\.xboxlive\.cn\s+# (XboxDownload|Xbox下载助手)\r\n", "");
                         sb.AppendLine(ip + " dlassets.xboxlive.cn # XboxDownload");
                         sb.AppendLine(ip + " dlassets2.xboxlive.cn # XboxDownload");
                         msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
@@ -2592,16 +2681,12 @@ namespace XboxDownload
                 case "assets2.xboxlive.cn":
                 case "d1.xboxlive.cn":
                 case "d2.xboxlive.cn":
-                case "dlassets.xboxlive.cn":
-                case "dlassets2.xboxlive.cn":
                     if (tsmi.Name == "tsmDNSmasp")
                     {
                         sb.AppendLine("address=/assets1.xboxlive.cn/" + ip);
                         sb.AppendLine("address=/assets2.xboxlive.cn/" + ip);
                         sb.AppendLine("address=/d1.xboxlive.cn/" + ip);
                         sb.AppendLine("address=/d2.xboxlive.cn/" + ip);
-                        sb.AppendLine("address=/dlassets.xboxlive.cn/" + ip);
-                        sb.AppendLine("address=/dlassets2.xboxlive.cn/" + ip);
                     }
                     else
                     {
@@ -2609,6 +2694,18 @@ namespace XboxDownload
                         sb.AppendLine(ip + " assets2.xboxlive.cn");
                         sb.AppendLine(ip + " d1.xboxlive.cn");
                         sb.AppendLine(ip + " d2.xboxlive.cn");
+                    }
+                    msg = "\nXbox、PC商店游戏下载可能会使用com域名，只写入cn域名加速不一定有效。";
+                    break;
+                case "dlassets.xboxlive.cn":
+                case "dlassets2.xboxlive.cn":
+                    if (tsmi.Name == "tsmDNSmasp")
+                    {
+                        sb.AppendLine("address=/dlassets.xboxlive.cn/" + ip);
+                        sb.AppendLine("address=/dlassets2.xboxlive.cn/" + ip);
+                    }
+                    else
+                    {
                         sb.AppendLine(ip + " dlassets.xboxlive.cn");
                         sb.AppendLine(ip + " dlassets2.xboxlive.cn");
                     }

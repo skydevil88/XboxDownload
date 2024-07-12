@@ -17,6 +17,9 @@
     <Setting Name="CnIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="CnIP2" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
     <Setting Name="AppIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

@@ -65,6 +65,9 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
+            label8 = new Label();
+            tbCnIP2 = new TextBox();
+            labelCn2 = new Label();
             linkProxy = new LinkLabel();
             ckbProxy = new CheckBox();
             ckbBetterAkamaiIP = new CheckBox();
@@ -327,6 +330,7 @@
             cmsIP = new ContextMenuStrip(components);
             tsmUseIP = new ToolStripMenuItem();
             tsmUseIPCn = new ToolStripMenuItem();
+            tsmUseIPCn2 = new ToolStripMenuItem();
             tsmUseIPCom = new ToolStripMenuItem();
             tsmUseIPXbox = new ToolStripMenuItem();
             tsmUseIPApp = new ToolStripMenuItem();
@@ -617,6 +621,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label8);
+            groupBox1.Controls.Add(tbCnIP2);
+            groupBox1.Controls.Add(labelCn2);
             groupBox1.Controls.Add(linkProxy);
             groupBox1.Controls.Add(ckbProxy);
             groupBox1.Controls.Add(ckbBetterAkamaiIP);
@@ -687,6 +694,21 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
+            // 
+            // label8
+            // 
+            resources.ApplyResources(label8, "label8");
+            label8.Name = "label8";
+            // 
+            // tbCnIP2
+            // 
+            resources.ApplyResources(tbCnIP2, "tbCnIP2");
+            tbCnIP2.Name = "tbCnIP2";
+            // 
+            // labelCn2
+            // 
+            resources.ApplyResources(labelCn2, "labelCn2");
+            labelCn2.Name = "labelCn2";
             // 
             // linkProxy
             // 
@@ -1285,7 +1307,7 @@
             // 
             cbImportIP.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImportIP.FormattingEnabled = true;
-            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5"), resources.GetString("cbImportIP.Items6"), resources.GetString("cbImportIP.Items7") });
+            cbImportIP.Items.AddRange(new object[] { resources.GetString("cbImportIP.Items"), resources.GetString("cbImportIP.Items1"), resources.GetString("cbImportIP.Items2"), resources.GetString("cbImportIP.Items3"), resources.GetString("cbImportIP.Items4"), resources.GetString("cbImportIP.Items5"), resources.GetString("cbImportIP.Items6"), resources.GetString("cbImportIP.Items7"), resources.GetString("cbImportIP.Items8") });
             resources.ApplyResources(cbImportIP, "cbImportIP");
             cbImportIP.Name = "cbImportIP";
             cbImportIP.SelectedIndexChanged += CbImportIP_SelectedIndexChanged;
@@ -2533,7 +2555,7 @@
             // 
             // tsmUseIP
             // 
-            tsmUseIP.DropDownItems.AddRange(new ToolStripItem[] { tsmUseIPCn, tsmUseIPCom, tsmUseIPXbox, tsmUseIPApp, tssUseIP1, tsmUseIPPS, tsmUseIPNS, tsmUseIPEa, tsmUseIPBattle, tsmUseIPEpic, tsmUseIPUbi, tssUseIP2, tsmUseAkamai, tsmUseIPHosts });
+            tsmUseIP.DropDownItems.AddRange(new ToolStripItem[] { tsmUseIPCn, tsmUseIPCn2, tsmUseIPCom, tsmUseIPXbox, tsmUseIPApp, tssUseIP1, tsmUseIPPS, tsmUseIPNS, tsmUseIPEa, tsmUseIPBattle, tsmUseIPEpic, tsmUseIPUbi, tssUseIP2, tsmUseAkamai, tsmUseIPHosts });
             tsmUseIP.Name = "tsmUseIP";
             resources.ApplyResources(tsmUseIP, "tsmUseIP");
             // 
@@ -2543,6 +2565,13 @@
             tsmUseIPCn.Name = "tsmUseIPCn";
             resources.ApplyResources(tsmUseIPCn, "tsmUseIPCn");
             tsmUseIPCn.Click += TsmUseIP_Click;
+            // 
+            // tsmUseIPCn2
+            // 
+            tsmUseIPCn2.Image = Properties.Resource.Xbox;
+            tsmUseIPCn2.Name = "tsmUseIPCn2";
+            resources.ApplyResources(tsmUseIPCn2, "tsmUseIPCn2");
+            tsmUseIPCn2.Click += TsmUseIP_Click;
             // 
             // tsmUseIPCom
             // 
@@ -2810,26 +2839,6 @@
         private Label label2;
         private Label labelCn;
         private Label label6;
-        private Label labelApp;
-        private Label label10;
-        private Label labelPS;
-        private Label label12;
-        private Label labelNS;
-        private Label label14;
-        private CheckBox ckbNSBrowser;
-        private LinkLabel linkNSHomepage;
-        private Label labelEA;
-        private Label labelBattle;
-        private Label label16;
-        private Label label18;
-        private Label label20;
-        private Label labelEpic;
-        private CheckBox ckbLocalUpload;
-        private Label label22;
-        private CheckBox ckbTruncation;
-        private Button butBrowse;
-        private TextBox tbLocalPath;
-        private Label label21;
         private ComboBox cbListenIP;
         private Label label23;
         private CheckBox ckbHttpService;
@@ -2853,12 +2862,6 @@
         private Label label25;
         public TextBox tbComIP;
         public TextBox tbCnIP;
-        public TextBox tbAppIP;
-        public TextBox tbPSIP;
-        public TextBox tbNSIP;
-        public TextBox tbEAIP;
-        public TextBox tbBattleIP;
-        public TextBox tbEpicIP;
         private GroupBox groupBox2;
         private DataGridView dgvHosts;
         private Panel panel2;
@@ -3068,13 +3071,9 @@
         private System.Windows.Forms.Timer timerTraffic;
         private Label labelTraffic;
         private LinkLabel linkPcInstall1;
-        private LinkLabel linkEA1;
         private LinkLabel linkXbox3;
         private LinkLabel linkXbox2;
         private LinkLabel linkXbox1;
-        public TextBox tbUbiIP;
-        private Label labelUbi;
-        private Label label34;
         private CheckBox ckbUbiStore;
         private DataGridViewCheckBoxColumn Col_Check;
         private DataGridViewTextBoxColumn Col_IPAddress;
@@ -3089,20 +3088,54 @@
         private DataGridViewTextBoxColumn Col_Remark;
         private CheckBox ckbDisableIPv6DNS;
         private ToolStripMenuItem tsmUseIPUbi;
-        private RadioButton rbEpicCDN1;
-        private RadioButton rbEpicCDN2;
-        private Panel panelEpic;
-        private LinkLabel linkEA2;
         private LinkLabel linkRestartEpic;
         private ToolStripMenuItem tsmDownload;
         private ToolStripMenuItem tsmDownload1;
         private ToolStripMenuItem tsmDownload2;
         private LinkLabel linkRepairDNS;
         private ToolStripMenuItem tsmCopyUrl3;
-        private CheckBox ckbBattleNetease;
         private LinkLabel linkDoHServer;
         private LinkLabel linkHostsAdd;
         private CheckBox ckbProxy;
         private LinkLabel linkProxy;
+        private Label label8;
+        public TextBox tbCnIP2;
+        private Label labelCn2;
+        private CheckBox ckbBattleNetease;
+        private LinkLabel linkEA2;
+        private Panel panelEpic;
+        private RadioButton rbEpicCDN1;
+        private RadioButton rbEpicCDN2;
+        private Label label34;
+        public TextBox tbUbiIP;
+        private Label labelUbi;
+        private LinkLabel linkEA1;
+        private Label label22;
+        private CheckBox ckbTruncation;
+        private Button butBrowse;
+        private TextBox tbLocalPath;
+        private Label label21;
+        private CheckBox ckbLocalUpload;
+        private Label label20;
+        public TextBox tbEpicIP;
+        private Label labelEpic;
+        private Label label18;
+        public TextBox tbBattleIP;
+        private Label labelBattle;
+        private Label label16;
+        public TextBox tbEAIP;
+        private Label labelEA;
+        private LinkLabel linkNSHomepage;
+        private CheckBox ckbNSBrowser;
+        private Label label14;
+        public TextBox tbNSIP;
+        private Label labelNS;
+        private Label label12;
+        public TextBox tbPSIP;
+        private Label labelPS;
+        private Label label10;
+        public TextBox tbAppIP;
+        private Label labelApp;
+        private ToolStripMenuItem tsmUseIPCn2;
     }
 }
