@@ -113,7 +113,7 @@ namespace XboxDownload
                 else if (_proxy.Length >= 3)
                 {
                     fakeHost = Regex.Replace(_proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
-                    if (IPAddress.TryParse(_proxy[2], out IPAddress? address))
+                    if (IPAddress.TryParse(_proxy[2].Trim(), out IPAddress? address))
                         ip = address.ToString();
                 }
                 if (arrHost.Count >= 1) lsSniProxy.Add(new List<object> { arrHost, fakeHost, ip });

@@ -213,7 +213,7 @@ namespace XboxDownload
                 }
                 if (mySocket.Connected)
                 {
-                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return string.IsNullOrEmpty(proxy.Sni) || sslPolicyErrors == SslPolicyErrors.None; }), null);
+                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return true; }), null);
                     ssl.WriteTimeout = 6000;
                     ssl.ReadTimeout = 6000;
                     try
