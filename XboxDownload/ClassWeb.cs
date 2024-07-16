@@ -218,7 +218,7 @@ namespace XboxDownload
                     ssl.ReadTimeout = 6000;
                     try
                     {
-                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(proxy.Sni) ? proxy.IP! : proxy.Sni, null, SslProtocols.Tls13 | SslProtocols.Tls12, true);
+                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(proxy.Sni) ? proxy.IP! : proxy.Sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
                         if (ssl.IsAuthenticated)
                         {
                             Byte[] bReceive = new Byte[4096];
