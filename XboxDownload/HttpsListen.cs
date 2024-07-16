@@ -170,21 +170,43 @@ namespace XboxDownload
                         {
                             Byte[] _receive = new Byte[4096];
                             int _num = ssl.Read(_receive, 0, _receive.Length);
-                            string _buffer = Encoding.ASCII.GetString(_receive, 0, _num);
-                            Match result = Regex.Match(_buffer, @"(?<method>GET|POST|OPTIONS|PUP|DELETE) (?<path>[^\s]+)");
+                            string headers = string.Empty;
+                            long contentLength = 0, bodyLength = 0;
+                            List<Byte> list = new();
+                            for (int i = 1; i <= _num - 4; i++)
+                            {
+                                if (BitConverter.ToString(_receive, i, 4) == "0D-0A-0D-0A")
+                                {
+                                    headers = Encoding.ASCII.GetString(_receive, 0, i + 4);
+                                    Match m1 = Regex.Match(headers, @"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.IgnoreCase);
+                                    if (m1.Success)
+                                    {
+                                        contentLength = Convert.ToInt32(m1.Groups["ContentLength"].Value);
+                                    }
+                                    Byte[] dest = new Byte[_num - i - 4];
+                                    Buffer.BlockCopy(_receive, i + 4, dest, 0, dest.Length);
+                                    list.AddRange(dest);
+                                    bodyLength = dest.Length;
+                                    break;
+                                }
+                            }
+                            while (bodyLength < contentLength)
+                            {
+                                _num = ssl.Read(_receive, 0, _receive.Length);
+                                Byte[] dest = new Byte[_num];
+                                Buffer.BlockCopy(_receive, 0, dest, 0, dest.Length);
+                                list.AddRange(dest);
+                                bodyLength += _num;
+                            }
+                            Match result = Regex.Match(headers, @"(?<method>GET|POST|PUP|DELETE|OPTIONS|HEAD) (?<path>[^\s]+)");
                             if (!result.Success)
                             {
                                 mySocket.Close();
                                 continue;
                             }
-                            if (_buffer.StartsWith("POST") && _buffer.EndsWith("\r\n\r\n") && !_buffer.Contains("Content-Length: 0"))
-                            {
-                                _num = ssl.Read(_receive, 0, _receive.Length);
-                                _buffer += Encoding.ASCII.GetString(_receive, 0, _num);
-                            }
                             string _method = result.Groups["method"].Value;
                             string _filePath = Regex.Replace(result.Groups["path"].Value.Trim(), @"^https?://[^/]+", "");
-                            result = Regex.Match(_buffer, @"Host:(.+)");
+                            result = Regex.Match(headers, @"Host:(.+)");
                             if (!result.Success)
                             {
                                 mySocket.Close();
@@ -218,7 +240,7 @@ namespace XboxDownload
                                     string _contentRange = string.Empty, _status = "200 OK";
                                     long _fileLength = br.BaseStream.Length, _startPosition = 0;
                                     long _endPosition = _fileLength;
-                                    result = Regex.Match(_buffer, @"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?");
+                                    result = Regex.Match(headers, @"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?");
                                     if (result.Success)
                                     {
                                         _startPosition = long.Parse(result.Groups["StartPosition"].Value);
@@ -284,14 +306,13 @@ namespace XboxDownload
                                                 ip = ClassDNS.DoH(_host);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
-                                                Match m1 = Regex.Match(_buffer, @"Authorization:(.+)");
+                                                Match m1 = Regex.Match(headers, @"Authorization:(.+)");
                                                 if (m1.Success)
                                                 {
                                                     Properties.Settings.Default.Authorization = m1.Groups[1].Value.Trim();
                                                     Properties.Settings.Default.Save();
                                                 }
-                                                var headers = new Dictionary<string, string>() { { "Host", _host }, { "Authorization", Properties.Settings.Default.Authorization } };
-                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, headers);
+                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, new() { { "Host", _host }, { "Authorization", Properties.Settings.Default.Authorization } });
                                                 if (response != null && response.IsSuccessStatusCode)
                                                 {
                                                     bFileFound = true;
@@ -353,13 +374,12 @@ namespace XboxDownload
                                             string? ip = ClassDNS.DoH(_host);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
-                                                var headers = new Dictionary<string, string>() { { "Host", _host } };
-                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, headers);
+                                                using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, new() { { "Host", _host } });
                                                 if (response != null && response.IsSuccessStatusCode)
                                                 {
                                                     bFileFound = true;
                                                     Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
-                                                    byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
+                                                    Byte[] _response = response.Content.ReadAsByteArrayAsync().Result;
                                                     ssl.Write(_headers);
                                                     ssl.Write(_response);
                                                     ssl.Flush();
@@ -416,7 +436,12 @@ namespace XboxDownload
                                             if (!string.IsNullOrEmpty(proxy?.IP))
                                             {
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                                if (!ClassWeb.SniProxy(proxy, Encoding.ASCII.GetBytes(_buffer), ssl, out string errMessae))
+                                                Byte[] _headers = Encoding.ASCII.GetBytes(headers);
+                                                Byte[] _body = list.ToArray();
+                                                Byte[] send = new Byte[_headers.Length + _body.Length];
+                                                Buffer.BlockCopy(_headers, 0, send, 0, _headers.Length);
+                                                Buffer.BlockCopy(_body, 0, send, _headers.Length, _body.Length);
+                                                if (!ClassWeb.SniProxy(proxy, send, ssl, out string errMessae))
                                                 {
                                                     proxy.IP = null;
                                                     dicSniProxy.AddOrUpdate(_host, proxy, (oldkey, oldvalue) => proxy);
@@ -425,8 +450,7 @@ namespace XboxDownload
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                     sb.Append("Content-Type: text/html\r\n");
                                                     sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                                    Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                                    ssl.Write(_headers);
+                                                    ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
                                                     ssl.Write(_response);
                                                     ssl.Flush();
                                                 }
@@ -438,8 +462,7 @@ namespace XboxDownload
                                                 sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                 sb.Append("Content-Type: text/html\r\n");
                                                 sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                                Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                                ssl.Write(_headers);
+                                                ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
                                                 ssl.Write(_response);
                                                 ssl.Flush();
                                             }

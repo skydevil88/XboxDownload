@@ -59,6 +59,9 @@ namespace XboxDownload
                 case "Steam 商店社区":
                     hosts1 = new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "help.steampowered.com", "checkout.steampowered.com", "steamcommunity.com" };
                     break;
+                case "GitHub":
+                    hosts1 = new string[] { "*github.com", "*githubusercontent.com", "*github.io", "*github.blog", "*githubstatus.com", "*githubassets.com" };
+                    break;
             }
 
             StringBuilder sb = new();

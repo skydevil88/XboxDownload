@@ -65,7 +65,7 @@
             checkedListBox1.CheckOnClick = true;
             checkedListBox1.Dock = DockStyle.Fill;
             checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区" });
+            checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区", "GitHub" });
             checkedListBox1.Location = new Point(3, 26);
             checkedListBox1.Name = "checkedListBox1";
             checkedListBox1.Size = new Size(278, 314);
