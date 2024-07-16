@@ -162,9 +162,9 @@ namespace XboxDownload
                 try
                 {
                     if (cts == null)
-                    response = await client.SendAsync(httpRequestMessage);
-                else
-                    response = await client.SendAsync(httpRequestMessage, (CancellationToken)cts);
+                        response = await client.SendAsync(httpRequestMessage);
+                    else
+                        response = await client.SendAsync(httpRequestMessage, (CancellationToken)cts);
                 }
                 catch (Exception ex)
                 {
