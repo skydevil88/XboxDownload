@@ -410,12 +410,12 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Proxy {
+        public bool SniProxy {
             get {
-                return ((bool)(this["Proxy"]));
+                return ((bool)(this["SniProxy"]));
             }
             set {
-                this["Proxy"] = value;
+                this["SniProxy"] = value;
             }
         }
         

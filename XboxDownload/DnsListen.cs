@@ -675,12 +675,17 @@ namespace XboxDownload
                     _ = dicServiceV4.TryAdd("uplaypc-s-ubisoft.cdn.ubionline.com.cn", lsLocalIP);
                 }
             }
-            if (Properties.Settings.Default.Proxy)
+            if (Properties.Settings.Default.SniProxy)
             {
-                foreach (string host in HttpsListen.dicProxy.Keys)
+                foreach (string host in HttpsListen.dicSniProxy.Keys)
                 {
                     _ = dicServiceV4.TryAdd(host, lsLocalIP);
                     _ = dicServiceV6.TryAdd(host, lsEmptyIP);
+                }
+                foreach (Regex reHost in HttpsListen.dicSniProxy2.Keys)
+                {
+                    _ = dicHosts2V4.AddOrUpdate(reHost, lsLocalIP, (oldkey, oldvalue) => lsLocalIP);
+                    _ = dicHosts2V6.AddOrUpdate(reHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                 }
             }
             if (Properties.Settings.Default.HttpService)
@@ -1016,15 +1021,51 @@ namespace XboxDownload
                 string? host = dr["HostName"].ToString()?.Trim().ToLower();
                 if (!string.IsNullOrEmpty(host) && IPAddress.TryParse(dr["IP"].ToString()?.Trim(), out IPAddress? ip))
                 {
-                    if (host.StartsWith("*."))
+                    if (host.StartsWith("*"))
                     {
-                        host = Regex.Replace(host, @"^\*\.", "");
-                        Regex re = new("\\." + host.Replace(".", "\\.") + "$");
+                        host = host[1..];
+                        if (!host.StartsWith("."))
+                        {
+                            if (ip.AddressFamily == AddressFamily.InterNetwork)
+                            {
+                                if (!dicHosts1V4.TryGetValue(host, out List<ResouceRecord>? lsIp))
+                                {
+                                    lsIp = new List<ResouceRecord>();
+                                    _ = dicHosts1V4.TryAdd(host, lsIp);
+                                }
+                                else if (lsIp.Where(x => new IPAddress(x.Datas!).ToString() == ip.ToString()).FirstOrDefault() != null) continue;
+                                lsIp.Add(new ResouceRecord
+                                {
+                                    Datas = ip.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.A
+                                });
+                            }
+                            else
+                            {
+                                if (!dicHosts1V6.TryGetValue(host, out List<ResouceRecord>? lsIp))
+                                {
+                                    lsIp = new List<ResouceRecord>();
+                                    _ = dicHosts1V6.TryAdd(host, lsIp);
+                                }
+                                else if (lsIp.Where(x => new IPAddress(x.Datas!).ToString() == ip.ToString()).FirstOrDefault() != null) continue;
+                                lsIp.Add(new ResouceRecord
+                                {
+                                    Datas = ip.GetAddressBytes(),
+                                    TTL = 100,
+                                    QueryClass = 1,
+                                    QueryType = QueryType.AAAA
+                                });
+                            }
+                            host = "." + host;
+                        }
+                        Regex re = new(host.Replace(".", "\\.") + "$");
                         if (ip.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            if (!dicHosts2V4.ContainsKey(re) && reHosts.IsMatch(host))
+                            if (!dicHosts2V4.ContainsKey(re) && reHosts.IsMatch(host[1..]))
                             {
-                                List<ResouceRecord> lsIp = new()
+                                _ = dicHosts2V4.TryAdd(re, new()
                                 {
                                     new ResouceRecord
                                     {
@@ -1033,15 +1074,14 @@ namespace XboxDownload
                                         QueryClass = 1,
                                         QueryType = QueryType.A
                                     }
-                                };
-                                _ = dicHosts2V4.TryAdd(re, lsIp);
+                                });
                             }
                         }
                         else
                         {
-                            if (!dicHosts2V6.ContainsKey(re) && reHosts.IsMatch(host))
+                            if (!dicHosts2V6.ContainsKey(re) && reHosts.IsMatch(host[1..]))
                             {
-                                List<ResouceRecord> lsIp = new()
+                                _ = dicHosts2V6.TryAdd(re, new()
                                 {
                                     new ResouceRecord
                                     {
@@ -1050,8 +1090,7 @@ namespace XboxDownload
                                         QueryClass = 1,
                                         QueryType = QueryType.AAAA
                                     }
-                                };
-                                _ = dicHosts2V6.TryAdd(re, lsIp);
+                                });
                             }
                         }
                     }

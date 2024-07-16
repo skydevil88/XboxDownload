@@ -107,7 +107,7 @@ namespace XboxDownload
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
-            ckbProxy.Checked = Properties.Settings.Default.Proxy;
+            ckbProxy.Checked = Properties.Settings.Default.SniProxy;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -692,7 +692,7 @@ namespace XboxDownload
                     MessageBox.Show("Akamai 优选 IP 列表不存在，请在测速选项卡中导入。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                lsIP = lsIP.OrderBy(s => Guid.NewGuid()).Take(20).ToList();
+                lsIP = lsIP.OrderBy(s => Guid.NewGuid()).Take(30).ToList();
                 ckbBetterAkamaiIP.Enabled = false;
                 string[] test = { "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt", "http://gst.prod.dl.playstation.net/networktest/get_192m", "http://ctest-dl-lp1.cdn.nintendo.net/30m" };
                 Random ran = new();
@@ -1088,7 +1088,7 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
-                Properties.Settings.Default.Proxy = ckbProxy.Checked;
+                Properties.Settings.Default.SniProxy = ckbProxy.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1190,7 +1190,7 @@ namespace XboxDownload
                         }
                         result = result.NextMatch();
                     }
-                    if (!dic.IsEmpty && MessageBox.Show("检测到以下端口被占用\n" + sb.ToString() + "\n是否尝试强制结束占用端口程序？", "启用服务失败", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    if (!dic.IsEmpty && MessageBox.Show("检测到以下端口被占用\n" + sb.ToString() + "\n是否尝试强制结束占用端口程序？", "端口占用", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                     {
                         foreach (var item in dic)
                         {
@@ -1274,7 +1274,7 @@ namespace XboxDownload
 
         private void UpdateHosts(bool add, string? akamai = null)
         {
-            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.Proxy)) return;
+            if (!(Properties.Settings.Default.MicrosoftStore || Properties.Settings.Default.EAStore || Properties.Settings.Default.BattleStore || Properties.Settings.Default.EpicStore || Properties.Settings.Default.UbiStore || Properties.Settings.Default.SniProxy)) return;
 
             StringBuilder sb = new();
             try
@@ -1454,9 +1454,9 @@ namespace XboxDownload
                                     sb.AppendLine(Properties.Settings.Default.LocalIP + " uplaypc-s-ubisoft.cdn.ubionline.com.cn");
                             }
                         }
-                        if (Properties.Settings.Default.Proxy)
+                        if (Properties.Settings.Default.SniProxy)
                         {
-                            foreach (string host in HttpsListen.dicProxy.Keys)
+                            foreach (string host in HttpsListen.dicSniProxy.Keys)
                             {
                                 sb.AppendLine(Properties.Settings.Default.LocalIP + " " + host);
                             }

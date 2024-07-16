@@ -89,6 +89,7 @@
             textBox1.Location = new Point(3, 26);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
+            textBox1.PlaceholderText = "*example.com | SNI(可空) | IPv4(可空)\r\n使用泛域名解析需要勾选“设置本机 DNS”";
             textBox1.ScrollBars = ScrollBars.Both;
             textBox1.Size = new Size(375, 452);
             textBox1.TabIndex = 0;

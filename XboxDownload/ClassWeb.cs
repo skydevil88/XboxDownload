@@ -190,7 +190,7 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
-        public static bool Proxy(string ip, Byte[] send, SslStream clent, out string errMessage)
+        public static bool SniProxy(HttpsListen.SniProxy proxy, Byte[] send, SslStream clent, out string errMessage)
         {
             bool isOK = true;
             errMessage = string.Empty;
@@ -204,7 +204,7 @@ namespace XboxDownload
                 mySocket.ReceiveTimeout = 6000;
                 try
                 {
-                    mySocket.Connect(ip, 443);
+                    mySocket.Connect(proxy.IP!, 443);
                 }
                 catch (Exception ex)
                 {
@@ -213,12 +213,12 @@ namespace XboxDownload
                 }
                 if (mySocket.Connected)
                 {
-                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return true; }), null);
+                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return string.IsNullOrEmpty(proxy.Sni) || sslPolicyErrors == SslPolicyErrors.None; }), null);
                     ssl.WriteTimeout = 6000;
                     ssl.ReadTimeout = 6000;
                     try
                     {
-                        ssl.AuthenticateAsClient(ip, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(proxy.Sni) ? proxy.IP! : proxy.Sni, null, SslProtocols.Tls13 | SslProtocols.Tls12, true);
                         if (ssl.IsAuthenticated)
                         {
                             Byte[] bReceive = new Byte[4096];

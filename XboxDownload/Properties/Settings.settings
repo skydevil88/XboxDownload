@@ -98,7 +98,7 @@
     <Setting Name="UbiStore" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Proxy" Type="System.Boolean" Scope="User">
+    <Setting Name="SniProxy" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DoHProxy" Type="System.Int32" Scope="User">
