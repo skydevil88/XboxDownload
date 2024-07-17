@@ -392,6 +392,20 @@ namespace XboxDownload
                                         }
                                     }
                                     break;
+                                default:
+                                    if (Properties.Settings.Default.SniProxy && (HttpsListen.dicSniProxy.ContainsKey(_host) || HttpsListen.dicSniProxy2.Where(kvp => kvp.Key.IsMatch(_host)).Select(x => x.Value).FirstOrDefault() != null))
+                                    {
+                                        bFileFound = true;
+                                        StringBuilder sb = new();
+                                        sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
+                                        sb.Append("Content-Type: text/html\r\n");
+                                        sb.Append("Location: https://" + _host + _filePath + "\r\n");
+                                        sb.Append("Content-Length: 0\r\n\r\n");
+                                        Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                        mySocket.Send(_headers, 0, _headers.Length, SocketFlags.None, out _);
+                                        if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                    }
+                                    break;
                             }
                             if (!bFileFound)
                             {

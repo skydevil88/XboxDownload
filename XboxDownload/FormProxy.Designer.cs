@@ -42,9 +42,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(390, 411);
+            button1.Location = new Point(423, 411);
             button1.Name = "button1";
-            button1.Size = new Size(278, 67);
+            button1.Size = new Size(262, 67);
             button1.TabIndex = 0;
             button1.Text = "保存";
             button1.UseVisualStyleBackColor = true;
@@ -53,9 +53,9 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(checkedListBox1);
-            groupBox1.Location = new Point(387, 0);
+            groupBox1.Location = new Point(420, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(284, 343);
+            groupBox1.Size = new Size(271, 343);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "选择服务";
@@ -65,10 +65,10 @@
             checkedListBox1.CheckOnClick = true;
             checkedListBox1.Dock = DockStyle.Fill;
             checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区", "GitHub" });
+            checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区", "GitHub", "Pixiv" });
             checkedListBox1.Location = new Point(3, 26);
             checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(278, 314);
+            checkedListBox1.Size = new Size(265, 314);
             checkedListBox1.TabIndex = 0;
             checkedListBox1.ItemCheck += CheckedListBox1_ItemCheck;
             // 
@@ -77,10 +77,10 @@
             groupBox2.Controls.Add(textBox1);
             groupBox2.Location = new Point(0, 0);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(381, 481);
+            groupBox2.Size = new Size(414, 481);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
-            groupBox2.Text = "域名";
+            groupBox2.Text = "域名 (使用泛域名解析需要勾选“设置本机 DNS”)";
             // 
             // textBox1
             // 
@@ -89,9 +89,9 @@
             textBox1.Location = new Point(3, 26);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "*example.com | SNI(可空) | IPv4(可空)\r\n使用泛域名解析需要勾选“设置本机 DNS”";
+            textBox1.PlaceholderText = "*example.com | SNI(可留空) | IPv4(可留空)";
             textBox1.ScrollBars = ScrollBars.Both;
-            textBox1.Size = new Size(375, 452);
+            textBox1.Size = new Size(408, 452);
             textBox1.TabIndex = 0;
             textBox1.WordWrap = false;
             // 
@@ -100,23 +100,23 @@
             label1.AutoSize = true;
             label1.Location = new Point(3, 487);
             label1.Name = "label1";
-            label1.Size = new Size(644, 48);
+            label1.Size = new Size(558, 48);
             label1.TabIndex = 3;
-            label1.Text = "此功能可以改善部分网站被 SNI 阻断无法访问的问题，其它域名可以自行尝试。\r\n*整个代理过程在用户自己的电脑上完成，并不涉及任何第三方服务。";
+            label1.Text = "此功能可以改善部分网站被 SNI 阻断无法访问的问题。\r\n*整个代理过程在用户自己的电脑上完成，并不涉及任何第三方服务。";
             // 
             // cbDoh
             // 
             cbDoh.DropDownStyle = ComboBoxStyle.DropDownList;
             cbDoh.FormattingEnabled = true;
-            cbDoh.Location = new Point(390, 373);
+            cbDoh.Location = new Point(423, 373);
             cbDoh.Name = "cbDoh";
-            cbDoh.Size = new Size(281, 32);
+            cbDoh.Size = new Size(262, 32);
             cbDoh.TabIndex = 4;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(390, 346);
+            label2.Location = new Point(420, 346);
             label2.Name = "label2";
             label2.Size = new Size(264, 24);
             label2.TabIndex = 5;
@@ -126,7 +126,7 @@
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(683, 543);
+            ClientSize = new Size(703, 543);
             Controls.Add(label2);
             Controls.Add(cbDoh);
             Controls.Add(label1);

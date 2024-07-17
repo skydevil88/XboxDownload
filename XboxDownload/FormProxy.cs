@@ -62,6 +62,9 @@ namespace XboxDownload
                 case "GitHub":
                     hosts1 = new string[] { "*github.com", "*githubusercontent.com", "*github.io", "*github.blog", "*githubstatus.com", "*githubassets.com" };
                     break;
+                case "Pixiv":
+                    hosts1 = new string[] { "*pixiv.net | 210.140.92.187", "*.pximg.net | 210.140.92.141" };
+                    break;
             }
 
             StringBuilder sb = new();
