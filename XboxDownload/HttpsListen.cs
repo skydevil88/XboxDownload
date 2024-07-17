@@ -21,11 +21,13 @@ namespace XboxDownload
         {
             public string? Sni { get; set; }
             public string? IP { get; set; }
+            public bool CustomIP { get; set; }
         }
 
         public static void CreateCertificate()
         {
             dicSniProxy.Clear();
+            dicSniProxy2.Clear();
             // 生成证书
             using var rsa = RSA.Create(2048);
             var req = new CertificateRequest("CN=XboxDownload", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
@@ -59,41 +61,39 @@ namespace XboxDownload
                                 {
                                     string _host = host.ToString().Trim();
                                     if (string.IsNullOrEmpty(_host)) continue;
+                                    string? sni = item[1]?.ToString();
+                                    string? ip = item[2]?.ToString();
+                                    bool customIp = !string.IsNullOrEmpty(ip);
                                     if (_host.StartsWith("*"))
                                     {
                                         _host = _host[1..];
-                                        if (_host.StartsWith("."))
-                                        {
-                                            sanBuilder.AddDnsName("*" + _host);
-                                            dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), new()
-                                            {
-                                                Sni = item[1]?.ToString(),
-                                                IP = item[2]?.ToString()
-                                            });
-                                        }
-                                        else
+                                        if (!_host.StartsWith("."))
                                         {
                                             sanBuilder.AddDnsName(_host);
                                             dicSniProxy.TryAdd(_host, new()
                                             {
-                                                Sni = item[1]?.ToString(),
-                                                IP = item[2]?.ToString()
+                                                Sni = sni,
+                                                IP = ip,
+                                                CustomIP = customIp
                                             });
-                                            sanBuilder.AddDnsName("*." + _host);
-                                            dicSniProxy2.TryAdd(new("\\." + _host.Replace(".", "\\.") + "$"), new()
-                                            {
-                                                Sni = item[1]?.ToString(),
-                                                IP = item[2]?.ToString()
-                                            });
+                                            _host = "." + _host;
                                         }
+                                        sanBuilder.AddDnsName("*" + _host);
+                                        dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), new()
+                                        {
+                                            Sni = sni,
+                                            IP = ip,
+                                            CustomIP = customIp
+                                        });
                                     }
                                     else
                                     {
                                         sanBuilder.AddDnsName(_host);
                                         dicSniProxy.TryAdd(_host, new()
                                         {
-                                            Sni = item[1]?.ToString(),
-                                            IP = item[2]?.ToString()
+                                            Sni = sni,
+                                            IP = ip,
+                                            CustomIP = customIp
                                         });
                                     }
                                 }
@@ -444,7 +444,7 @@ namespace XboxDownload
                                                 if (!ClassWeb.SniProxy(proxy, send, ssl, out string errMessae))
                                                 {
                                                     proxy.IP = null;
-                                                    dicSniProxy.AddOrUpdate(_host, proxy, (oldkey, oldvalue) => proxy);
+                                                    if (!proxy.CustomIP) dicSniProxy.AddOrUpdate(_host, proxy, (oldkey, oldvalue) => proxy);
                                                     Byte[] _response = Encoding.ASCII.GetBytes(errMessae);
                                                     StringBuilder sb = new();
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
