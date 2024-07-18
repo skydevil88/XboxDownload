@@ -91,43 +91,40 @@ namespace XboxDownload
         private void Button1_Click(object sender, EventArgs e)
         {
             List<List<object>> lsSniProxy = new();
-            foreach (string proxy in Regex.Split(textBox1.Text.Trim(), @"\n"))
+            foreach (string str in textBox1.Text.Trim().Split('\n'))
             {
                 ArrayList arrHost = new();
-                string fakeHost = string.Empty, ip = string.Empty;
-                string[] _proxy = proxy.Trim().Split('|');
-                if (_proxy.Length >= 1)
+                string sni = string.Empty;
+                string[] proxy = str.Trim().Split('|');
+                IPAddress? ip = null;
+                if (proxy.Length >= 1)
                 {
-                    foreach (string host in Regex.Split(_proxy[0], @","))
+                    foreach (string host in Regex.Split(proxy[0], @","))
                     {
-                        string _host = Regex.Replace(host.ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
+                        string _host = Regex.Replace(host.ToLower().Trim(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
                         if (!string.IsNullOrEmpty(_host))
                         {
                             arrHost.Add(_host);
                         }
                     }
                 }
-                if (_proxy.Length == 2)
+                if (proxy.Length == 2)
                 {
-                    fakeHost = Regex.Replace(_proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
-                    if (IPAddress.TryParse(fakeHost, out IPAddress? address))
-                    {
-                        fakeHost = string.Empty;
-                        ip = address.ToString();
-                    }
+                    proxy[1] = proxy[1].Trim();
+                    if (!(Regex.IsMatch(proxy[1], @"^(\d(\.\d+){3}|([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})$") && IPAddress.TryParse(proxy[1], out ip)))
+                        sni = Regex.Replace(proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
                 }
-                else if (_proxy.Length >= 3)
+                else if (proxy.Length >= 3)
                 {
-                    fakeHost = Regex.Replace(_proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
-                    if (IPAddress.TryParse(_proxy[2].Trim(), out IPAddress? address))
-                        ip = address.ToString();
+                    sni = Regex.Replace(proxy[1].ToLower().Trim(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
+                    _ = IPAddress.TryParse(proxy[2].Trim(), out ip);
                 }
-                if (arrHost.Count >= 1) lsSniProxy.Add(new List<object> { arrHost, fakeHost, ip });
+                if (arrHost.Count >= 1) lsSniProxy.Add(new List<object> { arrHost, sni, ip != null ? ip.ToString() : string.Empty });
             }
             if (lsSniProxy.Count >= 1)
             {
                 if (!Directory.Exists(Form1.resourcePath)) Directory.CreateDirectory(Form1.resourcePath);
-                File.WriteAllText(Form1.resourcePath + "\\SniProxy.json", JsonSerializer.Serialize(lsSniProxy, new JsonSerializerOptions { WriteIndented = true, }));
+                File.WriteAllText(Form1.resourcePath + "\\SniProxy.json", JsonSerializer.Serialize(lsSniProxy, new JsonSerializerOptions { WriteIndented = true }));
             }
             else if (File.Exists(Form1.resourcePath + "\\SniProxy.json"))
             {

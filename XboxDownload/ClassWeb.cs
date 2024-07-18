@@ -190,13 +190,13 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
-        public static bool SniProxy(HttpsListen.SniProxy proxy, Byte[] send, SslStream clent, out string errMessage)
+        public static bool SniProxy(HttpsListen.SniProxy proxy, Byte[] send, SslStream clent, out string? errMessage)
         {
             bool isOK = true;
-            errMessage = string.Empty;
+            errMessage = null;
             String contentencoding = string.Empty;
             List<Byte> list = new();
-            using (Socket mySocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            using (Socket mySocket = new(proxy.IP!.AddressFamily == AddressFamily.InterNetworkV6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
@@ -214,16 +214,16 @@ namespace XboxDownload
                 if (mySocket.Connected)
                 {
                     using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return true; }), null);
-                    ssl.WriteTimeout = 6000;
-                    ssl.ReadTimeout = 6000;
+                    ssl.WriteTimeout = 30000;
+                    ssl.ReadTimeout = 30000;
                     try
                     {
-                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(proxy.Sni) ? proxy.IP! : proxy.Sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(proxy.Sni) ? proxy.IP!.ToString() : proxy.Sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
                         if (ssl.IsAuthenticated)
                         {
                             Byte[] bReceive = new Byte[4096];
                             long count = 0;
-                            Int32 len = -1;
+                            Int32 len = -1, StatusCode = -1;
                             long ContentLength = -1;
                             string headers = string.Empty;
                             String TransferEncoding = "";
@@ -254,7 +254,13 @@ namespace XboxDownload
                                             headers = Encoding.ASCII.GetString(bytes, 0, i + 4);
                                             count = bytes.Length - i - 4;
                                             list.Clear();
-                                            Match result = Regex.Match(headers, @"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.IgnoreCase);
+                                            Match result = Regex.Match(headers, @"^HTTP/\d+(\.\d*)? (?<StatusCode>\d+)");
+                                            if (result.Success && int.TryParse(result.Groups["StatusCode"].Value, out StatusCode) && StatusCode >= 400)
+                                            {
+                                                isOK = false;
+                                                errMessage = "StatusCode: " + result.Groups["StatusCode"].Value;
+                                            }
+                                            result = Regex.Match(headers, @"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.IgnoreCase);
                                             if (result.Success)
                                             {
                                                 ContentLength = Convert.ToInt32(result.Groups["ContentLength"].Value);

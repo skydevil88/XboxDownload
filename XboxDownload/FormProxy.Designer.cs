@@ -42,10 +42,10 @@
             // 
             // button1
             // 
-            button1.Location = new Point(423, 411);
+            button1.Location = new Point(470, 414);
             button1.Name = "button1";
             button1.Size = new Size(262, 67);
-            button1.TabIndex = 0;
+            button1.TabIndex = 4;
             button1.Text = "保存";
             button1.UseVisualStyleBackColor = true;
             button1.Click += Button1_Click;
@@ -53,10 +53,10 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(checkedListBox1);
-            groupBox1.Location = new Point(420, 0);
+            groupBox1.Location = new Point(467, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(271, 343);
-            groupBox1.TabIndex = 1;
+            groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "选择服务";
             // 
@@ -75,10 +75,10 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(textBox1);
-            groupBox2.Location = new Point(0, 0);
+            groupBox2.Location = new Point(3, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(414, 481);
-            groupBox2.TabIndex = 2;
+            groupBox2.Size = new Size(460, 481);
+            groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "域名 (使用泛域名解析需要勾选“设置本机 DNS”)";
             // 
@@ -89,9 +89,9 @@
             textBox1.Location = new Point(3, 26);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "*example.com | SNI(可留空) | IPv4(可留空)";
+            textBox1.PlaceholderText = "*example.com | SNI(可留空) | IP(可留空)";
             textBox1.ScrollBars = ScrollBars.Both;
-            textBox1.Size = new Size(408, 452);
+            textBox1.Size = new Size(454, 452);
             textBox1.TabIndex = 0;
             textBox1.WordWrap = false;
             // 
@@ -108,15 +108,15 @@
             // 
             cbDoh.DropDownStyle = ComboBoxStyle.DropDownList;
             cbDoh.FormattingEnabled = true;
-            cbDoh.Location = new Point(423, 373);
+            cbDoh.Location = new Point(470, 376);
             cbDoh.Name = "cbDoh";
             cbDoh.Size = new Size(262, 32);
-            cbDoh.TabIndex = 4;
+            cbDoh.TabIndex = 3;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(420, 346);
+            label2.Location = new Point(467, 349);
             label2.Name = "label2";
             label2.Size = new Size(264, 24);
             label2.TabIndex = 5;
@@ -126,7 +126,7 @@
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(703, 543);
+            ClientSize = new Size(743, 544);
             Controls.Add(label2);
             Controls.Add(cbDoh);
             Controls.Add(label1);

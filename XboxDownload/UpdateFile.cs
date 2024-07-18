@@ -33,7 +33,8 @@ namespace XboxDownload
                 };
                 tasks[i] = new Task(() =>
                 {
-                    if (proxy.StartsWith("https://py2.skydevil.xyz/")) Thread.Sleep(1000);
+                    if (proxy.StartsWith("https://py2.skydevil.xyz/")) Thread.Sleep(500);
+                    else if(proxy.StartsWith("https://github.com/")) Thread.Sleep(1000);
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(proxy + "/releases/latest", "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(releases))
                         releases = response.RequestMessage?.RequestUri?.ToString();
@@ -146,7 +147,8 @@ namespace XboxDownload
                 };
                 tasks[i] = new Task(() =>
                 {
-                    if (proxy.StartsWith("https://py2.skydevil.xyz/")) Thread.Sleep(1000);
+                    if (proxy.StartsWith("https://py2.skydevil.xyz/")) Thread.Sleep(500);
+                    else if (proxy.StartsWith("https://github.com/")) Thread.Sleep(1000);
                     string tmpUrl = proxy + "/blob/master/IP/" + fi.Name;
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(tmpUrl, "HEAD", null, null, null, 6000, "XboxDownload");
                     if (response != null && response.IsSuccessStatusCode && string.IsNullOrEmpty(fileUrl))
