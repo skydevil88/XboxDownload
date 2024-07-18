@@ -20,7 +20,7 @@ namespace XboxDownload
         public class SniProxy
         {
             public string? Sni { get; set; }
-            public IPAddress? IP { get; set; }
+            public IPAddress[]? IPs { get; set; }
             public bool CustomIP { get; set; }
         }
 
@@ -62,7 +62,13 @@ namespace XboxDownload
                                     string _host = host.ToString().Trim();
                                     if (string.IsNullOrEmpty(_host)) continue;
                                     string? sni = item[1]?.ToString();
-                                    bool customIp = IPAddress.TryParse(item[2]?.ToString(), out IPAddress? ip);
+                                    IPAddress[]? ips = null;
+                                    bool customIp = false;
+                                    if (IPAddress.TryParse(item[2]?.ToString(), out var ip))
+                                    {
+                                        ips = new IPAddress[1] { ip };
+                                        customIp = true;
+                                    }
                                     if (_host.StartsWith("*"))
                                     {
                                         _host = _host[1..];
@@ -72,7 +78,7 @@ namespace XboxDownload
                                             dicSniProxy.TryAdd(_host, new()
                                             {
                                                 Sni = sni,
-                                                IP = ip,
+                                                IPs = ips,
                                                 CustomIP = customIp
                                             });
                                             _host = "." + _host;
@@ -81,7 +87,7 @@ namespace XboxDownload
                                         dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), new()
                                         {
                                             Sni = sni,
-                                            IP = ip,
+                                            IPs = ips,
                                             CustomIP = customIp
                                         });
                                     }
@@ -91,7 +97,7 @@ namespace XboxDownload
                                         dicSniProxy.TryAdd(_host, new()
                                         {
                                             Sni = sni,
-                                            IP = ip,
+                                            IPs = ips,
                                             CustomIP = customIp
                                         });
                                     }
@@ -412,29 +418,28 @@ namespace XboxDownload
                                                     proxy = new()
                                                     {
                                                         Sni = proxy2.Sni,
-                                                        IP = proxy2.IP,
+                                                        IPs = proxy2.IPs,
                                                         CustomIP = proxy2.CustomIP
                                                     };
-                                                    dicSniProxy.AddOrUpdate(_host, proxy, (oldkey, oldvalue) => proxy);
+                                                    dicSniProxy.TryAdd(_host, proxy);
                                                 }
                                             }
                                             if (proxy != null)
                                             {
+                                                if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 bFileFound = true;
-                                                IPAddress? ip = null;
-                                                if (proxy.IP == null)
+                                                IPAddress[]? ips = null;
+                                                if (proxy.IPs == null)
                                                 {
                                                     int dohs = Properties.Settings.Default.DoHProxy >= DnsListen.dohs.GetLongLength(0) ? 3 : Properties.Settings.Default.DoHProxy;
-                                                    if (IPAddress.TryParse(ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } }), out ip))
-                                                        proxy.IP = ip;
+                                                    ips = proxy.IPs = ClassDNS.DoH2(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new() { { "Host", DnsListen.dohs[dohs, 2] } });
                                                 }
-                                                else ip = proxy.IP;
-                                                if (ip != null)
+                                                else ips = proxy.IPs;
+                                                if (ips != null)
                                                 {
-                                                    if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                                    if (!ClassWeb.SniProxy(ip, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out string? errMessae))
+                                                    if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out string? errMessae))
                                                     {
-                                                        if (!proxy.CustomIP) proxy.IP = null;
+                                                        if (!proxy.CustomIP) proxy.IPs = null;
                                                         Byte[] _response = Encoding.ASCII.GetBytes(errMessae ?? "Unknown Error");
                                                         StringBuilder sb = new();
                                                         sb.Append("HTTP/1.1 500 Server Error\r\n");

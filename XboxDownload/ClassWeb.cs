@@ -191,11 +191,11 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
-        public static bool SniProxy(IPAddress ip, string? sni, Byte[] send1, Byte[] send2, SslStream clent, out string? errMessage)
+        public static bool SniProxy(IPAddress[] ips, string? sni, Byte[] send1, Byte[] send2, SslStream clent, out string? errMessage)
         {
             bool isOK = true;
             errMessage = null;
-            using (Socket mySocket = new(ip.AddressFamily == AddressFamily.InterNetworkV6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            using (Socket mySocket = new(ips[0].AddressFamily == AddressFamily.InterNetworkV6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
@@ -203,7 +203,7 @@ namespace XboxDownload
                 mySocket.ReceiveTimeout = 6000;
                 try
                 {
-                    mySocket.Connect(ip, 443);
+                    mySocket.Connect(ips, 443);
                 }
                 catch (Exception ex)
                 {
@@ -217,7 +217,7 @@ namespace XboxDownload
                     ssl.ReadTimeout = 30000;
                     try
                     {
-                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(sni) ? ip.ToString() : sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(sni) ? ips[0].ToString() : sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
                         if (ssl.IsAuthenticated)
                         {
                             ssl.Write(send1);

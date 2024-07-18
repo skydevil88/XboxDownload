@@ -89,7 +89,7 @@
             textBox1.Location = new Point(3, 26);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "*example.com | SNI(可留空) | IP(可留空)";
+            textBox1.PlaceholderText = "*example.com | SNI (可留空) | IP (可留空)";
             textBox1.ScrollBars = ScrollBars.Both;
             textBox1.Size = new Size(454, 452);
             textBox1.TabIndex = 0;
