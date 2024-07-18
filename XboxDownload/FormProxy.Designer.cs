@@ -45,7 +45,7 @@
             button1.Location = new Point(470, 414);
             button1.Name = "button1";
             button1.Size = new Size(262, 67);
-            button1.TabIndex = 4;
+            button1.TabIndex = 0;
             button1.Text = "保存";
             button1.UseVisualStyleBackColor = true;
             button1.Click += Button1_Click;
