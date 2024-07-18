@@ -117,7 +117,7 @@ namespace XboxDownload
 
             butTest.Enabled = false;
             dataGridView1.ClearSelection();
-            string type = rbIPv4.Checked ? "A" : "AAAA";
+            bool ipv4 = rbIPv4.Checked;
             Uri uri = new("https://" + host);
 
             await Task.Run(() =>
@@ -144,12 +144,12 @@ namespace XboxDownload
                                     { "Host", dohHost }
                                 };
                             }
-                            string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, type);
+                            string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, ipv4);
                             if (this.IsDisposed) return;
                             if (IPAddress.TryParse(ip, out IPAddress? address))
                             {
                                 dgvr.Cells[2].Value = ip;
-                                bool verified = ClassWeb.ConnectTest(uri, address, out string errMessage);
+                                bool verified = ClassWeb.ConnectTest(uri, address, true, out string errMessage);
                                 if (this.IsDisposed) return;
                                 if (verified)
                                 {

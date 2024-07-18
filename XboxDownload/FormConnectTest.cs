@@ -52,7 +52,7 @@ namespace XboxDownload
             Task[] tasks = new Task[2];
             tasks[0] = new Task(() =>
             {
-                verified = ClassWeb.ConnectTest(uri, ip, out errMsg);
+                verified = ClassWeb.ConnectTest(uri, ip, true, out errMsg);
             });
             tasks[1] = new Task(() =>
             {

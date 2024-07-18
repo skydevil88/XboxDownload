@@ -113,15 +113,15 @@ namespace XboxDownload
 
             if (File.Exists(resourcePath + "\\DohServer.json"))
             {
-                JsonDocument? jsonDocument = null;
+                JsonDocument? jsDoH = null;
                 try
                 {
-                    jsonDocument = JsonDocument.Parse(File.ReadAllText(resourcePath + "\\DohServer.json"));
+                    jsDoH = JsonDocument.Parse(File.ReadAllText(resourcePath + "\\DohServer.json"));
                 }
                 catch { }
-                if (jsonDocument != null)
+                if (jsDoH != null)
                 {
-                    foreach (JsonElement arr in jsonDocument.RootElement.EnumerateArray())
+                    foreach (JsonElement arr in jsDoH.RootElement.EnumerateArray())
                     {
                         string name = string.Empty, url = string.Empty, host = string.Empty;
                         if (arr.TryGetProperty("name", out JsonElement jeName)) name = jeName.ToString();

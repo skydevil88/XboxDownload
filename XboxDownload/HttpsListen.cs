@@ -421,21 +421,18 @@ namespace XboxDownload
                                             if (proxy != null)
                                             {
                                                 bFileFound = true;
+                                                IPAddress? ip = null;
                                                 if (proxy.IP == null)
                                                 {
                                                     int dohs = Properties.Settings.Default.DoHProxy >= DnsListen.dohs.GetLongLength(0) ? 3 : Properties.Settings.Default.DoHProxy;
-                                                    if (IPAddress.TryParse(ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } }, "A", 15000), out var ip))
+                                                    if (IPAddress.TryParse(ClassDNS.DoH(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new Dictionary<string, string>() { { "Host", DnsListen.dohs[dohs, 2] } }), out ip))
                                                         proxy.IP = ip;
                                                 }
-                                                if (proxy.IP != null)
+                                                else ip = proxy.IP;
+                                                if (ip != null)
                                                 {
                                                     if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                                    Byte[] _headers = Encoding.ASCII.GetBytes(headers);
-                                                    Byte[] _body = list.ToArray();
-                                                    Byte[] send = new Byte[_headers.Length + _body.Length];
-                                                    Buffer.BlockCopy(_headers, 0, send, 0, _headers.Length);
-                                                    Buffer.BlockCopy(_body, 0, send, _headers.Length, _body.Length);
-                                                    if (!ClassWeb.SniProxy(proxy, send, ssl, out string? errMessae))
+                                                    if (!ClassWeb.SniProxy(ip, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out string? errMessae))
                                                     {
                                                         if (!proxy.CustomIP) proxy.IP = null;
                                                         Byte[] _response = Encoding.ASCII.GetBytes(errMessae ?? "Unknown Error");

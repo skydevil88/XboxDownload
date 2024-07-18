@@ -103,7 +103,7 @@ namespace XboxDownload
                 IPAddress? ip = null;
                 if (proxy.Length >= 1)
                 {
-                    foreach (string host in Regex.Split(proxy[0], @","))
+                    foreach (string host in proxy[0].Split(','))
                     {
                         string _host = Regex.Replace(host.ToLower().Trim(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
                         if (!string.IsNullOrEmpty(_host))

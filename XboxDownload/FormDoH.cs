@@ -138,7 +138,7 @@ namespace XboxDownload
                             {
                                 string host = hosts[x];
                                 sw.Restart();
-                                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, "A", 3000);
+                                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, true, 3000);
                                 sw.Stop();
                                 if (!string.IsNullOrEmpty(ip))
                                 {

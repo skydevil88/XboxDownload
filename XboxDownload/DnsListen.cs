@@ -1627,15 +1627,15 @@ namespace XboxDownload
             return ip;
         }
 
-        public static string? DoH(string hostName, string type = "A")
+        public static string? DoH(string host, bool ipv4 = true)
         {
-            return DoH(hostName, DnsListen.dohServer, DnsListen.dohHeaders, type);
+            return DoH(host, DnsListen.dohServer, DnsListen.dohHeaders, ipv4);
         }
 
-        public static string? DoH(string hostName, string dohServer, Dictionary<string, string>? headers, string type = "A", int timeout = 6000)
+        public static string? DoH(string host, string dohServer, Dictionary<string, string>? headers, bool ipv4 = true, int timeout = 6000)
         {
             string? ip = null;
-            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(hostName) + "&type=" + type, "GET", null, null, headers, timeout);
+            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(host) + "&type=" + (ipv4 ? "A" : "AAAA"), "GET", null, null, headers, timeout);
             if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
             {
                 try
@@ -1645,13 +1645,35 @@ namespace XboxDownload
                     {
                         if (json.Status == 0 && json.Answer.Count >= 1)
                         {
-                            ip = json.Answer.Where(x => x.Type == (type == "A" ? 1 : 28)).Select(x => x.Data).FirstOrDefault();
+                            ip = json.Answer.Where(x => x.Type == (ipv4 ? 1 : 28) && !string.IsNullOrEmpty(x.Data)).Select(x => x.Data).FirstOrDefault();
                         }
                     }
                 }
                 catch { }
             }
             return ip;
+        }
+
+        public static IPAddress[]? DoH2(string host, string dohServer, Dictionary<string, string>? headers, bool ipv4 = true, int timeout = 6000)
+        {
+            IPAddress[]? ips = null;
+            string html = ClassWeb.HttpResponseContent(dohServer + "?name=" + ClassWeb.UrlEncode(host) + "&type=" + (ipv4 ? "A" : "AAAA"), "GET", null, null, headers, timeout);
+            if (Regex.IsMatch(html.Trim(), @"^{.+}$"))
+            {
+                try
+                {
+                    var json = JsonSerializer.Deserialize<ClassDNS.Api>(html, Form1.jsOptions);
+                    if (json != null && json.Answer != null)
+                    {
+                        if (json.Status == 0 && json.Answer.Count >= 1)
+                        {
+                            ips = json.Answer.Where(x => x.Type == (ipv4 ? 1 : 28) && !string.IsNullOrEmpty(x.Data)).Select(x => IPAddress.Parse(x.Data!)).ToArray();
+                        }
+                    }
+                }
+                catch { }
+            }
+            return ips;
         }
 
         public class Api

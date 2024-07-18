@@ -21,10 +21,11 @@ namespace XboxDownload
 
         public static void HttpClientFactory()
         {
+            string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
             ServiceCollection services = new();
             services.AddHttpClient("default").ConfigureHttpClient(httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
+                httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
             }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.All
@@ -190,13 +191,11 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
-        public static bool SniProxy(HttpsListen.SniProxy proxy, Byte[] send, SslStream clent, out string? errMessage)
+        public static bool SniProxy(IPAddress ip, string? sni, Byte[] send1, Byte[] send2, SslStream clent, out string? errMessage)
         {
             bool isOK = true;
             errMessage = null;
-            String contentencoding = string.Empty;
-            List<Byte> list = new();
-            using (Socket mySocket = new(proxy.IP!.AddressFamily == AddressFamily.InterNetworkV6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            using (Socket mySocket = new(ip.AddressFamily == AddressFamily.InterNetworkV6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
@@ -204,7 +203,7 @@ namespace XboxDownload
                 mySocket.ReceiveTimeout = 6000;
                 try
                 {
-                    mySocket.Connect(proxy.IP!, 443);
+                    mySocket.Connect(ip, 443);
                 }
                 catch (Exception ex)
                 {
@@ -218,17 +217,18 @@ namespace XboxDownload
                     ssl.ReadTimeout = 30000;
                     try
                     {
-                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(proxy.Sni) ? proxy.IP!.ToString() : proxy.Sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(sni) ? ip.ToString() : sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
                         if (ssl.IsAuthenticated)
                         {
-                            Byte[] bReceive = new Byte[4096];
-                            long count = 0;
-                            Int32 len = -1, StatusCode = -1;
-                            long ContentLength = -1;
-                            string headers = string.Empty;
-                            String TransferEncoding = "";
-                            ssl.Write(send);
+                            ssl.Write(send1);
+                            ssl.Write(send2);
                             ssl.Flush();
+                            
+                            long count = 0, ContentLength = -1;
+                            int len = -1, StatusCode = -1;
+                            string headers = string.Empty, contentencoding = string.Empty, TransferEncoding = string.Empty;
+                            List<Byte> list = new();
+                            Byte[] bReceive = new Byte[4096];
                             while ((len = ssl.Read(bReceive, 0, bReceive.Length)) > 0)
                             {
                                 count += len;
@@ -618,7 +618,7 @@ namespace XboxDownload
             return socketPackage;
         }
 
-        public static bool ConnectTest(Uri uri, IPAddress ip, out string errMsg)
+        public static bool ConnectTest(Uri uri, IPAddress ip, bool verifyCA, out string errMsg)
         {
             bool verified = false;
             errMsg = "";
@@ -638,7 +638,7 @@ namespace XboxDownload
                 }
                 if (mySocket.Connected)
                 {
-                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return sslPolicyErrors == SslPolicyErrors.None; }), null);
+                    using SslStream ssl = new(new NetworkStream(mySocket), false, new RemoteCertificateValidationCallback(delegate (object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors) { return !verifyCA || sslPolicyErrors == SslPolicyErrors.None; }), null);
                     try
                     {
                         ssl.AuthenticateAsClient(uri.Host, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
