@@ -422,9 +422,9 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public int DoHProxy {
+        public string DoHProxy {
             get {
-                return ((int)(this["DoHProxy"]));
+                return ((string)(this["DoHProxy"]));
             }
             set {
                 this["DoHProxy"] = value;

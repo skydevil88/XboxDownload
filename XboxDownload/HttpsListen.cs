@@ -431,12 +431,45 @@ namespace XboxDownload
                                                 IPAddress[]? ips = null;
                                                 if (proxy.IPs == null)
                                                 {
-                                                    int dohs = Properties.Settings.Default.DoHProxy >= DnsListen.dohs.GetLongLength(0) ? 3 : Properties.Settings.Default.DoHProxy;
-                                                    ips = proxy.IPs = ClassDNS.DoH2(_host, DnsListen.dohs[dohs, 1], string.IsNullOrEmpty(DnsListen.dohs[dohs, 2]) ? null : new() { { "Host", DnsListen.dohs[dohs, 2] } });
+                                                    string[] dohs = Properties.Settings.Default.DoHProxy.Split(',');
+                                                    if (dohs.Length == 1)
+                                                    {
+                                                        int index = int.Parse(dohs[0]);
+                                                        if (index >= DnsListen.dohs.GetLongLength(0)) index = 3;
+                                                        ips = proxy.IPs = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } });
+                                                    }
+                                                    else
+                                                    {
+                                                        ConcurrentBag<IPAddress> lsIP = new();
+                                                        Task[] tasks = new Task[dohs.Length];
+                                                        for (int i = 0; i <= tasks.Length - 1; i++)
+                                                        {
+                                                            int tmp = i;
+                                                            tasks[tmp] = new Task(() =>
+                                                            {
+                                                                int index = int.Parse(dohs[tmp]);
+                                                                if (index < DnsListen.dohs.GetLongLength(0))
+                                                                {
+                                                                    IPAddress[]? _ips = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
+                                                                    if (_ips != null)
+                                                                    {
+                                                                        foreach (var item in _ips)
+                                                                        {
+                                                                            if (!lsIP.Contains(item)) lsIP.Add(item);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                        Array.ForEach(tasks, x => x.Start());
+                                                        Task.WaitAll(tasks);
+                                                        if (!lsIP.IsEmpty) ips = proxy.IPs = lsIP.ToArray();
+                                                    }
                                                 }
                                                 else ips = proxy.IPs;
                                                 if (ips != null)
                                                 {
+                                                    if (ips.Length >= 2) ips = ips = ips.OrderBy(a => Guid.NewGuid()).Take(16).ToArray();
                                                     if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out string? errMessae))
                                                     {
                                                         if (!proxy.CustomIP) proxy.IPs = null;
