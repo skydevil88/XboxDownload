@@ -57,18 +57,18 @@ namespace XboxDownload
                             JsonElement jeHosts = (JsonElement)item[0];
                             if (jeHosts.ValueKind == JsonValueKind.Array)
                             {
+                                string? sni = item[1]?.ToString();
+                                IPAddress[]? ips = null;
+                                bool customIp = false;
+                                if (IPAddress.TryParse(item[2]?.ToString(), out var ip))
+                                {
+                                    ips = new IPAddress[1] { ip };
+                                    customIp = true;
+                                }
                                 foreach (var host in jeHosts.EnumerateArray())
                                 {
                                     string _host = host.ToString().Trim();
                                     if (string.IsNullOrEmpty(_host)) continue;
-                                    string? sni = item[1]?.ToString();
-                                    IPAddress[]? ips = null;
-                                    bool customIp = false;
-                                    if (IPAddress.TryParse(item[2]?.ToString(), out var ip))
-                                    {
-                                        ips = new IPAddress[1] { ip };
-                                        customIp = true;
-                                    }
                                     if (_host.StartsWith("*"))
                                     {
                                         _host = _host[1..];
@@ -429,9 +429,9 @@ namespace XboxDownload
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 bFileFound = true;
                                                 IPAddress[]? ips = null;
-                                                if (proxy.IPs == null)
+                                                if (proxy.IPs == null || proxy.IPs.Length == 0)
                                                 {
-                                                    string[] dohs = Properties.Settings.Default.DoHProxy.Split(',');
+                                                    string[] dohs = Properties.Settings.Default.SinProxys.Split(',');
                                                     if (dohs.Length == 1)
                                                     {
                                                         int index = int.Parse(dohs[0]);
@@ -463,16 +463,32 @@ namespace XboxDownload
                                                         }
                                                         Array.ForEach(tasks, x => x.Start());
                                                         Task.WaitAll(tasks);
-                                                        if (!lsIP.IsEmpty) ips = proxy.IPs = lsIP.ToArray();
+                                                        if (!lsIP.IsEmpty)
+                                                        {
+                                                            if (proxy.IPs != null)
+                                                            {
+                                                                foreach (var item in proxy.IPs)
+                                                                {
+                                                                    if (!lsIP.Contains(item)) lsIP.Add(item);
+                                                                }
+                                                            }
+                                                            ips = proxy.IPs = lsIP.ToArray();
+                                                        }
                                                     }
                                                 }
-                                                else ips = proxy.IPs;
+                                                else
+                                                {
+                                                    ips = proxy.IPs.Length >= 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
+                                                }
                                                 if (ips != null)
                                                 {
-                                                    if (ips.Length >= 2) ips = ips = ips.OrderBy(a => Guid.NewGuid()).Take(16).ToArray();
-                                                    if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out string? errMessae))
+                                                    if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out IPAddress? remoteIP, out string? errMessae))
                                                     {
-                                                        if (!proxy.CustomIP) proxy.IPs = null;
+                                                        if (!proxy.CustomIP)
+                                                        {
+                                                            if (proxy.IPs?.Length >= 2 && remoteIP != null) proxy.IPs = proxy.IPs?.Where(x => !x.Equals(remoteIP)).ToArray();
+                                                            else proxy.IPs = null;
+                                                        }
                                                         Byte[] _response = Encoding.ASCII.GetBytes(errMessae ?? "Unknown Error");
                                                         StringBuilder sb = new();
                                                         sb.Append("HTTP/1.1 500 Server Error\r\n");

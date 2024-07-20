@@ -422,12 +422,12 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public string DoHProxy {
+        public string SinProxys {
             get {
-                return ((string)(this["DoHProxy"]));
+                return ((string)(this["SinProxys"]));
             }
             set {
-                this["DoHProxy"] = value;
+                this["SinProxys"] = value;
             }
         }
         

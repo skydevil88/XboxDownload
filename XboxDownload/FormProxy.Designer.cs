@@ -43,9 +43,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(470, 431);
+            button1.Location = new Point(473, 412);
             button1.Name = "button1";
-            button1.Size = new Size(262, 50);
+            button1.Size = new Size(265, 69);
             button1.TabIndex = 0;
             button1.Text = "保存";
             button1.UseVisualStyleBackColor = true;
@@ -56,7 +56,7 @@
             groupBox2.Controls.Add(checkedListBox1);
             groupBox2.Location = new Point(467, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(271, 155);
+            groupBox2.Size = new Size(271, 143);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "选择服务";
@@ -68,7 +68,7 @@
             checkedListBox1.Items.AddRange(new object[] { "Steam 商店社区", "GitHub", "Pixiv" });
             checkedListBox1.Location = new Point(3, 26);
             checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(265, 126);
+            checkedListBox1.Size = new Size(265, 114);
             checkedListBox1.TabIndex = 0;
             checkedListBox1.ItemCheck += CheckedListBox1_ItemCheck;
             // 
@@ -107,9 +107,9 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(checkedListBox2);
-            groupBox3.Location = new Point(467, 164);
+            groupBox3.Location = new Point(470, 152);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(271, 261);
+            groupBox3.Size = new Size(271, 254);
             groupBox3.TabIndex = 3;
             groupBox3.TabStop = false;
             groupBox3.Text = "DoH服务器 (0)";
@@ -120,7 +120,7 @@
             checkedListBox2.FormattingEnabled = true;
             checkedListBox2.Location = new Point(3, 26);
             checkedListBox2.Name = "checkedListBox2";
-            checkedListBox2.Size = new Size(265, 232);
+            checkedListBox2.Size = new Size(265, 225);
             checkedListBox2.TabIndex = 0;
             checkedListBox2.SelectedIndexChanged += CheckedListBox2_SelectedIndexChanged;
             // 

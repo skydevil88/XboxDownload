@@ -28,10 +28,11 @@ namespace XboxDownload
                         if (item.Count == 3)
                         {
                             JsonElement jeHosts = (JsonElement)item[0];
-                            string? hosts = jeHosts.ValueKind == JsonValueKind.Array ? string.Join(", ", jeHosts.EnumerateArray().Select(item => item.GetString()?.Trim())) : string.Empty;
+                            if (jeHosts.ValueKind != JsonValueKind.Array) continue;
+                            string? hosts = string.Join(", ", jeHosts.EnumerateArray().Select(x => x.GetString()?.Trim()));
+                            if (string.IsNullOrEmpty(hosts)) continue;
                             string? fakeHost = item[1]?.ToString()?.Trim();
                             string? ip = item[2]?.ToString()?.Trim();
-                            if (string.IsNullOrEmpty(hosts)) continue;
                             if (string.IsNullOrEmpty(fakeHost) && string.IsNullOrEmpty(ip))
                                 sb.AppendLine(hosts);
                             else if (!string.IsNullOrEmpty(fakeHost) && !string.IsNullOrEmpty(ip))
@@ -46,7 +47,7 @@ namespace XboxDownload
 
             int total = 0;
             List<int> ls = new();
-            foreach (string part in Properties.Settings.Default.DoHProxy.Split(','))
+            foreach (string part in Properties.Settings.Default.SinProxys.Split(','))
             {
                 ls.Add(int.Parse(part));
             }
@@ -79,11 +80,10 @@ namespace XboxDownload
             }
 
             StringBuilder sb = new();
-            foreach (string host in Regex.Split(textBox1.Text.Trim(), @"\n"))
+            foreach (string host in textBox1.Text.Trim().ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
-                string _host = host.Trim();
-                if (string.IsNullOrEmpty(_host)) continue;
-                if (!Array.Exists(hosts1, element => element.Equals(_host)))
+                if (string.IsNullOrEmpty(host)) continue;
+                if (!Array.Exists(hosts1, element => element.Equals(host)))
                 {
                     sb.AppendLine(host);
                 }
@@ -91,7 +91,7 @@ namespace XboxDownload
             string hosts2 = sb.ToString();
             if (e.NewValue == CheckState.Checked)
             {
-                string hosts = string.Join("\r\n", hosts1) + "\r\n";
+                string hosts = string.Join(Environment.NewLine, hosts1) + Environment.NewLine;
                 textBox1.Text = hosts + hosts2;
                 textBox1.Focus();
                 textBox1.Select(0, hosts.Length - 2);
@@ -121,15 +121,16 @@ namespace XboxDownload
             Regex reIP = new(ipPattern);
 
             List<List<object>> lsSniProxy = new();
-            foreach (string str in textBox1.Text.Trim().Split('\n'))
+            foreach (string str in textBox1.Text.Trim().ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
+                string[] proxy = str.Split('|');
+                if (proxy.Length == 0) continue;
                 ArrayList arrHost = new();
                 string sni = string.Empty;
-                string[] proxy = str.Trim().Split('|');
                 IPAddress? ip = null;
                 if (proxy.Length >= 1)
                 {
-                    foreach (string host in proxy[0].Split(','))
+                    foreach (string host in proxy[0].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                     {
                         string _host = Regex.Replace(host.ToLower().Trim(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
                         if (!string.IsNullOrEmpty(_host))
@@ -168,7 +169,7 @@ namespace XboxDownload
                     ls.Add(i);
             }
             if (ls.Count == 0) ls.Add(3);
-            Properties.Settings.Default.DoHProxy = string.Join(',', ls.ToArray());
+            Properties.Settings.Default.SinProxys = string.Join(',', ls.ToArray());
             Properties.Settings.Default.Save();
             HttpsListen.CreateCertificate();
             this.Close();
