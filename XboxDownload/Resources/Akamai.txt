@@ -2,6 +2,7 @@
 catalog.gamepass.com	#XGP游戏库
 download.xbox.com		#Xbox360主机下载域名
 *.video.microsoft.com	#商店电影和电视
+.ak.tiles.virtualearth.net	#微软模拟飞行虚拟地球数据
 
 ###################### Nintendo ######################
 *.hac.lp1.d4c.nintendo.net

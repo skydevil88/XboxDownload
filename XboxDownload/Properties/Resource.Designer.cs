@@ -65,6 +65,7 @@ namespace XboxDownload.Properties {
         ///catalog.gamepass.com	#XGP游戏库
         ///download.xbox.com		#Xbox360主机下载域名
         ///*.video.microsoft.com	#商店电影和电视
+        ///.ak.tiles.virtualearth.net	#微软模拟飞行虚拟地球数据
         ///
         ///###################### Nintendo ######################
         ///*.hac.lp1.d4c.nintendo.net
@@ -77,8 +78,7 @@ namespace XboxDownload.Properties {
         ///cdn2.epicgames.com
         ///shared-static-prod.epicgames.com
         ///
-        ///##################### Riot Games #####################
-        ///* [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///############### [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Akamai {
             get {
