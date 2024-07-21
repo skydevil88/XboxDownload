@@ -119,64 +119,47 @@ namespace XboxDownload
             dataGridView1.ClearSelection();
             bool ipv4 = rbIPv4.Checked;
             Uri uri = new("https://" + host);
-
-            await Task.Run(() =>
-            {
-                Task[] tasks = new Task[dataGridView1.Rows.Count];
-                for (int i = 0; i <= tasks.Length - 1; i++)
+            DataGridViewRow[] rows = dataGridView1.Rows.Cast<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value) == true).ToArray();
+            var tasks = rows.Select(dgvr => Task.Run(() => {
+                dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
+                dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = Color.Empty;
+                dgvr.Cells[3].ToolTipText = null;
+                string dohServer = DnsListen.dohs[dgvr.Index, 1];
+                string dohHost = DnsListen.dohs[dgvr.Index, 2];
+                Dictionary<string, string>? dohHeaders = null;
+                if (!string.IsNullOrEmpty(dohHost))
                 {
-                    int tmp = i;
-                    tasks[tmp] = new Task(() =>
-                    {
-                        DataGridViewRow dgvr = dataGridView1.Rows[tmp];
-                        if (Convert.ToBoolean(dgvr.Cells[0].Value))
-                        {
-                            dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
-                            dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = Color.Empty;
-                            dgvr.Cells[3].ToolTipText = null;
-                            string dohServer = DnsListen.dohs[tmp, 1];
-                            string dohHost = DnsListen.dohs[tmp, 2];
-                            Dictionary<string, string>? dohHeaders = null;
-                            if (!string.IsNullOrEmpty(dohHost))
-                            {
-                                dohHeaders = new Dictionary<string, string>
-                                {
-                                    { "Host", dohHost }
-                                };
-                            }
-                            string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, ipv4);
-                            if (this.IsDisposed) return;
-                            if (IPAddress.TryParse(ip, out IPAddress? address))
-                            {
-                                dgvr.Cells[2].Value = ip;
-                                bool verified = ClassWeb.ConnectTest(uri, address, true, out string errMessage);
-                                if (this.IsDisposed) return;
-                                if (verified)
-                                {
-                                    dgvr.Cells[3].Value = "√";
-                                    dgvr.Cells[3].Style.ForeColor = Color.Green;
-                                }
-                                else
-                                {
-                                    dgvr.Cells[3].Value = "×";
-                                    dgvr.Cells[3].ToolTipText = "提示：" + dataGridView1.Columns[3].ToolTipText + "，错误信息：\n" + errMessage;
-                                    dgvr.Cells[3].Style.ForeColor = Color.Red;
-                                }
-                                string location = ClassDNS.QueryLocation(ip);
-                                if (this.IsDisposed) return;
-                                dgvr.Cells[4].Value = location;
-                            }
-                            else
-                            {
-                                dgvr.Cells[2].Value = "error";
-                                dgvr.Cells[2].Style.ForeColor = Color.Red;
-                            }
-                        }
-                    });
+                    dohHeaders = new Dictionary<string, string> { { "Host", dohHost } };
                 }
-                Array.ForEach(tasks, x => x.Start());
-                Task.WaitAll(tasks);
-            });
+                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, ipv4);
+                if (this.IsDisposed) return;
+                if (IPAddress.TryParse(ip, out IPAddress? address))
+                {
+                    dgvr.Cells[2].Value = ip;
+                    bool verified = ClassWeb.ConnectTest(uri, address, true, out string errMessage);
+                    if (this.IsDisposed) return;
+                    if (verified)
+                    {
+                        dgvr.Cells[3].Value = "√";
+                        dgvr.Cells[3].Style.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        dgvr.Cells[3].Value = "×";
+                        dgvr.Cells[3].ToolTipText = "提示：" + dataGridView1.Columns[3].ToolTipText + "，错误信息：\n" + errMessage;
+                        dgvr.Cells[3].Style.ForeColor = Color.Red;
+                    }
+                    string location = ClassDNS.QueryLocation(ip);
+                    if (this.IsDisposed) return;
+                    dgvr.Cells[4].Value = location;
+                }
+                else
+                {
+                    dgvr.Cells[2].Value = "error";
+                    dgvr.Cells[2].Style.ForeColor = Color.Red;
+                }
+            })).ToArray();
+            await Task.WhenAll(tasks);
             butTest.Enabled = true;
         }
 

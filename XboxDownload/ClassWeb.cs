@@ -196,7 +196,7 @@ namespace XboxDownload
             bool isOK = true;
             remoteIP = null;
             errMessage = null;
-            using (Socket mySocket = new(ips[0].AddressFamily == AddressFamily.InterNetworkV6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            using (Socket mySocket = new(ips[0].AddressFamily, SocketType.Stream, ProtocolType.Tcp))
             {
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
                 mySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);

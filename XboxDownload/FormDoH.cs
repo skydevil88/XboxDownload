@@ -1,5 +1,4 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace XboxDownload
@@ -62,7 +61,7 @@ namespace XboxDownload
             Col_DoHServer.ValueMember = "key";
             Col_DoHServer.DisplayMember = "value";
             Col_DoHServer.DataSource = listKvp;
-            dataGridView2.DataSource = Form1.dtDoH;
+            dataGridView2.DataSource = Form1.dtDoHServer;
         }
 
         private void FormDoH_Load(object sender, EventArgs e)
@@ -82,16 +81,9 @@ namespace XboxDownload
         {
             Properties.Settings.Default.DoHServer = cbDoh.SelectedIndex;
             Properties.Settings.Default.Save();
-            DnsListen.dohServer = DnsListen.dohs[cbDoh.SelectedIndex, 1];
-            string dohHost = DnsListen.dohs[cbDoh.SelectedIndex, 2];
-            if (!string.IsNullOrEmpty(dohHost))
-            {
-                DnsListen.dohHeaders = new Dictionary<string, string>
-                {
-                    { "Host", dohHost }
-                };
-            }
-            else DnsListen.dohHeaders = null;
+            DnsListen.dohServer.Website = DnsListen.dohs[cbDoh.SelectedIndex, 1];
+            if (!string.IsNullOrEmpty(DnsListen.dohs[cbDoh.SelectedIndex, 2]))   DnsListen.dohServer.Headers = new() { { "Host", DnsListen.dohs[cbDoh.SelectedIndex, 2] } };
+            else DnsListen.dohServer.Headers = null;
             this.Close();
         }
 
@@ -108,56 +100,39 @@ namespace XboxDownload
         {
             butTest.Enabled = false;
             dataGridView1.ClearSelection();
-
-            await Task.Run(() =>
-            {
-                Task[] tasks = new Task[dataGridView1.Rows.Count];
-                for (int i = 0; i <= tasks.Length - 1; i++)
+            DataGridViewRow[] rows = dataGridView1.Rows.Cast<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value) == true).ToArray();
+            var tasks = rows.Select(dgvr => Task.Run(() => {
+                dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
+                dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = dgvr.Cells[4].Style.ForeColor = Color.Empty;
+                string dohServer = DnsListen.dohs[dgvr.Index, 1];
+                string dohHost = DnsListen.dohs[dgvr.Index, 2];
+                Dictionary<string, string>? dohHeaders = null;
+                if (!string.IsNullOrEmpty(dohHost))
                 {
-                    int tmp = i;
-                    tasks[tmp] = new Task(() =>
-                    {
-                        DataGridViewRow dgvr = dataGridView1.Rows[tmp];
-                        if (Convert.ToBoolean(dgvr.Cells[0].Value))
-                        {
-                            dgvr.Cells[2].Value = dgvr.Cells[3].Value = dgvr.Cells[4].Value = null;
-                            dgvr.Cells[2].Style.ForeColor = dgvr.Cells[3].Style.ForeColor = dgvr.Cells[4].Style.ForeColor = Color.Empty;
-                            string dohServer = DnsListen.dohs[tmp, 1];
-                            string dohHost = DnsListen.dohs[tmp, 2];
-                            Dictionary<string, string>? dohHeaders = null;
-                            if (!string.IsNullOrEmpty(dohHost))
-                            {
-                                dohHeaders = new Dictionary<string, string>
-                                {
-                                    { "Host", dohHost }
-                                };
-                            }
-                            _ = ClassWeb.HttpResponseMessage(dohServer, "HEAD", null, null, dohHeaders, 3000);
-                            Stopwatch sw = new();
-                            for (int x = 0; x <= hosts.Length - 1; x++)
-                            {
-                                string host = hosts[x];
-                                sw.Restart();
-                                string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, true, 3000);
-                                sw.Stop();
-                                if (!string.IsNullOrEmpty(ip))
-                                {
-                                    dgvr.Cells[x + 2].ToolTipText = "IP: " + ip;
-                                    dgvr.Cells[x + 2].Value = (int)sw.ElapsedMilliseconds;
-                                }
-                                else
-                                {
-                                    dgvr.Cells[x + 2].ToolTipText = null;
-                                    dgvr.Cells[x + 2].Value = "error";
-                                    dgvr.Cells[x + 2].Style.ForeColor = Color.Red;
-                                }
-                            }
-                        }
-                    });
+                    dohHeaders = new Dictionary<string, string> { { "Host", dohHost } };
                 }
-                Array.ForEach(tasks, x => x.Start());
-                Task.WaitAll(tasks);
-            });
+                _ = ClassWeb.HttpResponseMessage(dohServer, "HEAD", null, null, dohHeaders, 3000);
+                Stopwatch sw = new();
+                for (int x = 0; x <= hosts.Length - 1; x++)
+                {
+                    string host = hosts[x];
+                    sw.Restart();
+                    string? ip = ClassDNS.DoH(host, dohServer, dohHeaders, true, 3000);
+                    sw.Stop();
+                    if (!string.IsNullOrEmpty(ip))
+                    {
+                        dgvr.Cells[x + 2].ToolTipText = "IP: " + ip;
+                        dgvr.Cells[x + 2].Value = (int)sw.ElapsedMilliseconds;
+                    }
+                    else
+                    {
+                        dgvr.Cells[x + 2].ToolTipText = null;
+                        dgvr.Cells[x + 2].Value = "error";
+                        dgvr.Cells[x + 2].Style.ForeColor = Color.Red;
+                    }
+                }
+            })).ToArray();
+            await Task.WhenAll(tasks);
             butTest.Enabled = true;
         }
 
@@ -175,23 +150,23 @@ namespace XboxDownload
 
         private void ButDoHSave_Click(object sender, EventArgs e)
         {
-            Form1.dtDoH.AcceptChanges();
-            if (Form1.dtDoH.Rows.Count >= 1)
+            Form1.dtDoHServer.AcceptChanges();
+            if (Form1.dtDoHServer.Rows.Count >= 1)
             {
                 if (!Directory.Exists(Form1.resourcePath)) Directory.CreateDirectory(Form1.resourcePath);
-                Form1.dtDoH.WriteXml(Form1.resourcePath + "\\DoH.xml");
+                Form1.dtDoHServer.WriteXml(Form1.resourcePath + "\\DoH.xml");
             }
             else if (File.Exists(Form1.resourcePath + "\\DoH.xml"))
             {
                 File.Delete(Form1.resourcePath + "\\DoH.xml");
             }
-            DnsListen.UseDoH();
+            DnsListen.SetDoHServer();
             this.Close();
         }
 
         private void ButDohReset_Click(object sender, EventArgs e)
         {
-            Form1.dtDoH.RejectChanges();
+            Form1.dtDoHServer.RejectChanges();
             dataGridView2.ClearSelection();
         }
 

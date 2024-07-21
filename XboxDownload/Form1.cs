@@ -23,7 +23,7 @@ namespace XboxDownload
         internal static List<Market> lsMarket = new();
         internal static float dpixRatio = 1;
         internal static JsonSerializerOptions jsOptions = new() { PropertyNameCaseInsensitive = true };
-        internal static DataTable dtHosts = new("Hosts"), dtDoH = new("DoH");
+        internal static DataTable dtHosts = new("Hosts"), dtDoHServer = new("DoH");
         private readonly DnsListen dnsListen;
         private readonly HttpListen httpListen;
         private readonly HttpsListen httpsListen;
@@ -151,15 +151,8 @@ namespace XboxDownload
             }
 
             int iDohServer = Properties.Settings.Default.DoHServer >= DnsListen.dohs.GetLongLength(0) ? 0 : Properties.Settings.Default.DoHServer;
-            DnsListen.dohServer = DnsListen.dohs[iDohServer, 1];
-            string dohHost = DnsListen.dohs[iDohServer, 2];
-            if (!string.IsNullOrEmpty(dohHost))
-            {
-                DnsListen.dohHeaders = new Dictionary<string, string>
-                {
-                    { "Host", dohHost }
-                };
-            }
+            DnsListen.dohServer.Website = DnsListen.dohs[iDohServer, 1];
+            if (!string.IsNullOrEmpty(DnsListen.dohs[iDohServer, 2])) DnsListen.dohServer.Headers = new() { { "Host", DnsListen.dohs[iDohServer, 2] } };
 
             rbEpicCDN1.CheckedChanged += RbCDN_CheckedChanged;
             rbEpicCDN2.CheckedChanged += RbCDN_CheckedChanged;
@@ -231,26 +224,26 @@ namespace XboxDownload
             }
             dgvHosts.DataSource = dtHosts;
 
-            dtDoH.Columns.Add("Enable", typeof(Boolean));
-            dtDoH.Columns.Add("Host", typeof(String));
-            dtDoH.Columns.Add("DoHServer", typeof(Int32));
-            dtDoH.Columns.Add("Remark", typeof(String));
+            dtDoHServer.Columns.Add("Enable", typeof(Boolean));
+            dtDoHServer.Columns.Add("Host", typeof(String));
+            dtDoHServer.Columns.Add("DoHServer", typeof(Int32));
+            dtDoHServer.Columns.Add("Remark", typeof(String));
             if (File.Exists(resourcePath + "\\DoH.xml"))
             {
                 try
                 {
-                    dtDoH.ReadXml(resourcePath + "\\DoH.xml");
+                    dtDoHServer.ReadXml(resourcePath + "\\DoH.xml");
                 }
                 catch { }
                 int length = (int)DnsListen.dohs.GetLongLength(0);
-                foreach (DataRow row in dtDoH.Rows)
+                foreach (DataRow row in dtDoHServer.Rows)
                 {
                     if (int.TryParse(row["DoHServer"].ToString(), out int index) && index >= length)
                         row["DoHServer"] = 0;
                 }
-                dtDoH.AcceptChanges();
+                dtDoHServer.AcceptChanges();
             }
-            DnsListen.UseDoH();
+            DnsListen.SetDoHServer();
 
             Form1.lsMarket.AddRange((new List<Market>
             {
@@ -725,18 +718,18 @@ namespace XboxDownload
                 if (!bServiceFlag) return;
                 if (akamai.Length == 0)
                 {
-                    foreach (var _ip in lsIP)
+                    cts = new();
+                    tasks = lsIP.Select(_ip => Task.Run(() =>
                     {
-                        uri = new(test[ran.Next(test.Length)]);
-                        using HttpResponseMessage? response = await ClassWeb.HttpResponseMessageAsync(uri.ToString().Replace(uri.Host, _ip[0]), "HEAD", null, null, new() { { "Host", uri.Host } }, 500);
-                        if (response != null && response.IsSuccessStatusCode)
-                        {
-                            akamai = _ip;
-                            break;
-                        }
-                    }
+                        Uri uri = new(test[ran.Next(test.Length)]);
+                        using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(uri.ToString().Replace(uri.Host, _ip[0]), "HEAD", null, null, new() { { "Host", uri.Host }, { "User-Agent", "XboxDownload" + (uri.Host.Contains("nintendo") ? "/Nintendo NX" : "") } }, 3000, null, cts.Token);
+                        if (akamai.Length == 0 && response != null && response.IsSuccessStatusCode) akamai = _ip;
+                        else if (!cts.IsCancellationRequested) Task.Delay(3000, cts.Token);
+                    })).ToArray();
+                    await Task.WhenAny(tasks);
+                    cts.Cancel();
                     if (!bServiceFlag) return;
-                    if (akamai.Length == 0)
+                    if (akamai.Length > 0)
                     {
                         SaveLog("提示信息", "优选 Akamai IP 测速超时，随机指定 -> " + akamai[0] + "，建议在测速选项卡中手动测速指定。", "localhost", 0xFF0000);
                     }
@@ -1468,7 +1461,7 @@ namespace XboxDownload
                             if (!Convert.ToBoolean(dr["Enable"])) continue;
                             string? hostName = dr["HostName"].ToString()?.ToLower();
                             string? ip = dr["IP"].ToString()?.Trim();
-                            if (!string.IsNullOrEmpty(hostName) && !hostName.StartsWith("*") && !string.IsNullOrEmpty(ip))
+                            if (!string.IsNullOrEmpty(hostName) && !hostName.StartsWith('*') && !string.IsNullOrEmpty(ip))
                             {
                                 sb.AppendLine(ip + " " + hostName);
                             }
@@ -2995,7 +2988,7 @@ namespace XboxDownload
                 foreach (string str in sHosts.Split('\n'))
                 {
                     string tmp = str.Trim();
-                    if (tmp.StartsWith("#") || string.IsNullOrEmpty(tmp))
+                    if (tmp.StartsWith('#') || string.IsNullOrEmpty(tmp))
                         sb1.AppendLine(tmp);
                     else
                         sb2.AppendLine(tmp);
@@ -3447,7 +3440,7 @@ namespace XboxDownload
                 {
                     string hostname = result.Groups["hostname"].Value.Trim().ToLower();
                     string remark = result.Groups["remark"].Value.Trim();
-                    if (remark.StartsWith("#"))
+                    if (remark.StartsWith('#'))
                         remark = remark[1..].Trim();
                     if (IPAddress.TryParse(result.Groups["ip"].Value, out IPAddress? ip) && DnsListen.reHosts.IsMatch(hostname))
                     {
@@ -3714,7 +3707,7 @@ namespace XboxDownload
             if (string.IsNullOrEmpty(url)) return;
             if (!Regex.IsMatch(url, @"^https?://"))
             {
-                if (!url.StartsWith("/")) url = "/" + url;
+                if (!url.StartsWith('/')) url = "/" + url;
                 url = "http://assets1.xboxlive.cn" + url;
                 tbDownloadUrl.Text = url;
             }

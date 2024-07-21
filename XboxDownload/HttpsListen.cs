@@ -68,11 +68,11 @@ namespace XboxDownload
                                 foreach (var host in jeHosts.EnumerateArray())
                                 {
                                     string _host = host.ToString().Trim();
-                                    if (string.IsNullOrEmpty(_host)) continue;
-                                    if (_host.StartsWith("*"))
+                                    if (string.IsNullOrEmpty(_host) || _host.StartsWith('#')) continue;
+                                    if (_host.StartsWith('*'))
                                     {
                                         _host = _host[1..];
-                                        if (!_host.StartsWith("."))
+                                        if (!_host.StartsWith('.'))
                                         {
                                             sanBuilder.AddDnsName(_host);
                                             dicSniProxy.TryAdd(_host, new()
@@ -83,7 +83,7 @@ namespace XboxDownload
                                             });
                                             _host = "." + _host;
                                         }
-                                        sanBuilder.AddDnsName("*" + _host);
+                                        sanBuilder.AddDnsName('*' + _host);
                                         dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), new()
                                         {
                                             Sni = sni,
@@ -157,7 +157,7 @@ namespace XboxDownload
             }
         }
 
-        private void TcpThread(Socket mySocket)
+        private async void TcpThread(Socket mySocket)
         {
             if (mySocket.Connected)
             {
@@ -305,8 +305,8 @@ namespace XboxDownload
                                                 ip = "[" + new IPAddress(lsHostsIpV6[0].Datas!).ToString() + "]";
                                             else if (DnsListen.dicHosts1V4.TryGetValue(_host, out List<ResouceRecord>? lsHostsIpV4) && lsHostsIpV4.Count >= 1)
                                                 ip = new IPAddress(lsHostsIpV4[0].Datas!).ToString();
-                                            else if (DnsListen.dicUseDoH.TryGetValue(_host, out DnsListen.DoH? doh))
-                                                ip = ClassDNS.DoH(_host, doh.Server, doh.Headers);
+                                            else if (DnsListen.dicDoHServer.TryGetValue(_host, out DnsListen.DoHServer? doh))
+                                                ip = ClassDNS.DoH(_host, doh.Website, doh.Headers);
                                             else
                                                 ip = ClassDNS.DoH(_host);
                                             if (!string.IsNullOrEmpty(ip))
@@ -441,28 +441,21 @@ namespace XboxDownload
                                                     else
                                                     {
                                                         ConcurrentBag<IPAddress> lsIP = new();
-                                                        Task[] tasks = new Task[dohs.Length];
-                                                        for (int i = 0; i <= tasks.Length - 1; i++)
-                                                        {
-                                                            int tmp = i;
-                                                            tasks[tmp] = new Task(() =>
+                                                        var tasks = dohs.Select(i => Task.Run(() => {
+                                                            int index = int.Parse(i);
+                                                            if (index < DnsListen.dohs.GetLongLength(0))
                                                             {
-                                                                int index = int.Parse(dohs[tmp]);
-                                                                if (index < DnsListen.dohs.GetLongLength(0))
+                                                                IPAddress[]? iPAddresses = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
+                                                                if (iPAddresses != null)
                                                                 {
-                                                                    IPAddress[]? _ips = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
-                                                                    if (_ips != null)
+                                                                    foreach (var item in iPAddresses)
                                                                     {
-                                                                        foreach (var item in _ips)
-                                                                        {
-                                                                            if (!lsIP.Contains(item)) lsIP.Add(item);
-                                                                        }
+                                                                        if (!lsIP.Contains(item)) lsIP.Add(item);
                                                                     }
                                                                 }
-                                                            });
-                                                        }
-                                                        Array.ForEach(tasks, x => x.Start());
-                                                        Task.WaitAll(tasks);
+                                                            }
+                                                        })).ToArray();
+                                                        await Task.WhenAll(tasks);
                                                         if (!lsIP.IsEmpty)
                                                         {
                                                             if (proxy.IPs != null)
