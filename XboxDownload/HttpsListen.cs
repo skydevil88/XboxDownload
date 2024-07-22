@@ -453,38 +453,39 @@ namespace XboxDownload
                                                             }
                                                         })).ToArray();
                                                         await Task.WhenAll(tasks);
-                                                        if (!lsIP.IsEmpty)
-                                                        {
-                                                            if (proxy.IPs != null)
-                                                            {
-                                                                foreach (var item in proxy.IPs)
-                                                                {
-                                                                    if (!lsIP.Contains(item)) lsIP.Add(item);
-                                                                }
-                                                            }
-                                                            proxy.IPs = lsIP.ToArray();
-                                                        }
+                                                        if (!lsIP.IsEmpty) proxy.IPs = lsIP.ToArray();
                                                     }
                                                     if (proxy.IPs?.Length >= 1)
                                                     {
                                                         if (Properties.Settings.Default.SniPorxyOptimized && proxy.IPs.Length >= 2)
                                                         {
                                                             CancellationTokenSource cts = new();
-                                                            var tasks = proxy.IPs.Select(ip => Task.Run(() =>
+                                                            var tasks = proxy.IPs.Select(ip => Task.Run(async () =>
                                                             {
+                                                                Socket socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                                                                 try
                                                                 {
-                                                                    using Ping p1 = new();
-                                                                    PingReply reply = p1.Send(ip);
-                                                                    if (reply.Status == IPStatus.Success && !cts.IsCancellationRequested)
+                                                                    await Task.Factory.FromAsync(socket.BeginConnect, socket.EndConnect, new IPEndPoint(ip, 443), null);
+                                                                    socket.Close();
+                                                                    socket.Dispose();
+                                                                    if (!cts.IsCancellationRequested)
                                                                     {
                                                                         cts.Cancel();
-                                                                        ips = proxy.IPs = new IPAddress[1] { ip };
+                                                                        return ip;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        return null;
                                                                     }
                                                                 }
-                                                                catch { }
+                                                                catch
+                                                                {
+                                                                    socket.Dispose();
+                                                                    return null;
+                                                                }
                                                             })).ToArray();
-                                                            await Task.WhenAny(tasks);
+                                                            IPAddress? ip = await Task.WhenAny(tasks).Result;
+                                                            if (ip != null) ips = proxy.IPs = new IPAddress[1] { ip };
                                                         }
                                                         ips ??= proxy.IPs.Length > 16 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
                                                         proxy.Error = 0;

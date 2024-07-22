@@ -73,6 +73,11 @@ namespace XboxDownload
             cbSniPorxyOptimized.Checked = Properties.Settings.Default.SniPorxyOptimized;
         }
 
+        private void FormSniProxy_Load(object sender, EventArgs e)
+        {
+            checkedListBox2.ItemCheck += CheckedListBox2_ItemCheck;
+        }
+
         private void CheckedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             string? key = checkedListBox1.Items[e.Index].ToString();
@@ -99,9 +104,13 @@ namespace XboxDownload
             }
         }
 
-        private void CheckedListBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void CheckedListBox2_ItemCheck(object? sender, ItemCheckEventArgs e)
         {
-            groupBox3.Text = Regex.Replace(groupBox3.Text, @"\d+", checkedListBox2.CheckedIndices.Count.ToString());
+            // 在状态改变后计算总数
+            this.BeginInvoke(new Action(() =>
+            {
+                groupBox3.Text = Regex.Replace(groupBox3.Text, @"\d+", checkedListBox2.CheckedItems.Count.ToString());
+            }));
         }
 
         private void Button1_Click(object sender, EventArgs e)

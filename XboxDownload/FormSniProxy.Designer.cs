@@ -122,16 +122,15 @@
             checkedListBox2.Name = "checkedListBox2";
             checkedListBox2.Size = new Size(265, 225);
             checkedListBox2.TabIndex = 0;
-            checkedListBox2.SelectedIndexChanged += CheckedListBox2_SelectedIndexChanged;
             // 
             // cbSniPorxyOptimized
             // 
             cbSniPorxyOptimized.AutoSize = true;
             cbSniPorxyOptimized.Location = new Point(473, 412);
             cbSniPorxyOptimized.Name = "cbSniPorxyOptimized";
-            cbSniPorxyOptimized.Size = new Size(250, 28);
+            cbSniPorxyOptimized.Size = new Size(214, 28);
             cbSniPorxyOptimized.TabIndex = 4;
-            cbSniPorxyOptimized.Text = "自动选择延迟最低的IP连接";
+            cbSniPorxyOptimized.Text = "自动连接延迟最低的IP";
             cbSniPorxyOptimized.UseVisualStyleBackColor = true;
             // 
             // FormSniProxy
@@ -151,6 +150,7 @@
             Name = "FormSniProxy";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "本地代理服务";
+            Load += FormSniProxy_Load;
             groupBox2.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
