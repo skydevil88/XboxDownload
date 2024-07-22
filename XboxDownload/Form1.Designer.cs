@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -68,8 +68,8 @@
             label8 = new Label();
             tbCnIP2 = new TextBox();
             labelCn2 = new Label();
-            linkProxy = new LinkLabel();
-            ckbProxy = new CheckBox();
+            linkSniProxy = new LinkLabel();
+            ckbSniProxy = new CheckBox();
             ckbBetterAkamaiIP = new CheckBox();
             linkDoHServer = new LinkLabel();
             ckbBattleNetease = new CheckBox();
@@ -624,8 +624,8 @@
             groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(tbCnIP2);
             groupBox1.Controls.Add(labelCn2);
-            groupBox1.Controls.Add(linkProxy);
-            groupBox1.Controls.Add(ckbProxy);
+            groupBox1.Controls.Add(linkSniProxy);
+            groupBox1.Controls.Add(ckbSniProxy);
             groupBox1.Controls.Add(ckbBetterAkamaiIP);
             groupBox1.Controls.Add(linkDoHServer);
             groupBox1.Controls.Add(ckbBattleNetease);
@@ -710,18 +710,18 @@
             resources.ApplyResources(labelCn2, "labelCn2");
             labelCn2.Name = "labelCn2";
             // 
-            // linkProxy
+            // linkSniProxy
             // 
-            resources.ApplyResources(linkProxy, "linkProxy");
-            linkProxy.Name = "linkProxy";
-            linkProxy.TabStop = true;
-            linkProxy.LinkClicked += LinkProxy_LinkClicked;
+            resources.ApplyResources(linkSniProxy, "linkSniProxy");
+            linkSniProxy.Name = "linkSniProxy";
+            linkSniProxy.TabStop = true;
+            linkSniProxy.LinkClicked += LinkSniProxy_LinkClicked;
             // 
-            // ckbProxy
+            // ckbSniProxy
             // 
-            resources.ApplyResources(ckbProxy, "ckbProxy");
-            ckbProxy.Name = "ckbProxy";
-            ckbProxy.UseVisualStyleBackColor = true;
+            resources.ApplyResources(ckbSniProxy, "ckbSniProxy");
+            ckbSniProxy.Name = "ckbSniProxy";
+            ckbSniProxy.UseVisualStyleBackColor = true;
             // 
             // ckbBetterAkamaiIP
             // 
@@ -1184,9 +1184,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1194,9 +1194,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1204,9 +1204,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -3096,8 +3096,8 @@
         private ToolStripMenuItem tsmCopyUrl3;
         private LinkLabel linkDoHServer;
         private LinkLabel linkHostsAdd;
-        private CheckBox ckbProxy;
-        private LinkLabel linkProxy;
+        private CheckBox ckbSniProxy;
+        private LinkLabel linkSniProxy;
         private Label label8;
         public TextBox tbCnIP2;
         private Label labelCn2;

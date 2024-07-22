@@ -259,7 +259,6 @@ namespace XboxDownload
                                             if (result.Success && int.TryParse(result.Groups["StatusCode"].Value, out StatusCode) && StatusCode >= 400)
                                             {
                                                 isOK = false;
-                                                errMessage = "StatusCode: " + result.Groups["StatusCode"].Value;
                                             }
                                             result = Regex.Match(headers, @"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.IgnoreCase);
                                             if (result.Success)

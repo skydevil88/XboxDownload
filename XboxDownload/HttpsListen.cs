@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Collections.Concurrent;
+using System.Net.NetworkInformation;
 
 namespace XboxDownload
 {
@@ -22,6 +23,8 @@ namespace XboxDownload
             public string? Sni { get; set; }
             public IPAddress[]? IPs { get; set; }
             public bool CustomIP { get; set; }
+            public int Error { get; set; }
+            public SemaphoreSlim Semaphore = new(1, 1);
         }
 
         public static void CreateCertificate()
@@ -69,37 +72,28 @@ namespace XboxDownload
                                 {
                                     string _host = host.ToString().Trim();
                                     if (string.IsNullOrEmpty(_host) || _host.StartsWith('#')) continue;
+                                    SniProxy proyx = new()
+                                    {
+                                        Sni = sni,
+                                        IPs = ips,
+                                        CustomIP = customIp
+                                    };
                                     if (_host.StartsWith('*'))
                                     {
                                         _host = _host[1..];
                                         if (!_host.StartsWith('.'))
                                         {
                                             sanBuilder.AddDnsName(_host);
-                                            dicSniProxy.TryAdd(_host, new()
-                                            {
-                                                Sni = sni,
-                                                IPs = ips,
-                                                CustomIP = customIp
-                                            });
+                                            dicSniProxy.TryAdd(_host, proyx);
                                             _host = "." + _host;
                                         }
                                         sanBuilder.AddDnsName('*' + _host);
-                                        dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), new()
-                                        {
-                                            Sni = sni,
-                                            IPs = ips,
-                                            CustomIP = customIp
-                                        });
+                                        dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), proyx);
                                     }
                                     else
                                     {
                                         sanBuilder.AddDnsName(_host);
-                                        dicSniProxy.TryAdd(_host, new()
-                                        {
-                                            Sni = sni,
-                                            IPs = ips,
-                                            CustomIP = customIp
-                                        });
+                                        dicSniProxy.TryAdd(_host, proyx);
                                     }
                                 }
                             }
@@ -429,6 +423,8 @@ namespace XboxDownload
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 bFileFound = true;
                                                 IPAddress[]? ips = null;
+
+                                                await proxy.Semaphore.WaitAsync();
                                                 if (proxy.IPs == null || proxy.IPs.Length == 0)
                                                 {
                                                     string[] dohs = Properties.Settings.Default.SinProxys.Split(',');
@@ -436,12 +432,13 @@ namespace XboxDownload
                                                     {
                                                         int index = int.Parse(dohs[0]);
                                                         if (index >= DnsListen.dohs.GetLongLength(0)) index = 3;
-                                                        ips = proxy.IPs = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } });
+                                                        proxy.IPs = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } });
                                                     }
                                                     else
                                                     {
                                                         ConcurrentBag<IPAddress> lsIP = new();
-                                                        var tasks = dohs.Select(i => Task.Run(() => {
+                                                        var tasks = dohs.Select(i => Task.Run(() =>
+                                                        {
                                                             int index = int.Parse(i);
                                                             if (index < DnsListen.dohs.GetLongLength(0))
                                                             {
@@ -465,36 +462,61 @@ namespace XboxDownload
                                                                     if (!lsIP.Contains(item)) lsIP.Add(item);
                                                                 }
                                                             }
-                                                            ips = proxy.IPs = lsIP.ToArray();
+                                                            proxy.IPs = lsIP.ToArray();
                                                         }
+                                                    }
+                                                    if (proxy.IPs?.Length >= 1)
+                                                    {
+                                                        if (Properties.Settings.Default.SniPorxyOptimized && proxy.IPs.Length >= 2)
+                                                        {
+                                                            CancellationTokenSource cts = new();
+                                                            var tasks = proxy.IPs.Select(ip => Task.Run(() =>
+                                                            {
+                                                                try
+                                                                {
+                                                                    using Ping p1 = new();
+                                                                    PingReply reply = p1.Send(ip);
+                                                                    if (reply.Status == IPStatus.Success && !cts.IsCancellationRequested)
+                                                                    {
+                                                                        cts.Cancel();
+                                                                        ips = proxy.IPs = new IPAddress[1] { ip };
+                                                                    }
+                                                                }
+                                                                catch { }
+                                                            })).ToArray();
+                                                            await Task.WhenAny(tasks);
+                                                        }
+                                                        ips ??= proxy.IPs.Length > 16 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
+                                                        proxy.Error = 0;
                                                     }
                                                 }
                                                 else
                                                 {
                                                     ips = proxy.IPs.Length >= 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
                                                 }
+                                                proxy.Semaphore.Release();
+
+                                                string? errMessae = null;
                                                 if (ips != null)
                                                 {
-                                                    if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out IPAddress? remoteIP, out string? errMessae))
+                                                    if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out IPAddress? remoteIP, out errMessae))
                                                     {
                                                         if (!proxy.CustomIP)
                                                         {
-                                                            if (proxy.IPs?.Length >= 2 && remoteIP != null) proxy.IPs = proxy.IPs?.Where(x => !x.Equals(remoteIP)).ToArray();
+                                                            if (remoteIP != null)
+                                                            {
+                                                                proxy.Error++;
+                                                                if (proxy.Error > 3) proxy.IPs = proxy.IPs?.Where(x => !x.Equals(remoteIP)).ToArray();
+                                                            }
                                                             else proxy.IPs = null;
                                                         }
-                                                        Byte[] _response = Encoding.ASCII.GetBytes(errMessae ?? "Unknown Error");
-                                                        StringBuilder sb = new();
-                                                        sb.Append("HTTP/1.1 500 Server Error\r\n");
-                                                        sb.Append("Content-Type: text/html\r\n");
-                                                        sb.Append("Content-Length: " + _response.Length + "\r\n\r\n");
-                                                        ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
-                                                        ssl.Write(_response);
-                                                        ssl.Flush();
                                                     }
+                                                    else proxy.Error = 0;
                                                 }
-                                                else
+                                                else errMessae = "Unable to query domain " + _host + ".";
+                                                if (!string.IsNullOrEmpty(errMessae))
                                                 {
-                                                    Byte[] _response = Encoding.ASCII.GetBytes("Unable to query domain " + _host + ".");
+                                                    Byte[] _response = Encoding.ASCII.GetBytes(errMessae);
                                                     StringBuilder sb = new();
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                     sb.Append("Content-Type: text/html\r\n");

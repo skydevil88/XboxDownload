@@ -107,7 +107,7 @@ namespace XboxDownload
             ckbBattleStore.Checked = Properties.Settings.Default.BattleStore;
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
-            ckbProxy.Checked = Properties.Settings.Default.SniProxy;
+            ckbSniProxy.Checked = Properties.Settings.Default.SniProxy;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -744,16 +744,21 @@ namespace XboxDownload
                 {
                     SaveLog("提示信息", "优选 Akamai IP -> " + akamai[0] + " (" + akamai[1] + ")", "localhost", 0x008000);
                 }
-                DnsListen.SetAkamaiIP(akamai[0]);
-                UpdateHosts(true, akamai[0]);
-                DnsListen.UpdateHosts(akamai[0]);
-                if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
-                tbComIP.Text = tbCnIP.Text = tbCnIP2.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai[0];
-                if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai[0];
+                if (akamai.Length > 0)
+                {
+                    ckbBetterAkamaiIP.Tag = true;
+                    DnsListen.SetAkamaiIP(akamai[0]);
+                    UpdateHosts(true, akamai[0]);
+                    DnsListen.UpdateHosts(akamai[0]);
+                    if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = false;
+                    tbComIP.Text = tbCnIP.Text = tbCnIP2.Text = tbAppIP.Text = tbPSIP.Text = tbNSIP.Text = tbEAIP.Text = tbUbiIP.Text = tbBattleIP.Text = akamai[0];
+                    if (!Properties.Settings.Default.EpicCDN) tbEpicIP.Text = akamai[0];
+                }
                 ckbBetterAkamaiIP.Enabled = true;
             }
-            else if (bServiceFlag)
+            else if (bServiceFlag && Convert.ToBoolean(ckbBetterAkamaiIP.Tag))
             {
+                ckbBetterAkamaiIP.Tag = null;
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.ComIP))
                     tbComIP.Text = Properties.Settings.Default.ComIP;
                 else if (DnsListen.dicService2V4.TryGetValue("xvcf2.xboxlive.com", out List<ResouceRecord>? lsComIp))
@@ -801,7 +806,6 @@ namespace XboxDownload
                 UpdateHosts(true);
                 DnsListen.UpdateHosts();
                 if (ckbLocalUpload.Checked) Properties.Settings.Default.LocalUpload = true;
-                SaveLog("提示信息", "取消优选 Akamai IP", "localhost", 0x008000);
             }
             if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
         }
@@ -833,9 +837,9 @@ namespace XboxDownload
                     if ((control is TextBox || control is CheckBox || control is Panel || control is Button || control is ComboBox) && control != butStart)
                         control.Enabled = true;
                 }
-                ckbBetterAkamaiIP.Checked = false;
-                ckbBetterAkamaiIP.Enabled = false;
-                linkRepairDNS.Enabled = linkProxy.Enabled = cbLocalIP.Enabled = true;
+                ckbBetterAkamaiIP.Checked = ckbBetterAkamaiIP.Enabled = false;
+                ckbBetterAkamaiIP.Tag = null;
+                linkRepairDNS.Enabled = linkSniProxy.Enabled = cbLocalIP.Enabled = true;
                 dnsListen.Close();
                 httpListen.Close();
                 httpsListen.Close();
@@ -1081,7 +1085,7 @@ namespace XboxDownload
                 Properties.Settings.Default.BattleStore = ckbBattleStore.Checked;
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
-                Properties.Settings.Default.SniProxy = ckbProxy.Checked;
+                Properties.Settings.Default.SniProxy = ckbSniProxy.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1228,7 +1232,7 @@ namespace XboxDownload
                         control.Enabled = false;
                 }
                 ckbBetterAkamaiIP.Enabled = true;
-                linkRepairDNS.Enabled = linkProxy.Enabled = cbLocalIP.Enabled =  false;
+                linkRepairDNS.Enabled = linkSniProxy.Enabled = cbLocalIP.Enabled =  false;
                 _ = Task.Run(() =>
                 {
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
@@ -1714,9 +1718,9 @@ namespace XboxDownload
             }
         }
 
-        private void LinkProxy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkSniProxy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormProxy dialog = new();
+            FormSniProxy dialog = new();
             dialog.ShowDialog();
             dialog.Dispose();
         }
