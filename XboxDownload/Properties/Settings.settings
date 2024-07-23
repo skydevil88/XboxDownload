@@ -104,6 +104,9 @@
     <Setting Name="SniProxys" Type="System.String" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
+    <Setting Name="SniProxysIPv6" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="SniPorxyOptimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -121,9 +124,6 @@
     </Setting>
     <Setting Name="Authorization" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="SniProxysIPv6" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -433,6 +433,18 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SniProxysIPv6 {
+            get {
+                return ((bool)(this["SniProxysIPv6"]));
+            }
+            set {
+                this["SniProxysIPv6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool SniPorxyOptimized {
             get {
@@ -500,18 +512,6 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["Authorization"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SniProxysIPv6 {
-            get {
-                return ((bool)(this["SniProxysIPv6"]));
-            }
-            set {
-                this["SniProxysIPv6"] = value;
             }
         }
     }
