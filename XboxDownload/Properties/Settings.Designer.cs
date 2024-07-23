@@ -422,12 +422,12 @@ namespace XboxDownload.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public string SinProxys {
+        public string SniProxys {
             get {
-                return ((string)(this["SinProxys"]));
+                return ((string)(this["SniProxys"]));
             }
             set {
-                this["SinProxys"] = value;
+                this["SniProxys"] = value;
             }
         }
         
@@ -500,6 +500,18 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["Authorization"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SniProxysIPv6 {
+            get {
+                return ((bool)(this["SniProxysIPv6"]));
+            }
+            set {
+                this["SniProxysIPv6"] = value;
             }
         }
     }

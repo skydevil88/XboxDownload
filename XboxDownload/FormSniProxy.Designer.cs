@@ -37,6 +37,7 @@
             groupBox3 = new GroupBox();
             checkedListBox2 = new CheckedListBox();
             cbSniPorxyOptimized = new CheckBox();
+            cbSniProxysIPv6 = new CheckBox();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -44,7 +45,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(473, 446);
+            button1.Location = new Point(467, 480);
             button1.Name = "button1";
             button1.Size = new Size(265, 45);
             button1.TabIndex = 0;
@@ -77,7 +78,7 @@
             groupBox1.Controls.Add(textBox1);
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(460, 488);
+            groupBox1.Size = new Size(460, 522);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "域名 (使用泛域名解析需要勾选“设置本机 DNS”)";
@@ -91,14 +92,14 @@
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "*example.com | SNI (可留空) | IP (可留空)";
             textBox1.ScrollBars = ScrollBars.Both;
-            textBox1.Size = new Size(454, 459);
+            textBox1.Size = new Size(454, 493);
             textBox1.TabIndex = 0;
             textBox1.WordWrap = false;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(3, 497);
+            label1.Location = new Point(3, 532);
             label1.Name = "label1";
             label1.Size = new Size(673, 48);
             label1.TabIndex = 3;
@@ -126,18 +127,29 @@
             // cbSniPorxyOptimized
             // 
             cbSniPorxyOptimized.AutoSize = true;
-            cbSniPorxyOptimized.Location = new Point(473, 412);
+            cbSniPorxyOptimized.Location = new Point(473, 446);
             cbSniPorxyOptimized.Name = "cbSniPorxyOptimized";
-            cbSniPorxyOptimized.Size = new Size(214, 28);
+            cbSniPorxyOptimized.Size = new Size(219, 28);
             cbSniPorxyOptimized.TabIndex = 4;
-            cbSniPorxyOptimized.Text = "自动连接延迟最低的IP";
+            cbSniPorxyOptimized.Text = "自动连接延迟最低的 IP";
             cbSniPorxyOptimized.UseVisualStyleBackColor = true;
+            // 
+            // cbSniProxysIPv6
+            // 
+            cbSniProxysIPv6.AutoSize = true;
+            cbSniProxysIPv6.Location = new Point(473, 412);
+            cbSniProxysIPv6.Name = "cbSniProxysIPv6";
+            cbSniProxysIPv6.Size = new Size(149, 28);
+            cbSniProxysIPv6.TabIndex = 5;
+            cbSniProxysIPv6.Text = "优先使用 IPv6";
+            cbSniProxysIPv6.UseVisualStyleBackColor = true;
             // 
             // FormSniProxy
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(743, 554);
+            ClientSize = new Size(743, 589);
+            Controls.Add(cbSniProxysIPv6);
             Controls.Add(cbSniPorxyOptimized);
             Controls.Add(groupBox3);
             Controls.Add(label1);
@@ -169,5 +181,6 @@
         private GroupBox groupBox3;
         private CheckedListBox checkedListBox2;
         private CheckBox cbSniPorxyOptimized;
+        private CheckBox cbSniProxysIPv6;
     }
 }

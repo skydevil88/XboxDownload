@@ -840,6 +840,7 @@ namespace XboxDownload
                 ckbBetterAkamaiIP.Checked = ckbBetterAkamaiIP.Enabled = false;
                 ckbBetterAkamaiIP.Tag = null;
                 linkRepairDNS.Enabled = linkSniProxy.Enabled = cbLocalIP.Enabled = true;
+                linkSniProxy.Text = "设置";
                 dnsListen.Close();
                 httpListen.Close();
                 httpsListen.Close();
@@ -1232,7 +1233,10 @@ namespace XboxDownload
                         control.Enabled = false;
                 }
                 ckbBetterAkamaiIP.Enabled = true;
-                linkRepairDNS.Enabled = linkSniProxy.Enabled = cbLocalIP.Enabled =  false;
+                linkRepairDNS.Enabled = cbLocalIP.Enabled = false;
+                if (Properties.Settings.Default.SniProxy) linkSniProxy.Text = "清理";
+                else linkSniProxy.Enabled = false;
+
                 _ = Task.Run(() =>
                 {
                     using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
@@ -1720,9 +1724,22 @@ namespace XboxDownload
 
         private void LinkSniProxy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormSniProxy dialog = new();
-            dialog.ShowDialog();
-            dialog.Dispose();
+            if (bServiceFlag)
+            {
+                if (MessageBox.Show("是否确认清理 本地代理服务 DNS缓存？", "清理DNS缓存", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    foreach (var proxy in HttpsListen.dicSniProxy.Values)
+                    {
+                        if (!proxy.CustomIP) proxy.IPs = null;
+                    }
+                }
+            }
+            else
+            {
+                FormSniProxy dialog = new();
+                dialog.ShowDialog();
+                dialog.Dispose();
+            }
         }
 
         private void CkbRecordLog_CheckedChanged(object? sender, EventArgs? e)

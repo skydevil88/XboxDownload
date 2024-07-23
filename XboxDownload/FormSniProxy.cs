@@ -56,7 +56,7 @@ namespace XboxDownload
 
             int total = 0;
             List<int> ls = new();
-            foreach (string part in Properties.Settings.Default.SinProxys.Split(','))
+            foreach (string part in Properties.Settings.Default.SniProxys.Split(','))
             {
                 ls.Add(int.Parse(part));
             }
@@ -70,12 +70,14 @@ namespace XboxDownload
                 }
             }
             groupBox3.Text = Regex.Replace(groupBox3.Text, @"\d+", total.ToString());
+            cbSniProxysIPv6.Checked = Properties.Settings.Default.SniProxysIPv6;
             cbSniPorxyOptimized.Checked = Properties.Settings.Default.SniPorxyOptimized;
         }
 
         private void FormSniProxy_Load(object sender, EventArgs e)
         {
             checkedListBox2.ItemCheck += CheckedListBox2_ItemCheck;
+            cbSniProxysIPv6.CheckedChanged += CbSniProxysIPv6_CheckedChanged;
         }
 
         private void CheckedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -111,6 +113,12 @@ namespace XboxDownload
             {
                 groupBox3.Text = Regex.Replace(groupBox3.Text, @"\d+", checkedListBox2.CheckedItems.Count.ToString());
             }));
+        }
+
+        private void CbSniProxysIPv6_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (cbSniProxysIPv6.Checked)
+                MessageBox.Show("请确保本地可以使用 IPv6 联网，否则支持 IPv6 的网站将没法打开。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -179,7 +187,8 @@ namespace XboxDownload
                     ls.Add(i);
             }
             if (ls.Count == 0) ls.Add(3);
-            Properties.Settings.Default.SinProxys = string.Join(',', ls.ToArray());
+            Properties.Settings.Default.SniProxys = string.Join(',', ls.ToArray());
+            Properties.Settings.Default.SniProxysIPv6 = cbSniProxysIPv6.Checked;
             Properties.Settings.Default.SniPorxyOptimized = cbSniPorxyOptimized.Checked;
             Properties.Settings.Default.Save();
             HttpsListen.CreateCertificate();

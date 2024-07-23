@@ -8,7 +8,8 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Collections.Concurrent;
-using System.Net.NetworkInformation;
+using System;
+using static XboxDownload.DnsListen;
 
 namespace XboxDownload
 {
@@ -423,46 +424,84 @@ namespace XboxDownload
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 bFileFound = true;
                                                 IPAddress[]? ips = null;
-
-                                                await proxy.Semaphore.WaitAsync();
                                                 if (proxy.IPs == null || proxy.IPs.Length == 0)
                                                 {
-                                                    string[] dohs = Properties.Settings.Default.SinProxys.Split(',');
-                                                    if (dohs.Length == 1)
+                                                    await proxy.Semaphore.WaitAsync();
+                                                    if (proxy.IPs == null || proxy.IPs.Length == 0)
                                                     {
-                                                        int index = int.Parse(dohs[0]);
-                                                        if (index >= DnsListen.dohs.GetLongLength(0)) index = 3;
-                                                        proxy.IPs = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } });
-                                                    }
-                                                    else
-                                                    {
-                                                        ConcurrentBag<IPAddress> lsIP = new();
-                                                        var tasks = dohs.Select(i => Task.Run(() =>
+                                                        proxy.IPs = null;
+                                                        string[] dohs = Properties.Settings.Default.SniProxys.Split(',');
+                                                        if (dohs.Length == 1)
                                                         {
-                                                            int index = int.Parse(i);
-                                                            if (index < DnsListen.dohs.GetLongLength(0))
-                                                            {
-                                                                IPAddress[]? iPAddresses = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
-                                                                if (iPAddresses != null)
+                                                            int index = int.Parse(dohs[0]);
+                                                            if (index >= DnsListen.dohs.GetLongLength(0)) index = 3;
+                                                            string dohServer = DnsListen.dohs[index, 1];
+                                                            Dictionary<string, string>? dohHeaders = null;
+                                                            if (!string.IsNullOrEmpty(DnsListen.dohs[index, 2])) dohHeaders = new() { { "Host", DnsListen.dohs[index, 2] } };
+                                                            IPAddress[]? ipV6 = null, ipV4 = null;
+                                                            Task[] tasks = new Task[2];
+                                                            tasks[0] = Task.Run(() => {
+                                                                if (Properties.Settings.Default.SniProxysIPv6)
+                                                                    ipV6 = ClassDNS.DoH2(_host, dohServer, dohHeaders, false);
+                                                            });
+                                                            tasks[1] = Task.Run(() => {
+                                                                ipV4 = ClassDNS.DoH2(_host, dohServer, dohHeaders, true);
+                                                            });
+                                                            await Task.WhenAll(tasks);
+                                                            proxy.IPs = ipV6 ?? ipV4;
+                                                        }
+                                                        else
+                                                        {
+                                                            ConcurrentBag<IPAddress> lsIPv6 = new(), lsIPv4 = new();
+                                                            Task[] tasks = new Task[2];
+                                                            tasks[0] = Task.Run(async () => {
+                                                                if (Properties.Settings.Default.SniProxysIPv6)
                                                                 {
-                                                                    foreach (var item in iPAddresses)
+                                                                    var tasks2 = dohs.Select(i => Task.Run(() =>
                                                                     {
-                                                                        if (!lsIP.Contains(item)) lsIP.Add(item);
-                                                                    }
+                                                                        int index = int.Parse(i);
+                                                                        if (index < DnsListen.dohs.GetLongLength(0))
+                                                                        {
+                                                                            IPAddress[]? iPAddresses = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, false, 3000);
+                                                                            if (iPAddresses != null)
+                                                                            {
+                                                                                foreach (var item in iPAddresses)
+                                                                                {
+                                                                                    if (!lsIPv6.Contains(item)) lsIPv6.Add(item);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    })).ToArray();
+                                                                    await Task.WhenAll(tasks2);
                                                                 }
-                                                            }
-                                                        })).ToArray();
-                                                        await Task.WhenAll(tasks);
-                                                        if (!lsIP.IsEmpty) proxy.IPs = lsIP.ToArray();
-                                                    }
-                                                    if (proxy.IPs?.Length >= 1)
-                                                    {
-                                                        if (Properties.Settings.Default.SniPorxyOptimized && proxy.IPs.Length >= 2)
+                                                            });
+                                                            tasks[1] = Task.Run(async () => {
+                                                                var tasks2 = dohs.Select(i => Task.Run(() =>
+                                                                {
+                                                                    int index = int.Parse(i);
+                                                                    if (index < DnsListen.dohs.GetLongLength(0))
+                                                                    {
+                                                                        IPAddress[]? iPAddresses = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
+                                                                        if (iPAddresses != null)
+                                                                        {
+                                                                            foreach (var item in iPAddresses)
+                                                                            {
+                                                                                if (!lsIPv4.Contains(item)) lsIPv4.Add(item);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                })).ToArray();
+                                                                await Task.WhenAll(tasks2);
+                                                            });
+                                                            await Task.WhenAll(tasks);
+                                                            proxy.IPs = !lsIPv6.IsEmpty ? lsIPv6.ToArray() : lsIPv4.ToArray();
+                                                        }
+                                                        if (Properties.Settings.Default.SniPorxyOptimized && proxy.IPs?.Length >= 2)
                                                         {
                                                             CancellationTokenSource cts = new();
                                                             var tasks = proxy.IPs.Select(ip => Task.Run(async () =>
                                                             {
-                                                                Socket socket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                                                                Socket socket = new(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                                                                 try
                                                                 {
                                                                     await Task.Factory.FromAsync(socket.BeginConnect, socket.EndConnect, new IPEndPoint(ip, 443), null);
@@ -487,18 +526,14 @@ namespace XboxDownload
                                                             IPAddress? ip = await Task.WhenAny(tasks).Result;
                                                             if (ip != null) ips = proxy.IPs = new IPAddress[1] { ip };
                                                         }
-                                                        ips ??= proxy.IPs.Length > 16 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
                                                         proxy.Error = 0;
                                                     }
+                                                    proxy.Semaphore.Release();
                                                 }
-                                                else
-                                                {
-                                                    ips = proxy.IPs.Length >= 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
-                                                }
-                                                proxy.Semaphore.Release();
+                                                ips ??= proxy.IPs?.Length > 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
 
                                                 string? errMessae = null;
-                                                if (ips != null)
+                                                if (ips != null && ips.Length >= 1)
                                                 {
                                                     if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out IPAddress? remoteIP, out errMessae))
                                                     {
