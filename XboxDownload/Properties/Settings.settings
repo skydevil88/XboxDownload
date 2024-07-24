@@ -110,6 +110,9 @@
     <Setting Name="SniPorxyOptimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="SniPorxyExpired" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
     <Setting Name="LocalIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

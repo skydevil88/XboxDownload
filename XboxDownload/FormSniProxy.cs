@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -12,7 +13,8 @@ namespace XboxDownload
         {
             { "Steam 商店社区", new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "help.steampowered.com", "checkout.steampowered.com", "steamcommunity.com" } },
             { "GitHub", new string[] { "*github.com", "*githubusercontent.com", "*github.io", "*github.blog", "*githubstatus.com", "*githubassets.com" } },
-            { "Pixiv", new string[] { "*pixiv.net | 210.140.92.187", "*.pximg.net | 210.140.92.141" } },
+            //{ "Pixiv", new string[] { "*pixiv.net | 210.140.92.187", "*.pximg.net | 210.140.92.141" } },
+            { "Pixiv", new string[] { "*pixiv.net -> pixiv.net", "*.pximg.net -> pximg.net" } },
         };
 
         public FormSniProxy()
@@ -72,12 +74,19 @@ namespace XboxDownload
             groupBox3.Text = Regex.Replace(groupBox3.Text, @"\d+", total.ToString());
             cbSniProxysIPv6.Checked = Properties.Settings.Default.SniProxysIPv6;
             cbSniPorxyOptimized.Checked = Properties.Settings.Default.SniPorxyOptimized;
+            nudSniPorxyExpired.Value = Properties.Settings.Default.SniPorxyExpired;
+            if (!Form1.bIPv6Support)
+            {
+                Font font = cbSniProxysIPv6.Font;
+                cbSniProxysIPv6.Font = new Font(font.FontFamily, font.Size, FontStyle.Strikeout, GraphicsUnit.Point);
+                cbSniProxysIPv6.ForeColor = Color.Red;
+                linkTestIPv6.Visible = true;
+            }
         }
 
         private void FormSniProxy_Load(object sender, EventArgs e)
         {
             checkedListBox2.ItemCheck += CheckedListBox2_ItemCheck;
-            cbSniProxysIPv6.CheckedChanged += CbSniProxysIPv6_CheckedChanged;
         }
 
         private void CheckedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -115,10 +124,23 @@ namespace XboxDownload
             }));
         }
 
-        private void CbSniProxysIPv6_CheckedChanged(object? sender, EventArgs e)
+        private async void LinkTestIPv6_LinkClickedAsync(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (cbSniProxysIPv6.Checked)
-                MessageBox.Show("请确保本地可以使用 IPv6 联网，否则支持 IPv6 的网站将没法打开。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            linkTestIPv6.Enabled = false;
+            Form1.bIPv6Support = await ClassWeb.TestIPv6();
+            if (Form1.bIPv6Support)
+            {
+                Font font = cbSniProxysIPv6.Font;
+                cbSniProxysIPv6.Font = new Font(font.FontFamily, font.Size);
+                cbSniProxysIPv6.ForeColor = Color.Empty;
+                cbSniProxysIPv6.Text += " (可用)";
+                linkTestIPv6.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("当前网络不支持IPv6。", "检测IPv6", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                linkTestIPv6.Enabled = true;
+            }
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -135,7 +157,6 @@ namespace XboxDownload
                                @"(::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|" +  //匹配包含嵌入IPv4地址的IPv6地址，带有可选的前导零和可选的ffff组
                                @"(([0-9A-Fa-f]{1,4}:){1,4}:((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|" +     //匹配包含最多四组后跟嵌入IPv4地址的IPv6地址
                                @"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$";                                //匹配IPv4地址
-
             Regex reIP = new(ipPattern);
 
             List<List<object>> lsSniProxy = new();
@@ -145,30 +166,66 @@ namespace XboxDownload
                 if (proxy.Length == 0) continue;
                 ArrayList arrHost = new();
                 string sni = string.Empty;
-                IPAddress? ip = null;
+                List<IPAddress>? lsIPv6 = new(), lsIPv4 = new();
                 if (proxy.Length >= 1)
                 {
                     foreach (string host in proxy[0].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                     {
-                        string _host = Regex.Replace(host.ToLower().Trim(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
+                        string _host = Regex.Replace(host.ToLower().Trim(), @"^(https?://)?([^/|:]+).*$", "$2").Trim();
                         if (!string.IsNullOrEmpty(_host))
                         {
-                            arrHost.Add(_host);
+                            arrHost.Add(Regex.Replace(_host, @"\s*->\s*", " -> "));
                         }
                     }
                 }
                 if (proxy.Length == 2)
                 {
                     proxy[1] = proxy[1].Trim();
-                    if (!(reIP.IsMatch(proxy[1]) && IPAddress.TryParse(proxy[1], out ip)))
-                        sni = Regex.Replace(proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
+                    string[] _ips = proxy[1].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                    if (_ips.Length == 1)
+                    {
+                        if (reIP.IsMatch(proxy[1]) && IPAddress.TryParse(proxy[1], out var ip))
+                        {
+                            if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                lsIPv6.Add(ip);
+                            else if (ip.AddressFamily == AddressFamily.InterNetwork)
+                                lsIPv4.Add(ip);
+                        }
+                        else sni = Regex.Replace(proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
+                    }
+                    else
+                    {
+                        foreach (string _ip in _ips)
+                        {
+                            if (IPAddress.TryParse(_ip.Trim(), out var ip))
+                            {
+                                if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                    lsIPv6.Add(ip);
+                                else if (ip.AddressFamily == AddressFamily.InterNetwork)
+                                    lsIPv4.Add(ip);
+                            }
+                        }
+                    }
                 }
                 else if (proxy.Length >= 3)
                 {
                     sni = Regex.Replace(proxy[1].ToLower().Trim(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
-                    _ = IPAddress.TryParse(proxy[2].Trim(), out ip);
+                    string[] _ips = proxy[2].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string _ip in _ips)
+                    {
+                        if (IPAddress.TryParse(_ip.Trim(), out var ip))
+                        {
+                            if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                lsIPv6.Add(ip);
+                            else if (ip.AddressFamily == AddressFamily.InterNetwork)
+                                lsIPv4.Add(ip);
+                        }
+                    }
                 }
-                if (arrHost.Count >= 1) lsSniProxy.Add(new List<object> { arrHost, sni, ip != null ? ip.ToString() : string.Empty });
+                if (arrHost.Count >= 1)
+                {
+                    lsSniProxy.Add(new List<object> { arrHost, sni, String.Join(", ", lsIPv6.Union(lsIPv4).Take(16).ToList<IPAddress>()) });
+                }
             }
             if (lsSniProxy.Count >= 1)
             {
@@ -190,6 +247,7 @@ namespace XboxDownload
             Properties.Settings.Default.SniProxys = string.Join(',', ls.ToArray());
             Properties.Settings.Default.SniProxysIPv6 = cbSniProxysIPv6.Checked;
             Properties.Settings.Default.SniPorxyOptimized = cbSniPorxyOptimized.Checked;
+            Properties.Settings.Default.SniPorxyExpired = (int)nudSniPorxyExpired.Value;
             Properties.Settings.Default.Save();
             HttpsListen.CreateCertificate();
             this.Close();

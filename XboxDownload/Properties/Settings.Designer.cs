@@ -457,6 +457,18 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int SniPorxyExpired {
+            get {
+                return ((int)(this["SniPorxyExpired"]));
+            }
+            set {
+                this["SniPorxyExpired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string LocalIP {
             get {

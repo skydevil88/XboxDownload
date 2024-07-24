@@ -191,6 +191,33 @@ namespace XboxDownload
             return contentType ?? "application/octet-stream";
         }
 
+        public static async Task<bool> TestIPv6()
+        {
+            IPAddress[] ips = {
+                IPAddress.Parse("2400:3200::1"),            //阿里云
+                IPAddress.Parse("2402:4e00::"),             //腾讯云
+                IPAddress.Parse("2001:4860:4860::8888"),    //谷歌
+                IPAddress.Parse("2606:4700:4700::1111"),    //Cloudflare 
+            };
+            var tasks = ips.Select(ip => Task.Run(async () =>
+            {
+                Socket socket = new(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                try
+                {
+                    await Task.Factory.FromAsync(socket.BeginConnect, socket.EndConnect, new IPEndPoint(ip, 443), null);
+                    socket.Close();
+                    socket.Dispose();
+                    return true;
+                }
+                catch
+                {
+                    socket.Dispose();
+                    return false;
+                }
+            })).ToArray();
+            return await Task.WhenAny(tasks).Result;
+        }
+
         public static bool SniProxy(IPAddress[] ips, string? sni, Byte[] send1, Byte[] send2, SslStream clent, out IPAddress? remoteIP, out string? errMessage)
         {
             bool isOK = true;

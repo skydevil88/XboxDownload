@@ -18,7 +18,7 @@ namespace XboxDownload
 {
     public partial class Form1 : Form
     {
-        internal static Boolean bServiceFlag = false, bAutoStartup = false;
+        internal static Boolean bServiceFlag = false, bAutoStartup = false, bIPv6Support = false;
         internal readonly static String resourcePath = Application.StartupPath + "Resource";
         internal static List<Market> lsMarket = new();
         internal static float dpixRatio = 1;
@@ -343,6 +343,15 @@ namespace XboxDownload
                 tsmUpdate.Enabled = false;
                 ThreadPool.QueueUserWorkItem(delegate { UpdateFile.Start(true, this); });
             }
+            Task.Run(async () =>
+            {
+                bIPv6Support = await ClassWeb.TestIPv6();
+                if (bIPv6Support)
+                {
+                    bIPv6Support = true;
+                    SaveLog("提示信息", "检测到正在使用IPv6联网，如果加速主机下载(Xbox、PS)，必需进入路由器后台关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
+                }
+            });
             if (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build >= 1803)
             {
                 Task.Run(() =>
@@ -1236,15 +1245,6 @@ namespace XboxDownload
                 linkRepairDNS.Enabled = cbLocalIP.Enabled = false;
                 if (Properties.Settings.Default.SniProxy) linkSniProxy.Text = "清理";
                 else linkSniProxy.Enabled = false;
-
-                _ = Task.Run(() =>
-                {
-                    using HttpResponseMessage? response = ClassWeb.HttpResponseMessage("https://ipv6.lookup.test-ipv6.com/", "HEAD");
-                    if (response != null && response.IsSuccessStatusCode)
-                    {
-                        SaveLog("提示信息", "检测到使用IPv6联网，如果加速Xbox、PS主机下载，必需关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
-                    }
-                });
                 UpdateHosts(true);
                 if (Properties.Settings.Default.EAStore) linkRestartEABackgroundService.Enabled = true;
                 if (Properties.Settings.Default.EpicStore) linkRestartEpic.Enabled = true;
@@ -1726,13 +1726,11 @@ namespace XboxDownload
         {
             if (bServiceFlag)
             {
-                if (MessageBox.Show("是否确认清理 本地代理服务 DNS缓存？", "清理DNS缓存", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                foreach (var proxy in HttpsListen.dicSniProxy.Values)
                 {
-                    foreach (var proxy in HttpsListen.dicSniProxy.Values)
-                    {
-                        if (!proxy.CustomIP) proxy.IPs = null;
-                    }
+                    if (!proxy.CustomIP) proxy.IPs = null;
                 }
+                SaveLog("提示信息", "已清理本地代理服务DNS缓存。", "localhost", 0x008000);
             }
             else
             {

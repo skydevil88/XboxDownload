@@ -8,8 +8,6 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Collections.Concurrent;
-using System;
-using static XboxDownload.DnsListen;
 
 namespace XboxDownload
 {
@@ -21,10 +19,11 @@ namespace XboxDownload
 
         public class SniProxy
         {
+            public string? Branch { get; set; }
             public string? Sni { get; set; }
             public IPAddress[]? IPs { get; set; }
             public bool CustomIP { get; set; }
-            public int Error { get; set; }
+            public DateTime Expired { get; set; }
             public SemaphoreSlim Semaphore = new(1, 1);
         }
 
@@ -62,39 +61,49 @@ namespace XboxDownload
                             if (jeHosts.ValueKind == JsonValueKind.Array)
                             {
                                 string? sni = item[1]?.ToString();
-                                IPAddress[]? ips = null;
-                                bool customIp = false;
-                                if (IPAddress.TryParse(item[2]?.ToString(), out var ip))
+                                string? ips = item[2]?.ToString();
+                                List<IPAddress>? lsIP = new();
+                                if (!string.IsNullOrEmpty(ips))
                                 {
-                                    ips = new IPAddress[1] { ip };
-                                    customIp = true;
+                                    foreach (string _ip in ips.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        if (IPAddress.TryParse(_ip.Trim(), out var ip))
+                                        {
+                                            if (!lsIP.Contains(ip))
+                                                lsIP.Add(ip);
+                                        }
+                                    }
                                 }
-                                foreach (var host in jeHosts.EnumerateArray())
+                                bool customIp = lsIP.Count >= 1;
+                                foreach (var str in jeHosts.EnumerateArray())
                                 {
-                                    string _host = host.ToString().Trim();
-                                    if (string.IsNullOrEmpty(_host) || _host.StartsWith('#')) continue;
+                                    string[] splitArray = Regex.Split(str.ToString().Trim(), @"\s*->\s*");
+                                    string host = splitArray[0].Trim();
+                                    if (string.IsNullOrEmpty(host) || host.StartsWith('#')) continue;
+                                    string? branch = splitArray.Length > 1 ? splitArray[1].Trim() : null;
                                     SniProxy proyx = new()
                                     {
+                                        Branch = branch,
                                         Sni = sni,
-                                        IPs = ips,
+                                        IPs = lsIP.Count >= 1 ? lsIP.ToArray() : null,
                                         CustomIP = customIp
                                     };
-                                    if (_host.StartsWith('*'))
+                                    if (host.StartsWith('*'))
                                     {
-                                        _host = _host[1..];
-                                        if (!_host.StartsWith('.'))
+                                        host = host[1..];
+                                        if (!host.StartsWith('.'))
                                         {
-                                            sanBuilder.AddDnsName(_host);
-                                            dicSniProxy.TryAdd(_host, proyx);
-                                            _host = "." + _host;
+                                            sanBuilder.AddDnsName(host);
+                                            dicSniProxy.TryAdd(host, proyx);
+                                            host = "." + host;
                                         }
-                                        sanBuilder.AddDnsName('*' + _host);
-                                        dicSniProxy2.TryAdd(new(_host.Replace(".", "\\.") + "$"), proyx);
+                                        sanBuilder.AddDnsName('*' + host);
+                                        dicSniProxy2.TryAdd(new(host.Replace(".", "\\.") + "$"), proyx);
                                     }
                                     else
                                     {
-                                        sanBuilder.AddDnsName(_host);
-                                        dicSniProxy.TryAdd(_host, proyx);
+                                        sanBuilder.AddDnsName(host);
+                                        dicSniProxy.TryAdd(host, proyx);
                                     }
                                 }
                             }
@@ -306,6 +315,7 @@ namespace XboxDownload
                                                 ip = ClassDNS.DoH(_host);
                                             if (!string.IsNullOrEmpty(ip))
                                             {
+                                                bFileFound = true;
                                                 Match m1 = Regex.Match(headers, @"Authorization:(.+)");
                                                 if (m1.Success)
                                                 {
@@ -315,7 +325,6 @@ namespace XboxDownload
                                                 using HttpResponseMessage? response = ClassWeb.HttpResponseMessage(_url.Replace(_host, ip), "GET", null, null, new() { { "Host", _host }, { "Authorization", Properties.Settings.Default.Authorization } });
                                                 if (response != null && response.IsSuccessStatusCode)
                                                 {
-                                                    bFileFound = true;
                                                     byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
                                                     Byte[] _headers = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n" + response.Content.Headers + response.Headers + "\r\n");
                                                     ssl.Write(_headers);
@@ -361,6 +370,10 @@ namespace XboxDownload
                                                             }
                                                         }
                                                     }
+                                                }
+                                                else if (Properties.Settings.Default.RecordLog)
+                                                {
+                                                    parentForm.SaveLog("HTTP 500", "域名 packagespc.xboxlive.com 没法访问，请把此域名加入强制加密DNS列表，选择使用国外DoH服务器、并且勾上“设置本机 DNS”。", ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0xFF0000);
                                                 }
                                             }
                                         }
@@ -412,6 +425,7 @@ namespace XboxDownload
                                                 {
                                                     proxy = new()
                                                     {
+                                                        Branch = proxy2.Branch,
                                                         Sni = proxy2.Sni,
                                                         IPs = proxy2.IPs,
                                                         CustomIP = proxy2.CustomIP
@@ -424,12 +438,13 @@ namespace XboxDownload
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 bFileFound = true;
                                                 IPAddress[]? ips = null;
-                                                if (proxy.IPs == null || proxy.IPs.Length == 0)
+                                                if (proxy.IPs == null || proxy.IPs.Length == 0 || (!proxy.CustomIP && DateTime.Compare(proxy.Expired, DateTime.Now) < 0))
                                                 {
                                                     await proxy.Semaphore.WaitAsync();
-                                                    if (proxy.IPs == null || proxy.IPs.Length == 0)
+                                                    if (proxy.IPs == null || proxy.IPs.Length == 0 || (!proxy.CustomIP && DateTime.Compare(proxy.Expired, DateTime.Now) < 0))
                                                     {
                                                         proxy.IPs = null;
+                                                        string domain = proxy.Branch ?? _host;
                                                         string[] dohs = Properties.Settings.Default.SniProxys.Split(',');
                                                         if (dohs.Length == 1)
                                                         {
@@ -441,11 +456,11 @@ namespace XboxDownload
                                                             IPAddress[]? ipV6 = null, ipV4 = null;
                                                             Task[] tasks = new Task[2];
                                                             tasks[0] = Task.Run(() => {
-                                                                if (Properties.Settings.Default.SniProxysIPv6)
-                                                                    ipV6 = ClassDNS.DoH2(_host, dohServer, dohHeaders, false);
+                                                                if (Properties.Settings.Default.SniProxysIPv6 && Form1.bIPv6Support)
+                                                                    ipV6 = ClassDNS.DoH2(domain, dohServer, dohHeaders, false);
                                                             });
                                                             tasks[1] = Task.Run(() => {
-                                                                ipV4 = ClassDNS.DoH2(_host, dohServer, dohHeaders, true);
+                                                                ipV4 = ClassDNS.DoH2(domain, dohServer, dohHeaders, true);
                                                             });
                                                             await Task.WhenAll(tasks);
                                                             proxy.IPs = ipV6 ?? ipV4;
@@ -455,14 +470,14 @@ namespace XboxDownload
                                                             ConcurrentBag<IPAddress> lsIPv6 = new(), lsIPv4 = new();
                                                             Task[] tasks = new Task[2];
                                                             tasks[0] = Task.Run(async () => {
-                                                                if (Properties.Settings.Default.SniProxysIPv6)
+                                                                if (Properties.Settings.Default.SniProxysIPv6 && Form1.bIPv6Support)
                                                                 {
                                                                     var tasks2 = dohs.Select(i => Task.Run(() =>
                                                                     {
                                                                         int index = int.Parse(i);
                                                                         if (index < DnsListen.dohs.GetLongLength(0))
                                                                         {
-                                                                            IPAddress[]? iPAddresses = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, false, 3000);
+                                                                            IPAddress[]? iPAddresses = ClassDNS.DoH2(domain, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, false, 3000);
                                                                             if (iPAddresses != null)
                                                                             {
                                                                                 foreach (var item in iPAddresses)
@@ -481,7 +496,7 @@ namespace XboxDownload
                                                                     int index = int.Parse(i);
                                                                     if (index < DnsListen.dohs.GetLongLength(0))
                                                                     {
-                                                                        IPAddress[]? iPAddresses = ClassDNS.DoH2(_host, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
+                                                                        IPAddress[]? iPAddresses = ClassDNS.DoH2(domain, DnsListen.dohs[index, 1], string.IsNullOrEmpty(DnsListen.dohs[index, 2]) ? null : new() { { "Host", DnsListen.dohs[index, 2] } }, true, 3000);
                                                                         if (iPAddresses != null)
                                                                         {
                                                                             foreach (var item in iPAddresses)
@@ -509,7 +524,6 @@ namespace XboxDownload
                                                                     socket.Dispose();
                                                                     if (!cts.IsCancellationRequested)
                                                                     {
-                                                                        cts.Cancel();
                                                                         return ip;
                                                                     }
                                                                     else
@@ -520,34 +534,28 @@ namespace XboxDownload
                                                                 catch
                                                                 {
                                                                     socket.Dispose();
+                                                                    if (!cts.IsCancellationRequested)
+                                                                        await Task.Delay(1000, cts.Token);
                                                                     return null;
                                                                 }
                                                             })).ToArray();
                                                             IPAddress? ip = await Task.WhenAny(tasks).Result;
+                                                            cts.Cancel();
                                                             if (ip != null) ips = proxy.IPs = new IPAddress[1] { ip };
                                                         }
-                                                        proxy.Error = 0;
+                                                        proxy.Expired = DateTime.Now.AddMinutes(Properties.Settings.Default.SniPorxyExpired);
                                                     }
                                                     proxy.Semaphore.Release();
                                                 }
-                                                ips ??= proxy.IPs?.Length > 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
+                                                ips ??= proxy.IPs?.Length >= 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
 
                                                 string? errMessae = null;
                                                 if (ips != null && ips.Length >= 1)
                                                 {
                                                     if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out IPAddress? remoteIP, out errMessae))
                                                     {
-                                                        if (!proxy.CustomIP)
-                                                        {
-                                                            if (remoteIP != null)
-                                                            {
-                                                                proxy.Error++;
-                                                                if (proxy.Error > 3) proxy.IPs = proxy.IPs?.Where(x => !x.Equals(remoteIP)).ToArray();
-                                                            }
-                                                            else proxy.IPs = null;
-                                                        }
+                                                        if (!proxy.CustomIP && remoteIP == null) proxy.IPs = null;
                                                     }
-                                                    else proxy.Error = 0;
                                                 }
                                                 else errMessae = "Unable to query domain " + _host + ".";
                                                 if (!string.IsNullOrEmpty(errMessae))
