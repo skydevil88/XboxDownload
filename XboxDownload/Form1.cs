@@ -3410,9 +3410,9 @@ namespace XboxDownload
                 File.Delete(resourcePath + "\\Hosts.xml");
             }
             dgvHosts.ClearSelection();
-            DnsListen.UpdateHosts();
             if (bServiceFlag)
             {
+                DnsListen.UpdateHosts();
                 if (ckbBetterAkamaiIP.Checked) ckbBetterAkamaiIP.Checked = false;
                 else UpdateHosts(true);
                 if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
@@ -3596,9 +3596,9 @@ namespace XboxDownload
             }
             Properties.Settings.Default.IpsAkamai = tbCdnAkamai.Text;
             Properties.Settings.Default.Save();
-            DnsListen.UpdateHosts();
             if (bServiceFlag)
             {
+                DnsListen.UpdateHosts();
                 if (ckbBetterAkamaiIP.Checked) ckbBetterAkamaiIP.Checked = false;
                 if (Properties.Settings.Default.SetDns) DnsListen.FlushDns();
             }

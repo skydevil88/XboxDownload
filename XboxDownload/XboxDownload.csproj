@@ -7,13 +7,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>XBox.ico</ApplicationIcon>
-    <FileVersion>2.0.2.43</FileVersion>
+    <FileVersion>2.0.2.44</FileVersion>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="ClassGetXboxGames.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Form1.cs~RFfc58326.TMP" />

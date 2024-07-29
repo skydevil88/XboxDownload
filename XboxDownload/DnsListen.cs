@@ -1178,23 +1178,20 @@ namespace XboxDownload
                         }
                     }
                 }
-                if (Form1.bServiceFlag)
+                if (dicServiceV4.TryGetValue("dl.delivery.mp.microsoft.com", out List<ResouceRecord>? _lsIpV4) && _lsIpV4.Count >= 1)
                 {
-                    if (dicServiceV4.TryGetValue("dl.delivery.mp.microsoft.com", out List<ResouceRecord>? _lsIpV4) && _lsIpV4.Count >= 1)
-                    {
-                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, _lsIpV4, (oldkey, oldvalue) => _lsIpV4);
-                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
-                    }
-                    else if (dicServiceV6.TryGetValue("dl.delivery.mp.microsoft.com", out List<ResouceRecord>? _lsIpV6) && _lsIpV6.Count >= 1)
-                    {
-                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
-                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, _lsIpV6, (oldkey, oldvalue) => _lsIpV6);
-                    }
-                    else
-                    {
-                        _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
-                        _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
-                    }
+                    _ = dicHosts2V4.AddOrUpdate(reMsAppHost, _lsIpV4, (oldkey, oldvalue) => _lsIpV4);
+                    _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                }
+                else if (dicServiceV6.TryGetValue("dl.delivery.mp.microsoft.com", out List<ResouceRecord>? _lsIpV6) && _lsIpV6.Count >= 1)
+                {
+                    _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                    _ = dicHosts2V6.AddOrUpdate(reMsAppHost, _lsIpV6, (oldkey, oldvalue) => _lsIpV6);
+                }
+                else
+                {
+                    _ = dicHosts2V4.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                    _ = dicHosts2V6.AddOrUpdate(reMsAppHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                 }
             }
             else
@@ -1264,6 +1261,13 @@ namespace XboxDownload
                         }
                     }
                 }
+            }
+            Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+            List<ResouceRecord> lsLocalIP = new() { new ResouceRecord { Datas = localIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+            foreach (Regex reHost in HttpsListen.dicSniProxy2.Keys)
+            {
+                _ = dicHosts2V4.AddOrUpdate(reHost, lsLocalIP, (oldkey, oldvalue) => lsLocalIP);
+                _ = dicHosts2V6.AddOrUpdate(reHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
             }
         }
 
