@@ -306,7 +306,6 @@ namespace XboxDownload
                 linkAppxAdd.Enabled = false;
                 gbAddAppxPackage.Visible = gbGamingServices.Visible = false;
             }
-            DnsListen.UpdateHosts();
             if (File.Exists(resourcePath + "\\XboxGame.json"))
             {
                 string json = File.ReadAllText(resourcePath + "\\XboxGame.json");
@@ -1251,6 +1250,7 @@ namespace XboxDownload
                 }
                 else linkSniProxy.Enabled = false;
                 UpdateHosts(true);
+                DnsListen.UpdateHosts();
                 if (Properties.Settings.Default.EAStore) linkRestartEABackgroundService.Enabled = true;
                 if (Properties.Settings.Default.EpicStore) linkRestartEpic.Enabled = true;
                 if (Properties.Settings.Default.DnsService)
