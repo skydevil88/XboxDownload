@@ -246,7 +246,7 @@ namespace XboxDownload
                     ssl.ReadTimeout = 30000;
                     try
                     {
-                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(sni) ? (remoteIP ?? ips[0]).ToString() : sni, null, SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls, true);
+                        ssl.AuthenticateAsClient(string.IsNullOrEmpty(sni) ? (remoteIP ?? ips[0]).ToString() : sni);
                         if (ssl.IsAuthenticated)
                         {
                             ssl.Write(send1);
@@ -732,40 +732,6 @@ namespace XboxDownload
                 default:
                     return buffer;
             }
-        }
-
-        internal static Object docLock = new();
-        internal static WebBrowser? webb = null;
-        internal static HtmlDocument? doc = null;
-
-        public static void SetHtmlDocument(string strHtml, bool executeScript)
-        {
-            if (Application.OpenForms[0].InvokeRequired)
-            {
-                Application.OpenForms[0].Invoke(new MethodInvoker(() => { SetHtmlDocument(strHtml, executeScript); }));
-                return;
-            }
-            if (!executeScript)
-            {
-                strHtml = Regex.Replace(strHtml, "<script", "<!--<script", RegexOptions.IgnoreCase);
-                strHtml = Regex.Replace(strHtml, "</script>", "</script>!-->", RegexOptions.IgnoreCase);
-            }
-            webb = new WebBrowser() { ScriptErrorsSuppressed = true };
-            webb.Navigate("about:blank");
-            doc = webb.Document.OpenNew(true);
-            doc.Write(strHtml);
-        }
-
-        public static void ObjectDisposed()
-        {
-            if (Application.OpenForms[0].InvokeRequired)
-            {
-                Application.OpenForms[0].Invoke(new MethodInvoker(() => { ObjectDisposed(); }));
-                return;
-            }
-            doc = null;
-            webb?.Dispose();
-            webb = null;
         }
     }
 

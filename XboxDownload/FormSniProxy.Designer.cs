@@ -49,9 +49,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(540, 516);
+            button1.Location = new Point(581, 517);
             button1.Name = "button1";
-            button1.Size = new Size(265, 45);
+            button1.Size = new Size(266, 45);
             button1.TabIndex = 0;
             button1.Text = "保存";
             button1.UseVisualStyleBackColor = true;
@@ -60,9 +60,9 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(checkedListBox1);
-            groupBox2.Location = new Point(537, 3);
+            groupBox2.Location = new Point(578, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(271, 143);
+            groupBox2.Size = new Size(270, 143);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "选择服务";
@@ -73,7 +73,7 @@
             checkedListBox1.FormattingEnabled = true;
             checkedListBox1.Location = new Point(3, 26);
             checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(265, 114);
+            checkedListBox1.Size = new Size(264, 114);
             checkedListBox1.TabIndex = 0;
             checkedListBox1.ItemCheck += CheckedListBox1_ItemCheck;
             // 
@@ -82,7 +82,7 @@
             groupBox1.Controls.Add(textBox1);
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(528, 558);
+            groupBox1.Size = new Size(572, 558);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "域名 (使用泛域名解析需要勾选“设置本机 DNS”)";
@@ -96,7 +96,7 @@
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "*example.com | SNI (可留空) | IP (可留空)\r\n*example.com -> example.com (使用指定域名解释IP地址)";
             textBox1.ScrollBars = ScrollBars.Both;
-            textBox1.Size = new Size(522, 529);
+            textBox1.Size = new Size(566, 529);
             textBox1.TabIndex = 0;
             textBox1.TabStop = false;
             textBox1.WordWrap = false;
@@ -104,7 +104,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(3, 571);
+            label1.Location = new Point(3, 570);
             label1.Name = "label1";
             label1.Size = new Size(673, 48);
             label1.TabIndex = 3;
@@ -113,9 +113,9 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(checkedListBox2);
-            groupBox3.Location = new Point(537, 152);
+            groupBox3.Location = new Point(578, 152);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(271, 254);
+            groupBox3.Size = new Size(270, 254);
             groupBox3.TabIndex = 3;
             groupBox3.TabStop = false;
             groupBox3.Text = "DoH服务器 (0)";
@@ -126,23 +126,23 @@
             checkedListBox2.FormattingEnabled = true;
             checkedListBox2.Location = new Point(3, 26);
             checkedListBox2.Name = "checkedListBox2";
-            checkedListBox2.Size = new Size(265, 225);
+            checkedListBox2.Size = new Size(264, 225);
             checkedListBox2.TabIndex = 0;
             // 
             // cbSniPorxyOptimized
             // 
             cbSniPorxyOptimized.AutoSize = true;
-            cbSniPorxyOptimized.Location = new Point(540, 446);
+            cbSniPorxyOptimized.Location = new Point(581, 446);
             cbSniPorxyOptimized.Name = "cbSniPorxyOptimized";
-            cbSniPorxyOptimized.Size = new Size(219, 28);
+            cbSniPorxyOptimized.Size = new Size(214, 28);
             cbSniPorxyOptimized.TabIndex = 6;
-            cbSniPorxyOptimized.Text = "自动连接延迟最低的 IP";
+            cbSniPorxyOptimized.Text = "自动优选延迟最低的IP";
             cbSniPorxyOptimized.UseVisualStyleBackColor = true;
             // 
             // cbSniProxysIPv6
             // 
             cbSniProxysIPv6.AutoSize = true;
-            cbSniProxysIPv6.Location = new Point(540, 412);
+            cbSniProxysIPv6.Location = new Point(581, 412);
             cbSniProxysIPv6.Name = "cbSniProxysIPv6";
             cbSniProxysIPv6.Size = new Size(149, 28);
             cbSniProxysIPv6.TabIndex = 4;
@@ -152,18 +152,17 @@
             // linkTestIPv6
             // 
             linkTestIPv6.AutoSize = true;
-            linkTestIPv6.Location = new Point(695, 413);
+            linkTestIPv6.Location = new Point(797, 412);
             linkTestIPv6.Name = "linkTestIPv6";
-            linkTestIPv6.Size = new Size(82, 24);
+            linkTestIPv6.Size = new Size(46, 24);
             linkTestIPv6.TabIndex = 5;
             linkTestIPv6.TabStop = true;
-            linkTestIPv6.Text = "检测IPv6";
-            linkTestIPv6.Visible = false;
+            linkTestIPv6.Text = "检测";
             linkTestIPv6.LinkClicked += LinkTestIPv6_LinkClickedAsync;
             // 
             // nudSniPorxyExpired
             // 
-            nudSniPorxyExpired.Location = new Point(715, 480);
+            nudSniPorxyExpired.Location = new Point(757, 480);
             nudSniPorxyExpired.Maximum = new decimal(new int[] { 1440, 0, 0, 0 });
             nudSniPorxyExpired.Minimum = new decimal(new int[] { 20, 0, 0, 0 });
             nudSniPorxyExpired.Name = "nudSniPorxyExpired";
@@ -174,7 +173,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(537, 482);
+            label2.Location = new Point(575, 481);
             label2.Name = "label2";
             label2.Size = new Size(169, 24);
             label2.TabIndex = 8;
@@ -184,7 +183,7 @@
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(813, 629);
+            ClientSize = new Size(855, 630);
             Controls.Add(label2);
             Controls.Add(linkTestIPv6);
             Controls.Add(nudSniPorxyExpired);

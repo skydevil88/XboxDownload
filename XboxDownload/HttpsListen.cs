@@ -22,6 +22,8 @@ namespace XboxDownload
             public string? Branch { get; set; }
             public string? Sni { get; set; }
             public IPAddress[]? IPs { get; set; }
+            public IPAddress[]? IPv4s { get; set; }
+            public IPAddress[]? IPv6s { get; set; }
             public bool CustomIP { get; set; }
             public DateTime Expired { get; set; }
             public SemaphoreSlim Semaphore = new(1, 1);
@@ -62,19 +64,21 @@ namespace XboxDownload
                             {
                                 string? sni = item[1]?.ToString();
                                 string? ips = item[2]?.ToString();
-                                List<IPAddress>? lsIP = new();
+                                List<IPAddress>? lsIP = new(), lsIPv6 = new(), lsIPv4 = new();
                                 if (!string.IsNullOrEmpty(ips))
                                 {
                                     foreach (string _ip in ips.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                                     {
                                         if (IPAddress.TryParse(_ip.Trim(), out var ip))
                                         {
-                                            if (!lsIP.Contains(ip))
-                                                lsIP.Add(ip);
+                                            if (ip.AddressFamily == AddressFamily.InterNetworkV6 && !lsIPv6.Contains(ip))
+                                                lsIPv6.Add(ip);
+                                            else if (ip.AddressFamily == AddressFamily.InterNetwork && !lsIPv4.Contains(ip))
+                                                lsIPv4.Add(ip);
                                         }
                                     }
                                 }
-                                bool customIp = lsIP.Count >= 1;
+                                bool customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
                                 foreach (var str in jeHosts.EnumerateArray())
                                 {
                                     string[] splitArray = Regex.Split(str.ToString().Trim(), @"\s*->\s*");
@@ -85,7 +89,8 @@ namespace XboxDownload
                                     {
                                         Branch = branch,
                                         Sni = sni,
-                                        IPs = lsIP.Count >= 1 ? lsIP.ToArray() : null,
+                                        IPv4s = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
+                                        IPv6s = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
                                         CustomIP = customIp
                                     };
                                     if (host.StartsWith('*'))
@@ -371,8 +376,14 @@ namespace XboxDownload
                                                         }
                                                     }
                                                 }
-                                                else if (Properties.Settings.Default.RecordLog)
+                                                else
                                                 {
+                                                    StringBuilder sb = new();
+                                                    sb.Append("HTTP/1.1 500 Server Error\r\n");
+                                                    sb.Append("Content-Type: text/html\r\n");
+                                                    sb.Append("Content-Length: 0\r\n\r\n");
+                                                    ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
+                                                    ssl.Flush();
                                                     parentForm.SaveLog("HTTP 500", "域名 packagespc.xboxlive.com 没法访问，请把此域名加入强制加密DNS列表，选择使用国外DoH服务器、并且勾上“设置本机 DNS”。", ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0xFF0000);
                                                 }
                                             }
@@ -427,7 +438,8 @@ namespace XboxDownload
                                                     {
                                                         Branch = proxy2.Branch,
                                                         Sni = proxy2.Sni,
-                                                        IPs = proxy2.IPs,
+                                                        IPv4s = proxy2.IPv4s,
+                                                        IPv6s = proxy2.IPv6s,
                                                         CustomIP = proxy2.CustomIP
                                                     };
                                                     dicSniProxy.TryAdd(_host, proxy);
@@ -438,10 +450,17 @@ namespace XboxDownload
                                                 if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("Proxy", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
                                                 bFileFound = true;
                                                 IPAddress[]? ips = null;
-                                                if (proxy.IPs == null || proxy.IPs.Length == 0 || (!proxy.CustomIP && DateTime.Compare(proxy.Expired, DateTime.Now) < 0))
+                                                if (proxy.CustomIP && proxy.IPs == null)
+                                                {
+                                                    if (Properties.Settings.Default.SniProxysIPv6 && Form1.bIPv6Support && proxy.IPv6s != null || proxy.IPv4s == null)
+                                                        proxy.IPs = proxy.IPv6s;
+                                                    else
+                                                        proxy.IPs = proxy.IPv4s;
+                                                }
+                                                else if (proxy.IPs == null || (!proxy.CustomIP && DateTime.Compare(proxy.Expired, DateTime.Now) < 0))
                                                 {
                                                     await proxy.Semaphore.WaitAsync();
-                                                    if (proxy.IPs == null || proxy.IPs.Length == 0 || (!proxy.CustomIP && DateTime.Compare(proxy.Expired, DateTime.Now) < 0))
+                                                    if (proxy.IPs == null || (!proxy.CustomIP && DateTime.Compare(proxy.Expired, DateTime.Now) < 0))
                                                     {
                                                         proxy.IPs = null;
                                                         string domain = proxy.Branch ?? _host;
@@ -550,11 +569,11 @@ namespace XboxDownload
                                                 ips ??= proxy.IPs?.Length >= 2 ? proxy.IPs.OrderBy(a => Guid.NewGuid()).Take(16).ToArray() : proxy.IPs;
 
                                                 string? errMessae = null;
-                                                if (ips != null && ips.Length >= 1)
+                                                if (ips != null)
                                                 {
                                                     if (!ClassWeb.SniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out IPAddress? remoteIP, out errMessae))
                                                     {
-                                                        if (!proxy.CustomIP && remoteIP == null) proxy.IPs = null;
+                                                        if (!proxy.CustomIP) proxy.IPs = null;
                                                     }
                                                 }
                                                 else errMessae = "Unable to query domain " + _host + ".";

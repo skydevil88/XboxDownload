@@ -11,7 +11,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using System.Web;
 using NetFwTypeLib;
 
 namespace XboxDownload
@@ -346,11 +345,7 @@ namespace XboxDownload
             Task.Run(async () =>
             {
                 bIPv6Support = await ClassWeb.TestIPv6();
-                if (bIPv6Support)
-                {
-                    bIPv6Support = true;
-                    SaveLog("提示信息", "检测到正在使用IPv6联网，如果加速主机下载(Xbox、PS)，必需进入路由器后台关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
-                }
+                if (bIPv6Support) SaveLog("提示信息", "检测到正在使用IPv6联网，如果加速主机下载(Xbox、PS)，必需进入路由器后台关闭，PC用户忽略此信息。", "localhost", 0x0000FF);
             });
             if (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build >= 1803)
             {
@@ -510,7 +505,6 @@ namespace XboxDownload
                     if (cbAppxDrive.Items.Count == 0 && gbAddAppxPackage.Visible)
                     {
                         LinkAppxRefreshDrive_LinkClicked(null, null);
-                        GetEACdn();
                     }
                     break;
             }
@@ -1243,7 +1237,18 @@ namespace XboxDownload
                 }
                 ckbBetterAkamaiIP.Enabled = true;
                 linkRepairDNS.Enabled = cbLocalIP.Enabled = false;
-                if (Properties.Settings.Default.SniProxy) linkSniProxy.Text = "清理";
+                if (Properties.Settings.Default.SniProxy)
+                {
+                    linkSniProxy.Text = "清理";
+                    foreach (var proxy in HttpsListen.dicSniProxy.Values)
+                    {
+                        proxy.IPs = null;
+                    }
+                    _ = Task.Run(async () =>
+                    {
+                        bIPv6Support = await ClassWeb.TestIPv6();
+                    });
+                }
                 else linkSniProxy.Enabled = false;
                 UpdateHosts(true);
                 if (Properties.Settings.Default.EAStore) linkRestartEABackgroundService.Enabled = true;
@@ -1726,9 +1731,13 @@ namespace XboxDownload
         {
             if (bServiceFlag)
             {
+                Task.Run(async () =>
+                {
+                    bIPv6Support = await ClassWeb.TestIPv6();
+                });
                 foreach (var proxy in HttpsListen.dicSniProxy.Values)
                 {
-                    if (!proxy.CustomIP) proxy.IPs = null;
+                    proxy.IPs = null;
                 }
                 SaveLog("提示信息", "已清理本地代理服务DNS缓存。", "localhost", 0x008000);
             }
@@ -3906,7 +3915,15 @@ namespace XboxDownload
             if (string.IsNullOrEmpty(url)) return;
             Market market = (Market)cbGameMarket.SelectedItem;
             string language = market.language;
-            if (Regex.IsMatch(url, "^https?://marketplace.xbox.com/"))
+            string pat =
+                    @"^https?://www\.xbox\.com(/[^/]*)?/games/store/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^https?://www\.microsoft\.com(/[^/]*)?/p/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^https?://www\.microsoft\.com/store/productId/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^https?://apps\.microsoft\.com(/store)?/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"productid=(?<productId>[a-zA-Z0-9]{12})|" +
+                    @"^(?<productId>[a-zA-Z0-9]{12})$";
+            Match result = Regex.Match(url, pat, RegexOptions.IgnoreCase);
+            if (result.Success)
             {
                 pbGame.Image = pbGame.InitialImage;
                 tbGameTitle.Clear();
@@ -3922,46 +3939,14 @@ namespace XboxDownload
                 linkCompare.Enabled = false;
                 linkGameWebsite.Enabled = false;
                 this.cbGameBundled.SelectedIndexChanged -= new EventHandler(this.CbGameBundled_SelectedIndexChanged);
-                url = Regex.Replace(url, @"(/[a-zA-Z]{2}-[a-zA-Z]{2})?/Product/", "/" + language + "/Product/");
+                string productId = result.Groups["productId"].Value.ToUpperInvariant();
+                url = "https://www.microsoft.com/" + language + "/p/_/" + productId;
                 linkGameWebsite.Links[0].LinkData = url;
-                tbGameUrl.Text = url;
-                ThreadPool.QueueUserWorkItem(delegate { Xbox360Marketplace(url, language); });
+                ThreadPool.QueueUserWorkItem(delegate { XboxStore(market, productId); });
             }
             else
             {
-                string pat =
-                    @"^https?://www\.xbox\.com(/[^/]*)?/games/store/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^https?://www\.microsoft\.com(/[^/]*)?/p/[^/]+/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^https?://www\.microsoft\.com/store/productId/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^https?://apps\.microsoft\.com(/store)?/detail(/[^/]+)?/(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"productid=(?<productId>[a-zA-Z0-9]{12})|" +
-                    @"^(?<productId>[a-zA-Z0-9]{12})$";
-                Match result = Regex.Match(url, pat, RegexOptions.IgnoreCase);
-                if (result.Success)
-                {
-                    pbGame.Image = pbGame.InitialImage;
-                    tbGameTitle.Clear();
-                    tbGameDeveloperName.Clear();
-                    tbGameCategory.Clear();
-                    tbGameOriginalReleaseDate.Clear();
-                    cbGameBundled.Items.Clear();
-                    tbGamePrice.Clear();
-                    tbGameDescription.Clear();
-                    tbGameLanguages.Clear();
-                    lvGame.Items.Clear();
-                    butGame.Enabled = false;
-                    linkCompare.Enabled = false;
-                    linkGameWebsite.Enabled = false;
-                    this.cbGameBundled.SelectedIndexChanged -= new EventHandler(this.CbGameBundled_SelectedIndexChanged);
-                    string productId = result.Groups["productId"].Value.ToUpperInvariant();
-                    url = "https://www.microsoft.com/" + language + "/p/_/" + productId;
-                    linkGameWebsite.Links[0].LinkData = url;
-                    ThreadPool.QueueUserWorkItem(delegate { XboxStore(market, productId); });
-                }
-                else
-                {
-                    MessageBox.Show("无效 URL/ProductId", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("无效 URL/ProductId", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -5141,81 +5126,6 @@ namespace XboxDownload
                 MessageBox.Show("请先启动监听方式并且加勾选 启用HTTP(S)服务、加速微软商店 选项。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
-
-        private void Xbox360Marketplace(string url, string language)
-        {
-            cbGameBundled.Tag = null;
-            string title = string.Empty, publisherName = string.Empty, developerName = string.Empty, category = string.Empty, originalReleaseDate = string.Empty, description = string.Empty;
-            string html = ClassWeb.HttpResponseContent(url);
-            Match result = Regex.Match(html, @"<title>(?<title>.+)</title>");
-            if (result.Success) title = HttpUtility.HtmlDecode(result.Groups["title"].Value);
-            lock (ClassWeb.docLock)
-            {
-                ClassWeb.SetHtmlDocument(html, false);
-                if (ClassWeb.doc != null && ClassWeb.doc.Body != null)
-                {
-                    HtmlElement hec = ClassWeb.doc.GetElementById("ProductPublishing");
-                    if (hec != null)
-                    {
-                        if (hec.Children.Count == 4)
-                        {
-                            result = Regex.Match(hec.OuterHtml, @"<LI><LABEL>[^<]+</LABEL>(?<releasedate>[^<]+)\r\n<LI><LABEL>[^<]+</LABEL>(?<developer>[^<]+)\r\n<LI><LABEL>[^<]+</LABEL>(?<publisher>[^<]+)\r\n<LI><LABEL>[^<]+</LABEL>(?<genres>[^<]+)");
-                            if (result.Success)
-                            {
-                                if (DateTime.TryParse(result.Groups["releasedate"].Value, System.Globalization.CultureInfo.CreateSpecificCulture(language), System.Globalization.DateTimeStyles.None, out DateTime dt))
-                                    originalReleaseDate = dt.ToShortDateString();
-                                publisherName = HttpUtility.HtmlDecode(result.Groups["publisher"].Value).Trim();
-                                developerName = HttpUtility.HtmlDecode(result.Groups["developer"].Value).Trim();
-                                category = HttpUtility.HtmlDecode(result.Groups["genres"].Value).Trim();
-                            }
-                        }
-                        else if (hec.Children.Count == 3)
-                        {
-                            result = Regex.Match(hec.OuterHtml, @"<LABEL>[^<]+</LABEL>(?<releasedate>[^<]+)\r\n<LI><LABEL>[^<]+</LABEL>(?<publisher>[^<]+)\r\n<LI><LABEL>[^<]+</LABEL>(?<genres>[^<]+)");
-                            if (result.Success)
-                            {
-                                if (DateTime.TryParse(result.Groups["releasedate"].Value, System.Globalization.CultureInfo.CreateSpecificCulture(language), System.Globalization.DateTimeStyles.None, out DateTime dt))
-                                {
-                                    originalReleaseDate = dt.ToShortDateString();
-                                    publisherName = HttpUtility.HtmlDecode(result.Groups["publisher"].Value).Trim();
-                                    category = HttpUtility.HtmlDecode(result.Groups["genres"].Value).Trim();
-                                }
-                                else
-                                {
-                                    publisherName = HttpUtility.HtmlDecode(result.Groups["releasedate"].Value).Trim();
-                                    category = HttpUtility.HtmlDecode(result.Groups["genres"].Value).Trim();
-                                }
-                            }
-                        }
-                    }
-                    hec = ClassWeb.doc.GetElementById("overview1");
-                    if (hec != null)
-                    {
-                        description = hec.InnerText.Trim();
-                        result = Regex.Match(hec.OuterHtml, @"<IMG[^>]+src=""(?<boxart>[^""]+)"">");
-                        if (result.Success)
-                        {
-                            try
-                            {
-                                pbGame.LoadAsync(result.Groups["boxart"].Value);
-                            }
-                            catch { }
-                        }
-                    }
-                }
-                ClassWeb.ObjectDisposed();
-            }
-            this.Invoke(new Action(() =>
-            {
-                tbGameTitle.Text = title;
-                tbGameDeveloperName.Text = publisherName + " / " + developerName;
-                tbGameCategory.Text = category;
-                tbGameOriginalReleaseDate.Text = originalReleaseDate;
-                tbGameDescription.Text = description;
-                butGame.Enabled = true;
-                linkGameWebsite.Enabled = true;
-            }));
-        }
         #endregion
 
         #region 选项卡-工具
@@ -5832,168 +5742,6 @@ namespace XboxDownload
                 linkReInstallGamingServices.Text = "一键重装游戏服务";
                 linkReInstallGamingServices.Enabled = linkRestartGamingServices.Enabled = true;
             }));
-        }
-
-        private void GetEACdn()
-        {
-            string? eaCoreIni = null;
-            using (var key = Microsoft.Win32.Registry.LocalMachine)
-            {
-                var rk = key.OpenSubKey(@"SOFTWARE\WOW6432Node\Origin") ?? key.OpenSubKey(@"SOFTWARE\Origin");
-                if (rk != null)
-                {
-                    string? originPath = rk.GetValue("OriginPath", null)?.ToString();
-                    if (originPath != null && File.Exists(originPath))
-                    {
-                        linkEaOriginRepair.Links[0].LinkData = originPath;
-                        eaCoreIni = Path.GetDirectoryName(originPath) + "\\EACore.ini";
-                    }
-                    rk.Close();
-                }
-            }
-            if (string.IsNullOrEmpty(eaCoreIni))
-            {
-                labelStatusEACdn.Text = "当前使用CDN：没有安装 Origin";
-                return;
-            }
-            gpEACdn.Tag = eaCoreIni;
-            string CdnOverride = Program.FilesIniRead("Feature", "CdnOverride", eaCoreIni).Trim();
-            switch (CdnOverride.ToLower())
-            {
-                case "akamai":
-                    rbEACdn1.Checked = true;
-                    labelStatusEACdn.Text = "当前使用CDN：Akamai";
-                    break;
-                case "level3":
-                    rbEACdn2.Checked = true;
-                    labelStatusEACdn.Text = "当前使用CDN：Level3";
-                    break;
-                default:
-                    rbEACdn0.Checked = true;
-                    labelStatusEACdn.Text = "当前使用CDN：自动";
-                    break;
-            }
-        }
-
-        private void ButEACdn_Click(object sender, EventArgs e)
-        {
-            if (gpEACdn.Tag == null) GetEACdn();
-            string? eaCoreIni = gpEACdn.Tag?.ToString();
-            if (string.IsNullOrEmpty(eaCoreIni))
-            {
-                MessageBox.Show("没有安装 EA Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                return;
-            }
-            string status;
-            if (rbEACdn1.Checked)
-            {
-                Program.FilesIniWrite("Feature", "CdnOverride", "akamai", eaCoreIni);
-                status = "当前使用CDN：Akamai";
-            }
-            else if (rbEACdn2.Checked)
-            {
-                Program.FilesIniWrite("Feature", "CdnOverride", "level3", eaCoreIni);
-                status = "当前使用CDN：Level3";
-            }
-            else
-            {
-                Program.FilesIniWrite("Feature", null, null, eaCoreIni);
-                status = "当前使用CDN：自动";
-            }
-            labelStatusEACdn.Text = status;
-        }
-
-        private void LinkEaOriginRepair_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (gpEACdn.Tag == null) GetEACdn();
-            if (gpEACdn.Tag == null)
-            {
-                MessageBox.Show("没有安装 EA Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                return;
-            }
-            if (MessageBox.Show("此操作将删除Origin缓存文件和登录信息，执行下一步之前请先退出Origin，是否继续？", "修复 EA Origin", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-            {
-                Process[] processes = Process.GetProcessesByName("Origin");
-                if (processes.Length == 0)
-                {
-                    DirectoryInfo di1 = new(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Origin");
-                    DirectoryInfo di2 = new(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Local\\Origin");
-                    try
-                    {
-                        if (di1.Exists) di1.Delete(true);
-                        if (di2.Exists) di2.Delete(true);
-                    }
-                    catch { }
-                    string? path = e.Link.LinkData?.ToString();
-                    if (path != null) Process.Start(path);
-                }
-                else
-                {
-                    MessageBox.Show("请先退出 Origin。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-            }
-        }
-
-        private void LinkEaOriginNoUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (gpEACdn.Tag == null) GetEACdn();
-            string? eaCoreIni = gpEACdn.Tag?.ToString();
-            if (string.IsNullOrEmpty(eaCoreIni))
-            {
-                MessageBox.Show("没有安装 EA Origin", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                return;
-            }
-            linkEaOriginNoUpdate.Enabled = false;
-            Task.Run(() =>
-            {
-                Process[] processes = Process.GetProcessesByName("Origin");
-                if (processes.Length == 1)
-                {
-                    try
-                    {
-                        processes[0].Kill();
-                    }
-                    catch { }
-                }
-                ServiceController? service = ServiceController.GetServices().Where(s => s.ServiceName == "Origin Web Helper Service").SingleOrDefault();
-                if (service != null)
-                {
-                    if (service.Status == ServiceControllerStatus.Running)
-                    {
-                        service.Stop();
-                        service.WaitForStatus(ServiceControllerStatus.Stopped);
-                    }
-                }
-                Program.FilesIniWrite("Bootstrap", "EnableUpdating", "false", eaCoreIni);
-                using (var key = Microsoft.Win32.Registry.LocalMachine)
-                {
-                    var rk = key.CreateSubKey(@"SOFTWARE\WOW6432Node\Electronic Arts\EA Desktop");
-                    rk.SetValue("InstallSuccessful", true);
-                }
-                Thread.Sleep(3000);
-                string dllPath = Path.GetDirectoryName(gpEACdn.Tag?.ToString()) + "\\version.dll";
-                try
-                {
-                    using FileStream fs = new(dllPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                    fs.Write(Properties.Resource.version, 0, Properties.Resource.version.Length);
-                    fs.Flush();
-                    fs.Close();
-                }
-                catch (Exception ex)
-                {
-                    this.Invoke(new Action(() =>
-                    {
-                        linkEaOriginNoUpdate.Enabled = true;
-                        MessageBox.Show("复制文件出错，信息：" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }));
-                    return;
-                }
-                this.Invoke(new Action(() =>
-                {
-                    linkEaOriginNoUpdate.Enabled = true;
-                    MessageBox.Show("已经成功禁止 Origin 强制更新到 EA App。\n\n注：如果不生效请检查 " + dllPath + " 是否被杀毒软件删除。", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }));
-            });
         }
         #endregion
     }

@@ -1235,7 +1235,7 @@
     <value>1214, 398</value>
   </data>
   <data name="butStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 104</value>
+    <value>199, 77</value>
   </data>
   <data name="butStart.TabIndex" type="System.Int32, mscorlib">
     <value>100</value>
@@ -1541,13 +1541,13 @@
     <value>8, 478</value>
   </data>
   <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1179, 24</value>
+    <value>1395, 24</value>
   </data>
   <data name="label22.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
   </data>
   <data name="label22.Text" xml:space="preserve">
-    <value>主机使用：点击开始监听，然后在 Xbox、PS、NS 中把 DNS IP 设为本机IP，辅助DNS留空。 注意：Xbox、PS 使用必需进路由器后台关闭 IPv6。</value>
+    <value>主机使用：点击开始监听，然后在 Xbox、PS、NS 中把 DNS IP 设为本机IP，辅助DNS留空；下载完成后改回自动获取。 注意：Xbox、PS 使用必需进路由器后台关闭 IPv6。</value>
   </data>
   <data name="&gt;&gt;label22.Name" xml:space="preserve">
     <value>label22</value>
@@ -4297,14 +4297,14 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label31.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 60</value>
+    <value>1205, 60</value>
   </data>
   <data name="label31.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
   </data>
   <data name="label31.Text" xml:space="preserve">
     <value>PC下载完整游戏文件复制到 Xbox 移动硬盘并改名为 Content ID ，接回 Xbox 把游戏移动到另外一块硬盘就可以使用。
-注：1、不要在移动硬盘上启动游戏，否则游戏会被重新覆盖下载。2、应用不支持硬盘导入。</value>
+注：1、不要在移动硬盘上启动游戏，否则游戏会被重新覆盖下载。2、应用不支持硬盘导入。3、Xbox主机需要在线联网。</value>
   </data>
   <data name="&gt;&gt;label31.Name" xml:space="preserve">
     <value>label31</value>
@@ -6494,310 +6494,6 @@
   <data name="&gt;&gt;tabStore.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="linkLabel4.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkLabel4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>976, 124</value>
-  </data>
-  <data name="linkLabel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>315, 24</value>
-  </data>
-  <data name="linkLabel4.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="linkLabel4.Text" xml:space="preserve">
-    <value>下载 Origin 客户端 (10.5.122.52971)</value>
-  </data>
-  <data name="&gt;&gt;linkLabel4.Name" xml:space="preserve">
-    <value>linkLabel4</value>
-  </data>
-  <data name="&gt;&gt;linkLabel4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkLabel4.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkLabel4.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="linkLabel3.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkLabel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>750, 124</value>
-  </data>
-  <data name="linkLabel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 24</value>
-  </data>
-  <data name="linkLabel3.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="linkLabel3.Text" xml:space="preserve">
-    <value>Github F**k_off_EA_App</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.Name" xml:space="preserve">
-    <value>linkLabel3</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkLabel3.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>340, 124</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>308, 24</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="linkEaOriginNoUpdate.Text" xml:space="preserve">
-    <value>禁止 Origin 强制更新到 EA app (V3)</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Name" xml:space="preserve">
-    <value>linkEaOriginNoUpdate</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginNoUpdate.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="linkEaOriginRepair.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="linkEaOriginRepair.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 124</value>
-  </data>
-  <data name="linkEaOriginRepair.Size" type="System.Drawing.Size, System.Drawing">
-    <value>325, 24</value>
-  </data>
-  <data name="linkEaOriginRepair.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="linkEaOriginRepair.Text" xml:space="preserve">
-    <value>修复 Origin "发生了些意料之外的事情"</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Name" xml:space="preserve">
-    <value>linkEaOriginRepair</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;linkEaOriginRepair.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="label51.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>750, 20</value>
-  </data>
-  <data name="label51.Size" type="System.Drawing.Size, System.Drawing">
-    <value>477, 96</value>
-  </data>
-  <data name="label51.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="label51.Text" xml:space="preserve">
-    <value>使用说明：
-1. 选择CDN服务器后点击应用。
-2. 重启Origin生效。
-提示：服务中勾选“指定CDN Akamai”，此设置将被忽略。
-</value>
-  </data>
-  <data name="&gt;&gt;label51.Name" xml:space="preserve">
-    <value>label51</value>
-  </data>
-  <data name="&gt;&gt;label51.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label51.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;label51.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="labelStatusEACdn.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="labelStatusEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 82</value>
-  </data>
-  <data name="labelStatusEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 24</value>
-  </data>
-  <data name="labelStatusEACdn.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="labelStatusEACdn.Text" xml:space="preserve">
-    <value>当前使用CDN：</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Name" xml:space="preserve">
-    <value>labelStatusEACdn</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;labelStatusEACdn.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="butEACdn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="butEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>423, 36</value>
-  </data>
-  <data name="butEACdn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 2, 3, 2</value>
-  </data>
-  <data name="butEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 36</value>
-  </data>
-  <data name="butEACdn.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="butEACdn.Text" xml:space="preserve">
-    <value>应用</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Name" xml:space="preserve">
-    <value>butEACdn</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;butEACdn.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="rbEACdn2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbEACdn2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>298, 40</value>
-  </data>
-  <data name="rbEACdn2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 28</value>
-  </data>
-  <data name="rbEACdn2.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rbEACdn2.Text" xml:space="preserve">
-    <value>Level3</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Name" xml:space="preserve">
-    <value>rbEACdn2</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn2.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="rbEACdn1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbEACdn1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>140, 40</value>
-  </data>
-  <data name="rbEACdn1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 28</value>
-  </data>
-  <data name="rbEACdn1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rbEACdn1.Text" xml:space="preserve">
-    <value>Akamai (推荐)</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Name" xml:space="preserve">
-    <value>rbEACdn1</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn1.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="rbEACdn0.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbEACdn0.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 40</value>
-  </data>
-  <data name="rbEACdn0.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 28</value>
-  </data>
-  <data name="rbEACdn0.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="rbEACdn0.Text" xml:space="preserve">
-    <value>自动 (默认)</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Name" xml:space="preserve">
-    <value>rbEACdn0</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.Parent" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;rbEACdn0.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="gpEACdn.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="gpEACdn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 533</value>
-  </data>
-  <data name="gpEACdn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1436, 164</value>
-  </data>
-  <data name="gpEACdn.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="gpEACdn.Text" xml:space="preserve">
-    <value>EA Origin 切换CDN服务器</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Name" xml:space="preserve">
-    <value>gpEACdn</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.Parent" xml:space="preserve">
-    <value>tabTools</value>
-  </data>
-  <data name="&gt;&gt;gpEACdn.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="linkAppGamingServices.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -6968,7 +6664,7 @@ start ms-windows-store://pdp/?productid=9MWPM2CQNLHN
     <value>tabTools</value>
   </data>
   <data name="&gt;&gt;gbGamingServices.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="linkFixAppxDrive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7278,7 +6974,7 @@ HRESULT: 0x80080207, 哈希值不相符（安装包有坏块，改用.com域名�
     <value>tabTools</value>
   </data>
   <data name="&gt;&gt;gbAddAppxPackage.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="linkUsbDevice.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7613,7 +7309,7 @@ U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行�
     <value>tabTools</value>
   </data>
   <data name="&gt;&gt;groupBox8.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="tabTools.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 33</value>

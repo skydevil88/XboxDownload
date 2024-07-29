@@ -36,6 +36,11 @@
             tbHost = new TextBox();
             label1 = new Label();
             dataGridView1 = new DataGridView();
+            Column1 = new DataGridViewCheckBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             butTest = new Button();
@@ -44,11 +49,6 @@
             rbIPv6 = new RadioButton();
             rbIPv4 = new RadioButton();
             cbCheckAll = new CheckBox();
-            Column1 = new DataGridViewCheckBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
-            Column5 = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox2.SuspendLayout();
@@ -66,7 +66,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1208, 85);
+            groupBox1.Size = new Size(1224, 85);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "域名解释";
@@ -87,7 +87,7 @@
             // tbIP
             // 
             tbIP.BackColor = SystemColors.Window;
-            tbIP.Location = new Point(648, 32);
+            tbIP.Location = new Point(647, 32);
             tbIP.Name = "tbIP";
             tbIP.ReadOnly = true;
             tbIP.Size = new Size(380, 30);
@@ -113,7 +113,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 35);
+            label1.Location = new Point(13, 35);
             label1.Name = "label1";
             label1.Size = new Size(46, 24);
             label1.TabIndex = 0;
@@ -132,108 +132,10 @@
             dataGridView1.RowHeadersWidth = 40;
             dataGridView1.RowTemplate.Height = 32;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(1202, 385);
+            dataGridView1.Size = new Size(1218, 385);
             dataGridView1.TabIndex = 2;
             dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
             dataGridView1.RowPostPaint += Dgv_RowPostPaint;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(dataGridView1);
-            groupBox2.Controls.Add(tableLayoutPanel1);
-            groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Location = new Point(0, 85);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1208, 459);
-            groupBox2.TabIndex = 2;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "解释域名IP（双击选择）";
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel1.Controls.Add(butTest, 1, 0);
-            tableLayoutPanel1.Controls.Add(linkLabel1, 2, 0);
-            tableLayoutPanel1.Controls.Add(panel1, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(3, 411);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1202, 45);
-            tableLayoutPanel1.TabIndex = 3;
-            // 
-            // butTest
-            // 
-            butTest.Anchor = AnchorStyles.None;
-            butTest.Location = new Point(544, 5);
-            butTest.Name = "butTest";
-            butTest.Size = new Size(112, 34);
-            butTest.TabIndex = 0;
-            butTest.Text = "查询";
-            butTest.UseVisualStyleBackColor = true;
-            butTest.Click += ButTest_Click;
-            // 
-            // linkLabel1
-            // 
-            linkLabel1.Anchor = AnchorStyles.Right;
-            linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(1050, 10);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(149, 24);
-            linkLabel1.TabIndex = 1;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "添加 DoH 服务器";
-            linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(rbIPv6);
-            panel1.Controls.Add(rbIPv4);
-            panel1.Controls.Add(cbCheckAll);
-            panel1.Location = new Point(3, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(315, 39);
-            panel1.TabIndex = 0;
-            // 
-            // rbIPv6
-            // 
-            rbIPv6.AutoSize = true;
-            rbIPv6.Location = new Point(164, 5);
-            rbIPv6.Name = "rbIPv6";
-            rbIPv6.Size = new Size(71, 28);
-            rbIPv6.TabIndex = 1;
-            rbIPv6.Text = "IPv6";
-            rbIPv6.UseVisualStyleBackColor = true;
-            // 
-            // rbIPv4
-            // 
-            rbIPv4.AutoSize = true;
-            rbIPv4.Checked = true;
-            rbIPv4.Location = new Point(87, 5);
-            rbIPv4.Name = "rbIPv4";
-            rbIPv4.Size = new Size(71, 28);
-            rbIPv4.TabIndex = 0;
-            rbIPv4.TabStop = true;
-            rbIPv4.Text = "IPv4";
-            rbIPv4.UseVisualStyleBackColor = true;
-            // 
-            // cbCheckAll
-            // 
-            cbCheckAll.Anchor = AnchorStyles.Left;
-            cbCheckAll.AutoSize = true;
-            cbCheckAll.Checked = true;
-            cbCheckAll.CheckState = CheckState.Checked;
-            cbCheckAll.Location = new Point(9, 6);
-            cbCheckAll.Name = "cbCheckAll";
-            cbCheckAll.Size = new Size(72, 28);
-            cbCheckAll.TabIndex = 2;
-            cbCheckAll.Text = "全选";
-            cbCheckAll.UseVisualStyleBackColor = true;
-            cbCheckAll.CheckedChanged += CbCheckAll_CheckedChanged;
             // 
             // Column1
             // 
@@ -282,12 +184,110 @@
             Column5.SortMode = DataGridViewColumnSortMode.NotSortable;
             Column5.Width = 310;
             // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(dataGridView1);
+            groupBox2.Controls.Add(tableLayoutPanel1);
+            groupBox2.Dock = DockStyle.Fill;
+            groupBox2.Location = new Point(0, 85);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(1224, 459);
+            groupBox2.TabIndex = 2;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "解释域名IP（双击选择）";
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tableLayoutPanel1.Controls.Add(butTest, 1, 0);
+            tableLayoutPanel1.Controls.Add(linkLabel1, 2, 0);
+            tableLayoutPanel1.Controls.Add(panel1, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Bottom;
+            tableLayoutPanel1.Location = new Point(3, 411);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(1218, 45);
+            tableLayoutPanel1.TabIndex = 3;
+            // 
+            // butTest
+            // 
+            butTest.Anchor = AnchorStyles.None;
+            butTest.Location = new Point(552, 5);
+            butTest.Name = "butTest";
+            butTest.Size = new Size(112, 34);
+            butTest.TabIndex = 0;
+            butTest.Text = "查询";
+            butTest.UseVisualStyleBackColor = true;
+            butTest.Click += ButTest_Click;
+            // 
+            // linkLabel1
+            // 
+            linkLabel1.Anchor = AnchorStyles.Right;
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(1066, 10);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(149, 24);
+            linkLabel1.TabIndex = 1;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "添加 DoH 服务器";
+            linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(rbIPv6);
+            panel1.Controls.Add(rbIPv4);
+            panel1.Controls.Add(cbCheckAll);
+            panel1.Location = new Point(3, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(314, 39);
+            panel1.TabIndex = 0;
+            // 
+            // rbIPv6
+            // 
+            rbIPv6.AutoSize = true;
+            rbIPv6.Location = new Point(163, 6);
+            rbIPv6.Name = "rbIPv6";
+            rbIPv6.Size = new Size(71, 28);
+            rbIPv6.TabIndex = 1;
+            rbIPv6.Text = "IPv6";
+            rbIPv6.UseVisualStyleBackColor = true;
+            // 
+            // rbIPv4
+            // 
+            rbIPv4.AutoSize = true;
+            rbIPv4.Checked = true;
+            rbIPv4.Location = new Point(86, 6);
+            rbIPv4.Name = "rbIPv4";
+            rbIPv4.Size = new Size(71, 28);
+            rbIPv4.TabIndex = 0;
+            rbIPv4.TabStop = true;
+            rbIPv4.Text = "IPv4";
+            rbIPv4.UseVisualStyleBackColor = true;
+            // 
+            // cbCheckAll
+            // 
+            cbCheckAll.Anchor = AnchorStyles.Left;
+            cbCheckAll.AutoSize = true;
+            cbCheckAll.Checked = true;
+            cbCheckAll.CheckState = CheckState.Checked;
+            cbCheckAll.Location = new Point(9, 5);
+            cbCheckAll.Name = "cbCheckAll";
+            cbCheckAll.Size = new Size(72, 28);
+            cbCheckAll.TabIndex = 2;
+            cbCheckAll.Text = "全选";
+            cbCheckAll.UseVisualStyleBackColor = true;
+            cbCheckAll.CheckedChanged += CbCheckAll_CheckedChanged;
+            // 
             // FormHost
             // 
             AcceptButton = butTest;
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1208, 544);
+            ClientSize = new Size(1224, 544);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;

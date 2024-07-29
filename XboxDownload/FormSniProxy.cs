@@ -13,7 +13,7 @@ namespace XboxDownload
         {
             { "Steam 商店社区", new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "help.steampowered.com", "checkout.steampowered.com", "steamcommunity.com" } },
             { "GitHub", new string[] { "*github.com", "*githubusercontent.com", "*github.io", "*github.blog", "*githubstatus.com", "*githubassets.com" } },
-            //{ "Pixiv", new string[] { "*pixiv.net | 210.140.92.187", "*.pximg.net | 210.140.92.141" } },
+            //{ "Wikipedia", new string[] { "*wikipedia.org, *wikimedia.org, *mediawiki.org, *wikibooks.org, *wikidata.org, *wikinews.org, *wikiquote.org, *wikisource.org, *wikiversity.org, *wikivoyage.org, *wiktionary.org, *wikimediafoundation.org, *wmfusercontent.org, *wikifunctions.org, w.wiki | 208.80.153.224", "upload.wikimedia.org | 208.80.153.240" } },
             { "Pixiv", new string[] { "*pixiv.net -> pixiv.net", "*.pximg.net -> pximg.net" } },
         };
 
@@ -80,7 +80,6 @@ namespace XboxDownload
                 Font font = cbSniProxysIPv6.Font;
                 cbSniProxysIPv6.Font = new Font(font.FontFamily, font.Size, FontStyle.Strikeout, GraphicsUnit.Point);
                 cbSniProxysIPv6.ForeColor = Color.Red;
-                linkTestIPv6.Visible = true;
             }
         }
 
@@ -133,14 +132,20 @@ namespace XboxDownload
                 Font font = cbSniProxysIPv6.Font;
                 cbSniProxysIPv6.Font = new Font(font.FontFamily, font.Size);
                 cbSniProxysIPv6.ForeColor = Color.Empty;
-                cbSniProxysIPv6.Text += " (可用)";
-                linkTestIPv6.Visible = false;
+                MessageBox.Show("当前网络可以使用IPv6。", "检测IPv6", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
+                Font font = cbSniProxysIPv6.Font;
+                cbSniProxysIPv6.Font = new Font(font.FontFamily, font.Size, FontStyle.Strikeout, GraphicsUnit.Point);
+                cbSniProxysIPv6.ForeColor = Color.Red;
                 MessageBox.Show("当前网络不支持IPv6。", "检测IPv6", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                linkTestIPv6.Enabled = true;
             }
+            foreach (var proxy in HttpsListen.dicSniProxy.Values)
+            {
+                if (proxy.CustomIP) proxy.IPs = null;
+            }
+            linkTestIPv6.Enabled = true;
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -186,9 +191,9 @@ namespace XboxDownload
                     {
                         if (reIP.IsMatch(proxy[1]) && IPAddress.TryParse(proxy[1], out var ip))
                         {
-                            if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                            if (ip.AddressFamily == AddressFamily.InterNetworkV6 && !lsIPv6.Contains(ip))
                                 lsIPv6.Add(ip);
-                            else if (ip.AddressFamily == AddressFamily.InterNetwork)
+                            else if (ip.AddressFamily == AddressFamily.InterNetwork && !lsIPv4.Contains(ip))
                                 lsIPv4.Add(ip);
                         }
                         else sni = Regex.Replace(proxy[1].ToLower(), @"^(https?://)?([^/|:|\s]+).*$", "$2").Trim();
@@ -199,9 +204,9 @@ namespace XboxDownload
                         {
                             if (IPAddress.TryParse(_ip.Trim(), out var ip))
                             {
-                                if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                if (ip.AddressFamily == AddressFamily.InterNetworkV6 && !lsIPv6.Contains(ip))
                                     lsIPv6.Add(ip);
-                                else if (ip.AddressFamily == AddressFamily.InterNetwork)
+                                else if (ip.AddressFamily == AddressFamily.InterNetwork && !lsIPv4.Contains(ip))
                                     lsIPv4.Add(ip);
                             }
                         }
@@ -215,9 +220,9 @@ namespace XboxDownload
                     {
                         if (IPAddress.TryParse(_ip.Trim(), out var ip))
                         {
-                            if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                            if (ip.AddressFamily == AddressFamily.InterNetworkV6 && !lsIPv6.Contains(ip))
                                 lsIPv6.Add(ip);
-                            else if (ip.AddressFamily == AddressFamily.InterNetwork)
+                            else if (ip.AddressFamily == AddressFamily.InterNetwork && !lsIPv4.Contains(ip))
                                 lsIPv4.Add(ip);
                         }
                     }
