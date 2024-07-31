@@ -1267,12 +1267,15 @@ namespace XboxDownload
                     }
                 }
             }
-            Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
-            List<ResouceRecord> lsLocalIP = new() { new ResouceRecord { Datas = localIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
-            foreach (Regex reHost in HttpsListen.dicSniProxy2.Keys)
+            if (Properties.Settings.Default.SniProxy)
             {
-                _ = dicHosts2V4.AddOrUpdate(reHost, lsLocalIP, (oldkey, oldvalue) => lsLocalIP);
-                _ = dicHosts2V6.AddOrUpdate(reHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                Byte[] localIP = IPAddress.Parse(Properties.Settings.Default.LocalIP).GetAddressBytes();
+                List<ResouceRecord> lsLocalIP = new() { new ResouceRecord { Datas = localIP, TTL = 100, QueryClass = 1, QueryType = QueryType.A } };
+                foreach (Regex reHost in HttpsListen.dicSniProxy2.Keys)
+                {
+                    _ = dicHosts2V4.AddOrUpdate(reHost, lsLocalIP, (oldkey, oldvalue) => lsLocalIP);
+                    _ = dicHosts2V6.AddOrUpdate(reHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
+                }
             }
         }
 
