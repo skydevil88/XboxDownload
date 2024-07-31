@@ -20,6 +20,7 @@ shared-static-prod.epicgames.com
 
 ####################### Steam ########################
 *.akamai.steamstatic.com
+video.steamstatic.com
 
 ####################### Other ########################
 *.akamai.net

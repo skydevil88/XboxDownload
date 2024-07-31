@@ -107,6 +107,7 @@ namespace XboxDownload
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
             ckbSniProxy.Checked = Properties.Settings.Default.SniProxy;
+            ckbSteamVideo.Checked = Properties.Settings.Default.SteamVideo;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -1089,6 +1090,7 @@ namespace XboxDownload
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
                 Properties.Settings.Default.SniProxy = ckbSniProxy.Checked;
+                Properties.Settings.Default.SteamVideo = ckbSteamVideo.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1466,6 +1468,10 @@ namespace XboxDownload
                             {
                                 sb.AppendLine(Properties.Settings.Default.LocalIP + " " + host);
                             }
+                        }
+                        if (Properties.Settings.Default.SteamVideo)
+                        {
+                            sb.AppendLine(Properties.Settings.Default.LocalIP + " video.st.dl.eccdnx.com");
                         }
                         DataTable dt = Form1.dtHosts.Copy();
                         dt.RejectChanges();

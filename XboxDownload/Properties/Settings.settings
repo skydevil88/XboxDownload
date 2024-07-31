@@ -111,7 +111,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="SniPorxyExpired" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">720</Value>
     </Setting>
     <Setting Name="LocalIP" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -127,6 +127,9 @@
     </Setting>
     <Setting Name="Authorization" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SteamVideo" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

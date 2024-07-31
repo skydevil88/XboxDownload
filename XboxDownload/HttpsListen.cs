@@ -44,6 +44,7 @@ namespace XboxDownload
             sanBuilder.AddDnsName("epicgames-download1-1251447533.file.myqcloud.com");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
+            sanBuilder.AddDnsName("video.st.dl.eccdnx.com");
             if (File.Exists(Form1.resourcePath + "\\SniProxy.json"))
             {
                 List<List<object>>? SniProxy = null;
@@ -415,6 +416,21 @@ namespace XboxDownload
                                         {
                                             bFileFound = true;
                                             _url = "https://" + (Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net") + _filePath;
+                                            StringBuilder sb = new();
+                                            sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
+                                            sb.Append("Content-Type: text/html\r\n");
+                                            sb.Append("Location: " + _url + "\r\n");
+                                            sb.Append("Content-Length: 0\r\n\r\n");
+                                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
+                                            ssl.Write(_headers);
+                                            ssl.Flush();
+                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
+                                        }
+                                        break;
+                                    case "video.st.dl.eccdnx.com":
+                                        {
+                                            bFileFound = true;
+                                            _url = "https://video.steamstatic.com" + _filePath;
                                             StringBuilder sb = new();
                                             sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                                             sb.Append("Content-Type: text/html\r\n");

@@ -457,7 +457,7 @@ namespace XboxDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("720")]
         public int SniPorxyExpired {
             get {
                 return ((int)(this["SniPorxyExpired"]));
@@ -524,6 +524,18 @@ namespace XboxDownload.Properties {
             }
             set {
                 this["Authorization"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SteamVideo {
+            get {
+                return ((bool)(this["SteamVideo"]));
+            }
+            set {
+                this["SteamVideo"] = value;
             }
         }
     }

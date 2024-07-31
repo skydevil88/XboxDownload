@@ -680,6 +680,11 @@ namespace XboxDownload
                     _ = dicHosts2V6.AddOrUpdate(reHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                 }
             }
+            if (Properties.Settings.Default.SteamVideo)
+            {
+                _ = dicServiceV4.TryAdd("video.st.dl.eccdnx.com", lsLocalIP);
+                _ = dicServiceV6.TryAdd("video.st.dl.eccdnx.com", lsEmptyIP);
+            }
             if (Properties.Settings.Default.HttpService)
             {
                 _ = dicServiceV4.TryAdd("packagespc.xboxlive.com", lsLocalIP);
