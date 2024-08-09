@@ -17,10 +17,10 @@ namespace XboxDownload
 {
     public partial class Form1 : Form
     {
-        internal static Boolean bServiceFlag = false, bAutoStartup = false, bIPv6Support = false;
-        internal readonly static String resourcePath = Application.StartupPath + "Resource";
+        internal static bool bServiceFlag = false, bAutoStartup = false, bIPv6Support = false;
+        internal readonly static string resourcePath = Application.StartupPath + "Resource";
         internal static List<Market> lsMarket = new();
-        internal static float dpixRatio = 1;
+        internal static float dpiFactor = 1;
         internal static JsonSerializerOptions jsOptions = new() { PropertyNameCaseInsensitive = true };
         internal static DataTable dtHosts = new("Hosts"), dtDoHServer = new("DoH");
         private readonly DnsListen dnsListen;
@@ -36,22 +36,22 @@ namespace XboxDownload
         {
             InitializeComponent();
 
-            Form1.dpixRatio = Environment.OSVersion.Version.Major >= 10 ? CreateGraphics().DpiX / 96 : Program.Utility.DpiX / 96;
-            if (Form1.dpixRatio > 1)
+            Form1.dpiFactor = Environment.OSVersion.Version.Major >= 10 ? CreateGraphics().DpiX / 96f : Program.Utility.DpiX / 96f;
+            if (Form1.dpiFactor > 1)
             {
                 foreach (ColumnHeader col in lvLog.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
-                dgvIpList.RowHeadersWidth = (int)(dgvIpList.RowHeadersWidth * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
+                dgvIpList.RowHeadersWidth = (int)(dgvIpList.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dgvIpList.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
-                dgvHosts.RowHeadersWidth = (int)(dgvHosts.RowHeadersWidth * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
+                dgvHosts.RowHeadersWidth = (int)(dgvHosts.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dgvHosts.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
-                dgvDevice.RowHeadersWidth = (int)(dgvDevice.RowHeadersWidth * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
+                dgvDevice.RowHeadersWidth = (int)(dgvDevice.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dgvDevice.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
                 foreach (ColumnHeader col in lvGame.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
             }
 
             ClassWeb.HttpClientFactory();
@@ -107,7 +107,6 @@ namespace XboxDownload
             ckbEpicStore.Checked = Properties.Settings.Default.EpicStore;
             ckbUbiStore.Checked = Properties.Settings.Default.UbiStore;
             ckbSniProxy.Checked = Properties.Settings.Default.SniProxy;
-            ckbSteamVideo.Checked = Properties.Settings.Default.SteamVideo;
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
@@ -1090,7 +1089,6 @@ namespace XboxDownload
                 Properties.Settings.Default.EpicStore = ckbEpicStore.Checked;
                 Properties.Settings.Default.UbiStore = ckbUbiStore.Checked;
                 Properties.Settings.Default.SniProxy = ckbSniProxy.Checked;
-                Properties.Settings.Default.SteamVideo = ckbSteamVideo.Checked;
                 Properties.Settings.Default.Save();
 
                 try
@@ -1468,10 +1466,6 @@ namespace XboxDownload
                             {
                                 sb.AppendLine(Properties.Settings.Default.LocalIP + " " + host);
                             }
-                        }
-                        if (Properties.Settings.Default.SteamVideo)
-                        {
-                            sb.AppendLine(Properties.Settings.Default.LocalIP + " video.st.dl.eccdnx.com");
                         }
                         DataTable dt = Form1.dtHosts.Copy();
                         dt.RejectChanges();
@@ -4094,7 +4088,7 @@ namespace XboxDownload
                 lvGameSearch.Items.Clear();
                 if (ls.Count >= 1)
                 {
-                    int size = (int)(25 * Form1.dpixRatio);
+                    int size = (int)(25 * Form1.dpiFactor);
                     imageList1.ImageSize = new Size(size, size);
                     lvGameSearch.Height = ls.Count * (size + 2);
                     lvGameSearch.Visible = true;

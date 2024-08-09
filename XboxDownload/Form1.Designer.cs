@@ -65,7 +65,6 @@
             cbLocalIP = new ComboBox();
             label24 = new Label();
             groupBox1 = new GroupBox();
-            ckbSteamVideo = new CheckBox();
             label8 = new Label();
             tbCnIP2 = new TextBox();
             labelCn2 = new Label();
@@ -610,7 +609,6 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(ckbSteamVideo);
             groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(tbCnIP2);
             groupBox1.Controls.Add(labelCn2);
@@ -684,12 +682,6 @@
             resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
             groupBox1.TabStop = false;
-            // 
-            // ckbSteamVideo
-            // 
-            resources.ApplyResources(ckbSteamVideo, "ckbSteamVideo");
-            ckbSteamVideo.Name = "ckbSteamVideo";
-            ckbSteamVideo.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -3034,6 +3026,5 @@
         public TextBox tbAppIP;
         private Label labelApp;
         private ToolStripMenuItem tsmUseIPCn2;
-        private CheckBox ckbSteamVideo;
     }
 }

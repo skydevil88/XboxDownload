@@ -526,17 +526,5 @@ namespace XboxDownload.Properties {
                 this["Authorization"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SteamVideo {
-            get {
-                return ((bool)(this["SteamVideo"]));
-            }
-            set {
-                this["SteamVideo"] = value;
-            }
-        }
     }
 }

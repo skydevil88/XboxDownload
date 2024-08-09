@@ -44,7 +44,6 @@ namespace XboxDownload
             sanBuilder.AddDnsName("epicgames-download1-1251447533.file.myqcloud.com");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
-            sanBuilder.AddDnsName("video.st.dl.eccdnx.com");
             if (File.Exists(Form1.resourcePath + "\\SniProxy.json"))
             {
                 List<List<object>>? SniProxy = null;
@@ -65,7 +64,7 @@ namespace XboxDownload
                             {
                                 string? sni = item[1]?.ToString();
                                 string? ips = item[2]?.ToString();
-                                List<IPAddress>? lsIP = new(), lsIPv6 = new(), lsIPv4 = new();
+                                List<IPAddress>? lsIPv6 = new(), lsIPv4 = new();
                                 if (!string.IsNullOrEmpty(ips))
                                 {
                                     foreach (string _ip in ips.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
@@ -82,10 +81,10 @@ namespace XboxDownload
                                 bool customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
                                 foreach (var str in jeHosts.EnumerateArray())
                                 {
-                                    string[] splitArray = Regex.Split(str.ToString().Trim(), @"\s*->\s*");
+                                    string[] splitArray = str.ToString().Trim().Split("->", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                                     string host = splitArray[0].Trim();
                                     if (string.IsNullOrEmpty(host) || host.StartsWith('#')) continue;
-                                    string? branch = splitArray.Length > 1 ? splitArray[1].Trim() : null;
+                                    string? branch = splitArray.Length >= 2 ? splitArray[1].Trim() : null;
                                     SniProxy proyx = new()
                                     {
                                         Branch = branch,
@@ -416,21 +415,6 @@ namespace XboxDownload
                                         {
                                             bFileFound = true;
                                             _url = "https://" + (Properties.Settings.Default.EpicCDN ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net") + _filePath;
-                                            StringBuilder sb = new();
-                                            sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                            sb.Append("Content-Type: text/html\r\n");
-                                            sb.Append("Location: " + _url + "\r\n");
-                                            sb.Append("Content-Length: 0\r\n\r\n");
-                                            Byte[] _headers = Encoding.ASCII.GetBytes(sb.ToString());
-                                            ssl.Write(_headers);
-                                            ssl.Flush();
-                                            if (Properties.Settings.Default.RecordLog) parentForm.SaveLog("HTTP 302", _url, ((IPEndPoint)mySocket.RemoteEndPoint!).Address.ToString(), 0x008000);
-                                        }
-                                        break;
-                                    case "video.st.dl.eccdnx.com":
-                                        {
-                                            bFileFound = true;
-                                            _url = "https://video.steamstatic.com" + _filePath;
                                             StringBuilder sb = new();
                                             sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                                             sb.Append("Content-Type: text/html\r\n");

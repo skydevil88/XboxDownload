@@ -14,7 +14,7 @@ namespace XboxDownload
     {
         private Socket? socket = null;
         private readonly Form1 parentForm;
-        public static string[,] dohs = new string[,] { { "阿里云DoH", "https://223.5.5.5/resolve", "" }, { "腾讯云DoH", "https://1.12.12.12/resolve", "" }, { "360 DoH", "https://180.163.249.75/resolve", "" }, { "DNS.SB(Global)", "https://45.11.45.11/dns-query", "" } };
+        public static string[,] dohs = { { "阿里云DoH", "https://223.5.5.5/resolve", "" }, { "腾讯云DoH", "https://1.12.12.12/resolve", "" }, { "360 DoH", "https://180.163.249.75/resolve", "" }, { "DNS.SB(Global)", "https://45.11.45.11/dns-query", "" } };
         public static DoHServer dohServer = new();
         public static Dictionary<string, DoHServer> dicDoHServer = new();
         public static readonly List<ResouceRecord> lsEmptyIP = new();
@@ -679,11 +679,6 @@ namespace XboxDownload
                     _ = dicHosts2V4.AddOrUpdate(reHost, lsLocalIP, (oldkey, oldvalue) => lsLocalIP);
                     _ = dicHosts2V6.AddOrUpdate(reHost, lsEmptyIP, (oldkey, oldvalue) => lsEmptyIP);
                 }
-            }
-            if (Properties.Settings.Default.SteamVideo)
-            {
-                _ = dicServiceV4.TryAdd("video.st.dl.eccdnx.com", lsLocalIP);
-                _ = dicServiceV6.TryAdd("video.st.dl.eccdnx.com", lsEmptyIP);
             }
             if (Properties.Settings.Default.HttpService)
             {

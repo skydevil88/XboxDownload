@@ -17,18 +17,18 @@ namespace XboxDownload
         {
             InitializeComponent();
 
-            if (Form1.dpixRatio > 1)
+            if (Form1.dpiFactor > 1)
             {
-                dataGridView1.RowHeadersWidth = (int)(dataGridView1.RowHeadersWidth * Form1.dpixRatio);
+                dataGridView1.RowHeadersWidth = (int)(dataGridView1.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dataGridView1.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
             }
 
             var json = (ClassGame.Game)js;
             var product = json.Products[index];
             this.productId = product.ProductId;
 
-            int cbWidth = (int)(135 * Form1.dpixRatio), cbHeight = (int)(17 * Form1.dpixRatio);
+            int cbWidth = (int)(135 * Form1.dpiFactor), cbHeight = (int)(17 * Form1.dpiFactor);
             List<Market> lsMarket = new();
             lsMarket.AddRange(new List<Market>
             {

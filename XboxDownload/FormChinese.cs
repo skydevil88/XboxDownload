@@ -8,11 +8,11 @@ namespace XboxDownload
         {
             InitializeComponent();
 
-            if (Form1.dpixRatio > 1)
+            if (Form1.dpiFactor > 1)
             {
-                dgvGames.RowHeadersWidth = (int)(dgvGames.RowHeadersWidth * Form1.dpixRatio);
+                dgvGames.RowHeadersWidth = (int)(dgvGames.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dgvGames.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
             }
         }
 

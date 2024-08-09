@@ -11,17 +11,17 @@ namespace XboxDownload
         {
             InitializeComponent();
 
-            if (Form1.dpixRatio > 1)
+            if (Form1.dpiFactor > 1)
             {
-                dataGridView1.RowHeadersWidth = (int)(dataGridView1.RowHeadersWidth * Form1.dpixRatio);
+                dataGridView1.RowHeadersWidth = (int)(dataGridView1.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dataGridView1.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
-                dataGridView2.RowHeadersWidth = (int)(dataGridView2.RowHeadersWidth * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
+                dataGridView2.RowHeadersWidth = (int)(dataGridView2.RowHeadersWidth * Form1.dpiFactor);
                 foreach (DataGridViewColumn col in dataGridView2.Columns)
-                    col.Width = (int)(col.Width * Form1.dpixRatio);
+                    col.Width = (int)(col.Width * Form1.dpiFactor);
             }
 
-            int w = (int)(135 * Form1.dpixRatio);
+            int w = (int)(135 * Form1.dpiFactor);
             foreach (string host in hosts)
             {
                 DataGridViewTextBoxColumn col = new()

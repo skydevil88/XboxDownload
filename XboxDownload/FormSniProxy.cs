@@ -12,10 +12,9 @@ namespace XboxDownload
         private readonly Dictionary<string, string[]> dicService = new()
         {
             { "Steam 商店社区", new string[] { "store.steampowered.com", "api.steampowered.com", "login.steampowered.com", "help.steampowered.com", "checkout.steampowered.com", "steamcommunity.com" } },
-            { "GitHub", new string[] { "*github.com", "*githubusercontent.com", "*github.io", "*github.blog", "*githubstatus.com", "*githubassets.com" } },
+            { "GitHub", new string[] { "*github.blog", "*github.com", "*github.io", "*githubassets.com", "*githubstatus.com", "*githubusercontent.com" } },
+            { "Wikipedia", new string[] { "*wikipedia.org, *wikimedia.org, *mediawiki.org, *wikibooks.org, *wikidata.org, *wikinews.org, *wikiquote.org, *wikisource.org, *wikiversity.org, *wikivoyage.org, *wiktionary.org, *wikimediafoundation.org, *wmfusercontent.org, *wikifunctions.org, w.wiki | 2620:0:860:ed1a::1, 208.80.153.224", "upload.wikimedia.org | 2620:0:860:ed1a::2:b, 208.80.153.240" } },
             { "Pixiv", new string[] { "*pixiv.net -> pixiv.net", "*.pximg.net -> pximg.net" } },
-            //{ "Wikipedia", new string[] { "*wikipedia.org, *wikimedia.org, *mediawiki.org, *wikibooks.org, *wikidata.org, *wikinews.org, *wikiquote.org, *wikisource.org, *wikiversity.org, *wikivoyage.org, *wiktionary.org, *wikimediafoundation.org, *wmfusercontent.org, *wikifunctions.org, w.wiki | 2620:0:860:ed1a::1, 208.80.153.224", "upload.wikimedia.org | 2620:0:860:ed1a::2:b, 208.80.153.240" } },
-
         };
 
         public FormSniProxy()
@@ -144,7 +143,7 @@ namespace XboxDownload
             }
             foreach (var proxy in HttpsListen.dicSniProxy.Values)
             {
-                if (proxy.CustomIP) proxy.IPs = null;
+                proxy.IPs = null;
             }
             linkTestIPv6.Enabled = true;
         }

@@ -120,7 +120,6 @@ namespace XboxDownload
             return response;
         }
 
-
         public static async Task<HttpResponseMessage?> HttpResponseMessageAsync(string url, string method = "GET", string? postData = null, string? contentType = null, Dictionary<string, string>? headers = null, int timeOut = 30000, string? name = null, CancellationToken? cts = null)
         {
             HttpResponseMessage? response = null;
