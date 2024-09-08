@@ -44,12 +44,13 @@ namespace XboxDownload
             sanBuilder.AddDnsName("epicgames-download1-1251447533.file.myqcloud.com");
             sanBuilder.AddDnsName("download.epicgames.com");
             sanBuilder.AddDnsName("fastly-download.epicgames.com");
-            if (File.Exists(Form1.resourcePath + "\\SniProxy.json"))
+            string sniProxyFilepath = Path.Combine(Form1.resourceDirectory, "SniProxy.json");
+            if (File.Exists(sniProxyFilepath))
             {
                 List<List<object>>? SniProxy = null;
                 try
                 {
-                    SniProxy = JsonSerializer.Deserialize<List<List<object>>>(File.ReadAllText(Form1.resourcePath + "\\SniProxy.json"));
+                    SniProxy = JsonSerializer.Deserialize<List<List<object>>>(File.ReadAllText(sniProxyFilepath));
                 }
                 catch { }
                 if (SniProxy != null)

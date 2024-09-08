@@ -151,14 +151,15 @@ namespace XboxDownload
         private void ButDoHSave_Click(object sender, EventArgs e)
         {
             Form1.dtDoHServer.AcceptChanges();
+            string dohiFilepath = Path.Combine(Form1.resourceDirectory, "DoH.xml");
             if (Form1.dtDoHServer.Rows.Count >= 1)
             {
-                if (!Directory.Exists(Form1.resourcePath)) Directory.CreateDirectory(Form1.resourcePath);
-                Form1.dtDoHServer.WriteXml(Form1.resourcePath + "\\DoH.xml");
+                if (!Directory.Exists(Form1.resourceDirectory)) Directory.CreateDirectory(Form1.resourceDirectory);
+                Form1.dtDoHServer.WriteXml(dohiFilepath);
             }
-            else if (File.Exists(Form1.resourcePath + "\\DoH.xml"))
+            else if (File.Exists(dohiFilepath))
             {
-                File.Delete(Form1.resourcePath + "\\DoH.xml");
+                File.Delete(dohiFilepath);
             }
             DnsListen.SetDoHServer();
             this.Close();

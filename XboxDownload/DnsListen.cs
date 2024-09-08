@@ -929,7 +929,8 @@ namespace XboxDownload
             List<string> hosts;
             if (Properties.Settings.Default.GameLink)
             {
-                hosts = new List<string>() {
+                hosts = new()
+                {
                     "xvcf2.xboxlive.com", "assets2.xboxlive.com", "d2.xboxlive.com", "dlassets2.xboxlive.com",
                     "assets2.xboxlive.cn","d2.xboxlive.cn", "dlassets2.xboxlive.cn",
                     "dl.delivery.mp.microsoft.com", "2.tlu.dl.delivery.mp.microsoft.com",
@@ -941,7 +942,7 @@ namespace XboxDownload
             }
             else
             {
-                hosts = new List<string>()
+                hosts = new()
                 {
                     "xvcf1.xboxlive.com", "xvcf2.xboxlive.com", "assets1.xboxlive.com", "assets2.xboxlive.com", "d1.xboxlive.com", "d2.xboxlive.com", "dlassets.xboxlive.com", "dlassets2.xboxlive.com",
                     "assets1.xboxlive.cn", "assets2.xboxlive.cn", "d1.xboxlive.cn", "d2.xboxlive.cn", "dlassets.xboxlive.cn", "dlassets2.xboxlive.cn",
@@ -1227,9 +1228,10 @@ namespace XboxDownload
                         _ = dicHosts1V6.TryAdd(host, lsIpV6);
                     }
                 }
-                if (File.Exists(Form1.resourcePath + "\\Akamai.txt"))
+                string akamaiFilepath = Path.Combine(Form1.resourceDirectory, "Akamai.txt");
+                if (File.Exists(akamaiFilepath))
                 {
-                    foreach (string str in File.ReadAllText(Form1.resourcePath + "\\Akamai.txt").Split('\n'))
+                    foreach (string str in File.ReadAllText(akamaiFilepath).Split('\n'))
                     {
                         string host = Regex.Replace(str, @"\#.+", "").Trim().ToLower();
                         if (string.IsNullOrEmpty(host)) continue;

@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -232,6 +232,7 @@
             Col_Size = new DataGridViewTextBoxColumn();
             Col_Mode = new DataGridViewTextBoxColumn();
             panel5 = new Panel();
+            linkConsoleInstall1 = new LinkLabel();
             butScan = new Button();
             butEnableXbox = new Button();
             butEnablePc = new Button();
@@ -246,7 +247,7 @@
             columnHeader4 = new ColumnHeader();
             panel6 = new Panel();
             linkPcInstall1 = new LinkLabel();
-            linkConsoleInstall = new LinkLabel();
+            linkConsoleInstall2 = new LinkLabel();
             linkPcInstall2 = new LinkLabel();
             linkAppxAdd = new LinkLabel();
             linkWebPage = new LinkLabel();
@@ -1172,9 +1173,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1182,9 +1183,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1192,9 +1193,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1825,11 +1826,21 @@
             // 
             // panel5
             // 
+            panel5.Controls.Add(linkConsoleInstall1);
             panel5.Controls.Add(butScan);
             panel5.Controls.Add(butEnableXbox);
             panel5.Controls.Add(butEnablePc);
             resources.ApplyResources(panel5, "panel5");
             panel5.Name = "panel5";
+            // 
+            // linkConsoleInstall1
+            // 
+            resources.ApplyResources(linkConsoleInstall1, "linkConsoleInstall1");
+            linkConsoleInstall1.LinkColor = Color.Red;
+            linkConsoleInstall1.Name = "linkConsoleInstall1";
+            linkConsoleInstall1.TabStop = true;
+            linkConsoleInstall1.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
+            linkConsoleInstall1.LinkClicked += Link_LinkClicked;
             // 
             // butScan
             // 
@@ -1921,7 +1932,7 @@
             // panel6
             // 
             panel6.Controls.Add(linkPcInstall1);
-            panel6.Controls.Add(linkConsoleInstall);
+            panel6.Controls.Add(linkConsoleInstall2);
             panel6.Controls.Add(linkPcInstall2);
             panel6.Controls.Add(linkAppxAdd);
             panel6.Controls.Add(linkWebPage);
@@ -1956,14 +1967,14 @@
             linkPcInstall1.Tag = "https://www.bilibili.com/read/cv22153030/";
             linkPcInstall1.LinkClicked += Link_LinkClicked;
             // 
-            // linkConsoleInstall
+            // linkConsoleInstall2
             // 
-            resources.ApplyResources(linkConsoleInstall, "linkConsoleInstall");
-            linkConsoleInstall.LinkColor = Color.Red;
-            linkConsoleInstall.Name = "linkConsoleInstall";
-            linkConsoleInstall.TabStop = true;
-            linkConsoleInstall.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
-            linkConsoleInstall.LinkClicked += Link_LinkClicked;
+            resources.ApplyResources(linkConsoleInstall2, "linkConsoleInstall2");
+            linkConsoleInstall2.LinkColor = Color.Red;
+            linkConsoleInstall2.Name = "linkConsoleInstall2";
+            linkConsoleInstall2.TabStop = true;
+            linkConsoleInstall2.Tag = "https://www.bilibili.com/video/BV1CN4y197Js/";
+            linkConsoleInstall2.LinkClicked += Link_LinkClicked;
             // 
             // linkPcInstall2
             // 
@@ -2688,6 +2699,7 @@
             groupBox6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvDevice).EndInit();
             panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             tabStore.ResumeLayout(false);
             gbGameInfo.ResumeLayout(false);
             panel6.ResumeLayout(false);
@@ -2953,7 +2965,7 @@
         private ToolStripMenuItem tsmVideoFree;
         private LinkLabel linkUsbDevice;
         private LinkLabel linkAppGamingServices;
-        private LinkLabel linkConsoleInstall;
+        private LinkLabel linkConsoleInstall2;
         private CheckBox ckbBetterAkamaiIP;
         private CheckBox ckbGameLink;
         private LinkLabel linkRestartEABackgroundService;
@@ -3026,5 +3038,6 @@
         public TextBox tbAppIP;
         private Label labelApp;
         private ToolStripMenuItem tsmUseIPCn2;
+        private LinkLabel linkConsoleInstall1;
     }
 }

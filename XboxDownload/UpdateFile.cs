@@ -75,31 +75,32 @@ namespace XboxDownload
                     {
                         if (response != null && response.IsSuccessStatusCode)
                         {
-                            if (!Directory.Exists(Form1.resourcePath))
-                                Directory.CreateDirectory(Form1.resourcePath);
+                            if (!Directory.Exists(Form1.resourceDirectory))
+                                Directory.CreateDirectory(Form1.resourceDirectory);
                             byte[] buffer = response.Content.ReadAsByteArrayAsync().Result;
                             if (buffer.Length > 0)
                             {
-                                using (FileStream fs = new(Form1.resourcePath + "\\" + "XboxDownload.zip", FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                                string saveFilepath = Path.Combine(Form1.resourceDirectory, "XboxDownload.zip");
+                                using (FileStream fs = new(saveFilepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                                 {
                                     fs.Write(buffer, 0, buffer.Length);
                                     fs.Flush();
                                     fs.Close();
                                 }
-                                string tempDir = Form1.resourcePath + @"\.Temp";
+                                string tempDir = Path.Combine(Form1.resourceDirectory, ".Temp");
                                 if (Directory.Exists(tempDir))
                                     Directory.Delete(tempDir, true);
-                                ZipFile.ExtractToDirectory(Form1.resourcePath + @"\XboxDownload.zip", tempDir, Encoding.GetEncoding("GBK"), true);
+                                ZipFile.ExtractToDirectory(saveFilepath, tempDir, Encoding.GetEncoding("GBK"), true);
                                 foreach (DirectoryInfo di in new DirectoryInfo(tempDir).GetDirectories())
                                 {
-                                    if (File.Exists(di.FullName + @"\XboxDownload.exe"))
+                                    if (File.Exists(Path.Combine(di.FullName, "XboxDownload.exe")))
                                     {
                                         parentForm.Invoke(new Action(() =>
                                         {
                                             if (Form1.bServiceFlag) parentForm.ButStart_Click(null, null);
                                             parentForm.notifyIcon1.Visible = false;
                                         }));
-                                        string cmd = "chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + Form1.resourcePath + "\\XboxDownload.zip\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
+                                        string cmd = "chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"" + di.FullName + "\" \"" + Path.GetDirectoryName(Application.ExecutablePath) + "\" /s /e /y\r\ndel /a/f/q " + saveFilepath + "\r\n\"" + Application.ExecutablePath + "\"\r\nrd /s/q " + tempDir;
                                         File.WriteAllText(tempDir + "\\update.cmd", cmd);
                                         using (Process p = new())
                                         {

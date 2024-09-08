@@ -266,9 +266,9 @@ namespace XboxDownload
                 string jsonString = JsonSerializer.Serialize(xboxGame);
                 try
                 {
-                    if (!Directory.Exists(Form1.resourcePath))
-                        Directory.CreateDirectory(Form1.resourcePath);
-                    File.WriteAllText(Form1.resourcePath + "\\XboxGame.json", jsonString);
+                    if (!Directory.Exists(Form1.resourceDirectory))
+                        Directory.CreateDirectory(Form1.resourceDirectory);
+                    File.WriteAllText(Path.Combine(Form1.resourceDirectory, "XboxGame.json"), jsonString);
                 }
                 catch { }
             });

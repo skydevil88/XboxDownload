@@ -21,12 +21,13 @@ namespace XboxDownload
         {
             InitializeComponent();
 
-            if (File.Exists(Form1.resourcePath + "\\SniProxy.json"))
+            string SniProxyFilePath = Path.Combine(Form1.resourceDirectory, "SniProxy.json");
+            if (File.Exists(SniProxyFilePath))
             {
                 List<List<object>>? SniProxy = null;
                 try
                 {
-                    SniProxy = JsonSerializer.Deserialize<List<List<object>>>(File.ReadAllText(Form1.resourcePath + "\\SniProxy.json"));
+                    SniProxy = JsonSerializer.Deserialize<List<List<object>>>(File.ReadAllText(SniProxyFilePath));
                 }
                 catch { }
                 if (SniProxy != null)
@@ -232,14 +233,15 @@ namespace XboxDownload
                     lsSniProxy.Add(new List<object> { arrHost, sni, String.Join(", ", lsIPv6.Union(lsIPv4).Take(16).ToList<IPAddress>()) });
                 }
             }
+            string SniProxyFilePath = Path.Combine(Form1.resourceDirectory, "SniProxy.json");
             if (lsSniProxy.Count >= 1)
             {
-                if (!Directory.Exists(Form1.resourcePath)) Directory.CreateDirectory(Form1.resourcePath);
-                File.WriteAllText(Form1.resourcePath + "\\SniProxy.json", JsonSerializer.Serialize(lsSniProxy, new JsonSerializerOptions { WriteIndented = true }));
+                if (!Directory.Exists(Form1.resourceDirectory)) Directory.CreateDirectory(Form1.resourceDirectory);
+                File.WriteAllText(SniProxyFilePath, JsonSerializer.Serialize(lsSniProxy, new JsonSerializerOptions { WriteIndented = true }));
             }
-            else if (File.Exists(Form1.resourcePath + "\\SniProxy.json"))
+            else if (File.Exists(SniProxyFilePath))
             {
-                File.Delete(Form1.resourcePath + "\\SniProxy.json");
+                File.Delete(SniProxyFilePath);
             }
 
             List<int> ls = new();

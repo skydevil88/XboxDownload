@@ -18,7 +18,7 @@ namespace XboxDownload
     public partial class Form1 : Form
     {
         internal static bool bServiceFlag = false, bAutoStartup = false, bIPv6Support = false;
-        internal readonly static string resourcePath = Application.StartupPath + "Resource";
+        internal readonly static string resourceDirectory = Path.Combine(Application.StartupPath, "Resource");
         internal static List<Market> lsMarket = new();
         internal static float dpiFactor = 1;
         internal static JsonSerializerOptions jsOptions = new() { PropertyNameCaseInsensitive = true };
@@ -93,7 +93,7 @@ namespace XboxDownload
             ckbTruncation.Checked = Properties.Settings.Default.Truncation;
             ckbLocalUpload.Checked = Properties.Settings.Default.LocalUpload;
             if (string.IsNullOrEmpty(Properties.Settings.Default.LocalPath))
-                Properties.Settings.Default.LocalPath = Application.StartupPath + "Upload";
+                Properties.Settings.Default.LocalPath = Path.Combine(Application.StartupPath, "Upload");
             tbLocalPath.Text = Properties.Settings.Default.LocalPath;
             cbListenIP.SelectedIndex = Properties.Settings.Default.ListenIP;
             ckbDnsService.Checked = Properties.Settings.Default.DnsService;
@@ -110,12 +110,13 @@ namespace XboxDownload
             ckbRecordLog.Checked = Properties.Settings.Default.RecordLog;
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
 
-            if (File.Exists(resourcePath + "\\DohServer.json"))
+            string dohserverFilePath = Path.Combine(resourceDirectory, "DohServer.json");
+            if (File.Exists(dohserverFilePath))
             {
                 JsonDocument? jsDoH = null;
                 try
                 {
-                    jsDoH = JsonDocument.Parse(File.ReadAllText(resourcePath + "\\DohServer.json"));
+                    jsDoH = JsonDocument.Parse(File.ReadAllText(dohserverFilePath));
                 }
                 catch { }
                 if (jsDoH != null)
@@ -199,9 +200,10 @@ namespace XboxDownload
             }
 
             tbHosts1Akamai.Text = Properties.Resource.Akamai;
-            if (File.Exists(resourcePath + "\\Akamai.txt"))
+            string akamaiFilePath = Path.Combine(resourceDirectory, "Akamai.txt");
+            if (File.Exists(akamaiFilePath))
             {
-                tbHosts2Akamai.Text = File.ReadAllText(resourcePath + "\\Akamai.txt").Trim() + "\r\n";
+                tbHosts2Akamai.Text = File.ReadAllText(akamaiFilePath).Trim() + "\r\n";
             }
 
             cbHosts.SelectedIndex = 0;
@@ -212,11 +214,12 @@ namespace XboxDownload
             dtHosts.Columns.Add("HostName", typeof(String));
             dtHosts.Columns.Add("IP", typeof(String));
             dtHosts.Columns.Add("Remark", typeof(String));
-            if (File.Exists(resourcePath + "\\Hosts.xml"))
+            string hostsFilePath = Path.Combine(resourceDirectory, "Hosts.xml");
+            if (File.Exists(hostsFilePath))
             {
                 try
                 {
-                    dtHosts.ReadXml(resourcePath + "\\Hosts.xml");
+                    dtHosts.ReadXml(hostsFilePath);
                 }
                 catch { }
                 dtHosts.AcceptChanges();
@@ -227,11 +230,12 @@ namespace XboxDownload
             dtDoHServer.Columns.Add("Host", typeof(String));
             dtDoHServer.Columns.Add("DoHServer", typeof(Int32));
             dtDoHServer.Columns.Add("Remark", typeof(String));
-            if (File.Exists(resourcePath + "\\DoH.xml"))
+            string dohFilePath = Path.Combine(resourceDirectory, "DoH.xml");
+            if (File.Exists(dohFilePath))
             {
                 try
                 {
-                    dtDoHServer.ReadXml(resourcePath + "\\DoH.xml");
+                    dtDoHServer.ReadXml(dohFilePath);
                 }
                 catch { }
                 int length = (int)DnsListen.dohs.GetLongLength(0);
@@ -306,9 +310,10 @@ namespace XboxDownload
                 linkAppxAdd.Enabled = false;
                 gbAddAppxPackage.Visible = gbGamingServices.Visible = false;
             }
-            if (File.Exists(resourcePath + "\\XboxGame.json"))
+            string xboxGameFilePath = Path.Combine(resourceDirectory, "XboxGame.json");
+            if (File.Exists(xboxGameFilePath))
             {
-                string json = File.ReadAllText(resourcePath + "\\XboxGame.json");
+                string json = File.ReadAllText(xboxGameFilePath);
                 XboxGameDownload.XboxGame? xboxGame = null;
                 try
                 {
@@ -667,7 +672,7 @@ namespace XboxDownload
             if (ckbBetterAkamaiIP.Checked)
             {
                 bool update = true;
-                FileInfo fi = new(resourcePath + "\\IP.AkamaiV2.txt");
+                FileInfo fi = new(Path.Combine(resourceDirectory, "IP.AkamaiV2.txt"));
                 if (fi.Exists && fi.Length >= 1) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddDays(7)) >= 0;
                 if (update) await UpdateFile.DownloadIP(fi);
                 List<string[]> lsIP = new();
@@ -1971,7 +1976,7 @@ namespace XboxDownload
             gbIPList.Text = "IP 列表 (" + display + ")";
 
             bool update = true;
-            FileInfo fi = new(resourcePath + "\\IP." + host + ".txt");
+            FileInfo fi = new(Path.Combine(resourceDirectory, "IP." + host + ".txt"));
             if (fi.Exists && fi.Length >= 1) update = DateTime.Compare(DateTime.Now, fi.LastWriteTime.AddHours(24)) >= 0;
             if (update)
             {
@@ -2976,7 +2981,8 @@ namespace XboxDownload
                     using HttpResponseMessage? response2 = await ClassWeb.HttpResponseMessageAsync(UpdateFile.website + "/Akamai/Better", "POST", ja.ToString(), "application/json", null, 6000, "XboxDownload");
                     if (response2 != null && response2.IsSuccessStatusCode)
                     {
-                        if (File.Exists(resourcePath + "\\IP.AkamaiV2.txt")) File.SetLastWriteTime(resourcePath + "\\IP.AkamaiV2.txt", DateTime.Now.AddDays(-7));
+                        string ipFilepath = Path.Combine(resourceDirectory, "IP.AkamaiV2.txt");
+                        if (File.Exists(ipFilepath)) File.SetLastWriteTime(ipFilepath, DateTime.Now.AddDays(-7));
                         linkLabel.Text = text + " (上传成功)";
                     }
                     else
@@ -3400,14 +3406,15 @@ namespace XboxDownload
         private void ButHostSave_Click(object sender, EventArgs e)
         {
             dtHosts.AcceptChanges();
+            string hostFilepath = Path.Combine(resourceDirectory, "Hosts.xml");
             if (dtHosts.Rows.Count >= 1)
             {
-                if (!Directory.Exists(resourcePath)) Directory.CreateDirectory(resourcePath);
-                dtHosts.WriteXml(resourcePath + "\\Hosts.xml");
+                if (!Directory.Exists(resourceDirectory)) Directory.CreateDirectory(resourceDirectory);
+                dtHosts.WriteXml(hostFilepath);
             }
-            else if (File.Exists(resourcePath + "\\Hosts.xml"))
+            else if (File.Exists(hostFilepath))
             {
-                File.Delete(resourcePath + "\\Hosts.xml");
+                File.Delete(hostFilepath);
             }
             dgvHosts.ClearSelection();
             if (bServiceFlag)
@@ -3585,14 +3592,15 @@ namespace XboxDownload
             }
             List<string> lsIp = lsIpV6.Union(lsIpV4).ToList<string>();
             tbCdnAkamai.Text = string.Join(", ", lsIp.ToArray());
+            string akamaiFilePath = Path.Combine(resourceDirectory, "Akamai.txt");
             if (string.IsNullOrWhiteSpace(tbHosts2Akamai.Text))
             {
-                if (File.Exists(resourcePath + "\\" + "Akamai.txt")) File.Delete(resourcePath + "\\" + "Akamai.txt");
+                if (File.Exists(akamaiFilePath)) File.Delete(akamaiFilePath);
             }
             else
             {
-                if (!Directory.Exists(resourcePath)) Directory.CreateDirectory(resourcePath);
-                File.WriteAllText(resourcePath + "\\" + "Akamai.txt", tbHosts2Akamai.Text.Trim() + "\r\n");
+                if (!Directory.Exists(resourceDirectory)) Directory.CreateDirectory(resourceDirectory);
+                File.WriteAllText(akamaiFilePath, tbHosts2Akamai.Text.Trim() + "\r\n");
             }
             Properties.Settings.Default.IpsAkamai = tbCdnAkamai.Text;
             Properties.Settings.Default.Save();
@@ -3607,10 +3615,10 @@ namespace XboxDownload
         private void ButCdnReset_Click(object sender, EventArgs e)
         {
             tbCdnAkamai.Text = Properties.Settings.Default.IpsAkamai;
-            if (File.Exists(resourcePath + "\\Akamai.txt"))
+            string akamaiFilePath = Path.Combine(resourceDirectory, "Akamai.txt");
+            if (File.Exists(akamaiFilePath))
             {
-                using StreamReader sr = new(resourcePath + "\\Akamai.txt");
-                tbHosts2Akamai.Text = sr.ReadToEnd().Trim() + "\r\n";
+                tbHosts2Akamai.Text = File.ReadAllText(akamaiFilePath).Trim() + "\r\n";
             }
             else tbHosts2Akamai.Clear();
         }

@@ -8,7 +8,12 @@ namespace XboxDownload
 {
     public partial class FormImportIP : Form
     {
-        public static readonly Regex rMatchIP = new(@"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]*)\)|^[^\d]+(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>[\u4e00-\u9fa5]+).+ms\d+|^\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$|(?<IP>([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s*\((?<Location>[^\)]*)\)", RegexOptions.Multiline);
+        public static readonly Regex rMatchIP = new(
+            @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*\((?<Location>[^\)]*)\)|" +
+            @"^[^\d]+(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})(?<Location>[\u4e00-\u9fa5]+).+ms\d+|" +
+            @"\s*(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s*$|" +
+            @"(?<IP>\d{0,3}\.\d{0,3}\.\d{0,3}\.\d{0,3})\s+(?<Location>[^\s]+)\s+\<?\d+ms|" +   //itdog.cn
+            @"(?<IP>([\da-fA-F]{1,4}:){3}([\da-fA-F]{0,4}:)+[\da-fA-F]{1,4})\s*\((?<Location>[^\)]*)\)", RegexOptions.Multiline);
         public String host = string.Empty;
         public DataTable dt;
 
@@ -63,6 +68,9 @@ namespace XboxDownload
                             this.host = tmp.ToLowerInvariant();
                             switch (this.host)
                             {
+                                case "www.itdog.cn":
+                                    this.host = "";
+                                    continue;
                                 case "atum.hac.lp1.d4c.nintendo.net":
                                     this.host = "Akamai";
                                     break;
@@ -91,13 +99,16 @@ namespace XboxDownload
                     ulong ipLong = IpToLong(address);
                     string ip = address.ToString();
                     string IpFilter = address.AddressFamily == AddressFamily.InterNetwork ? Regex.Replace(ip, @"\d{0,3}$", "") : Regex.Replace(GetFullIPv6(ip), @"(:[\da-fA-F]{4}){4}$", "");
+                    string location = result.Groups["Location"].Value.Trim();
+                    location = Regex.Replace(location, @"([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}|\/", "");
+                    location = Regex.Replace(location, @"\s{2,}", " ").Trim();
                     DataRow? dr = dt.Rows.Find(IpFilter);
                     if (dr == null)
                     {
                         dr = dt.NewRow();
                         dr["IP"] = ip;
                         dr["IpFilter"] = IpFilter;
-                        dr["Location"] = Regex.Replace(Regex.Replace(result.Groups["Location"].Value.Trim(), @" ([-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}", ""), @"\s+", " ");
+                        dr["Location"] = location;
                         dr["IpLong"] = ipLong;
                         dt.Rows.Add(dr);
                     }
