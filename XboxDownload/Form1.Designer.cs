@@ -51,11 +51,6 @@
             tabControl1 = new TabControl();
             tabService = new TabPage();
             gbLog = new GroupBox();
-            lvLog = new DoubleBufferListView();
-            Col_Request = new ColumnHeader();
-            Col_Content = new ColumnHeader();
-            Col_ClientIP = new ColumnHeader();
-            Col_Time = new ColumnHeader();
             panel1 = new Panel();
             labelTraffic = new Label();
             linkClearLog = new LinkLabel();
@@ -310,6 +305,10 @@
             rbXboxSeries = new RadioButton();
             rbXboxOne = new RadioButton();
             label43 = new Label();
+            Col_Request = new ColumnHeader();
+            Col_Content = new ColumnHeader();
+            Col_ClientIP = new ColumnHeader();
+            Col_Time = new ColumnHeader();
             notifyIcon1 = new NotifyIcon(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
             tsmiShow = new ToolStripMenuItem();
@@ -348,10 +347,10 @@
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
             timerTraffic = new System.Windows.Forms.Timer(components);
+            linkLabel3 = new LinkLabel();
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
-            gbLog.SuspendLayout();
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
             panelEpic.SuspendLayout();
@@ -518,38 +517,9 @@
             // 
             // gbLog
             // 
-            gbLog.Controls.Add(lvLog);
             resources.ApplyResources(gbLog, "gbLog");
             gbLog.Name = "gbLog";
             gbLog.TabStop = false;
-            // 
-            // lvLog
-            // 
-            lvLog.Columns.AddRange(new ColumnHeader[] { Col_Request, Col_Content, Col_ClientIP, Col_Time });
-            resources.ApplyResources(lvLog, "lvLog");
-            lvLog.FullRowSelect = true;
-            lvLog.GridLines = true;
-            lvLog.Name = "lvLog";
-            lvLog.UseCompatibleStateImageBehavior = false;
-            lvLog.View = View.Details;
-            lvLog.DoubleClick += LvLog_DoubleClick;
-            lvLog.MouseClick += LvLog_MouseClick;
-            // 
-            // Col_Request
-            // 
-            resources.ApplyResources(Col_Request, "Col_Request");
-            // 
-            // Col_Content
-            // 
-            resources.ApplyResources(Col_Content, "Col_Content");
-            // 
-            // Col_ClientIP
-            // 
-            resources.ApplyResources(Col_ClientIP, "Col_ClientIP");
-            // 
-            // Col_Time
-            // 
-            resources.ApplyResources(Col_Time, "Col_Time");
             // 
             // panel1
             // 
@@ -1931,6 +1901,7 @@
             // 
             // panel6
             // 
+            panel6.Controls.Add(linkLabel3);
             panel6.Controls.Add(linkPcInstall1);
             panel6.Controls.Add(linkConsoleInstall2);
             panel6.Controls.Add(linkPcInstall2);
@@ -2189,6 +2160,7 @@
             // 
             resources.ApplyResources(tbGameUrl, "tbGameUrl");
             tbGameUrl.Name = "tbGameUrl";
+            tbGameUrl.TextChanged += tbGameUrl_TextChanged;
             tbGameUrl.KeyPress += TbGameUrl_KeyPress;
             // 
             // label32
@@ -2414,6 +2386,22 @@
             // 
             resources.ApplyResources(label43, "label43");
             label43.Name = "label43";
+            // 
+            // Col_Request
+            // 
+            resources.ApplyResources(Col_Request, "Col_Request");
+            // 
+            // Col_Content
+            // 
+            resources.ApplyResources(Col_Content, "Col_Content");
+            // 
+            // Col_ClientIP
+            // 
+            resources.ApplyResources(Col_ClientIP, "Col_ClientIP");
+            // 
+            // Col_Time
+            // 
+            resources.ApplyResources(Col_Time, "Col_Time");
             // 
             // notifyIcon1
             // 
@@ -2650,6 +2638,13 @@
             timerTraffic.Interval = 1000;
             timerTraffic.Tick += TimerTraffic_Tick;
             // 
+            // linkLabel3
+            // 
+            resources.ApplyResources(linkLabel3, "linkLabel3");
+            linkLabel3.Name = "linkLabel3";
+            linkLabel3.TabStop = true;
+            linkLabel3.LinkClicked += linkLabel3_LinkClicked;
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -2665,7 +2660,6 @@
             toolStrip1.PerformLayout();
             tabControl1.ResumeLayout(false);
             tabService.ResumeLayout(false);
-            gbLog.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             groupBox1.ResumeLayout(false);
@@ -3039,5 +3033,7 @@
         private Label labelApp;
         private ToolStripMenuItem tsmUseIPCn2;
         private LinkLabel linkConsoleInstall1;
+        private LinkLabel linkLabel1;
+        private LinkLabel linkLabel3;
     }
 }
