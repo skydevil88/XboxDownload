@@ -5752,5 +5752,17 @@ namespace XboxDownload
             }));
         }
         #endregion
+
+        private void tbGameUrl_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+                string? ost = "ms-windows-store://pdp/?productid=" + linkProductID.Text;
+                if (ost != null) Process.Start(new ProcessStartInfo(ost) { UseShellExecute = true });
+
+        }
     }
 }
