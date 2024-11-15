@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButton1 = new ToolStripDropDownButton();
             tsmUpdate = new ToolStripMenuItem();
@@ -241,6 +241,7 @@
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             panel6 = new Panel();
+            linkLabel3 = new LinkLabel();
             linkPcInstall1 = new LinkLabel();
             linkConsoleInstall2 = new LinkLabel();
             linkPcInstall2 = new LinkLabel();
@@ -305,6 +306,7 @@
             rbXboxSeries = new RadioButton();
             rbXboxOne = new RadioButton();
             label43 = new Label();
+            tabPage1 = new TabPage();
             Col_Request = new ColumnHeader();
             Col_Content = new ColumnHeader();
             Col_ClientIP = new ColumnHeader();
@@ -347,7 +349,6 @@
             tsmAuthorization1 = new ToolStripMenuItem();
             tsmAuthorization2 = new ToolStripMenuItem();
             timerTraffic = new System.Windows.Forms.Timer(components);
-            linkLabel3 = new LinkLabel();
             toolStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabService.SuspendLayout();
@@ -501,6 +502,7 @@
             tabControl1.Controls.Add(tabHardDisk);
             tabControl1.Controls.Add(tabStore);
             tabControl1.Controls.Add(tabTools);
+            tabControl1.Controls.Add(tabPage1);
             resources.ApplyResources(tabControl1, "tabControl1");
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -1143,9 +1145,9 @@
             // 
             // Col_TTL
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            Col_TTL.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Col_TTL.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(Col_TTL, "Col_TTL");
             Col_TTL.Name = "Col_TTL";
             Col_TTL.ReadOnly = true;
@@ -1153,9 +1155,9 @@
             // 
             // Col_RoundtripTime
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Col_RoundtripTime.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(Col_RoundtripTime, "Col_RoundtripTime");
             Col_RoundtripTime.Name = "Col_RoundtripTime";
             Col_RoundtripTime.ReadOnly = true;
@@ -1163,9 +1165,9 @@
             // 
             // Col_Speed
             // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            Col_Speed.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            Col_Speed.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(Col_Speed, "Col_Speed");
             Col_Speed.Name = "Col_Speed";
             Col_Speed.ReadOnly = true;
@@ -1929,6 +1931,13 @@
             resources.ApplyResources(panel6, "panel6");
             panel6.Name = "panel6";
             // 
+            // linkLabel3
+            // 
+            resources.ApplyResources(linkLabel3, "linkLabel3");
+            linkLabel3.Name = "linkLabel3";
+            linkLabel3.TabStop = true;
+            linkLabel3.LinkClicked += linkLabel3_LinkClicked;
+            // 
             // linkPcInstall1
             // 
             resources.ApplyResources(linkPcInstall1, "linkPcInstall1");
@@ -2387,6 +2396,13 @@
             resources.ApplyResources(label43, "label43");
             label43.Name = "label43";
             // 
+            // tabPage1
+            // 
+            resources.ApplyResources(tabPage1, "tabPage1");
+            tabPage1.Name = "tabPage1";
+            tabPage1.UseVisualStyleBackColor = true;
+            tabPage1.Click += tabPage1_Click;
+            // 
             // Col_Request
             // 
             resources.ApplyResources(Col_Request, "Col_Request");
@@ -2637,13 +2653,6 @@
             // 
             timerTraffic.Interval = 1000;
             timerTraffic.Tick += TimerTraffic_Tick;
-            // 
-            // linkLabel3
-            // 
-            resources.ApplyResources(linkLabel3, "linkLabel3");
-            linkLabel3.Name = "linkLabel3";
-            linkLabel3.TabStop = true;
-            linkLabel3.LinkClicked += linkLabel3_LinkClicked;
             // 
             // Form1
             // 
@@ -3035,5 +3044,6 @@
         private LinkLabel linkConsoleInstall1;
         private LinkLabel linkLabel1;
         private LinkLabel linkLabel3;
+        private TabPage tabPage1;
     }
 }

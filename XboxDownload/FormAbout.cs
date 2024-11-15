@@ -17,5 +17,10 @@ namespace XboxDownload
             string url = ((LinkLabel)sender).Text;
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

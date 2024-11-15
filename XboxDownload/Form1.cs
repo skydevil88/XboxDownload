@@ -410,9 +410,8 @@ namespace XboxDownload
 
         private void TsmAbout_Click(object sender, EventArgs e)
         {
-            FormAbout dialog = new();
-            dialog.ShowDialog();
-            dialog.Dispose();
+            string url = "https://github.com/skydevil88/XboxDownload";
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
 
         private void TsmOpenSite_Click(object sender, EventArgs e)
@@ -5760,8 +5759,13 @@ namespace XboxDownload
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-                string? ost = "ms-windows-store://pdp/?productid=" + linkProductID.Text;
-                if (ost != null) Process.Start(new ProcessStartInfo(ost) { UseShellExecute = true });
+            string? ost = "ms-windows-store://pdp/?productid=" + linkProductID.Text;
+            if (ost != null) Process.Start(new ProcessStartInfo(ost) { UseShellExecute = true });
+
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
 
         }
     }

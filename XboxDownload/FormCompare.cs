@@ -181,6 +181,13 @@ namespace XboxDownload
             DataGridViewRow dgvr = dataGridView1.Rows[e.RowIndex];
             Process.Start(new ProcessStartInfo("https://www.microsoft.com/" + dgvr.Cells["Col_Lang"].Value + "/p/_/" + this.productId) { UseShellExecute = true });
         }
+        private void DataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == -1 || e.RowIndex == -1) return;
+            if (dataGridView1.Columns[e.ColumnIndex].Name != "Col_Purchase2") return;
+            DataGridViewRow dgvr = dataGridView1.Rows[e.RowIndex];
+            Process.Start(new ProcessStartInfo("ms-windows-store://pdp/?productid=" + this.productId) { UseShellExecute = true });
+        }
 
         private void DataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
@@ -382,6 +389,11 @@ namespace XboxDownload
                 button1.Enabled = true;
             }));
             cts = null;
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
