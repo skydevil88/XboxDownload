@@ -88,6 +88,10 @@ public partial class ServiceViewModel : ObservableObject
 
         _ = TestIPv6();
         _ = DeliveryOptimization();
+        if (DateTime.UtcNow > App.Settings.NextUpdate)
+        {
+            _ = UpdateService.Start(true);
+        }
     }
 
     private bool _isIPv6Support;
