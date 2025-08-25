@@ -74,7 +74,7 @@
     <x:String x:Key="Service.Settings.EpicDlIp">Epic 下載 IP</x:String>
     <x:String x:Key="Service.Settings.UbisoftDlIp">育碧 下載 IP</x:String>
     <x:String x:Key="Service.Settings.LocalUpload">本地上傳</x:String>
-    <x:String x:Key="Service.Settings.Browse">流覽</x:String>
+    <x:String x:Key="Service.Settings.Browse">瀏覽</x:String>
     <x:String x:Key="Service.Settings.SelectFolder">選擇資料夾</x:String>
     <x:String x:Key="Service.Settings.ConsoleSetup">主機設置：點擊“開始監聽”，將主機的 DNS 設置為此電腦的 IP 位址，下載完成後再恢復。對於 Xbox，還需要在路由器上禁用 IPv6。</x:String>
     <x:String x:Key="Service.Service">服務</x:String>
@@ -385,7 +385,7 @@
     <x:String x:Key="Storage.DownloadFailed">下載失敗</x:String>
     <x:String x:Key="Storage.DownloadErrorMessage">下載失敗，錯誤資訊：&#x0a;{0}</x:String>
     <x:String x:Key="Storage.LocalFile">本地檔</x:String>
-    <x:String x:Key="Storage.Browse">流覽</x:String>
+    <x:String x:Key="Storage.Browse">瀏覽</x:String>
     <x:String x:Key="Storage.OpenXboxPackage">打開 Xbox 遊戲包</x:String>
     <x:String x:Key="Storage.InvalidXboxPackageTitle">無效的 Xbox 遊戲包</x:String>
     <x:String x:Key="Storage.InvalidXboxPackageMessage">該檔不是有效的 Xbox 遊戲包。</x:String>
@@ -538,7 +538,7 @@
     
     <x:String x:Key="Tools.Install">安裝微軟商店遊戲和應用</x:String>
     <x:String x:Key="Tools.Install.LocalFile">本地檔</x:String>
-    <x:String x:Key="Tools.Install.Browse">流覽</x:String>
+    <x:String x:Key="Tools.Install.Browse">瀏覽</x:String>
     <x:String x:Key="Tools.Install.InstallPath">安裝位置</x:String>
     <x:String x:Key="Tools.Install.Refresh">刷新</x:String>
     <x:String x:Key="Tools.Install.Install">安裝</x:String>

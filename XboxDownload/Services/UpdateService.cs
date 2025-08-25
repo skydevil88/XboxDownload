@@ -144,7 +144,7 @@ public static partial class UpdateService
                     var buffer = await response.Content.ReadAsByteArrayAsync(CancellationToken.None);
                     if (buffer.Length > 0)
                     {
-                        var saveFilepath = Path.Combine(tempDirectory, $"{nameof(XboxDownload)}.zip");
+                        var saveFilepath = Path.Combine(tempDirectory, fileName);
                         await using (FileStream fs = new(saveFilepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                         {
                             await fs.WriteAsync(buffer, CancellationToken.None);
@@ -173,10 +173,10 @@ public static partial class UpdateService
                                 {
                                     var exePath = Process.GetCurrentProcess().MainModule?.FileName;
 
-                                    var cmd = $"chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"{dir.FullName}\" \"{Path.GetDirectoryName(exePath)}\" /s /e /y\r\n\"{exePath}\"\r\nrd /s/q \"{tempDirectory}\"";
-                                    var cmdPath = Path.Combine(tempDirectory, "update.cmd");
-                                    await File.WriteAllTextAsync(cmdPath, cmd, CancellationToken.None);
-                                    _ = CommandHelper.RunCommandAsync("cmd.exe", $"/c \"{cmdPath}\"");
+                                    var script = $"chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"{dir.FullName}\" \"{Path.GetDirectoryName(exePath)}\" /s /e /y\r\n\"{exePath}\"\r\nrd /s/q \"{tempDirectory}\"";
+                                    var scriptPath = Path.Combine(tempDirectory, "update.cmd");
+                                    await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
+                                    _ = CommandHelper.RunCommandAsync("cmd.exe", $"/c \"{scriptPath}\"");
                                     Process.GetCurrentProcess().Kill();
                                 }
                                 else if (OperatingSystem.IsMacOS())
@@ -236,7 +236,7 @@ rm -rf ""{tempDirectory}""
     public static async Task DownloadIpAsync(FileInfo fi, string keyword = "")
     {
         var url = $"{Project.Replace("https://github.com", "https://raw.githubusercontent.com")}/refs/heads/master/IP/{fi.Name}";
-        if(string.IsNullOrEmpty(keyword)) keyword = fi.Name[3..^4];
+        if (string.IsNullOrEmpty(keyword)) keyword = fi.Name[3..^4];
         using var cts = new CancellationTokenSource();
         
         var tasks = Proxies2.Select(async proxy => await HttpClientHelper.GetStringContentAsync(proxy + url, token: cts.Token, timeout: 6000)).ToList();

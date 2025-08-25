@@ -78,7 +78,7 @@ public static class DnsHelper
             headers: doHServer.Headers,
             timeout: 3000
         );
-        
+
         if (string.IsNullOrWhiteSpace(responseString))
             return null;
 
@@ -167,7 +167,3 @@ public static class DnsHelper
         public string Data { get; set; } = string.Empty;
     }
 }
-
-
-
-

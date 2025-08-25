@@ -21,14 +21,12 @@ namespace XboxDownload;
 
 public partial class App : Application
 {
-    public static TrayIconService TrayIconService { get; private set; } = new();
+    public static TrayIconService TrayIconService { get; } = new();
     public static AppSettings Settings { get; private set; } = new();
     public static IServiceProvider? Services { get; private set; }
 
-    // Windows 唤醒消息 ID（Program 赋值）
+    // Windows wake-up message ID (assigned in Program)
     public static uint ShowWindowMessageId;
-    // macOS/Linux 唤醒回调（Program 赋值）
-    public static Action? UnixWakeupRequested;
 
     // Win32 API
     [DllImport("user32.dll")]
@@ -79,7 +77,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (OperatingSystem.IsWindows()) TrayIconService.Initialize();
+        if (OperatingSystem.IsWindows())
+            TrayIconService.Initialize();
+        
         Services = Setup.ConfigureServices();
 
         Ioc.Default.ConfigureServices(new ServiceCollection()
@@ -95,7 +95,7 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // 设置主题
+            // Set application theme
             var themeVariant = Settings.Theme switch
             {
                 "Light" => ThemeVariant.Light,
@@ -109,10 +109,7 @@ public partial class App : Application
             var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = new MainWindow { DataContext = mainWindowVm };
 
-            // macOS / Linux 唤醒绑定
-            UnixWakeupRequested = () => Dispatcher.UIThread.Post(ShowMainWindow);
-
-            // Windows 消息挂钩
+            // Windows message hook
             if (OperatingSystem.IsWindows())
             {
                 var handle = desktop.MainWindow.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
@@ -124,7 +121,7 @@ public partial class App : Application
                 }
             }
 
-            // 开机启动
+            // Launch on system startup
             if (desktop.Args?.Contains("Startup") == true)
             {
                 desktop.MainWindow.ShowInTaskbar = false;
