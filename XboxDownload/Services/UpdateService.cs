@@ -106,16 +106,16 @@ public static partial class UpdateService
         if (serviceVm.IsLogging) 
             serviceVm.AddLog(ResourceHelper.GetString("Update.Title"), ResourceHelper.GetString("Update.Downloading"), "System");
         
-        var systemLabel = OperatingSystem.IsWindows() ? "windows" :
-                          OperatingSystem.IsLinux() ? "linux" :
-                          OperatingSystem.IsMacOS() ? "macos" : "unknown";
+        var systemLabel= OperatingSystem.IsWindows() ? "windows" :
+                          OperatingSystem.IsMacOS() ? "macos" :
+                          OperatingSystem.IsLinux() ? "linux" : "unknown";
         
         var archLabel = RuntimeInformation.ProcessArchitecture switch
         {
-            Architecture.X64 => "x64",
-            Architecture.Arm64 => "arm64",
-            Architecture.X86 => "x86",
             Architecture.Arm => "arm",
+            Architecture.Arm64 => "arm64",
+            Architecture.X64 => "x64",
+            Architecture.X86 => "x86",
             _ => "unknown"
         };
         
@@ -164,7 +164,7 @@ public static partial class UpdateService
                         var dirs = new DirectoryInfo(tempDirectory).GetDirectories();
                         foreach (var dir in dirs)
                         {
-                            if (dir.Name.StartsWith(nameof(XboxDownload)))
+                            if (dir.Name.StartsWith(nameof(XboxDownload), StringComparison.OrdinalIgnoreCase))
                             {
                                 if (serviceVm.IsListening)
                                     await serviceVm.ToggleListeningAsync();
@@ -179,8 +179,7 @@ public static partial class UpdateService
                                     _ = CommandHelper.RunCommandAsync("cmd.exe", $"/c \"{cmdPath}\"");
                                     Process.GetCurrentProcess().Kill();
                                 }
-
-                                if (OperatingSystem.IsMacOS())
+                                else if (OperatingSystem.IsMacOS())
                                 {
                                     var exePath = Process.GetCurrentProcess().MainModule?.FileName;
                                     

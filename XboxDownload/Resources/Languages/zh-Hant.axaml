@@ -15,6 +15,7 @@
     <x:String x:Key="Menu.RootCertificate.Uninstall">卸載根憑證</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogInstallTitle">安裝根憑證</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogInstallMessage">根憑證已成功安裝，重啟監聽服務即可生效。</x:String>
+    <x:String x:Key="Menu.RootCertificate.DialogInstallFailedMessage">憑證安裝失敗。</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallTitle">卸載根憑證</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallMessage">根憑證已成功卸載。</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogFailedMessage">此操作需要管理員權限。</x:String>

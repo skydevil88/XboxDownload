@@ -172,7 +172,7 @@ public partial class MainWindowViewModel(
         {
             await DialogHelper.ShowInfoDialogAsync(
                 ResourceHelper.GetString("Menu.RootCertificate.DialogInstallTitle"),
-                "证书安装失败。",
+                ResourceHelper.GetString("Menu.RootCertificate.DialogInstallFailedMessage"),
                 Icon.Error);
         }
     }

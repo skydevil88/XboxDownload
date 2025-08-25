@@ -15,6 +15,7 @@
     <x:String x:Key="Menu.RootCertificate.Uninstall">Uninstall Root Certificate</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogInstallTitle">Install Root Certificate</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogInstallMessage">Root certificate installed successfully. Restart the listener service to take effect.</x:String>
+    <x:String x:Key="Menu.RootCertificate.DialogInstallFailedMessage">Failed to install the certificate.</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallTitle">Uninstall Root Certificate</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallMessage">Root certificate uninstalled successfully.</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogFailedMessage">This operation requires administrator privileges.</x:String>

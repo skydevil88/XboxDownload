@@ -15,6 +15,7 @@
     <x:String x:Key="Menu.RootCertificate.Uninstall">卸载根证书</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogInstallTitle">安装根证书</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogInstallMessage">根证书安装完成，重启监听服务即可生效。</x:String>
+    <x:String x:Key="Menu.RootCertificate.DialogInstallFailedMessage">证书安装失败。</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallTitle">卸载根证书</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallMessage">根证书已成功卸载。</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogFailedMessage">此操作需要管理员权限.</x:String>
