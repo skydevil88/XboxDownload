@@ -1,0 +1,90 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        x:Class="XboxDownload.Views.Dialog.LocalProxyDialog"
+        x:DataType="dialog:LocalProxyDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="980" Height="600"
+        Title="{DynamicResource Service.LocalProxy.Title}">
+
+    <Grid RowDefinitions="*,Auto" RowSpacing="10" Margin="6">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="6">
+            <HeaderedContentControl Grid.Column="0" Header="{DynamicResource Service.LocalProxy.ProxyRules}">
+                <TextBox BorderThickness="0" AcceptsReturn="True"
+                         SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                         SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
+                         Text="{Binding RulesText}"
+                         Watermark="{DynamicResource Service.LocalProxy.ProxyRulesWatermark}"/>
+            </HeaderedContentControl>
+
+            <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,*,Auto" RowSpacing="6" MinWidth="180">
+                <!-- 选择服务 -->
+                <HeaderedContentControl Header="{DynamicResource Service.LocalProxy.SelectService}" Grid.Row="0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="150">
+                        <ListBox ItemsSource="{Binding ProxyRules}">
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Height" Value="30"/>
+                                </Style>
+                            </ListBox.Styles>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Display}"
+                                                  Command="{Binding $parent[ListBox].((dialog:LocalProxyDialogViewModel)DataContext).CheckBoxCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
+                                                  CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </HeaderedContentControl>
+
+                <!-- DoH 服务器 -->
+                <HeaderedContentControl Header="{DynamicResource Service.LocalProxy.DoHServers}" Grid.Row="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="260" MinWidth="300">
+                        <ListBox ItemsSource="{Binding DohModelsMappings}">
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Height" Value="30"/>
+                                </Style>
+                            </ListBox.Styles>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </HeaderedContentControl>
+
+                <!-- 测试按钮 -->
+                <Button Grid.Row="2"
+                        Classes="LinkLabel"
+                        Click="ShowDohSettingsDialogAsync"
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="{DynamicResource Service.LocalProxy.TestDohServers}"
+                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                </Button>
+
+                <!-- Spacer -->
+                <Border Grid.Row="3" />
+
+                <!-- 保存按钮靠底 -->
+                <Button Grid.Row="4"
+                        Content="{DynamicResource Service.LocalProxy.Save}"
+                        MinWidth="140" MinHeight="60" CornerRadius="4"
+                        HorizontalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        FontWeight="Bold"
+                        Command="{Binding SaveCommand}"/>
+            </Grid>
+
+        </Grid>
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" TextWrapping="Wrap"
+                   Text="{DynamicResource Service.LocalProxy.Wrap}"/>
+    </Grid>
+</Window>

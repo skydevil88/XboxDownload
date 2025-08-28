@@ -1,0 +1,72 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             x:Class="XboxDownload.Views.HostView"
+             x:DataType="vm:HostViewModel">
+
+    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto">
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <HeaderedContentControl Header="{DynamicResource Host.CustomHostRules}">
+                <DataGrid CanUserSortColumns="False" CanUserResizeColumns="True" GridLinesVisibility="All"
+                          ItemsSource="{Binding HostMappings}"
+                          SelectedItem="{Binding SelectedEntry}">
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="{DynamicResource Host.Delete}" Command="{Binding $parent[DataGrid].((vm:HostViewModel)DataContext).DeleteEntryCommand}"/>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Styles>
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Host.Enable}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              IsChecked="{Binding IsEnabled}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="300" Binding="{Binding HostName}" Header="{DynamicResource Host.HostName}"/>
+                        <DataGridTextColumn MinWidth="300" Binding="{Binding Ip}" Header="{DynamicResource Host.Ip}"/>
+                        <DataGridTextColumn MinWidth="100" Width="*" Binding="{Binding Note}" Header="{DynamicResource Host.Note}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </HeaderedContentControl>
+        </Border>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+            <Button Classes="LinkLabel" Command="{Binding AddHostCommand}">
+                <TextBlock Text="{DynamicResource Host.AddNewRow}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+            <Button Classes="LinkLabel" Command="{Binding ClearAllCommand}">
+                <TextBlock Text="{DynamicResource Host.ClearAll}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10" Spacing="10">
+            <Button MinWidth="80" HorizontalContentAlignment="Center"
+                    Content="{DynamicResource Host.Save}"
+                    Command="{Binding SaveHostToJsonCommand}"/>
+            <Button MinWidth="80" HorizontalContentAlignment="Center"
+                    Content="{DynamicResource Host.Reset}"
+                    Command="{Binding LoadHostsFromJsonCommand}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <Button Classes="LinkLabel" Click="ShowResolveDomainDialogAsync">
+                <TextBlock Text="{DynamicResource Host.ResolveDomain}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+            <Button Classes="LinkLabel" Click="ShowImportHostDialogAsync">
+                <TextBlock Text="{DynamicResource Host.ImportHost}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

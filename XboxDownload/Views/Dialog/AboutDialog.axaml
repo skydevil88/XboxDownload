@@ -1,0 +1,38 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        x:Class="XboxDownload.Views.Dialog.AboutDialog"
+        x:DataType="dialog:AboutDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="500" Height="320" CanResize="False"
+        Title="{DynamicResource About.Title}">
+
+    <StackPanel Orientation="Vertical" Spacing="10" Margin="20">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="110,*" ColumnSpacing="20">
+            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Height="110" Width="110" Source="/Assets/xbox.ico"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" FontSize="20" Text="{DynamicResource About.XboxDownload}"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Version}"/>
+            <HyperlinkButton Grid.Row="2" Grid.Column="1" Padding="0" IsVisited="False"
+                             VerticalAlignment="Center"
+                             NavigateUri="https://github.com/skydevil88/XboxDownload"
+                             Content="https://github.com/skydevil88/XboxDownload"/>
+        </Grid>
+
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{DynamicResource About.Donate}"/>
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="20" IsVisible="{Binding IsChineseUser}">
+            <Image Grid.Column="0" Height="120" Width="120" Source="/Assets/About/Alipay.png"/>
+            <Image Grid.Column="1" Height="120" Width="120" Source="/Assets/About/WeChat.png"/>
+        </Grid>
+
+        <StackPanel Spacing="10" IsVisible="{Binding !IsChineseUser}">
+            <Image Height="120" Width="120" Source="/Assets/About/USDT.png"/>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="5">
+                <TextBlock VerticalAlignment="Center" Text="USDT(TRC20): TT9CzksU5KuXkkYaox2ifvF5tbGaQRmSZw" />
+                <Button Classes="LinkLabel" Command="{Binding CopyCommand}">
+                    <TextBlock Text="Copy" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</Window>

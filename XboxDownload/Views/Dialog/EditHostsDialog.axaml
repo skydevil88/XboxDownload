@@ -1,0 +1,31 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        x:Class="XboxDownload.Views.Dialog.EditHostsDialog"
+        x:DataType="dialog:EditHostsDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="980" Height="600"
+        Title="{DynamicResource EditHosts.SpeedTest.Title}">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <TextBox Grid.Row="0" Grid.Column="0"
+                 Margin="10,10, 10,0" AcceptsReturn="True"
+                 TextWrapping="Wrap"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Text="{Binding Content}"/>
+
+        <Border Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10" Spacing="10">
+                <Button MinWidth="80" HorizontalContentAlignment="Center"
+                        Content="{DynamicResource EditHosts.SpeedTest.Save}"
+                        Command="{Binding SaveHostsCommand}"/>
+                <Button MinWidth="80" HorizontalContentAlignment="Center"
+                        Content="{DynamicResource EditHosts.SpeedTest.Reset}"
+                        Command="{Binding ReadHostsCommand}"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>

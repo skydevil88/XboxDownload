@@ -1,0 +1,106 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="XboxDownload.Views.Dialog.PriceComparisonDialog"
+        x:DataType="dialog:PriceComparisonDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="980" Height="600"
+        Title="{DynamicResource Store.PriceComparison.Title}">
+
+    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto" RowSpacing="6">
+        <HeaderedContentControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,10,10,0"
+                                Header="{Binding Title}">
+            <DataGrid IsReadOnly="True" CanUserSortColumns="True" GridLinesVisibility="All"
+                      ItemsSource="{Binding MarketMappings}"
+                      SelectedItem="{Binding SelectedMarket}">
+
+                <DataGrid.Styles>
+                    <Style Selector="DataGridRow">
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="{DynamicResource Store.PriceComparison.VisitWebsite}"
+                                              Command="{Binding $parent[DataGrid].((dialog:PriceComparisonDialogViewModel)DataContext).VisitWebsiteCommand}"/>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Styles>
+
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Store.PriceComparison.Select}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          IsChecked="{Binding IsSelect}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn MinWidth="220"
+                                        Header="{DynamicResource Store.PriceComparison.Market}"
+                                        Binding="{Binding Market}"/>
+                    <DataGridTextColumn MinWidth="100"
+                                        Header="{DynamicResource Store.PriceComparison.Currency}"
+                                        Binding="{Binding Currency}"/>
+                    <DataGridTemplateColumn Width="150" Header="{DynamicResource Store.PriceComparison.ListPrice}" SortMemberPath="ListPrice">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                           Text="{Binding ListPrice, StringFormat=N2}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="150" Header="{Binding ConvertedPrice}" SortMemberPath="ConvertPrices">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                           Foreground="{DynamicResource Green}"
+                                           Text="{Binding ConvertPrices, StringFormat=N2}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="150" Header="{DynamicResource Store.PriceComparison.ExchangeRates}" SortMemberPath="ExchangeRates">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                           Text="{Binding ExchangeRates, StringFormat=N8}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </HeaderedContentControl>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Spacing="10" Margin="10,0,0,10" Orientation="Horizontal">
+            <Button Classes="LinkLabel" Command="{Binding UpdateSelectionCommand}" CommandParameter="SelectAll">
+                <TextBlock Text="{DynamicResource Store.PriceComparison.SelectAll}"
+                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+            <Button Classes="LinkLabel" Command="{Binding UpdateSelectionCommand}" CommandParameter="InvertSelection">
+                <TextBlock Text="{DynamicResource Store.PriceComparison.InvertSelection}"
+                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+        </StackPanel>
+
+        <Button Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="{DynamicResource Store.PriceComparison.Query}"
+                Command="{Binding QueryCommand}"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="2" Spacing="10" Margin="0,0,10,10" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock TextWrapping="Wrap"  HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                       Text="{DynamicResource Store.PriceComparison.ConvertCurrency}"/>
+            <TextBox x:Name="CurrencyTextBox" MaxLength="3"
+                     Text="{Binding UseCurrencyCode}"/>
+            <Button Classes="LinkLabel"  CommandParameter="SelectAll" Command="{Binding GetSystemCurrencyCodeCommand}">
+                <TextBlock Text="{DynamicResource Store.PriceComparison.DefaultCurrency}"
+                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,227 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        x:Class="XboxDownload.Views.Dialog.DohServerDialog"
+        x:DataType="dialog:DohServerDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="980" Height="600"
+        Title="{DynamicResource Service.SecureDns.Title}">
+
+    <TabControl>
+        <TabItem Header="{DynamicResource Service.SecureDns.GlobalSettings}">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <Border Grid.Row="0">
+                    <HeaderedContentControl Header="{DynamicResource Service.SecureDns.DohServer}">
+                        <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Spacing="10">
+                                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.SecureDns.DefaultDohServer}"/>
+                                <ComboBox MinWidth="280"
+                                          ItemsSource="{Binding DohServersMappings}"
+                                          SelectedItem="{Binding SelectedDohServer}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.SecureDns.CloudflareProxyIp}"/>
+                                <TextBox x:Name="ProxyIp" MinWidth="250" Watermark="{DynamicResource Service.SecureDns.CloudflareProxyIpWatermark}"
+                                         Text="{Binding DohServerProxyIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                                <Button MinWidth="80" HorizontalContentAlignment="Center"
+                                        Content="{DynamicResource Service.SecureDns.Save}"
+                                        Command="{Binding SaveSettingsCommand}"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </HeaderedContentControl>
+                </Border>
+
+                <Border Grid.Row="1">
+                    <HeaderedContentControl Header="{DynamicResource Service.SecureDns.SpeedTest}">
+                        <Grid ColumnDefinitions="*,120,*" RowDefinitions="*,Auto" RowSpacing="6">
+
+                            <DataGrid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" CanUserSortColumns="False"
+                                      CanUserResizeColumns="False" GridLinesVisibility="All"
+                                      ItemsSource="{Binding SpeedTestMappings}">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Width="70" Header="{DynamicResource Service.SecureDns.Select}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          IsEnabled="True"
+                                                          IsChecked="{Binding IsSelect}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="{DynamicResource Service.SecureDns.DohServer}" Width="*" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock VerticalAlignment="Center" Margin="10,0"
+                                                           Text="{Binding Name}"
+                                                           ToolTip.Tip="{Binding Url}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="www.xbox.com" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                                           Text="{Binding Website1, StringFormat='{}{0:F0}'}"
+                                                           ToolTip.Tip="{Binding Tip1}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="www.playstation.com" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                                           Text="{Binding Website2, StringFormat='{}{0:F0}'}"
+                                                           ToolTip.Tip="{Binding Tip2}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="www.nintendo.com" IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                                           Text="{Binding Website3, StringFormat='{}{0:F0}'}"
+                                                           ToolTip.Tip="{Binding Tip3}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="{DynamicResource Service.SecureDns.Proxy}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          IsEnabled="{Binding CanEditProxy}"
+                                                          IsChecked="{Binding UseProxy}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" Spacing="10" Orientation="Horizontal">
+                                <Button Classes="LinkLabel" Command="{Binding UpdateSelectionCommand}" CommandParameter="SelectAll">
+                                    <TextBlock Text="{DynamicResource Service.SecureDns.SelectAll}"
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                </Button>
+                                <Button Classes="LinkLabel" Command="{Binding UpdateSelectionCommand}" CommandParameter="InvertSelection">
+                                    <TextBlock Text="{DynamicResource Service.SecureDns.InvertSelection}"
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                </Button>
+                            </StackPanel>
+                            <Button Grid.Row="1" Grid.Column="1" MinWidth="100"
+                                    HorizontalAlignment="Center"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Content="{DynamicResource Service.SecureDns.Test}"
+                                    Command="{Binding SpeedTestCommand}"/>
+                            <StackPanel Grid.Row="1" Grid.Column="2" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                            Text="{DynamicResource Service.SecureDns.DohProxyNote}"/>
+                                <Button Classes="LinkLabel" Command="{Binding UpdateSelectionCommand}" CommandParameter="ToggleProxy">
+                                    <TextBlock Text="{DynamicResource Service.SecureDns.InvertSelection}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                </Button>
+                                <Button Classes="LinkLabel" Command="{Binding UpdateSelectionCommand}" CommandParameter="EnableAllProxy">
+                                    <TextBlock Text="{DynamicResource Service.SecureDns.SelectAll}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                </Button>
+                            </StackPanel>
+
+                        </Grid>
+                    </HeaderedContentControl>
+                </Border>
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,5"
+                           Text="{DynamicResource Service.SecureDns.DohDescription}"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="{DynamicResource Service.SecureDns.ForceEncryption}">
+            <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto">
+
+                <DataGrid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Gray"
+                          BorderThickness="1"
+                          Padding="2"
+                          CanUserSortColumns="False" CanUserResizeColumns="True" GridLinesVisibility="All"
+                          ItemsSource="{Binding DohHostMappings}"
+                          SelectedItem="{Binding SelectedEntry}">
+
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="{DynamicResource Service.SecureDns.Delete}" Command="{Binding $parent[DataGrid].((dialog:DohServerDialogViewModel)DataContext).DeleteEntryCommand}"/>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Styles>
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Service.SecureDns.Enable}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              IsChecked="{Binding IsEnabled}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="300" Binding="{Binding Domain}" Header="{DynamicResource Service.SecureDns.Domain}"/>
+                        <DataGridTemplateColumn MinWidth="280" Header="{DynamicResource Service.SecureDns.DohServer}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center" Margin="12, 0" Text="{Binding DohServer}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox MinWidth="280"
+                                              ItemsSource="{Binding $parent.((dialog:DohServerDialogViewModel)DataContext).DohServersMappings}"
+                                              SelectedItem="{Binding DohServer}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="100" Width="*" Binding="{Binding Note}" Header="{DynamicResource Service.SecureDns.Note}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,10" Spacing="10">
+                    <Button Classes="LinkLabel" Command="{Binding AddDohHostCommand}">
+                        <TextBlock Text="{DynamicResource Service.SecureDns.AddNewRow}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                    <Button Classes="LinkLabel" Command="{Binding ClearAllCommand}">
+                        <TextBlock Text="{DynamicResource Service.SecureDns.ClearAll}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10" Spacing="10">
+                    <Button MinWidth="80" HorizontalContentAlignment="Center"
+                            Content="{DynamicResource Service.SecureDns.Save}"
+                            Command="{Binding SaveDohHostsToJsonCommand}"/>
+                    <Button MinWidth="80" HorizontalContentAlignment="Center"
+                            Content="{DynamicResource Service.SecureDns.Reset}"
+                            Command="{Binding LoadDohHostsFromJsonCommand}"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" TextWrapping="Wrap" Margin="0,10"
+                           Text="{DynamicResource Service.SecureDns.ForceEncryptionNote}"/>
+            </Grid>
+
+        </TabItem>
+    </TabControl>
+</Window>
