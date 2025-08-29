@@ -1,0 +1,20 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        x:Class="XboxDownload.Views.Dialog.StartupSettingsDialog"
+        x:DataType="dialog:StartupSettingsDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="300" Height="100" CanResize="False"
+        Title="{DynamicResource Startup.Title}">
+
+    <StackPanel Orientation="Vertical" Spacing="10" Margin="20">
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10" >
+            <CheckBox Content="{DynamicResource Startup.RunAtStartup}"
+                      IsChecked="{Binding IsRunAtStartup}"/>
+            <Button MinWidth="60" HorizontalContentAlignment="Center"
+                    Content="{DynamicResource Startup.Save}"
+                    Command="{Binding SaveSettingsCommand}"/>
+        </StackPanel>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{DynamicResource Startup.Description}"/>
+    </StackPanel>
+</Window>

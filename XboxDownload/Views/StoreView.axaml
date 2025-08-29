@@ -1,0 +1,287 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             x:Class="XboxDownload.Views.StoreView"
+             x:DataType="vm:StoreViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+        <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Store.MicrosoftStore}">
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*,Auto,Auto" RowSpacing="5" ColumnSpacing="5">
+                <Grid.Styles>
+                    <Style Selector="TextBox">
+                        <Setter Property="Height" Value="32"/>
+                    </Style>
+                </Grid.Styles>
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Store.UrlProductId}"/>
+                <TextBox x:Name="QueryUrl" Grid.Row="0" Grid.Column="1" MaxLength="2083"
+                         VerticalAlignment="Center"
+                         KeyDown="QueryUrl_OnKeyDown"
+                         Text="{Binding QueryUrl}"/>
+                <ComboBox Grid.Row="0" Grid.Column="2" MinWidth="160"
+                          ItemsSource="{Binding Markets}"
+                          SelectedItem="{Binding SelectedMarket}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Region}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button x:Name="QueryButton" Grid.Row="0" Grid.Column="3" MinWidth="100" HorizontalContentAlignment="Center" Content="{DynamicResource Store.Query}"
+                        Command="{Binding QueryCommand}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Store.Search}"/>
+                <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ColumnDefinitions="*,1.5*,1.5*" ColumnSpacing="5">
+
+                    <StackPanel Grid.Column="0">
+                        <TextBox x:Name="SearchBox" MaxLength="50"
+                                 Watermark="{DynamicResource Store.SearchWatermark}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 KeyDown="SearchBox_KeyDown" PointerPressed="SearchBox_PointerPressed" LostFocus="SearchBox_LostFocus">
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout Placement="BottomEdgeAlignedLeft" ShowMode="Standard">
+                                    <ListBox x:Name="ResultListBox" MaxHeight="268"
+                                             MinWidth="{Binding #SearchBox.Bounds.Width}"
+                                             ItemsSource="{Binding SearchResults}"
+                                             DoubleTapped="ResultListBox_OnDoubleTapped"
+                                             KeyDown="ResultListBox_OnKeyDown">
+                                        <ListBox.Styles>
+                                            <Style Selector="ListBoxItem">
+                                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                <Setter Property="Padding" Value="4"/>
+                                                <Setter Property="Margin" Value="0"/>
+                                            </Style>
+                                        </ListBox.Styles>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                                    <Image Source="{Binding IconBitmap}" Width="32" Height="32"/>
+                                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" MinWidth="180"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </TextBox>
+                    </StackPanel>
+
+                    <ComboBox x:Name="Xgp1" Grid.Column="1" HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding GamePass1Mappings}"
+                              SelectedItem="{Binding SelectedGamePass1}"
+                              SelectionChanged="OnGamePass1SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent.Bounds.Width}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ComboBox x:Name="Xgp2" Grid.Column="2" HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding GamePass2Mappings}"
+                              SelectedItem="{Binding SelectedGamePass2}"
+                              SelectionChanged="OnGamePass2SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent.Bounds.Width}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+
+            </Grid>
+
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Grid.Row="1" Header="{DynamicResource Store.Information}">
+            <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="Auto,*" ColumnSpacing="5">
+                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="5" VerticalAlignment="Center">
+                    <StackPanel.Styles>
+                        <Style Selector="Image:disabled">
+                            <Setter Property="Opacity" Value="0.4"/>
+                        </Style>
+                    </StackPanel.Styles>
+                    <Image Width="177" Height="177" Source="{Binding BoxArt}"/>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <HyperlinkButton
+                            IsEnabled="{Binding ProductLoaded}"
+                            Command="{Binding OpenProductCommand}"
+                            CommandParameter="Browser">
+                            <Image Width="24" Height="24" Source="/Assets/Store/Browser.png" />
+                        </HyperlinkButton>
+                        <HyperlinkButton
+                            IsVisible="{Binding IsWindows}"
+                            IsEnabled="{Binding ProductLoaded}"
+                            Command="{Binding OpenProductCommand}"
+                            CommandParameter="Store">
+                            <Image Width="24" Height="24" Source="/Assets/Store/MsStore.png"/>
+                        </HyperlinkButton>
+                        <HyperlinkButton
+                            IsVisible="{Binding IsWindows}"
+                            IsEnabled="{Binding ProductLoaded}"
+                            Command="{Binding OpenProductCommand}"
+                            CommandParameter="Xbox">
+                            <Image Width="24" Height="24" Source="/Assets/Store/XboxApp.png"/>
+                        </HyperlinkButton>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="5" Grid.IsSharedSizeScope="True">
+                    <StackPanel.Styles>
+                        <Style Selector="TextBox">
+                            <Setter Property="IsReadOnly" Value="True" />
+                            <Setter Property="Height" Value="32"/>
+                        </Style>
+                    </StackPanel.Styles>
+                    <Grid ColumnSpacing="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="A" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Store.Title}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="1" Text="{Binding Title}"/>
+                        <ComboBox Grid.Row="0" Grid.Column="2" Width="250"
+                                  Foreground="{DynamicResource Green}"
+                                  ItemsSource="{Binding BundledMappings}"
+                                  SelectedIndex="{Binding SelectedBundledIndex}"
+                                  SelectionChanged="OnProductSelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <Grid ColumnSpacing="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="A" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Store.PublisherAndDeveloper}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding PublisherAndDeveloper}"/>
+                        <TextBlock Grid.Column="2" Text="{DynamicResource Store.Category}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="3" VerticalAlignment="Center" Text="{Binding Category}"/>
+                        <TextBlock Grid.Column="4" Text="{DynamicResource Store.OriginalReleaseDate}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="5" VerticalAlignment="Center" Text="{Binding OriginalReleaseDate}"/>
+                    </Grid>
+                    <Grid ColumnSpacing="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="A" />
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Store.Description}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" Height="100" Text="{Binding Description}"/>
+                    </Grid>
+                    <Grid ColumnSpacing="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="A"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Store.Languages}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="1" Text="{Binding GameLanguages}"/>
+                    </Grid>
+                    <Grid ColumnSpacing="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="A"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Store.Price}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBox Grid.Column="1" Text="{Binding Price}"/>
+                        <Button Grid.Column="2" Classes="LinkLabel"
+                                IsEnabled="{Binding IsEnablePriceComparison}"
+                                Click="ShowPriceComparisonAsync">
+                            <TextBlock Text="{DynamicResource Store.PriceComparison}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,5,5,2">
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Store.InstallationGuide}"/>
+                    <Button Classes="LinkLabel" Command="{Binding QuickInstallationCommand}" IsVisible="{Binding IsWindows}">
+                        <TextBlock Text="{DynamicResource Store.QuickInstallation}"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                    <Button Classes="LinkLabel" Command="{Binding OpenWebStoreCommand}">
+                        <TextBlock Text="{DynamicResource Store.WebStore}"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                    <Button Classes="LinkLabel" Command="{Binding OpenConsoleGuideCommand}">
+                        <TextBlock Text="{DynamicResource Store.ConsoleGuide}"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                </StackPanel>
+
+                <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" CanUserSortColumns="False" GridLinesVisibility="All"
+                          BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                          ItemsSource="{Binding PlatformDownloadInfo}"
+                          SelectedItem="{Binding SelectedPlatformDownloadItem}">
+
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowContextMenu}">
+                                        <MenuItem Header="{DynamicResource Store.CopyGlobalDownloadLink}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
+                                                  CommandParameter="Globa"/>
+                                        <MenuItem Header="{DynamicResource Store.CopyCnDownloadLink}" Foreground="{DynamicResource Green}"
+                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowGameCnMenu}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
+                                                  CommandParameter="Cn"/>
+                                        <MenuItem Header="{DynamicResource Store.CopyAzureDownloadLink}"
+                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAzureMenu}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
+                                                  CommandParameter="Azure"/>
+                                        <MenuItem Header="{DynamicResource Store.ViewAllDownloads}"
+                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAllAppMenu}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).GetAllAppPackageCommand}"/>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Styles>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn MinWidth="138" Header="{DynamicResource Store.PlatformName}" Binding="{Binding DisplayName}"/>
+                        <DataGridTextColumn MinWidth="90" Header="{DynamicResource Store.Market}" Binding="{Binding Market}"/>
+                        <DataGridTemplateColumn MinWidth="95" Header="{DynamicResource Store.Size}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
+                                               Text="{Binding FormatSize}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="*" Header="{DynamicResource Store.DownloadLink}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center" Margin="10,0" TextTrimming="CharacterEllipsis"
+                                               Foreground="{Binding Foreground}"
+                                               TextDecorations="{Binding TextDecorations}"
+                                               Text="{Binding Display}">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding Url}" />
+                                        </ToolTip.Tip>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+        </HeaderedContentControl>
+    </Grid>
+</UserControl>

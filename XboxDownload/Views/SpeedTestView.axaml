@@ -1,0 +1,319 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="XboxDownload.Views.SpeedTestView"
+             x:DataType="vm:SpeedTestViewModel">
+
+    <Grid RowDefinitions="*,Auto">
+        <Border>
+            <HeaderedContentControl Header="{Binding HeaderText}">
+                <DataGrid x:Name="MyDataGrid" AutoGenerateColumns="False" GridLinesVisibility="All" CanUserResizeColumns="True" Sorting="MyDataGrid_Sorting"
+                          ItemsSource="{Binding IpItems}"
+                          SelectedItem="{Binding SelectedItem}">
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="{DynamicResource SpeedTest.MenuItem.UseCustomIp}">
+                                            <MenuItem.Icon>
+                                                <Viewbox Width="16" Height="16">
+                                                    <Path Data="{StaticResource CloudDownloadRegular}" Fill="Gray" Stretch="Uniform"/>
+                                                </Viewbox>
+                                            </MenuItem.Icon>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxGlobal}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="XboxGlobal">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxCn1}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxCn1Visible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="XboxCn1">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxCn2}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxCn2Visible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="XboxCn2">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxApp}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxAppVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="XboxApp">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxGlobalCnApps}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="XboxGlobalCnApps">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxSeparatorVisible}"/>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForPs}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsPsVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Ps">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/ps.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForNs}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Ns">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/ns.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsPsSeparatorVisible}"/>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForEa}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Ea">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/ea.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForBattle}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Battle">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/battle.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForEpic}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Epic">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/epic.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForUbisoft}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsUbisoftVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Ubisoft">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/ubisoft.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsUbisoftSeparatorVisible}"/>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForAkamaiCdn}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      CommandParameter="Akamai">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/akamai.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.WriteToSystemHostsFile}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).WriteHostsCommand}">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/Assets/Speedtest/windows.ico" Width="16" Height="16"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource SpeedTest.MenuItem.ExportRules}">
+                                            <MenuItem.Icon>
+                                                <Viewbox Width="16" Height="16">
+                                                    <Path Data="{StaticResource SaveAsRegular}" Fill="Gray" Stretch="Uniform"/>
+                                                </Viewbox>
+                                            </MenuItem.Icon>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.HostsFormat}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).ExportHostsCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                <MenuItem.Icon>
+                                                    <Viewbox Width="16" Height="16">
+                                                        <Path Data="{StaticResource TextNumberListLtrRegular}" Fill="Gray" Stretch="Uniform"/>
+                                                    </Viewbox>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.DnsmasqFormat}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).ExportDnsmasqCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                <MenuItem.Icon>
+                                                    <Viewbox Width="16" Height="16">
+                                                        <Path Data="{StaticResource TextBulletListRegular}" Fill="Gray" Stretch="Uniform"/>
+                                                    </Viewbox>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CopyIpToClipboard}"
+                                                  Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CopyIpCommand}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                            <MenuItem.Icon>
+                                                <Viewbox Width="16" Height="16">
+                                                    <Path Data="{StaticResource CopyIconGeometry}" Fill="Gray" Stretch="Uniform"/>
+                                                </Viewbox>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Styles>
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.Select}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        IsEnabled="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsSortingEnabled}"
+                                        IsChecked="{Binding IsSelected}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Width="260" Header="{DynamicResource SpeedTest.DataGrid.Ip}" SortMemberPath="Ip" Binding="{Binding Path=Ip}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="*" Header="{DynamicResource SpeedTest.DataGrid.Location}" SortMemberPath="Location" Binding="{Binding Path=Location}" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.IsRedirect}" Binding="{Binding Path=IsRedirect}" IsReadOnly="True"/>
+                        <!--
+                        <DataGridTemplateColumn Width="85" Header="{DynamicResource SpeedTest.DataGrid.Ttl}" SortMemberPath="Ttl">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Ttl}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        //-->
+                        <DataGridTemplateColumn Width="145" Header="{DynamicResource SpeedTest.DataGrid.RoundtripTime}" SortMemberPath="RoundtripTime">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RoundtripTime}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="155" Header="{DynamicResource SpeedTest.DataGrid.Speed}" SortMemberPath="Speed">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Speed, StringFormat='{}{0:F2}'}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </HeaderedContentControl>
+        </Border>
+
+        <Border Grid.Row="1" Padding="0,2">
+            <StackPanel>
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0">
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource SpeedTest.Location}"/>
+                        <ItemsControl ItemsSource="{Binding LocationFilters}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox VerticalAlignment="Center" Margin="5 0"
+                                              Content="{Binding Display}"
+                                              IsChecked="{Binding IsSelected}"
+                                              IsVisible="{Binding IsVisible}"
+                                              IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Classes="LinkLabel" Margin="5,0" IsEnabled="{Binding !IsSpeedTest}"
+                                Command="{Binding ToggleSelectAllCommand}" CommandParameter="True">
+                            <TextBlock Text="{DynamicResource SpeedTest.SelectAll}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                        <Button Classes="LinkLabel" Margin="5,0" IsEnabled="{Binding !IsSpeedTest}"
+                                Command="{Binding ToggleSelectAllCommand}" CommandParameter="False">
+                            <TextBlock Text="{DynamicResource SpeedTest.SelectNone}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1" Spacing="5">
+                        <TextBox VerticalAlignment="Center" Width="140" MaxLength="16" KeyDown="OnLocationQueryKeyDown"
+                                 Text="{Binding SearchLocation}"
+                                 Watermark="{DynamicResource SpeedTest.SearchLocationHint}"
+                                 IsEnabled="{Binding !IsSpeedTest}"/>
+                        <Button VerticalContentAlignment="Center"
+                                Content="{DynamicResource SpeedTest.Search}"
+                                IsEnabled="{Binding !IsSpeedTest}"
+                                Command="{Binding FilterByLocationCommand}"/>
+
+                        <ComboBox VerticalContentAlignment="Center" MinWidth="310"
+                                  IsEnabled="{Binding IsImportEnabled}"
+                                  ItemsSource="{Binding ImportOptions}"
+                                  SelectedItem="{Binding SelectedImportOption}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Display}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource SpeedTest.DownloadTestFile}"/>
+                        <ItemsControl ItemsSource="{Binding SpeedTestFiles}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Classes="LinkLabel" Margin="5,0"
+                                            IsVisible="{Binding IsVisible}"
+                                            IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest}"
+                                            Command="{Binding $parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).FileClickedCommand}"
+                                            CommandParameter="{Binding}">
+                                        <TextBlock Text="{Binding Display}"
+                                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0 1" Spacing="5">
+                        <CheckBox Content="上传" ToolTip.Tip="当某 Akamai IP 节点对中国大陆的测试下载速度超过 20MB/s 时，系统将自动收录该 IP 至优选列表。（仅收录香港、台湾、日本、韩国、新加坡地区的 IP，非中国大陆用户请勿启用此功能））"
+                                  IsVisible="{Binding UploadAkamaiIpsVisible}"
+                                  IsChecked="{Binding UploadAkamaiIpsEnabled}"/>
+                        <Button Classes="LinkLabel" Command="{Binding ClearHostsCommand}">
+                            <TextBlock Text="{DynamicResource SpeedTest.ClearHosts}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                        <Button Classes="LinkLabel" Click="ShowEditHostsDialogAsync">
+                            <TextBlock Text="{DynamicResource SpeedTest.EditHosts}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource SpeedTest.Timeout}"/>
+                        <ComboBox ItemsSource="{Binding TimeoutOptions}" SelectedItem="{Binding SelectedTimeout}" IsEnabled="{Binding !IsSpeedTest}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,Auto,Auto">
+                    <TextBox Grid.Column="0" Height="50" MaxLength="2083" Margin="0 0 2 0" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding !IsSpeedTest}" Text="{Binding TargetTestUrl}" Watermark="{Binding WatermarkText}"/>
+                    <Button Grid.Column="1" Height="50" MinWidth="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{DynamicResource SpeedTest.StartTest}" Command="{Binding StartSpeedTestCommand}" IsVisible="{Binding !IsSpeedTest}"/>
+                    <Button Grid.Column="2" Height="50" MinWidth="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{DynamicResource SpeedTest.StopTest}" Command="{Binding StopSpeedTestCommand}" IsVisible="{Binding IsSpeedTest}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

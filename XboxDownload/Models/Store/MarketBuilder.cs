@@ -1,0 +1,87 @@
+﻿using System.Collections.Generic;
+using XboxDownload.Helpers.Resources;
+
+namespace XboxDownload.Models.Store;
+
+public abstract class MarketBuilder
+{
+    public static IEnumerable<Market> BuildMarket() =>
+    [
+        new Market { Region = ResourceHelper.GetString("Store.Region.Argentina"), Language = "es-AR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Austria"), Language = "de-AT" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Australia"), Language = "en-AU" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Belgium"), Language = "nl-BE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Brazil"), Language = "pt-BR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Canada"), Language = "en-CA" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Chile"), Language = "es-CL" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.China"), Language = "zh-CN" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Colombia"), Language = "es-CO" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.CzechRepublic"), Language = "cs-CZ" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Denmark"), Language = "da-DK" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Finland"), Language = "fi-FI" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.France"), Language = "fr-FR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Germany"), Language = "de-DE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Greece"), Language = "el-GR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.HongKongSar"), Language = "zh-HK" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Hungary"), Language = "hu-HU" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.India"), Language = "en-IN" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Ireland"), Language = "ar-AE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Israel"), Language = "he-IL" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Italy"), Language = "it-IT" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Japan"), Language = "ja-JP" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Korea"), Language = "ko-KR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Mexico"), Language = "es-MX" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Netherlands"), Language = "nl-NL" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.NewZealand"), Language = "en-NZ" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Norway"), Language = "nb-NO" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Poland"), Language = "pl-PL" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Portugal"), Language = "pt-PT" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Russia"), Language = "ru-RU" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.SaudiArabia"), Language = "ar-SA" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Singapore"), Language = "en-SG" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Slovakia"), Language = "sk-SK" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.SouthAfrica"), Language = "en-ZA" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Spain"), Language = "es-ES" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Sweden"), Language = "sv-SE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Switzerland"), Language = "de-CH" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Taiwan"), Language = "zh-TW" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Turkey"), Language = "tr-TR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.UnitedArabEmirates"), Language = "ar-AE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.UnitedKingdom"), Language = "en-GB" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.UnitedStates"), Language = "en-US" }
+    ];
+
+    public static IEnumerable<Market> BuildMarket2() =>
+    [
+        new Market { Region = ResourceHelper.GetString("Store.Region.Algeria"), Language = "ar-DZ" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Bahrain"), Language = "ar-BH" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Bangladesh"), Language = "en-BD" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Bulgaria"), Language = "bg-BG" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.CostaRica"), Language = "es-CR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Egypt"), Language = "ar-EG" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Guatemala"), Language = "es-GT" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Iceland"), Language = "is-IS" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Indonesia"), Language = "id-ID" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Iraq"), Language = "ar-IQ" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Jordan"), Language = "ar-JO" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Kazakhstan"), Language = "ru-KZ" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Kenya"), Language = "en-KE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Kuwait"), Language = "ar-KW" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Liechtenstein"), Language = "de-LI" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Malaysia"), Language = "en-MY" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Mauritania"), Language = "ar-MR" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Nigeria"), Language = "en-NG" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Oman"), Language = "ar-OM" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Pakistan"), Language = "en-PK" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Peru"), Language = "es-PE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Philippines"), Language = "en-PH" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Qatar"), Language = "en-QA" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Romania"), Language = "ro-RO" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Serbia"), Language = "en-RS" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Thailand"), Language = "th-TH" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.TrinidadAndTobago"), Language = "en-TT" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Tunisia"), Language = "ar-TN" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Ukraine"), Language = "uk-UA" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Vietnam"), Language = "vi-VN" },
+    ];
+}

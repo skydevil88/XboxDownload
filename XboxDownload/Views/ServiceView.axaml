@@ -1,0 +1,296 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="XboxDownload.Views.ServiceView"
+             x:DataType="vm:ServiceViewModel">
+
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,200">
+        <!-- Settings Group -->
+        <Border Grid.Row="0" Grid.Column="0">
+            <HeaderedContentControl Header="{DynamicResource Service.Settings}">
+                <StackPanel Spacing="2">
+                    <StackPanel.Styles>
+                        <Style Selector="StackPanel.hosts-row">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Spacing" Value="5"/>
+                        </Style>
+                        <Style Selector="StackPanel.hosts-row TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                        <Style Selector="StackPanel.hosts-row TextBox">
+                            <Setter Property="Width" Value="220"/>
+                            <Setter Property="MaxLength" Value="46"/>
+                        </Style>
+                        <Style Selector="TextBox">
+                            <Setter Property="IsReadOnly" Value="{Binding IsListening}"/>
+                            <Setter Property="Height" Value="32"/>
+                        </Style>
+                        <Style Selector="TextBox[IsReadOnly=true]">
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Style>
+                        <Style Selector="CheckBox">
+                            <Setter Property="IsEnabled" Value="{Binding !IsListening}"/>
+                        </Style>
+                        <Style Selector="Button">
+                            <Setter Property="IsEnabled" Value="{Binding !IsListening}"/>
+                        </Style>
+                    </StackPanel.Styles>
+
+                    <Grid RowDefinitions="*,*" ColumnDefinitions="60,Auto,Auto">
+                        <Image Grid.Row="0" Grid.Column="0" Height="58" Width="58" Source="{Binding StatusImage}"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4" Margin="5,0">
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.UpstreamDnsServer}"
+                                           ToolTip.Tip="{DynamicResource Service.Settings.UpstreamDnsServerTip}"/>
+                                <TextBox Name="DnsIpTextBox" Text="{Binding DnsIp}"
+                                         Watermark="{DynamicResource Service.Settings.OptionalDns}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.XboxGlobalDlIp}"
+                                           ToolTip.Tip="{Binding XboxGlobalDlIpTip}"/>
+                                <TextBox Name="XboxGlobalIpTextBox" Text="{Binding XboxGlobalIp}"
+                                          Watermark="{DynamicResource Service.Settings.XboxGlobalDlIpTip}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.XboxCn1DlIp}"
+                                           ToolTip.Tip="{Binding XboxCn1DlIpTip}"/>
+                                <TextBox Name="XboxCn1IpTextBox" Text="{Binding XboxCn1Ip}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.XboxCn2DlIp}"
+                                           ToolTip.Tip="{Binding XboxCn2DlIpTip}"/>
+                                <TextBox Name="XboxCn2IpTextBox" Text="{Binding XboxCn2Ip}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.XboxAppDlIp}"
+                                           ToolTip.Tip="{Binding XboxAppDlIpTip}"/>
+                                <TextBox Name="XboxAppIpTextBox" Text="{Binding XboxAppIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <CheckBox Content="{DynamicResource Service.Settings.ShowXboxGameDownloadLinks}"
+                                          IsChecked="{Binding IsXboxGameDownloadLinksShown}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4" Margin="5,0">
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.PsDlIp}"
+                                           ToolTip.Tip="{Binding PsDlIpTip}"/>
+                                <TextBox Name="PsIpTextBox" Text="{Binding PsIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.NsDlIp}"
+                                           ToolTip.Tip="{Binding NsDlIpTip}"/>
+                                <TextBox Name="NsIpTextBox" Text="{Binding NsIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.EaDlIp}"
+                                           ToolTip.Tip="{Binding EaDlIpTip}"/>
+                                <TextBox Name="EaIpTextBox" Text="{Binding EaIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.BattleDlIp}"
+                                           ToolTip.Tip="{Binding BattleDlIpTip}"/>
+                                <TextBox Name="BattleIpTextBox" Text="{Binding BattleIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.EpicDlIp}"
+                                           ToolTip.Tip="{Binding EpicDlIpTip}"/>
+                                <TextBox Name="EpicIpTextBox" Text="{Binding EpicIp}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
+                                <TextBlock Text="{DynamicResource Service.Settings.UbisoftDlIp}"
+                                           ToolTip.Tip="{Binding UbisoftDlIpTip}"/>
+                                <TextBox Name="UbisoftIpTextBox" Text="{Binding UbisoftIp}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2">
+                            <Grid ColumnDefinitions="Auto,Auto,*" VerticalAlignment="Center">
+                                <CheckBox Grid.Column="0" IsChecked="{Binding IsLocalUploadEnabled}"
+                                          Content="{DynamicResource Service.Settings.LocalUpload}"/>
+
+                                <TextBox Grid.Column="1"
+                                         Margin="5,2, 5,0"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Stretch"
+                                         Width="550"
+                                         MaxLength="1024"
+                                         Text="{Binding LocalUploadPath}"/>
+
+                                <Button Grid.Column="2"
+                                        MinWidth="60"
+                                        Content="{DynamicResource Service.Settings.Browse}"
+                                        VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        HorizontalContentAlignment="Center"
+                                        Click="OnBrowseClick"/>
+                            </Grid>
+                        </StackPanel>
+
+                    </Grid>
+
+                    <TextBlock TextWrapping="Wrap" Text="{DynamicResource Service.Settings.ConsoleSetup}"/>
+                </StackPanel>
+            </HeaderedContentControl>
+        </Border>
+
+        <!-- Service Group -->
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="2,0,0,0">
+            <HeaderedContentControl Header="{DynamicResource Service.Service}">
+                <StackPanel VerticalAlignment="Top">
+
+                    <StackPanel.Styles>
+                        <Style Selector="CheckBox">
+                            <Setter Property="IsEnabled" Value="{Binding !IsListening}"/>
+                        </Style>
+                        <Style Selector="ComboBox">
+                            <Setter Property="IsEnabled" Value="{Binding !IsListening}"/>
+                        </Style>
+                    </StackPanel.Styles>
+
+                    <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,2">
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.Service.ListeningIp}"/>
+                        <ComboBox ItemsSource="{Binding ListeningIpOptions}"
+                                  SelectedItem="{Binding SelectedListeningIp}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Display}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <CheckBox Content="{DynamicResource Service.Service.DnsService}"
+                              IsChecked="{Binding IsDnsServiceEnabled}"/>
+                    <CheckBox Content="{DynamicResource Service.Service.HttpService}"
+                              IsChecked="{Binding IsHttpServiceEnabled}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <CheckBox Content="{DynamicResource Service.Service.SetLocalDns}"
+                                  ToolTip.Tip="{DynamicResource Service.Service.SetLocalDnsTip}"
+                                  IsChecked="{Binding IsSetLocalDnsEnabled}"/>
+                        <Button Classes="LinkLabel" IsEnabled="{Binding !IsListening}"
+                                Command="{Binding RepairLocalDnsCommand}">
+                            <TextBlock Text="{DynamicResource Service.Service.SetLocalDnsRepair}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </StackPanel>
+                    <CheckBox Content="{DynamicResource Service.Service.SystemSleepPrevented}"
+                              IsChecked="{Binding IsSystemSleepPrevented}"/>
+
+                    <StackPanel Orientation="Horizontal" Spacing="5" >
+                        <CheckBox Content="{DynamicResource Service.Service.SecureDns}"
+                                  ToolTip.Tip="{DynamicResource Service.Service.SecureDnsTip}"
+                                  IsChecked="{Binding IsDoHEnabled}"/>
+                        <Button Classes="LinkLabel" Click="ShowDohSettingsDialogAsync">
+                            <TextBlock Text="{DynamicResource Service.Service.Settings}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </StackPanel>
+                    <CheckBox Content="{DynamicResource Service.Service.FilterIPv6Domains}"
+                              IsChecked="{Binding IsIPv6DomainFilterEnabled}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="5"
+                                IsVisible="{Binding !IsLinux}">
+                        <CheckBox Content="{DynamicResource Service.Service.LocalProxy}"
+                                  IsChecked="{Binding IsLocalProxyEnabled}"/>
+                        <Button Classes="LinkLabel" Click="ShowLocalProxyDialogAsync"
+                                IsEnabled="{Binding !IsListening}">
+                            <TextBlock Text="{DynamicResource Service.Service.Settings}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </StackPanel>
+                    <CheckBox Content="{DynamicResource Service.Service.FastestAkamaiIp}"
+                              ToolTip.Tip="{DynamicResource Service.Service.FastestAkamaiIpTip}"
+                              IsEnabled="{Binding IsDnsReady}"
+                              IsChecked="{Binding IsFastestAkamaiIp}"
+                              Command="{Binding FastestAkamaiIpCommand}"/>
+
+                    <Button Content="{Binding ListeningStatusText}" Margin="0,20, 0, 0"
+                            MinWidth="140" MinHeight="60" CornerRadius="8"
+                            HorizontalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            FontWeight="Bold"
+                            Command="{Binding ToggleListeningCommand}"/>
+
+                </StackPanel>
+            </HeaderedContentControl>
+        </Border>
+
+        <!-- Logs Group -->
+        <Border Grid.Row="1" Grid.Column="0">
+            <HeaderedContentControl Header="{DynamicResource Service.Logs}">
+                <DataGrid ItemsSource="{Binding Logs}" IsReadOnly="True" CanUserSortColumns="False" CanUserResizeColumns="True" GridLinesVisibility="All">
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <Setter Property="ContextMenu">
+                                <ContextMenu>
+                                    <!-- ReSharper disable once Xaml.PossibleNullReferenceException -->
+                                    <MenuItem Header="{DynamicResource Service.Logs.CopyContent}"
+                                              Command="{Binding $parent[DataGrid].((vm:ServiceViewModel)DataContext).CopyContentCommand}"
+                                              CommandParameter="{Binding }" />
+                                    <!-- ReSharper disable once Xaml.PossibleNullReferenceException -->
+                                    <MenuItem Header="{DynamicResource Service.Logs.ExportAllLogs}"
+                                              Command="{Binding $parent[DataGrid].((vm:ServiceViewModel)DataContext).ExportAllLogsCommand}"/>
+                                </ContextMenu>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Styles>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{DynamicResource Service.Logs.RequestMethod}" MinWidth="80" Binding="{Binding RequestMethod}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Service.Logs.Content}" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="6,0">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding $parent[TextBlock].Text}" TextWrapping="Wrap"/>
+                                        </ToolTip.Tip>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource Service.Logs.ClientIp}" Width="128" MinWidth="120" Binding="{Binding ClientIp}"/>
+                        <DataGridTextColumn Header="{DynamicResource Service.Logs.Timestamp}" CanUserResize="False" Width="120" Binding="{Binding TimestampFormatted}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </HeaderedContentControl>
+        </Border>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,2">
+            <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Spacing="10">
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.Bottom.LocalIp}"/>
+                    <ComboBox ItemsSource="{Binding AdapterList}" SelectedItem="{Binding SelectedAdapter}"
+                              IsEnabled="{Binding !IsListening}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ip}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.Bottom.LocalIpNote}"/>
+                    <StackPanel Orientation="Horizontal" ToolTip.Tip="{Binding AdapterInfo}">
+                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource Green}"
+                                   Text="{DynamicResource Service.Bottom.Traffic}"/>
+                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource Green}"
+                                   Text="{Binding Traffic}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                    <CheckBox Content="{DynamicResource Service.Bottom.Logging}" IsChecked="{Binding IsLogging}"/>
+                    <Button Classes="LinkLabel" Command="{Binding ClearLogsCommand}">
+                        <TextBlock Text="{DynamicResource Service.Bottom.ClearLogs}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:XboxDownload.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:XboxDownload.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="XboxDownload.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/xbox.ico"
+        Width="1100" MinWidth="1100"
+        Height="680" MinHeight="680"
+        Title="{DynamicResource App.Title}">
+
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Background="{DynamicResource BgToolbar}">
+            <Menu Grid.Column="0">
+                <MenuItem Header="{DynamicResource Menu.Options}">
+                    <MenuItem Header="{DynamicResource Menu.Language}">
+                        <MenuItem Header="English" Command="{Binding SwitchLanguageCommand}" CommandParameter="en-US"/>
+                        <MenuItem Header="简体中文" Command="{Binding SwitchLanguageCommand}" CommandParameter="zh-Hans"/>
+                        <MenuItem Header="繁體中文" Command="{Binding SwitchLanguageCommand}" CommandParameter="zh-Hant"/>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Menu.Theme}">
+                        <MenuItem Header="{DynamicResource Menu.Theme.Default}" Command="{Binding SwitchThemeCommand}" CommandParameter="Default"/>
+                        <MenuItem Header="{DynamicResource Menu.Theme.Light}" Command="{Binding SwitchThemeCommand}" CommandParameter="Light"/>
+                        <MenuItem Header="{DynamicResource Menu.Theme.Dark}" Command="{Binding SwitchThemeCommand}" CommandParameter="Dark"/>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Menu.RootCertificate}" IsVisible="{Binding !IsWindows}">
+                        <MenuItem Header="{DynamicResource Menu.RootCertificate.Install}" Command="{Binding InstallRootCertificateCommand}"/>
+                        <MenuItem Header="{DynamicResource Menu.RootCertificate.Uninstall}" Command="{Binding UninstallRootCertificateCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Menu.RunAtStartup}"
+                              IsVisible="{Binding IsWindows}"
+                              Click="ShowStartupSettingsDialogAsync"/>
+                    <Separator/>
+                    <MenuItem Header="{DynamicResource Menu.Exit}" Command="{Binding ExitCommand}"/>
+                </MenuItem>
+                <MenuItem Header="{DynamicResource Menu.Help}">
+                    <MenuItem Header="{DynamicResource Menu.Help.CheckForUpdates}" Command="{Binding CheckUpdateCommand}"/>
+                    <MenuItem Header="{DynamicResource Menu.Help.Download}">
+                        <MenuItem Header="{DynamicResource Menu.Help.Download.Github}"
+                                  Command="{Binding AppDownloadCommand}"
+                                  CommandParameter="https://github.com/skydevil88/XboxDownload/releases"/>
+                        <MenuItem Header="{DynamicResource Menu.Help.Download.BaiduNetDisk}"
+                                  Command="{Binding AppDownloadCommand}"
+                                  CommandParameter="https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp"/>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Menu.Help.About}" Click="ShowAboutDialogAsync"/>
+                </MenuItem>
+            </Menu>
+
+            <Menu Grid.Column="1">
+                <MenuItem Header="{DynamicResource Menu.SponsorTheAuthor}" Click="ShowAboutDialogAsync"/>
+            </Menu>
+        </Grid>
+
+        <TabControl x:Name="TabControlServices" SelectedIndex="{Binding SelectedTabIndex}">
+            <TabItem x:Name="TabServices" Header="{DynamicResource Tab.Services}">
+                <views:ServiceView DataContext="{Binding ServiceViewModel}" />
+            </TabItem>
+            <TabItem x:Name="TabSpeedTest" Header="{DynamicResource Tab.SpeedTest}">
+                <views:SpeedTestView DataContext="{Binding SpeedTestViewModel}"/>
+            </TabItem>
+            <TabItem x:Name="TabHost" Header="{DynamicResource Tab.Host}">
+                <views:HostView DataContext="{Binding HostViewModel}"/>
+            </TabItem>
+            <TabItem x:Name="TabCdn" Header="{DynamicResource Tab.Cdn}">
+                <views:CdnView DataContext="{Binding CdnViewModel}"/>
+            </TabItem>
+            <TabItem x:Name="TabStorage" Header="{DynamicResource Tab.Storage}">
+                <views:StorageView DataContext="{Binding StorageViewModel}"/>
+            </TabItem>
+            <TabItem x:Name="TabStore" Header="{DynamicResource Tab.Store}">
+                <views:StoreView DataContext="{Binding StoreViewModel}"/>
+            </TabItem>
+            <TabItem x:Name="TabTools" Header="{DynamicResource Tab.Tools}"
+                     IsVisible="{Binding IsWindows}">
+                <views:ToolsView DataContext="{Binding ToolsViewModel}"/>
+            </TabItem>
+        </TabControl>
+
+    </DockPanel>
+</Window>

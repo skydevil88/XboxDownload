@@ -1,0 +1,41 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             x:Class="XboxDownload.Views.CdnView"
+             x:DataType="vm:CdnViewModel">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Cdn.AkamaiCdn}">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Cdn.CustomIPs}"/>
+                <TextBox x:Name="CdnIpAddressInput" Grid.Column="1" MinWidth="680" Text="{Binding AkamaiCdnIp}"
+                         Watermark="{DynamicResource Cdn.CustomIPs.Watermark}"/>
+            </Grid>
+        </HeaderedContentControl>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
+            <HeaderedContentControl Grid.Column="0" Header="{DynamicResource Cdn.BuiltInDomain}">
+                <TextBox BorderThickness="0" Text="{Binding AkamaiHost1}" IsReadOnly="True"/>
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Grid.Column="1" Header="{DynamicResource Cdn.CustomDomain}">
+                <TextBox BorderThickness="0" Text="{Binding AkamaiHost2}" AcceptsReturn="True"
+                         Watermark="{DynamicResource Cdn.CustomDomain.Watermark}"/>
+            </HeaderedContentControl>
+        </Grid>
+
+        <Border Grid.Row="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10" Spacing="10">
+                <Button MinWidth="80" HorizontalContentAlignment="Center"
+                        Content="{DynamicResource Cdn.Save}"
+                        Command="{Binding SaveAkamaiHostsCommand}"/>
+                <Button MinWidth="80" HorizontalContentAlignment="Center"
+                        Content="{DynamicResource Cdn.Reset}"
+                        Command="{Binding LoadAkamaiHostsCommand}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

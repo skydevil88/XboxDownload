@@ -1,0 +1,101 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             xmlns:converters="clr-namespace:XboxDownload.Converters"
+             x:Class="XboxDownload.Views.ToolsView"
+             x:DataType="vm:ToolsViewModel">
+
+    <UserControl.Resources>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+    </UserControl.Resources>
+
+    <StackPanel Spacing="10">
+        <HeaderedContentControl Header="{DynamicResource Tools.Install}">
+            <Grid ColumnDefinitions="*,*">
+                <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="5"  ColumnSpacing="10">
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Tools.Install.LocalFile}"/>
+                    <TextBox x:Name="FilePath" Grid.Row="0" Grid.Column="1" Width="300" IsReadOnly="True" Text="{Binding FilePath}"/>
+                    <Button Grid.Row="0" Grid.Column="2" MinWidth="100" HorizontalContentAlignment="Center"
+                            Content="{DynamicResource Tools.Install.Browse}"
+                            Command="{Binding OpenFileCommand}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Tools.Install.InstallPath}"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                        <ComboBox MinWidth="65"
+                                  ItemsSource="{Binding DrivePaths}"
+                                  SelectedItem="{Binding SelectedDrivePath}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DirectoryRoot}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Classes="LinkLabel" Command="{Binding RefreshDrivesCommand}">
+                            <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                       Text="{DynamicResource Tools.Install.Refresh}"/>
+                        </Button>
+                    </StackPanel>
+                    <Button Grid.Row="1" Grid.Column="2" MinWidth="100" HorizontalContentAlignment="Center"
+                            Content="{DynamicResource Tools.Install.Install}"
+                            Command="{Binding AppxInstallCommand}"/>
+
+                    <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical" Spacing="5" Margin="0,10,0,0">
+                        <TextBlock VerticalAlignment="Center"
+                                   Foreground="{DynamicResource Green}"
+                                   Text="{Binding AppInstallPath}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Foreground="{DynamicResource Green}"
+                                   Text="{Binding GameInstallPath}" />
+                    </StackPanel>
+
+                </Grid>
+
+                <TextBlock Grid.Column="1" Text="{DynamicResource Tools.Install.UsageInstructions}" TextWrapping="Wrap"/>
+            </Grid>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="国行Xbox制作出国/回国U盘 (Only supports China region Xbox consoles)" IsVisible="{Binding IsChineseUsers}">
+            <Grid ColumnDefinitions="*,*">
+                <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="5"  ColumnSpacing="10">
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="机器型号"/>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                        <RadioButton Content="Xbox One"
+                                     IsChecked="{Binding SelectedPlatformType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=XboxOne}" />
+                        <RadioButton Content="Xbox Series X|S"
+                                     IsChecked="{Binding SelectedPlatformType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=XboxSeries}" />
+                    </StackPanel>
+                    <Button Grid.Row="0" Grid.Column="2" MinWidth="100" HorizontalContentAlignment="Center" Content="出国"
+                            Command="{Binding ConsoleRegionCommand}"
+                            CommandParameter="True"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="U盘位置" />
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                        <ComboBox MinWidth="65" ItemsSource="{Binding UsbDrivePaths}" SelectedItem="{Binding SelectedUsbDrivePath}"/>
+                        <Button Classes="LinkLabel" Command="{Binding RefreshUsbDrivesCommand}">
+                            <TextBlock Text="刷新" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                        <Button Classes="LinkLabel" Click="ShowUsbDeviceAsync">
+                            <TextBlock Text="检查U盘" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </StackPanel>
+                    <Button Grid.Row="1" Grid.Column="2" MinWidth="100" HorizontalContentAlignment="Center" Content="回国"
+                            Command="{Binding ConsoleRegionCommand}"
+                            CommandParameter="False"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="0,10,0,0"
+                               Foreground="{DynamicResource Green}"
+                               Text="{Binding UsbDriveStatus}" />
+                </Grid>
+
+                <TextBlock Grid.Column="1"
+                           Text="使用说明：&#x0a;1. Xbox 操作系统更新到最新版本&#x0a;2. 把制作好的出国/回国U盘插入Xbox后保持连线重启主机
+                           &#x0a;3. 在主机 设置-系统-语言和区域 中选择对应的国家或者地区后再次重启主机
+                           &#x0a;提示: 有隐藏启动分区的U盘可能不被Xbox识别，分区表类型必需是MBR不能是GPT，
+                           &#x0a;U盘卷标不能有中文。系统升级、断电等问题自动恢复成国行的，需要重置主机。" />
+            </Grid>
+
+        </HeaderedContentControl>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,56 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="250"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        xmlns:converters="clr-namespace:XboxDownload.Converters"
+        x:Class="XboxDownload.Views.Dialog.UsbDeviceDialog"
+        x:DataType="dialog:UsbDeviceDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="980" Height="250"
+        Title="Usb Device (MBR磁盘存在2TB分区限制，超出后的容量无法被使用)">
+
+    <Window.Resources>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+    </Window.Resources>
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,100,*" Margin="10" RowSpacing="5">
+        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" IsReadOnly="True" CanUserSortColumns="False" GridLinesVisibility="All"
+                  BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                  ItemsSource="{Binding UsbDeviceMappings}"
+                  SelectedItem="{Binding SelectedEntry}">
+            <DataGrid.Columns>
+                <DataGridTextColumn MinWidth="40" Header="编号" Binding="{Binding Index}"/>
+                <DataGridTextColumn Width="*" Header="型号" Binding="{Binding Model}"/>
+                <DataGridTextColumn MinWidth="40" Header="接口" Binding="{Binding InterfaceType}"/>
+                <DataGridTextColumn MinWidth="80" Header="容量" Binding="{Binding FormatSize}"/>
+                <DataGridTextColumn MinWidth="40" Header="分区表" Binding="{Binding PartitionScheme}"/>
+                <DataGridTextColumn MinWidth="40" Header="分区数" Binding="{Binding Partitions}"/>
+                <DataGridTextColumn MinWidth="40" Header="盘符" Binding="{Binding DriveLetter}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="Auto,*,Auto">
+            <Button Grid.Column="0" Classes="LinkLabel" Command="{Binding RefreshUsbDrivesCommand}">
+                <TextBlock Text="刷新" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="分区表类型"/>
+                <RadioButton Content="GPT"
+                             IsChecked="{Binding DiskPartitionType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Gpt}"/>
+                <RadioButton Content="MBR"
+                             IsChecked="{Binding DiskPartitionType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Mbr}"/>
+            </StackPanel>
+        </Grid>
+
+        <Button Grid.Row="1" Grid.Column="1" MinWidth="80" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Content="重新分区"
+                IsEnabled="{Binding IsEnabled}"
+                Command="{Binding RepartitionCommand}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="分区过程中弹出格式化或者其它错误信息请忽略取消"/>
+
+    </Grid>
+
+</Window>

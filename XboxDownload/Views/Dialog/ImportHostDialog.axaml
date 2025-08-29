@@ -1,0 +1,41 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        x:Class="XboxDownload.Views.Dialog.ImportHostDialog"
+        x:DataType="dialog:ImportHostDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="800" Height="450"
+        Title="{DynamicResource Host.ImportHost.Title}">
+
+    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto" RowSpacing="6">
+
+        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                 Margin="10,10, 10,0" AcceptsReturn="True"
+                 TextWrapping="Wrap"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Text="{Binding Content}"
+                 Watermark="{DynamicResource Host.ImportHost.Watermark}"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Spacing="10" Orientation="Horizontal">
+
+        </StackPanel>
+
+        <Button Grid.Row="1" Grid.Column="1" MinWidth="100" Margin="10,0,10,10"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="{DynamicResource Host.ImportHost.Confirm}"
+                Command="{Binding ConfirmCommand}"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="2" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0,10,10">
+            <Button Classes="LinkLabel" Command="{Binding ReadFileCommand}">
+                <TextBlock Text="{DynamicResource Host.ImportHost.LocalFile}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Window>

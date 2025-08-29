@@ -1,0 +1,29 @@
+﻿##################### Microsoft ######################
+download.xbox.com   # Xbox 360 console game DL domain
+catalog.gamepass.com
+s7mbrstream.scene7.com  # Game trailers
+*.ak.tiles.virtualearth.net # Microsoft Flight Simulator virtual earth data
+*.tlu.dl.delivery.mp.microsoft.com
+
+###################### Nintendo #####################
+*.lp1.eshop.nintendo.net
+*.lp1.d4c.srv.nintendo.net  # System updates, Content Servers (Switch 2)
+*.hac.lp1.d4c.nintendo.net  # System updates, Content Servers (Switch 1)
+
+####################### Epic #######################
+*.ak.epicgames.com
+cdn2.epicgames.com
+shared-static-prod.epicgames.com
+
+##################### Riot Games ####################
+*.dyn.riotcdn.net
+
+###################### Steam #######################
+*.akamai.steamstatic.com
+cdn.steamstatic.com
+video.steamstatic.com
+
+######### Other (including Rockstar, Spotify, etc.) ##########
+*.akamai.net
+*.akamaihd.net
+*.akamaized.net
