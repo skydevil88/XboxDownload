@@ -176,6 +176,12 @@
     <x:String x:Key="Service.LocalProxy.ProxyRulesWatermark">*example.com | SNI (optional) | IP (optional)&#x0a;*example.com -> example.com (use specified domain to resolve IP address)</x:String>
     <x:String x:Key="Service.LocalProxy.SelectService">Select Service</x:String>
     <x:String x:Key="Service.LocalProxy.DoHServers">DoH Servers</x:String>
+    <x:String x:Key="Service.LocalProxy.LinuxUserGuide">Linux User Guide</x:String>
+    <x:String x:Key="Service.LocalProxy.SaveCertificate">Save Certificate</x:String>
+    <x:String x:Key="Service.LocalProxy.FailedDialogTitle">Root Certificate Not Installed</x:String>
+    <x:String x:Key="Service.LocalProxy.FailedDialogMessage">The system does not have the root certificate installed. Please install it in the options.</x:String>
+    <x:String x:Key="Service.LocalProxy.SuccessDialogTitle">Root Certificate Saved Successfully</x:String>
+    <x:String x:Key="Service.LocalProxy.SuccessDialogMessage">The root certificate has been successfully saved to {0}.</x:String>
     <x:String x:Key="Service.LocalProxy.TestDohServers">Test DoH Servers</x:String>
     <x:String x:Key="Service.LocalProxy.Save">Save</x:String>
     <x:String x:Key="Service.LocalProxy.Wrap">This feature can help resist certain websites being blocked by SNI-based attacks, preventing access issues. The entire proxy process is completed on the user's own computer and does not involve any third-party services.</x:String>

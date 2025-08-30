@@ -104,7 +104,6 @@ public partial class ImportHostDialogViewModel(HostViewModel hostViewModel) : Ob
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
         if (files.Count > 0)
         {
-            //var filePath = files[0].Path.LocalPath;
             try
             {
                 if ((await files[0].GetBasicPropertiesAsync()).Size <= 1024 * 1024 * 1)

@@ -61,11 +61,16 @@
                 </HeaderedContentControl>
 
                 <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="20">
-                    <Button Grid.Column="0" Classes="LinkLabel" Command="{Binding  OpenWebStoreCommand}"
-                            IsVisible="{Binding IsLinux}">
-                        <TextBlock Text="Linux 使用说明"
-                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
-                    </Button>
+                    <StackPanel Grid.Column="0" Spacing="6" Orientation="Horizontal" IsVisible="{Binding IsLinux}">
+                        <Button Classes="LinkLabel" Command="{Binding OpenWebStoreCommand}">
+                            <TextBlock Text="{DynamicResource Service.LocalProxy.LinuxUserGuide}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                        <Button Classes="LinkLabel" Command="{Binding SaveCertificateCommand}">
+                            <TextBlock Text="{DynamicResource Service.LocalProxy.SaveCertificate}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                    </StackPanel>
                     <Button Grid.Column="1" Classes="LinkLabel" Click="ShowDohSettingsDialogAsync" HorizontalAlignment="Right">
                         <TextBlock Text="{DynamicResource Service.LocalProxy.TestDohServers}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>

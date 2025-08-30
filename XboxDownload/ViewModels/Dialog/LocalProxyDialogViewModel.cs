@@ -9,10 +9,18 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MsBox.Avalonia.Enums;
 using XboxDownload.Helpers.IO;
 using XboxDownload.Helpers.Network;
+using XboxDownload.Helpers.Resources;
+using XboxDownload.Helpers.System;
+using XboxDownload.Helpers.UI;
 using XboxDownload.Helpers.Utilities;
 using XboxDownload.Models.LocalProxy;
 using XboxDownload.Services;
@@ -112,9 +120,66 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
     
     [RelayCommand]
-    private void OpenWebStore()
+    private static void OpenWebStore()
     {
         HttpClientHelper.OpenUrl("https://github.com/skydevil88/XboxDownload/discussions/128");
+    }
+    
+    [RelayCommand]
+    private static async Task SaveCertificateAsync()
+    {
+        if (!File.Exists(CertificateHelper.RootCrt))
+        {
+            await DialogHelper.ShowInfoDialogAsync(
+                ResourceHelper.GetString("Service.LocalProxy.FailedDialogTitle"),
+                ResourceHelper.GetString("Service.LocalProxy.FailedDialogMessage"),
+                Icon.Error);
+            return;
+        }
+        
+        var topLevel = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+            ? desktop.MainWindow
+            : null;
+
+        if (topLevel == null)
+            return;
+        
+        var currentWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime currentDesktop
+            ? currentDesktop.MainWindow
+            : null;
+
+        currentWindow?.Hide();
+        
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Save Certificate",
+            SuggestedFileName = "XboxDownload.crt",
+            DefaultExtension = "crt",
+            ShowOverwritePrompt = true,
+            FileTypeChoices =
+            [
+                new FilePickerFileType("Certificate File")
+                {
+                    Patterns = ["*.crt"]
+                }
+            ]
+        });
+        
+        currentWindow?.Show(); 
+
+        var localPath = file?.TryGetLocalPath();
+        if (localPath == null) return;
+        
+        if (File.Exists(localPath))
+            File.Delete(localPath);
+        File.Copy(CertificateHelper.RootCrt, localPath);
+        if (!OperatingSystem.IsWindows())
+            _ = PathHelper.FixOwnershipAsync(localPath);
+        
+        await DialogHelper.ShowInfoDialogAsync(
+            ResourceHelper.GetString("Service.LocalProxy.SuccessDialogTitle"),
+            string.Format(ResourceHelper.GetString("Service.LocalProxy.SuccessDialogMessage"), localPath),
+            Icon.Success);
     }
 
     public Action? CloseDialog { get; init; }

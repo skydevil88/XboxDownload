@@ -176,6 +176,12 @@
     <x:String x:Key="Service.LocalProxy.ProxyRulesWatermark">*example.com | SNI (可留空) | IP (可留空)&#x0a;*example.com -> example.com (使用指定域名解释IP地址)</x:String>
     <x:String x:Key="Service.LocalProxy.SelectService">选择服务</x:String>
     <x:String x:Key="Service.LocalProxy.DoHServers">DoH 服务器</x:String>
+    <x:String x:Key="Service.LocalProxy.LinuxUserGuide">Linux 使用说明</x:String>
+    <x:String x:Key="Service.LocalProxy.SaveCertificate">保存证书</x:String>
+    <x:String x:Key="Service.LocalProxy.FailedDialogTitle">根证书未安装</x:String>
+    <x:String x:Key="Service.LocalProxy.FailedDialogMessage">系统未安装根证书，请在选项中安装。</x:String>
+    <x:String x:Key="Service.LocalProxy.SuccessDialogTitle">根证书保存成功</x:String>
+    <x:String x:Key="Service.LocalProxy.SuccessDialogMessage">根证书已成功保存到 {0}。</x:String>
     <x:String x:Key="Service.LocalProxy.TestDohServers">测试 DoH 服务器</x:String>
     <x:String x:Key="Service.LocalProxy.Save">保存</x:String>
     <x:String x:Key="Service.LocalProxy.Wrap">此功能可以抵御部分网站被 SNI 阻断攻击无法访问的问题。整个代理过程在用户自己的电脑上完成，不涉及任何第三方服务。</x:String>
