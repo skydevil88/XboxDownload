@@ -193,8 +193,7 @@
                     </StackPanel>
                     <CheckBox Content="{DynamicResource Service.Service.FilterIPv6Domains}"
                               IsChecked="{Binding IsIPv6DomainFilterEnabled}"/>
-                    <StackPanel Orientation="Horizontal" Spacing="5"
-                                IsVisible="{Binding !IsLinux}">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
                         <CheckBox Content="{DynamicResource Service.Service.LocalProxy}"
                                   IsChecked="{Binding IsLocalProxyEnabled}"/>
                         <Button Classes="LinkLabel" Click="ShowLocalProxyDialogAsync"

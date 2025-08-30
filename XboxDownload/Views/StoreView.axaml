@@ -45,7 +45,7 @@
                                     <ListBox x:Name="ResultListBox" MaxHeight="268"
                                              MinWidth="{Binding #SearchBox.Bounds.Width}"
                                              ItemsSource="{Binding SearchResults}"
-                                             DoubleTapped="ResultListBox_OnDoubleTapped"
+                                             Tapped="ResultListBox_OnTapped"
                                              KeyDown="ResultListBox_OnKeyDown">
                                         <ListBox.Styles>
                                             <Style Selector="ListBoxItem">

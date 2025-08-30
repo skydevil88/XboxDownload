@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XboxDownload.Helpers.IO;
+using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Utilities;
 using XboxDownload.Models.LocalProxy;
 using XboxDownload.Services;
@@ -21,6 +22,8 @@ namespace XboxDownload.ViewModels.Dialog;
 public partial class LocalProxyDialogViewModel : ObservableObject
 {
     private readonly ServiceViewModel _serviceViewModel;
+    
+    public static bool IsLinux => OperatingSystem.IsLinux();
 
     public ObservableCollection<DohModels> DohModelsMappings { get; } = [];
 
@@ -106,6 +109,12 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         {
             RulesText = sb.ToString();
         }
+    }
+    
+    [RelayCommand]
+    private void OpenWebStore()
+    {
+        HttpClientHelper.OpenUrl("https://github.com/skydevil88/XboxDownload/discussions/128");
     }
 
     public Action? CloseDialog { get; init; }

@@ -153,17 +153,49 @@ public class HttpClientHelper
 
     public static void OpenUrl(string url)
     {
+        if (string.IsNullOrWhiteSpace(url))
+            return;
+
         try
         {
-            Process.Start(new ProcessStartInfo
+            if (OperatingSystem.IsLinux() && Program.UnixUserIsRoot())
             {
-                FileName = url,
-                UseShellExecute = true
-            });
+                // Get the original user when the application was started with sudo
+                var user = Environment.GetEnvironmentVariable("SUDO_USER");
+
+                var psi = new ProcessStartInfo();
+                if (!string.IsNullOrEmpty(user))
+                {
+                    // When running as root, switch to the original user to execute xdg-open
+                    psi.FileName = "runuser";
+                    psi.Arguments = $"-u {user} -- xdg-open \"{url}\"";
+                }
+                else
+                {
+                    // If running as root but not started with sudo (e.g. launched with su root), try to call directly
+                    psi.FileName = "xdg-open";
+                    psi.Arguments = $"\"{url}\"";
+                }
+
+                psi.UseShellExecute = false;
+                psi.RedirectStandardError = true;
+                psi.RedirectStandardOutput = true;
+                psi.CreateNoWindow = true;
+
+                Process.Start(psi);
+            }
+            else
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error opening URL: " + ex.Message);
+            Console.WriteLine($"Error opening URL '{url}': {ex.Message}");
         }
     }
 }

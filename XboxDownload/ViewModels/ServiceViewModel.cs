@@ -40,8 +40,6 @@ public partial class ServiceViewModel : ObservableObject
 
     public readonly DnsConnectionListener DnsConnectionListener;
     public readonly TcpConnectionListener TcpConnectionListener;
-    
-    public static bool IsLinux => OperatingSystem.IsLinux();
 
     public ServiceViewModel()
     {
@@ -436,6 +434,8 @@ public partial class ServiceViewModel : ObservableObject
 
             if (IsSystemSleepPrevented) SystemSleepHelper.PreventSleep(false);
 
+            await TcpConnectionListener.GenerateServerCertificate();
+
             string errDnsMessage = string.Empty, errTcpMessage = string.Empty;
             var tasks = new List<Task>();
             if (IsDnsServiceEnabled)
@@ -447,12 +447,13 @@ public partial class ServiceViewModel : ObservableObject
             }
             if (IsHttpServiceEnabled)
             {
-                tasks.Add(Task.Run(async () =>
+                tasks.Add(Task.Run(() =>
                 {
-                    errTcpMessage = await TcpConnectionListener.StartAsync();
+                    errTcpMessage = TcpConnectionListener.Start();
                 }, ListeningToken));
             }
             await Task.WhenAll(tasks);
+
             if (IsListeningFailed)
             {
                 await DialogHelper.ShowInfoDialogAsync(

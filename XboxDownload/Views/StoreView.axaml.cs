@@ -78,7 +78,7 @@ public partial class StoreView : UserControl
         e.Handled = true;
     }
 
-    private void ResultListBox_OnDoubleTapped(object? sender, RoutedEventArgs e)
+    private void ResultListBox_OnTapped(object? sender, RoutedEventArgs e)
     {
         if (ResultListBox.SelectedItem is not StoreSearchResult selected ||
             DataContext is not StoreViewModel vm) return;

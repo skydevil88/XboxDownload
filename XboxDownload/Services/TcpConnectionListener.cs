@@ -46,7 +46,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         public readonly SemaphoreSlim Semaphore = new(1, 1);
     }
 
-    private async Task GenerateServerCertificate()
+    public async Task GenerateServerCertificate()
     {
         DicSniProxy.Clear();
         DicSniProxy2.Clear();
@@ -210,7 +210,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
     }
 
-    public async Task<string> StartAsync()
+    public string Start()
     {
         var ipAddress = App.Settings.ListeningIp == "LocalIp"
             ? IPAddress.Parse(App.Settings.LocalIp)
@@ -234,8 +234,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             serviceViewModel.IsListeningFailed = true;
             return string.Format(ResourceHelper.GetString("Service.Listening.TcpStartFailedDialogMessage"), ex.Message);
         }
-
-        await GenerateServerCertificate();
 
         _isSimplifiedChinese = App.Settings.Culture == "zh-Hans";
 

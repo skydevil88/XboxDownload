@@ -60,14 +60,17 @@
                     </ScrollViewer>
                 </HeaderedContentControl>
 
-                <!-- 测试按钮 -->
-                <Button Grid.Row="2"
-                        Classes="LinkLabel"
-                        Click="ShowDohSettingsDialogAsync"
-                        HorizontalAlignment="Right">
-                    <TextBlock Text="{DynamicResource Service.LocalProxy.TestDohServers}"
-                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
-                </Button>
+                <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="20">
+                    <Button Grid.Column="0" Classes="LinkLabel" Command="{Binding  OpenWebStoreCommand}"
+                            IsVisible="{Binding IsLinux}">
+                        <TextBlock Text="Linux 使用说明"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                    <Button Grid.Column="1" Classes="LinkLabel" Click="ShowDohSettingsDialogAsync" HorizontalAlignment="Right">
+                        <TextBlock Text="{DynamicResource Service.LocalProxy.TestDohServers}"
+                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    </Button>
+                </Grid>
 
                 <!-- Spacer -->
                 <Border Grid.Row="3" />

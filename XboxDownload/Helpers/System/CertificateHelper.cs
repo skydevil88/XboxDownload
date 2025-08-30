@@ -11,13 +11,13 @@ public static class CertificateHelper
 {
     public static readonly string RootPfx = PathHelper.GetLocalFilePath($"{nameof(XboxDownload)}.pfx");
     public static readonly string RootCrt = PathHelper.GetLocalFilePath($"{nameof(XboxDownload)}.crt");
-    
+
     public static async Task CreateRootCertificate(bool force = false)
     {
         if (!force && File.Exists(RootPfx) && File.Exists(RootCrt))
             return; // Root CA already exists, skip unless force = true
 
-        if (!OperatingSystem.IsWindows() && !Program.UnixUserIsRoot()) 
+        if (!OperatingSystem.IsWindows() && !Program.UnixUserIsRoot())
             return;
 
         using var rsa = RSA.Create(4096);
@@ -34,10 +34,10 @@ public static class CertificateHelper
 
         // Export Root PFX (contains private key, only for development)
         await File.WriteAllBytesAsync(RootPfx, caCert.Export(X509ContentType.Pfx));
-        
+
         // Export Root CRT (public key only, can be distributed to other devices)
         await File.WriteAllBytesAsync(RootCrt, caCert.Export(X509ContentType.Cert));
-        
+
         if (!OperatingSystem.IsWindows())
         {
             await PathHelper.FixOwnershipAsync(RootPfx);
@@ -46,7 +46,6 @@ public static class CertificateHelper
 
         if (OperatingSystem.IsWindows())
         {
-            //using var cert = new X509Certificate2(RootCrt);
             using var cert = new X509Certificate2(RootCrt, "", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
             using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
@@ -64,7 +63,7 @@ public static class CertificateHelper
             {
                 // ignored
             }
-            
+
             var exitCode = await CommandHelper.RunCommandAsync2("security", $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
             if (exitCode != 0)
             {
@@ -107,14 +106,14 @@ public static class CertificateHelper
             }
         }
     }
-    
+
     public static async Task DeleteRootCertificateAsync()
     {
         if (File.Exists(RootPfx))
             File.Delete(RootPfx);
         if (File.Exists(RootCrt))
             File.Delete(RootCrt);
-        
+
         if (OperatingSystem.IsWindows())
         {
             using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
@@ -133,11 +132,11 @@ public static class CertificateHelper
             {
                 // ignored
             }
-            
+
             var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;
             var home = $"/Users/{user}";
             var loginKeychain = Path.Combine(home, "Library/Keychains/login.keychain-db");
-                
+
             var pipeline = $"security find-certificate -c \"{nameof(XboxDownload)}\" -a -Z \"{loginKeychain}\" | grep \"SHA-1\" | awk '{{print $NF}}' | xargs -I {{}} security delete-certificate -Z {{}} \"{loginKeychain}\"";
             await CommandHelper.RunCommandAsync("bash", $"-c \"{pipeline}\"");
         }
@@ -148,7 +147,7 @@ public static class CertificateHelper
             {
                 if (File.Exists(certPath))
                     File.Delete(certPath);
-                
+
                 await CommandHelper.RunCommandAsync("update-ca-certificates", "");
             }
             catch
