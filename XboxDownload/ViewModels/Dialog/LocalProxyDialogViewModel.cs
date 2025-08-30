@@ -150,12 +150,23 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
         currentWindow?.Hide();
         
+        var resourceDirectory = Path.Combine(AppContext.BaseDirectory, "Resource");
+        if (!Directory.Exists(resourceDirectory))
+        {
+            Directory.CreateDirectory(resourceDirectory);
+
+            if (!OperatingSystem.IsWindows())
+                await PathHelper.FixOwnershipAsync(resourceDirectory, true);
+        }
+        
+        var startLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(resourceDirectory);
         var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Save Certificate",
             SuggestedFileName = "XboxDownload.crt",
             DefaultExtension = "crt",
             ShowOverwritePrompt = true,
+            SuggestedStartLocation = startLocation,
             FileTypeChoices =
             [
                 new FilePickerFileType("Certificate File")
@@ -172,6 +183,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         
         if (File.Exists(localPath))
             File.Delete(localPath);
+        
         File.Copy(CertificateHelper.RootCrt, localPath);
         if (!OperatingSystem.IsWindows())
             _ = PathHelper.FixOwnershipAsync(localPath);
