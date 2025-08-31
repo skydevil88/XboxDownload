@@ -24,7 +24,7 @@ namespace XboxDownload.Services;
 public static partial class UpdateService
 {
     public const string Website = "https://xbox.skydevil.xyz";
-    private const string Project = "https://github.com/skydevil88/XboxDownload";
+    public const string Project = "https://github.com/skydevil88/XboxDownload";
     public static readonly string[] Proxies1 = ["https://gh-proxy.com/", "https://ghproxy.net/"];
     private static readonly string[] Proxies2 = ["https://pxy1.skydevil.xyz/", "https://pxy2.skydevil.xyz/", ""];
 

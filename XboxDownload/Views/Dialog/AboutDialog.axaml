@@ -14,8 +14,8 @@
             <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Version}"/>
             <HyperlinkButton Grid.Row="2" Grid.Column="1" Padding="0" IsVisited="False"
                              VerticalAlignment="Center"
-                             NavigateUri="https://github.com/skydevil88/XboxDownload"
-                             Content="https://github.com/skydevil88/XboxDownload"/>
+                             Content="{Binding Project}"
+                             Command="{Binding OpenUrlCommand}"/>
         </Grid>
 
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{DynamicResource About.Donate}"/>
