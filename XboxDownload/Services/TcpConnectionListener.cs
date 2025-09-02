@@ -71,36 +71,121 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         sanBuilder.AddDnsName("download.epicgames.com");
 
         // Load SNI proxy file if exists
-        if (File.Exists(serviceViewModel.SniProxyFilePath))
+        if (App.Settings.IsLocalProxyEnabled)
         {
-            List<List<object>>? sniProxy = null;
-            try
+            if (File.Exists(serviceViewModel.SniProxyFilePath))
             {
-                sniProxy = JsonSerializer.Deserialize<List<List<object>>>(await File.ReadAllTextAsync(serviceViewModel.SniProxyFilePath));
-            }
-            catch
-            {
-                // ignored
-            }
-
-            if (sniProxy != null)
-            {
-                foreach (var item in sniProxy)
+                List<List<object>>? sniProxy = null;
+                try
                 {
-                    if (item.Count != 3) continue;
+                    sniProxy = JsonSerializer.Deserialize<List<List<object>>>(await File.ReadAllTextAsync(serviceViewModel.SniProxyFilePath));
+                }
+                catch
+                {
+                    // ignored
+                }
 
-                    var jeHosts = (JsonElement)item[0];
-                    if (jeHosts.ValueKind != JsonValueKind.Array) continue;
-
-                    var sni = item[1].ToString();
-                    var ips = item[2].ToString();
-                    var lsIPv6 = new List<IPAddress>();
-                    var lsIPv4 = new List<IPAddress>();
-                    if (!string.IsNullOrEmpty(ips))
+                if (sniProxy != null)
+                {
+                    foreach (var item in sniProxy)
                     {
-                        foreach (var ip in ips.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                        if (item.Count != 3) continue;
+
+                        var jeHosts = (JsonElement)item[0];
+                        if (jeHosts.ValueKind != JsonValueKind.Array) continue;
+
+                        var sni = item[1].ToString();
+                        var ips = item[2].ToString();
+                        var lsIPv6 = new List<IPAddress>();
+                        var lsIPv4 = new List<IPAddress>();
+                        if (!string.IsNullOrEmpty(ips))
                         {
-                            if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
+                            foreach (var ip in ips.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
+                                {
+                                    switch (ipAddress.AddressFamily)
+                                    {
+                                        case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
+                                            lsIPv6.Add(ipAddress);
+                                            break;
+                                        case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
+                                            lsIPv4.Add(ipAddress);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        var customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
+
+                        foreach (var str in jeHosts.EnumerateArray())
+                        {
+                            var splitArray = str.ToString().Trim().Split("->", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                            var host = splitArray[0].Trim();
+                            if (string.IsNullOrEmpty(host) || host.StartsWith('#')) continue;
+
+                            var branch = splitArray.Length >= 2 ? splitArray[1].Trim() : null;
+                            SniProxy proyx = new()
+                            {
+                                Branch = branch,
+                                Sni = sni,
+                                IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
+                                IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
+                                UseCustomIpAddress = customIp
+                            };
+
+                            if (host.StartsWith('*'))
+                            {
+                                host = host[1..];
+                                if (!host.StartsWith('.'))
+                                {
+                                    sanBuilder.AddDnsName(host);
+                                    DicSniProxy.TryAdd(host, proyx);
+                                    host = "." + host;
+                                }
+                                sanBuilder.AddDnsName('*' + host);
+                                DicSniProxy2.TryAdd(host, proyx);
+                            }
+                            else
+                            {
+                                sanBuilder.AddDnsName(host);
+                                DicSniProxy.TryAdd(host, proyx);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (File.Exists(serviceViewModel.SniProxy2FilePath))
+            {
+                List<List<object>>? sniProxy = null;
+                try
+                {
+                    sniProxy = JsonSerializer.Deserialize<List<List<object>>>(await File.ReadAllTextAsync(serviceViewModel.SniProxy2FilePath));
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                if (sniProxy != null)
+                {
+                    foreach (var item in sniProxy)
+                    {
+                        if (item.Count != 3) continue;
+
+                        var jeHosts = (JsonElement)item[0];
+                        if (jeHosts.ValueKind != JsonValueKind.Array) continue;
+
+                        var sni = item[1] as string;
+                        var ips = item[2].ToString()?.Trim();
+                        var lsIPv6 = new List<IPAddress>();
+                        var lsIPv4 = new List<IPAddress>();
+                        string? branch = null;
+                        if (!string.IsNullOrEmpty(ips))
+                        {
+                            if (IPAddress.TryParse(ips, out var ipAddress))
                             {
                                 switch (ipAddress.AddressFamily)
                                 {
@@ -112,43 +197,44 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         break;
                                 }
                             }
+                            else if (RegexHelper.IsValidDomain().IsMatch(ips))
+                            {
+                                branch = ips;
+                            }
                         }
-                    }
-
-                    var customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
-
-                    foreach (var str in jeHosts.EnumerateArray())
-                    {
-                        var splitArray = str.ToString().Trim().Split("->", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                        var host = splitArray[0].Trim();
-                        if (string.IsNullOrEmpty(host) || host.StartsWith('#')) continue;
-
-                        var branch = splitArray.Length >= 2 ? splitArray[1].Trim() : null;
-                        SniProxy proyx = new()
+                        var customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
+                        foreach (var element in jeHosts.EnumerateArray())
                         {
-                            Branch = branch,
-                            Sni = sni,
-                            IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
-                            IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
-                            UseCustomIpAddress = customIp
-                        };
+                            var host = element.ToString().Trim();
+                            if (string.IsNullOrEmpty(host) || host.StartsWith('#') || host.StartsWith('^')) continue;
+                            host = CaretAndFollowingRegex().Replace(host.TrimStart('$'), "");
 
-                        if (host.StartsWith('*'))
-                        {
-                            host = host[1..];
-                            if (!host.StartsWith('.'))
+                            SniProxy proyx = new()
+                            {
+                                Branch = branch,
+                                Sni = sni,
+                                IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
+                                IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
+                                UseCustomIpAddress = customIp
+                            };
+
+                            if (host.StartsWith('*'))
+                            {
+                                host = host[1..];
+                                if (!host.StartsWith('.'))
+                                {
+                                    sanBuilder.AddDnsName(host);
+                                    DicSniProxy.TryAdd(host, proyx);
+                                    host = "." + host;
+                                }
+                                sanBuilder.AddDnsName('*' + host);
+                                DicSniProxy2.TryAdd(host, proyx);
+                            }
+                            else
                             {
                                 sanBuilder.AddDnsName(host);
                                 DicSniProxy.TryAdd(host, proyx);
-                                host = "." + host;
                             }
-                            sanBuilder.AddDnsName('*' + host);
-                            DicSniProxy2.TryAdd(host, proyx);
-                        }
-                        else
-                        {
-                            sanBuilder.AddDnsName(host);
-                            DicSniProxy.TryAdd(host, proyx);
                         }
                     }
                 }
@@ -1269,5 +1355,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     [GeneratedRegex(@"Transfer-Encoding:\s*(?<TransferEncoding>.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex TransferEncodingHeaderRegex();
+    
+    [GeneratedRegex(@"\^.*")]
+    private static partial Regex CaretAndFollowingRegex();
 }
-

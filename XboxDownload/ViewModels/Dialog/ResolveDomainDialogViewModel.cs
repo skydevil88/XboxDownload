@@ -39,7 +39,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
         foreach (var dohServer in DohServersMappings)
         {
             var useProxy = App.Settings.DohServerUseProxyId.Contains(dohServer.Id);
-            ResolveHostMappings.Add(new ResolveHostMappingEntry(dohServer.IsSelected, dohServer.Id, dohServer.Name, dohServer.Url, dohServer.Ip, useProxy, dohServer.IsProxyDisabled));
+            ResolveHostMappings.Add(new ResolveHostMappingEntry(dohServer.IsChecked, dohServer.Id, dohServer.Name, dohServer.Url, dohServer.Ip, useProxy, dohServer.IsProxyDisabled));
         }
     }
 

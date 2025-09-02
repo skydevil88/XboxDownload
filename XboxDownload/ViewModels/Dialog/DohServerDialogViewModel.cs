@@ -43,7 +43,7 @@ public partial class DohServerDialogViewModel : ObservableObject
         foreach (var dohServer in DohServersMappings)
         {
             var useProxy = App.Settings.DohServerUseProxyId.Contains(dohServer.Id);
-            SpeedTestMappings.Add(new SpeedTestMappingEntry(dohServer.IsSelected, dohServer.Id, dohServer.Name, dohServer.Url, dohServer.Ip, useProxy, dohServer.IsProxyDisabled));
+            SpeedTestMappings.Add(new SpeedTestMappingEntry(dohServer.IsChecked, dohServer.Id, dohServer.Name, dohServer.Url, dohServer.Ip, useProxy, dohServer.IsProxyDisabled));
         }
 
         _ = LoadDohHostsFromJsonAsync();

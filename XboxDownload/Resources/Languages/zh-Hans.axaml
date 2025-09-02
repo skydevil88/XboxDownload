@@ -172,6 +172,7 @@
     <x:String x:Key="Service.SecureDns.DohDescription">DNS over HTTPS (DoH) 是一种使用 HTTPS 加密 DNS 请求和响应的安全协议。通过使用基于 HTTPS 的 DNS，可以帮助保护您的在线隐私和安全，并确保您的 DNS 请求不被拦截或篡改。</x:String>
 
     <x:String x:Key="Service.LocalProxy.Title">本地代理服务</x:String>
+    <x:String x:Key="Service.LocalProxy.LocalRules">本地规则</x:String>
     <x:String x:Key="Service.LocalProxy.ProxyRules">代理规则</x:String>
     <x:String x:Key="Service.LocalProxy.ProxyRulesWatermark">*example.com | SNI (可留空) | IP (可留空)&#x0a;*example.com -> example.com (使用指定域名解释IP地址)</x:String>
     <x:String x:Key="Service.LocalProxy.SelectService">选择服务</x:String>
@@ -185,6 +186,13 @@
     <x:String x:Key="Service.LocalProxy.TestDohServers">测试 DoH 服务器</x:String>
     <x:String x:Key="Service.LocalProxy.Save">保存</x:String>
     <x:String x:Key="Service.LocalProxy.Wrap">此功能可以抵御部分网站被 SNI 阻断攻击无法访问的问题。整个代理过程在用户自己的电脑上完成，不涉及任何第三方服务。</x:String>
+    <x:String x:Key="Service.LocalProxy.ThirdPartyRules">第三方规则</x:String>
+    <x:String x:Key="Service.LocalProxy.UpdateRules">更新规则</x:String>
+    <x:String x:Key="Service.LocalProxy.ClearRules">清除规则</x:String>
+    <x:String x:Key="Service.LocalProxy.RuleSource">规则来源:</x:String>
+    <x:String x:Key="Service.LocalProxy.RuleTip">作者不对第三方规则的安全性承担责任。若您对安全性有较高要求，请自行编写本地规则，或者选择正规商业 VPN 产品。</x:String>
+    <x:String x:Key="Service.LocalProxy.FailedDialogTitle2">规则格式错误</x:String>
+    <x:String x:Key="Service.LocalProxy.FailedDialogMessage2">输入的内容不是有效的 JSON。&#x0a;&#x0a;详细信息: {0}</x:String>
 
     <x:String x:Key="Service.SecureDns.Delete">删除</x:String>
     <x:String x:Key="Service.SecureDns.Enable">启用</x:String>

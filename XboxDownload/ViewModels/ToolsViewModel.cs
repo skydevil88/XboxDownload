@@ -129,13 +129,13 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     private async Task AppxInstallAsync()
     {
         if (SelectedDrivePath == null || !OperatingSystem.IsWindows()) return;
-        
+
         if (string.IsNullOrEmpty(FilePath))
         {
             FocusText();
             return;
         }
-        
+
         var service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == "GamingServices");
         if (service is not { Status: ServiceControllerStatus.Running })
         {
@@ -166,63 +166,41 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     {
         DrivePaths.Clear();
 
-        var entries = await Task.Run(() =>
+        var appxVolumeOutput = await CommandHelper.RunCommandWithOutputAsync("powershell.exe", "Get-AppxVolume");
+
+        var results = new ConcurrentDictionary<string, (string StorePath, bool IsOffline)>();
+        foreach (var line in appxVolumeOutput)
         {
-            var outputString = "";
-            try
-            {
-                using Process p = new();
-                p.StartInfo.FileName = "powershell.exe";
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-                p.StandardInput.WriteLine("Get-AppxVolume");
-                p.StandardInput.Close();
-                outputString = p.StandardOutput.ReadToEnd();
-                p.WaitForExit();
-            }
-            catch
-            {
-                // ignored
-            }
-
-            var results = new ConcurrentDictionary<string, (string StorePath, bool IsOffline)>();
-
-            var match = Regex.Match(outputString, @"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)");
-            while (match.Success)
+            var match = Regex.Match(line, @"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)");
+            if (match.Success)
             {
                 var storePath = match.Groups["PackageStorePath"].Value.Trim();
                 var directoryRoot = Directory.GetDirectoryRoot(storePath);
                 var isOffline = match.Groups["IsOffline"].Value == "True";
                 results[directoryRoot] = (storePath, isOffline);
-                match = match.NextMatch();
             }
+        }
 
-            var result = new List<DeviceMappingEntry>();
-            foreach (var drive in Array.FindAll(DriveInfo.GetDrives(), d => d is { DriveType: DriveType.Fixed, IsReady: true, DriveFormat: "NTFS" }))
+        var entries = new List<DeviceMappingEntry>();
+        foreach (var drive in Array.FindAll(DriveInfo.GetDrives(), d => d is { DriveType: DriveType.Fixed, IsReady: true, DriveFormat: "NTFS" }))
+        {
+            var directoryRoot = drive.RootDirectory.FullName;
+            if (results.TryGetValue(directoryRoot, out var value))
             {
-                var directoryRoot = drive.RootDirectory.FullName;
-                if (results.TryGetValue(directoryRoot, out var value))
+                var entry = new DeviceMappingEntry(directoryRoot)
                 {
-                    var entry = new DeviceMappingEntry(directoryRoot)
-                    {
-                        StorePath = value.StorePath,
-                        IsOffline = value.IsOffline
-                    };
+                    StorePath = value.StorePath,
+                    IsOffline = value.IsOffline
+                };
 
-                    result.Add(entry);
-                }
-                else
-                {
-                    var entry = new DeviceMappingEntry(directoryRoot);
-                    result.Add(entry);
-                }
+                entries.Add(entry);
             }
-
-            return result;
-        });
+            else
+            {
+                var entry = new DeviceMappingEntry(directoryRoot);
+                entries.Add(entry);
+            }
+        }
 
         DrivePaths.AddRange(entries);
         if (DrivePaths.Count > 0)

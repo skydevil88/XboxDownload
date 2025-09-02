@@ -8,7 +8,7 @@ namespace XboxDownload.Helpers.System;
 
 public static class CommandHelper
 {
-    public static async Task RunCommandAsync(string fileName, string arguments, bool useShellExecute = false)
+    public static async Task<int> RunCommandAsync(string fileName, string arguments, bool useShellExecute = false)
     {
         using var process = new Process();
         process.StartInfo = new ProcessStartInfo
@@ -20,31 +20,16 @@ public static class CommandHelper
             UseShellExecute = useShellExecute,
             CreateNoWindow = true
         };
-        process.Start();
-        await process.WaitForExitAsync();
-    }
-    
-    public static async Task<int> RunCommandAsync2(string fileName, string arguments, bool useShellExecute = false)
-    {
-        using var process = new Process();
-        process.StartInfo = new ProcessStartInfo
-        {
-            FileName = fileName,
-            Arguments = arguments,
-            RedirectStandardOutput = false,
-            RedirectStandardError = false,
-            UseShellExecute = useShellExecute,
-            CreateNoWindow = true
-        };
-
         process.Start();
         await process.WaitForExitAsync();
         return process.ExitCode;
     }
 
-    public static async Task<List<string>> RunCommandWithOutputAsync(string fileName, string arguments)
+    public static async Task<List<string>> RunCommandWithOutputAsync(string fileName, string arguments, int timeoutMs = 30000)
     {
         var output = new List<string>();
+        var errorOutput = new List<string>();
+
         using var process = new Process();
         process.StartInfo = new ProcessStartInfo
         {
@@ -58,17 +43,39 @@ public static class CommandHelper
 
         process.Start();
 
-        while (!process.StandardOutput.EndOfStream)
+        // Asynchronously read stdout
+        var outputTask = ReadStreamAsync(process.StandardOutput, output);
+        // Asynchronously read stderr
+        var errorTask = ReadStreamAsync(process.StandardError, errorOutput);
+
+        // Wait for the process to exit or timeout
+        var exitTask = process.WaitForExitAsync();
+        var allTasks = Task.WhenAll(outputTask, errorTask, exitTask);
+
+        if (await Task.WhenAny(allTasks, Task.Delay(timeoutMs)) != allTasks)
         {
-            var line = await process.StandardOutput.ReadLineAsync();
-            if (!string.IsNullOrWhiteSpace(line))
-                output.Add(line.Trim());
+            try
+            {
+                process.Kill(true);
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
-        await process.WaitForExitAsync();
         return output;
     }
-    
+
+    private static async Task ReadStreamAsync(StreamReader reader, List<string> outputList)
+    {
+        while (await reader.ReadLineAsync() is { } line)
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+                outputList.Add(line.Trim());
+        }
+    }
+
     public static void FlushDns()
     {
         try

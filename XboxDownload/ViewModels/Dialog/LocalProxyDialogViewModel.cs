@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -30,13 +31,13 @@ namespace XboxDownload.ViewModels.Dialog;
 public partial class LocalProxyDialogViewModel : ObservableObject
 {
     private readonly ServiceViewModel _serviceViewModel;
-    
+
     public static bool IsLinux => OperatingSystem.IsLinux();
 
     public ObservableCollection<DohModels> DohModelsMappings { get; } = [];
 
     [ObservableProperty]
-    private static string _rulesText = string.Empty;
+    private static string _rulesText = string.Empty, _rules2Text = string.Empty;
 
     public ObservableCollection<ProxyModels> ProxyRules { get; } = LocalProxyBuilder.GetProxyRulesList();
 
@@ -77,16 +78,50 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             }
             RulesText = sb.ToString();
         }
+        else
+            RulesText = string.Empty;
 
-        foreach (var dohServers in _serviceViewModel.DohServersMappings)
+        foreach (var dohServer in _serviceViewModel.DohServersMappings)
         {
-            if (dohServers.Id is not ("AlibabaCloud" or "TencentCloud" or "Qihoo360"))
-            {
-                DohModelsMappings.Add(new DohModels(dohServers.Id, dohServers.Name, App.Settings.SniProxyId.Contains(dohServers.Id)));
-            }
+            if (dohServer.Id is "AlibabaCloud" or "TencentCloud" or "Qihoo360") continue;
+
+            var model = new DohModels(
+                dohServer.Id,
+                dohServer.Name,
+                App.Settings.SniProxyId.Contains(dohServer.Id)
+            );
+
+            model.CheckedChanged += (_, _) => UpdateCheckedCount();
+
+            DohModelsMappings.Add(model);
         }
+
+        UpdateCheckedCount();
+
         if (!DohModelsMappings.Any(a => a.IsChecked))
             DohModelsMappings.FirstOrDefault()!.IsChecked = true;
+
+        Rules2Text = File.Exists(_serviceViewModel.SniProxy2FilePath) ? File.ReadAllText(_serviceViewModel.SniProxy2FilePath) : string.Empty;
+    }
+
+    [ObservableProperty]
+    private string _doHServers = string.Empty;
+
+    private void UpdateCheckedCount()
+    {
+        var count = DohModelsMappings.Count(x => x.IsChecked);
+
+        DoHServers = $"{ResourceHelper.GetString("Service.LocalProxy.DoHServers")} ({count}/8)";
+
+        var disableUnchecked = count >= 8;
+
+        foreach (var dohModels in DohModelsMappings)
+        {
+            if (!dohModels.IsChecked && dohModels.IsEnabled != !disableUnchecked)
+            {
+                dohModels.IsEnabled = !disableUnchecked;
+            }
+        }
     }
 
     [ObservableProperty]
@@ -118,13 +153,13 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             RulesText = sb.ToString();
         }
     }
-    
+
     [RelayCommand]
-    private static void OpenWebStore()
+    private static void OpenUrl(string url)
     {
-        HttpClientHelper.OpenUrl("https://github.com/skydevil88/XboxDownload/discussions/128");
+        HttpClientHelper.OpenUrl(url);
     }
-    
+
     [RelayCommand]
     private static async Task SaveCertificateAsync()
     {
@@ -136,20 +171,20 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 Icon.Error);
             return;
         }
-        
+
         var topLevel = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
             ? desktop.MainWindow
             : null;
 
         if (topLevel == null)
             return;
-        
+
         var currentWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime currentDesktop
             ? currentDesktop.MainWindow
             : null;
 
         currentWindow?.Hide();
-        
+
         var resourceDirectory = Path.Combine(AppContext.BaseDirectory, "Resource");
         if (!Directory.Exists(resourceDirectory))
         {
@@ -158,7 +193,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             if (!OperatingSystem.IsWindows())
                 await PathHelper.FixOwnershipAsync(resourceDirectory, true);
         }
-        
+
         var startLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(resourceDirectory);
         var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
@@ -175,19 +210,19 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 }
             ]
         });
-        
-        currentWindow?.Show(); 
+
+        currentWindow?.Show();
 
         var localPath = file?.TryGetLocalPath();
         if (localPath == null) return;
-        
+
         if (File.Exists(localPath))
             File.Delete(localPath);
-        
+
         File.Copy(CertificateHelper.RootCrt, localPath);
         if (!OperatingSystem.IsWindows())
             _ = PathHelper.FixOwnershipAsync(localPath);
-        
+
         await DialogHelper.ShowInfoDialogAsync(
             ResourceHelper.GetString("Service.LocalProxy.SuccessDialogTitle"),
             string.Format(ResourceHelper.GetString("Service.LocalProxy.SuccessDialogMessage"), localPath),
@@ -307,5 +342,74 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
     [GeneratedRegex(@"\s*->\s*")]
     private static partial Regex ArrowSymbolRegex();
-}
 
+
+
+    [RelayCommand]
+    private async Task UpdateRulesAsync()
+    {
+        Rules2Text = string.Empty;
+
+        const string url = "https://github.com/SpaceTimee/Cealing-Host/raw/main/Cealing-Host.json";
+        using var cts = new CancellationTokenSource();
+
+        var tasks = UpdateService.Proxies1.Concat([""]).ToArray().Select(async proxy => await HttpClientHelper.GetStringContentAsync(proxy + url, token: cts.Token, timeout: 6000)).ToList();
+        while (tasks.Count > 0)
+        {
+            var completedTask = await Task.WhenAny(tasks);
+            tasks.Remove(completedTask);
+            var responseString = await completedTask;
+            if (!responseString.StartsWith('[')) continue;
+            await cts.CancelAsync();
+            Rules2Text = responseString;
+        }
+
+        if (!cts.IsCancellationRequested)
+        {
+            var responseString = await HttpClientHelper.GetStringContentAsync($"https://testingcf.jsdelivr.net/gh/SpaceTimee/Cealing-Host/Cealing-Host.json", token: cts.Token);
+            if (responseString.StartsWith('['))
+            {
+                Rules2Text = responseString;
+            }
+        }
+    }
+
+    [RelayCommand]
+    private void ClearRules()
+    {
+        Rules2Text = string.Empty;
+    }
+
+    [RelayCommand]
+    private async Task SaveRulesAsync()
+    {
+        Rules2Text = Rules2Text.Trim();
+        if (string.IsNullOrEmpty(Rules2Text))
+        {
+            if (File.Exists(_serviceViewModel.SniProxy2FilePath))
+                File.Delete(_serviceViewModel.SniProxy2FilePath);
+        }
+        else
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(Rules2Text);
+            }
+            catch (JsonException ex)
+            {
+                await DialogHelper.ShowInfoDialogAsync(
+                    ResourceHelper.GetString("Service.LocalProxy.FailedDialogTitle2"),
+                    string.Format(ResourceHelper.GetString("Service.LocalProxy.FailedDialogMessage2"), ex.Message),
+                    Icon.Error);
+                return;
+            }
+
+            await File.WriteAllTextAsync(_serviceViewModel.SniProxy2FilePath, Rules2Text);
+
+            if (!OperatingSystem.IsWindows())
+                await PathHelper.FixOwnershipAsync(_serviceViewModel.SniProxy2FilePath);
+        }
+
+        CloseDialog?.Invoke();
+    }
+}

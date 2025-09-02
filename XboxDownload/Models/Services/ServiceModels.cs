@@ -61,18 +61,18 @@ public partial class DohServerOption : ObservableObject
     private string _ip;
 
     [ObservableProperty]
-    private bool _isSelected;
+    private bool _isChecked;
 
     [ObservableProperty]
     private bool _isProxyDisabled;
 
-    public DohServerOption(string id, string name, string url, string ip = "", bool isSelected = false, bool isProxyDisabled = false)
+    public DohServerOption(string id, string name, string url, string ip = "", bool isChecked = false, bool isProxyDisabled = false)
     {
         Id = id;
         _name = name;
         Url = url;
         Ip = ip;
-        IsSelected = isSelected;
+        IsChecked = isChecked;
         IsProxyDisabled = isProxyDisabled;
     }
 

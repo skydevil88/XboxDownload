@@ -57,14 +57,14 @@ public static class CertificateHelper
         {
             try
             {
-                await CommandHelper.RunCommandAsync("sudo", $"security delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
+                await CommandHelper.RunCommandAsync("security", $"delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
             }
             catch
             {
                 // ignored
             }
 
-            var exitCode = await CommandHelper.RunCommandAsync2("security", $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
+            var exitCode = await CommandHelper.RunCommandAsync("security", $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
             if (exitCode != 0)
             {
                 File.Delete(RootPfx);
@@ -126,7 +126,7 @@ public static class CertificateHelper
         {
             try
             {
-                await CommandHelper.RunCommandAsync("sudo", $"security delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
+                await CommandHelper.RunCommandAsync("security", $"delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
             }
             catch
             {

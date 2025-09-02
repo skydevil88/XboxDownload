@@ -14,8 +14,8 @@ public static class ServiceDataBuilder
     public static ObservableCollection<DohServerOption> GetDohServerList() =>
     [
         new("AlibabaCloud", ResourceHelper.GetString("Service.Service.SecureDns.AlibabaCloud"), "https://dns.alidns.com/resolve", "223.5.5.5", true, true),
-        new("TencentCloud", ResourceHelper.GetString("Service.Service.SecureDns.TencentCloud"), "https://doh.pub/resolve", "1.12.12.12", true,true),
-        new("Qihoo360", ResourceHelper.GetString("Service.Service.SecureDns.Qihoo360"), "https://doh.360.cn/resolve", "101.198.198.198", true,true),
+        new("TencentCloud", ResourceHelper.GetString("Service.Service.SecureDns.TencentCloud"), "https://doh.pub/resolve", "1.12.12.12", true, true),
+        new("Qihoo360", ResourceHelper.GetString("Service.Service.SecureDns.Qihoo360"), "https://doh.360.cn/resolve", "101.198.198.198", true, true),
         new("Google", "Google", "https://dns.google/resolve", "8.8.8.8", true),
         new("Cloudflare", "Cloudflare", "https://cloudflare-dns.com/dns-query", "1.1.1.1", true),
         new("DNS.SB", "DNS.SB (Global)", "https://doh.sb/dns-query", "185.222.222.222", true),

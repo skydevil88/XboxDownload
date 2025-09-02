@@ -37,6 +37,7 @@ public partial class ServiceViewModel : ObservableObject
     public readonly string HostFilePath = PathHelper.GetLocalFilePath("Host.json");
     public readonly string AkamaiFilePath = PathHelper.GetLocalFilePath("Akamai.txt");
     public readonly string SniProxyFilePath = PathHelper.GetLocalFilePath("SniProxy.json");
+    public readonly string SniProxy2FilePath = PathHelper.GetLocalFilePath("Cealing-Host.json");
 
     public readonly DnsConnectionListener DnsConnectionListener;
     public readonly TcpConnectionListener TcpConnectionListener;
@@ -116,9 +117,8 @@ public partial class ServiceViewModel : ObservableObject
 
     private async Task DeliveryOptimization()
     {
-        if (!OperatingSystem.IsWindows()) return;
-
         var doConfigOutput = await CommandHelper.RunCommandWithOutputAsync("powershell.exe", "Get-DOConfig");
+
         var dic = new Dictionary<string, string>();
         foreach (var line in doConfigOutput)
         {
@@ -786,5 +786,3 @@ public partial class ServiceViewModel : ObservableObject
 
     #endregion
 }
-
-
