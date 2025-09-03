@@ -1152,10 +1152,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 else errMessae = $"Unable to query domain {host}.";
                                                 if (!string.IsNullOrEmpty(errMessae))
                                                 {
-                                                    var response = Encoding.ASCII.GetBytes(errMessae);
+                                                    var response = Encoding.UTF8.GetBytes(errMessae);
                                                     StringBuilder sb = new();
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
-                                                    sb.Append("Content-Type: text/html\r\n");
+                                                    sb.Append("Content-Type: text/html; charset=utf-8\r\n");
                                                     sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                                     ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
                                                     ssl.Write(response);
