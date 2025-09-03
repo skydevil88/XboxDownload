@@ -16,10 +16,10 @@
                 <DockPanel LastChildFill="True" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Spacing="10">
                         <TextBlock VerticalAlignment="Center" Text="{DynamicResource Host.ResolveDomain.DomainName}"/>
-                        <TextBox x:Name="Host" MinWidth="280" Watermark="{DynamicResource Host.ResolveDomain.DomainNameWatermark}"
+                        <TextBox x:Name="Host" Width="280" Watermark="{DynamicResource Host.ResolveDomain.DomainNameWatermark}"
                                  Text="{Binding HostnameToResolve}" KeyDown="Host_KeyDown"/>
                         <TextBlock VerticalAlignment="Center" Text="{DynamicResource Host.ResolveDomain.IpAddress}"/>
-                        <TextBox x:Name="Ip" MinWidth="280" Text="{Binding ResolveIp}" IsReadOnly="True"/>
+                        <TextBox x:Name="Ip" MinWidth="280" MaxWidth="450" Text="{Binding ResolveIp}" IsReadOnly="True"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
                         <Button MinWidth="80" HorizontalContentAlignment="Center" Content="{DynamicResource Host.ResolveDomain.Confirm}"
@@ -71,7 +71,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="{DynamicResource Host.ResolveDomain.Delay}" MinWidth="70">
+                            <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Host.ResolveDomain.Delay}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Delay}" TextAlignment="Right"
@@ -80,7 +80,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="{DynamicResource Host.ResolveDomain.Location}" Width="*">
+                            <DataGridTemplateColumn MinWidth="240" Width="*" Header="{DynamicResource Host.ResolveDomain.Location}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Location}" VerticalAlignment="Center"
