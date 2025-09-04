@@ -526,7 +526,7 @@ public partial class StoreViewModel : ObservableObject
             if (displaySkuAvailabilities != null)
             {
                 var packages = displaySkuAvailabilities.Sku.Properties.Packages;
-                if (packages.Count > 0)
+                if (packages != null && packages.Count > 0)
                 {
                     var wuCategoryId = packages[0].FulfillmentData.WuCategoryId.ToLower();
                     GameLanguages = string.Join(", ", packages[0].Languages);
