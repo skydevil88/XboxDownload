@@ -1200,7 +1200,13 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             ssl.ReadTimeout = 30000;
             try
             {
-                ssl.AuthenticateAsClient(string.IsNullOrEmpty(sni) ? ips[0].ToString() : sni);
+                var options = new SslClientAuthenticationOptions
+                {
+                    TargetHost = string.IsNullOrEmpty(sni) ? ips[0].ToString() : sni,
+                    EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
+                    CertificateRevocationCheckMode = X509RevocationMode.Online
+                };
+                ssl.AuthenticateAsClient(options);
                 if (ssl.IsAuthenticated)
                 {
                     ssl.Write(send1);
