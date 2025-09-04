@@ -485,6 +485,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             sb.Append("HTTP/1.1 500 Server Error\r\n");
                             sb.Append("Content-Type: text/html\r\n");
                             sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                            sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
+                            sb.Append("Pragma: no-cache\r\n");
+                            sb.Append("Expires: 0\r\n");
                             var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                             socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
                             socket.Send(response, 0, response.Length, SocketFlags.None, out _);
@@ -728,6 +731,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 sb.Append("HTTP/1.1 404 Not Found\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
                                 sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                                sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
+                                sb.Append("Pragma: no-cache\r\n");
+                                sb.Append("Expires: 0\r\n");
                                 var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                 socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
                                 socket.Send(response, 0, response.Length, SocketFlags.None, out _);
@@ -935,6 +941,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 sb.Append("HTTP/1.1 500 Server Error\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
                                 sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                                sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
+                                sb.Append("Pragma: no-cache\r\n");
+                                sb.Append("Expires: 0\r\n");
                                 var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                 ssl.Write(headersBytes);
                                 ssl.Write(response);
@@ -976,6 +985,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                 sb.Append("Content-Type: text/html\r\n");
                                                 sb.Append("Content-Length: 0\r\n\r\n");
+                                                sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
+                                                sb.Append("Pragma: no-cache\r\n");
+                                                sb.Append("Expires: 0\r\n");
                                                 ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
                                                 ssl.Flush();
                                                 if (serviceViewModel.IsLogging)
@@ -1157,6 +1169,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                     sb.Append("Content-Type: text/html; charset=utf-8\r\n");
                                                     sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                                                    sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
+                                                    sb.Append("Pragma: no-cache\r\n");
+                                                    sb.Append("Expires: 0\r\n");
                                                     ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
                                                     ssl.Write(response);
                                                     ssl.Flush();
@@ -1173,6 +1188,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 sb.Append("HTTP/1.1 404 Not Found\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
                                 sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                                sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
+                                sb.Append("Pragma: no-cache\r\n");
+                                sb.Append("Expires: 0\r\n");
                                 var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                 ssl.Write(headersBytes);
                                 ssl.Write(response);
@@ -1355,7 +1373,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     [GeneratedRegex(@"Transfer-Encoding:\s*(?<TransferEncoding>.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex TransferEncodingHeaderRegex();
-    
+
     [GeneratedRegex(@"\^.*")]
     private static partial Regex CaretAndFollowingRegex();
 }
