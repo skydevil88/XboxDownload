@@ -33,7 +33,7 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                 <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Display}"
-                                                          Command="{Binding $parent[ListBox].((dialog:LocalProxyDialogViewModel)DataContext).CheckBoxCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
+                                                          Command="{Binding $parent[ListBox].((dialog:LocalProxyDialogViewModel)DataContext).ApplyProxyRuleCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                           CommandParameter="{Binding}"/>
                                             </StackPanel>
                                         </DataTemplate>
@@ -84,7 +84,7 @@
                         <!-- 保存按钮靠底 -->
                         <Button Grid.Row="3" MinWidth="120" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
                                 Content="{DynamicResource Service.LocalProxy.Save}"
-                                Command="{Binding SaveCommand}"/>
+                                Command="{Binding SaveRulesCommand}"/>
                     </Grid>
 
                 </Grid>
@@ -101,11 +101,11 @@
                 
                 <Grid Grid.Row="1" ColumnDefinitions="*,120,*">
                     <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6">
-                        <Button Classes="LinkLabel" Command="{Binding UpdateRulesCommand}">
+                        <Button Classes="LinkLabel" Command="{Binding UpdateThirdPartyRulesCommand}">
                             <TextBlock Text="{DynamicResource Service.LocalProxy.UpdateRules}"
                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                         </Button>
-                        <Button Classes="LinkLabel" HorizontalAlignment="Right" Command="{Binding ClearRulesCommand}">
+                        <Button Classes="LinkLabel" HorizontalAlignment="Right" Command="{Binding ClearThirdPartyRulesCommand}">
                             <TextBlock Text="{DynamicResource Service.LocalProxy.ClearRules}"
                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                         </Button>
@@ -113,7 +113,7 @@
                     
                     <Button Grid.Column="1" MinWidth="120" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
                             Content="{DynamicResource Service.LocalProxy.Save}"
-                            Command="{Binding SaveRulesCommand}"/>
+                            Command="{Binding SaveThirdPartyRulesCommand}"/>
                     
                     <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
                         <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.LocalProxy.RuleSource}"/>

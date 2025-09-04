@@ -73,36 +73,80 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         // Load SNI proxy file if exists
         if (App.Settings.IsLocalProxyEnabled)
         {
-            if (File.Exists(serviceViewModel.SniProxyFilePath))
+            foreach (var path in new[] { serviceViewModel.SniProxyFilePath, serviceViewModel.SniProxy2FilePath })
             {
+                if (!File.Exists(path)) continue;
                 List<List<object>>? sniProxy = null;
                 try
                 {
-                    sniProxy = JsonSerializer.Deserialize<List<List<object>>>(await File.ReadAllTextAsync(serviceViewModel.SniProxyFilePath));
+                    sniProxy = JsonSerializer.Deserialize<List<List<object>>>(await File.ReadAllTextAsync(path));
                 }
                 catch
                 {
                     // ignored
                 }
 
-                if (sniProxy != null)
+                if (sniProxy == null) continue;
+
+                foreach (var item in sniProxy)
                 {
-                    foreach (var item in sniProxy)
+                    if (item.Count != 3) continue;
+
+                    var jeHosts = (JsonElement)item[0];
+                    if (jeHosts.ValueKind != JsonValueKind.Array) continue;
+
+                    // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+                    var sni = item[1]?.ToString();
+                    var branch = string.Empty;
+                    var lsIPv6 = new List<IPAddress>();
+                    var lsIPv4 = new List<IPAddress>();
+
+                    var jeIps = (JsonElement)item[2];
+                    if (jeIps.ValueKind == JsonValueKind.Array)
                     {
-                        if (item.Count != 3) continue;
-
-                        var jeHosts = (JsonElement)item[0];
-                        if (jeHosts.ValueKind != JsonValueKind.Array) continue;
-
-                        var sni = item[1].ToString();
-                        var ips = item[2].ToString();
-                        var lsIPv6 = new List<IPAddress>();
-                        var lsIPv4 = new List<IPAddress>();
-                        if (!string.IsNullOrEmpty(ips))
+                        foreach (var ip in jeIps.EnumerateArray())
                         {
-                            foreach (var ip in ips.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                            if (IPAddress.TryParse(ip.ToString(), out var ipAddress))
                             {
-                                if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
+                                switch (ipAddress.AddressFamily)
+                                {
+                                    case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
+                                        lsIPv6.Add(ipAddress);
+                                        break;
+                                    case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
+                                        lsIPv4.Add(ipAddress);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var ips = jeIps.ToString().Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                        if (ips.Length == 1)
+                        {
+                            if (IPAddress.TryParse(ips[0], out var ipAddress))
+                            {
+                                switch (ipAddress.AddressFamily)
+                                {
+                                    case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
+                                        lsIPv6.Add(ipAddress);
+                                        break;
+                                    case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
+                                        lsIPv4.Add(ipAddress);
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                branch = ips[0];
+                            }
+                        }
+                        else
+                        {
+                            foreach (var ip in ips)
+                            {
+                                if (IPAddress.TryParse(ip, out var ipAddress))
                                 {
                                     switch (ipAddress.AddressFamily)
                                     {
@@ -116,125 +160,43 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 }
                             }
                         }
-
-                        var customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
-
-                        foreach (var str in jeHosts.EnumerateArray())
-                        {
-                            var splitArray = str.ToString().Trim().Split("->", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                            var host = splitArray[0].Trim();
-                            if (string.IsNullOrEmpty(host) || host.StartsWith('#')) continue;
-
-                            var branch = splitArray.Length >= 2 ? splitArray[1].Trim() : null;
-                            SniProxy proyx = new()
-                            {
-                                Branch = branch,
-                                Sni = sni,
-                                IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
-                                IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
-                                UseCustomIpAddress = customIp
-                            };
-
-                            if (host.StartsWith('*'))
-                            {
-                                host = host[1..];
-                                if (!host.StartsWith('.'))
-                                {
-                                    sanBuilder.AddDnsName(host);
-                                    DicSniProxy.TryAdd(host, proyx);
-                                    host = "." + host;
-                                }
-                                sanBuilder.AddDnsName('*' + host);
-                                DicSniProxy2.TryAdd(host, proyx);
-                            }
-                            else
-                            {
-                                sanBuilder.AddDnsName(host);
-                                DicSniProxy.TryAdd(host, proyx);
-                            }
-                        }
                     }
-                }
-            }
 
-            if (File.Exists(serviceViewModel.SniProxy2FilePath))
-            {
-                List<List<object>>? sniProxy = null;
-                try
-                {
-                    sniProxy = JsonSerializer.Deserialize<List<List<object>>>(await File.ReadAllTextAsync(serviceViewModel.SniProxy2FilePath));
-                }
-                catch
-                {
-                    // ignored
-                }
+                    var customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
 
-                if (sniProxy != null)
-                {
-                    foreach (var item in sniProxy)
+                    foreach (var str in jeHosts.EnumerateArray())
                     {
-                        if (item.Count != 3) continue;
+                        var splitArray = str.ToString().Trim().Split("->", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                        var host = splitArray[0].Trim();
+                        if (string.IsNullOrEmpty(host) || host.StartsWith('#')) continue;
 
-                        var jeHosts = (JsonElement)item[0];
-                        if (jeHosts.ValueKind != JsonValueKind.Array) continue;
-
-                        var sni = item[1] as string;
-                        var ips = item[2].ToString()?.Trim();
-                        var lsIPv6 = new List<IPAddress>();
-                        var lsIPv4 = new List<IPAddress>();
-                        string? branch = null;
-                        if (!string.IsNullOrEmpty(ips))
+                        if (string.IsNullOrEmpty(branch))
+                            branch = splitArray.Length >= 2 ? splitArray[1].Trim() : null;
+                        SniProxy proyx = new()
                         {
-                            if (IPAddress.TryParse(ips, out var ipAddress))
-                            {
-                                switch (ipAddress.AddressFamily)
-                                {
-                                    case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
-                                        lsIPv6.Add(ipAddress);
-                                        break;
-                                    case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
-                                        lsIPv4.Add(ipAddress);
-                                        break;
-                                }
-                            }
-                            else if (RegexHelper.IsValidDomain().IsMatch(ips))
-                            {
-                                branch = ips;
-                            }
-                        }
-                        var customIp = lsIPv4.Count >= 1 || lsIPv6.Count >= 1;
-                        foreach (var element in jeHosts.EnumerateArray())
+                            Branch = branch,
+                            Sni = sni,
+                            IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
+                            IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
+                            UseCustomIpAddress = customIp
+                        };
+
+                        if (host.StartsWith('*'))
                         {
-                            var host = element.ToString().Trim();
-                            if (string.IsNullOrEmpty(host) || host.StartsWith('#') || host.StartsWith('^')) continue;
-                            host = CaretAndFollowingRegex().Replace(host.TrimStart('$'), "");
-
-                            SniProxy proyx = new()
-                            {
-                                Branch = branch,
-                                Sni = sni,
-                                IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
-                                IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
-                                UseCustomIpAddress = customIp
-                            };
-
-                            if (host.StartsWith('*'))
-                            {
-                                host = host[1..];
-                                if (!host.StartsWith('.'))
-                                {
-                                    sanBuilder.AddDnsName(host);
-                                    DicSniProxy.TryAdd(host, proyx);
-                                    host = "." + host;
-                                }
-                                sanBuilder.AddDnsName('*' + host);
-                                DicSniProxy2.TryAdd(host, proyx);
-                            }
-                            else
+                            host = host[1..];
+                            if (!host.StartsWith('.'))
                             {
                                 sanBuilder.AddDnsName(host);
                                 DicSniProxy.TryAdd(host, proyx);
+                                host = "." + host;
                             }
+                            sanBuilder.AddDnsName('*' + host);
+                            DicSniProxy2.TryAdd(host, proyx);
+                        }
+                        else
+                        {
+                            sanBuilder.AddDnsName(host);
+                            DicSniProxy.TryAdd(host, proyx);
                         }
                     }
                 }
@@ -270,7 +232,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             // Load Root CA
             using var caCert = new X509Certificate2(CertificateHelper.RootPfx, "", X509KeyStorageFlags.Exportable);
 
-            var notBefore = DateTimeOffset.UtcNow.AddMinutes(-5);
+            var notBefore = DateTimeOffset.UtcNow;
             if (notBefore < caCert.NotBefore)
                 notBefore = caCert.NotBefore;
 
@@ -484,10 +446,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             var sb = new StringBuilder();
                             sb.Append("HTTP/1.1 500 Server Error\r\n");
                             sb.Append("Content-Type: text/html\r\n");
-                            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                             sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
                             sb.Append("Pragma: no-cache\r\n");
                             sb.Append("Expires: 0\r\n");
+                            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                             var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                             socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
                             socket.Send(response, 0, response.Length, SocketFlags.None, out _);
@@ -730,10 +692,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 StringBuilder sb = new();
                                 sb.Append("HTTP/1.1 404 Not Found\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
-                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                 sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
                                 sb.Append("Pragma: no-cache\r\n");
                                 sb.Append("Expires: 0\r\n");
+                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                 var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                 socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
                                 socket.Send(response, 0, response.Length, SocketFlags.None, out _);
@@ -940,10 +902,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 var sb = new StringBuilder();
                                 sb.Append("HTTP/1.1 500 Server Error\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
-                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                 sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
                                 sb.Append("Pragma: no-cache\r\n");
                                 sb.Append("Expires: 0\r\n");
+                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                 var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                 ssl.Write(headersBytes);
                                 ssl.Write(response);
@@ -984,10 +946,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 StringBuilder sb = new();
                                                 sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                 sb.Append("Content-Type: text/html\r\n");
-                                                sb.Append("Content-Length: 0\r\n\r\n");
                                                 sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
                                                 sb.Append("Pragma: no-cache\r\n");
                                                 sb.Append("Expires: 0\r\n");
+                                                sb.Append("Content-Length: 0\r\n\r\n");
                                                 ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
                                                 ssl.Flush();
                                                 if (serviceViewModel.IsLogging)
@@ -1110,7 +1072,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 }
                                                 else if (proxy.IpAddresses == null)
                                                 {
-                                                    await proxy.Semaphore.WaitAsync();
                                                     if (proxy.IpAddresses == null)
                                                     {
                                                         var domain = proxy.Branch ?? host;
@@ -1168,11 +1129,11 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                     StringBuilder sb = new();
                                                     sb.Append("HTTP/1.1 500 Server Error\r\n");
                                                     sb.Append("Content-Type: text/html; charset=utf-8\r\n");
-                                                    sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                                     sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
                                                     sb.Append("Pragma: no-cache\r\n");
                                                     sb.Append("Expires: 0\r\n");
-                                                    ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
+                                                    sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                                                    ssl.Write(Encoding.UTF8.GetBytes(sb.ToString()));
                                                     ssl.Write(response);
                                                     ssl.Flush();
                                                 }
@@ -1187,10 +1148,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 StringBuilder sb = new();
                                 sb.Append("HTTP/1.1 404 Not Found\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
-                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                 sb.Append("Cache-Control: no-store, no-cache, must-revalidate\r\n");
                                 sb.Append("Pragma: no-cache\r\n");
                                 sb.Append("Expires: 0\r\n");
+                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
                                 var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                 ssl.Write(headersBytes);
                                 ssl.Write(response);
@@ -1373,7 +1334,4 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     [GeneratedRegex(@"Transfer-Encoding:\s*(?<TransferEncoding>.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex TransferEncodingHeaderRegex();
-
-    [GeneratedRegex(@"\^.*")]
-    private static partial Regex CaretAndFollowingRegex();
 }

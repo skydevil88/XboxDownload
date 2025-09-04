@@ -8,7 +8,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -65,16 +64,43 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 if (item.Count != 3) continue;
                 var jeHosts = (JsonElement)item[0];
                 if (jeHosts.ValueKind != JsonValueKind.Array) continue;
-                var hosts = string.Join(", ", jeHosts.EnumerateArray().Select(x => x.GetString()?.Trim()));
+                var hosts = string.Join(", ", jeHosts.EnumerateArray().Select(x => x.GetString()));
                 if (string.IsNullOrEmpty(hosts)) continue;
-                var fakeHost = item[1].ToString()?.Trim();
-                var ip = item[2].ToString()?.Trim();
-                if (string.IsNullOrEmpty(fakeHost) && string.IsNullOrEmpty(ip))
-                    sb.AppendLine(hosts);
-                else if (!string.IsNullOrEmpty(fakeHost) && !string.IsNullOrEmpty(ip))
-                    sb.AppendLine(hosts + " | " + fakeHost + " | " + ip);
+                var sni = item[1].ToString()?.Trim();
+                var jeIps = (JsonElement)item[2];
+
+                var list = new List<string>();
+                if (jeIps.ValueKind == JsonValueKind.Array)
+                {
+                    list.Add(hosts);
+                    if (!string.IsNullOrEmpty(sni))
+                        list.Add(sni);
+                    list.Add(string.Join(", ", jeIps.EnumerateArray().Select(x => x.GetString())));
+                }
                 else
-                    sb.AppendLine(hosts + " | " + fakeHost + ip);
+                {
+                    var ip = jeIps.GetString();
+                    if (string.IsNullOrEmpty(ip))
+                    {
+                        list.Add(hosts);
+                        if (!string.IsNullOrEmpty(sni))
+                            list.Add(sni);
+                    }
+                    else if (RegexHelper.IsValidDomain().IsMatch(ip))
+                    {
+                        list.Add(hosts + " -> " + ip);
+                        if (!string.IsNullOrEmpty(sni))
+                            list.Add(sni);
+                    }
+                    else
+                    {
+                        list.Add(hosts);
+                        if (!string.IsNullOrEmpty(sni))
+                            list.Add(sni);
+                        list.Add(ip);
+                    }
+                }
+                sb.AppendLine(string.Join(" | ", list));
             }
             RulesText = sb.ToString();
         }
@@ -91,12 +117,12 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 App.Settings.SniProxyId.Contains(dohServer.Id)
             );
 
-            model.CheckedChanged += (_, _) => UpdateCheckedCount();
+            model.CheckedChanged += (_, _) => RefreshDoHSelectionState();
 
             DohModelsMappings.Add(model);
         }
 
-        UpdateCheckedCount();
+        RefreshDoHSelectionState();
 
         if (!DohModelsMappings.Any(a => a.IsChecked))
             DohModelsMappings.FirstOrDefault()!.IsChecked = true;
@@ -105,30 +131,10 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _doHServers = string.Empty;
-
-    private void UpdateCheckedCount()
-    {
-        var count = DohModelsMappings.Count(x => x.IsChecked);
-
-        DoHServers = $"{ResourceHelper.GetString("Service.LocalProxy.DoHServers")} ({count}/8)";
-
-        var disableUnchecked = count >= 8;
-
-        foreach (var dohModels in DohModelsMappings)
-        {
-            if (!dohModels.IsChecked && dohModels.IsEnabled != !disableUnchecked)
-            {
-                dohModels.IsEnabled = !disableUnchecked;
-            }
-        }
-    }
-
-    [ObservableProperty]
     private int _selectionStart, _selectionEnd;
 
     [RelayCommand]
-    private void CheckBox(ProxyModels models)
+    private void ApplyProxyRule(ProxyModels models)
     {
         var rule = ProxyRules.FirstOrDefault(rule => rule.Display == models.Display)?.Rule;
         if (rule == null) return;
@@ -151,6 +157,27 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         else
         {
             RulesText = sb.ToString();
+        }
+    }
+
+    [ObservableProperty]
+    private string _doHServers = string.Empty;
+
+    private void RefreshDoHSelectionState()
+    {
+        var count = DohModelsMappings.Count(x => x.IsChecked);
+
+        DoHServers = $"{ResourceHelper.GetString("Service.LocalProxy.DoHServers")} ({count}/8)";
+
+        var disableUnselected = count >= 8;
+        var enableState = !disableUnselected;
+
+        foreach (var model in DohModelsMappings)
+        {
+            if (!model.IsChecked && model.IsEnabled != enableState)
+            {
+                model.IsEnabled = enableState;
+            }
         }
     }
 
@@ -232,7 +259,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     public Action? CloseDialog { get; init; }
 
     [RelayCommand]
-    private void Save()
+    private void SaveRules()
     {
         var lsSniProxy = new List<List<object>>();
         foreach (var line in RulesText.ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
@@ -240,27 +267,34 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             var proxy = line.Split('|');
             if (proxy.Length == 0) continue;
             var arrHost = new ArrayList();
+            var branch = string.Empty;
             var sni = string.Empty;
             var lsIPv6 = new List<IPAddress>();
             var lsIPv4 = new List<IPAddress>();
             if (proxy.Length >= 1)
             {
-                foreach (var hostRaw in proxy[0].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                foreach (var hostRaw in proxy[0].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                 {
                     var host = RegexHelper.ExtractDomainFromUrlRegex().Replace(hostRaw, "$2").Trim().ToLowerInvariant();
-                    if (!string.IsNullOrEmpty(host))
+                    var parts = host.Split("->", StringSplitOptions.TrimEntries);
+                    if (parts.Length == 2)
                     {
-                        arrHost.Add(ArrowSymbolRegex().Replace(host, " -> "));
+                        arrHost.Add(parts[0]);
+                        branch = parts[1];
+                    }
+                    else
+                    {
+                        arrHost.Add(host);
                     }
                 }
             }
+
             if (proxy.Length == 2)
             {
-                proxy[1] = proxy[1].Trim();
-                var ips = proxy[1].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                var ips = proxy[1].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                 if (ips.Length == 1)
                 {
-                    if (IPAddress.TryParse(proxy[1], out var ipAddress))
+                    if (IPAddress.TryParse(ips[0], out var ipAddress))
                     {
                         switch (ipAddress.AddressFamily)
                         {
@@ -272,7 +306,10 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                                 break;
                         }
                     }
-                    else sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
+                    else
+                    {
+                        sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
+                    }
                 }
                 else
                 {
@@ -296,7 +333,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             else if (proxy.Length >= 3)
             {
                 sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
-                var ips = proxy[2].Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                var ips = proxy[2].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                 foreach (var ip in ips)
                 {
                     if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
@@ -313,9 +350,18 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                     }
                 }
             }
-            if (arrHost.Count >= 1)
+
+            if (!string.IsNullOrEmpty(branch))
             {
-                lsSniProxy.Add([arrHost, sni, string.Join(", ", lsIPv6.Union(lsIPv4).Take(16).ToList())]);
+                lsSniProxy.Add([arrHost, sni, branch]);
+            }
+            else if (arrHost.Count >= 1)
+            {
+                var ips = lsIPv4.Union(lsIPv6).Take(16).Select(ip => ip.ToString());
+                if (ips.Any())
+                    lsSniProxy.Add([arrHost, sni, ips]);
+                else
+                    lsSniProxy.Add([arrHost, sni, ""]);
             }
         }
 
@@ -340,13 +386,8 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         CloseDialog?.Invoke();
     }
 
-    [GeneratedRegex(@"\s*->\s*")]
-    private static partial Regex ArrowSymbolRegex();
-
-
-
     [RelayCommand]
-    private async Task UpdateRulesAsync()
+    private async Task UpdateThirdPartyRulesAsync()
     {
         Rules2Text = string.Empty;
 
@@ -375,13 +416,13 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ClearRules()
+    private void ClearThirdPartyRules()
     {
         Rules2Text = string.Empty;
     }
 
     [RelayCommand]
-    private async Task SaveRulesAsync()
+    private async Task SaveThirdPartyRulesAsync()
     {
         Rules2Text = Rules2Text.Trim();
         if (string.IsNullOrEmpty(Rules2Text))

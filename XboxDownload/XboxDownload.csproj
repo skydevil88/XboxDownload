@@ -6,7 +6,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <FileVersion>3.0.0.14</FileVersion>
+        <FileVersion>3.0.0.15</FileVersion>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 
@@ -15,7 +15,7 @@
         <AvaloniaResource Include="Resources\Akamai.txt" />
         <AvaloniaResource Include="Resources\Task.xml" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <Content Include="Assets\xbox.ico" />
     </ItemGroup>
@@ -42,17 +42,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Dialog\ResolveDomainDialog.axaml.cs">
-        <DependentUpon>ResolveHostDialog.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Dialog\DohServerDialog.axaml.cs">
-        <DependentUpon>DohServerDialog.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Dialog\ImportHostDialog.axaml.cs">
-        <DependentUpon>ImportHostDialog.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+        <Compile Update="Views\Dialog\ResolveDomainDialog.axaml.cs">
+            <DependentUpon>ResolveHostDialog.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Dialog\DohServerDialog.axaml.cs">
+            <DependentUpon>DohServerDialog.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Dialog\ImportHostDialog.axaml.cs">
+            <DependentUpon>ImportHostDialog.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 </Project>
