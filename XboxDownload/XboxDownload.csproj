@@ -6,13 +6,15 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <FileVersion>3.0.0.15</FileVersion>
+        <FileVersion>3.0.0.16</FileVersion>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <None Remove="Resources\CertDomain.txt" />
         <AvaloniaResource Include="Resources\Akamai.txt" />
+        <AvaloniaResource Include="Resources\CertDomain.txt" />
         <AvaloniaResource Include="Resources\Task.xml" />
     </ItemGroup>
 

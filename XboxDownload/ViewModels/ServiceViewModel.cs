@@ -38,6 +38,7 @@ public partial class ServiceViewModel : ObservableObject
     public readonly string AkamaiFilePath = PathHelper.GetLocalFilePath("Akamai.txt");
     public readonly string SniProxyFilePath = PathHelper.GetLocalFilePath("SniProxy.json");
     public readonly string SniProxy2FilePath = PathHelper.GetLocalFilePath("Cealing-Host.json");
+    public readonly string CertDomainFilePath = PathHelper.GetLocalFilePath("CertDomainMapping.txt");
 
     public readonly DnsConnectionListener DnsConnectionListener;
     public readonly TcpConnectionListener TcpConnectionListener;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Web;
+using Avalonia.Platform;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.System;
@@ -32,8 +34,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     private const int HttpsPort = 443;
     private bool _isSimplifiedChinese;
 
-    public static readonly ConcurrentDictionary<string, SniProxy> DicSniProxy = new();
-    public static readonly ConcurrentDictionary<string, SniProxy> DicSniProxy2 = new();
+    public static readonly ConcurrentDictionary<string, (SniProxy, string[]?)> DicSniProxy = new();
+    public static readonly ConcurrentDictionary<string, (SniProxy, string[]?)> DicSniProxy2 = new();
 
     public class SniProxy
     {
@@ -73,6 +75,63 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         // Load SNI proxy file if exists
         if (App.Settings.IsLocalProxyEnabled)
         {
+            string certDomainText;
+            await using (var stream = AssetLoader.Open(new Uri($"avares://{nameof(XboxDownload)}/Resources/CertDomain.txt")))
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    certDomainText = (await reader.ReadToEndAsync()).Trim();
+                }
+            }
+            if (File.Exists(serviceViewModel.CertDomainFilePath))
+                certDomainText += Environment.NewLine + await File.ReadAllTextAsync(serviceViewModel.CertDomainFilePath);
+            
+            var certDomainMap = new ConcurrentDictionary<string, string[]?>();
+            var wildcardDomainMap = new List<KeyValuePair<string, string[]?>>();
+            
+            foreach (var line in certDomainText.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (string.IsNullOrEmpty(line) || line.StartsWith('#'))
+                    continue;
+
+                var parts = line.Split('=', 2, StringSplitOptions.TrimEntries);
+                if (parts.Length != 2) continue;
+
+                var key = parts[0].Trim().Trim('"').Trim().ToLowerInvariant();
+                string[] value;
+
+                try
+                {
+                    value = JsonSerializer.Deserialize<string[]>(parts[1])!;
+                    value = value.Select(v => v.Trim().ToLowerInvariant()).ToArray();
+                }
+                catch
+                {
+                    continue;
+                }
+                    
+                if (key.StartsWith('*'))
+                {
+                    key = key[1..];
+                    if (!key.StartsWith('.'))
+                    {
+                        certDomainMap.TryAdd(key, value);
+                        key = "." + key;
+                    }
+                        
+                    if (!wildcardDomainMap.Any(kv => kv.Key.Equals(key)))
+                        wildcardDomainMap.Add(new KeyValuePair<string, string[]?>(key, value));
+                }
+                else
+                {
+                    certDomainMap.TryAdd(key, value);
+                }
+            }
+
+            wildcardDomainMap = wildcardDomainMap
+                .OrderByDescending(kv => kv.Key.Length)
+                .ToList();
+            
             foreach (var path in new[] { serviceViewModel.SniProxyFilePath, serviceViewModel.SniProxy2FilePath })
             {
                 if (!File.Exists(path)) continue;
@@ -187,16 +246,25 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             if (!host.StartsWith('.'))
                             {
                                 sanBuilder.AddDnsName(host);
-                                DicSniProxy.TryAdd(host, proyx);
+                                if (!certDomainMap.TryGetValue(host, out var expectedHosts))
+                                {
+                                    expectedHosts = wildcardDomainMap.Where(kv => host.EndsWith(kv.Key)).Select(kv => kv.Value).FirstOrDefault();
+                                }
+                                DicSniProxy.TryAdd(host, (proyx, expectedHosts));
                                 host = "." + host;
                             }
                             sanBuilder.AddDnsName('*' + host);
-                            DicSniProxy2.TryAdd(host, proyx);
+                            var wildcardExpectedHosts = wildcardDomainMap.Where(kv => host.EndsWith(kv.Key)).Select(kv => kv.Value).FirstOrDefault();
+                            DicSniProxy2.TryAdd(host, (proyx, wildcardExpectedHosts));
                         }
                         else
                         {
                             sanBuilder.AddDnsName(host);
-                            DicSniProxy.TryAdd(host, proyx);
+                            if (!certDomainMap.TryGetValue(host, out var expectedHosts))
+                            {
+                                expectedHosts = wildcardDomainMap.Where(kv => host.EndsWith(kv.Key)).Select(kv => kv.Value).FirstOrDefault();
+                            }
+                            DicSniProxy.TryAdd(host, (proyx, expectedHosts));
                         }
                     }
                 }
@@ -370,7 +438,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                     result = HostHeaderRegex().Match(headers);
                     if (!result.Success) break;
-                    var host = result.Groups[1].Value.Trim().ToLower();
+                    var host = result.Groups[1].Value.Trim().ToLowerInvariant();
 
                     string tmpPath = QueryStringRegex().Replace(filePath, ""), localPath = string.Empty;
                     if (serviceViewModel.IsLocalUploadEnabled)
@@ -670,7 +738,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         break;
                                     }
                                 default:
-                                    if (App.Settings.IsLocalProxyEnabled && (DicSniProxy.ContainsKey(host) || DicSniProxy2.Where(kvp => kvp.Key.EndsWith(host)).Select(x => x.Value).FirstOrDefault() != null))
+                                    if (App.Settings.IsLocalProxyEnabled && (DicSniProxy.ContainsKey(host) || DicSniProxy2.Any(kvp => kvp.Key.EndsWith(host))))
                                     {
                                         fileFound = true;
                                         url = $"https://{host}{filePath}";
@@ -1023,23 +1091,31 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                                         if (!fileFound)
                                         {
-                                            if (!DicSniProxy.TryGetValue(host, out var proxy))
+                                            SniProxy? proxy = null;
+                                            string[]? expectedHosts = null;
+                                            if (DicSniProxy.TryGetValue(host, out var tuple))
                                             {
-                                                var proxy2 = DicSniProxy2.Where(kvp => host.EndsWith(kvp.Key)).Select(x => x.Value).FirstOrDefault();
-                                                if (proxy2 != null)
+                                                proxy = tuple.Item1;
+                                                expectedHosts = tuple.Item2;
+                                            }
+                                            else
+                                            {
+                                                tuple = DicSniProxy2.Where(kvp => host.EndsWith(kvp.Key)).Select(x => x.Value).FirstOrDefault();
+                                                if (tuple.Item1 != null)
                                                 {
                                                     proxy = new SniProxy
                                                     {
-                                                        Branch = proxy2.Branch,
-                                                        Sni = proxy2.Sni,
-                                                        IpAddressesV4 = proxy2.IpAddressesV4,
-                                                        IpAddressesV6 = proxy2.IpAddressesV6,
-                                                        UseCustomIpAddress = proxy2.UseCustomIpAddress
+                                                        Branch = tuple.Item1.Branch,
+                                                        Sni = tuple.Item1.Sni,
+                                                        IpAddressesV4 = tuple.Item1.IpAddressesV4,
+                                                        IpAddressesV6 = tuple.Item1.IpAddressesV6,
+                                                        UseCustomIpAddress = tuple.Item1.UseCustomIpAddress
                                                     };
-                                                    DicSniProxy.TryAdd(host, proxy);
+                                                    expectedHosts = tuple.Item2;
+                                                    DicSniProxy.TryAdd(host, (proxy, expectedHosts));
                                                 }
                                             }
-
+                                            
                                             if (proxy != null)
                                             {
                                                 if (serviceViewModel.IsLogging)
@@ -1072,6 +1148,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 }
                                                 else if (proxy.IpAddresses == null)
                                                 {
+                                                    await proxy.Semaphore.WaitAsync();
                                                     if (proxy.IpAddresses == null)
                                                     {
                                                         var domain = proxy.Branch ?? host;
@@ -1117,7 +1194,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 string? errMessae;
                                                 if (ips != null)
                                                 {
-                                                    if (!ExecuteSniProxy(ips, proxy.Sni, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out errMessae))
+                                                    if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out errMessae))
                                                     {
                                                         proxy.IpAddresses = null;
                                                     }
@@ -1175,7 +1252,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
     }
 
-    private static bool ExecuteSniProxy(IPAddress[] ips, string? sni, byte[] send1, byte[] send2, SslStream client, out string? errMessage)
+    private static bool ExecuteSniProxy(string targetHost, IPAddress[] ips, string? sni, string[]? expectedHosts, byte[] send1, byte[] send2, SslStream client, out string? errMessage)
     {
         var isOk = true;
         errMessage = null;
@@ -1209,74 +1286,143 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 ssl.AuthenticateAsClient(options);
                 if (ssl.IsAuthenticated)
                 {
-                    ssl.Write(send1);
-                    ssl.Write(send2);
-                    ssl.Flush();
-                    long count = 0, contentLength = -1;
-                    int len;
-                    string headers = string.Empty, transferEncoding = string.Empty;
-                    var list = new List<byte>();
-                    var bReceive = new byte[4096];
-                    while ((len = ssl.Read(bReceive, 0, bReceive.Length)) > 0)
+                    if (expectedHosts == null || expectedHosts.Length > 0)
                     {
-                        count += len;
-                        var dest = new byte[len];
-                        if (len == bReceive.Length)
+                        var useCustomValidation = expectedHosts is { Length: > 0 };
+                        if (ssl.RemoteCertificate == null)
                         {
-                            dest = bReceive;
-                            if (string.IsNullOrEmpty(headers)) list.AddRange(bReceive);
+                            isOk = false;
+                            errMessage = "Server certificate not received.";
                         }
                         else
                         {
-                            Buffer.BlockCopy(bReceive, 0, dest, 0, len);
-                            if (string.IsNullOrEmpty(headers)) list.AddRange(dest);
-                        }
-                        client.Write(dest);
-                        if (string.IsNullOrEmpty(headers))
-                        {
-                            var bytes = list.ToArray();
-                            for (var i = 1; i <= bytes.Length - 4; i++)
-                            {
-                                if (BitConverter.ToString(bytes, i, 4) != "0D-0A-0D-0A") continue;
+                            var domainMatched = false;
+                            
+                            var cert2 = new X509Certificate2(ssl.RemoteCertificate);
 
-                                headers = Encoding.ASCII.GetString(bytes, 0, i + 4);
-                                count = bytes.Length - i - 4;
-                                list.Clear();
-                                var result = StatusCodeHeaderRegex().Match(headers);
-                                if (result.Success && int.TryParse(result.Groups["StatusCode"].Value, out var statusCode) && statusCode >= 400)
+                            // Get all DNS names from the certificate
+                            var dnsNames = cert2.Extensions
+                                .Where(e => e.Oid?.Value == "2.5.29.17")
+                                .SelectMany(ext =>
                                 {
-                                    isOk = false;
-                                }
-                                result = ContentLengthHeaderRegex().Match(headers);
-                                if (result.Success)
-                                {
-                                    contentLength = Convert.ToInt32(result.Groups["ContentLength"].Value);
-                                }
-                                result = TransferEncodingHeaderRegex().Match(headers);
-                                if (result.Success)
-                                {
-                                    transferEncoding = result.Groups["TransferEncoding"].Value.Trim();
-                                }
-                                break;
+                                    var reader = new AsnReader(ext.RawData, AsnEncodingRules.DER);
+                                    var seq = reader.ReadSequence();
+                                    var result = new List<string>();
+
+                                    while (seq.HasData)
+                                    {
+                                        var tag = seq.PeekTag();
+
+                                        if (tag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 2)))
+                                        {
+                                            var dns = seq.ReadCharacterString(
+                                                UniversalTagNumber.IA5String,
+                                                new Asn1Tag(TagClass.ContextSpecific, 2)
+                                            );
+                                            result.Add(dns);
+
+                                            if (!useCustomValidation && (targetHost.Equals(dns) || dns.StartsWith('*') && targetHost.EndsWith(dns[1..])))
+                                                domainMatched = true;
+                                        }
+                                        else
+                                        {
+                                            seq.ReadEncodedValue();
+                                        }
+                                    }
+                                    return result;
+                                })
+                                .ToList();
+
+                            // Check if a matching domain exists
+                            if (!domainMatched && useCustomValidation)
+                                domainMatched = expectedHosts!.Any(host => dnsNames.Any(dns => dns.Equals(host)));
+                            
+                            if (!domainMatched)
+                            {
+                                isOk = false;
+                                
+                                var issuedFor = $"[\"{string.Join("\",&nbsp;\"", dnsNames)}\"]";
+                                var expectedFor = expectedHosts != null
+                                    ? $"[\"{string.Join("\",&nbsp;\"", expectedHosts)}\"]"
+                                    : null;
+                                errMessage = expectedFor != null
+                                    ? $"Certificate domain mismatch.<br>The server's certificate is issued for {issuedFor},<br>but the expected domain was {expectedFor}."
+                                    : $"Certificate domain mismatch.<br>The server's certificate is issued for {issuedFor}.";
                             }
                         }
-                        if (!string.IsNullOrEmpty(headers))
+                    }
+                    
+                    if (isOk)
+                    {
+                        ssl.Write(send1);
+                        ssl.Write(send2);
+                        ssl.Flush();
+                        long count = 0, contentLength = -1;
+                        int len;
+                        string headers = string.Empty, transferEncoding = string.Empty;
+                        var list = new List<byte>();
+                        var bReceive = new byte[4096];
+                        while ((len = ssl.Read(bReceive, 0, bReceive.Length)) > 0)
                         {
-                            if (transferEncoding == "chunked")
+                            count += len;
+                            var dest = new byte[len];
+                            if (len == bReceive.Length)
                             {
-                                if (dest.Length >= 5 && BitConverter.ToString(dest, dest.Length - 5) == "30-0D-0A-0D-0A")
+                                dest = bReceive;
+                                if (string.IsNullOrEmpty(headers)) list.AddRange(bReceive);
+                            }
+                            else
+                            {
+                                Buffer.BlockCopy(bReceive, 0, dest, 0, len);
+                                if (string.IsNullOrEmpty(headers)) list.AddRange(dest);
+                            }
+                            client.Write(dest);
+                            if (string.IsNullOrEmpty(headers))
+                            {
+                                var bytes = list.ToArray();
+                                for (var i = 1; i <= bytes.Length - 4; i++)
                                 {
+                                    if (BitConverter.ToString(bytes, i, 4) != "0D-0A-0D-0A") continue;
+
+                                    headers = Encoding.ASCII.GetString(bytes, 0, i + 4);
+                                    count = bytes.Length - i - 4;
+                                    list.Clear();
+                                    var result = StatusCodeHeaderRegex().Match(headers);
+                                    if (result.Success && int.TryParse(result.Groups["StatusCode"].Value, out var statusCode) && statusCode >= 400)
+                                    {
+                                        isOk = false;
+                                    }
+                                    result = ContentLengthHeaderRegex().Match(headers);
+                                    if (result.Success)
+                                    {
+                                        contentLength = Convert.ToInt32(result.Groups["ContentLength"].Value);
+                                    }
+                                    result = TransferEncodingHeaderRegex().Match(headers);
+                                    if (result.Success)
+                                    {
+                                        transferEncoding = result.Groups["TransferEncoding"].Value.Trim();
+                                    }
                                     break;
                                 }
                             }
-                            else if (contentLength >= 0)
+                            if (!string.IsNullOrEmpty(headers))
                             {
-                                if (count == contentLength) break;
+                                if (transferEncoding == "chunked")
+                                {
+                                    if (dest.Length >= 5 && BitConverter.ToString(dest, dest.Length - 5) == "30-0D-0A-0D-0A")
+                                    {
+                                        break;
+                                    }
+                                }
+                                else if (contentLength >= 0)
+                                {
+                                    if (count == contentLength) break;
+                                }
+                                else break;
                             }
-                            else break;
                         }
+                        client.Flush();
                     }
-                    client.Flush();
                 }
             }
             catch (Exception ex)

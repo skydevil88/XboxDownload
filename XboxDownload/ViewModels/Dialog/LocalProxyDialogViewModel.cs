@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -36,7 +37,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     public ObservableCollection<DohModels> DohModelsMappings { get; } = [];
 
     [ObservableProperty]
-    private static string _rulesText = string.Empty, _rules2Text = string.Empty;
+    private static string _rulesText = string.Empty, _rules2Text = string.Empty, _certDomain1Text = string.Empty, _certDomain2Text = string.Empty;
 
     public ObservableCollection<ProxyModels> ProxyRules { get; } = LocalProxyBuilder.GetProxyRulesList();
 
@@ -127,7 +128,16 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         if (!DohModelsMappings.Any(a => a.IsChecked))
             DohModelsMappings.FirstOrDefault()!.IsChecked = true;
 
-        Rules2Text = File.Exists(_serviceViewModel.SniProxy2FilePath) ? File.ReadAllText(_serviceViewModel.SniProxy2FilePath) : string.Empty;
+        Rules2Text = File.Exists(_serviceViewModel.SniProxy2FilePath) ? File.ReadAllText(_serviceViewModel.SniProxy2FilePath): string.Empty;
+
+        using (var stream = AssetLoader.Open(new Uri($"avares://{nameof(XboxDownload)}/Resources/CertDomain.txt")))
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                CertDomain1Text = reader.ReadToEnd().Trim() + Environment.NewLine;
+            }
+        }
+        CertDomain2Text = File.Exists(_serviceViewModel.CertDomainFilePath) ? File.ReadAllText(_serviceViewModel.CertDomainFilePath) + Environment.NewLine : string.Empty;
     }
 
     [ObservableProperty]
@@ -259,7 +269,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     public Action? CloseDialog { get; init; }
 
     [RelayCommand]
-    private void SaveRules()
+    private async Task SaveRulesAsync()
     {
         var lsSniProxy = new List<List<object>>();
         foreach (var line in RulesText.ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
@@ -367,10 +377,10 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
         if (lsSniProxy.Count >= 1)
         {
-            File.WriteAllText(_serviceViewModel.SniProxyFilePath, JsonSerializer.Serialize(lsSniProxy, JsonHelper.Indented));
+            await File.WriteAllTextAsync(_serviceViewModel.SniProxyFilePath, JsonSerializer.Serialize(lsSniProxy, JsonHelper.Indented));
 
             if (!OperatingSystem.IsWindows())
-                _ = PathHelper.FixOwnershipAsync(_serviceViewModel.SniProxyFilePath);
+                await PathHelper.FixOwnershipAsync(_serviceViewModel.SniProxyFilePath);
         }
         else if (File.Exists(_serviceViewModel.SniProxyFilePath))
         {
@@ -449,6 +459,27 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
             if (!OperatingSystem.IsWindows())
                 await PathHelper.FixOwnershipAsync(_serviceViewModel.SniProxy2FilePath);
+        }
+
+        CloseDialog?.Invoke();
+    }
+    
+    
+    [RelayCommand]
+    private async Task SaveCertVerifyRulesAsync()
+    {
+        CertDomain2Text = CertDomain2Text.Trim();
+        if (string.IsNullOrEmpty(CertDomain2Text))
+        {
+            if (File.Exists(_serviceViewModel.CertDomainFilePath))
+                File.Delete(_serviceViewModel.CertDomainFilePath);
+        }
+        else
+        {
+            await File.WriteAllTextAsync(_serviceViewModel.CertDomainFilePath, CertDomain2Text);
+
+            if (!OperatingSystem.IsWindows())
+                await PathHelper.FixOwnershipAsync(_serviceViewModel.CertDomainFilePath);
         }
 
         CloseDialog?.Invoke();

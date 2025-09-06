@@ -193,6 +193,10 @@
     <x:String x:Key="Service.LocalProxy.RuleTip">The author is not responsible for third-party rule security. For higher security, use local rules or a trusted commercial VPN.</x:String>
     <x:String x:Key="Service.LocalProxy.FailedDialogTitle2">Rule Format Error</x:String>
     <x:String x:Key="Service.LocalProxy.FailedDialogMessage2">The input is not valid JSON.&#x0a;&#x0a;Details: {0}</x:String>
+    <x:String x:Key="Service.LocalProxy.CertificateValidation">Certificate validation</x:String>
+    <x:String x:Key="Service.LocalProxy.BuiltinValidationPolicy">Built-in validation policy</x:String>
+    <x:String x:Key="Service.LocalProxy.CustomValidationPolicy">Custom validation policy</x:String>
+    <x:String x:Key="Service.LocalProxy.CustomValidationPolicyWatermark"># Set a certificate validation policy for each domain&#x0a;# The value can be a list of expected domain names&#x0a;"example.com" = ["a.example.com", "b.example.com"]&#x0a;&#x0a;# An empty array means no validation will be performed for this domain&#x0a;"example.com" = []</x:String>
     
     <x:String x:Key="Service.SecureDns.Delete">Delete</x:String>
     <x:String x:Key="Service.SecureDns.Enable">Enable</x:String>

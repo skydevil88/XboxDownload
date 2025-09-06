@@ -193,7 +193,11 @@
     <x:String x:Key="Service.LocalProxy.RuleTip">作者不对第三方规则的安全性承担责任。若您对安全性有较高要求，请自行编写本地规则，或者选择正规商业 VPN 产品。</x:String>
     <x:String x:Key="Service.LocalProxy.FailedDialogTitle2">规则格式错误</x:String>
     <x:String x:Key="Service.LocalProxy.FailedDialogMessage2">输入的内容不是有效的 JSON。&#x0a;&#x0a;详细信息: {0}</x:String>
-
+    <x:String x:Key="Service.LocalProxy.CertificateValidation">证书校验</x:String>
+    <x:String x:Key="Service.LocalProxy.BuiltinValidationPolicy">内置校验策略</x:String>
+    <x:String x:Key="Service.LocalProxy.CustomValidationPolicy">自定义校验策略</x:String>
+    <x:String x:Key="Service.LocalProxy.CustomValidationPolicyWatermark"># 为每个域名单独设置证书校验策略&#x0a;# 其值可以是一个包含多个预期域名的列表&#x0a;"example.com" = ["a.example.com", "b.example.com"]&#x0a;&#x0a;# 为空数组表示不对该域名进行校验&#x0a;"example.com" = []</x:String>
+    
     <x:String x:Key="Service.SecureDns.Delete">删除</x:String>
     <x:String x:Key="Service.SecureDns.Enable">启用</x:String>
     <x:String x:Key="Service.SecureDns.Domain">域名 (右键删除)</x:String>

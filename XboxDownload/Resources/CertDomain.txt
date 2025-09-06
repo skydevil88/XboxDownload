@@ -1,0 +1,2 @@
+﻿"*github.com" = ["github.com",  "gist.githubusercontent.com"]
+"*githubusercontent.com" = ["github.com",  "githubassets.com"]

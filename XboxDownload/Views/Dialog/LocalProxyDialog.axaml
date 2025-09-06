@@ -92,11 +92,11 @@
                            Text="{DynamicResource Service.LocalProxy.Wrap}"/>
             </Grid>
         </TabItem>
-        
+
         <TabItem Header="{DynamicResource Service.LocalProxy.ThirdPartyRules}">
             <Grid RowDefinitions="*,Auto,Auto" RowSpacing="6" Margin="6">
                 <HeaderedContentControl Grid.Column="0" Header="{DynamicResource Service.LocalProxy.ProxyRules}">
-                    <TextBox BorderThickness="0" AcceptsReturn="True" Text="{Binding Rules2Text }"/>
+                    <TextBox BorderThickness="0" AcceptsReturn="True" Text="{Binding Rules2Text}"/>
                 </HeaderedContentControl>
                 
                 <Grid Grid.Row="1" ColumnDefinitions="*,120,*">
@@ -128,6 +128,31 @@
                 
                 <TextBlock Grid.Row="2" VerticalAlignment="Center" TextWrapping="Wrap"
                            Text="{DynamicResource Service.LocalProxy.RuleTip}"/>
+            </Grid>
+        </TabItem>
+        
+        <TabItem Header="{DynamicResource Service.LocalProxy.CertificateValidation}">
+            <Grid RowDefinitions="*,Auto" RowSpacing="6" Margin="6">
+                <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <HeaderedContentControl Grid.Column="0" Header="{DynamicResource Service.LocalProxy.BuiltinValidationPolicy}">
+                        <TextBox BorderThickness="0" AcceptsReturn="True" IsReadOnly="True"
+                                 Text="{Binding CertDomain1Text}"/>
+                    </HeaderedContentControl>
+
+                    <HeaderedContentControl Grid.Column="1" Header="{DynamicResource Service.LocalProxy.CustomValidationPolicy}">
+                        <TextBox BorderThickness="0" AcceptsReturn="True"
+                                 Text="{Binding CertDomain2Text}"
+                                 Watermark="{DynamicResource Service.LocalProxy.CustomValidationPolicyWatermark}"/>
+                    </HeaderedContentControl>
+                </Grid>
+                
+                <Grid Grid.Row="1" ColumnDefinitions="*,120,*">
+                    
+                    <Button Grid.Column="1" MinWidth="120" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                            Content="{DynamicResource Service.LocalProxy.Save}"
+                            Command="{Binding SaveCertVerifyRulesCommand}"/>
+                    
+                </Grid>
             </Grid>
         </TabItem>
     </TabControl>
