@@ -1,2 +1,3 @@
 ﻿"*github.com" = ["github.com",  "gist.githubusercontent.com"]
 "*githubusercontent.com" = ["github.com",  "githubassets.com"]
+"*amazon.co.jp" = ["amazon.com", "amazon.co.jp", "unagi.amazon.co.jp", "fls-fe.amazon.co.jp"]

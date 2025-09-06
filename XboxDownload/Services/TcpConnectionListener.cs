@@ -1321,7 +1321,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                             );
                                             result.Add(dns);
 
-                                            if (!useCustomValidation && (targetHost.Equals(dns) || dns.StartsWith('*') && targetHost.EndsWith(dns[1..])))
+                                            if (!useCustomValidation && !domainMatched && (targetHost.Equals(dns) || dns.StartsWith('*') && targetHost.EndsWith(dns[1..])))
                                                 domainMatched = true;
                                         }
                                         else

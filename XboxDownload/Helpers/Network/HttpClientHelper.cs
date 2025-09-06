@@ -120,7 +120,7 @@ public class HttpClientHelper
                 await using var networkStream = new NetworkStream(socket, ownsSocket: false);
                 await using var sslStream = new SslStream(networkStream, false, delegate { return true; });
 
-                await sslStream.AuthenticateAsClientAsync(ip.ToString(), null, SslProtocols.Tls12, false);
+                await sslStream.AuthenticateAsClientAsync(ip.ToString(), null, SslProtocols.Tls12 | SslProtocols.Tls13, false);
 
                 return ip;
             }
