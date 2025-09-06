@@ -85,10 +85,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             }
             if (File.Exists(serviceViewModel.CertDomainFilePath))
                 certDomainText += Environment.NewLine + await File.ReadAllTextAsync(serviceViewModel.CertDomainFilePath);
-            
+
             var certDomainMap = new ConcurrentDictionary<string, string[]?>();
             var wildcardDomainMap = new List<KeyValuePair<string, string[]?>>();
-            
+
             foreach (var line in certDomainText.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
                 if (string.IsNullOrEmpty(line) || line.StartsWith('#'))
@@ -109,7 +109,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 {
                     continue;
                 }
-                    
+
                 if (key.StartsWith('*'))
                 {
                     key = key[1..];
@@ -118,7 +118,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         certDomainMap.TryAdd(key, value);
                         key = "." + key;
                     }
-                        
+
                     if (!wildcardDomainMap.Any(kv => kv.Key.Equals(key)))
                         wildcardDomainMap.Add(new KeyValuePair<string, string[]?>(key, value));
                 }
@@ -131,7 +131,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             wildcardDomainMap = wildcardDomainMap
                 .OrderByDescending(kv => kv.Key.Length)
                 .ToList();
-            
+
             foreach (var path in new[] { serviceViewModel.SniProxyFilePath, serviceViewModel.SniProxy2FilePath })
             {
                 if (!File.Exists(path)) continue;
@@ -1115,7 +1115,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                     DicSniProxy.TryAdd(host, (proxy, expectedHosts));
                                                 }
                                             }
-                                            
+
                                             if (proxy != null)
                                             {
                                                 if (serviceViewModel.IsLogging)
@@ -1139,7 +1139,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
                                                             var fastestIp =
-                                                                await HttpClientHelper.GetFastestIp(proxy.IpAddresses, 443, 3000);
+                                                                await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses, 443, 3000);
                                                             if (fastestIp != null)
                                                                 ips = proxy.IpAddresses = [fastestIp];
                                                         }
@@ -1183,7 +1183,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
-                                                            var fastestIp = await HttpClientHelper.GetFastestIp(proxy.IpAddresses, 443, 3000);
+                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses, 443, 3000);
                                                             if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
                                                         }
                                                     }
@@ -1297,7 +1297,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         else
                         {
                             var domainMatched = false;
-                            
+
                             var cert2 = new X509Certificate2(ssl.RemoteCertificate);
 
                             // Get all DNS names from the certificate
@@ -1336,11 +1336,11 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             // Check if a matching domain exists
                             if (!domainMatched && useCustomValidation)
                                 domainMatched = expectedHosts!.Any(host => dnsNames.Any(dns => dns.Equals(host)));
-                            
+
                             if (!domainMatched)
                             {
                                 isOk = false;
-                                
+
                                 var issuedFor = $"[\"{string.Join("\",&nbsp;\"", dnsNames)}\"]";
                                 var expectedFor = expectedHosts != null
                                     ? $"[\"{string.Join("\",&nbsp;\"", expectedHosts)}\"]"
@@ -1351,7 +1351,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             }
                         }
                     }
-                    
+
                     if (isOk)
                     {
                         ssl.Write(send1);

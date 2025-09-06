@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -101,20 +103,26 @@ public class HttpClientHelper
         return null;
     }
 
-    public static async Task<IPAddress?> GetFastestIp(IPAddress[] ips, int port, int timeout)
+    public static async Task<IPAddress?> GetFastestHttpsIp(IPAddress[] ips, int port, int timeout)
     {
-        using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeout));
+        using var cts = new CancellationTokenSource(timeout);
 
         var tasks = ips.Select(async ip =>
         {
             using var socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             socket.SendTimeout = timeout;
             socket.ReceiveTimeout = timeout;
+
             try
             {
-                var connectTask = Task.Factory.FromAsync(socket.BeginConnect, socket.EndConnect, new IPEndPoint(ip, port), null);
-                var completedTask = await Task.WhenAny(connectTask, Task.Delay(timeout, cts.Token));
-                return (completedTask == connectTask && socket.Connected) ? ip : null;
+                await socket.ConnectAsync(ip, port, cts.Token);
+
+                await using var networkStream = new NetworkStream(socket, ownsSocket: false);
+                await using var sslStream = new SslStream(networkStream, false, delegate { return true; });
+
+                await sslStream.AuthenticateAsClientAsync(ip.ToString(), null, SslProtocols.Tls12, false);
+
+                return ip;
             }
             catch
             {
@@ -126,11 +134,13 @@ public class HttpClientHelper
         {
             var completedTask = await Task.WhenAny(tasks);
             tasks.Remove(completedTask);
+
             var fastestIp = await completedTask;
             if (fastestIp == null) continue;
             await cts.CancelAsync();
             return fastestIp;
         }
+
         return null;
     }
 
