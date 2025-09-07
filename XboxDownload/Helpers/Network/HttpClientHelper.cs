@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -103,7 +104,7 @@ public class HttpClientHelper
         return null;
     }
 
-    public static async Task<IPAddress?> GetFastestHttpsIp(IPAddress[] ips, int port, int timeout)
+    public static async Task<IPAddress?> GetFastestHttpsIp(IPAddress[] ips, int port = 443, int timeout = 3000)
     {
         using var cts = new CancellationTokenSource(timeout);
 
@@ -118,9 +119,16 @@ public class HttpClientHelper
                 await socket.ConnectAsync(ip, port, cts.Token);
 
                 await using var networkStream = new NetworkStream(socket, ownsSocket: false);
-                await using var sslStream = new SslStream(networkStream, false, delegate { return true; });
+                await using var sslStream = new SslStream(networkStream, false, (_, _, _, _) => true);
 
-                await sslStream.AuthenticateAsClientAsync(ip.ToString(), null, SslProtocols.Tls12 | SslProtocols.Tls13, false);
+                var options = new SslClientAuthenticationOptions
+                {
+                    TargetHost = ip.ToString(),
+                    EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
+                    CertificateRevocationCheckMode = X509RevocationMode.NoCheck
+                };
+
+                await sslStream.AuthenticateAsClientAsync(options, cts.Token);
 
                 return ip;
             }
@@ -137,7 +145,8 @@ public class HttpClientHelper
 
             var fastestIp = await completedTask;
             if (fastestIp == null) continue;
-            await cts.CancelAsync();
+
+            _ = cts.CancelAsync();
             return fastestIp;
         }
 

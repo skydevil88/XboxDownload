@@ -108,7 +108,7 @@ public partial class ServiceViewModel : ObservableObject
             IPAddress.Parse("2001:4860:4860::8888"), //Google
             IPAddress.Parse("2606:4700:4700::1111") //Cloudflare 
         ];
-        var fastestIp = await HttpClientHelper.GetFastestHttpsIp(ips, 443, 3000);
+        var fastestIp = await HttpClientHelper.GetFastestHttpsIp(ips);
         IsIPv6Support = fastestIp != null;
         if (IsIPv6Support)
         {

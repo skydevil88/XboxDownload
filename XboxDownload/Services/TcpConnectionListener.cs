@@ -1139,7 +1139,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
                                                             var fastestIp =
-                                                                await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses, 443, 3000);
+                                                                await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses);
                                                             if (fastestIp != null)
                                                                 ips = proxy.IpAddresses = [fastestIp];
                                                         }
@@ -1183,7 +1183,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
-                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses, 443, 3000);
+                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses);
                                                             if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
                                                         }
                                                     }
@@ -1257,8 +1257,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         var isOk = true;
         errMessage = null;
         using Socket socket = new(ips[0].AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, true);
-        socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, true);
         socket.SendTimeout = 6000;
         socket.ReceiveTimeout = 6000;
         try
@@ -1272,7 +1270,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
         if (socket.Connected)
         {
-            using SslStream ssl = new(new NetworkStream(socket), false, delegate { return true; }, null);
+            using SslStream ssl = new(new NetworkStream(socket), false, (_, _, _, _) => true, null);
             ssl.WriteTimeout = 30000;
             ssl.ReadTimeout = 30000;
             try
@@ -1341,9 +1339,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             {
                                 isOk = false;
 
-                                var issuedFor = $"[\"{string.Join("\",&nbsp;\"", dnsNames)}\"]";
+                                var issuedFor = $"[\"{string.Join("\", \"", dnsNames)}\"]";
                                 var expectedFor = expectedHosts != null
-                                    ? $"[\"{string.Join("\",&nbsp;\"", expectedHosts)}\"]"
+                                    ? $"[\"{string.Join("\", \"", expectedHosts)}\"]"
                                     : null;
                                 errMessage = expectedFor != null
                                     ? $"Certificate domain mismatch.<br>The server's certificate is issued for {issuedFor},<br>but the expected domain was {expectedFor}."
