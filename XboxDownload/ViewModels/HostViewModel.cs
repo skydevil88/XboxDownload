@@ -101,7 +101,7 @@ public partial class HostViewModel : ObservableObject
                 continue;
             }
 
-            var ips = entry.Ip.Replace('，', ',').Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var ips = entry.Ip.Split([",", "，"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             invalidEntries.AddRange(from ip in ips where !IPAddress.TryParse(ip, out _) select $"{entry.HostName}: {ip}");
 
             entry.HostName = entry.HostName.Trim().ToLowerInvariant();

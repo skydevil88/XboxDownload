@@ -287,7 +287,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 var lsIPv4 = new List<IPAddress>();
                 if (proxy.Length >= 1)
                 {
-                    foreach (var hostRaw in proxy[0].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                    foreach (var hostRaw in proxy[0].Split([",", "，"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                     {
                         var host = RegexHelper.ExtractDomainFromUrlRegex().Replace(hostRaw, "$2").Trim().ToLowerInvariant();
                         var parts = host.Split("->", StringSplitOptions.TrimEntries);
@@ -307,7 +307,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
                 if (proxy.Length == 2)
                 {
-                    var ips = proxy[1].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                    var ips = proxy[1].Split([",", "，"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                     if (ips.Length == 1)
                     {
                         if (IPAddress.TryParse(ips[0], out var ipAddress))
@@ -349,7 +349,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 else if (proxy.Length >= 3)
                 {
                     sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
-                    var ips = proxy[2].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                    var ips = proxy[2].Split([",", "，"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                     foreach (var ip in ips)
                     {
                         if (IPAddress.TryParse(ip.Trim(), out var ipAddress))

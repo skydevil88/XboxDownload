@@ -129,8 +129,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     var hostNameNoStar = isWildcard ? hostNameRaw.TrimStart('*') : hostNameRaw;
 
                     var ipAddresses = entry.Ip
-                        .Replace('，', ',')
-                        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .Split([",", "，"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                         .Select(ip => IPAddress.TryParse(ip, out var addr) ? addr : null)
                         .Where(addr => addr is not null)
                         .Cast<IPAddress>()
@@ -189,8 +188,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         if (!string.IsNullOrEmpty(akamaiIp))
         {
             var akamaiIpAddresses = akamaiIp
-           .Replace('，', ',')
-           .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+           .Split([",", "，"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
            .Select(ip => IPAddress.TryParse(ip, out var addr) ? addr : null)
            .Where(addr => addr is not null)
            .Cast<IPAddress>()

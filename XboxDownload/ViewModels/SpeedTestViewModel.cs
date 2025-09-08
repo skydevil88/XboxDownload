@@ -383,7 +383,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         await clipboard.SetTextAsync(exportContent);
 
-        var lines = exportContent.Split(["\r\n", "\r", "\n"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var lines = exportContent.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var count = lines.Count(line => !line.StartsWith('#')); // 排除以 # 开头的行（忽略前导空格）
 
         await DialogHelper.ShowInfoDialogAsync(
