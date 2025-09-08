@@ -45,6 +45,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     {
         _serviceViewModel = serviceViewModel;
 
+        RulesText = string.Empty;
         if (File.Exists(_serviceViewModel.SniProxyFilePath))
         {
             List<List<object>>? sniProxy = null;
@@ -57,56 +58,55 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 // ignored
             }
 
-            if (sniProxy == null) return;
-
-            var sb = new StringBuilder();
-            foreach (var item in sniProxy)
+            if (sniProxy != null)
             {
-                if (item.Count != 3) continue;
-                var jeHosts = (JsonElement)item[0];
-                if (jeHosts.ValueKind != JsonValueKind.Array) continue;
-                var hosts = string.Join(", ", jeHosts.EnumerateArray().Select(x => x.GetString()));
-                if (string.IsNullOrEmpty(hosts)) continue;
-                var sni = item[1].ToString()?.Trim();
-                var jeIps = (JsonElement)item[2];
+                var sb = new StringBuilder();
+                foreach (var item in sniProxy)
+                {
+                    if (item.Count != 3) continue;
+                    var jeHosts = (JsonElement)item[0];
+                    if (jeHosts.ValueKind != JsonValueKind.Array) continue;
+                    var hosts = string.Join(", ", jeHosts.EnumerateArray().Select(x => x.GetString()));
+                    if (string.IsNullOrEmpty(hosts)) continue;
+                    var sni = item[1].ToString()?.Trim();
+                    var jeIps = (JsonElement)item[2];
 
-                var list = new List<string>();
-                if (jeIps.ValueKind == JsonValueKind.Array)
-                {
-                    list.Add(hosts);
-                    if (!string.IsNullOrEmpty(sni))
-                        list.Add(sni);
-                    list.Add(string.Join(", ", jeIps.EnumerateArray().Select(x => x.GetString())));
-                }
-                else
-                {
-                    var ip = jeIps.GetString();
-                    if (string.IsNullOrEmpty(ip))
+                    var list = new List<string>();
+                    if (jeIps.ValueKind == JsonValueKind.Array)
                     {
                         list.Add(hosts);
                         if (!string.IsNullOrEmpty(sni))
                             list.Add(sni);
-                    }
-                    else if (RegexHelper.IsValidDomain().IsMatch(ip))
-                    {
-                        list.Add(hosts + " -> " + ip);
-                        if (!string.IsNullOrEmpty(sni))
-                            list.Add(sni);
+                        list.Add(string.Join(", ", jeIps.EnumerateArray().Select(x => x.GetString())));
                     }
                     else
                     {
-                        list.Add(hosts);
-                        if (!string.IsNullOrEmpty(sni))
-                            list.Add(sni);
-                        list.Add(ip);
+                        var ip = jeIps.GetString();
+                        if (string.IsNullOrEmpty(ip))
+                        {
+                            list.Add(hosts);
+                            if (!string.IsNullOrEmpty(sni))
+                                list.Add(sni);
+                        }
+                        else if (RegexHelper.IsValidDomain().IsMatch(ip))
+                        {
+                            list.Add(hosts + " -> " + ip);
+                            if (!string.IsNullOrEmpty(sni))
+                                list.Add(sni);
+                        }
+                        else
+                        {
+                            list.Add(hosts);
+                            if (!string.IsNullOrEmpty(sni))
+                                list.Add(sni);
+                            list.Add(ip);
+                        }
                     }
+                    sb.AppendLine(string.Join(" | ", list));
                 }
-                sb.AppendLine(string.Join(" | ", list));
+                RulesText = sb.ToString();
             }
-            RulesText = sb.ToString();
         }
-        else
-            RulesText = string.Empty;
 
         foreach (var dohServer in _serviceViewModel.DohServersMappings)
         {
@@ -152,7 +152,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         SelectionStart = 0;
         SelectionEnd = 0;
         var sb = new StringBuilder();
-        foreach (var line in RulesText.ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in RulesText.ReplaceLineEndings().Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
         {
             if (string.IsNullOrEmpty(line)) continue;
             if (!Array.Exists(rule, element => element.Equals(line)))
@@ -272,57 +272,84 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     private async Task SaveRulesAsync()
     {
         var lsSniProxy = new List<List<object>>();
-        foreach (var line in RulesText.ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in RulesText.ReplaceLineEndings().Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
         {
-            var proxy = line.Split('|');
-            if (proxy.Length == 0) continue;
-            var arrHost = new ArrayList();
-            var branch = string.Empty;
-            var sni = string.Empty;
-            var lsIPv6 = new List<IPAddress>();
-            var lsIPv4 = new List<IPAddress>();
-            if (proxy.Length >= 1)
+            if (string.IsNullOrEmpty(line) || line.StartsWith('#')) continue;
+            
+            if (!line.Contains('='))
             {
-                foreach (var hostRaw in proxy[0].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                var proxy = line.Split('|');
+                if (proxy.Length == 0) continue;
+                var arrHost = new ArrayList();
+                var branch = string.Empty;
+                var sni = string.Empty;
+                var lsIPv6 = new List<IPAddress>();
+                var lsIPv4 = new List<IPAddress>();
+                if (proxy.Length >= 1)
                 {
-                    var host = RegexHelper.ExtractDomainFromUrlRegex().Replace(hostRaw, "$2").Trim().ToLowerInvariant();
-                    var parts = host.Split("->", StringSplitOptions.TrimEntries);
-                    if (parts.Length == 2)
+                    foreach (var hostRaw in proxy[0].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
                     {
-                        arrHost.Add(parts[0]);
-                        branch = parts[1];
-                    }
-                    else
-                    {
-                        arrHost.Add(host);
+                        var host = RegexHelper.ExtractDomainFromUrlRegex().Replace(hostRaw, "$2").Trim().ToLowerInvariant();
+                        var parts = host.Split("->", StringSplitOptions.TrimEntries);
+                        if (parts.Length == 2)
+                        {
+                            if (parts[0].StartsWith('.')) parts[0] = "*" + parts[0];
+                            arrHost.Add(parts[0]);
+                            branch = parts[1];
+                        }
+                        else
+                        {
+                            if (host.StartsWith('.')) host = "*" + host;
+                            arrHost.Add(host);
+                        }
                     }
                 }
-            }
 
-            if (proxy.Length == 2)
-            {
-                var ips = proxy[1].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                if (ips.Length == 1)
+                if (proxy.Length == 2)
                 {
-                    if (IPAddress.TryParse(ips[0], out var ipAddress))
+                    var ips = proxy[1].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                    if (ips.Length == 1)
                     {
-                        switch (ipAddress.AddressFamily)
+                        if (IPAddress.TryParse(ips[0], out var ipAddress))
                         {
-                            case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
-                                lsIPv6.Add(ipAddress);
-                                break;
-                            case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
-                                lsIPv4.Add(ipAddress);
-                                break;
+                            switch (ipAddress.AddressFamily)
+                            {
+                                case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
+                                    lsIPv6.Add(ipAddress);
+                                    break;
+                                case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
+                                    lsIPv4.Add(ipAddress);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
                         }
                     }
                     else
                     {
-                        sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
+                        foreach (var ip in ips)
+                        {
+                            if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
+                            {
+                                switch (ipAddress.AddressFamily)
+                                {
+                                    case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
+                                        lsIPv6.Add(ipAddress);
+                                        break;
+                                    case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
+                                        lsIPv4.Add(ipAddress);
+                                        break;
+                                }
+                            }
+                        }
                     }
                 }
-                else
+                else if (proxy.Length >= 3)
                 {
+                    sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
+                    var ips = proxy[2].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                     foreach (var ip in ips)
                     {
                         if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
@@ -339,39 +366,39 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                         }
                     }
                 }
-            }
-            else if (proxy.Length >= 3)
-            {
-                sni = RegexHelper.ExtractDomainFromUrlRegex().Replace(proxy[1], "$2").Trim().ToLowerInvariant();
-                var ips = proxy[2].Replace('，', ',').Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                foreach (var ip in ips)
+
+                if (!string.IsNullOrEmpty(branch))
                 {
-                    if (IPAddress.TryParse(ip.Trim(), out var ipAddress))
-                    {
-                        switch (ipAddress.AddressFamily)
-                        {
-                            case AddressFamily.InterNetworkV6 when !lsIPv6.Contains(ipAddress):
-                                lsIPv6.Add(ipAddress);
-                                break;
-                            case AddressFamily.InterNetwork when !lsIPv4.Contains(ipAddress):
-                                lsIPv4.Add(ipAddress);
-                                break;
-                        }
-                    }
+                    lsSniProxy.Add([arrHost, sni, branch]);
+                }
+                else if (arrHost.Count >= 1)
+                {
+                    var ips = lsIPv4.Union(lsIPv6).Take(16).Select(ip => ip.ToString());
+                    if (ips.Any())
+                        lsSniProxy.Add([arrHost, sni, ips]);
+                    else
+                        lsSniProxy.Add([arrHost, sni, ""]);
                 }
             }
+            else
+            {
+                var proxy = line.Split('=', 2, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                if (proxy.Length != 2) continue;
+                proxy[0] = proxy[0].Trim('"').Trim();
+                proxy[1] = proxy[1].Trim('"').Trim();
 
-            if (!string.IsNullOrEmpty(branch))
-            {
-                lsSniProxy.Add([arrHost, sni, branch]);
-            }
-            else if (arrHost.Count >= 1)
-            {
-                var ips = lsIPv4.Union(lsIPv6).Take(16).Select(ip => ip.ToString());
-                if (ips.Any())
-                    lsSniProxy.Add([arrHost, sni, ips]);
+                var host = proxy[0].ToLowerInvariant();
+                if (host.StartsWith('.')) host = "*" + host;
+                var arrHost = new ArrayList { host };
+                if (IPAddress.TryParse(proxy[1] , out var ipAddress))
+                {
+                    var lsIp = new List<string> { ipAddress.ToString() };
+                    lsSniProxy.Add([arrHost, string.Empty, lsIp]);
+                }
                 else
-                    lsSniProxy.Add([arrHost, sni, ""]);
+                {
+                    lsSniProxy.Add([arrHost, string.Empty, proxy[1]]);
+                }
             }
         }
 
