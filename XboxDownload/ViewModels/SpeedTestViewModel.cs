@@ -50,7 +50,6 @@ public partial class SpeedTestViewModel : ViewModelBase
     [ObservableProperty]
     private ImportOption? _selectedImportOption;
 
-
     public SpeedTestViewModel()
     {
         SelectedImportOption = ImportOptions.FirstOrDefault();
@@ -102,10 +101,12 @@ public partial class SpeedTestViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isXboxCn1Visible, _isXboxCn2Visible, _isXboxAppVisible, _isXboxSeparatorVisible, _isPsVisible, _isPsSeparatorVisible, _isUbisoftVisible, _isAkamaiVisible, _isUbisoftSeparatorVisible;
 
+    private string _selectedkey = string.Empty;
     [RelayCommand]
     private async Task LoadIpAsync()
     {
         if (string.IsNullOrEmpty(SelectedImportOption?.Target)) return;
+        _selectedkey = SelectedImportOption.Key;
 
         CancelFetchAppDownloadUrl();
         ClearSort();
@@ -367,10 +368,10 @@ public partial class SpeedTestViewModel : ViewModelBase
     #region MenuItem
 
     [RelayCommand]
-    private Task ExportDnsmasqAsync(Visual? visual) => ExportRulesAsync(visual, SelectedImportOption!.Key, SelectedItem?.Ip, "dnsmasq");
+    private Task ExportDnsmasqAsync(Visual? visual) => ExportRulesAsync(visual, _selectedkey, SelectedItem?.Ip, "dnsmasq");
 
     [RelayCommand]
-    private Task ExportHostsAsync(Visual? visual) => ExportRulesAsync(visual, SelectedImportOption!.Key, SelectedItem?.Ip, "hosts");
+    private Task ExportHostsAsync(Visual? visual) => ExportRulesAsync(visual, _selectedkey, SelectedItem?.Ip, "hosts");
 
     private static async Task ExportRulesAsync(Visual? visual, string key, string? ip, string exportFormat)
     {
@@ -502,7 +503,6 @@ public partial class SpeedTestViewModel : ViewModelBase
         var ip = SelectedItem?.Ip;
         if (string.IsNullOrEmpty(ip)) return;
 
-        var key = SelectedImportOption!.Key;
         FileInfo fi = new(PathHelper.SystemHostsPath);
 
         try
@@ -514,11 +514,11 @@ public partial class SpeedTestViewModel : ViewModelBase
                 content = await sr.ReadToEndAsync();
             }
 
-            var patterns = DnsMappingGenerator.GenerateHostRegexPattern(key);
+            var patterns = DnsMappingGenerator.GenerateHostRegexPattern(_selectedkey);
 
             content = Regex.Replace(content, patterns, "");
 
-            var dnsMapping = DnsMappingGenerator.GenerateDnsMapping(key, ip, "hosts", "Write");
+            var dnsMapping = DnsMappingGenerator.GenerateDnsMapping(_selectedkey, ip, "hosts", "Write");
 
             content = content.Trim() + Environment.NewLine + dnsMapping;
 
@@ -534,7 +534,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             }
 
             var count = dnsMapping
-                .Split(["\r\n", "\n"], StringSplitOptions.None)
+                .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
                 .Count(line => !string.IsNullOrWhiteSpace(line));
 
             await DialogHelper.ShowInfoDialogAsync(
@@ -558,6 +558,7 @@ public partial class SpeedTestViewModel : ViewModelBase
         {
             var content = await File.ReadAllTextAsync(PathHelper.SystemHostsPath);
 
+            // 清理非正常退出残留内容
             if (!Ioc.Default.GetRequiredService<ServiceViewModel>().IsListening && HostsHelper.RemoveAppSectionRegex().IsMatch(content))
             {
                 content = HostsHelper.RemoveAppSectionRegex().Replace(content, "").Trim();
@@ -565,7 +566,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             }
 
             // 拆分为行
-            var lines = content.Split(["\r\n", "\n"], StringSplitOptions.None);
+            var lines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
 
             // 找出将被删除的行
             var removedLines = lines.Where(line => line.Contains($"# {nameof(XboxDownload)}")).ToList();
