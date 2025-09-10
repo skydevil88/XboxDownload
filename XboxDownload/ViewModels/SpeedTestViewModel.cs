@@ -101,12 +101,12 @@ public partial class SpeedTestViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isXboxCn1Visible, _isXboxCn2Visible, _isXboxAppVisible, _isXboxSeparatorVisible, _isPsVisible, _isPsSeparatorVisible, _isUbisoftVisible, _isAkamaiVisible, _isUbisoftSeparatorVisible;
 
-    private string _selectedkey = string.Empty;
+    private string _selectedImportkey = string.Empty;
     [RelayCommand]
     private async Task LoadIpAsync()
     {
         if (string.IsNullOrEmpty(SelectedImportOption?.Target)) return;
-        _selectedkey = SelectedImportOption.Key;
+        _selectedImportkey = SelectedImportOption.Key;
 
         CancelFetchAppDownloadUrl();
         ClearSort();
@@ -368,10 +368,10 @@ public partial class SpeedTestViewModel : ViewModelBase
     #region MenuItem
 
     [RelayCommand]
-    private Task ExportDnsmasqAsync(Visual? visual) => ExportRulesAsync(visual, _selectedkey, SelectedItem?.Ip, "dnsmasq");
+    private Task ExportDnsmasqAsync(Visual? visual) => ExportRulesAsync(visual, _selectedImportkey, SelectedItem?.Ip, "dnsmasq");
 
     [RelayCommand]
-    private Task ExportHostsAsync(Visual? visual) => ExportRulesAsync(visual, _selectedkey, SelectedItem?.Ip, "hosts");
+    private Task ExportHostsAsync(Visual? visual) => ExportRulesAsync(visual, _selectedImportkey, SelectedItem?.Ip, "hosts");
 
     private static async Task ExportRulesAsync(Visual? visual, string key, string? ip, string exportFormat)
     {
@@ -514,11 +514,11 @@ public partial class SpeedTestViewModel : ViewModelBase
                 content = await sr.ReadToEndAsync();
             }
 
-            var patterns = DnsMappingGenerator.GenerateHostRegexPattern(_selectedkey);
+            var patterns = DnsMappingGenerator.GenerateHostRegexPattern(_selectedImportkey);
 
             content = Regex.Replace(content, patterns, "");
 
-            var dnsMapping = DnsMappingGenerator.GenerateDnsMapping(_selectedkey, ip, "hosts", "Write");
+            var dnsMapping = DnsMappingGenerator.GenerateDnsMapping(_selectedImportkey, ip, "hosts", "Write");
 
             content = content.Trim() + Environment.NewLine + dnsMapping;
 

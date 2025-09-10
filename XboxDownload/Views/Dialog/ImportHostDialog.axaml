@@ -14,9 +14,6 @@
 
         <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                  Margin="10,10, 10,0" AcceptsReturn="True"
-                 TextWrapping="Wrap"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
                  Text="{Binding Content}"
                  Watermark="{DynamicResource Host.ImportHost.Watermark}"/>
 

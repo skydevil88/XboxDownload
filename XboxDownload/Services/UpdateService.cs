@@ -164,6 +164,7 @@ public static partial class UpdateService
                                 var scriptPath = Path.Combine(tempDirectory, "update.cmd");
                                 await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
                                 _ = CommandHelper.RunCommandAsync("cmd.exe", $"/c \"{scriptPath}\"");
+                                await Task.Delay(TimeSpan.FromMicroseconds(100), CancellationToken.None);
                                 Process.GetCurrentProcess().Kill();
                             }
                             else if (OperatingSystem.IsMacOS())
@@ -187,6 +188,7 @@ rm -rf ""{tempDirectory}""
                                 await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
                                 await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
                                 _ = CommandHelper.RunCommandAsync("/bin/bash", $"\"{scriptPath}\"");
+                                await Task.Delay(TimeSpan.FromMicroseconds(100), CancellationToken.None);
                                 Process.GetCurrentProcess().Kill();
                             }
                             else if (OperatingSystem.IsLinux())
@@ -209,6 +211,7 @@ rm -rf ""{tempDirectory}""
                                 await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
                                 await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
                                 _ = CommandHelper.RunCommandAsync("/bin/bash", $"\"{scriptPath}\"");
+                                await Task.Delay(TimeSpan.FromMicroseconds(100), CancellationToken.None);
                                 Process.GetCurrentProcess().Kill();
                             }
                         }

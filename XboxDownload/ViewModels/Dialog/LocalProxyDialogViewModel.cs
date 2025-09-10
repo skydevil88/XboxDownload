@@ -382,10 +382,11 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             }
             else
             {
-                var proxy = line.Split('=', 2, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                var proxy = line.Split('=', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                 if (proxy.Length != 2) continue;
                 proxy[0] = proxy[0].Trim('"').Trim();
                 proxy[1] = proxy[1].Trim('"').Trim();
+                if (string.IsNullOrEmpty(proxy[0])) continue;
 
                 var host = proxy[0].ToLowerInvariant();
                 if (host.StartsWith('.')) host = "*" + host;

@@ -11,9 +11,6 @@
 
         <TextBox Grid.Row="0" Grid.Column="0"
                  Margin="10,10, 10,0" AcceptsReturn="True"
-                 TextWrapping="Wrap"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
                  Text="{Binding Content}"/>
 
         <Border Grid.Row="1">
