@@ -226,7 +226,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
         await Task.WhenAll(tasks);
     }
 
-    private static readonly ConcurrentDictionary<IPAddress, string?> IpLocationCache = new();
+    private static readonly ConcurrentDictionary<string, string?> IpLocationCache = new();
 
     private static async Task<(long? delay, string? location)> HttpDelayTestWithLocationAsync(string host, IPAddress ip, int timeout = 3000)
     {
@@ -268,13 +268,15 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
             }
         }
         ip = new IPAddress(bytes);
-        if (IpLocationCache.TryGetValue(ip, out var cachedLocation)) return (delay, cachedLocation);
-
+        
         var isSimplifiedChineseUser = App.Settings.Culture.Equals("zh-Hans");
+        var key = ip + "|" + isSimplifiedChineseUser;
+        if (IpLocationCache.TryGetValue(key, out var cachedLocation)) return (delay, cachedLocation);
+        
         cachedLocation = await IpGeoHelper.GetIpLocationFromMultipleApisAsync(ip.ToString(), isSimplifiedChineseUser);
         if (!string.IsNullOrEmpty(cachedLocation))
         {
-            IpLocationCache[ip] = cachedLocation;
+            IpLocationCache[key] = cachedLocation;
         }
 
         return (delay, cachedLocation);

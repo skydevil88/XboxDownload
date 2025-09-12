@@ -10,11 +10,11 @@ public static class SpeedTestDataBuilder
         new LocationFilter("ChinaTelecom", ["电信", "電信", "Telecom"], ResourceHelper.GetString("SpeedTest.ChinaTelecom")),
         new LocationFilter("ChinaUnicom", ["联通", "聯通", "Unicom"], ResourceHelper.GetString("SpeedTest.ChinaUnicom")),
         new LocationFilter("ChinaMobile", ["移动", "移動", "Mobile"], ResourceHelper.GetString("SpeedTest.ChinaMobile")),
-        new LocationFilter("HongKong", ["香港", "Hong Kong"], ResourceHelper.GetString("SpeedTest.HongKong")),
-        new LocationFilter("Taiwan", ["台湾", "台灣", "Taiwan"], ResourceHelper.GetString("SpeedTest.Taiwan")),
-        new LocationFilter("Japan", ["日本", "Japan"], ResourceHelper.GetString("SpeedTest.Japan")),
-        new LocationFilter("SouthKorea", ["韩国", "韓國", "South Korea"], ResourceHelper.GetString("SpeedTest.SouthKorea")),
-        new LocationFilter("Singapore", ["新加坡", "Singapore"], ResourceHelper.GetString("SpeedTest.Singapore")),
+        new LocationFilter("HongKong", ["香港", "HK,", "Hong Kong"], ResourceHelper.GetString("SpeedTest.HongKong")),
+        new LocationFilter("Taiwan", ["台湾", "台灣", "TW,", "Taiwan"], ResourceHelper.GetString("SpeedTest.Taiwan")),
+        new LocationFilter("Japan", ["日本", "JP,", "Japan"], ResourceHelper.GetString("SpeedTest.Japan")),
+        new LocationFilter("SouthKorea", ["韩国", "韓國", "KR,", "South Korea"], ResourceHelper.GetString("SpeedTest.SouthKorea")),
+        new LocationFilter("Singapore", ["新加坡", "SG,", "Singapore"], ResourceHelper.GetString("SpeedTest.Singapore")),
         new LocationFilter("Other", [], ResourceHelper.GetString("SpeedTest.Other")),
     ];
 

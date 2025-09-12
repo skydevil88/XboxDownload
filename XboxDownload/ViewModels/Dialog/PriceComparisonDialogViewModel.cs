@@ -145,12 +145,6 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
 
                 App.Settings.CurrencyCode = UseCurrencyCode;
                 SettingsManager.Save(App.Settings);
-
-                foreach (var market in MarketMappings.Where(s => !s.IsSelect))
-                {
-                    market.ConvertPrices = null;
-                    market.ExchangeRates = null;
-                }
             }
             else UseCurrencyCode = UseCurrencyCode.ToUpperInvariant();
         }
@@ -171,6 +165,12 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
                 ResourceHelper.GetString("Store.PriceComparison.ExchangeRateFetchFailedMessage"),
                 Icon.Error);
             return;
+        }
+        
+        foreach (var market in MarketMappings)
+        {
+            market.ConvertPrices = null;
+            market.ExchangeRates = null;
         }
 
         OnPropertyChanged(nameof(ConvertedPrice));
