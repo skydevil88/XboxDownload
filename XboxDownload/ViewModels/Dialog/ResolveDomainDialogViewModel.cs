@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -225,7 +226,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
         await Task.WhenAll(tasks);
     }
 
-    private static readonly ConcurrentDictionary<string, string?> IpLocationCache = new();
+    private static readonly ConcurrentDictionary<IPAddress, string?> IpLocationCache = new();
 
     private static async Task<(long? delay, string? location)> HttpDelayTestWithLocationAsync(string host, IPAddress ip, int timeout = 3000)
     {
@@ -253,15 +254,27 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
         {
             // ignored
         }
+        
+        var bytes = ip.GetAddressBytes();
+        if (ip.AddressFamily == AddressFamily.InterNetwork)
+        {
+            bytes[3] = 0;
+        }
+        else
+        {
+            for (var i = 8; i < 16; i++)
+            {
+                bytes[i] = 0;
+            }
+        }
+        ip = new IPAddress(bytes);
+        if (IpLocationCache.TryGetValue(ip, out var cachedLocation)) return (delay, cachedLocation);
 
         var isSimplifiedChineseUser = App.Settings.Culture.Equals("zh-Hans");
-        var key = ip.ToString() + isSimplifiedChineseUser;
-        if (IpLocationCache.TryGetValue(key, out var cachedLocation)) return (delay, cachedLocation);
-
         cachedLocation = await IpGeoHelper.GetIpLocationFromMultipleApisAsync(ip.ToString(), isSimplifiedChineseUser);
         if (!string.IsNullOrEmpty(cachedLocation))
         {
-            IpLocationCache[key] = cachedLocation;
+            IpLocationCache[ip] = cachedLocation;
         }
 
         return (delay, cachedLocation);
