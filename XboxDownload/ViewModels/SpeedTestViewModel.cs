@@ -401,13 +401,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var serviceVm = Ioc.Default.GetRequiredService<ServiceViewModel>();
         if (serviceVm.IsListening && parameter != "Akamai")
-        {
-            await DialogHelper.ShowInfoDialogAsync(
-                ResourceHelper.GetString("SpeedTest.MenuItem.StopListeningTitle"),
-                ResourceHelper.GetString("SpeedTest.MenuItem.RequireStopListening"),
-                Icon.Stop);
-            return;
-        }
+            await serviceVm.ToggleListeningAsync();
 
         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
         const int tabIndex = 0;

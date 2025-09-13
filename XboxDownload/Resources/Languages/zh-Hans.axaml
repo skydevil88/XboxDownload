@@ -228,8 +228,6 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEpic">指定 Epic Games 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForUbisoft">指定 Ubisoft 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">指定 Akamai CDN IP</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.StopListeningTitle">停止监听</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.RequireStopListening">请先停止监听，再指定 IP 地址。</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">写入系统 hosts 文件（可选操作，普通用户建议跳过）</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">写入成功</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessfulMsg">已成功将以下 {0} 行规则写入系统 hosts 文件：</x:String>

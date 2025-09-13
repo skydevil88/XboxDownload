@@ -228,8 +228,6 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEpic">Custom IP for Epic Games</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForUbisoft">Custom IP for Ubisoft</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">Custom IP for Akamai CDN</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.StopListeningTitle">Stop Listening</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.RequireStopListening">Please stop listening before specifying the IP address.</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">Write to System hosts file (not for beginners)</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">Write Successful</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessfulMsg">Successfully wrote {0} entries to the system hosts file:</x:String>
