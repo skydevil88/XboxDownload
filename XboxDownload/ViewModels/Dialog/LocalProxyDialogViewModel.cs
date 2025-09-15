@@ -445,7 +445,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
         if (!cts.IsCancellationRequested)
         {
-            var responseString = await HttpClientHelper.GetStringContentAsync($"https://testingcf.jsdelivr.net/gh/SpaceTimee/Cealing-Host/Cealing-Host.json", token: cts.Token);
+            var responseString = await HttpClientHelper.GetStringContentAsync($"https://testingcf.jsdelivr.net/gh/SpaceTimee/Cealing-Host/Cealing-Host.json", token: CancellationToken.None);
             if (responseString.StartsWith('['))
             {
                 Rules2Text = responseString;

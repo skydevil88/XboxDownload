@@ -257,7 +257,7 @@ rm -rf ""{tempDirectory}""
 
         if (!cts.IsCancellationRequested)
         {
-            var responseString = await HttpClientHelper.GetStringContentAsync($"{Project.Replace("https://github.com", "https://testingcf.jsdelivr.net/gh")}/IP/{fi.Name}", token: cts.Token);
+            var responseString = await HttpClientHelper.GetStringContentAsync($"{Project.Replace("https://github.com", "https://testingcf.jsdelivr.net/gh")}/IP/{fi.Name}", token: CancellationToken.None);
             if (responseString.StartsWith(keyword))
             {
                 await SaveToFileAsync(fi, responseString);
