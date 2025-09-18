@@ -18,8 +18,11 @@ public static class SpeedTestService
 {
     public static async Task<IpItem?> FindFastestOrBestAkamaiIpAsync(List<IpItem> items, CancellationToken cancellationToken)
     {
-        items = items.OrderBy(_ => Random.Shared.Next()).Take(30).ToList();
-
+        if (items.Count > 10)
+        {
+            items = await PingFastest15Async(items, cancellationToken);
+        }
+        
         string[] test =
         [
             "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
@@ -112,6 +115,63 @@ public static class SpeedTestService
         {
             cts.Dispose();
         }
+    }
+    
+    private static async Task<List<IpItem>> PingFastest15Async(List<IpItem> items, CancellationToken cancellationToken)
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(TimeSpan.FromSeconds(3));
+        var bag = new ConcurrentBag<IpItem>();
+
+        var successCount = 0;
+
+        var tasks = items.Select(async item =>
+        {
+            using var ping = new Ping();
+            try
+            {
+                var reply = await ping.SendPingAsync(
+                    item.Ip,
+                    TimeSpan.FromSeconds(1),
+                    null,
+                    null,
+                    cts.Token);
+
+                if (reply.Status == IPStatus.Success)
+                {
+                    item.Ttl = reply.Options?.Ttl;
+                    item.RoundtripTime = reply.RoundtripTime;
+
+                    // 原子加一
+                    var current = Interlocked.Increment(ref successCount);
+
+                    if (current <= 10)
+                        bag.Add(item);
+
+                    // 超过 10 就取消
+                    if (current == 10)
+                        _ = cts.CancelAsync();
+                }
+            }
+            catch (OperationCanceledException) { }
+            catch
+            {
+                // ignored
+            }
+        }).ToList();
+
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch (OperationCanceledException) { }
+
+        if (bag.Count >= 5)
+        {
+            return bag.ToList();
+        }
+
+        return items.OrderBy(_ => Random.Shared.Next()).Take(30).ToList();
     }
 
     public static async Task PingAndTestAsync(IpItem item, Uri? baseUri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)
