@@ -48,7 +48,7 @@ public static class SpeedTestService
 
         var ipResults = new ConcurrentDictionary<IpItem, long>();
 
-        var startSignal = new TaskCompletionSource(); // 控制统一开始
+        var startSignal = new TaskCompletionSource<bool>(); // 控制统一开始
 
         // ReSharper disable once MethodSupportsCancellation
         var tasks = items.Select(ipItem => Task.Run(async () =>
@@ -96,7 +96,7 @@ public static class SpeedTestService
         })).ToList();
 
         // ✅ 所有任务创建完后再启动测速
-        startSignal.SetResult(); // 发出统一开始信号
+        startSignal.SetResult(true); // 发出统一开始信号
 
         try
         {
@@ -121,44 +121,42 @@ public static class SpeedTestService
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cts.CancelAfter(TimeSpan.FromSeconds(3));
-        var bag = new ConcurrentBag<IpItem>();
 
+        var bag = new ConcurrentBag<IpItem>();
         var successCount = 0;
 
+        var startSignal = new TaskCompletionSource<bool>();
+        
         var tasks = items.Select(async item =>
         {
-            using var ping = new Ping();
+            await startSignal.Task; // 等待统一启动
+            
             try
             {
-                var reply = await ping.SendPingAsync(
-                    item.Ip,
-                    TimeSpan.FromSeconds(1),
-                    null,
-                    null,
-                    cts.Token);
+                using var ping = new Ping();
+                var reply = await ping.SendPingAsync(item.Ip, TimeSpan.FromSeconds(1), null, null, cts.Token);
 
                 if (reply.Status == IPStatus.Success)
                 {
                     item.Ttl = reply.Options?.Ttl;
                     item.RoundtripTime = reply.RoundtripTime;
 
-                    // 原子加一
                     var current = Interlocked.Increment(ref successCount);
 
                     if (current <= 10)
                         bag.Add(item);
 
-                    // 超过 10 就取消
                     if (current == 10)
                         _ = cts.CancelAsync();
                 }
             }
-            catch (OperationCanceledException) { }
             catch
             {
                 // ignored
             }
         }).ToList();
+
+        startSignal.SetResult(true);
 
         try
         {
@@ -166,12 +164,8 @@ public static class SpeedTestService
         }
         catch (OperationCanceledException) { }
 
-        if (bag.Count >= 5)
-        {
-            return bag.ToList();
-        }
-
-        return items.OrderBy(_ => Random.Shared.Next()).Take(30).ToList();
+        // 返回结果
+        return bag.Count >= 5 ? bag.ToList() : items.OrderBy(_ => Random.Shared.Next()).Take(30).ToList();
     }
 
     public static async Task PingAndTestAsync(IpItem item, Uri? baseUri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)
