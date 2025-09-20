@@ -20,7 +20,7 @@ public static class SpeedTestService
     {
         if (items.Count > 10)
         {
-            items = await PingFastest15Async(items, cancellationToken);
+            items = await PingFastest10Async(items, cancellationToken);
         }
         
         string[] test =
@@ -41,7 +41,7 @@ public static class SpeedTestService
         };
 
         var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        cts.CancelAfter(TimeSpan.FromSeconds(30));
+        cts.CancelAfter(TimeSpan.FromSeconds(15));
         var token = cts.Token;
 
         var result = new TaskCompletionSource<IpItem?>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -117,7 +117,7 @@ public static class SpeedTestService
         }
     }
     
-    private static async Task<List<IpItem>> PingFastest15Async(List<IpItem> items, CancellationToken cancellationToken)
+    private static async Task<List<IpItem>> PingFastest10Async(List<IpItem> items, CancellationToken cancellationToken)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cts.CancelAfter(TimeSpan.FromSeconds(3));
