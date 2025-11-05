@@ -85,7 +85,7 @@ public static class MbrHelper
 
     public static byte[] HexToByte(string byteStr)
     {
-        byteStr = byteStr.ToUpper().Replace(" ", "");
+        byteStr = byteStr.ToUpperInvariant().Replace(" ", "");
         var len = byteStr.Length / 2;
         var data = new byte[len];
         for (var i = 0; i < len; i++)
