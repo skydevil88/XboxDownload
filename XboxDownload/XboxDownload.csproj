@@ -36,7 +36,7 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="DnsClient" Version="1.8.0" />
         <PackageReference Include="DynamicData" Version="9.4.1" />
-        <PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
+        <PackageReference Include="MessageBox.Avalonia" Version="3.3.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
         <PackageReference Include="System.Management" Version="10.0.0-preview.5.25277.114" />
