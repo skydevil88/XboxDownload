@@ -796,7 +796,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         var result = ContentIdVersionRegex().Match(tmpPath);
         if (!result.Success) return;
 
-        var key = result.Groups["ContentId"].Value.ToLower();
+        var key = result.Groups["ContentId"].Value.ToLowerInvariant();
         if (XvcRegex().IsMatch(tmpPath))
             key += "_xs";
         else if (!MsiXvcRegex().IsMatch(tmpPath))
@@ -893,7 +893,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         var filePath = BaseUrlRegex().Replace(result.Groups["path"].Value.Trim(), "");
                         result = HostHeaderRegex().Match(headers);
                         if (!result.Success) break;
-                        var host = result.Groups[1].Value.Trim().ToLower();
+                        var host = result.Groups[1].Value.Trim().ToLowerInvariant();
 
                         string tmpPath = QueryStringRegex().Replace(filePath, ""), localPath = string.Empty;
                         if (serviceViewModel.IsLocalUploadEnabled)

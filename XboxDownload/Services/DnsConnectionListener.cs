@@ -226,7 +226,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     foreach (var hostEntry in lines)
                     {
                         if (hostEntry.StartsWith('#')) continue;
-                        var hostNameRaw = new string(hostEntry.TakeWhile(c => c != '#').ToArray()).Trim().ToLower();
+                        var hostNameRaw = new string(hostEntry.TakeWhile(c => c != '#').ToArray()).Trim().ToLowerInvariant();
                         var isWildcard = hostNameRaw.StartsWith('*');
                         var isDotAfterStar = isWildcard && hostNameRaw.Length > 1 && hostNameRaw[1] == '.';
                         var hostNameNoStar = isWildcard ? hostNameRaw.TrimStart('*') : hostNameRaw;

@@ -528,7 +528,7 @@ public partial class StoreViewModel : ObservableObject
                 var packages = displaySkuAvailabilities.Sku.Properties.Packages;
                 if (packages is { Count: > 0 })
                 {
-                    var wuCategoryId = packages[0].FulfillmentData.WuCategoryId.ToLower();
+                    var wuCategoryId = packages[0].FulfillmentData.WuCategoryId.ToLowerInvariant();
                     GameLanguages = string.Join(", ", packages[0].Languages);
 
                     List<PlatformDownloadItem> platformDownloadList = [];
@@ -537,7 +537,7 @@ public partial class StoreViewModel : ObservableObject
                         var platformDependencies = package.PlatformDependencies;
                         if (platformDependencies.Count >= 1)
                         {
-                            var contentId = package.ContentId.ToLower();
+                            var contentId = package.ContentId.ToLowerInvariant();
                             switch (platformDependencies[0].PlatformName)
                             {
                                 case "Windows.Xbox":
@@ -622,7 +622,7 @@ public partial class StoreViewModel : ObservableObject
                                             {
                                                 var version = RegexHelper.GetVersion().Match(package.PackageFullName).Value;
                                                 var filename = package.PackageFullName + "." + package.PackageFormat;
-                                                var key = filename.Replace(version, "").ToLower();
+                                                var key = filename.Replace(version, "").ToLowerInvariant();
                                                 var platformDownload = platformDownloadList.FirstOrDefault(x => x.Category == "App" && x.Key == key);
                                                 if (platformDownload == null)
                                                 {
@@ -654,7 +654,7 @@ public partial class StoreViewModel : ObservableObject
                                     break;
                                 case "Windows.Desktop":
                                 case "Windows.Universal":
-                                    switch (package.PackageFormat.ToLower())
+                                    switch (package.PackageFormat.ToLowerInvariant())
                                     {
                                         case "msixvc":
                                             {
@@ -702,7 +702,7 @@ public partial class StoreViewModel : ObservableObject
                                             {
                                                 var version = RegexHelper.GetVersion().Match(package.PackageFullName).Value;
                                                 var filename = package.PackageFullName + "." + package.PackageFormat;
-                                                var key = filename.Replace(version, "").ToLower();
+                                                var key = filename.Replace(version, "").ToLowerInvariant();
                                                 var platformDownload = platformDownloadList.FirstOrDefault(x => x.Category == "App" && x.Key == key);
                                                 if (platformDownload == null)
                                                 {
@@ -740,7 +740,7 @@ public partial class StoreViewModel : ObservableObject
                         List<PlatformDownloadItem> app = [];
                         foreach (var platformDownload in platformDownloadList.Where(x => x.Category == "App"))
                         {
-                            if (_xboxAppPackage.TryGetValue(platformDownload.FileName.ToLower(), out var appData) && (DateTime.Now - appData.Date).TotalSeconds <= 300)
+                            if (_xboxAppPackage.TryGetValue(platformDownload.FileName.ToLowerInvariant(), out var appData) && (DateTime.Now - appData.Date).TotalSeconds <= 300)
                             {
                                 var result = ExpireLinkRegex().Match(appData.Url);
                                 var display = result.Success
@@ -1051,7 +1051,7 @@ public partial class StoreViewModel : ObservableObject
                     Url = item.Url,
                     Date = DateTime.Now
                 };
-                _xboxAppPackage[item.Name.ToLower()] = appData;
+                _xboxAppPackage[item.Name.ToLowerInvariant()] = appData;
             }
         }
 
@@ -1113,7 +1113,7 @@ public partial class StoreViewModel : ObservableObject
                 if (platformDownload != null)
                 {
                     platformDownload.Url = item.Url;
-                    if (!_xboxAppPackage.TryGetValue(item.Name.ToLower(), out var appData)) continue;
+                    if (!_xboxAppPackage.TryGetValue(item.Name.ToLowerInvariant(), out var appData)) continue;
                     appData.Size = item.Size;
                     appData.Url = item.Url;
                     appData.Date = DateTime.Now;
