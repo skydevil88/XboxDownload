@@ -532,7 +532,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 .Count(line => !string.IsNullOrWhiteSpace(line));
 
             var cnXboxDownloadHint  = App.Settings.Culture == "zh-Hans" && dnsMapping.Contains(".xboxlive.cn") ?
-                $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 游戏下载可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
+                $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 下载游戏可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
                 "";
 
             await DialogHelper.ShowInfoDialogAsync(
