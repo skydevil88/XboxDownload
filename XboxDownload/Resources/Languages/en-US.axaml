@@ -375,7 +375,7 @@
     <x:String x:Key="Cdn.InvalidIpDialogTitle">Invalid IP Address</x:String>
     <x:String x:Key="Cdn.InvalidIpDialogMessage">The following IP address(es) are invalid:&#x0a;&#x0a;{0}</x:String>
 
-    <x:String x:Key="Storage.XboxExternalStorageDevice">Xbox External Storage Device</x:String>
+    <x:String x:Key="Storage.XboxExternalStorageDevice">Xbox Console External Storage Device</x:String>
     <x:String x:Key="Storage.Index">No.</x:String>
     <x:String x:Key="Storage.Model">Model</x:String>
     <x:String x:Key="Storage.SerialNumber">Serial Number</x:String>
@@ -386,7 +386,7 @@
     <x:String x:Key="Storage.RepairMode">Repair Mode</x:String>
     <x:String x:Key="Storage.Scan">Scan</x:String>
     <x:String x:Key="Storage.UserGuide">User Guide</x:String>
-    <x:String x:Key="Storage.XboxToPcModeDescription">This feature converts an Xbox external hard drive to PC-readable mode. (Note: Security software may block this operation. Data loss risk is possible, please use an empty drive and backup your data. User assumes all risks.)</x:String>
+    <x:String x:Key="Storage.XboxToPcModeDescription">This feature converts an Xbox Console external hard drive to PC-readable mode. (Note: Security software may block this operation. Data loss risk is possible, please use an empty drive and backup your data. User assumes all risks.)</x:String>
     <x:String x:Key="Storage.PcMode">PC Mode</x:String>
     <x:String x:Key="Storage.XboxMode">Xbox Mode</x:String>
     <x:String x:Key="Storage.SwitchToXboxMode">Switch to Xbox Mode</x:String>
@@ -409,7 +409,7 @@
     <x:String x:Key="Storage.RenameLocalFile">Rename Local File</x:String>
     <x:String x:Key="Storage.RenameConfirm">Are you sure you want to rename the local file?&#x0a;&#x0a;Original file name: {0}&#x0a;New file name: {1}</x:String>
     <x:String x:Key="Storage.RenameFileFailed">Failed to rename local file. Error: &#x0a;{0}</x:String>
-    <x:String x:Key="Storage.CopyAndRenameGame">Copy the game files from PC to the Xbox external drive's root directory, rename to Content ID, then connect to Xbox and move the game to another drive.&#x0a;Note: 1. Do not launch from the external drive, it will be re-downloaded. 2. The app does not support hard drive import. 3. Xbox must be online.</x:String>
+    <x:String x:Key="Storage.CopyAndRenameGame">Copy the game files from PC to the Xbox Console external drive's root directory, rename to Content ID, then connect to Xbox and move the game to another drive.&#x0a;Note: 1. Do not launch from the external drive, it will be re-downloaded. 2. The app does not support hard drive import. 3. Xbox must be online.</x:String>
 
     <x:String x:Key="Store.MicrosoftStore">Microsoft Store</x:String>
     <x:String x:Key="Store.UrlProductId">URL/ProductID</x:String>
