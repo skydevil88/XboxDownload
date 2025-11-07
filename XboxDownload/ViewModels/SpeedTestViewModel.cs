@@ -531,9 +531,13 @@ public partial class SpeedTestViewModel : ViewModelBase
                 .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
                 .Count(line => !string.IsNullOrWhiteSpace(line));
 
+            var cnXboxDownloadHint  = App.Settings.Culture == "zh-Hans" && dnsMapping.Contains(".xboxlive.cn") ?
+                $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 游戏下载可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
+                "";
+
             await DialogHelper.ShowInfoDialogAsync(
                 ResourceHelper.GetString("SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful"),
-                string.Format(ResourceHelper.GetString("SpeedTest.MenuItem.WriteToSystemHostsFileSuccessfulMsg"), count) + Environment.NewLine + Environment.NewLine + dnsMapping,
+                string.Format(ResourceHelper.GetString("SpeedTest.MenuItem.WriteToSystemHostsFileSuccessfulMsg"), count) + Environment.NewLine + Environment.NewLine + dnsMapping + cnXboxDownloadHint,
                 Icon.Success);
         }
         catch (Exception ex)
