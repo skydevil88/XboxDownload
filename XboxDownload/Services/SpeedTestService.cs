@@ -95,7 +95,7 @@ public static class SpeedTestService
             }
         })).ToList();
 
-        // ✅ 所有任务创建完后再启动测速
+        // 所有任务创建完后再启动测速
         startSignal.SetResult(true); // 发出统一开始信号
 
         try
@@ -165,7 +165,7 @@ public static class SpeedTestService
         catch (OperationCanceledException) { }
 
         // 返回结果
-        return bag.Count >= 5 ? bag.ToList() : items.OrderBy(_ => Random.Shared.Next()).Take(30).ToList();
+        return bag.Count >= 5 ? bag.ToList() : [.. items.OrderBy(_ => Random.Shared.Next()).Take(30)];
     }
 
     public static async Task PingAndTestAsync(IpItem item, Uri? baseUri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)
