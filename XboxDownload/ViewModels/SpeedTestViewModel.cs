@@ -386,10 +386,14 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var lines = exportContent.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var count = lines.Count(line => !line.StartsWith('#')); // 排除以 # 开头的行（忽略前导空格）
+        
+        var cnXboxDownloadHint  = App.Settings.Culture == "zh-Hans" && exportContent.Contains(".xboxlive.cn") ?
+            $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 下载游戏可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
+            "";
 
         await DialogHelper.ShowInfoDialogAsync(
             ResourceHelper.GetString("SpeedTest.MenuItem.ExportRules"),
-            string.Format(ResourceHelper.GetString("SpeedTest.MenuItem.RulesCopiedToClipboard"), count) + Environment.NewLine + Environment.NewLine + exportContent,
+            string.Format(ResourceHelper.GetString("SpeedTest.MenuItem.RulesCopiedToClipboard"), count) + Environment.NewLine + Environment.NewLine + exportContent + cnXboxDownloadHint,
             Icon.Success);
     }
 
