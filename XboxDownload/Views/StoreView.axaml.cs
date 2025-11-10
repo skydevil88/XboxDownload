@@ -90,7 +90,8 @@ public partial class StoreView : UserControl
                 QueryButton.Focus();
             }, DispatcherPriority.Input);
         }
-        vm.QueryUrl = $"https://www.microsoft.com/store/productid/{selected.ProductId}";
+        //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{selected.ProductId}";
+        vm.QueryUrl = $"https://apps.microsoft.com/detail/{selected.ProductId}";
         QueryButton.Command?.Execute(null);
     }
 
@@ -107,7 +108,8 @@ public partial class StoreView : UserControl
                 QueryButton.Focus();
             }, DispatcherPriority.Input);
         }
-        vm.QueryUrl = $"https://www.microsoft.com/store/productid/{selected.ProductId}";
+        //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{selected.ProductId}";
+        vm.QueryUrl = $"https://apps.microsoft.com/detail/{selected.ProductId}";
         QueryButton.Command?.Execute(null);
         e.Handled = true;
     }
@@ -181,7 +183,8 @@ public partial class StoreView : UserControl
             Xgp1.Focus();
         }, DispatcherPriority.Input);
         
-        vm.QueryUrl = $"https://www.microsoft.com/store/productid/{vm.SelectedGamePass1.ProductId}";
+        //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{vm.SelectedGamePass1.ProductId}";
+        vm.QueryUrl = $"https://apps.microsoft.com/detail/{vm.SelectedGamePass1.ProductId}";
         QueryButton.Command?.Execute(null);
     }
 
@@ -200,7 +203,8 @@ public partial class StoreView : UserControl
             Xgp2.Focus();
         }, DispatcherPriority.Input);
         
-        vm.QueryUrl = $"https://www.microsoft.com/store/productid/{vm.SelectedGamePass2.ProductId}";
+        //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{vm.SelectedGamePass2.ProductId}";
+        vm.QueryUrl = $"https://apps.microsoft.com/detail/{vm.SelectedGamePass2.ProductId}";
         QueryButton.Command?.Execute(null);
     }
     

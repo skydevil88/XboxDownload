@@ -484,7 +484,8 @@ public partial class StorageViewModel : ObservableObject
     private static async Task QueryContentId(string productId)
     {
         var storeVm = Ioc.Default.GetRequiredService<StoreViewModel>();
-        storeVm.QueryUrl = $"https://www.microsoft.com/store/productid/{productId}";
+        //storeVm.QueryUrl = $"https://www.microsoft.com/store/productid/{productId}";
+        storeVm.QueryUrl = $"https://apps.microsoft.com/detail/{productId}";
 
         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
         mainWindowVm.SelectedTabIndex = 5;

@@ -287,9 +287,8 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
                 _ => language
             };
         }
-
-        //var url = $"https://www.xbox.com/{language}/games/store/_/{_productId}";
-        var url = $"https://www.microsoft.com/{language}/p/_/{_productId}";
+        //var url = $"https://www.microsoft.com/{language}/p/_/{_productId}";
+        var url = $"https://www.xbox.com/{language}/games/store/_/{_productId}";
         HttpClientHelper.OpenUrl(url);
     }
 
