@@ -409,7 +409,7 @@
     <x:String x:Key="Storage.RenameLocalFile">Rename Local File</x:String>
     <x:String x:Key="Storage.RenameConfirm">Are you sure you want to rename the local file?&#x0a;&#x0a;Original file name: {0}&#x0a;New file name: {1}</x:String>
     <x:String x:Key="Storage.RenameFileFailed">Failed to rename local file. Error: &#x0a;{0}</x:String>
-    <x:String x:Key="Storage.CopyAndRenameGame">Copy the game files from PC to the Xbox Console external drive's root directory, rename to Content ID, then connect to Xbox and move the game to another drive.&#x0a;Note: 1. Do not launch from the external drive, it will be re-downloaded. 2. The app does not support hard drive import. 3. Xbox must be online.</x:String>
+    <x:String x:Key="Storage.CopyAndRenameGame">Copy the game files from PC to the Xbox external drive's root directory, rename to Content ID, then connect to Xbox and move the game to another drive.&#x0a;Note: 1. Do not launch from the external drive, it will be re-downloaded. 2. The app does not support hard drive import. 3. Xbox must be online.</x:String>
 
     <x:String x:Key="Store.MicrosoftStore">Microsoft Store</x:String>
     <x:String x:Key="Store.UrlProductId">URL/ProductID</x:String>

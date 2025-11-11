@@ -106,7 +106,6 @@ public partial class CdnViewModel : ObservableObject
                 AkamaiHost1 = reader.ReadToEnd();
             }
         }
-        if (File.Exists(_serviceViewModel.AkamaiFilePath))
-            AkamaiHost2 = File.ReadAllText(_serviceViewModel.AkamaiFilePath);
+        AkamaiHost2 = File.Exists(_serviceViewModel.AkamaiFilePath) ? File.ReadAllText(_serviceViewModel.AkamaiFilePath) : string.Empty;
     }
 }
