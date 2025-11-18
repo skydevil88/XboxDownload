@@ -38,7 +38,7 @@
 
     <x:String x:Key="Update.Title">App Update</x:String>
     <x:String x:Key="Update.UpdateNow">A new version {0} has been detected. Would you like to update now?</x:String>
-    <x:String x:Key="Update.AlreadyUpToDate">The software is already up to date with version {0}</x:String>
+    <x:String x:Key="Update.AlreadyUpToDate">The software is already the latest version &#x0a;({0}).</x:String>
     <x:String x:Key="Update.Downloading">Downloading the update package, please wait...</x:String>
     <x:String x:Key="Update.UpdateFailedTitle">Update Failed</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">An error occurred while checking for updates. Please try again later.</x:String>

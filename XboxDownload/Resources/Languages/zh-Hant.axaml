@@ -38,7 +38,7 @@
 
     <x:String x:Key="Update.Title">軟體更新</x:String>
     <x:String x:Key="Update.UpdateNow">已檢測到新版本 {0}，是否立即更新？</x:String>
-    <x:String x:Key="Update.AlreadyUpToDate">軟體已經是最新版本 {0}。</x:String>
+    <x:String x:Key="Update.AlreadyUpToDate">軟體已經是最新版本 ({0})。</x:String>
     <x:String x:Key="Update.Downloading">正在下載更新包，請稍候...</x:String>
     <x:String x:Key="Update.UpdateFailedTitle">更新失敗</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">檢查更新出錯，請稍候再試。</x:String>
