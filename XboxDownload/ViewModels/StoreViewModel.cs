@@ -1144,7 +1144,6 @@ public partial class StoreViewModel : ObservableObject
         {
             "Store" => $"ms-windows-store://pdp/?productid={productId}",
             "Xbox" => $"msxbox://game/?productId={productId}",
-            //_ => $"https://apps.microsoft.com/detail/{productId}"
             _ => $"https://www.xbox.com/{_currentProductMarket?.Language}/games/store/_/{productId}"
         };
         HttpClientHelper.OpenUrl(url);
