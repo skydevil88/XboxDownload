@@ -84,6 +84,7 @@ public static class DnsMappingGenerator
             ],
             [],
             [
+                "prod.cloudflare.cdn.ea.com",
                 "ssl-lvlt.cdn.ea.com"
             ]
         ),

@@ -20,3 +20,39 @@ macOS 默认启用了 Gatekeeper，会阻止未签名的脚本或二进制运行
 sudo xattr -dr com.apple.quarantine /Users/username/Downloads/XboxDownload-macos-arm64
 ```
 3. 双击运行启动脚本 run_xboxdownload.command。
+
+
+
+//////////////////////////////////////////////////////////////////////
+
+
+
+⚡ Linux First-Time Run Instructions
+Method 1: Run via File Manager (Recommended)
+
+Locate the startup script run_xboxdownload.sh.
+
+Right-click the file and select Properties.
+
+Enable “Allow executing file as program”.
+
+Close the dialog.
+
+Right-click the script and choose Run as Program.
+
+On some desktop environments (such as GNOME or KDE), you can also double-click the script and select Run.
+
+⚡ Linux 首次运行说明
+方法一：文件管理器右键运行（推荐）
+
+找到启动脚本 run_xboxdownload.sh。
+
+右键 → 属性（Properties）。
+
+勾选 “允许作为程序执行” / “Allow executing file as program”。
+
+关闭窗口。
+
+右键脚本 → 以程序方式运行（Run as Program）。
+
+在部分桌面环境（如 GNOME、KDE）中，也可以直接双击并选择 运行。
