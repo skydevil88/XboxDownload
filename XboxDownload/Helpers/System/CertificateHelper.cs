@@ -27,7 +27,7 @@ public static class CertificateHelper
         caReq.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, false, 0, true));
         caReq.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.CrlSign, true));
         caReq.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(caReq.PublicKey, false));
-        caReq.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(new OidCollection { new Oid("1.3.6.1.5.5.7.3.1") }, false)); // Server Authentication
+        caReq.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension([new Oid("1.3.6.1.5.5.7.3.1")], false)); // Server Authentication
 
         var utcNow = DateTimeOffset.UtcNow;
         var caCert = caReq.CreateSelfSigned(utcNow, utcNow.AddYears(10));
@@ -37,72 +37,74 @@ public static class CertificateHelper
 
         // Export Root CRT (public key only, can be distributed to other devices)
         await File.WriteAllBytesAsync(RootCrt, caCert.Export(X509ContentType.Cert));
-
-        if (!OperatingSystem.IsWindows())
-        {
-            await PathHelper.FixOwnershipAsync(RootPfx);
-            await PathHelper.FixOwnershipAsync(RootCrt);
-        }
-
+        
         if (OperatingSystem.IsWindows())
         {
-            using var cert = new X509Certificate2(RootCrt, "", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
+            using var cert = X509CertificateLoader.LoadPkcs12FromFile(RootCrt, password: null);
             using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
             var existing = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
             if (existing.Count > 0) store.RemoveRange(existing);
             store.Add(cert);
         }
-        else if (OperatingSystem.IsMacOS())
+        else
         {
-            try
-            {
-                await CommandHelper.RunCommandAsync("security", $"delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
-            }
-            catch
-            {
-                // ignored
-            }
+            await PathHelper.FixOwnershipAsync(RootPfx);
+            await PathHelper.FixOwnershipAsync(RootCrt);
 
-            var exitCode = await CommandHelper.RunCommandAsync("security", $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
-            if (exitCode != 0)
+            if (OperatingSystem.IsMacOS())
             {
-                File.Delete(RootPfx);
-                File.Delete(RootCrt);
-            }
-        }
-        else if (OperatingSystem.IsLinux())
-        {
-            try
-            {
-                var raw = await File.ReadAllBytesAsync(RootCrt);
-                var pem = "-----BEGIN CERTIFICATE-----\n"
-                          + Convert.ToBase64String(raw, Base64FormattingOptions.InsertLineBreaks)
-                          + "\n-----END CERTIFICATE-----\n";
-
-                if (File.Exists("/etc/os-release"))
+                try
                 {
-                    var osRelease = await File.ReadAllTextAsync("/etc/os-release");
+                    await CommandHelper.RunCommandAsync("security",
+                        $"delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
+                }
+                catch
+                {
+                    // ignored
+                }
 
-                    if (osRelease.Contains("ID_LIKE=debian") || osRelease.Contains("ID=debian") || osRelease.Contains("ID=ubuntu"))
-                    {
-                        // Debian/Ubuntu
-                        var certPath = $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt";
-                        await File.WriteAllTextAsync(certPath, pem);
-                        await CommandHelper.RunCommandAsync("update-ca-certificates", "");
-                    }
-                    else if (osRelease.Contains("ID_LIKE=\"rhel fedora\"") || osRelease.Contains("ID=fedora") || osRelease.Contains("ID=centos") || osRelease.Contains("ID=rhel"))
-                    {
-                        // RHEL/CentOS/Fedora
-                        var certPath = $"/etc/pki/ca-trust/source/anchors/{nameof(XboxDownload)}.crt";
-                        await File.WriteAllTextAsync(certPath, pem);
-                        await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
-                    }
+                var exitCode = await CommandHelper.RunCommandAsync("security",
+                    $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
+                if (exitCode != 0)
+                {
+                    File.Delete(RootPfx);
+                    File.Delete(RootCrt);
                 }
             }
-            catch
+            else if (OperatingSystem.IsLinux())
             {
-                // ignored
+                try
+                {
+                    var raw = await File.ReadAllBytesAsync(RootCrt);
+                    var pem = "-----BEGIN CERTIFICATE-----\n"
+                              + Convert.ToBase64String(raw, Base64FormattingOptions.InsertLineBreaks)
+                              + "\n-----END CERTIFICATE-----\n";
+
+                    if (File.Exists("/etc/os-release"))
+                    {
+                        var osRelease = await File.ReadAllTextAsync("/etc/os-release");
+
+                        if (osRelease.Contains("ID_LIKE=debian") || osRelease.Contains("ID=debian") || osRelease.Contains("ID=ubuntu"))
+                        {
+                            // Debian/Ubuntu
+                            var certPath = $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt";
+                            await File.WriteAllTextAsync(certPath, pem);
+                            await CommandHelper.RunCommandAsync("update-ca-certificates", "--fresh");
+                        }
+                        else if (osRelease.Contains("ID_LIKE=\"rhel fedora\"") || osRelease.Contains("ID=fedora") || osRelease.Contains("ID=centos") || osRelease.Contains("ID=rhel"))
+                        {
+                            // RHEL/CentOS/Fedora
+                            var certPath = $"/etc/pki/ca-trust/source/anchors/{nameof(XboxDownload)}.crt";
+                            await File.WriteAllTextAsync(certPath, pem);
+                            await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
+                        }
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
             }
         }
     }
@@ -148,7 +150,7 @@ public static class CertificateHelper
                 if (File.Exists(certPath))
                     File.Delete(certPath);
 
-                await CommandHelper.RunCommandAsync("update-ca-certificates", "");
+                await CommandHelper.RunCommandAsync("update-ca-certificates", "--fresh");
             }
             catch
             {

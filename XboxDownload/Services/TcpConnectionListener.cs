@@ -61,7 +61,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
 
         using var serverRsa = RSA.Create(2048);
-        var serverReq = new CertificateRequest($"CN=skydevil.xyz, O={nameof(XboxDownload)}, OU={nameof(XboxDownload)}", serverRsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        var serverReq = new CertificateRequest($"CN={nameof(XboxDownload)}, O={nameof(XboxDownload)}, OU={nameof(XboxDownload)}", serverRsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
         // Subject Alternative Names (SAN)
         var sanBuilder = new SubjectAlternativeNameBuilder();
@@ -78,10 +78,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             string certDomainText;
             await using (var stream = AssetLoader.Open(new Uri($"avares://{nameof(XboxDownload)}/Resources/CertDomain.txt")))
             {
-                using (var reader = new StreamReader(stream))
-                {
-                    certDomainText = (await reader.ReadToEndAsync()).Trim();
-                }
+                using var reader = new StreamReader(stream);
+                certDomainText = (await reader.ReadToEndAsync()).Trim();
             }
             if (File.Exists(serviceViewModel.CertDomainFilePath))
                 certDomainText += Environment.NewLine + await File.ReadAllTextAsync(serviceViewModel.CertDomainFilePath);
@@ -103,7 +101,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 try
                 {
                     value = JsonSerializer.Deserialize<string[]>(parts[1])!;
-                    value = value.Select(v => v.Trim().ToLowerInvariant()).ToArray();
+                    value = [.. value.Select(v => v.Trim().ToLowerInvariant())];
                 }
                 catch
                 {
@@ -128,9 +126,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 }
             }
 
-            wildcardDomainMap = wildcardDomainMap
-                .OrderByDescending(kv => kv.Key.Length)
-                .ToList();
+            wildcardDomainMap = [.. wildcardDomainMap.OrderByDescending(kv => kv.Key.Length)];
 
             foreach (var path in new[] { serviceViewModel.SniProxyFilePath, serviceViewModel.SniProxy2FilePath })
             {
@@ -235,8 +231,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         {
                             Branch = branch,
                             Sni = sni,
-                            IpAddressesV4 = lsIPv4.Count >= 1 ? lsIPv4.ToArray() : null,
-                            IpAddressesV6 = lsIPv6.Count >= 1 ? lsIPv6.ToArray() : null,
+                            IpAddressesV4 = lsIPv4.Count >= 1 ? [.. lsIPv4] : null,
+                            IpAddressesV6 = lsIPv6.Count >= 1 ? [.. lsIPv6] : null,
                             UseCustomIpAddress = customIp
                         };
 
@@ -283,7 +279,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         {
             var utcNow = DateTimeOffset.UtcNow;
             var cert = serverReq.CreateSelfSigned(utcNow, utcNow.AddYears(1));
-            _certificate = new X509Certificate2(cert.Export(X509ContentType.Pfx));
+            var pfxData = cert.Export(X509ContentType.Pfx);
+            _certificate = X509CertificateLoader.LoadPkcs12(pfxData, password: null);
 
             using X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
@@ -304,7 +301,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             serverReq.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(oids, false));
 
             // Load Root CA
-            using var caCert = new X509Certificate2(CertificateHelper.RootPfx, "", X509KeyStorageFlags.Exportable);
+            using var caCert = X509CertificateLoader.LoadPkcs12FromFile(CertificateHelper.RootPfx, password: null, keyStorageFlags: X509KeyStorageFlags.Exportable);
 
             var notBefore = DateTimeOffset.UtcNow;
             if (notBefore < caCert.NotBefore)
@@ -326,9 +323,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 caCert
             };
 
-            var pfxBytes = exportCollection.Export(X509ContentType.Pfx, "");
-            //_certificate = System.Security.Cryptography.X509Certificates.X509CertificateLoader.LoadPkcs12(pfxBytes!, password: "", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.EphemeralKeySet );
-            _certificate = new X509Certificate2(pfxBytes!, "", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
+            var pfxData = exportCollection.Export(X509ContentType.Pfx);
+            _certificate = X509CertificateLoader.LoadPkcs12(pfxData!, password: null);
         }
     }
 
@@ -388,7 +384,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         {
             using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
-            var existing = store.Certificates.Find(X509FindType.FindBySubjectName, "skydevil.xyz", false);
+            var existing = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
             if (existing.Count > 0) store.RemoveRange(existing);
             store.Close();
         }
@@ -398,7 +394,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             var home = $"/Users/{user}";
             var loginKeychain = Path.Combine(home, "Library/Keychains/login.keychain-db");
 
-            var pipeline = $"security find-certificate -c \"skydevil.xyz\" -a -Z \"{loginKeychain}\" | grep \"SHA-1\" | awk '{{print $NF}}' | xargs -I {{}} security delete-certificate -Z {{}} \"{loginKeychain}\"";
+            var pipeline = $"security find-certificate -c \"{nameof(XboxDownload)}\" -a -Z \"{loginKeychain}\" | grep \"SHA-1\" | awk '{{print $NF}}' | xargs -I {{}} security delete-certificate -Z {{}} \"{loginKeychain}\"";
             _ = CommandHelper.RunCommandAsync("bash", $"-c \"{pipeline}\"");
         }
     }
@@ -480,7 +476,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             string contentRange = string.Empty, status = "200 OK";
                             long fileLength = br.BaseStream.Length, startPosition = 0;
                             var endPosition = fileLength;
-                            result = RangeHeaderRegex().Match(headers);
+                            result = RangeHeaderRegex2().Match(headers);
                             if (result.Success)
                             {
                                 startPosition = long.Parse(result.Groups["StartPosition"].Value);
@@ -695,7 +691,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         if (IPAddress.TryParse(App.Settings.BattleIp, out var address) && address.AddressFamily == AddressFamily.InterNetworkV6)
                                         {
                                             var httpHeaders = new Dictionary<string, string>() { { "Host", host } };
-                                            result = Regex.Match(headers, @"Range: (bytes=.+)");
+                                            result = RangeHeaderRegex().Match(headers);
                                             if (result.Success) httpHeaders.Add("Range", result.Groups[1].Value.Trim());
                                             using var response = await HttpClientHelper.SendRequestAsync(url.Replace(host, "[" + address + "]"), headers: httpHeaders);
                                             if (response is { IsSuccessStatusCode: true })
@@ -824,7 +820,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         if (ipAddresses?.Count > 0)
         {
             var headers = new Dictionary<string, string>() { { "Host", tagHost } };
-            using var response = await HttpClientHelper.SendRequestAsync($"http://{ipAddresses[0].ToString()}{tmpPath}", method: "HEAD", headers: headers);
+            using var response = await HttpClientHelper.SendRequestAsync($"http://{ipAddresses[0]}{tmpPath}", method: "HEAD", headers: headers);
             if (response is { IsSuccessStatusCode: true })
             {
                 if (response.Content.Headers.TryGetValues("Content-Length", out var values))
@@ -929,7 +925,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 string contentRange = string.Empty, status = "200 OK";
                                 long fileLength = br.BaseStream.Length, startPosition = 0;
                                 var endPosition = fileLength;
-                                result = RangeHeaderRegex().Match(headers);
+                                result = RangeHeaderRegex2().Match(headers);
                                 if (result.Success)
                                 {
                                     startPosition = long.Parse(result.Groups["StartPosition"].Value);
@@ -1122,8 +1118,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                     IPAddress[]? ipV6 = proxy.IpAddressesV6, ipV4 = proxy.IpAddressesV4;
                                                     proxy.IpAddresses = serviceViewModel.IsIPv6Support switch
                                                     {
-                                                        true when ipV6 != null && ipV4 != null => ipV6.Concat(ipV4)
-                                                            .ToArray(),
+                                                        true when ipV6 != null && ipV4 != null => [.. ipV6, .. ipV4],
                                                         true => ipV6 ?? ipV4,
                                                         _ => ipV4
                                                     };
@@ -1161,19 +1156,19 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                                 {
                                                                     var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
                                                                     if (ipV6 != null)
-                                                                        ipAddresses = ipAddresses.Concat(ipV6).ToList();
+                                                                        ipAddresses = [.. ipAddresses, .. ipV6];
                                                                 }));
                                                             }
                                                             tasks.Add(Task.Run(async () =>
                                                             {
                                                                 var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
                                                                 if (ipV4 != null)
-                                                                    ipAddresses = ipAddresses.Concat(ipV4).ToList();
+                                                                    ipAddresses = [.. ipAddresses, .. ipV4];
                                                             }));
                                                         }
                                                         await Task.WhenAll(tasks);
                                                         if (ipAddresses.Count > 0)
-                                                            proxy.IpAddresses = ipAddresses.Distinct().ToArray();
+                                                            proxy.IpAddresses = [.. ipAddresses.Distinct()];
 
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
@@ -1183,12 +1178,12 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                     }
                                                     proxy.Semaphore.Release();
                                                 }
-                                                ips ??= proxy.IpAddresses?.Length >= 2 ? proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16).ToArray() : proxy.IpAddresses;
+                                                ips ??= proxy.IpAddresses?.Length >= 2 ? [.. proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16)] : proxy.IpAddresses;
 
                                                 string? errMessae;
                                                 if (ips != null)
                                                 {
-                                                    if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, Encoding.ASCII.GetBytes(headers), list.ToArray(), ssl, out errMessae))
+                                                    if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, Encoding.ASCII.GetBytes(headers), [.. list], ssl, out errMessae))
                                                     {
                                                         proxy.IpAddresses = null;
                                                     }
@@ -1449,8 +1444,11 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     [GeneratedRegex(@"\?.*$", RegexOptions.Compiled)]
     private static partial Regex QueryStringRegex();
 
-    [GeneratedRegex(@"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?", RegexOptions.Compiled)]
+    [GeneratedRegex(@"Range: (bytes=.+)")]
     private static partial Regex RangeHeaderRegex();
+
+    [GeneratedRegex(@"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?", RegexOptions.Compiled)]
+    private static partial Regex RangeHeaderRegex2();
 
     [GeneratedRegex(@"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex ContentLengthHeaderRegex();
