@@ -1188,7 +1188,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                         proxy.IpAddresses = null;
                                                     }
                                                 }
-                                                else errMessae = $"Unable to query domain {host}.";
+                                                else errMessae = $"Unable to query domain {host}. Please check whether the DoH server is reachable. If necessary, enable proxy forwarding for the request.";
                                                 if (!string.IsNullOrEmpty(errMessae))
                                                 {
                                                     var response = Encoding.UTF8.GetBytes(errMessae);

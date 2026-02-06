@@ -479,8 +479,7 @@ public partial class StoreViewModel : ObservableObject
         SelectedPlatformDownloadItem!.Outdated) && (SelectedPlatformDownloadItem?.Platform == PlatformType.XboxOne || SelectedPlatformDownloadItem?.Platform == PlatformType.WindowsPc));
     public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) || IsShowUpdateMenu;
     public bool IsShowGameGlobalMenu =>
-        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
-        && App.Settings.Culture == "zh-Hans";
+        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>
         SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
         && App.Settings.Culture == "zh-Hans";
@@ -491,7 +490,6 @@ public partial class StoreViewModel : ObservableObject
         SelectedPlatformDownloadItem!.Category == "App"
         && SelectedPlatformDownloadItem!.Platform == PlatformType.WindowsPc
         && !PlatformDownloadInfo.Any(x => string.IsNullOrEmpty(x.Key));
-
 
     public DateTime NextUpdatedRates = DateTime.MinValue;
     public readonly ConcurrentDictionary<string, decimal> ExchangeRates = new();
