@@ -472,14 +472,20 @@ public partial class StoreViewModel : ObservableObject
     public ObservableCollection<PlatformDownloadItem> PlatformDownloadInfo { get; } = [];
 
     [ObservableProperty]
-    private PlatformDownloadItem? _selectedPlatformDownloadItem;
+    private PlatformDownloadItem? _selectedPlatformDownloadItem = new();
 
-    public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
+    public bool IsShowUpdateMenu => !(OperatingSystem.IsLinux() && Program.UnixUserIsRoot()) &&
+        ((string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) && string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Display) ||
+        SelectedPlatformDownloadItem!.Outdated) && (SelectedPlatformDownloadItem?.Platform == PlatformType.XboxOne || SelectedPlatformDownloadItem?.Platform == PlatformType.WindowsPc));
+    public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) || IsShowUpdateMenu;
+    public bool IsShowGameGlobalMenu =>
+        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
+        && App.Settings.Culture == "zh-Hans";
     public bool IsShowGameCnMenu =>
-        SelectedPlatformDownloadItem!.Category == "Game"
+        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
         && App.Settings.Culture == "zh-Hans";
     public bool IsShowAzureMenu =>
-        SelectedPlatformDownloadItem!.Category == "Game"
+        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
         && !SelectedPlatformDownloadItem!.Url.Contains("/public/");
     public bool IsShowAllAppMenu =>
         SelectedPlatformDownloadItem!.Category == "App"
@@ -550,6 +556,7 @@ public partial class StoreViewModel : ObservableObject
                                                 {
                                                     Platform = PlatformType.XboxOne,
                                                     Key = key,
+                                                    ContentId = contentId,
                                                     Category = "Game",
                                                     Market = _currentProductMarket!.Region,
                                                     FileSize = package.MaxDownloadSizeInBytes,
@@ -587,6 +594,7 @@ public partial class StoreViewModel : ObservableObject
                                                 {
                                                     Platform = PlatformType.XboxSeries,
                                                     Key = key,
+                                                    ContentId = contentId,
                                                     Category = "Game",
                                                     Market = _currentProductMarket!.Region,
                                                     FileSize = package.MaxDownloadSizeInBytes,
@@ -630,6 +638,7 @@ public partial class StoreViewModel : ObservableObject
                                                     {
                                                         Platform = PlatformType.XboxOne,
                                                         Key = key,
+                                                        ContentId = contentId,
                                                         Category = "App",
                                                         Market = _currentProductMarket!.Region,
                                                         FileSize = package.MaxDownloadSizeInBytes,
@@ -663,6 +672,7 @@ public partial class StoreViewModel : ObservableObject
                                                 {
                                                     Platform = PlatformType.WindowsPc,
                                                     Key = key,
+                                                    ContentId = contentId,
                                                     Category = "Game",
                                                     Market = _currentProductMarket!.Region,
                                                     FileSize = package.MaxDownloadSizeInBytes,
@@ -710,6 +720,7 @@ public partial class StoreViewModel : ObservableObject
                                                     {
                                                         Platform = PlatformType.WindowsPc,
                                                         Key = key,
+                                                        ContentId = contentId,
                                                         Category = "App",
                                                         Market = _currentProductMarket!.Region,
                                                         FileSize = package.MaxDownloadSizeInBytes,
@@ -871,8 +882,7 @@ public partial class StoreViewModel : ObservableObject
 
     private async Task GetGamePackageAsync(PlatformDownloadItem platformDownload, string contentId)
     {
-        if (!_platformPackageFetchTimes.TryGetValue(platformDownload.Key, out var value) ||
-            DateTime.Compare(value, DateTime.Now) < 0)
+        if (!_platformPackageFetchTimes.TryGetValue(platformDownload.Key, out var value) || DateTime.Compare(value, DateTime.Now) < 0)
         {
             _platformPackageFetchTimes[platformDownload.Key] = DateTime.Now.AddMinutes(3);
 
@@ -990,7 +1000,6 @@ public partial class StoreViewModel : ObservableObject
                                 };
                                 update = true;
                             }
-
                             if (update)
                             {
                                 XboxGameManager.Dictionary.AddOrUpdate(platformDownload.Key, xboxGame, (_, _) => xboxGame);
@@ -1004,7 +1013,7 @@ public partial class StoreViewModel : ObservableObject
                         // ignored
                     }
                 }
-                else if (response?.StatusCode == HttpStatusCode.Unauthorized)
+                else if (response?.StatusCode == HttpStatusCode.Unauthorized || response?.StatusCode == HttpStatusCode.Forbidden || response?.StatusCode == HttpStatusCode.ServiceUnavailable)
                 {
                     App.Settings.Authorization = string.Empty;
                     SettingsManager.Save(App.Settings);
@@ -1202,6 +1211,35 @@ public partial class StoreViewModel : ObservableObject
         }
         await provider.SetTextAsync(url);
     }
+
+    [RelayCommand]
+    private async Task UpdateGameLinkAsync()
+    {
+        var platformDownload = SelectedPlatformDownloadItem;
+
+        if (string.IsNullOrEmpty(App.Settings.Authorization))
+        {
+            string xbl = string.Empty;
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            try
+            {
+                xbl = await XboxAuthHelper.GetXbl3TokenAsync(
+                   interactive: false,
+                   cancellationToken: cts.Token);
+            }
+            catch
+            {
+                // ignored
+            }
+            if (string.IsNullOrEmpty(xbl)) return;
+
+            App.Settings.Authorization = xbl;
+            SettingsManager.Save(App.Settings);
+        }
+        platformDownload?.Display = ResourceHelper.GetString("Store.FetchingDownloadLink");
+        await GetGamePackageAsync(platformDownload!, platformDownload!.ContentId);
+    }
+    
 
     [GeneratedRegex(@"P1=(\d+)")]
     private static partial Regex ExpireLinkRegex();

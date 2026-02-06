@@ -8,6 +8,7 @@
             <SolidColorBrush x:Key="BgToolbar" Color="#f5f5ff" />
             <SolidColorBrush x:Key="LinkLabel" Color="Blue" />
             <SolidColorBrush x:Key="Green" Color="Green" />
+            <SolidColorBrush x:Key="Red" Color="Red" />
             <SolidColorBrush x:Key="BorderColor" Color="Black" />
         </ResourceDictionary>
 
@@ -16,6 +17,7 @@
             <SolidColorBrush x:Key="BgToolbar" Color="#222226" />
             <SolidColorBrush x:Key="LinkLabel" Color="#4EA1FF" />
             <SolidColorBrush x:Key="Green" Color="MediumSeaGreen" />
+            <SolidColorBrush x:Key="Red" Color="#C2185B" />
             <SolidColorBrush x:Key="BorderColor" Color="LightGray" />
         </ResourceDictionary>
 

@@ -1,7 +1,7 @@
 # Xbox下载助手
 [English](https://github.com/skydevil88/XboxDownload/blob/master/README-EN.md)
 
-Target Framework: .NET 8.0 + Avalonia 11
+Target Framework: .NET 10.0, Avalonia 11
 
 获取微软商店应用游戏下载链接
 ---

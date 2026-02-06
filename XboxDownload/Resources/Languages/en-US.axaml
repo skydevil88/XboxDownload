@@ -441,6 +441,7 @@
     <x:String x:Key="Store.Market">Market</x:String>
     <x:String x:Key="Store.Size">Size</x:String>
     <x:String x:Key="Store.DownloadLink">Download Link (Right-click to Copy)</x:String>
+    <x:String x:Key="Store.UpdateDownloadLink">Update Download link</x:String>
     <x:String x:Key="Store.CopyGlobalDownloadLink">Copy Download Link</x:String>
     <x:String x:Key="Store.CopyCnDownloadLink">Copy Download Link (CN Domain)</x:String>
     <x:String x:Key="Store.CopyAzureDownloadLink">Copy Download Link (Azure)</x:String>

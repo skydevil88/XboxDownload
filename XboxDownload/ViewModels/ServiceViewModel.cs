@@ -5,6 +5,7 @@ using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia.Enums;
 using System;
@@ -18,7 +19,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using XboxDownload.Helpers.IO;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
@@ -250,7 +250,7 @@ public partial class ServiceViewModel : ObservableObject
                     {
                         var idx = line.IndexOf("Device:", StringComparison.Ordinal);
                         if (idx < 0) continue;
-                        var device = line.Substring(idx + "Device:".Length).Trim().TrimEnd(')');
+                        var device = line[(idx + "Device:".Length)..].Trim().TrimEnd(')');
                         dic[device] = currentService;
                     }
                 }

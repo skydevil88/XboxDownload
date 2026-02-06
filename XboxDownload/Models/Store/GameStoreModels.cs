@@ -156,6 +156,7 @@ public partial class PlatformDownloadItem : ObservableObject
     public PlatformType Platform { get; init; }
     public string DisplayName => !string.IsNullOrEmpty(Key) ? Platform.GetDescription() : string.Empty;
     public string Key { get; init; } = "";
+    public string ContentId = "";
     public string Category { get; init; } = "";
     public string Market { get; init; } = "";
     public string WuCategoryId { get; init; } = "";

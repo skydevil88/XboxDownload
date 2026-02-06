@@ -441,6 +441,7 @@
     <x:String x:Key="Store.Market">商店</x:String>
     <x:String x:Key="Store.Size">容量</x:String>
     <x:String x:Key="Store.DownloadLink">下載連結 (右鍵複製)</x:String>
+    <x:String x:Key="Store.UpdateDownloadLink">更新下載連結</x:String>
     <x:String x:Key="Store.CopyGlobalDownloadLink">複製下載連結</x:String>
     <x:String x:Key="Store.CopyCnDownloadLink">複製下載連結(.cn 域名)</x:String>
     <x:String x:Key="Store.CopyAzureDownloadLink">複製下載連結(Azure)</x:String>
