@@ -25,7 +25,7 @@ public static partial class UpdateService
 {
     public const string Website = "https://xbox.skydevil.xyz";
     public const string Project = "https://github.com/skydevil88/XboxDownload";
-    public static readonly string[] Proxies1 = ["https://v6.gh-proxy.com/", "https://gh-proxy.com/", "https://ghproxy.net/"];
+    public static readonly string[] Proxies1 = ["https://gh-proxy.com/", "https://ghproxy.net/"];
     private static readonly string[] Proxies2 = ["https://pxy1.skydevil.xyz/", "https://pxy2.skydevil.xyz/", ""];
 
     public static async Task Start(bool autoupdate = false)

@@ -478,8 +478,7 @@ public partial class StoreViewModel : ObservableObject
         ((string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) && string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Display) ||
         SelectedPlatformDownloadItem!.Outdated) && (SelectedPlatformDownloadItem?.Platform == PlatformType.XboxOne || SelectedPlatformDownloadItem?.Platform == PlatformType.WindowsPc));
     public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) || IsShowUpdateMenu;
-    public bool IsShowGameGlobalMenu =>
-        (SelectedPlatformDownloadItem!.Category == "Game" || SelectedPlatformDownloadItem!.Category == "App") && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
+    public bool IsShowGameGlobalMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>
         SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
         && App.Settings.Culture == "zh-Hans";
@@ -1217,18 +1216,11 @@ public partial class StoreViewModel : ObservableObject
 
         if (string.IsNullOrEmpty(App.Settings.Authorization))
         {
-            string xbl = string.Empty;
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-            try
-            {
-                xbl = await XboxAuthHelper.GetXbl3TokenAsync(
-                   interactive: false,
-                   cancellationToken: cts.Token);
-            }
-            catch
-            {
-                // ignored
-            }
+            var xbl = await XboxAuthHelper.GetXbl3TokenAsync(
+                interactive: false,
+                cancellationToken: cts.Token);
+            
             if (string.IsNullOrEmpty(xbl)) return;
 
             App.Settings.Authorization = xbl;

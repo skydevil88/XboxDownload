@@ -1,8 +1,5 @@
 ﻿using Microsoft.Identity.Client;
-using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,14 +8,11 @@ namespace XboxDownload.Helpers.Network;
 
 public static class XboxAuthHelper
 {
-    private static readonly string ClientId =
-        "b3900558-4f9d-43ef-9db5-cfc7cb01874e";
+    private const string ClientId = "b3900558-4f9d-43ef-9db5-cfc7cb01874e";
 
-    private static readonly string Authority =
-        "https://login.microsoftonline.com/consumers";
+    private const string Authority = "https://login.microsoftonline.com/consumers";
 
-    private static readonly string[] Scopes =
-        ["XboxLive.signin"];
+    private static readonly string[] Scopes = ["XboxLive.signin"];
 
     public static async Task<string> GetXbl3TokenAsync(
         bool interactive = false,
@@ -29,17 +23,17 @@ public static class XboxAuthHelper
             .WithAuthority(Authority)
             .WithDefaultRedirectUri()
             .Build();
-
+        
         AuthenticationResult result;
-
+        
         try
         {
-            var accounts = await app.GetAccountsAsync();
+            var account = (await app.GetAccountsAsync()).FirstOrDefault();
 
-            if (accounts.Any() && !interactive)
+            if (account != null && !interactive)
             {
                 result = await app
-                    .AcquireTokenSilent(Scopes, accounts.First())
+                    .AcquireTokenSilent(Scopes, account)
                     .ExecuteAsync(cancellationToken);
             }
             else
@@ -50,21 +44,18 @@ public static class XboxAuthHelper
                     .ExecuteAsync(cancellationToken);
             }
         }
-        catch (MsalClientException ex)
-            when (ex.ErrorCode == "authentication_canceled")
+        catch 
         {
-            throw new OperationCanceledException(
-                "The user canceled the Microsoft sign-in process.");
+            return string.Empty;
         }
-
-        string msaAccessToken = result.AccessToken;
-
-        using var http = new HttpClient();
-
+        
+        var msaAccessToken = result.AccessToken;
+        
         // 1️、Xbox Live User Token
-        var xboxResp = await http.PostAsync(
+        var json = await HttpClientHelper.GetStringContentAsync(
             "https://user.auth.xboxlive.com/user/authenticate",
-            JsonContent(new
+            method: "POST",
+            postData: JsonSerializer.Serialize(new
             {
                 Properties = new
                 {
@@ -75,23 +66,21 @@ public static class XboxAuthHelper
                 RelyingParty = "http://auth.xboxlive.com",
                 TokenType = "JWT"
             }),
-            cancellationToken);
-
-        if (!xboxResp.IsSuccessStatusCode)
-            throw new Exception("Failed to authenticate Xbox Live user.");
-
-        var xboxJson = JsonDocument.Parse(
-            await xboxResp.Content.ReadAsStringAsync(cancellationToken));
-
+            contentType: "application/json",
+            token: cancellationToken);
+        
+        using var xboxJson = JsonDocument.Parse(json);
+        
         if (!xboxJson.RootElement.TryGetProperty("Token", out var xboxTokenProp))
-            throw new Exception("Xbox Live user token was not returned.");
-
-        string xboxUserToken = xboxTokenProp.GetString()!;
-
+            return string.Empty;
+        
+        var xboxUserToken = xboxTokenProp.GetString();
+        
         // 2️、XSTS Token
-        var xstsResp = await http.PostAsync(
+        var xstsText = await HttpClientHelper.GetStringContentAsync(
             "https://xsts.auth.xboxlive.com/xsts/authorize",
-            JsonContent(new
+            method: "POST",
+            postData: JsonSerializer.Serialize(new
             {
                 Properties = new
                 {
@@ -101,31 +90,23 @@ public static class XboxAuthHelper
                 RelyingParty = "http://update.xboxlive.com",
                 TokenType = "JWT"
             }),
-            cancellationToken);
-
-        var xstsText = await xstsResp.Content.ReadAsStringAsync(cancellationToken);
-        var xstsJson = JsonDocument.Parse(xstsText);
-
+            contentType: "application/json",
+            token: cancellationToken);
+        
+        using var xstsJson = JsonDocument.Parse(xstsText);
+        
         // Important: XSTS errors do NOT include a Token field
         if (!xstsJson.RootElement.TryGetProperty("Token", out var tokenProp))
-        {
-            if (xstsJson.RootElement.TryGetProperty("XErr", out var xerr))
-                throw new Exception($"XSTS authorization was denied. XErr={xerr.GetInt32()}");
-
-            throw new Exception("XSTS response did not contain a token.");
-        }
-
-        string xstsToken = tokenProp.GetString()!;
-
+            return string.Empty;
+        
+        var xstsToken = tokenProp.GetString()!;
+        
         var uhs = xstsJson.RootElement
             .GetProperty("DisplayClaims")
             .GetProperty("xui")[0]
             .GetProperty("uhs")
             .GetString();
-
+        
         return $"XBL3.0 x={uhs};{xstsToken}";
     }
-
-    private static StringContent JsonContent(object obj) =>
-        new(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
 }
