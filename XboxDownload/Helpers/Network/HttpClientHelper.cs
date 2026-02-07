@@ -159,10 +159,10 @@ public class HttpClientHelper
     {
         var handler = new SocketsHttpHandler
         {
-            CookieContainer = new CookieContainer(),
+            //CookieContainer = new CookieContainer(),
+            //AutomaticDecompression = DecompressionMethods.All,
             PooledConnectionLifetime = TimeSpan.FromMinutes(5),
-            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
-            AutomaticDecompression = DecompressionMethods.All
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2)
         };
 
         SharedHttpClient = new HttpClient(handler)
