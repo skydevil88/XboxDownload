@@ -885,7 +885,7 @@ public partial class StoreViewModel : ObservableObject
             _platformPackageFetchTimes[platformDownload.Key] = DateTime.Now.AddMinutes(3);
 
             var responseString = await HttpClientHelper.GetStringContentAsync(
-                $"{UpdateService.Website}/Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}",
+                $"{UpdateService.Website}/Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}&size={platformDownload.FileSize}",
                 name: nameof(XboxDownload)
             );
 
