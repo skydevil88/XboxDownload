@@ -518,7 +518,7 @@
     <x:String x:Key="Store.Region.Kuwait">科威特</x:String>
     <x:String x:Key="Store.Region.Liechtenstein">列支敦士登</x:String>
     <x:String x:Key="Store.Region.Malaysia">馬來西亞</x:String>
-    <x:String x:Key="Store.Region.Mauritania">茅利塔尼亞烏吉亞</x:String>
+    <x:String x:Key="Store.Region.Mauritania">茅利塔尼亞</x:String>
     <x:String x:Key="Store.Region.Nigeria">奈及利亞</x:String>
     <x:String x:Key="Store.Region.Oman">阿曼</x:String>
     <x:String x:Key="Store.Region.Pakistan">巴基斯坦</x:String>

@@ -952,12 +952,6 @@ public partial class StoreViewModel : ObservableObject
                     App.Settings.Authorization = xbl;
                     SettingsManager.Save(App.Settings);
                 }
-                else
-                {
-                    File.Delete(MsalTokenCacheHelper.CachePath);
-                    if (File.Exists(MsalTokenCacheHelper.KeyPath))
-                        File.Delete(MsalTokenCacheHelper.KeyPath);
-                }
             }
 
             if (!string.IsNullOrEmpty(App.Settings.Authorization))

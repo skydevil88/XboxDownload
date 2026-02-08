@@ -17,7 +17,7 @@ public static class MsalTokenCacheHelper
     public static readonly string CachePath =
         PathHelper.GetLocalFilePath("msal_cache.bin");
 
-    public static readonly string KeyPath =
+    private static readonly string KeyPath =
         PathHelper.GetLocalFilePath("msal_cache.key");
 
     // ================= Public =================
@@ -173,12 +173,13 @@ public static class MsalTokenCacheHelper
             Environment.ProcessorCount,
             GetTotalMemoryMb(),
             RuntimeInformation.ProcessArchitecture,
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "win" :
-            RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? "mac" : "linux");
-        
+            OperatingSystem.IsWindows() ? "win" :
+            OperatingSystem.IsMacOS() ? "mac" :
+            OperatingSystem.IsLinux() ? "linux" : "unknown");
+
         return SHA256.HashData(Encoding.UTF8.GetBytes(raw));
     }
-    
+
     private static long GetTotalMemoryMb()
     {
         try
