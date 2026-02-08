@@ -1,7 +1,11 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using MsBox.Avalonia.Enums;
 using System;
 using System.Collections.Concurrent;
@@ -16,12 +20,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using DynamicData;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
+using XboxDownload.Helpers.Security;
 using XboxDownload.Helpers.UI;
 using XboxDownload.Helpers.Utilities;
 using XboxDownload.Models;
@@ -938,82 +939,112 @@ public partial class StoreViewModel : ObservableObject
                 else platformDownload.Outdated = false;
             }
         }
-
+        
         if ((string.IsNullOrEmpty(platformDownload.Url) || platformDownload.Outdated)
-            && platformDownload.Platform is PlatformType.XboxOne or PlatformType.WindowsPc
-            && !string.IsNullOrEmpty(App.Settings.Authorization))
+            && platformDownload.Platform is PlatformType.XboxOne or PlatformType.WindowsPc)
         {
-            const string host = "packagespc.xboxlive.com";
-            var ipAddresses = App.Settings.IsDoHEnabled
-                ? await DnsHelper.ResolveDohAsync(host, DnsHelper.CurrentDoH)
-                : await DnsHelper.ResolveDnsAsync(host, Ioc.Default.GetRequiredService<ServiceViewModel>().DnsIp);
-            if (ipAddresses?.Count > 0)
+            if (File.Exists(MsalTokenCacheHelper.CachePath) && (!_platformPackageFetchTimes.TryGetValue("Xbl3Token", out var xbl3TimeOut) || DateTime.Compare(xbl3TimeOut, DateTime.Now) < 0))
             {
-                var headers = new Dictionary<string, string>() { { "Host", host }, { "Authorization", App.Settings.Authorization } };
-                using var response = await HttpClientHelper.SendRequestAsync($"https://{ipAddresses[0].ToString()}/GetBasePackage/{contentId}", headers: headers);
-                if (response is { IsSuccessStatusCode: true })
+                _platformPackageFetchTimes["Xbl3Token"] = DateTime.Now.AddHours(12);
+                var xbl = await XboxAuthHelper.GetXbl3TokenAsync(interactive: false);
+                if (!string.IsNullOrEmpty(xbl))
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    try
+                    App.Settings.Authorization = xbl;
+                    SettingsManager.Save(App.Settings);
+                }
+                else
+                {
+                    File.Delete(MsalTokenCacheHelper.CachePath);
+                    if(File.Exists(MsalTokenCacheHelper.KeyPath))
+                        File.Delete(MsalTokenCacheHelper.KeyPath);
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(App.Settings.Authorization))
+            {
+                const string host = "packagespc.xboxlive.com";
+                var ipAddresses = App.Settings.IsDoHEnabled
+                    ? await DnsHelper.ResolveDohAsync(host, DnsHelper.CurrentDoH)
+                    : await DnsHelper.ResolveDnsAsync(host, Ioc.Default.GetRequiredService<ServiceViewModel>().DnsIp);
+                if (ipAddresses?.Count > 0)
+                {
+                    var headers = new Dictionary<string, string>()
+                        { { "Host", host }, { "Authorization", App.Settings.Authorization } };
+                    using var response = await HttpClientHelper.SendRequestAsync(
+                        $"https://{ipAddresses[0].ToString()}/GetBasePackage/{contentId}", headers: headers);
+                    if (response is { IsSuccessStatusCode: true })
                     {
-                        var doc = JsonDocument.Parse(json);
-                        var root = doc.RootElement;
-                        var packageFiles = root.GetProperty("PackageFiles").EnumerateArray();
-                        var matchedPackageFile = packageFiles.FirstOrDefault(x =>
+                        var json = await response.Content.ReadAsStringAsync();
+                        try
                         {
-                            var url = x.GetProperty("RelativeUrl").GetString();
-                            var ext = Path.GetExtension(url)?.ToLowerInvariant();
-                            return ext != ".phf" && ext != ".xsp";
-                        });
-                        if (matchedPackageFile.ValueKind != JsonValueKind.Undefined)
-                        {
-                            var gameUrl = matchedPackageFile.GetProperty("CdnRootPaths")[0].GetString()!.Replace(".xboxlive.cn", ".xboxlive.com") + matchedPackageFile.GetProperty("RelativeUrl").GetString();
-                            var version = new Version(RegexHelper.GetVersion().Match(gameUrl).Value);
-                            var fileSize = matchedPackageFile.GetProperty("FileSize").GetInt64();
-
-                            platformDownload.Outdated = false;
-                            platformDownload.FileSize = fileSize;
-                            platformDownload.Url = gameUrl;
-                            platformDownload.Display = Path.GetFileName(gameUrl);
-
-                            var update = false;
-                            if (XboxGameManager.Dictionary.TryGetValue(platformDownload.Key, out var xboxGame))
+                            var doc = JsonDocument.Parse(json);
+                            var root = doc.RootElement;
+                            var packageFiles = root.GetProperty("PackageFiles").EnumerateArray();
+                            var matchedPackageFile = packageFiles.FirstOrDefault(x =>
                             {
-                                if (version > xboxGame.Version)
+                                var url = x.GetProperty("RelativeUrl").GetString();
+                                var ext = Path.GetExtension(url)?.ToLowerInvariant();
+                                return ext != ".phf" && ext != ".xsp";
+                            });
+                            if (matchedPackageFile.ValueKind != JsonValueKind.Undefined)
+                            {
+                                var gameUrl =
+                                    matchedPackageFile.GetProperty("CdnRootPaths")[0].GetString()!.Replace(
+                                        ".xboxlive.cn",
+                                        ".xboxlive.com") + matchedPackageFile.GetProperty("RelativeUrl").GetString();
+                                var version = new Version(RegexHelper.GetVersion().Match(gameUrl).Value);
+                                var fileSize = matchedPackageFile.GetProperty("FileSize").GetInt64();
+
+                                platformDownload.Outdated = false;
+                                platformDownload.FileSize = fileSize;
+                                platformDownload.Url = gameUrl;
+                                platformDownload.Display = Path.GetFileName(gameUrl);
+
+                                var update = false;
+                                if (XboxGameManager.Dictionary.TryGetValue(platformDownload.Key, out var xboxGame))
                                 {
-                                    xboxGame.Version = version;
-                                    xboxGame.FileSize = fileSize;
-                                    xboxGame.Url = gameUrl;
+                                    if (version > xboxGame.Version)
+                                    {
+                                        xboxGame.Version = version;
+                                        xboxGame.FileSize = fileSize;
+                                        xboxGame.Url = gameUrl;
+                                        update = true;
+                                    }
+                                }
+                                else
+                                {
+                                    xboxGame = new XboxGameManager.Product
+                                    {
+                                        Version = version,
+                                        FileSize = fileSize,
+                                        Url = gameUrl
+                                    };
                                     update = true;
                                 }
-                            }
-                            else
-                            {
-                                xboxGame = new XboxGameManager.Product
+
+                                if (update)
                                 {
-                                    Version = version,
-                                    FileSize = fileSize,
-                                    Url = gameUrl
-                                };
-                                update = true;
-                            }
-                            if (update)
-                            {
-                                XboxGameManager.Dictionary.AddOrUpdate(platformDownload.Key, xboxGame, (_, _) => xboxGame);
-                                _ = XboxGameManager.SaveAsync();
-                                _ = HttpClientHelper.GetStringContentAsync(UpdateService.Website + "/Game/AddGameUrl?url=" + HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: "XboxDownload");
+                                    XboxGameManager.Dictionary.AddOrUpdate(platformDownload.Key, xboxGame,
+                                        (_, _) => xboxGame);
+                                    _ = XboxGameManager.SaveAsync();
+                                    _ = HttpClientHelper.GetStringContentAsync(
+                                        UpdateService.Website + "/Game/AddGameUrl?url=" +
+                                        HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: "XboxDownload");
+                                }
                             }
                         }
+                        catch
+                        {
+                            // ignored
+                        }
                     }
-                    catch
+                    else if (response?.StatusCode == HttpStatusCode.Unauthorized ||
+                             response?.StatusCode == HttpStatusCode.Forbidden ||
+                             response?.StatusCode == HttpStatusCode.ServiceUnavailable)
                     {
-                        // ignored
+                        App.Settings.Authorization = string.Empty;
+                        SettingsManager.Save(App.Settings);
                     }
-                }
-                else if (response?.StatusCode == HttpStatusCode.Unauthorized || response?.StatusCode == HttpStatusCode.Forbidden || response?.StatusCode == HttpStatusCode.ServiceUnavailable)
-                {
-                    App.Settings.Authorization = string.Empty;
-                    SettingsManager.Save(App.Settings);
                 }
             }
         }
@@ -1216,10 +1247,7 @@ public partial class StoreViewModel : ObservableObject
 
         if (string.IsNullOrEmpty(App.Settings.Authorization))
         {
-            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-            var xbl = await XboxAuthHelper.GetXbl3TokenAsync(
-                interactive: false,
-                cancellationToken: cts.Token);
+            var xbl = await XboxAuthHelper.GetXbl3TokenAsync(true);
             
             if (string.IsNullOrEmpty(xbl)) return;
 

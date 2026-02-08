@@ -1,8 +1,10 @@
-﻿using Microsoft.Identity.Client;
+﻿using System;
+using Microsoft.Identity.Client;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using XboxDownload.Helpers.Security;
 
 namespace XboxDownload.Helpers.Network;
 
@@ -14,34 +16,41 @@ public static class XboxAuthHelper
 
     private static readonly string[] Scopes = ["XboxLive.signin"];
 
-    public static async Task<string> GetXbl3TokenAsync(
-        bool interactive = false,
-        CancellationToken cancellationToken = default)
+    public static async Task<string> GetXbl3TokenAsync(bool interactive = false)
     {
+        var cancellationToken = (new CancellationTokenSource(TimeSpan.FromSeconds(30))).Token;
+        
         var app = PublicClientApplicationBuilder
             .Create(ClientId)
             .WithAuthority(Authority)
             .WithDefaultRedirectUri()
             .Build();
-        
+
+        // Enable serializable token cache
+        MsalTokenCacheHelper.EnableSerialization(app.UserTokenCache);
+
         AuthenticationResult result;
         
         try
         {
             var account = (await app.GetAccountsAsync()).FirstOrDefault();
 
-            if (account != null && !interactive)
+            if (account != null)
             {
                 result = await app
                     .AcquireTokenSilent(Scopes, account)
                     .ExecuteAsync(cancellationToken);
             }
-            else
+            else if(interactive)
             {
                 result = await app
                     .AcquireTokenInteractive(Scopes)
                     .WithPrompt(Prompt.SelectAccount)
                     .ExecuteAsync(cancellationToken);
+            }
+            else
+            {
+                return string.Empty;
             }
         }
         catch 
@@ -52,7 +61,7 @@ public static class XboxAuthHelper
         var msaAccessToken = result.AccessToken;
         
         // 1️、Xbox Live User Token
-        var json = await HttpClientHelper.GetStringContentAsync(
+        var xboxText = await HttpClientHelper.GetStringContentAsync(
             "https://user.auth.xboxlive.com/user/authenticate",
             method: "POST",
             postData: JsonSerializer.Serialize(new
@@ -69,7 +78,7 @@ public static class XboxAuthHelper
             contentType: "application/json",
             token: cancellationToken);
         
-        using var xboxJson = JsonDocument.Parse(json);
+        using var xboxJson = JsonDocument.Parse(xboxText);
         
         if (!xboxJson.RootElement.TryGetProperty("Token", out var xboxTokenProp))
             return string.Empty;
