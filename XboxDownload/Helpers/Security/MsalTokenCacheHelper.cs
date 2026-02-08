@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -169,9 +170,28 @@ public static class MsalTokenCacheHelper
     {
         var raw = string.Join("|",
             Environment.MachineName,
-            Environment.OSVersion.VersionString,
-            Environment.ProcessorCount);
-
+            Environment.ProcessorCount,
+            GetTotalMemoryMb(),
+            RuntimeInformation.ProcessArchitecture,
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "win" :
+            RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? "mac" : "linux");
+        
         return SHA256.HashData(Encoding.UTF8.GetBytes(raw));
+    }
+    
+    private static long GetTotalMemoryMb()
+    {
+        try
+        {
+            var bytes = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes;
+            if (bytes <= 0)
+                return 0;
+
+            return bytes / (1024 * 1024); // MB
+        }
+        catch
+        {
+            return 0;
+        }
     }
 }
