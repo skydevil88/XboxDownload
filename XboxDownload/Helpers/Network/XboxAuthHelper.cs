@@ -14,36 +14,40 @@ public static class XboxAuthHelper
 
     private const string Authority = "https://login.microsoftonline.com/consumers";
 
-    private static readonly string[] Scopes = ["XboxLive.signin"];
+    private static readonly string[] Scopes = ["XboxLive.signin", "offline_access"];
+
+    private static readonly IPublicClientApplication App =
+    PublicClientApplicationBuilder
+        .Create(ClientId)
+        .WithAuthority(Authority)
+        .WithDefaultRedirectUri()
+        .Build();
+
+    static XboxAuthHelper()
+    {
+        MsalTokenCacheHelper.EnableSerialization(App.UserTokenCache);
+    }
 
     public static async Task<string> GetXbl3TokenAsync(bool interactive = false)
     {
-        var cancellationToken = (new CancellationTokenSource(TimeSpan.FromSeconds(30))).Token;
-
-        var app = PublicClientApplicationBuilder
-            .Create(ClientId)
-            .WithAuthority(Authority)
-            .WithDefaultRedirectUri()
-            .Build();
-
-        // Enable serializable token cache
-        MsalTokenCacheHelper.EnableSerialization(app.UserTokenCache);
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        var cancellationToken = cts.Token;
 
         AuthenticationResult result;
 
         try
         {
-            var account = (await app.GetAccountsAsync()).FirstOrDefault();
+            var account = (await App.GetAccountsAsync()).FirstOrDefault();
 
             if (account != null)
             {
-                result = await app
+                result = await App
                     .AcquireTokenSilent(Scopes, account)
                     .ExecuteAsync(cancellationToken);
             }
             else if (interactive)
             {
-                result = await app
+                result = await App
                     .AcquireTokenInteractive(Scopes)
                     .WithPrompt(Prompt.SelectAccount)
                     .ExecuteAsync(cancellationToken);
@@ -53,8 +57,17 @@ public static class XboxAuthHelper
                 return string.Empty;
             }
         }
-        catch
+        catch (MsalUiRequiredException)
         {
+            return string.Empty;
+        }
+        catch (OperationCanceledException)
+        {
+            return string.Empty;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
             return string.Empty;
         }
 
