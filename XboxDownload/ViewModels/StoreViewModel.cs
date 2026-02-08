@@ -939,7 +939,7 @@ public partial class StoreViewModel : ObservableObject
                 else platformDownload.Outdated = false;
             }
         }
-        
+
         if ((string.IsNullOrEmpty(platformDownload.Url) || platformDownload.Outdated)
             && platformDownload.Platform is PlatformType.XboxOne or PlatformType.WindowsPc)
         {
@@ -955,11 +955,11 @@ public partial class StoreViewModel : ObservableObject
                 else
                 {
                     File.Delete(MsalTokenCacheHelper.CachePath);
-                    if(File.Exists(MsalTokenCacheHelper.KeyPath))
+                    if (File.Exists(MsalTokenCacheHelper.KeyPath))
                         File.Delete(MsalTokenCacheHelper.KeyPath);
                 }
             }
-            
+
             if (!string.IsNullOrEmpty(App.Settings.Authorization))
             {
                 const string host = "packagespc.xboxlive.com";
@@ -1248,7 +1248,7 @@ public partial class StoreViewModel : ObservableObject
         if (string.IsNullOrEmpty(App.Settings.Authorization))
         {
             var xbl = await XboxAuthHelper.GetXbl3TokenAsync(true);
-            
+
             if (string.IsNullOrEmpty(xbl)) return;
 
             App.Settings.Authorization = xbl;
@@ -1257,7 +1257,7 @@ public partial class StoreViewModel : ObservableObject
         platformDownload?.Display = ResourceHelper.GetString("Store.FetchingDownloadLink");
         await GetGamePackageAsync(platformDownload!, platformDownload!.ContentId);
     }
-    
+
 
     [GeneratedRegex(@"P1=(\d+)")]
     private static partial Regex ExpireLinkRegex();

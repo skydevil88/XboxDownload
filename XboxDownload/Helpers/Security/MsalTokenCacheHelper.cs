@@ -68,7 +68,7 @@ public static class MsalTokenCacheHelper
             var data = Encrypt(plain);
 
             File.WriteAllBytes(CachePath, data);
-            
+
             if (!OperatingSystem.IsWindows())
                 _ = PathHelper.FixOwnershipAsync(CachePath);
         }
@@ -131,7 +131,7 @@ public static class MsalTokenCacheHelper
 
         var key = RandomNumberGenerator.GetBytes(32); // 256-bit
         File.WriteAllBytes(KeyPath, key);
-        
+
         if (!OperatingSystem.IsWindows())
             _ = PathHelper.FixOwnershipAsync(CachePath);
 

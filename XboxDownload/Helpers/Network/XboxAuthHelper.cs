@@ -19,7 +19,7 @@ public static class XboxAuthHelper
     public static async Task<string> GetXbl3TokenAsync(bool interactive = false)
     {
         var cancellationToken = (new CancellationTokenSource(TimeSpan.FromSeconds(30))).Token;
-        
+
         var app = PublicClientApplicationBuilder
             .Create(ClientId)
             .WithAuthority(Authority)
@@ -30,7 +30,7 @@ public static class XboxAuthHelper
         MsalTokenCacheHelper.EnableSerialization(app.UserTokenCache);
 
         AuthenticationResult result;
-        
+
         try
         {
             var account = (await app.GetAccountsAsync()).FirstOrDefault();
@@ -41,7 +41,7 @@ public static class XboxAuthHelper
                     .AcquireTokenSilent(Scopes, account)
                     .ExecuteAsync(cancellationToken);
             }
-            else if(interactive)
+            else if (interactive)
             {
                 result = await app
                     .AcquireTokenInteractive(Scopes)
@@ -53,13 +53,13 @@ public static class XboxAuthHelper
                 return string.Empty;
             }
         }
-        catch 
+        catch
         {
             return string.Empty;
         }
-        
+
         var msaAccessToken = result.AccessToken;
-        
+
         // 1️、Xbox Live User Token
         var xboxText = await HttpClientHelper.GetStringContentAsync(
             "https://user.auth.xboxlive.com/user/authenticate",
@@ -77,14 +77,14 @@ public static class XboxAuthHelper
             }),
             contentType: "application/json",
             token: cancellationToken);
-        
+
         using var xboxJson = JsonDocument.Parse(xboxText);
-        
+
         if (!xboxJson.RootElement.TryGetProperty("Token", out var xboxTokenProp))
             return string.Empty;
-        
+
         var xboxUserToken = xboxTokenProp.GetString();
-        
+
         // 2️、XSTS Token
         var xstsText = await HttpClientHelper.GetStringContentAsync(
             "https://xsts.auth.xboxlive.com/xsts/authorize",
@@ -101,21 +101,21 @@ public static class XboxAuthHelper
             }),
             contentType: "application/json",
             token: cancellationToken);
-        
+
         using var xstsJson = JsonDocument.Parse(xstsText);
-        
+
         // Important: XSTS errors do NOT include a Token field
         if (!xstsJson.RootElement.TryGetProperty("Token", out var tokenProp))
             return string.Empty;
-        
+
         var xstsToken = tokenProp.GetString()!;
-        
+
         var uhs = xstsJson.RootElement
             .GetProperty("DisplayClaims")
             .GetProperty("xui")[0]
             .GetProperty("uhs")
             .GetString();
-        
+
         return $"XBL3.0 x={uhs};{xstsToken}";
     }
 }
