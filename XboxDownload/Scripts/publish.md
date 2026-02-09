@@ -78,6 +78,5 @@ Scripts/
   dotnet restore
   ```
 - macOS 上执行 arm64 构建请确认未开启 Rosetta 模拟。
-- 若在 macOS 上运行 `osx-arm64` 版本失败但 `osx-x64` 正常，建议使用 `osx-x64` 兼容构建。
 
 ---

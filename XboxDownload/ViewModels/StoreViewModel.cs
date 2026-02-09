@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 using System.Web;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
-using XboxDownload.Helpers.Security;
 using XboxDownload.Helpers.UI;
 using XboxDownload.Helpers.Utilities;
 using XboxDownload.Models;
@@ -943,7 +942,7 @@ public partial class StoreViewModel : ObservableObject
         if ((string.IsNullOrEmpty(platformDownload.Url) || platformDownload.Outdated)
             && platformDownload.Platform is PlatformType.XboxOne or PlatformType.WindowsPc)
         {
-            if (File.Exists(MsalTokenCacheHelper.CachePath) && (!_platformPackageFetchTimes.TryGetValue("Xbl3Token", out var xbl3TimeOut) || DateTime.Compare(xbl3TimeOut, DateTime.Now) < 0))
+            if (!_platformPackageFetchTimes.TryGetValue("Xbl3Token", out var xbl3TimeOut) || DateTime.Compare(xbl3TimeOut, DateTime.Now) < 0)
             {
                 _platformPackageFetchTimes["Xbl3Token"] = DateTime.Now.AddHours(12);
                 var xbl = await XboxAuthHelper.GetXbl3TokenAsync(interactive: false);

@@ -121,7 +121,7 @@ public static class XboxAuthHelper
         if (!xstsJson.RootElement.TryGetProperty("Token", out var tokenProp))
             return string.Empty;
 
-        var xstsToken = tokenProp.GetString()!;
+        var xstsToken = tokenProp.GetString();
 
         var uhs = xstsJson.RootElement
             .GetProperty("DisplayClaims")

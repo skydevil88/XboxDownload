@@ -14,7 +14,7 @@ public static class MsalTokenCacheHelper
 {
     private static readonly Lock FileLock = new();
 
-    public static readonly string CachePath =
+    private static readonly string CachePath =
         PathHelper.GetLocalFilePath("msal_cache.bin");
 
     private static readonly string KeyPath =

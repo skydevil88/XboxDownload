@@ -41,12 +41,12 @@ public partial class ServiceViewModel : ObservableObject
     public readonly string CertDomainFilePath = PathHelper.GetLocalFilePath("CertDomainMapping.txt");
 
     public readonly DnsConnectionListener DnsConnectionListener;
-    public readonly TcpConnectionListener TcpConnectionListener;
+    private readonly TcpConnectionListener _tcpConnectionListener;
 
     public ServiceViewModel()
     {
         DnsConnectionListener = new DnsConnectionListener(this);
-        TcpConnectionListener = new TcpConnectionListener(this);
+        _tcpConnectionListener = new TcpConnectionListener(this);
 
         var adapters = NetworkAdapterHelper.GetValidAdapters();
         foreach (var adapter in adapters)
@@ -435,7 +435,7 @@ public partial class ServiceViewModel : ObservableObject
 
             if (IsSystemSleepPrevented) SystemSleepHelper.PreventSleep(false);
 
-            await TcpConnectionListener.GenerateServerCertificate();
+            await _tcpConnectionListener.GenerateServerCertificate();
 
             string errDnsMessage = string.Empty, errTcpMessage = string.Empty;
             var tasks = new List<Task>();
@@ -450,7 +450,7 @@ public partial class ServiceViewModel : ObservableObject
             {
                 tasks.Add(Task.Run(() =>
                 {
-                    errTcpMessage = TcpConnectionListener.Start();
+                    errTcpMessage = _tcpConnectionListener.Start();
                 }, ListeningToken));
             }
             await Task.WhenAll(tasks);
