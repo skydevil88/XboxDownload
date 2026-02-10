@@ -348,7 +348,7 @@ public partial class StoreViewModel : ObservableObject
             foreach (var suggest in resultSets.EnumerateArray().Select(resultSet => resultSet.GetProperty("Suggests")).SelectMany(suggests => suggests.EnumerateArray()))
             {
                 string? title = null, imageUrl = null, bigCatalogId = null;
-                if (suggest.TryGetProperty("Title", out var titleProperty))
+                if (suggest.TryGetProperty(nameof(Title), out var titleProperty))
                     title = titleProperty.GetString();
                 if (suggest.TryGetProperty("ImageUrl", out var imageUrlProperty))
                     imageUrl = imageUrlProperty.GetString();
@@ -390,17 +390,22 @@ public partial class StoreViewModel : ObservableObject
 
     private Market? _currentProductMarket;
 
+    private CancellationTokenSource? _ctsQuery;
+
     [RelayCommand]
     private async Task QueryAsync()
     {
-        if (string.IsNullOrWhiteSpace(QueryUrl) || IsLoding) return;
-        IsLoding = true;
+        if (string.IsNullOrWhiteSpace(QueryUrl)) return;
+
+        // ReSharper disable once MethodHasAsyncOverload
+        _ctsQuery?.Cancel();
+        _ctsQuery = new CancellationTokenSource();
+        var token = _ctsQuery.Token;
 
         var result = RegexHelper.ExtractProductIdRegex().Match(QueryUrl);
         var productId = result.Success ? result.Groups["productId"].Value.ToUpperInvariant() : string.Empty;
         if (string.IsNullOrEmpty(productId))
         {
-            IsLoding = false;
             await DialogHelper.ShowInfoDialogAsync(
                 ResourceHelper.GetString("Store.InvalidUrlOrProductIdTitle"),
                 ResourceHelper.GetString("Store.InvalidUrlOrProductIdMessage"),
@@ -420,14 +425,16 @@ public partial class StoreViewModel : ObservableObject
 
         _currentProductMarket = SelectedMarket;
         var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={productId}&market={_currentProductMarket?.Code}&languages={_currentProductMarket?.Language},neutral&MS-CV=DGU1mcuYo0WMMp+F.1";
-        var responseString = await HttpClientHelper.GetStringContentAsync(url);
+        var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token);
         if (string.IsNullOrEmpty(responseString.Trim()))
         {
-            IsLoding = false;
-            await DialogHelper.ShowInfoDialogAsync(
-                ResourceHelper.GetString("Store.CannotConnectServerTitle"),
-                ResourceHelper.GetString("Store.CannotConnectServerMessage"),
-                Icon.Error);
+            if (!token.IsCancellationRequested)
+            {
+                await DialogHelper.ShowInfoDialogAsync(
+                    ResourceHelper.GetString("Store.CannotConnectServerTitle"),
+                    ResourceHelper.GetString("Store.CannotConnectServerMessage"),
+                    Icon.Error);
+            }
             return;
         }
 
@@ -437,7 +444,6 @@ public partial class StoreViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            IsLoding = false;
             await DialogHelper.ShowInfoDialogAsync(
                 ResourceHelper.GetString("Store.DataAnalysisFailedTitle"),
                 string.Format(ResourceHelper.GetString("Store.DataAnalysisFailedMessage"), ex.Message),
@@ -447,10 +453,8 @@ public partial class StoreViewModel : ObservableObject
 
         if (GameData is { Products.Count: >= 1 })
         {
-            await StoreParseAsync(0);
+            await StoreParseAsync(0, token);
         }
-
-        IsLoding = false;
     }
 
     public Game? GameData;
@@ -464,7 +468,7 @@ public partial class StoreViewModel : ObservableObject
     private int _selectedBundledIndex = -1;
 
     [ObservableProperty]
-    private bool _isLoding, _bundledLoaded, _productLoaded, _isEnablePriceComparison;
+    private bool _bundledLoaded, _productLoaded, _isEnablePriceComparison;
 
     [ObservableProperty]
     private Bundled? _selectedBundled;
@@ -502,7 +506,7 @@ public partial class StoreViewModel : ObservableObject
         ExchangeRates.Clear();
     }
 
-    public async Task StoreParseAsync(int index)
+    public async Task StoreParseAsync(int index, CancellationToken token = default)
     {
         if (GameData == null || GameData.Products.Count - 1 < index) return;
 
@@ -570,16 +574,16 @@ public partial class StoreViewModel : ObservableObject
                                                         platformDownload.Display += $" ({ResourceHelper.GetString("Store.UpdateAvailable")})";
                                                         tasks.Add(Task.Run(async () =>
                                                         {
-                                                            await GetGamePackageAsync(platformDownload, contentId);
-                                                        }));
+                                                            await GetGamePackageAsync(platformDownload, contentId, token);
+                                                        }, token));
                                                     }
                                                 }
                                                 else
                                                 {
                                                     tasks.Add(Task.Run(async () =>
                                                     {
-                                                        await GetGamePackageAsync(platformDownload, contentId);
-                                                    }));
+                                                        await GetGamePackageAsync(platformDownload, contentId, token);
+                                                    }, token));
                                                 }
                                                 platformDownloadList.Add(platformDownload);
                                             }
@@ -608,16 +612,16 @@ public partial class StoreViewModel : ObservableObject
                                                         platformDownload.Display += $" ({ResourceHelper.GetString("Store.UpdateAvailable")})";
                                                         tasks.Add(Task.Run(async () =>
                                                         {
-                                                            await GetGamePackageAsync(platformDownload, contentId);
-                                                        }));
+                                                            await GetGamePackageAsync(platformDownload, contentId, token);
+                                                        }, token));
                                                     }
                                                 }
                                                 else
                                                 {
                                                     tasks.Add(Task.Run(async () =>
                                                     {
-                                                        await GetGamePackageAsync(platformDownload, contentId);
-                                                    }));
+                                                        await GetGamePackageAsync(platformDownload, contentId, token);
+                                                    }, token));
                                                 }
 
                                                 platformDownloadList.Add(platformDownload);
@@ -686,16 +690,16 @@ public partial class StoreViewModel : ObservableObject
                                                         platformDownload.Display += $" ({ResourceHelper.GetString("Store.UpdateAvailable")})";
                                                         tasks.Add(Task.Run(async () =>
                                                         {
-                                                            await GetGamePackageAsync(platformDownload, contentId);
-                                                        }));
+                                                            await GetGamePackageAsync(platformDownload, contentId, token);
+                                                        }, token));
                                                     }
                                                 }
                                                 else
                                                 {
                                                     tasks.Add(Task.Run(async () =>
                                                     {
-                                                        await GetGamePackageAsync(platformDownload, contentId);
-                                                    }));
+                                                        await GetGamePackageAsync(platformDownload, contentId, token);
+                                                    }, token));
                                                 }
                                                 platformDownloadList.Add(platformDownload);
                                             }
@@ -766,8 +770,8 @@ public partial class StoreViewModel : ObservableObject
                         {
                             tasks.Add(Task.Run(async () =>
                             {
-                                await GetAppPackageAsync(wuCategoryId, app);
-                            }));
+                                await GetAppPackageAsync(wuCategoryId, app, token);
+                            }, token));
                         }
 
                         PlatformDownloadInfo.AddRange(platformDownloadList.OrderBy(p => p.Platform));
@@ -803,7 +807,7 @@ public partial class StoreViewModel : ObservableObject
                             {
                                 Price += $", {UseCurrencyCode}: {listPrice / value:N2}, {ResourceHelper.GetString("Store.ExchangeRate")}: {(1 / value):N8}";
                             }
-                        }));
+                        }, token));
                     }
                 }
 
@@ -826,14 +830,14 @@ public partial class StoreViewModel : ObservableObject
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    using var response = await HttpClientHelper.SendRequestAsync(imageUri + "?w=177&h=177");
+                    using var response = await HttpClientHelper.SendRequestAsync(imageUri + "?w=177&h=177", token: token);
                     if (response is { IsSuccessStatusCode: true })
                     {
-                        var buffer = await response.Content.ReadAsByteArrayAsync();
+                        var buffer = await response.Content.ReadAsByteArrayAsync(token);
                         using var stream = new MemoryStream(buffer);
                         BoxArt = new Bitmap(stream);
                     }
-                }));
+                }, token));
             }
 
             if (bundledId.Count >= 1 && GameData.Products.Count == 1)
@@ -846,7 +850,7 @@ public partial class StoreViewModel : ObservableObject
                 tasks.Add(Task.Run(async () =>
                 {
                     var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={string.Join(',', bundledId.ToArray())}&market={_currentProductMarket?.Code}&languages={_currentProductMarket?.Language},neutral&MS-CV=DGU1mcuYo0WMMp+F.1";
-                    var responseString = await HttpClientHelper.GetStringContentAsync(url);
+                    var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token);
                     if (!string.IsNullOrWhiteSpace(responseString))
                     {
                         Game? gameData = null;
@@ -868,7 +872,7 @@ public partial class StoreViewModel : ObservableObject
                         }
                     }
 
-                }));
+                }, token));
             }
 
             await Task.WhenAll(tasks);
@@ -877,7 +881,7 @@ public partial class StoreViewModel : ObservableObject
 
     private readonly ConcurrentDictionary<string, DateTime> _platformPackageFetchTimes = new();
 
-    private async Task GetGamePackageAsync(PlatformDownloadItem platformDownload, string contentId)
+    private async Task GetGamePackageAsync(PlatformDownloadItem platformDownload, string contentId, CancellationToken token = default)
     {
         if (!_platformPackageFetchTimes.TryGetValue(platformDownload.Key, out var value) || DateTime.Compare(value, DateTime.Now) < 0)
         {
@@ -885,7 +889,8 @@ public partial class StoreViewModel : ObservableObject
 
             var responseString = await HttpClientHelper.GetStringContentAsync(
                 $"{UpdateService.Website}/Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}&size={platformDownload.FileSize}",
-                name: nameof(XboxDownload)
+                name: nameof(XboxDownload), 
+                token: token
             );
 
             XboxPackage.Game? game = null;
@@ -964,10 +969,10 @@ public partial class StoreViewModel : ObservableObject
                     var headers = new Dictionary<string, string>()
                         { { "Host", host }, { "Authorization", App.Settings.Authorization } };
                     using var response = await HttpClientHelper.SendRequestAsync(
-                        $"https://{ipAddresses[0].ToString()}/GetBasePackage/{contentId}", headers: headers);
+                        $"https://{ipAddresses[0]}/GetBasePackage/{contentId}", headers: headers, token: token);
                     if (response is { IsSuccessStatusCode: true })
                     {
-                        var json = await response.Content.ReadAsStringAsync();
+                        var json = await response.Content.ReadAsStringAsync(token);
                         try
                         {
                             var doc = JsonDocument.Parse(json);
@@ -1020,9 +1025,8 @@ public partial class StoreViewModel : ObservableObject
                                     XboxGameManager.Dictionary.AddOrUpdate(platformDownload.Key, xboxGame,
                                         (_, _) => xboxGame);
                                     _ = XboxGameManager.SaveAsync();
-                                    _ = HttpClientHelper.GetStringContentAsync(
-                                        UpdateService.Website + "/Game/AddGameUrl?url=" +
-                                        HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: "XboxDownload");
+                                    _ = HttpClientHelper.GetStringContentAsync(UpdateService.Website + "/Game/AddGameUrl?url=" +
+                                        HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: "XboxDownload", token: CancellationToken.None);
                                 }
                             }
                         }
@@ -1048,11 +1052,12 @@ public partial class StoreViewModel : ObservableObject
 
     private readonly ConcurrentDictionary<string, XboxPackage.AppData> _xboxAppPackage = new();
 
-    private async Task GetAppPackageAsync(string wuCategoryId, List<PlatformDownloadItem> platformDownloadList)
+    private async Task GetAppPackageAsync(string wuCategoryId, List<PlatformDownloadItem> platformDownloadList, CancellationToken token)
     {
         var responseString = await HttpClientHelper.GetStringContentAsync(
             $"{UpdateService.Website}/Game/GetAppPackage?WuCategoryId={wuCategoryId}",
-            name: nameof(XboxDownload)
+            name: nameof(XboxDownload),
+            token: token
         );
 
         XboxPackage.App? app = null;

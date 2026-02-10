@@ -106,6 +106,8 @@ function Publish-Current {
         switch ($arch) {
             "X64"   { Publish-Target "linux-x64"   "linux-x64" }
             "Arm64" { Publish-Target "linux-arm64" "linux-arm64" }
+            "X86"   { Publish-Target "linux-x86" "linux-x86" }
+            "Arm"   { Publish-Target "linux-arm" "linux-arm" }
             default { Write-Host "Unsupported Linux architecture: $arch" -ForegroundColor Red }
         }
     }

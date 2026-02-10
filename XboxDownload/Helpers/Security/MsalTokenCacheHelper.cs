@@ -171,28 +171,11 @@ public static class MsalTokenCacheHelper
         var raw = string.Join("|",
             Environment.MachineName,
             Environment.ProcessorCount,
-            GetTotalMemoryMb(),
             RuntimeInformation.ProcessArchitecture,
-            OperatingSystem.IsWindows() ? "win" :
-            OperatingSystem.IsMacOS() ? "mac" :
+            OperatingSystem.IsWindows() ? "windows" :
+            OperatingSystem.IsMacOS() ? "macos" :
             OperatingSystem.IsLinux() ? "linux" : "unknown");
 
         return SHA256.HashData(Encoding.UTF8.GetBytes(raw));
-    }
-
-    private static long GetTotalMemoryMb()
-    {
-        try
-        {
-            var bytes = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes;
-            if (bytes <= 0)
-                return 0;
-
-            return bytes / (1024 * 1024); // MB
-        }
-        catch
-        {
-            return 0;
-        }
     }
 }

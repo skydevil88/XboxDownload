@@ -127,6 +127,7 @@ publish_current() {
                 x86_64) rid="linux-x64" ;;
                 aarch64|arm64) rid="linux-arm64" ;;
                 i386|i686) rid="linux-x86" ;;
+                armv7l|arm|armhf) rid="linux-arm" ;;
                 *) echo "[ERROR] Unsupported Linux arch: $arch"; exit 1 ;;
             esac
             ;;
@@ -139,7 +140,7 @@ publish_current() {
             ;;
         MINGW*|MSYS*|CYGWIN*|Windows_NT)
             case "$arch" in
-                x86_64) rid="win-x64" ;;
+                x86_64|AMD64) rid="win-x64" ;;
                 aarch64|arm64) rid="win-arm64" ;;
                 i386|i686) rid="win-x86" ;;
                 *) echo "[ERROR] Unsupported Windows arch: $arch"; exit 1 ;;
