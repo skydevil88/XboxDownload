@@ -138,11 +138,6 @@ public class Price
     public decimal WholesalePrice { get; set; }
 }
 
-
-
-
-
-
 public partial class Bundled : ObservableObject
 {
     [ObservableProperty]
@@ -162,7 +157,7 @@ public partial class PlatformDownloadItem : ObservableObject
     public string WuCategoryId { get; init; } = "";
     public string AppVersion { get; set; } = "";
     public string FileName { get; set; } = "";
-    public long LatestSize { get; init; }
+    public long ExpectedSize { get; init; }
 
     [ObservableProperty]
     private string _display = ResourceHelper.GetString("Store.FetchingDownloadLink");
@@ -193,4 +188,3 @@ public partial class PlatformDownloadItem : ObservableObject
         OnPropertyChanged(nameof(Foreground));
     }
 }
-

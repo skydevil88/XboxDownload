@@ -397,8 +397,9 @@ public partial class StoreViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(QueryUrl)) return;
 
-        // ReSharper disable once MethodHasAsyncOverload
-        _ctsQuery?.Cancel();
+        if (_ctsQuery != null) 
+            await _ctsQuery.CancelAsync();
+        
         _ctsQuery = new CancellationTokenSource();
         var token = _ctsQuery.Token;
 
@@ -561,13 +562,13 @@ public partial class StoreViewModel : ObservableObject
                                                     Category = "Game",
                                                     Market = _currentProductMarket!.Region,
                                                     FileSize = package.MaxDownloadSizeInBytes,
-                                                    LatestSize = package.MaxDownloadSizeInBytes
+                                                    ExpectedSize = package.MaxDownloadSizeInBytes
                                                 };
                                                 if (XboxGameManager.Dictionary.TryGetValue(key, out var xboxGame))
                                                 {
                                                     platformDownload.Url = xboxGame.Url;
                                                     platformDownload.Display = Path.GetFileName(xboxGame.Url);
-                                                    if (platformDownload.LatestSize != xboxGame.FileSize)
+                                                    if (platformDownload.ExpectedSize != xboxGame.FileSize)
                                                     {
                                                         platformDownload.Outdated = true;
                                                         platformDownload.FileSize = xboxGame.FileSize;
@@ -599,13 +600,13 @@ public partial class StoreViewModel : ObservableObject
                                                     Category = "Game",
                                                     Market = _currentProductMarket!.Region,
                                                     FileSize = package.MaxDownloadSizeInBytes,
-                                                    LatestSize = package.MaxDownloadSizeInBytes
+                                                    ExpectedSize = package.MaxDownloadSizeInBytes
                                                 };
                                                 if (XboxGameManager.Dictionary.TryGetValue(key, out var xboxGame))
                                                 {
                                                     platformDownload.Url = xboxGame.Url;
                                                     platformDownload.Display = Path.GetFileName(xboxGame.Url);
-                                                    if (platformDownload.LatestSize != xboxGame.FileSize)
+                                                    if (platformDownload.ExpectedSize != xboxGame.FileSize)
                                                     {
                                                         platformDownload.Outdated = true;
                                                         platformDownload.FileSize = xboxGame.FileSize;
@@ -677,13 +678,13 @@ public partial class StoreViewModel : ObservableObject
                                                     Category = "Game",
                                                     Market = _currentProductMarket!.Region,
                                                     FileSize = package.MaxDownloadSizeInBytes,
-                                                    LatestSize = package.MaxDownloadSizeInBytes
+                                                    ExpectedSize = package.MaxDownloadSizeInBytes
                                                 };
                                                 if (XboxGameManager.Dictionary.TryGetValue(key, out var xboxGame))
                                                 {
                                                     platformDownload.Url = xboxGame.Url;
                                                     platformDownload.Display = Path.GetFileName(xboxGame.Url);
-                                                    if (platformDownload.LatestSize != xboxGame.FileSize)
+                                                    if (platformDownload.ExpectedSize != xboxGame.FileSize)
                                                     {
                                                         platformDownload.Outdated = true;
                                                         platformDownload.FileSize = xboxGame.FileSize;
@@ -888,7 +889,7 @@ public partial class StoreViewModel : ObservableObject
             _platformPackageFetchTimes[platformDownload.Key] = DateTime.Now.AddMinutes(3);
 
             var responseString = await HttpClientHelper.GetStringContentAsync(
-                $"{UpdateService.Website}/Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}&size={platformDownload.FileSize}",
+                $"{UpdateService.Website}/Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}&size={platformDownload.ExpectedSize}",
                 name: nameof(XboxDownload), 
                 token: token
             );
@@ -934,7 +935,7 @@ public partial class StoreViewModel : ObservableObject
 
                 platformDownload.Url = xboxGame.Url;
                 platformDownload.Display = Path.GetFileName(xboxGame.Url);
-                if (platformDownload.LatestSize != xboxGame.FileSize)
+                if (platformDownload.ExpectedSize != xboxGame.FileSize)
                 {
                     platformDownload.Outdated = true;
                     platformDownload.FileSize = xboxGame.FileSize;

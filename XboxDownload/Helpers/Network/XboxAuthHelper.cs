@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Identity.Client;
 using System.Linq;
 using System.Text.Json;
@@ -67,7 +68,7 @@ public static class XboxAuthHelper
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Debug.WriteLine(ex.Message);
             return string.Empty;
         }
 
