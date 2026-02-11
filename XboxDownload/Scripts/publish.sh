@@ -90,10 +90,10 @@ publish_target() {
             chmod +x "$output_dir/$dest"
         fi
 
-        # Readme.md (no exec permission)
-        src="$SCRIPT_DIR/Readme.md"
+        # README.md (no exec permission)
+        src="$SCRIPT_DIR/README.md"
         if [[ -f "$src" ]]; then
-            cp -f "$src" "$output_dir/Readme.md"
+            cp -f "$src" "$output_dir/README.md"
         fi
 
         # Set main executable

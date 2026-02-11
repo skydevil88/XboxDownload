@@ -81,7 +81,7 @@ function Publish-Target {
     # Copy extra files only for Linux/macOS
     # -------------------------------
     if ($rid -like "linux*" -or $rid -like "osx*") {
-        $files = @("Readme.md", "run_xboxdownload.sh")
+        $files = @("README.md", "run_xboxdownload.sh")
         foreach ($file in $files) {
             $src = Join-Path $PSScriptRoot $file
             if (Test-Path $src) {
