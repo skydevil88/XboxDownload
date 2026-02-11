@@ -32,6 +32,25 @@ function Clean-ReleaseDir {
 }
 
 # --------------------------------------------------
+# Menu
+# --------------------------------------------------
+function Show-Menu {
+    Write-Host "=========================================" -ForegroundColor Cyan
+    Write-Host "       XboxDownload - Publish Tool       " -ForegroundColor Cyan
+    Write-Host "=========================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "Select target to publish:"
+    Write-Host ""
+    Write-Host " 1) Publish for Current System"
+    Write-Host " 2) Publish for Windows (x64 + arm64)"
+    Write-Host " 3) Publish for macOS   (x64 + arm64)"
+    Write-Host " 4) Publish for Linux   (x64 + arm64)"
+    Write-Host " 5) Publish All (Windows, macOS, Linux)"
+    Write-Host " 6) Exit"
+    Write-Host ""
+}
+
+# --------------------------------------------------
 # Publish one target
 # --------------------------------------------------
 function Publish-Target {
@@ -40,7 +59,14 @@ function Publish-Target {
         [string]$outputFolder
     )
 
+    Write-Host ""
     $outputDir = Join-Path $outputRoot "XboxDownload-$outputFolder"
+
+    # -------------------------------
+    # Clean old directory
+    # -------------------------------
+    if (Test-Path $outputDir) { Remove-Item $outputDir -Recurse -Force }
+
     Write-Host "Publishing for $rid -> $outputDir" -ForegroundColor Yellow
 
     dotnet publish $projectFile -r $rid -o $outputDir @commonArgs
@@ -86,34 +112,47 @@ function Publish-Target {
 function Publish-Current {
     $os   = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()
+    $rid  = ""
+    $outputFolder = ""
 
+    # ---------- ѡ�� RID ----------
     if ($os -match "Windows") {
         switch ($arch) {
-            "X64"   { Publish-Target "win-x64"   "windows-x64" }
-            "Arm64" { Publish-Target "win-arm64" "windows-arm64" }
-            "X86"   { Publish-Target "win-x86"   "windows-x86" }
-            default { Write-Host "Unsupported Windows architecture: $arch" -ForegroundColor Red }
+            "X64"   { $rid = "win-x64";   $outputFolder = "windows-x64" }
+            "Arm64" { $rid = "win-arm64"; $outputFolder = "windows-arm64" }
+            "X86"   { $rid = "win-x86";   $outputFolder = "windows-x86" }
+            default { Write-Host "Unsupported Windows architecture: $arch" -ForegroundColor Red; return }
         }
     }
     elseif ($os -match "Darwin|macOS") {
         switch ($arch) {
-            "X64"   { Publish-Target "osx-x64"   "macos-x64" }
-            "Arm64" { Publish-Target "osx-arm64" "macos-arm64" }
-            default { Write-Host "Unsupported macOS architecture: $arch" -ForegroundColor Red }
+            "X64"   { $rid = "osx-x64";   $outputFolder = "macos-x64" }
+            "Arm64" { $rid = "osx-arm64"; $outputFolder = "macos-arm64" }
+            default { Write-Host "Unsupported macOS architecture: $arch" -ForegroundColor Red; return }
         }
     }
     elseif ($os -match "Linux") {
         switch ($arch) {
-            "X64"   { Publish-Target "linux-x64"   "linux-x64" }
-            "Arm64" { Publish-Target "linux-arm64" "linux-arm64" }
-            "X86"   { Publish-Target "linux-x86" "linux-x86" }
-            "Arm"   { Publish-Target "linux-arm" "linux-arm" }
-            default { Write-Host "Unsupported Linux architecture: $arch" -ForegroundColor Red }
+            "X64"   { $rid = "linux-x64";   $outputFolder = "linux-x64" }
+            "Arm64" { $rid = "linux-arm64"; $outputFolder = "linux-arm64" }
+            "X86"   { $rid = "linux-x86";   $outputFolder = "linux-x86" }
+            "Arm"   { $rid = "linux-arm";   $outputFolder = "linux-arm" }
+            default { Write-Host "Unsupported Linux architecture: $arch" -ForegroundColor Red; return }
         }
     }
     else {
         Write-Host "Unsupported OS: $os" -ForegroundColor Red
+        return
     }
+
+    Write-Host "-----------------------------------------" -ForegroundColor Cyan
+    Write-Host "Detected system  : $os" -ForegroundColor Yellow
+    Write-Host "CPU Architecture : $arch" -ForegroundColor Yellow
+    Write-Host "Target RID       : $rid" -ForegroundColor Yellow
+    Write-Host "Output folder    : XboxDownload-$outputFolder" -ForegroundColor Yellow
+    Write-Host "-----------------------------------------" -ForegroundColor Cyan
+
+    Publish-Target $rid $outputFolder
 }
 
 function Publish-Windows {
@@ -129,23 +168,6 @@ function Publish-MacOS {
 function Publish-Linux {
     Publish-Target "linux-x64"   "linux-x64"
     Publish-Target "linux-arm64" "linux-arm64"
-}
-
-# --------------------------------------------------
-# Menu
-# --------------------------------------------------
-function Show-Menu {
-    Write-Host "=========================================" -ForegroundColor Cyan
-    Write-Host "       XboxDownload - Publish Tool       " -ForegroundColor Cyan
-    Write-Host "=========================================" -ForegroundColor Cyan
-    Write-Host ""
-    Write-Host " 1) Publish for Current System"
-    Write-Host " 2) Publish for Windows (x64 + arm64)"
-    Write-Host " 3) Publish for macOS   (x64 + arm64)"
-    Write-Host " 4) Publish for Linux   (x64 + arm64)"
-    Write-Host " 5) Publish All (Windows, macOS, Linux)"
-    Write-Host " 6) Exit"
-    Write-Host ""
 }
 
 # --------------------------------------------------

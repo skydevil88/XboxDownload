@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Publishing XboxDownload..."
+echo -e "\033[96mPublishing XboxDownload...\033[0m"
 
 # --------------------------------------------------
 # Paths
@@ -28,9 +28,9 @@ COMMON_ARGS=(
 # --------------------------------------------------
 clean_release_dir() {
     if [[ -d "$OUTPUT_ROOT" ]]; then
-        echo "Cleaning Release directory: $OUTPUT_ROOT"
+        echo -e "\033[33mCleaning Release directory: $OUTPUT_ROOT\033[0m"
         rm -rf "$OUTPUT_ROOT"
-        echo "[OK] Release directory removed"
+        echo -e "\033[32m[OK] Release directory removed\033[0m"
     fi
 }
 
@@ -38,9 +38,9 @@ clean_release_dir() {
 # Menu
 # --------------------------------------------------
 print_menu() {
-    echo "========================================="
-    echo "       XboxDownload - Publish Tool       "
-    echo "========================================="
+    echo -e "\033[96m=========================================\033[0m"
+    echo -e "\033[96m       XboxDownload - Publish Tool       \033[0m"
+    echo -e "\033[96m=========================================\033[0m"
     echo
     echo "Select target to publish:"
     echo
@@ -58,23 +58,23 @@ print_menu() {
 # --------------------------------------------------
 publish_target() {
     local rid="$1"
-    local output_rid="$rid"
-
-    if [[ "$rid" == win-* ]]; then
-        output_rid="windows-${rid#win-}"
-    elif [[ "$rid" == osx-* ]]; then
-        output_rid="macos-${rid#osx-}"
-    elif [[ "$rid" == linux-* ]]; then
-        output_rid="linux-${rid#linux-}"
-    fi
+    local output_rid="$2"
 
     local output_dir="$OUTPUT_ROOT/XboxDownload-$output_rid"
+
+    # -------------------------------
+    # Clean old directory
+    # -------------------------------
+    if [[ -d "$output_dir" ]]; then
+        rm -rf "$output_dir"
+    fi
+
     mkdir -p "$output_dir"
 
     echo
-    echo "Publishing for $rid -> $output_dir"
+    echo -e "\033[93mPublishing for $rid -> $output_dir\033[0m"
     dotnet publish "$PROJECT_FILE" -r "$rid" -o "$output_dir" "${COMMON_ARGS[@]}"
-    echo "[OK] Publish success: $output_dir"
+    echo -e "\033[92m[OK] Publish success: $output_dir\033[0m"
 
     # -------------------------------
     # Copy extra files for Linux/macOS
@@ -108,41 +108,43 @@ publish_target() {
     # -------------------------------
     zip_file="$output_dir.zip"
     [[ -f "$zip_file" ]] && rm -f "$zip_file"
-    echo "Creating ZIP: $zip_file"
+    echo -e "\033[96mCreating ZIP: $zip_file\033[0m"
     (cd "$OUTPUT_ROOT" && zip -r "$(basename "$zip_file")" "XboxDownload-$output_rid" > /dev/null)
-    echo "[OK] ZIP created: $zip_file"
+    echo -e "\033[92m[OK] ZIP created: $zip_file\033[0m"
 }
 
 # --------------------------------------------------
 # Publish current system
 # --------------------------------------------------
 publish_current() {
-    local os arch rid
+    local os arch rid output_folder
     os="$(uname -s)"
     arch="$(uname -m)"
+    rid=""
+    output_folder=""
 
     case "$os" in
         Linux)
             case "$arch" in
-                x86_64) rid="linux-x64" ;;
-                aarch64|arm64) rid="linux-arm64" ;;
-                i386|i686) rid="linux-x86" ;;
-                armv7l|arm|armhf) rid="linux-arm" ;;
+                x86_64) rid="linux-x64";           output_folder="linux-x64" ;;
+                aarch64|arm64) rid="linux-arm64";  output_folder="linux-arm64" ;;
+                i386|i686) rid="linux-x86";        output_folder="linux-x86" ;;
+                armv7l|arm|armhf) rid="linux-arm"; output_folder="linux-arm" ;;
                 *) echo "[ERROR] Unsupported Linux arch: $arch"; exit 1 ;;
             esac
             ;;
         Darwin)
             case "$arch" in
-                x86_64) rid="osx-x64" ;;
-                arm64)  rid="osx-arm64" ;;
+                x86_64) rid="osx-x64";   output_folder="macos-x64" ;;
+                arm64)  rid="osx-arm64"; output_folder="macos-arm64" ;;
                 *) echo "[ERROR] Unsupported macOS arch: $arch"; exit 1 ;;
             esac
             ;;
         MINGW*|MSYS*|CYGWIN*|Windows_NT)
             case "$arch" in
-                x86_64|AMD64) rid="win-x64" ;;
-                aarch64|arm64) rid="win-arm64" ;;
-                i386|i686) rid="win-x86" ;;
+                x86_64|AMD64) rid="win-x64";    output_folder="windows-x64" ;;
+                aarch64|arm64) rid="win-arm64"; output_folder="windows-arm64" ;;
+                i386|i686) rid="win-x86";       output_folder="windows-x86" ;;
                 *) echo "[ERROR] Unsupported Windows arch: $arch"; exit 1 ;;
             esac
             ;;
@@ -150,24 +152,29 @@ publish_current() {
             echo "[ERROR] Unsupported OS: $os"; exit 1 ;;
     esac
 
-    echo "Detected system: $os / $arch"
-    echo "Using RID: $rid"
-    publish_target "$rid"
+    echo -e "\033[96m-----------------------------------------\033[0m"
+    echo -e "\033[93mDetected system  : $os\033[0m"
+    echo -e "\033[93mCPU Architecture : $arch\033[0m"
+    echo -e "\033[93mTarget RID       : $rid\033[0m"
+    echo -e "\033[93mOutput folder    : XboxDownload-$output_folder\033[0m"
+    echo -e "\033[96m-----------------------------------------\033[0m"
+
+    publish_target "$rid" "$output_folder"
 }
 
 publish_windows() {
-    publish_target "win-x64"
-    publish_target "win-arm64"
+    publish_target "win-x64"   "windows-x64"
+    publish_target "win-arm64" "windows-arm64"
 }
 
 publish_macos() {
-    publish_target "osx-x64"
-    publish_target "osx-arm64"
+    publish_target "osx-x64"   "macos-x64"
+    publish_target "osx-arm64" "macos-arm64"
 }
 
 publish_linux() {
-    publish_target "linux-x64"
-    publish_target "linux-arm64"
+    publish_target "linux-x64"   "linux-x64"
+    publish_target "linux-arm64" "linux-arm64"
 }
 
 # --------------------------------------------------
@@ -177,6 +184,8 @@ while true; do
     print_menu
     read -rp "Enter your choice [1-6] (Default: 1): " choice
     choice="${choice:-1}"
+
+    start_time=$(date +%s.%N)
 
     case "$choice" in
         1) publish_current ;;
@@ -193,6 +202,9 @@ while true; do
         *) echo "Invalid choice. Please enter 1-6." ;;
     esac
 
+    end_time=$(date +%s.%N)
+    elapsed=$(echo "$end_time - $start_time" | bc)
+
+    printf "\033[0;96mDone in %.2fs\033[0m\n" "$elapsed"
     echo
-    read -rp "Press Enter to return to menu..." _
 done
