@@ -94,16 +94,35 @@ function Publish-Target {
     }
 
     # -------------------------------
-    # Create ZIP
+    # Create ZIP (tar preferred, fallback to Compress-Archive)
     # -------------------------------
     $zipPath = "$outputDir.zip"
     if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 
     Write-Host "Creating ZIP: $zipPath" -ForegroundColor Cyan
     Push-Location $outputRoot
-    Compress-Archive -Path "XboxDownload-$outputFolder" -DestinationPath $zipPath -Force
+
+    $tarCmd = Get-Command "tar.exe" -ErrorAction SilentlyContinue
+
+    if ($tarCmd) {
+        # ---- Use tar if available ----
+        & tar.exe -a -cf "$outputDir.zip" "XboxDownload-$outputFolder"
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "[OK] ZIP created using tar.exe: $zipPath" -ForegroundColor Green
+        } else {
+            Write-Host "[ERROR] tar.exe failed, trying Compress-Archive..." -ForegroundColor Yellow
+            Compress-Archive -Path "XboxDownload-$outputFolder" -DestinationPath $zipPath -Force
+            Write-Host "[OK] ZIP created using Compress-Archive: $zipPath" -ForegroundColor Green
+        }
+    }
+    else {
+        # ---- Fallback ----
+        Write-Host "[INFO] tar.exe not found, using Compress-Archive" -ForegroundColor Yellow
+        Compress-Archive -Path "XboxDownload-$outputFolder" -DestinationPath $zipPath -Force
+        Write-Host "[OK] ZIP created using Compress-Archive: $zipPath" -ForegroundColor Green
+    }
+
     Pop-Location
-    Write-Host "[OK] ZIP created: $zipPath" -ForegroundColor Green
 }
 
 # --------------------------------------------------
@@ -149,7 +168,7 @@ function Publish-Current {
     Write-Host "Detected system  : $os" -ForegroundColor Yellow
     Write-Host "CPU Architecture : $arch" -ForegroundColor Yellow
     Write-Host "Target RID       : $rid" -ForegroundColor Yellow
-    Write-Host "Output folder    : XboxDownload-$outputFolder" -ForegroundColor Yellow
+    Write-Host "Output folder    : .\Release\XboxDownload-$($outputFolder)" -ForegroundColor Yellow
     Write-Host "-----------------------------------------" -ForegroundColor Cyan
 
     Publish-Target $rid $outputFolder

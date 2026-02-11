@@ -156,7 +156,7 @@ publish_current() {
     echo -e "\033[93mDetected system  : $os\033[0m"
     echo -e "\033[93mCPU Architecture : $arch\033[0m"
     echo -e "\033[93mTarget RID       : $rid\033[0m"
-    echo -e "\033[93mOutput folder    : XboxDownload-$output_folder\033[0m"
+	  echo -e "\033[93mOutput folder    : ./Release/XboxDownload-${output_folder}\033[0m"
     echo -e "\033[96m-----------------------------------------\033[0m"
 
     publish_target "$rid" "$output_folder"
@@ -203,8 +203,7 @@ while true; do
     esac
 
     end_time=$(date +%s.%N)
-    elapsed=$(echo "$end_time - $start_time" | bc)
-
-    printf "\033[0;96mDone in %.2fs\033[0m\n" "$elapsed"
+	elapsed=$(awk "BEGIN {print $end_time - $start_time}")
+	printf "\033[0;96mDone in %.4fs\033[0m\n" "$elapsed"
     echo
 done
