@@ -133,8 +133,7 @@ function Publish-Current {
     $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()
     $rid  = ""
     $outputFolder = ""
-
-    # ---------- ѡ�� RID ----------
+    
     if ($os -match "Windows") {
         switch ($arch) {
             "X64"   { $rid = "win-x64";   $outputFolder = "windows-x64" }

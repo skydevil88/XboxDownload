@@ -12,9 +12,7 @@ macOS and Linux.
 > may be blocked on first launch.
 
 ### Step 1 --- Open Terminal
-
 Press `Command + Space`, type **Terminal**, and open it.
-
 ### Step 2 --- Prepare and Launch (One-Time Setup)
 
 Run the following:
@@ -31,9 +29,13 @@ XboxDownload directory.
 
 > ✅ This only needs to be done once after downloading.
 
-After the first successful run, you can launch it by double-clicking:
+After the first successful run, you can simply double-click:
+-   `run_xboxdownload.sh` — Runs with root privileges
+-   `XboxDownload` — Runs with normal user privileges
 
-    run_xboxdownload.command
+> 💡 Most features are available when running with normal privileges.\
+> Some advanced features (such as port listening or modifying system
+> network settings) may require root privileges.
 
 ---
 
@@ -55,21 +57,13 @@ XboxDownload directory.
 ### Method 2 — Run via File Manager
 
 1.  Open the **XboxDownload** directory.
-
 2.  Locate `run_xboxdownload.sh` or `XboxDownload`.
-
 3.  Right-click → **Properties**.
-
 4.  Enable **Allow executing file as program**.
-
 5.  Close the dialog.
-
-6.  Right-click one of the following files and choose **Run as
-    Program**:
-
+6.  Right-click one of the following files and choose **Run as Program**:
     -   `run_xboxdownload.sh` — Runs with root privileges
     -   `XboxDownload` — Runs with normal user privileges
-
 > 💡 Most features are available when running with normal privileges.\
 > Some advanced features (such as port listening or modifying system
 > network settings) may require root privileges.
@@ -110,8 +104,10 @@ chmod +x run_xboxdownload.command XboxDownload
 > ✅ 该操作仅在首次下载后需要执行一次
 
 首次成功运行后，今后可直接双击：
-
-    run_xboxdownload.command
+-   `run_xboxdownload.command` — 以 root 权限运行
+-   `XboxDownload` — 以普通用户权限运行
+> 💡 在普通用户权限下可以使用大部分功能。\
+> 某些高级功能（例如监听端口或修改系统网络设置）可能需要以 root 权限运行。
 
 ---
 
@@ -132,21 +128,14 @@ chmod +x run_xboxdownload.sh XboxDownload
 ### 方法 2 — 文件管理器运行
 
 1.  打开 **XboxDownload** 目录。
-
 2.  找到 `run_xboxdownload.sh` 或 `XboxDownload`。
-
 3.  右键 → **属性**。
-
 4.  勾选 **允许作为程序执行**。
-
 5.  关闭窗口。
-
-6.  右键以下任意文件之一并选择 **以程序方式运行**:
-
+6.  右键以下任意文件之一并选择 **以程序方式运行**：
     -   `run_xboxdownload.sh` — 以 root 权限运行
     -   `XboxDownload` — 以普通用户权限运行
-
 > 💡 在普通用户权限下可以使用大部分功能。\
-> 某些高级功能（例如监听端口或修改系统网络设置）可能需要以 root（管理员）权限运行。
+> 某些高级功能（例如监听端口或修改系统网络设置）可能需要以 root 权限运行。
 
 在 GNOME、KDE 等桌面环境中，也可以直接双击并选择 **运行**。
