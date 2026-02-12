@@ -21,8 +21,8 @@ Run the following:
 
 ```bash
 cd /path/to/XboxDownload
-sudo xattr -dr com.apple.quarantine .
-chmod +x run_xboxdownload.command xboxdownload
+sudo xattr -dr com.apple.quarantine run_xboxdownload.command XboxDownload
+chmod +x run_xboxdownload.command XboxDownload
 ./run_xboxdownload.command
 ```
 
@@ -39,13 +39,16 @@ After the first successful run, you can launch it by double-clicking:
 
 ## 🐧 Linux First-Time Setup
 
-### Method 1 — Run via Terminal (Recommended)
+### Method 1 — Run via Terminal
 
 ```bash
 cd /path/to/XboxDownload
-chmod +x run_xboxdownload.sh xboxdownload
+chmod +x run_xboxdownload.sh XboxDownload
 ./run_xboxdownload.sh
 ```
+
+Replace `/path/to/XboxDownload` with the actual path to your
+XboxDownload directory.
 
 ---
 
@@ -53,7 +56,7 @@ chmod +x run_xboxdownload.sh xboxdownload
 
 1.  Open the **XboxDownload** directory.
 
-2.  Locate `run_xboxdownload.sh` or `xboxdownload`.
+2.  Locate `run_xboxdownload.sh` or `XboxDownload`.
 
 3.  Right-click → **Properties**.
 
@@ -65,7 +68,7 @@ chmod +x run_xboxdownload.sh xboxdownload
     Program**:
 
     -   `run_xboxdownload.sh` — Runs with root privileges
-    -   `xboxdownload` — Runs with normal user privileges
+    -   `XboxDownload` — Runs with normal user privileges
 
 > 💡 Most features are available when running with normal privileges.\
 > Some advanced features (such as port listening or modifying system
@@ -97,8 +100,8 @@ double-click the file and select **Run**.
 
 ```bash
 cd /path/to/XboxDownload
-sudo xattr -dr com.apple.quarantine .
-chmod +x run_xboxdownload.command xboxdownload
+sudo xattr -dr com.apple.quarantine run_xboxdownload.command XboxDownload
+chmod +x run_xboxdownload.command XboxDownload
 ./run_xboxdownload.command
 ```
 
@@ -114,21 +117,23 @@ chmod +x run_xboxdownload.command xboxdownload
 
 ## 🐧 Linux 首次运行说明
 
-### 方法一 — 终端运行（推荐）
+### 方法 1 — 终端运行
 
 ```bash
 cd /path/to/XboxDownload
-chmod +x run_xboxdownload.sh xboxdownload
+chmod +x run_xboxdownload.sh XboxDownload
 ./run_xboxdownload.sh
 ```
 
+将 `/path/to/XboxDownload` 替换为程序所在目录。
+
 ---
 
-### 方法二 — 文件管理器运行
+### 方法 2 — 文件管理器运行
 
 1.  打开 **XboxDownload** 目录。
 
-2.  找到 `run_xboxdownload.sh` 或 `xboxdownload`。
+2.  找到 `run_xboxdownload.sh` 或 `XboxDownload`。
 
 3.  右键 → **属性**。
 
@@ -138,11 +143,10 @@ chmod +x run_xboxdownload.sh xboxdownload
 
 6.  右键以下任意文件之一并选择 **以程序方式运行**:
 
-    -   `run_xboxdownload.sh` — 以 root（管理员）权限运行
-    -   `xboxdownload` — 普通权限运行
+    -   `run_xboxdownload.sh` — 以 root 权限运行
+    -   `XboxDownload` — 以普通用户权限运行
 
-> 💡 在普通权限下可以使用大部分功能。\
+> 💡 在普通用户权限下可以使用大部分功能。\
 > 某些高级功能（例如监听端口或修改系统网络设置）可能需要以 root（管理员）权限运行。
 
 在 GNOME、KDE 等桌面环境中，也可以直接双击并选择 **运行**。
-

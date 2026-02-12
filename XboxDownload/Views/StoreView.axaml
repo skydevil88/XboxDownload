@@ -233,11 +233,7 @@
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
                                     <ContextMenu IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowContextMenu}">
-                                        <MenuItem Header="{DynamicResource Store.UpdateDownloadLink}" Foreground="{DynamicResource Red}"
-                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowUpdateMenu}"
-                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).UpdateGameLinkCommand}"/>
                                         <MenuItem Header="{DynamicResource Store.CopyGlobalDownloadLink}"
-                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowGameGlobalMenu}"
                                                   Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
                                                   CommandParameter="Globa"/>
                                         <MenuItem Header="{DynamicResource Store.CopyCnDownloadLink}" Foreground="{DynamicResource Green}"

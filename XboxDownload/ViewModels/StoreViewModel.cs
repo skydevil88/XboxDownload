@@ -479,16 +479,12 @@ public partial class StoreViewModel : ObservableObject
     [ObservableProperty]
     private PlatformDownloadItem? _selectedPlatformDownloadItem = new();
 
-    public bool IsShowUpdateMenu => !(OperatingSystem.IsLinux() && Program.UnixUserIsRoot()) &&
-        ((string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) && string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Display) ||
-        SelectedPlatformDownloadItem!.Outdated) && (SelectedPlatformDownloadItem?.Platform == PlatformType.XboxOne || SelectedPlatformDownloadItem?.Platform == PlatformType.WindowsPc));
-    public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url) || IsShowUpdateMenu;
-    public bool IsShowGameGlobalMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
+    public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>
-        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
+        SelectedPlatformDownloadItem!.Category == "Game"
         && App.Settings.Culture == "zh-Hans";
     public bool IsShowAzureMenu =>
-        SelectedPlatformDownloadItem!.Category == "Game" && !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url)
+        SelectedPlatformDownloadItem!.Category == "Game"
         && !SelectedPlatformDownloadItem!.Url.Contains("/public/");
     public bool IsShowAllAppMenu =>
         SelectedPlatformDownloadItem!.Category == "App"
@@ -948,17 +944,6 @@ public partial class StoreViewModel : ObservableObject
         if ((string.IsNullOrEmpty(platformDownload.Url) || platformDownload.Outdated)
             && platformDownload.Platform is PlatformType.XboxOne or PlatformType.WindowsPc)
         {
-            if (!_platformPackageFetchTimes.TryGetValue("Xbl3Token", out var xbl3TimeOut) || DateTime.Compare(xbl3TimeOut, DateTime.Now) < 0)
-            {
-                _platformPackageFetchTimes["Xbl3Token"] = DateTime.Now.AddHours(12);
-                var xbl = await XboxAuthHelper.GetXbl3TokenAsync(interactive: false);
-                if (!string.IsNullOrEmpty(xbl))
-                {
-                    App.Settings.Authorization = xbl;
-                    SettingsManager.Save(App.Settings);
-                }
-            }
-
             if (!string.IsNullOrEmpty(App.Settings.Authorization))
             {
                 const string host = "packagespc.xboxlive.com";
@@ -1237,24 +1222,6 @@ public partial class StoreViewModel : ObservableObject
                 }
         }
         await provider.SetTextAsync(url);
-    }
-
-    [RelayCommand]
-    private async Task UpdateGameLinkAsync()
-    {
-        var platformDownload = SelectedPlatformDownloadItem;
-
-        if (string.IsNullOrEmpty(App.Settings.Authorization))
-        {
-            var xbl = await XboxAuthHelper.GetXbl3TokenAsync(true);
-
-            if (string.IsNullOrEmpty(xbl)) return;
-
-            App.Settings.Authorization = xbl;
-            SettingsManager.Save(App.Settings);
-        }
-        platformDownload?.Display = ResourceHelper.GetString("Store.FetchingDownloadLink");
-        await GetGamePackageAsync(platformDownload!, platformDownload!.ContentId);
     }
 
 
