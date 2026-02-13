@@ -141,7 +141,7 @@ public static partial class UpdateService
                     if (buffer.Length > 0)
                     {
                         var saveFilepath = Path.Combine(tempDirectory, fileName);
-                        await using (FileStream fs = new(saveFilepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                        await using (var fs = new FileStream(saveFilepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                         {
                             await fs.WriteAsync(buffer, CancellationToken.None);
                             await fs.FlushAsync(CancellationToken.None);
