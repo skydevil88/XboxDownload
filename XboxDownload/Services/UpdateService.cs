@@ -150,8 +150,8 @@ public static partial class UpdateService
 
                         await ZipFile.ExtractToDirectoryAsync(saveFilepath, tempDirectory, overwriteFiles: true, CancellationToken.None);
 
-                        var dir = new DirectoryInfo(Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(fileName)));
-                        if (dir.Exists)
+                        var extractDir = new DirectoryInfo(Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(fileName)));
+                        if (extractDir.Exists)
                         {
                             if (serviceVm.IsListening)
                                 await serviceVm.ToggleListeningAsync();
@@ -166,10 +166,11 @@ public static partial class UpdateService
                                 scriptPath = Path.Combine(tempDirectory, "update.cmd");
 
                                 var script = $@"
-chcp 65001
+@echo off
+chcp 65001 >nul
 timeout /t 3 /nobreak >nul
-robocopy ""{dir.FullName}"" ""{appDir}"" /e /move /r:3 /w:1 >nul
-start """" ""{appPath}""
+robocopy ""{extractDir.FullName}"" ""{appDir}"" /e /is /it /r:5 /w:2 >nul 2>&1
+start /d ""{appDir}"" """" ""{appPath}""
 rd /s /q ""{tempDirectory}""
 ";
 
@@ -183,27 +184,29 @@ rd /s /q ""{tempDirectory}""
                                 var script = $@"
 #!/bin/bash
 sleep 3
-cp -R ""{dir.FullName}""/. ""{appDir}""
-
-APP_PATH=""{appPath}""
+cp -Rf ""{extractDir.FullName}""/. ""{appDir}""
 
 if [[ ""$(uname)"" == ""Darwin"" ]]; then
-    xattr -dr com.apple.quarantine ""$APP_PATH"" 2>/dev/null || true
+    xattr -dr com.apple.quarantine ""{appPath}"" 2>/dev/null || true
     xattr -dr com.apple.quarantine ""{appDir}/run_xboxdownload.command"" 2>/dev/null || true
-    open ""$APP_PATH"" &
+    chmod +x ""{appPath}"" 2>/dev/null || true
+    chmod +x ""{appDir}/run_xboxdownload.command"" 2>/dev/null || true
+    open ""{appPath}"" &
 else
-    nohup ""$APP_PATH"" >/dev/null 2>&1 &
+    chmod +x ""{appPath}"" 2>/dev/null || true
+    chmod +x ""{appDir}/run_xboxdownload.sh"" 2>/dev/null || true
+    nohup ""{appPath}"" >/dev/null 2>&1 </dev/null &
 fi
 
-rm -rf ""{tempDirectory}""
+rm -rf -- ""{tempDirectory}""
+exit 0
 ";
 
                                 await File.WriteAllTextAsync(scriptPath, script.Replace("\r\n", "\n"), CancellationToken.None);
                                 await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
-                                _ = CommandHelper.RunCommandAsync("/bin/bash", $"\"{scriptPath}\"");
+                                _ = CommandHelper.RunCommandAsync("/usr/bin/env", $"bash \"{scriptPath}\"");
                             }
-
-                            //await Task.Delay(100);
+                            
                             Process.GetCurrentProcess().Kill();
                         }
                     }
