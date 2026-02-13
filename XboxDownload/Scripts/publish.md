@@ -1,4 +1,3 @@
-
 # 📦 Xbox下载助手  发布说明
 
 Xbox下载助手 支持将项目发布为各平台的**独立可执行文件**，无需目标系统安装 .NET 运行时。
@@ -20,7 +19,7 @@ Xbox下载助手 支持将项目发布为各平台的**独立可执行文件**�
 1. 打开 PowerShell 或 CMD
 2. 执行脚本：
    ```bat
-   Scripts\publish-win.bat
+   .\Scripts\publish-win.bat
    ```
 
 ---
@@ -29,7 +28,7 @@ Xbox下载助手 支持将项目发布为各平台的**独立可执行文件**�
 
 1. 首次使用需授权执行权限：
    ```bash
-   chmod +x Scripts/publish.sh
+   chmod +x ./Scripts/publish.sh
    ```
 
 2. 运行脚本并选择发布目标：
@@ -46,12 +45,13 @@ Xbox下载助手 支持将项目发布为各平台的**独立可执行文件**�
 ```
 Scripts/
 ├── Release/
-│   ├── XboxDownload-windows-x64/
-│   ├── XboxDownload-windows-arm64/
-│   ├── XboxDownload-macos-x64/
-│   ├── XboxDownload-macos-arm64/
+│   ├── XboxDownload-linux-arm64/
 │   ├── XboxDownload-linux-x64/
-│   └── XboxDownload-linux-arm64/
+│   ├── XboxDownload-macos-arm64/
+│   ├── XboxDownload-macos-x64/
+│   ├── XboxDownload-windows-arm64/
+│   └── XboxDownload-windows-x64/
+
 ```
 
 每个子目录下为该平台的完整自包含可执行文件。
@@ -68,15 +68,5 @@ Scripts/
     - `publish.sh`（macOS/Linux Bash）
     - `publish-win.bat`（Windows 批处理）
     - `publish-win.ps1`（PowerShell 脚本）
-
----
-
-## 📌 注意事项
-
-- 如构建失败，请先执行：
-  ```bash
-  dotnet restore
-  ```
-- macOS 上执行 arm64 构建请确认未开启 Rosetta 模拟。
 
 ---

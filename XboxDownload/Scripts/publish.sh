@@ -156,7 +156,7 @@ publish_current() {
     echo -e "\033[93mDetected system  : $os\033[0m"
     echo -e "\033[93mCPU Architecture : $arch\033[0m"
     echo -e "\033[93mTarget RID       : $rid\033[0m"
-	echo -e "\033[93mOutput folder    : ./Release/XboxDownload-${output_folder}\033[0m"
+    echo -e "\033[93mOutput folder    : ./Release/XboxDownload-${output_folder}\033[0m"
     echo -e "\033[96m-----------------------------------------\033[0m"
 
     publish_target "$rid" "$output_folder"
