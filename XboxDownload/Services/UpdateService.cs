@@ -119,7 +119,7 @@ public static partial class UpdateService
 
         var fileName = $"{nameof(XboxDownload)}-{systemLabel}-{archLabel}.zip";
 
-        var fastestUrl = await HttpClientHelper.GetFastestProxy(Proxies1.Concat(Proxies2).ToArray(),
+        var fastestUrl = await HttpClientHelper.GetFastestProxy([.. Proxies1, .. Proxies2],
             $"{Project}/releases/download/{tagName}/{fileName}",
             new Dictionary<string, string> { { "Range", "bytes=0-10239" } },
             6000);
@@ -148,7 +148,7 @@ public static partial class UpdateService
                             fs.Close();
                         }
 
-                        ZipFile.ExtractToDirectory(saveFilepath, tempDirectory, overwriteFiles: true);
+                        await ZipFile.ExtractToDirectoryAsync(saveFilepath, tempDirectory, overwriteFiles: true, CancellationToken.None);
 
                         var dir = new DirectoryInfo(Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(fileName)));
                         if (dir.Exists)
@@ -156,64 +156,55 @@ public static partial class UpdateService
                             if (serviceVm.IsListening)
                                 await serviceVm.ToggleListeningAsync();
 
+                            var appPath = Process.GetCurrentProcess().MainModule?.FileName;
+                            var appDir = Path.GetDirectoryName(appPath);
+
+                            string scriptPath;
+
                             if (OperatingSystem.IsWindows())
                             {
-                                var appPath = Process.GetCurrentProcess().MainModule?.FileName;
+                                scriptPath = Path.Combine(tempDirectory, "update.cmd");
 
-                                var script = $"chcp 65001\r\nchoice /t 3 /d y /n >nul\r\nxcopy \"{dir.FullName}\" \"{Path.GetDirectoryName(appPath)}\" /s /e /y\r\n\"{appPath}\"\r\nrd /s/q \"{tempDirectory}\"";
-                                var scriptPath = Path.Combine(tempDirectory, "update.cmd");
+                                var script = $@"
+chcp 65001
+timeout /t 3 /nobreak >nul
+robocopy ""{dir.FullName}"" ""{appDir}"" /e /move /r:3 /w:1 >nul
+start """" ""{appPath}""
+rd /s /q ""{tempDirectory}""
+";
+
                                 await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
                                 _ = CommandHelper.RunCommandAsync("cmd.exe", $"/c \"{scriptPath}\"");
-                                await Task.Delay(TimeSpan.FromMicroseconds(100), CancellationToken.None);
-                                Process.GetCurrentProcess().Kill();
                             }
-                            else if (OperatingSystem.IsMacOS())
+                            else
                             {
-                                var appPath = Process.GetCurrentProcess().MainModule?.FileName;
+                                scriptPath = Path.Combine(tempDirectory, "update.sh");
 
                                 var script = $@"
 #!/bin/bash
 sleep 3
-cp -R ""{dir.FullName}""/. ""{Path.GetDirectoryName(appPath)}""
-APP_PATH=""{appPath}""
-xattr -dr com.apple.quarantine ""$APP_PATH""
-if [ ""$(id -u)"" -eq 0 ]; then
-    sudo ""$APP_PATH""
-else
-    open ""$APP_PATH""
-fi
-rm -rf ""{tempDirectory}""
-".Replace("\r\n", "\n");
-                                var scriptPath = Path.Combine(tempDirectory, "update.sh");
-                                await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
-                                await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
-                                _ = CommandHelper.RunCommandAsync("/bin/bash", $"\"{scriptPath}\"");
-                                await Task.Delay(TimeSpan.FromMicroseconds(100), CancellationToken.None);
-                                Process.GetCurrentProcess().Kill();
-                            }
-                            else if (OperatingSystem.IsLinux())
-                            {
-                                var appPath = Process.GetCurrentProcess().MainModule?.FileName;
+cp -R ""{dir.FullName}""/. ""{appDir}""
 
-                                var script = $@"
-#!/bin/bash
-sleep 3
-cp -R ""{dir.FullName}""/. ""{Path.GetDirectoryName(appPath)}""
 APP_PATH=""{appPath}""
-if [ ""$(id -u)"" -eq 0 ]; then
-    sudo ""$APP_PATH""
+
+if [[ ""$(uname)"" == ""Darwin"" ]]; then
+    xattr -dr com.apple.quarantine ""$APP_PATH"" 2>/dev/null || true
+    xattr -dr com.apple.quarantine ""{appDir}/run_xboxdownload.command"" 2>/dev/null || true
+    open ""$APP_PATH"" &
 else
-    ""$APP_PATH""
+    nohup ""$APP_PATH"" >/dev/null 2>&1 &
 fi
+
 rm -rf ""{tempDirectory}""
-".Replace("\r\n", "\n");
-                                var scriptPath = Path.Combine(tempDirectory, "update.sh");
-                                await File.WriteAllTextAsync(scriptPath, script, CancellationToken.None);
+";
+
+                                await File.WriteAllTextAsync(scriptPath, script.Replace("\r\n", "\n"), CancellationToken.None);
                                 await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
                                 _ = CommandHelper.RunCommandAsync("/bin/bash", $"\"{scriptPath}\"");
-                                await Task.Delay(TimeSpan.FromMicroseconds(100), CancellationToken.None);
-                                Process.GetCurrentProcess().Kill();
                             }
+
+                            //await Task.Delay(100);
+                            Process.GetCurrentProcess().Kill();
                         }
                     }
                 }

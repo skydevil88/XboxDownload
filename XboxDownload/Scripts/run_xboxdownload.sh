@@ -83,4 +83,5 @@ echo ""
 # ----------------------------
 # Run with sudo (required for DNS / hosts / ports)
 # ----------------------------
-exec sudo "$APP" "$@"
+#exec sudo "$APP" "$@"
+exec sudo nohup "$APP" "$@" >/dev/null
