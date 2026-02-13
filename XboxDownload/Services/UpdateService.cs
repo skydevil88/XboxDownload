@@ -170,7 +170,7 @@ public static partial class UpdateService
 chcp 65001 >nul
 timeout /t 3 /nobreak >nul
 robocopy ""{extractDir.FullName}"" ""{appDir}"" /e /is /it /r:5 /w:2 >nul 2>&1
-start /d ""{appDir}"" """" ""{appPath}""
+start """" /d ""{appDir}"" ""{appPath}""
 rd /s /q ""{tempDirectory}""
 ";
 
