@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Microsoft.Extensions.DependencyInjection;
+using MsBox.Avalonia.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,9 +16,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+using XboxDownload.Helpers.UI;
 
 namespace XboxDownload.Helpers.Network;
+
 
 public class HttpClientHelper
 {
@@ -31,42 +36,41 @@ public class HttpClientHelper
 
     public static async Task<HttpResponseMessage?> SendRequestAsync(string url, string method = "GET", string? postData = null, string? contentType = null, Dictionary<string, string>? headers = null, int timeout = 30000, string? name = null, CancellationToken token = default)
     {
-        var client = HttpClientFactory?.CreateClient(name ?? "Default");
+        var client = HttpClientFactory?.CreateClient(name ?? HttpClientNames.Default);
         if (client == null) return null;
-        client.Timeout = TimeSpan.FromMilliseconds(timeout);
+
+        using var request = new HttpRequestMessage(new HttpMethod(method), url);
+
         if (headers != null)
         {
             foreach (var (key, value) in headers)
-                client.DefaultRequestHeaders.TryAddWithoutValidation(key, value);
+                request.Headers.TryAddWithoutValidation(key, value);
         }
-        HttpRequestMessage httpRequestMessage = new()
+
+        if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put)
         {
-            Method = new HttpMethod(method),
-            RequestUri = new Uri(url)
-        };
-        if (httpRequestMessage.Method == HttpMethod.Post || httpRequestMessage.Method == HttpMethod.Put)
-            httpRequestMessage.Content = new StringContent(postData ?? string.Empty, Encoding.UTF8, contentType ?? "application/x-www-form-urlencoded");
-        HttpResponseMessage? response;
+            request.Content = new StringContent(
+                postData ?? string.Empty,
+                Encoding.UTF8,
+                contentType ?? "application/x-www-form-urlencoded");
+        }
+
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+        cts.CancelAfter(timeout);
+
         try
         {
-            response = await client.SendAsync(httpRequestMessage, token);
+            return await client.SendAsync(
+                request,
+                HttpCompletionOption.ResponseHeadersRead,
+                cts.Token);
         }
-        catch (HttpRequestException ex)
+        catch
         {
-            response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
-            {
-                ReasonPhrase = ex.Message
-            };
+            return null;
         }
-        catch (Exception ex)
-        {
-            response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-            {
-                ReasonPhrase = ex.Message
-            };
-        }
-        return response;
     }
+
 
     public static async Task<string?> GetFastestProxy(string[] proxies, string path, Dictionary<string, string> headers, int timeout)
     {
@@ -75,7 +79,7 @@ public class HttpClientHelper
         var tasks = proxies.Select(async proxy =>
         {
             var url = proxy + (string.IsNullOrEmpty(proxy) ? path : path.Replace("https://", ""));
-            using var response = await SendRequestAsync(url, headers: headers, timeout: timeout, name: "NoCache", token: cts.Token);
+            using var response = await SendRequestAsync(url, headers: headers, timeout: timeout, name: HttpClientNames.SpeedTest, token: cts.Token);
             if (response is not { IsSuccessStatusCode: true }) return null;
             using var ms = new MemoryStream();
             try
@@ -173,51 +177,47 @@ public class HttpClientHelper
         SharedHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(nameof(XboxDownload));
     }
 
-    public static void OpenUrl(string url)
+    public static async void OpenUrl(string url)
     {
         if (string.IsNullOrWhiteSpace(url))
             return;
 
+        if (OperatingSystem.IsLinux() && Program.UnixUserIsRoot())
+        {
+            var topLevel = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+             ? desktop.MainWindow
+             : null;
+
+            if (topLevel?.Clipboard != null)
+                await topLevel.Clipboard.SetTextAsync(url);
+            
+            await DialogHelper.ShowInfoDialogAsync(
+                "Notice",
+                $"The link has been copied to the clipboard:\n{url}\n\n" +
+                "The application is running with root privileges, so it cannot automatically open the browser.\n" +
+                "Please manually paste the link into your browser to open it.",
+                Icon.Warning);
+            return;
+        }
+
         try
         {
-            if (OperatingSystem.IsLinux() && Program.UnixUserIsRoot())
+            Process.Start(new ProcessStartInfo
             {
-                // Get the original user when the application was started with sudo
-                var user = Environment.GetEnvironmentVariable("SUDO_USER");
-
-                var psi = new ProcessStartInfo();
-                if (!string.IsNullOrEmpty(user))
-                {
-                    // When running as root, switch to the original user to execute xdg-open
-                    psi.FileName = "runuser";
-                    psi.Arguments = $"-u {user} -- xdg-open \"{url}\"";
-                }
-                else
-                {
-                    // If running as root but not started with sudo (e.g. launched with su root), try to call directly
-                    psi.FileName = "xdg-open";
-                    psi.Arguments = $"\"{url}\"";
-                }
-
-                psi.UseShellExecute = false;
-                psi.RedirectStandardError = true;
-                psi.RedirectStandardOutput = true;
-                psi.CreateNoWindow = true;
-
-                Process.Start(psi);
-            }
-            else
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
-            }
+                FileName = url,
+                UseShellExecute = true
+            });
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error opening URL '{url}': {ex.Message}");
+            // ignored
         }
     }
+}
+
+public static class HttpClientNames
+{
+    public const string Default = nameof(Default);
+    public const string XboxDownload = nameof(XboxDownload);
+    public const string SpeedTest = nameof(SpeedTest);
 }

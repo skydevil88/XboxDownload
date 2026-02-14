@@ -525,10 +525,8 @@ public partial class SpeedTestViewModel : ViewModelBase
 
             await using (var fs = fi.Open(FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             {
-                await using (StreamWriter sw = new(fs))
-                {
-                    await sw.WriteAsync(content);
-                }
+                await using var sw = new StreamWriter(fs);
+                await sw.WriteAsync(content);
             }
 
             var count = dnsMapping
@@ -850,7 +848,7 @@ public partial class SpeedTestViewModel : ViewModelBase
         return Uri.TryCreate(TargetTestUrl, UriKind.Absolute, out baseUri) ? baseUri : null;
     }
 
-    private readonly Dictionary<string, DateTime> _uploadedIpTimes = new();
+    private readonly Dictionary<string, DateTime> _uploadedIpTimes = [];
 
     /// <summary>
     /// 上传在中国大陆区域测速良好的 Akamai 节点信息。
@@ -907,7 +905,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             "POST",
             jsonArray.ToJsonString(),
             "application/json",
-            name: "XboxDownload");
+            name: HttpClientNames.XboxDownload);
         //Console.WriteLine(response?.StatusCode);
 
         var filePath = PathHelper.GetResourceFilePath("IP.AkamaiV2.txt");

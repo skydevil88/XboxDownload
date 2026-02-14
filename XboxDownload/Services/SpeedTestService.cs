@@ -165,7 +165,7 @@ public static class SpeedTestService
         catch (OperationCanceledException) { }
 
         // 返回结果
-        return bag.Count >= 5 ? bag.ToList() : [.. items.OrderBy(_ => Random.Shared.Next()).Take(30)];
+        return bag.Count >= 5 ? [.. bag] : [.. items.OrderBy(_ => Random.Shared.Next()).Take(30)];
     }
 
     public static async Task PingAndTestAsync(IpItem item, Uri? baseUri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)

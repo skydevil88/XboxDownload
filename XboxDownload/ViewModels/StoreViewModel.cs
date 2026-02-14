@@ -1020,7 +1020,7 @@ public partial class StoreViewModel : ObservableObject
                                 _ = XboxGameManager.SaveAsync();
                                 _ = HttpClientHelper.GetStringContentAsync(
                                     UpdateService.Website + "/Game/AddGameUrl?url=" +
-                                    HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: "XboxDownload",
+                                    HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: HttpClientNames.XboxDownload,
                                     token: CancellationToken.None);
                             }
                         }

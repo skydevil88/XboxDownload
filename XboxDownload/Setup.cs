@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using XboxDownload.Helpers.Network;
+using XboxDownload.Services;
 
 namespace XboxDownload;
 
@@ -12,26 +13,25 @@ public static class Setup
 {
     public static IServiceProvider ConfigureServices()
     {
-        var services = new ServiceCollection();
-        const string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36";
+        var userAgent = $"{nameof(XboxDownload)}/" +
+            $"{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version} " +
+            $"(+{UpdateService.Project})";
 
-        services.AddHttpClient("Default", client =>
+        var services = new ServiceCollection();
+
+        services.AddHttpClient(HttpClientNames.Default, client =>
         {
             client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
-        }).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+        }).ConfigurePrimaryHttpMessageHandler(() => CreateBaseHandler());
+
+        services.AddHttpClient(HttpClientNames.XboxDownload, client =>
         {
-            AutomaticDecompression = DecompressionMethods.All
-        });
-        services.AddHttpClient("XboxDownload", client =>
-        {
-            client.DefaultRequestHeaders.UserAgent.ParseAdd($"XboxDownload/{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version}");
-            client.DefaultRequestHeaders.Add("X-Organization", "XboxDownload");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+            client.DefaultRequestHeaders.Add("X-Organization", nameof(XboxDownload));
             client.DefaultRequestHeaders.Add("X-Author", "Devil");
-        }).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
-        {
-            AutomaticDecompression = DecompressionMethods.All
-        });
-        services.AddHttpClient("NoCache", client =>
+        }).ConfigurePrimaryHttpMessageHandler(() => CreateBaseHandler());
+
+        services.AddHttpClient(HttpClientNames.SpeedTest, client =>
         {
             client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
             client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
@@ -40,13 +40,22 @@ public static class Setup
                 NoStore = true,
                 MustRevalidate = true
             };
-        }).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
-        {
-            AutomaticDecompression = DecompressionMethods.All
-        });
+            client.DefaultRequestHeaders.Pragma.ParseAdd("no-cache");
+        }).ConfigurePrimaryHttpMessageHandler(() => CreateBaseHandler(isSpeedTest: true));
 
         services.AddSingleton<HttpClientHelper>();
 
         return services.BuildServiceProvider();
     }
+
+    private static SocketsHttpHandler CreateBaseHandler(bool isSpeedTest = false) => new()
+    {
+        EnableMultipleHttp2Connections = true,
+        AutomaticDecompression = isSpeedTest ? DecompressionMethods.None : DecompressionMethods.All,
+        PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
+        MaxConnectionsPerServer = isSpeedTest ? 50 : 20,
+        AllowAutoRedirect = true,
+        UseCookies = false
+    };
 }

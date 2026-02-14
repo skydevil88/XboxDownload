@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using MsBox.Avalonia.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,8 +12,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using MsBox.Avalonia.Enums;
 using XboxDownload.Helpers.IO;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
@@ -281,7 +281,7 @@ exit 0
         var wuCategoryId = products[0];
         var json = await HttpClientHelper.GetStringContentAsync(
             Website + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId,
-            name: "XboxDownload",
+            name: HttpClientNames.XboxDownload,
             token: token
         );
 

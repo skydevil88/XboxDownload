@@ -1,27 +1,27 @@
-﻿using System;
+﻿using Avalonia.Platform;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using XboxDownload.ViewModels;
 using System.Net.Security;
+using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
-using Avalonia.Platform;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.System;
 using XboxDownload.Helpers.Utilities;
+using XboxDownload.ViewModels;
 
 namespace XboxDownload.Services;
 
@@ -834,7 +834,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                     };
                     XboxGameManager.Dictionary.AddOrUpdate(key, xboxGame, (_, _) => xboxGame);
                     _ = XboxGameManager.SaveAsync();
-                    _ = HttpClientHelper.GetStringContentAsync(UpdateService.Website + "/Game/AddGameUrl?url=" + HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: "XboxDownload");
+                    _ = HttpClientHelper.GetStringContentAsync(UpdateService.Website + "/Game/AddGameUrl?url=" + HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: HttpClientNames.XboxDownload);
                 }
             }
         }
@@ -1127,8 +1127,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                         await proxy.Semaphore.WaitAsync();
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
-                                                            var fastestIp =
-                                                                await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses);
+                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses);
                                                             if (fastestIp != null)
                                                                 ips = proxy.IpAddresses = [fastestIp];
                                                         }
