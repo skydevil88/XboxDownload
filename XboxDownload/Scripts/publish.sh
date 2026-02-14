@@ -202,7 +202,7 @@ while true; do
         *) echo "Invalid choice. Please enter 1-6." ;;
     esac
 
-    end_time=$(date +%s.%N)
+	end_time=$(date +%s.%N)
 	elapsed=$(awk "BEGIN {print $end_time - $start_time}")
 	printf "\033[0;96mDone in %.4fs\033[0m\n" "$elapsed"
     echo

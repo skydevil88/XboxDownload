@@ -159,11 +159,9 @@ public static partial class UpdateService
                             var appPath = Process.GetCurrentProcess().MainModule?.FileName;
                             var appDir = Path.GetDirectoryName(appPath);
 
-                            string scriptPath;
-
                             if (OperatingSystem.IsWindows())
                             {
-                                scriptPath = Path.Combine(tempDirectory, "update.cmd");
+                                var scriptPath = Path.Combine(tempDirectory, "update.cmd");
 
                                 var script = $@"
 @echo off
@@ -179,7 +177,7 @@ rd /s /q ""{tempDirectory}""
                             }
                             else
                             {
-                                scriptPath = Path.Combine(tempDirectory, "update.sh");
+                                var scriptPath = Path.Combine(tempDirectory, "update.sh");
 
                                 var script = $@"
 #!/bin/bash

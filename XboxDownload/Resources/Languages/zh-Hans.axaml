@@ -18,7 +18,7 @@
     <x:String x:Key="Menu.RootCertificate.DialogInstallFailedMessage">证书安装失败。</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallTitle">卸载根证书</x:String>
     <x:String x:Key="Menu.RootCertificate.DialogUninstallMessage">根证书已成功卸载。</x:String>
-    <x:String x:Key="Menu.RootCertificate.DialogFailedMessage">此操作需要管理员权限.</x:String>
+    <x:String x:Key="Menu.RootCertificate.DialogFailedMessage">此操作需要 root 权限.</x:String>
     <x:String x:Key="Menu.Show">显示</x:String>
     <x:String x:Key="Menu.Exit">退出</x:String>
     <x:String x:Key="Menu.Help">帮助</x:String>
@@ -441,7 +441,6 @@
     <x:String x:Key="Store.Market">商店</x:String>
     <x:String x:Key="Store.Size">容量</x:String>
     <x:String x:Key="Store.DownloadLink">下载链接 (右键复制)</x:String>
-    <x:String x:Key="Store.UpdateDownloadLink">更新下载链接</x:String>
     <x:String x:Key="Store.CopyGlobalDownloadLink">复制下载链接(.com 域名)</x:String>
     <x:String x:Key="Store.CopyCnDownloadLink">复制下载链接(.cn 域名)</x:String>
     <x:String x:Key="Store.CopyAzureDownloadLink">复制下载链接(Azure)</x:String>
