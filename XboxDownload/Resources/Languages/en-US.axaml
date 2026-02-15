@@ -242,7 +242,6 @@
     <x:String x:Key="SpeedTest.DataGrid.Select">Sel</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Ip">IP (Right-click, double-click to test)</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Location">Location</x:String>
-    <x:String x:Key="SpeedTest.DataGrid.IsRedirect">302</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Ttl">TTL</x:String>
     <x:String x:Key="SpeedTest.DataGrid.RoundtripTime">RTT (ms)</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Speed">Download (MB/s)</x:String>

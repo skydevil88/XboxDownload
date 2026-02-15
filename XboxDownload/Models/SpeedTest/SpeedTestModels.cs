@@ -80,9 +80,6 @@ public partial class IpItem : ObservableObject
     private string _location = string.Empty;
 
     [ObservableProperty]
-    private bool _isRedirect;
-
-    [ObservableProperty]
     private int? _ttl;
 
     [ObservableProperty]

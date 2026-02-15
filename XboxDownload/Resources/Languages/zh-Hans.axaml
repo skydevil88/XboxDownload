@@ -242,7 +242,6 @@
     <x:String x:Key="SpeedTest.DataGrid.Select">选择</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Ip">IP (右键使用，双击测速)</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Location">位置</x:String>
-    <x:String x:Key="SpeedTest.DataGrid.IsRedirect">302</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Ttl">TTL</x:String>
     <x:String x:Key="SpeedTest.DataGrid.RoundtripTime">响应时间(ms)</x:String>
     <x:String x:Key="SpeedTest.DataGrid.Speed">下载速度(MB/s)</x:String>

@@ -183,16 +183,13 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Width="260" Header="{DynamicResource SpeedTest.DataGrid.Ip}" SortMemberPath="Ip" Binding="{Binding Path=Ip}" IsReadOnly="True"/>
                         <DataGridTextColumn Width="*" Header="{DynamicResource SpeedTest.DataGrid.Location}" SortMemberPath="Location" Binding="{Binding Path=Location}" IsReadOnly="True"/>
-                        <DataGridCheckBoxColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.IsRedirect}" Binding="{Binding Path=IsRedirect}" IsReadOnly="True"/>
-                        <!--
-                        <DataGridTemplateColumn Width="85" Header="{DynamicResource SpeedTest.DataGrid.Ttl}" SortMemberPath="Ttl">
+                        <DataGridTemplateColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.Ttl}" SortMemberPath="Ttl">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Ttl}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        //-->
                         <DataGridTemplateColumn Width="145" Header="{DynamicResource SpeedTest.DataGrid.RoundtripTime}" SortMemberPath="RoundtripTime">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

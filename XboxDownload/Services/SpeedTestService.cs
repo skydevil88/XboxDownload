@@ -168,7 +168,6 @@ public static class SpeedTestService
 
     public static async Task PingAndTestAsync(IpItem item, Uri uri, int rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
     {
-        item.IsRedirect = false;
         item.Ttl = null;
         item.RoundtripTime = null;
         item.Speed = null;
@@ -228,9 +227,6 @@ public static class SpeedTestService
             try
             {
                 response.EnsureSuccessStatusCode();
-
-                if (!Equals(response.RequestMessage?.RequestUri, uri))
-                    item.IsRedirect = true;
 
                 await using var stream = await response.Content.ReadAsStreamAsync(cts.Token);
 
