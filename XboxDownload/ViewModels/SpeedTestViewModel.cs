@@ -741,31 +741,21 @@ public partial class SpeedTestViewModel : ViewModelBase
         ClearSortRequested?.Invoke();
         _sortSubject.OnNext([("IsSelected", SortDirection.Descending)]);
 
-        var baseUri = await EnsureValidTargetTestUrlAsync();
+        var uri = await EnsureValidTargetTestUrlAsync();
 
-        if (!token.IsCancellationRequested)
+        if (uri != null && !token.IsCancellationRequested)
         {
+            
+            var rangeTo = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
             var timeout = TimeSpan.FromSeconds(SelectedTimeout);
-            Dictionary<string, string>? headers = null;
-            if (baseUri != null)
-            {
-                var userAgent = baseUri.Host.EndsWith(".nintendo.net") ? "XboxDownload/Nintendo NX" : "XboxDownload";
-                var range = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
-
-                headers = new Dictionary<string, string>
-                {
-                    { "Host", baseUri.Host },
-                    { "User-Agent", userAgent },
-                    { "Range", $"bytes=0-{range}" }
-                };
-            }
+            var userAgent = uri.Host.EndsWith(".nintendo.net") ? "XboxDownload/Nintendo NX" : "XboxDownload";
 
             foreach (var item in IpItems.Where(p => p.IsSelected))
             {
                 if (token.IsCancellationRequested)
                     break;
 
-                await SpeedTestService.PingAndTestAsync(item, baseUri, headers, timeout, token);
+                await SpeedTestService.PingAndTestAsync(item, uri, rangeTo, timeout, userAgent, token);
             }
 
             _ = UploadPreferredAkamaiIpsIfInChinaAsync();
@@ -790,26 +780,15 @@ public partial class SpeedTestViewModel : ViewModelBase
         _speedTestCancellation = new CancellationTokenSource();
         var token = _speedTestCancellation.Token;
 
-        var baseUri = await EnsureValidTargetTestUrlAsync();
+        var uri = await EnsureValidTargetTestUrlAsync();
 
-        if (!token.IsCancellationRequested)
+        if (uri != null && !token.IsCancellationRequested)
         {
+            var rangeTo = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
             var timeout = TimeSpan.FromSeconds(SelectedTimeout);
-            Dictionary<string, string>? headers = null;
-            if (baseUri != null)
-            {
-                var userAgent = baseUri.Host.EndsWith(".nintendo.net") ? "XboxDownload/Nintendo NX" : "XboxDownload";
-                var range = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
+            var userAgent = uri.Host.EndsWith(".nintendo.net") ? "XboxDownload/Nintendo NX" : "XboxDownload";
 
-                headers = new Dictionary<string, string>
-                {
-                    { "Host", baseUri.Host },
-                    { "User-Agent", userAgent },
-                    { "Range", $"bytes=0-{range}" }
-                };
-            }
-
-            await SpeedTestService.PingAndTestAsync(item, baseUri, headers, timeout, token);
+            await SpeedTestService.PingAndTestAsync(item, uri, rangeTo, timeout, userAgent, token);
 
             _ = UploadPreferredAkamaiIpsIfInChinaAsync();
         }

@@ -214,9 +214,9 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
                     var delayTask = delayTestCache.GetOrAdd(ip, _ => HttpLatencyTestWithLocationAsync(new Uri("https://"+ HostnameToResolve), ip));
 
                     // Wait for the result
-                    var task = await delayTask;
-                    selected.Delay = task.delay ?? -1;
-                    selected.Location = task.location;
+                    var (delay, location) = await delayTask;
+                    selected.Delay = delay ?? -1;
+                    selected.Location = location;
                 }
             });
 
@@ -227,7 +227,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
 
     private static async Task<(long? latency, string? location)> HttpLatencyTestWithLocationAsync(Uri uri, IPAddress ip)
     {
-        var (response, latency) = await HttpClientHelper.MeasureHttpLatencyAsync(uri, ip);
+        var (response, latency) = await HttpClientHelper.MeasureHttpLatencyAsync(uri, ip, TimeSpan.FromSeconds(10));
         response?.Dispose();
 
         var normalizedBytes = ip.GetAddressBytes();

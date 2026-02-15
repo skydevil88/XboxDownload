@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,9 +32,11 @@ public static class SpeedTestService
         var userAgent = selectedTestUri.Host.EndsWith(".nintendo.net") 
             ? $"{nameof(XboxDownload)}/Nintendo NX" 
             : nameof(XboxDownload);
-        
+
+        var timeout = TimeSpan.FromSeconds(10);
+
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        cts.CancelAfter(timeout);
         var token = cts.Token;
         
         var result = new TaskCompletionSource<IpItem?>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -48,10 +48,10 @@ public static class SpeedTestService
             long totalBytes = 0;
             var (response, _) = await HttpClientHelper.MeasureHttpLatencyAsync(
                 selectedTestUri,  
-                IPAddress.Parse(ipItem.Ip), 
+                IPAddress.Parse(ipItem.Ip),
+                timeout,
                 rangeFrom: 0,
                 rangeTo: 10485759,  // 10MB
-                timeoutSeconds: 10, 
                 userAgent: userAgent,
                 token);
             
@@ -94,7 +94,7 @@ public static class SpeedTestService
         {
             await Task.WhenAll(tasks);
         }
-        catch
+        catch (OperationCanceledException)
         {
             // ignored
         }
@@ -157,13 +157,16 @@ public static class SpeedTestService
         {
             await Task.WhenAll(tasks);
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+            // ignored
+        }
 
         // 返回结果
         return bag.Count >= 5 ? [.. bag] : [.. items.OrderBy(_ => Random.Shared.Next()).Take(30)];
     }
 
-    public static async Task PingAndTestAsync(IpItem item, Uri? baseUri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)
+    public static async Task PingAndTestAsync(IpItem item, Uri uri, int rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
     {
         item.IsRedirect = false;
         item.Ttl = null;
@@ -175,10 +178,9 @@ public static class SpeedTestService
         var pingTask = PingAsync(item, ip, token);
 
         Task? speedTask = null;
-        if (baseUri != null && !token.IsCancellationRequested)
+        if (!token.IsCancellationRequested)
         {
-            var builder = new UriBuilder(baseUri) { Host = ip.ToString() };
-            speedTask = TestDownloadSpeedAsync(item, builder.Uri, headers, timeout, token);
+            speedTask = TestDownloadSpeedAsync(item, uri, rangeTo, timeout, userAgent, token);
         }
 
         if (speedTask is not null)
@@ -208,75 +210,65 @@ public static class SpeedTestService
             Console.WriteLine($"Ping failed for {item.Ip}: {ex.Message}");
         }
     }
-    
-    private static async Task TestDownloadSpeedAsync(IpItem item, Uri uri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)
+
+    private static async Task TestDownloadSpeedAsync(IpItem item, Uri uri, int rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
     {
-        try
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+        cts.CancelAfter(timeout);
+
+        var (response, _) = await HttpClientHelper.MeasureHttpLatencyAsync(
+                uri,
+                IPAddress.Parse(item.Ip),
+                timeout,
+                rangeTo: rangeTo,
+                userAgent: userAgent,
+                token: token);
+        if (response != null)
         {
-            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
-            cts.CancelAfter(timeout);
-
-            using var request = CreateSpeedTestRequest(uri, headers);
-            using var response = await HttpClientHelper.SharedHttpClient.SendAsync(
-                request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
-            response.EnsureSuccessStatusCode();
-
-            if (!Equals(response.RequestMessage?.RequestUri, uri))
-                item.IsRedirect = true;
-
-            await using var stream = await response.Content.ReadAsStreamAsync(cts.Token);
-
-            var buffer = new byte[8192];
-            long totalBytes = 0;
-            var stopwatch = Stopwatch.StartNew();
-
-            while (true)
+            try
             {
-                var bytesRead = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), cts.Token);
-                if (bytesRead == 0)
-                    break;
+                response.EnsureSuccessStatusCode();
 
-                totalBytes += bytesRead;
+                if (!Equals(response.RequestMessage?.RequestUri, uri))
+                    item.IsRedirect = true;
 
-                var elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-                if (elapsedSeconds > 0.1) // 100毫秒阈值，防止除数过小导致数值异常
+                await using var stream = await response.Content.ReadAsStreamAsync(cts.Token);
+
+                var buffer = new byte[16384];
+                long totalBytes = 0;
+                var stopwatch = Stopwatch.StartNew();
+
+                while (true)
                 {
-                    item.Speed = totalBytes / (1048576 * elapsedSeconds); // bytes to MiB per second
+                    var bytesRead = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), cts.Token);
+                    if (bytesRead == 0)
+                        break;
+
+                    totalBytes += bytesRead;
+
+                    var elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
+                    if (elapsedSeconds > 0.1) // 100毫秒阈值，防止除数过小导致数值异常
+                    {
+                        item.Speed = totalBytes / (1048576 * elapsedSeconds); // bytes to MiB per second
+                    }
                 }
+
+                stopwatch.Stop();
             }
-
-            stopwatch.Stop();
+            catch (OperationCanceledException)
+            {
+                // ignore
+            }
+            catch 
+            {
+                // ignore
+            }
+            finally
+            {
+                item.Speed ??= 0;
+                response.Dispose();
+            }
         }
-        catch (OperationCanceledException)
-        {
-            // ignore
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"SpeedTest failed for {item.Ip}: {ex.Message}");
-        }
-        finally
-        {
-            item.Speed ??= 0;
-        }
-    }
-    
-    private static HttpRequestMessage CreateSpeedTestRequest(Uri uri, Dictionary<string, string>? headers)
-    {
-        var request = new HttpRequestMessage(HttpMethod.Get, uri);
-        request.Headers.CacheControl = new CacheControlHeaderValue
-        {
-            NoCache = true,
-            NoStore = true,
-            MustRevalidate = true
-        };
-        request.Headers.Pragma.TryParseAdd("no-cache");
 
-        if (headers is null) return request;
-
-        foreach (var (key, value) in headers)
-            request.Headers.TryAddWithoutValidation(key, value);
-
-        return request;
     }
 }

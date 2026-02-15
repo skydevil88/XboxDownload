@@ -30,9 +30,16 @@ public class HttpClientHelper
     {
         using var response = await SendRequestAsync(url, method, postData, contentType, headers, timeout, name, token);
         if (response is not { IsSuccessStatusCode: true }) return string.Empty;
-        if (charset is null) return await response.Content.ReadAsStringAsync(token);
-        var responseBytes = await response.Content.ReadAsByteArrayAsync(token);
-        return Encoding.GetEncoding(charset).GetString(responseBytes);
+        try
+        {
+            if (charset is null) return await response.Content.ReadAsStringAsync(token);
+            var responseBytes = await response.Content.ReadAsByteArrayAsync(token);
+            return Encoding.GetEncoding(charset).GetString(responseBytes);
+        }
+        catch (OperationCanceledException)
+        {
+            return string.Empty;
+        }
     }
 
     public static async Task<HttpResponseMessage?> SendRequestAsync(string url, string method = "GET", string? postData = null, string? contentType = null, Dictionary<string, string>? headers = null, int timeout = 30000, string? name = null, CancellationToken token = default)
@@ -158,9 +165,8 @@ public class HttpClientHelper
         return null;
     }
     
-    public static async Task<(HttpResponseMessage? Response, long Latency)> MeasureHttpLatencyAsync(Uri uri, IPAddress ip, int rangeFrom = 0, int rangeTo = 0, int timeoutSeconds = 10, string? userAgent = null, CancellationToken token = default)
+    public static async Task<(HttpResponseMessage? Response, long Latency)> MeasureHttpLatencyAsync(Uri uri, IPAddress ip, TimeSpan timeout, int rangeFrom = 0, int rangeTo = 0, string? userAgent = null, CancellationToken token = default)
     {
-        var timeout = TimeSpan.FromSeconds(timeoutSeconds);
         using var handler = new SocketsHttpHandler();
         handler.UseProxy = false;
         handler.AllowAutoRedirect = false;
@@ -169,8 +175,10 @@ public class HttpClientHelper
         handler.ConnectTimeout = timeout;
         handler.ConnectCallback = async (context, cancellationToken) =>
         {
-            var tcp = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            tcp.NoDelay = true;
+            var tcp = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
+            {
+                NoDelay = true
+            };
             await tcp.ConnectAsync(ip, uri.Port, cancellationToken);
 
             var networkStream = new NetworkStream(tcp, ownsSocket: true);
@@ -224,26 +232,6 @@ public class HttpClientHelper
         {
             return (null, -1);
         }
-    }
-
-    public static readonly HttpClient SharedHttpClient;
-
-    static HttpClientHelper()
-    {
-        var handler = new SocketsHttpHandler
-        {
-            //CookieContainer = new CookieContainer(),
-            //AutomaticDecompression = DecompressionMethods.All,
-            PooledConnectionLifetime = TimeSpan.FromMinutes(5),
-            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2)
-        };
-
-        SharedHttpClient = new HttpClient(handler)
-        {
-            Timeout = TimeSpan.FromSeconds(30)
-        };
-
-        SharedHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(nameof(XboxDownload));
     }
 
     public static async Task OpenUrlAsync(string url)

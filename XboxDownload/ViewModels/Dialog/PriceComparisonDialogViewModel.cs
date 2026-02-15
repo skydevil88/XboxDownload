@@ -247,8 +247,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
                         market.ExchangeRates = 1;
                     }
                 }
-            }))
-            .ToList();
+            })).ToList();
 
         await Task.WhenAll(tasks);
 
