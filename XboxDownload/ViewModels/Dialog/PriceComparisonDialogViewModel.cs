@@ -274,7 +274,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void VisitWebsite()
+    private async Task  VisitWebsite()
     {
         var language = SelectedMarket?.Language;
         if (language == "de-DE")
@@ -289,7 +289,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
         }
         //var url = $"https://www.microsoft.com/{language}/p/_/{_productId}";
         var url = $"https://www.xbox.com/{language}/games/store/_/{_productId}";
-        HttpClientHelper.OpenUrl(url);
+        await HttpClientHelper.OpenUrlAsync(url);
     }
 
     private static bool IsValidCurrencyCode(string? code)

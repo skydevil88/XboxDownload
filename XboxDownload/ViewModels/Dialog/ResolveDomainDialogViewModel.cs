@@ -2,12 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -214,7 +211,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
                     selected.ResolvedIp = ip.ToString();
 
                     // Get or create a delay test task
-                    var delayTask = delayTestCache.GetOrAdd(ip, _ => HttpDelayTestWithLocationAsync(HostnameToResolve, ip));
+                    var delayTask = delayTestCache.GetOrAdd(ip, _ => HttpLatencyTestWithLocationAsync(new Uri("https://"+ HostnameToResolve), ip));
 
                     // Wait for the result
                     var task = await delayTask;
@@ -228,58 +225,36 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
 
     private static readonly ConcurrentDictionary<string, string?> IpLocationCache = new();
 
-    private static async Task<(long? delay, string? location)> HttpDelayTestWithLocationAsync(string host, IPAddress ip, int timeout = 3000)
+    private static async Task<(long? latency, string? location)> HttpLatencyTestWithLocationAsync(Uri uri, IPAddress ip)
     {
-        long? delay = null;
-        try
-        {
-            using var cts = new CancellationTokenSource(timeout);
-            var token = cts.Token;
+        var (response, latency) = await HttpClientHelper.MeasureHttpLatencyAsync(uri, ip);
+        response?.Dispose();
 
-            var uri = new Uri($"https://{ip}");
-
-            using var request = new HttpRequestMessage(HttpMethod.Head, uri);
-            request.Headers.TryAddWithoutValidation("Host", host);
-
-            var sw = Stopwatch.StartNew();
-            var delayResponse = await HttpClientHelper.SharedHttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, token);
-            sw.Stop();
-
-            if (delayResponse.IsSuccessStatusCode)
-            {
-                delay = sw.ElapsedMilliseconds;
-            }
-        }
-        catch
-        {
-            // ignored
-        }
-        
-        var bytes = ip.GetAddressBytes();
+        var normalizedBytes = ip.GetAddressBytes();
         if (ip.AddressFamily == AddressFamily.InterNetwork)
         {
-            bytes[3] = 0;
+            normalizedBytes[3] = 0;
         }
         else
         {
             for (var i = 8; i < 16; i++)
             {
-                bytes[i] = 0;
+                normalizedBytes[i] = 0;
             }
         }
-        ip = new IPAddress(bytes);
+        var normalizedIp = new IPAddress(normalizedBytes);
         
         var isSimplifiedChineseUser = App.Settings.Culture.Equals("zh-Hans");
-        var key = ip + "|" + isSimplifiedChineseUser;
-        if (IpLocationCache.TryGetValue(key, out var cachedLocation)) return (delay, cachedLocation);
+        var key = normalizedIp + "|" + isSimplifiedChineseUser;
+        if (IpLocationCache.TryGetValue(key, out var cachedLocation)) return (latency, cachedLocation);
         
-        cachedLocation = await IpGeoHelper.GetIpLocationFromMultipleApisAsync(ip.ToString(), isSimplifiedChineseUser);
+        cachedLocation = await IpGeoHelper.GetIpLocationFromMultipleApisAsync(normalizedIp.ToString(), isSimplifiedChineseUser);
         if (!string.IsNullOrEmpty(cachedLocation))
         {
             IpLocationCache[key] = cachedLocation;
         }
 
-        return (delay, cachedLocation);
+        return (latency, cachedLocation);
     }
 }
 

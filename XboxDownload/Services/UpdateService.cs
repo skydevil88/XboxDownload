@@ -119,7 +119,7 @@ public static partial class UpdateService
 
         var fileName = $"{nameof(XboxDownload)}-{systemLabel}-{archLabel}.zip";
 
-        var fastestUrl = await HttpClientHelper.GetFastestProxy([.. Proxies1, .. Proxies2],
+        var fastestUrl = await HttpClientHelper.GetFastestProxyAsync([.. Proxies1, .. Proxies2],
             $"{Project}/releases/download/{tagName}/{fileName}",
             new Dictionary<string, string> { { "Range", "bytes=0-10239" } },
             6000);

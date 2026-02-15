@@ -192,9 +192,9 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static void OpenUrl(string url)
+    private static async Task OpenUrl(string url)
     {
-        HttpClientHelper.OpenUrl(url);
+        await HttpClientHelper.OpenUrlAsync(url);
     }
 
     [RelayCommand]

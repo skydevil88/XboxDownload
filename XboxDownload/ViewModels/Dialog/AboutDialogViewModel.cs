@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel.__Internals;
 using CommunityToolkit.Mvvm.Input;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
@@ -24,9 +25,9 @@ public partial class AboutDialogViewModel : ObservableObject
     public static string Project => UpdateService.Project;
     
     [RelayCommand]
-    private static void OpenUrl()
+    private static async Task OpenUrlAsync()
     {
-        HttpClientHelper.OpenUrl(Project);
+        await HttpClientHelper.OpenUrlAsync(Project);
     }
     
     [RelayCommand]

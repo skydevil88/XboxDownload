@@ -294,9 +294,9 @@ public partial class StorageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static void OpenUrl()
+    private static async Task OpenUrl()
     {
-        HttpClientHelper.OpenUrl(App.Settings.Culture == "zh-Hans"
+        await HttpClientHelper.OpenUrlAsync(App.Settings.Culture == "zh-Hans"
             ? "https://www.bilibili.com/video/BV1CN4y197Js?t=130"
             : "https://www.youtube.com/watch?v=3F499kh_jfk&t=130");
     }

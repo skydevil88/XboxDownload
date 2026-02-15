@@ -71,7 +71,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Host.ResolveDomain.Delay}">
+                            <DataGridTemplateColumn MinWidth="80" Header="{DynamicResource Host.ResolveDomain.Delay}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Delay}" TextAlignment="Right"
@@ -80,7 +80,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn MinWidth="240" Width="*" Header="{DynamicResource Host.ResolveDomain.Location}">
+                            <DataGridTemplateColumn MinWidth="230" Width="*" Header="{DynamicResource Host.ResolveDomain.Location}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Location}" VerticalAlignment="Center"

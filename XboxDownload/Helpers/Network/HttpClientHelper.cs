@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
@@ -70,9 +71,8 @@ public class HttpClientHelper
             return null;
         }
     }
-
-
-    public static async Task<string?> GetFastestProxy(string[] proxies, string path, Dictionary<string, string> headers, int timeout)
+    
+    public static async Task<string?> GetFastestProxyAsync(string[] proxies, string path, Dictionary<string, string> headers, int timeout)
     {
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeout));
 
@@ -108,13 +108,14 @@ public class HttpClientHelper
         return null;
     }
 
-    public static async Task<IPAddress?> GetFastestHttpsIp(IPAddress[] ips, int port = 443, int timeout = 3000)
+    public static async Task<IPAddress?> GetFastestHttpsIpAsync(IPAddress[] ips, int port = 443, int timeout = 3000)
     {
         using var cts = new CancellationTokenSource(timeout);
 
         var tasks = ips.Select(async ip =>
         {
             using var socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.NoDelay = true;
             socket.SendTimeout = timeout;
             socket.ReceiveTimeout = timeout;
 
@@ -122,8 +123,8 @@ public class HttpClientHelper
             {
                 await socket.ConnectAsync(ip, port, cts.Token);
 
-                await using var networkStream = new NetworkStream(socket, ownsSocket: false);
-                await using var sslStream = new SslStream(networkStream, false, (_, _, _, _) => true);
+                await using var networkStream = new NetworkStream(socket, ownsSocket: true);
+                await using var ssl = new SslStream(networkStream, false, (_, _, _, _) => true);
 
                 var options = new SslClientAuthenticationOptions
                 {
@@ -132,7 +133,7 @@ public class HttpClientHelper
                     CertificateRevocationCheckMode = X509RevocationMode.NoCheck
                 };
 
-                await sslStream.AuthenticateAsClientAsync(options, cts.Token);
+                await ssl.AuthenticateAsClientAsync(options, cts.Token);
 
                 return ip;
             }
@@ -156,6 +157,74 @@ public class HttpClientHelper
 
         return null;
     }
+    
+    public static async Task<(HttpResponseMessage? Response, long Latency)> MeasureHttpLatencyAsync(Uri uri, IPAddress ip, int rangeFrom = 0, int rangeTo = 0, int timeoutSeconds = 10, string? userAgent = null, CancellationToken token = default)
+    {
+        var timeout = TimeSpan.FromSeconds(timeoutSeconds);
+        using var handler = new SocketsHttpHandler();
+        handler.UseProxy = false;
+        handler.AllowAutoRedirect = false;
+        handler.AutomaticDecompression = DecompressionMethods.None;
+        handler.PooledConnectionLifetime = TimeSpan.Zero;
+        handler.ConnectTimeout = timeout;
+        handler.ConnectCallback = async (context, cancellationToken) =>
+        {
+            var tcp = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            tcp.NoDelay = true;
+            await tcp.ConnectAsync(ip, uri.Port, cancellationToken);
+
+            var networkStream = new NetworkStream(tcp, ownsSocket: true);
+
+            if (context.InitialRequestMessage.RequestUri?.Scheme != Uri.UriSchemeHttps)
+                return networkStream;
+            
+            var ssl = new SslStream(
+                networkStream,
+                leaveInnerStreamOpen: false,
+                (_, _, _, errors) => errors == SslPolicyErrors.None
+            );
+            
+            try
+            {
+                await ssl.AuthenticateAsClientAsync(
+                    context.InitialRequestMessage.RequestUri.Host,
+                    null,
+                    SslProtocols.Tls12 | SslProtocols.Tls13,
+                    checkCertificateRevocation: false
+                );
+            }
+            catch
+            {
+                tcp.Dispose();
+                await ssl.DisposeAsync();
+                throw;
+            }
+
+            return ssl;
+        };
+
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+        cts.CancelAfter(timeout);
+
+        try
+        {
+            using var client = new HttpClient(handler, disposeHandler: true);
+            
+            using var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            request.Headers.Range = new RangeHeaderValue(rangeFrom, rangeTo);
+            request.Headers.UserAgent.ParseAdd(string.IsNullOrEmpty(userAgent) ? nameof(XboxDownload) : userAgent);
+            
+            var sw = Stopwatch.StartNew();
+            var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            sw.Stop();
+            
+            return (response, sw.ElapsedMilliseconds);
+        }
+        catch
+        {
+            return (null, -1);
+        }
+    }
 
     public static readonly HttpClient SharedHttpClient;
 
@@ -177,7 +246,7 @@ public class HttpClientHelper
         SharedHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(nameof(XboxDownload));
     }
 
-    public static async void OpenUrl(string url)
+    public static async Task OpenUrlAsync(string url)
     {
         if (string.IsNullOrWhiteSpace(url))
             return;

@@ -850,7 +850,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             await using SslStream ssl = new(new NetworkStream(socket), false);
             try
             {
-                await ssl.AuthenticateAsServerAsync(_certificate!, false, SslProtocols.Tls13 | SslProtocols.Tls12, false);
+                await ssl.AuthenticateAsServerAsync(_certificate!, false, SslProtocols.Tls12 | SslProtocols.Tls13, false);
                 if (ssl.IsAuthenticated)
                 {
                     while (serviceViewModel.IsListening && socket.Connected)
@@ -1064,7 +1064,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     {
                                         if (host == "github.com" && filePath.Contains("/releases/download/"))
                                         {
-                                            var fastestUrl = await HttpClientHelper.GetFastestProxy(UpdateService.Proxies1, url, new Dictionary<string, string> { { "Range", "bytes=0-10239" } }, 3000);
+                                            var fastestUrl = await HttpClientHelper.GetFastestProxyAsync(UpdateService.Proxies1, url, new Dictionary<string, string> { { "Range", "bytes=0-10239" } }, 3000);
                                             if (fastestUrl != null)
                                             {
                                                 fileFound = true;
@@ -1127,7 +1127,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                         await proxy.Semaphore.WaitAsync();
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
-                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses);
+                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
                                                             if (fastestIp != null)
                                                                 ips = proxy.IpAddresses = [fastestIp];
                                                         }
@@ -1171,7 +1171,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                                                         if (proxy.IpAddresses?.Length >= 2)
                                                         {
-                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIp(proxy.IpAddresses);
+                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
                                                             if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
                                                         }
                                                     }

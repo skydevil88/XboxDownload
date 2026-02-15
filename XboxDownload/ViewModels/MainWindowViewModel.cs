@@ -225,8 +225,8 @@ public partial class MainWindowViewModel(
     }
 
     [RelayCommand]
-    private static void AppDownload(string parameter)
+    private static async Task AppDownload(string parameter)
     {
-        HttpClientHelper.OpenUrl(parameter);
+        await HttpClientHelper.OpenUrlAsync(parameter);
     }
 }

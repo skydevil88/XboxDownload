@@ -23,98 +23,93 @@ public static class SpeedTestService
             items = await PingFastest10Async(items, cancellationToken);
         }
         
-        string[] test =
+        string[] testUrls =
         [
             "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
             "http://gst.prod.dl.playstation.net/networktest/get_192m",
             "http://ctest-dl-lp1.cdn.nintendo.net/30m"
         ];
-
-        Uri baseUri = new(test[Random.Shared.Next(test.Length)]);
-
-        var userAgent = baseUri.Host.EndsWith(".nintendo.net") ? "XboxDownload/Nintendo NX" : "XboxDownload";
-        var headers = new Dictionary<string, string>
-        {
-            { "Host", baseUri.Host },
-            { "User-Agent", userAgent },
-            { "Range", "bytes=0-10485759"} // 10MB
-        };
-
-        var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        cts.CancelAfter(TimeSpan.FromSeconds(15));
+        
+        var selectedTestUri = new Uri(testUrls[Random.Shared.Next(testUrls.Length)]);
+        var userAgent = selectedTestUri.Host.EndsWith(".nintendo.net") 
+            ? $"{nameof(XboxDownload)}/Nintendo NX" 
+            : nameof(XboxDownload);
+        
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
         var token = cts.Token;
-
+        
         var result = new TaskCompletionSource<IpItem?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var ipResults = new ConcurrentDictionary<IpItem, long>();
-
-        var startSignal = new TaskCompletionSource<bool>(); // 控制统一开始
-
-        // ReSharper disable once MethodSupportsCancellation
-        var tasks = items.Select(ipItem => Task.Run(async () =>
+        
+        var tasks = items.Select(async ipItem =>
         {
-            var builder = new UriBuilder(baseUri) { Host = ipItem.Ip };
             long totalBytes = 0;
-
-            try
+            var (response, _) = await HttpClientHelper.MeasureHttpLatencyAsync(
+                selectedTestUri,  
+                IPAddress.Parse(ipItem.Ip), 
+                rangeFrom: 0,
+                rangeTo: 10485759,  // 10MB
+                timeoutSeconds: 10, 
+                userAgent: userAgent,
+                token);
+            
+            if (response != null)
             {
-                await startSignal.Task; // 等待统一启动信号
-
-                using var request = CreateSpeedTestRequest(builder.Uri, headers);
-                using var response = await HttpClientHelper.SharedHttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, token);
-                response.EnsureSuccessStatusCode();
-
-                await using var stream = await response.Content.ReadAsStreamAsync(token);
-                var buffer = new byte[8192];
-
-                while (true)
+                try
                 {
-                    var bytesRead = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), token);
-                    if (bytesRead == 0) break;
-                    totalBytes += bytesRead;
-                }
+                    response.EnsureSuccessStatusCode();
+                    
+                    await using var stream = await response.Content.ReadAsStreamAsync(token);
+                    var buffer = new byte[16384];
 
-                if (result.TrySetResult(ipItem))
+                    while (true)
+                    {
+                        var bytesRead = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), token);
+                        if (bytesRead == 0) break;
+                        totalBytes += bytesRead;
+                    }
+
+                    if (result.TrySetResult(ipItem))
+                    {
+                        _ = cts.CancelAsync();
+                    }
+                }
+                catch
                 {
-                    // ReSharper disable once AccessToDisposedClosure
-                    _ = cts.CancelAsync();
+                    // ignored
+                }
+                finally
+                {
+                    // Even if the request fails, record the amount of data that was downloaded.
+                    response.Dispose();
+                    ipResults[ipItem] = totalBytes;
                 }
             }
-            catch (OperationCanceledException)
-            {
-                // Ignore cancellation
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"SpeedTest failed for {builder.Uri}: {ex.Message}");
-            }
-            finally
-            {
-                // Even if the request fails, record the amount of data that was downloaded.
-                ipResults[ipItem] = totalBytes;
-            }
-        })).ToList();
-
-        // 所有任务创建完后再启动测速
-        startSignal.SetResult(true); // 发出统一开始信号
+            
+        }).ToList();
 
         try
         {
             await Task.WhenAll(tasks);
-
-            if (result.Task.IsCompletedSuccessfully)
-            {
-                return await result.Task;
-            }
-
-            // If all speed tests fail or are canceled, select the one with the highest totalBytes downloaded.
-            var best = ipResults.Where(kv => kv.Value > 0).OrderByDescending(kv => kv.Value).FirstOrDefault();
-            return best.Key;
         }
-        finally
+        catch
         {
-            cts.Dispose();
+            // ignored
         }
+
+        if (result.Task.IsCompletedSuccessfully)
+        {
+            return result.Task.Result;
+        }
+
+        var best = ipResults
+            .Where(kv => kv.Value > 0)
+            .OrderByDescending(kv => kv.Value)
+            .FirstOrDefault();
+
+        return best.Key;
     }
     
     private static async Task<List<IpItem>> PingFastest10Async(List<IpItem> items, CancellationToken cancellationToken)
@@ -213,7 +208,7 @@ public static class SpeedTestService
             Console.WriteLine($"Ping failed for {item.Ip}: {ex.Message}");
         }
     }
-
+    
     private static async Task TestDownloadSpeedAsync(IpItem item, Uri uri, Dictionary<string, string>? headers, TimeSpan timeout, CancellationToken token)
     {
         try
@@ -265,7 +260,7 @@ public static class SpeedTestService
             item.Speed ??= 0;
         }
     }
-
+    
     private static HttpRequestMessage CreateSpeedTestRequest(Uri uri, Dictionary<string, string>? headers)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, uri);

@@ -1162,7 +1162,7 @@ public partial class StoreViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenProduct(string parameter)
+    private async Task  OpenProduct(string parameter)
     {
         var productId = !string.IsNullOrEmpty(SelectedBundled?.ProductId) ? SelectedBundled.ProductId : GameData?.Products[0].ProductId;
         if (string.IsNullOrEmpty(productId)) return;
@@ -1173,7 +1173,7 @@ public partial class StoreViewModel : ObservableObject
             "Xbox" => $"msxbox://game/?productId={productId}",
             _ => $"https://www.xbox.com/{_currentProductMarket?.Language}/games/store/_/{productId}"
         };
-        HttpClientHelper.OpenUrl(url);
+        await HttpClientHelper.OpenUrlAsync(url);
     }
 
     [RelayCommand]
@@ -1187,17 +1187,17 @@ public partial class StoreViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenWebStore()
+    private async Task  OpenWebStore()
     {
         var productId = !string.IsNullOrEmpty(SelectedBundled?.ProductId) ? SelectedBundled.ProductId : GameData?.Products[0].ProductId;
         var url = string.IsNullOrEmpty(productId) ? UpdateService.Website : $"{UpdateService.Website}?{productId}";
-        HttpClientHelper.OpenUrl(url);
+        await HttpClientHelper.OpenUrlAsync(url);
     }
 
     [RelayCommand]
-    private static void OpenConsoleGuide()
+    private static async Task  OpenConsoleGuide()
     {
-        HttpClientHelper.OpenUrl(App.Settings.Culture == "zh-Hans"
+        await HttpClientHelper.OpenUrlAsync(App.Settings.Culture == "zh-Hans"
             ? "https://www.bilibili.com/video/BV1CN4y197Js"
             : "https://www.youtube.com/watch?v=3F499kh_jfk");
     }

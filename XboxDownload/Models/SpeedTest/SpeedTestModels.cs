@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Net.Http;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace XboxDownload.Models.SpeedTest;
 
