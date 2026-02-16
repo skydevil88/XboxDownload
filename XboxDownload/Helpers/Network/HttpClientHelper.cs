@@ -12,7 +12,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -136,7 +135,6 @@ public class HttpClientHelper
                 var options = new SslClientAuthenticationOptions
                 {
                     TargetHost = ip.ToString(),
-                    EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
                     CertificateRevocationCheckMode = X509RevocationMode.NoCheck
                 };
 
@@ -179,7 +177,16 @@ public class HttpClientHelper
             {
                 NoDelay = true
             };
-            await tcp.ConnectAsync(ip, uri.Port, cancellationToken);
+
+            try
+            {
+                await tcp.ConnectAsync(ip, uri.Port, cancellationToken);
+            }
+            catch (SocketException)
+            {
+                tcp.Dispose();
+                throw;
+            }
 
             var networkStream = new NetworkStream(tcp, ownsSocket: true);
 
@@ -197,7 +204,6 @@ public class HttpClientHelper
                 await ssl.AuthenticateAsClientAsync(
                     context.InitialRequestMessage.RequestUri.Host,
                     null,
-                    SslProtocols.Tls12 | SslProtocols.Tls13,
                     checkCertificateRevocation: false
                 );
             }

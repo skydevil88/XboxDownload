@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -848,9 +847,15 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             socket.ReceiveTimeout = 30000;
 
             await using SslStream ssl = new(new NetworkStream(socket), false);
+            var options = new SslServerAuthenticationOptions
+            {
+                ServerCertificate = _certificate,
+                ClientCertificateRequired = false,
+                CertificateRevocationCheckMode = X509RevocationMode.NoCheck
+            };
             try
             {
-                await ssl.AuthenticateAsServerAsync(_certificate!, false, SslProtocols.Tls12 | SslProtocols.Tls13, false);
+                await ssl.AuthenticateAsServerAsync(options);
                 if (ssl.IsAuthenticated)
                 {
                     while (serviceViewModel.IsListening && socket.Connected)
@@ -1260,7 +1265,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 var options = new SslClientAuthenticationOptions
                 {
                     TargetHost = string.IsNullOrEmpty(sni) ? ips[0].ToString() : sni,
-                    EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
                     CertificateRevocationCheckMode = X509RevocationMode.Online
                 };
                 ssl.AuthenticateAsClient(options);

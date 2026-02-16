@@ -622,8 +622,9 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         return IPAddress.None;
     }
 
-    public string DnsV4Query = ResourceHelper.GetString("Service.Listening.DnsV4Query"),
-        DnsV6Query = ResourceHelper.GetString("Service.Listening.DnsV6Query"),
+    public string
+        DnsV4Query     = ResourceHelper.GetString("Service.Listening.DnsV4Query"),
+        DnsV6Query     = ResourceHelper.GetString("Service.Listening.DnsV6Query"),
         DnsQueryFailed = ResourceHelper.GetString("Service.Listening.DnsQueryFailed");
 
     private void Listening(IPEndPoint iPEndPoint)

@@ -6,7 +6,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <FileVersion>3.0.0.35</FileVersion>
+        <FileVersion>3.0.0.36</FileVersion>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 
