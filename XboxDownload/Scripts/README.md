@@ -37,7 +37,7 @@ After the first successful run, you can simply double-click:
 > Some advanced features (such as port listening or modifying system
 > network settings) may require root privileges.\
 > If the application cannot run properly under a regular user\
-> (e.g., it fails with the error Failed to commit extracted files to directory [/Users/devil/.net/XboxDownload/...]),\
+> (e.g., it fails with the error Failed to commit extracted files to directory),\
 > please run the following command in the terminal to fix the permissions:
 
 
@@ -117,7 +117,7 @@ chmod +x run_xboxdownload.command XboxDownload
 > 💡 在普通用户权限下可以使用大部分功能。\
 > 某些高级功能（例如监听端口或修改系统网络设置）可能需要以 root 权限运行。\
 > 如果应用程序在普通用户权限下无法正常运行\
-> （例如报错：Failed to commit extracted files to directory [/Users/devil/.net/XboxDownload/...]），\
+> （例如报错：Failed to commit extracted files to directory），\
 > 请在终端执行以下命令修复权限：
 
 ```bash

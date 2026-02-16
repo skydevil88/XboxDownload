@@ -204,9 +204,9 @@ public static class SpeedTestService
         {
             // ignore
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Ping failed for {item.Ip}: {ex.Message}");
+            // ignore
         }
     }
 
@@ -257,14 +257,16 @@ public static class SpeedTestService
             }
             catch 
             {
-                // ignore
+                item.Speed ??= 0;
             }
             finally
             {
-                item.Speed ??= 0;
                 response.Dispose();
             }
         }
-
+        else if(!token.IsCancellationRequested)
+        {
+            item.Speed = 0;
+        }
     }
 }
