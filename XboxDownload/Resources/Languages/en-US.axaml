@@ -382,7 +382,6 @@
     <x:String x:Key="Storage.Mode">Mode</x:String>
     <x:String x:Key="Storage.EnablePcMode">Enable PC Mode</x:String>
     <x:String x:Key="Storage.EnableXboxMode">Enable Xbox Mode</x:String>
-    <x:String x:Key="Storage.RepairMode">Repair Mode</x:String>
     <x:String x:Key="Storage.Scan">Scan</x:String>
     <x:String x:Key="Storage.UserGuide">User Guide</x:String>
     <x:String x:Key="Storage.XboxToPcModeDescription">This feature converts an Xbox Console external hard drive to PC-readable mode. (Note: Security software may block this operation. Data loss risk is possible, please use an empty drive and backup your data. User assumes all risks.)</x:String>

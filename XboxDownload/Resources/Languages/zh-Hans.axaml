@@ -383,7 +383,6 @@
     <x:String x:Key="Storage.EnablePcMode">启用 PC 模式</x:String>
     <x:String x:Key="Storage.EnableXboxMode">启用 Xbox 模式</x:String>
     <x:String x:Key="Storage.Scan">扫描</x:String>
-    <x:String x:Key="Storage.RepairMode">修复模式</x:String>
     <x:String x:Key="Storage.UserGuide">使用教程</x:String>
     <x:String x:Key="Storage.XboxToPcModeDescription">此功能可以把Xbox主机外置移动硬盘转换为PC可读写模式。（注：操作可能导致安全软件拦截，建议提前关闭防护；该过程存在数据丢失风险，请务必使用空闲硬盘并做好备份，使用者需自行承担操作风险。）</x:String>
     <x:String x:Key="Storage.PcMode">PC 模式</x:String>

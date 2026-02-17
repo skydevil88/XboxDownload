@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using XboxDownload.Helpers.IO;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.Utilities;
 
@@ -21,32 +23,26 @@ public partial class StorageMappingEntry : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FormatSize))]
     private long _size;
-
-    [ObservableProperty]
-    private string _mbrHex;
-
+    
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Mode))]
-    private string _bootSignature;
+    private byte[] _bootSignatureBytes;
 
     public string FormatSize => UnitConverter.ConvertBytes(Size);
 
-    public string Mode => BootSignature switch
-    {
-        "99CC" => ResourceHelper.GetString("Storage.XboxMode"),
-        "55AA" => ResourceHelper.GetString("Storage.PcMode"),
-        "0000" => ResourceHelper.GetString("Storage.RepairMode"),
-        _ => "Unknown"
-    };
+    public string Mode => BootSignatureBytes.SequenceEqual(MbrHelper.XboxMode)
+        ? ResourceHelper.GetString("Storage.XboxMode")
+        : BootSignatureBytes.SequenceEqual(MbrHelper.PcMode)
+            ? ResourceHelper.GetString("Storage.PcMode")
+            : "Unknown";
 
-    public StorageMappingEntry(int index, string deviceId, string model, string serialNumber, long size, string mbrHex, string bootSignature)
+    public StorageMappingEntry(int index, string deviceId, string model, string serialNumber, long size, byte[] bootSignatureBytes)
     {
         Index = index;
         DeviceId = deviceId;
         Model = model;
         SerialNumber = serialNumber;
         Size = size;
-        MbrHex = mbrHex;
-        BootSignature = bootSignature;
+        BootSignatureBytes = bootSignatureBytes;
     }
 }
