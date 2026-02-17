@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Runtime.Versioning;
 using System.Text;
@@ -95,7 +96,7 @@ public partial class StorageViewModel : ObservableObject
                 
                 try
                 {
-                    await CommandHelper.RunCommandAsync("powershell.exe",
+                    await CommandHelper.RunCommandAsync("PowerShell.exe",
                         $"Update-Disk -Number {SelectedEntry.Index}");
                 }
                 catch
@@ -170,7 +171,7 @@ public partial class StorageViewModel : ObservableObject
             return result;
         });
 
-        StorageMappings.AddRange(entries);
+        StorageMappings.AddRange(entries.OrderBy(e => e.Index));
     }
 
     [RelayCommand]
@@ -345,26 +346,11 @@ public partial class StorageViewModel : ObservableObject
             ResourceHelper.GetString("Storage.InvalidXboxPackageMessage"),
             Icon.Error);
     }
-
-    private static string TryExtractProductId2(byte[] productIdBytes)
-    {
-        var part1 = Encoding.ASCII.GetString(productIdBytes, 0, 7);
-        var part2 = Encoding.ASCII.GetString(productIdBytes, 9, 5);
-        var candidate = part1 + part2;
-
-        return MyRegex().IsMatch(candidate)
-            ? candidate
-            : string.Empty;
-    }
-
-    [GeneratedRegex(@"^[A-Z0-9]{12}$", RegexOptions.IgnoreCase)]
-    private static partial Regex MyRegex();
-
+    
     [RelayCommand]
     private static async Task QueryContentId(string productId)
     {
         var storeVm = Ioc.Default.GetRequiredService<StoreViewModel>();
-        //storeVm.QueryUrl = $"https://www.microsoft.com/store/productid/{productId}";
         storeVm.QueryUrl = $"https://apps.microsoft.com/detail/{productId}";
 
         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
@@ -372,4 +358,18 @@ public partial class StorageViewModel : ObservableObject
 
         await storeVm.QueryCommand.ExecuteAsync(null);
     }
+
+    private static string TryExtractProductId2(byte[] productIdBytes)
+    {
+        var part1 = Encoding.ASCII.GetString(productIdBytes, 0, 7);
+        var part2 = Encoding.ASCII.GetString(productIdBytes, 9, 5);
+        var productId = part1 + part2;
+
+        return MyRegex().IsMatch(productId)
+            ? productId
+            : string.Empty;
+    }
+
+    [GeneratedRegex(@"^[A-Z0-9]{12}$", RegexOptions.IgnoreCase)]
+    private static partial Regex MyRegex();
 }

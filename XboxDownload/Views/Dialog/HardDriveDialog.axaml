@@ -1,0 +1,54 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="250"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        xmlns:converters="clr-namespace:XboxDownload.Converters"
+        x:Class="XboxDownload.Views.Dialog.HardDriveDialog"
+        x:DataType="dialog:HardDriveDialogViewModel"
+        WindowStartupLocation="CenterOwner"
+        Width="980" Height="250"
+        Title="{DynamicResource Storage.FormatHardDrive.Title}">
+    
+    <Window.Resources>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+    </Window.Resources>
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,100,*" Margin="10" RowSpacing="5">
+            <DataGrid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" CanUserSortColumns="False" GridLinesVisibility="All"
+                      BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                      ItemsSource="{Binding StorageMappings}"
+                      SelectedItem="{Binding SelectedEntry}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn MinWidth="40" Header="{DynamicResource Storage.Index}" Binding="{Binding Index}"/>
+                    <DataGridTextColumn Width="*" Header="{DynamicResource Storage.Model}" Binding="{Binding Model}"/>
+                    <DataGridTextColumn MinWidth="110" Header="{DynamicResource Storage.SerialNumber}" Binding="{Binding SerialNumber}"/>
+                    <DataGridTextColumn MinWidth="80" Header="{DynamicResource Storage.Size}" Binding="{Binding FormatSize}"/>
+                    <DataGridTextColumn MinWidth="100" Header="{DynamicResource Storage.Mode}" Binding="{Binding Mode}"/>
+                    <DataGridTextColumn MinWidth="80" Header="盘符" Binding="{Binding DriveLetter}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0" Classes="LinkLabel" Command="{Binding RefreshHardDrivesCommand}">
+                    <TextBlock Text="刷新" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                </Button>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="显示："/>
+                    <RadioButton Content="移动硬盘"
+                                 IsChecked="{Binding DiskMediaType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=External}"  />
+                    <RadioButton Content="所有硬盘"
+                                 IsChecked="{Binding DiskMediaType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=All}"/>
+                </StackPanel>
+            </Grid>
+
+            <Button Grid.Row="1" Grid.Column="1" MinWidth="80" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Content="格式化"
+                    IsEnabled="{Binding IsEnabled}"
+                    Command="{Binding FormatHardDriveCommand}"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="分区过程中弹出格式化或者其它错误信息请忽略取消"/>
+
+        </Grid>
+</Window>

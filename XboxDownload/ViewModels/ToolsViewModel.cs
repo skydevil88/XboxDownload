@@ -150,7 +150,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
         FilePath = string.Empty;
         try
         {
-            await CommandHelper.RunCommandAsync("powershell", cmd, true);
+            await CommandHelper.RunCommandAsync("PowerShell.exe", cmd, true);
         }
         catch (Exception ex)
         {
@@ -166,7 +166,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     {
         DrivePaths.Clear();
 
-        var appxVolumeOutput = await CommandHelper.RunCommandWithOutputAsync("powershell.exe", "Get-AppxVolume");
+        var appxVolumeOutput = await CommandHelper.RunCommandWithOutputAsync("PowerShell.exe", "Get-AppxVolume");
 
         var results = new ConcurrentDictionary<string, (string StorePath, bool IsOffline)>();
         foreach (var line in appxVolumeOutput)

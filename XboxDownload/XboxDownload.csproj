@@ -42,19 +42,4 @@
         <PackageReference Include="System.Management" Version="10.0.3" />
         <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Views\Dialog\ResolveDomainDialog.axaml.cs">
-            <DependentUpon>ResolveHostDialog.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Dialog\DohServerDialog.axaml.cs">
-            <DependentUpon>DohServerDialog.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Dialog\ImportHostDialog.axaml.cs">
-            <DependentUpon>ImportHostDialog.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-    </ItemGroup>
 </Project>

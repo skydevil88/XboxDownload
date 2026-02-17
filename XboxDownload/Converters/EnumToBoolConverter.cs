@@ -12,7 +12,7 @@ public class EnumToBoolConverter : IValueConverter
         return value?.ToString() == parameter?.ToString();
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return value is bool and true ? Enum.Parse(targetType, parameter?.ToString() ?? string.Empty) : AvaloniaProperty.UnsetValue;
     }

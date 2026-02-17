@@ -383,6 +383,7 @@
     <x:String x:Key="Storage.EnablePcMode">启用 PC 模式</x:String>
     <x:String x:Key="Storage.EnableXboxMode">启用 Xbox 模式</x:String>
     <x:String x:Key="Storage.Scan">扫描</x:String>
+    <x:String x:Key="Storage.FormatHardDrive">格式化硬盘</x:String>
     <x:String x:Key="Storage.UserGuide">使用教程</x:String>
     <x:String x:Key="Storage.XboxToPcModeDescription">此功能可以把Xbox主机外置移动硬盘转换为PC可读写模式。（注：操作可能导致安全软件拦截，建议提前关闭防护；该过程存在数据丢失风险，请务必使用空闲硬盘并做好备份，使用者需自行承担操作风险。）</x:String>
     <x:String x:Key="Storage.PcMode">PC 模式</x:String>
@@ -405,10 +406,12 @@
     <x:String x:Key="Storage.InvalidXboxPackageMessage">该文件不是有效的 Xbox 游戏包。</x:String>
     <x:String x:Key="Storage.Copy">复制</x:String>
     <x:String x:Key="Storage.RenameLocalFile">重命名本地文件</x:String>
-    <x:String x:Key="Storage.RenameConfirm">是否确认重命名本地文件？&#x0a;&#x0a;原文件名：{0}&#x0a;新文件名：{1} </x:String>
+    <x:String x:Key="Storage.RenameConfirm">确定要重命名本地文件吗？&#x0a;&#x0a;原始文件名：{0}&#x0a;修改后文件名：{1} </x:String>
     <x:String x:Key="Storage.RenameFileFailed">重命名本地文件失败，错误信息：&#x0a;{0}</x:String>
     <x:String x:Key="Storage.CopyAndRenameGame">将PC上下载的完整游戏文件复制到Xbox主机外置硬盘根目录并重命名为Content ID，然后连接硬盘到Xbox，最后将游戏移动到另一块硬盘即可使用。&#x0a;注意事项： 1. 请勿在外置硬盘上启动游戏，否则游戏会被重新下载并覆盖。 2. 应用不支持硬盘导入。 3. Xbox主机需要保持联网状态。</x:String>
 
+    <x:String x:Key="Storage.FormatHardDrive.Title">格式化 Xbox 外接式硬盘</x:String>
+    
     <x:String x:Key="Store.MicrosoftStore">微软商店</x:String>
     <x:String x:Key="Store.UrlProductId">链接/ProductID</x:String>
     <x:String x:Key="Store.Query">查询</x:String>

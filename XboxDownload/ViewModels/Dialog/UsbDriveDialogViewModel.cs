@@ -16,17 +16,17 @@ using XboxDownload.Helpers.Utilities;
 
 namespace XboxDownload.ViewModels.Dialog;
 
-public partial class UsbDeviceDialogViewModel : ObservableObject
+public partial class UsbDriveDialogViewModel : ObservableObject
 {
-    public ObservableCollection<UsbDeviceMappingEntry> UsbDeviceMappings { get; } = [];
+    public ObservableCollection<UsbDriveMappingEntry> UsbDriveMappings { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
-    private UsbDeviceMappingEntry? _selectedEntry;
+    private UsbDriveMappingEntry? _selectedEntry;
 
     public bool IsEnabled => SelectedEntry != null;
 
-    public UsbDeviceDialogViewModel()
+    public UsbDriveDialogViewModel()
     {
         RefreshUsbDrivesCommand.Execute(null);
     }
@@ -41,11 +41,11 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
         if (!OperatingSystem.IsWindows())
             return;
 
-        UsbDeviceMappings.Clear();
+        UsbDriveMappings.Clear();
 
         var entries = await Task.Run(() =>
         {
-            var result = new List<UsbDeviceMappingEntry>();
+            var result = new List<UsbDriveMappingEntry>();
             using var mc = new ManagementClass("Win32_DiskDrive");
             using var moc = mc.GetInstances();
             foreach (var (mo, deviceId, interfaceType, mediaType) in from ManagementObject mo in moc
@@ -54,18 +54,18 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
                                                                      let mediaType = mo.Properties["MediaType"].Value?.ToString()
                                                                      select (mo, deviceId, interfaceType, mediaType))
             {
-                if (string.IsNullOrEmpty(deviceId) || interfaceType != "USB" ||
-                    mediaType != "Removable Media") continue;
+                if (string.IsNullOrEmpty(deviceId) || interfaceType != "USB" || mediaType != "Removable Media")
+                    continue;
+                
                 var index = Convert.ToInt32(mo.Properties["Index"].Value);
                 var model = mo.Properties["Model"].Value?.ToString()?.Trim() ?? string.Empty;
                 var serialNumber = mo.Properties["SerialNumber"].Value?.ToString()?.Trim() ?? string.Empty;
                 var size = Convert.ToInt64(mo.Properties["Size"].Value);
                 var partitions = Convert.ToInt32(mo.Properties["Partitions"].Value);
-                var lstDisk = (from ManagementObject diskPartition in mo.GetRelated("Win32_DiskPartition")
+                var driveLetters = (from ManagementObject diskPartition in mo.GetRelated("Win32_DiskPartition")
                                from ManagementBaseObject disk in diskPartition.GetRelated("Win32_LogicalDisk")
                                select disk.Properties["Name"].Value.ToString()).ToList();
-
-
+                
                 var outputString = "";
                 try
                 {
@@ -89,14 +89,14 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
 
                 var m = Regex.Match(outputString, @"\s" + index + ".{43}(?<Gpt>.)");
                 var partitionScheme = m.Success ? m.Groups["Gpt"].Value == "*" ? "GPT" : "MBR" : "未知";
-                var entry = new UsbDeviceMappingEntry(index, model, interfaceType, serialNumber, size, partitionScheme, partitions, string.Join(',', lstDisk.ToArray()));
+                var entry = new UsbDriveMappingEntry(index, model, interfaceType, serialNumber, size, partitionScheme, partitions, string.Join(',', driveLetters.ToArray()));
 
                 result.Add(entry);
             }
             return result;
         });
 
-        UsbDeviceMappings.AddRange(entries);
+        UsbDriveMappings.AddRange(entries);
     }
 
     [RelayCommand]
@@ -106,7 +106,7 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
 
         var confirm = await DialogHelper.ShowConfirmDialogAsync(
             "重新分区",
-            "确认重新分区U盘？\n\n警告，此操作将删除U盘中的所有分区和文件!",
+            "确认要重新分区U盘吗？ \n\n⚠ 警告，此操作将删除U盘中的所有分区和文件!",
             Icon.Question);
 
         if (!confirm) return;
@@ -123,7 +123,7 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
 
             p.Start();
 
-            await p.StandardInput.WriteLineAsync("list disk");
+            //await p.StandardInput.WriteLineAsync("list disk");
             await p.StandardInput.WriteLineAsync("select disk " + SelectedEntry.Index);
             await p.StandardInput.WriteLineAsync("clean");
 
@@ -134,7 +134,7 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
                 await p.StandardInput.WriteLineAsync("convert gpt");
 
             await p.StandardInput.WriteLineAsync("create partition primary");
-            await p.StandardInput.WriteLineAsync("select partition 1");
+            //await p.StandardInput.WriteLineAsync("select partition 1");
             await p.StandardInput.WriteLineAsync("format fs=ntfs quick");
 
             // 如果没有驱动器盘符，自动分配
@@ -185,7 +185,7 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
         Mbr
     }
 
-    public partial class UsbDeviceMappingEntry : ObservableObject
+    public partial class UsbDriveMappingEntry : ObservableObject
     {
         [ObservableProperty]
         private int _index;
@@ -214,7 +214,7 @@ public partial class UsbDeviceDialogViewModel : ObservableObject
 
         public string FormatSize => UnitConverter.ConvertBytes(Size);
 
-        public UsbDeviceMappingEntry(int index, string model, string interfaceType, string serialNumber, long size, string partitionScheme, int partitions, string driveLetter)
+        public UsbDriveMappingEntry(int index, string model, string interfaceType, string serialNumber, long size, string partitionScheme, int partitions, string driveLetter)
         {
             Index = index;
             Model = model;

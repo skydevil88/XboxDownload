@@ -5,8 +5,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="250"
         xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         xmlns:converters="clr-namespace:XboxDownload.Converters"
-        x:Class="XboxDownload.Views.Dialog.UsbDeviceDialog"
-        x:DataType="dialog:UsbDeviceDialogViewModel"
+        x:Class="XboxDownload.Views.Dialog.UsbDriveDialog"
+        x:DataType="dialog:UsbDriveDialogViewModel"
         WindowStartupLocation="CenterOwner"
         Width="980" Height="250"
         Title="Usb Device (MBR磁盘存在2TB分区限制，超出后的容量无法被使用)">
@@ -16,9 +16,9 @@
     </Window.Resources>
 
     <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,100,*" Margin="10" RowSpacing="5">
-        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" IsReadOnly="True" CanUserSortColumns="False" GridLinesVisibility="All"
+        <DataGrid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" CanUserSortColumns="False" GridLinesVisibility="All"
                   BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
-                  ItemsSource="{Binding UsbDeviceMappings}"
+                  ItemsSource="{Binding UsbDriveMappings}"
                   SelectedItem="{Binding SelectedEntry}">
             <DataGrid.Columns>
                 <DataGridTextColumn MinWidth="40" Header="编号" Binding="{Binding Index}"/>

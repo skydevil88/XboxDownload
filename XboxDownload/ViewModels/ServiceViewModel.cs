@@ -118,7 +118,7 @@ public partial class ServiceViewModel : ObservableObject
 
     private async Task DeliveryOptimization()
     {
-        var doConfigOutput = await CommandHelper.RunCommandWithOutputAsync("powershell.exe", "Get-DOConfig");
+        var doConfigOutput = await CommandHelper.RunCommandWithOutputAsync("PowerShell.exe", "Get-DOConfig");
 
         var dic = new Dictionary<string, string>();
         foreach (var line in doConfigOutput)
@@ -227,7 +227,7 @@ public partial class ServiceViewModel : ObservableObject
         {
             if (OperatingSystem.IsWindows())
             {
-                await CommandHelper.RunCommandAsync("powershell", "Get-NetAdapter -Physical | Set-DnsClientServerAddress -ResetServerAddresses");
+                await CommandHelper.RunCommandAsync("PowerShell.exe", "Get-NetAdapter -Physical | Set-DnsClientServerAddress -ResetServerAddresses");
             }
             else if (OperatingSystem.IsMacOS())
             {

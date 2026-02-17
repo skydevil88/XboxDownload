@@ -76,7 +76,7 @@
                         <Button Classes="LinkLabel" Command="{Binding RefreshUsbDrivesCommand}">
                             <TextBlock Text="刷新" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                         </Button>
-                        <Button Classes="LinkLabel" Click="ShowUsbDeviceAsync">
+                        <Button Classes="LinkLabel" Click="ShowUsbDriveAsync">
                             <TextBlock Text="检查U盘" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                         </Button>
                     </StackPanel>

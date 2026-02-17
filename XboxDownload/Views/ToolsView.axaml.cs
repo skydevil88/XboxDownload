@@ -30,7 +30,7 @@ public partial class ToolsView : UserControl
         }
     }
     
-    private async void ShowUsbDeviceAsync(object? sender, RoutedEventArgs e)
+    private async void ShowUsbDriveAsync(object? sender, RoutedEventArgs e)
     {
         try
         {
@@ -39,7 +39,7 @@ public partial class ToolsView : UserControl
             // Ensure DataContext is HostViewModel
             if (DataContext is ToolsViewModel toolsVm)
             {
-                var dialog = new Dialog.UsbDeviceDialog();
+                var dialog = new Dialog.UsbDriveDialog();
                 await dialog.ShowDialog(window);  // Only call this once
                 toolsVm.RefreshUsbDrivesCommand.Execute(null);
             }

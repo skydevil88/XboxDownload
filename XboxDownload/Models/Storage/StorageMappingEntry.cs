@@ -27,6 +27,9 @@ public partial class StorageMappingEntry : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Mode))]
     private byte[] _bootSignatureBytes;
+    
+    [ObservableProperty]
+    private string _driveLetter;
 
     public string FormatSize => UnitConverter.ConvertBytes(Size);
 
@@ -36,7 +39,7 @@ public partial class StorageMappingEntry : ObservableObject
             ? ResourceHelper.GetString("Storage.PcMode")
             : "Unknown";
 
-    public StorageMappingEntry(int index, string deviceId, string model, string serialNumber, long size, byte[] bootSignatureBytes)
+    public StorageMappingEntry(int index, string deviceId, string model, string serialNumber, long size, byte[] bootSignatureBytes, string driveLetter = "")
     {
         Index = index;
         DeviceId = deviceId;
@@ -44,5 +47,6 @@ public partial class StorageMappingEntry : ObservableObject
         SerialNumber = serialNumber;
         Size = size;
         BootSignatureBytes = bootSignatureBytes;
+        DriveLetter = driveLetter;
     }
 }

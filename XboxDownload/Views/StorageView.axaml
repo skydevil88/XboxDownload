@@ -39,13 +39,22 @@
                         <Button Grid.Row="2" MinWidth="120" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                                 Content="{DynamicResource Storage.Scan}"
                                 Command="{Binding ScanCommand}"/>
-                        <HyperlinkButton Grid.Row="4"
-                                         IsVisited="False"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         Command="{Binding OpenUrlCommand}">
-                            <TextBlock Text="{DynamicResource Storage.UserGuide}"/>
-                        </HyperlinkButton>
+                        <Button Grid.Row="3" Margin="0,5,0,0"
+                                Classes="LinkLabel"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Command="{Binding OpenUrlCommand}">
+                            <TextBlock Text="{DynamicResource Storage.UserGuide}" 
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
+                        <Button Grid.Row="4" Margin="0,5,0,0"
+                                Classes="LinkLabel"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Click="FormatHardDriveAsync">
+                            <TextBlock Text="{DynamicResource Storage.FormatHardDrive}"
+                                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Button>
                     </Grid>
                 </StackPanel>
 
