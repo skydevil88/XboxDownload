@@ -32,6 +32,13 @@ public static class SpeedTestService
         var userAgent = selectedTestUri.Host.EndsWith(".nintendo.net") 
             ? $"{nameof(XboxDownload)}/Nintendo NX" 
             : nameof(XboxDownload);
+        
+        const long totalSize = 30L * 1024 * 1024;      // 30MB
+        const long chunkSize = 10L * 1024 * 1024;      // 10MB
+        const long maxStart = totalSize - chunkSize;
+        var random = Random.Shared;
+        var rangeFrom = random.NextInt64(0, maxStart + 1);
+        var rangeTo = rangeFrom + chunkSize - 1;
 
         var timeout = TimeSpan.FromSeconds(10);
 
@@ -50,8 +57,8 @@ public static class SpeedTestService
                 selectedTestUri,  
                 IPAddress.Parse(ipItem.Ip),
                 timeout,
-                rangeFrom: 0,
-                rangeTo: 10485759,  // 10MB
+                rangeFrom: rangeFrom,
+                rangeTo: rangeTo,
                 userAgent: userAgent,
                 token);
             
@@ -62,7 +69,7 @@ public static class SpeedTestService
                     response.EnsureSuccessStatusCode();
                     
                     await using var stream = await response.Content.ReadAsStreamAsync(token);
-                    var buffer = new byte[16384];
+                    var buffer = new byte[64 * 1024];
 
                     while (true)
                     {
@@ -166,7 +173,7 @@ public static class SpeedTestService
         return bag.Count >= 5 ? [.. bag] : [.. items.OrderBy(_ => Random.Shared.Next()).Take(30)];
     }
 
-    public static async Task PingAndTestAsync(IpItem item, Uri uri, int rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
+    public static async Task PingAndTestAsync(IpItem item, Uri uri, long rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
     {
         item.Ttl = null;
         item.RoundtripTime = null;
@@ -210,7 +217,7 @@ public static class SpeedTestService
         }
     }
 
-    private static async Task TestDownloadSpeedAsync(IpItem item, Uri uri, int rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
+    private static async Task TestDownloadSpeedAsync(IpItem item, Uri uri, long rangeTo, TimeSpan timeout, string userAgent, CancellationToken token)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
         cts.CancelAfter(timeout);
@@ -230,7 +237,7 @@ public static class SpeedTestService
 
                 await using var stream = await response.Content.ReadAsStreamAsync(cts.Token);
 
-                var buffer = new byte[16384];
+                var buffer = new byte[64 * 1024];
                 long totalBytes = 0;
                 var stopwatch = Stopwatch.StartNew();
 

@@ -163,7 +163,7 @@ public class HttpClientHelper
         return null;
     }
     
-    public static async Task<(HttpResponseMessage? Response, long Latency)> MeasureHttpLatencyAsync(Uri uri, IPAddress ip, TimeSpan timeout, int rangeFrom = 0, int rangeTo = 0, string? userAgent = null, CancellationToken token = default)
+    public static async Task<(HttpResponseMessage? Response, long Latency)> MeasureHttpLatencyAsync(Uri uri, IPAddress ip, TimeSpan timeout, long rangeFrom = 0, long rangeTo = 0, string? userAgent = null, CancellationToken token = default)
     {
         using var handler = new SocketsHttpHandler();
         handler.UseProxy = false;
@@ -182,7 +182,7 @@ public class HttpClientHelper
             {
                 await tcp.ConnectAsync(ip, uri.Port, cancellationToken);
             }
-            catch (SocketException)
+            catch
             {
                 tcp.Dispose();
                 throw;

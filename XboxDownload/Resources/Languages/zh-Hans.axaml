@@ -406,7 +406,7 @@
     <x:String x:Key="Storage.InvalidXboxPackageMessage">该文件不是有效的 Xbox 游戏包。</x:String>
     <x:String x:Key="Storage.Copy">复制</x:String>
     <x:String x:Key="Storage.RenameLocalFile">重命名本地文件</x:String>
-    <x:String x:Key="Storage.RenameConfirm">是否确认重命名本地文件？&#x0a;&#x0a;原文件名：{0}&#x0a;新文件名：{1}</x:String>
+    <x:String x:Key="Storage.RenameConfirm">是否确认重命名本地文件？&#x0a;&#x0a;原文件名：{0}&#x0a;新文件名：{1} </x:String>
     <x:String x:Key="Storage.RenameFileFailed">重命名本地文件失败，错误信息：&#x0a;{0}</x:String>
     <x:String x:Key="Storage.CopyAndRenameGame">将PC上下载的完整游戏文件复制到Xbox主机外置硬盘根目录并重命名为Content ID，然后连接硬盘到Xbox，最后将游戏移动到另一块硬盘即可使用。&#x0a;注意事项： 1. 请勿在外置硬盘上启动游戏，否则游戏会被重新下载并覆盖。 2. 应用不支持硬盘导入。 3. Xbox主机需要保持联网状态。</x:String>
 

@@ -226,7 +226,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     foreach (var hostEntry in lines)
                     {
                         if (hostEntry.StartsWith('#')) continue;
-                        var hostNameRaw = new string(hostEntry.TakeWhile(c => c != '#').ToArray()).Trim().ToLowerInvariant();
+                        var hostNameRaw = new string([.. hostEntry.TakeWhile(c => c != '#')]).Trim().ToLowerInvariant();
                         var isWildcard = hostNameRaw.StartsWith('*');
                         var isDotAfterStar = isWildcard && hostNameRaw.Length > 1 && hostNameRaw[1] == '.';
                         var hostNameNoStar = isWildcard ? hostNameRaw.TrimStart('*') : hostNameRaw;
@@ -277,7 +277,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
     private static void AddOrUpdateMap(ConcurrentDictionary<string, List<ResourceRecord>> map, string host, List<ResourceRecord> records)
     {
         if (map.TryGetValue(host, out var existing))
-            map[host] = existing.Concat(records).DistinctBy(r => BitConverter.ToString(r.Data ?? [])).ToList();
+            map[host] = [.. existing.Concat(records).DistinctBy(r => BitConverter.ToString(r.Data ?? []))];
         else
             map[host] = records;
     }
@@ -995,7 +995,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         if (hostMap.TryGetValue(queryName, out var hostRecords))
         {
             if (hostRecords.Count > 1)
-                hostRecords = hostRecords.OrderBy(_ => Random.Shared.Next()).Take(16).ToList();
+                hostRecords = [.. hostRecords.OrderBy(_ => Random.Shared.Next()).Take(16)];
 
             SendDnsResponse(dnsMessage, client, hostRecords, queryTypeText, queryName);
             return true;
@@ -1013,7 +1013,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 Ipv4HostMap.TryAdd(queryName, wildcardHost);
 
             if (wildcardHost.Count > 1)
-                wildcardHost = wildcardHost.OrderBy(_ => Random.Shared.Next()).Take(16).ToList();
+                wildcardHost = [.. wildcardHost.OrderBy(_ => Random.Shared.Next()).Take(16)];
 
             SendDnsResponse(dnsMessage, client, wildcardHost, queryTypeText, queryName);
             return true;

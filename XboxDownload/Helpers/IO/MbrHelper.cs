@@ -38,7 +38,7 @@ public static class MbrHelper
 
         try
         {
-            var buffer = new byte[2048];
+            var buffer = new byte[512];
             uint length = 0;
             var pos = SetFilePointer(diskHandle, 0, IntPtr.Zero, FileBegin);
             if (pos == 0xFFFFFFFF || !ReadFile(diskHandle, buffer, (uint)buffer.Length, ref length, IntPtr.Zero) || length != buffer.Length)

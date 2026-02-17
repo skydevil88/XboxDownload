@@ -41,7 +41,8 @@
                                 Command="{Binding ScanCommand}"/>
                         <CheckBox Grid.Row="3" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
                                   Content="{DynamicResource Storage.RepairMode}"
-                                  IsChecked="{Binding IsRepair}"/>
+                                  IsChecked="{Binding IsRepair}"
+                                  IsVisible="False"/>
                         <HyperlinkButton Grid.Row="4"
                                          IsVisited="False"
                                          HorizontalAlignment="Center"

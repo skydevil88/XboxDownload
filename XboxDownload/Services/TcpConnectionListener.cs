@@ -64,7 +64,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
         // Subject Alternative Names (SAN)
         var sanBuilder = new SubjectAlternativeNameBuilder();
-        sanBuilder.AddDnsName("packagespc.xboxlive.com");
+        if (OperatingSystem.IsWindows())
+            sanBuilder.AddDnsName("packagespc.xboxlive.com");
         sanBuilder.AddDnsName("*.akamai.net");
         sanBuilder.AddDnsName("*.akamaihd.net");
         sanBuilder.AddDnsName("*.akamaized.net");

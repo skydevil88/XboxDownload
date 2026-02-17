@@ -6,16 +6,13 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using MsBox.Avalonia.Enums;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Management;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -32,15 +29,6 @@ namespace XboxDownload.ViewModels;
 public partial class StorageViewModel : ObservableObject
 {
     public static bool IsWindows => OperatingSystem.IsWindows();
-
-    private readonly ConcurrentDictionary<string, MbrCacheEntry> _mbrMap = new();
-
-    private static readonly string MbrFilePath = PathHelper.GetLocalFilePath("MbrBackup.json");
-
-    public StorageViewModel()
-    {
-        _ = LoadMbrMapAsync(MbrFilePath);
-    }
 
     public ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
 
@@ -85,81 +73,59 @@ public partial class StorageViewModel : ObservableObject
 
         var mbrHex = await Task.Run(() => MbrHelper.ByteToHex(mbrBytes));
 
-        if (IsRepair)
+        if (mbrHex[..1020] == SelectedEntry.MbrHex[..1020])
         {
-            if (mbrHex == SelectedEntry.MbrHex)
+            var bootSignature = mbrHex[1020..1024];
+            switch (parameter)
             {
-                var key = $"{SelectedEntry.Model}_{SelectedEntry.SerialNumber}_{SelectedEntry.Size}";
-                if (_mbrMap.TryGetValue(key, out var kv))
-                {
-                    if (MbrHelper.WriteMbr(SelectedEntry.DeviceId, MbrHelper.HexToByte(kv.MbrHex)))
+                case "PC" when SelectedEntry.BootSignature == "99CC" && bootSignature == "99CC":
                     {
-                        SelectedEntry.BootSignature = "99CC";
-                        SelectedEntry = null;
-                        await DialogHelper.ShowInfoDialogAsync(
-                            ResourceHelper.GetString("Storage.SwitchToXboxMode"),
-                            ResourceHelper.GetString("Storage.SuccessfullySwitchedToXboxMode"),
-                            Icon.Success);
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (mbrHex[..1020] == SelectedEntry.MbrHex[..1020])
-            {
-                var bootSignature = mbrHex[1020..1024];
-                switch (parameter)
-                {
-                    case "PC" when SelectedEntry.BootSignature == "99CC" && bootSignature == "99CC":
+                        var newMbr = string.Concat(
+                            SelectedEntry.MbrHex.AsSpan(0, 1020),
+                            "55AA",
+                            SelectedEntry.MbrHex.AsSpan(1024)
+                        );
+                        if (MbrHelper.WriteMbr(SelectedEntry.DeviceId, MbrHelper.HexToByte(newMbr)))
                         {
-                            var newMbr = string.Concat(
-                                SelectedEntry.MbrHex.AsSpan(0, 1020),
-                                "55AA",
-                                SelectedEntry.MbrHex.AsSpan(1024)
-                            );
-                            if (MbrHelper.WriteMbr(SelectedEntry.DeviceId, MbrHelper.HexToByte(newMbr)))
+                            if (OperatingSystem.IsWindows())
                             {
-                                if (OperatingSystem.IsWindows())
+                                try
                                 {
-                                    try
-                                    {
-                                        await CommandHelper.RunCommandAsync("powershell",
-                                            $"Update-Disk -Number {SelectedEntry.Index}");
-                                    }
-                                    catch
-                                    {
-                                        // ignored
-                                    }
+                                    await CommandHelper.RunCommandAsync("powershell",
+                                        $"Update-Disk -Number {SelectedEntry.Index}");
                                 }
-                                SelectedEntry.BootSignature = "55AA";
-                                SelectedEntry = null;
-                                await DialogHelper.ShowInfoDialogAsync(
-                                    ResourceHelper.GetString("Storage.SwitchToPcMode"),
-                                    ResourceHelper.GetString("Storage.SuccessfullySwitchedToPcMode"),
-                                    Icon.Success);
+                                catch
+                                {
+                                    // ignored
+                                }
                             }
-                            break;
+                            SelectedEntry.BootSignature = "55AA";
+                            SelectedEntry = null;
+                            await DialogHelper.ShowInfoDialogAsync(
+                                ResourceHelper.GetString("Storage.SwitchToPcMode"),
+                                ResourceHelper.GetString("Storage.SuccessfullySwitchedToPcMode"),
+                                Icon.Success);
                         }
-                    case "Xbox" when SelectedEntry.BootSignature == "55AA" && bootSignature == "55AA":
+                        break;
+                    }
+                case "Xbox" when SelectedEntry.BootSignature == "55AA" && bootSignature == "55AA":
+                    {
+                        var newMbr = string.Concat(
+                            SelectedEntry.MbrHex.AsSpan(0, 1020),
+                            "99CC",
+                            SelectedEntry.MbrHex.AsSpan(1024)
+                        );
+                        if (MbrHelper.WriteMbr(SelectedEntry.DeviceId, MbrHelper.HexToByte(newMbr)))
                         {
-                            var newMbr = string.Concat(
-                                SelectedEntry.MbrHex.AsSpan(0, 1020),
-                                "99CC",
-                                SelectedEntry.MbrHex.AsSpan(1024)
-                            );
-                            if (MbrHelper.WriteMbr(SelectedEntry.DeviceId, MbrHelper.HexToByte(newMbr)))
-                            {
-                                SelectedEntry.BootSignature = "99CC";
-                                SelectedEntry = null;
-                                await DialogHelper.ShowInfoDialogAsync(
-                                    ResourceHelper.GetString("Storage.SwitchToXboxMode"),
-                                    ResourceHelper.GetString("Storage.SuccessfullySwitchedToXboxMode"),
-                                    Icon.Success);
-                            }
-                            break;
+                            SelectedEntry.BootSignature = "99CC";
+                            SelectedEntry = null;
+                            await DialogHelper.ShowInfoDialogAsync(
+                                ResourceHelper.GetString("Storage.SwitchToXboxMode"),
+                                ResourceHelper.GetString("Storage.SuccessfullySwitchedToXboxMode"),
+                                Icon.Success);
                         }
-                }
+                        break;
+                    }
             }
         }
     }
@@ -170,8 +136,7 @@ public partial class StorageViewModel : ObservableObject
     {
         StorageMappings.Clear();
         SelectedEntry = null;
-
-        var isSave = false;
+        
         var entries = await Task.Run(() =>
         {
             var result = new List<StorageMappingEntry>();
@@ -191,100 +156,15 @@ public partial class StorageViewModel : ObservableObject
                 var serialNumber = mo.Properties["SerialNumber"].Value?.ToString()?.Trim() ?? string.Empty;
                 var size = Convert.ToInt64(mo.Properties["Size"].Value);
                 var bootSignature = mbrHex[1020..1024];
-                var key = $"{model}_{serialNumber}_{size}";
 
-                if (IsRepair)
-                {
-                    if (mbrHex[..892] == MbrHelper.Mbr || !_mbrMap.TryGetValue(key, out _)) continue;
-
-                    var entry = new StorageMappingEntry(index, deviceId, model, serialNumber, size, mbrHex, "0000");
-                    result.Add(entry);
-                }
-                else
-                {
-                    if (mbrHex[..892] != MbrHelper.Mbr) continue;
-
-                    if (bootSignature == "99CC")
-                    {
-                        if (_mbrMap.TryGetValue(key, out var kv))
-                        {
-                            if (mbrHex == kv.MbrHex)
-                            {
-                                kv.Timestamp = DateTime.UtcNow;
-                                isSave = true;
-                            }
-                            else if ((DateTime.UtcNow - kv.Timestamp).TotalHours <= 72)
-                            {
-                                mbrHex = kv.MbrHex;
-                            }
-                            else
-                            {
-                                // 保留旧值，但修改其 key，防止被覆盖
-                                string newKey;
-                                do
-                                {
-                                    newKey = $"{key}.Backup_{Guid.NewGuid().ToString("N")[..8]}";
-                                } while (_mbrMap.ContainsKey(newKey));
-                                _mbrMap[newKey] = kv;
-
-                                // 替换当前 key 对应的新 MBR 数据
-                                _mbrMap[key] = new MbrCacheEntry
-                                {
-                                    MbrHex = mbrHex,
-                                    Timestamp = DateTime.UtcNow
-                                };
-
-                                isSave = true;
-                            }
-                        }
-                        else
-                        {
-                            _mbrMap[key] = new MbrCacheEntry
-                            {
-                                MbrHex = mbrHex,
-                                Timestamp = DateTime.UtcNow
-                            };
-                            isSave = true;
-                        }
-                    }
-                    var entry = new StorageMappingEntry(index, deviceId, model, serialNumber, size, mbrHex, bootSignature);
-                    result.Add(entry);
-                }
+                if (mbrHex[..892] != MbrHelper.Mbr) continue;
+                var entry = new StorageMappingEntry(index, deviceId, model, serialNumber, size, mbrHex, bootSignature);
+                result.Add(entry);
             }
             return result;
         });
 
-        if (isSave)
-        {
-            var json = JsonSerializer.Serialize(_mbrMap, JsonHelper.Indented);
-            await File.WriteAllTextAsync(MbrFilePath, json);
-
-            if (!OperatingSystem.IsWindows())
-                _ = PathHelper.FixOwnershipAsync(MbrFilePath);
-        }
-
         StorageMappings.AddRange(entries);
-    }
-
-    private async Task LoadMbrMapAsync(string filePath)
-    {
-        if (!File.Exists(filePath)) return;
-        try
-        {
-            var json = await File.ReadAllTextAsync(filePath);
-            var dict = JsonSerializer.Deserialize<Dictionary<string, MbrCacheEntry>>(json);
-            if (dict != null)
-            {
-                foreach (var kv in dict.Where(kv => kv.Value.MbrHex.Length == 4096 && (DateTime.UtcNow - kv.Value.Timestamp).TotalDays <= 365))
-                {
-                    _mbrMap.TryAdd(kv.Key, kv.Value);
-                }
-            }
-        }
-        catch
-        {
-            // ignored
-        }
     }
 
     partial void OnIsRepairChanged(bool value)

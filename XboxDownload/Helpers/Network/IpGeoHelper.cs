@@ -153,6 +153,7 @@ public static class IpGeoHelper
             : $"https://ipinfo.io/{ip}/json";
 
         var json = await HttpClientHelper.GetStringContentAsync(url, timeout: 5000, token: token);
+        if (string.IsNullOrEmpty(json)) return null;
         try
         {
             using var doc = JsonDocument.Parse(json);
@@ -177,6 +178,7 @@ public static class IpGeoHelper
             : $"http://ip-api.com/json/{ip}";
 
         var json = await HttpClientHelper.GetStringContentAsync(url, timeout: 5000, token: token);
+        if (string.IsNullOrEmpty(json)) return null;
         try
         {
             using var doc = JsonDocument.Parse(json);
@@ -217,6 +219,7 @@ public static class IpGeoHelper
             : $"https://qifu-api.baidubce.com/ip/geo/v1/district?ip={ip}";
 
         var json = await HttpClientHelper.GetStringContentAsync(url, timeout: 5000, token: token);
+        if (string.IsNullOrEmpty(json)) return null;
         try
         {
             using var doc = JsonDocument.Parse(json);
@@ -259,6 +262,7 @@ public static class IpGeoHelper
             : $"https://ip.zxinc.org/api.php?type=json&ip={ip}";
 
         var json = await HttpClientHelper.GetStringContentAsync(url, timeout: 5000, token: token);
+        if (string.IsNullOrEmpty(json)) return null;
         try
         {
             using var doc = JsonDocument.Parse(json);
