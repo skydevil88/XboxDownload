@@ -20,19 +20,19 @@ public static class SpeedTestService
         {
             items = await PingFastest10Async(items, cancellationToken);
         }
-        
+
         string[] testUrls =
         [
             "http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt",
             "http://gst.prod.dl.playstation.net/networktest/get_192m",
             "http://ctest-dl-lp1.cdn.nintendo.net/30m"
         ];
-        
+
         var selectedTestUri = new Uri(testUrls[Random.Shared.Next(testUrls.Length)]);
-        var userAgent = selectedTestUri.Host.EndsWith(".nintendo.net") 
-            ? $"{nameof(XboxDownload)}/Nintendo NX" 
+        var userAgent = selectedTestUri.Host.EndsWith(".nintendo.net")
+            ? $"{nameof(XboxDownload)}/Nintendo NX"
             : nameof(XboxDownload);
-        
+
         const long totalSize = 30L * 1024 * 1024;      // 30MB
         const long chunkSize = 10L * 1024 * 1024;      // 10MB
         const long maxStart = totalSize - chunkSize;
@@ -45,29 +45,29 @@ public static class SpeedTestService
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cts.CancelAfter(timeout);
         var token = cts.Token;
-        
+
         var result = new TaskCompletionSource<IpItem?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var ipResults = new ConcurrentDictionary<IpItem, long>();
-        
+
         var tasks = items.Select(async ipItem =>
         {
             long totalBytes = 0;
             var (response, _) = await HttpClientHelper.MeasureHttpLatencyAsync(
-                selectedTestUri,  
+                selectedTestUri,
                 IPAddress.Parse(ipItem.Ip),
                 timeout,
                 rangeFrom: rangeFrom,
                 rangeTo: rangeTo,
                 userAgent: userAgent,
                 token);
-            
+
             if (response != null)
             {
                 try
                 {
                     response.EnsureSuccessStatusCode();
-                    
+
                     await using var stream = await response.Content.ReadAsStreamAsync(token);
                     var buffer = new byte[64 * 1024];
 
@@ -94,7 +94,7 @@ public static class SpeedTestService
                     ipResults[ipItem] = totalBytes;
                 }
             }
-            
+
         }).ToList();
 
         try
@@ -118,7 +118,7 @@ public static class SpeedTestService
 
         return best.Key;
     }
-    
+
     private static async Task<List<IpItem>> PingFastest10Async(List<IpItem> items, CancellationToken cancellationToken)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -128,11 +128,11 @@ public static class SpeedTestService
         var successCount = 0;
 
         var startSignal = new TaskCompletionSource<bool>();
-        
+
         var tasks = items.Select(async item =>
         {
             await startSignal.Task; // 等待统一启动
-            
+
             try
             {
                 using var ping = new Ping();
@@ -209,11 +209,10 @@ public static class SpeedTestService
         }
         catch (OperationCanceledException)
         {
-            // ignore
         }
         catch
         {
-            // ignore
+            // ignored
         }
     }
 
@@ -222,6 +221,8 @@ public static class SpeedTestService
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
         cts.CancelAfter(timeout);
 
+        var stopwatch = Stopwatch.StartNew();
+
         var (response, _) = await HttpClientHelper.MeasureHttpLatencyAsync(
                 uri,
                 IPAddress.Parse(item.Ip),
@@ -229,6 +230,7 @@ public static class SpeedTestService
                 rangeTo: rangeTo,
                 userAgent: userAgent,
                 token: token);
+
         if (response != null)
         {
             try
@@ -239,7 +241,6 @@ public static class SpeedTestService
 
                 var buffer = new byte[64 * 1024];
                 long totalBytes = 0;
-                var stopwatch = Stopwatch.StartNew();
 
                 while (true)
                 {
@@ -255,14 +256,12 @@ public static class SpeedTestService
                         item.Speed = totalBytes / (1048576 * elapsedSeconds); // bytes to MiB per second
                     }
                 }
-
-                stopwatch.Stop();
             }
             catch (OperationCanceledException)
             {
                 // ignore
             }
-            catch 
+            catch
             {
                 item.Speed ??= 0;
             }
@@ -271,9 +270,11 @@ public static class SpeedTestService
                 response.Dispose();
             }
         }
-        else if(!token.IsCancellationRequested)
+        else if (!token.IsCancellationRequested)
         {
             item.Speed = 0;
         }
+
+        stopwatch.Stop();
     }
 }

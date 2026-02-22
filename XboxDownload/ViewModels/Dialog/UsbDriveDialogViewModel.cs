@@ -56,16 +56,16 @@ public partial class UsbDriveDialogViewModel : ObservableObject
             {
                 if (string.IsNullOrEmpty(deviceId) || interfaceType != "USB" || mediaType != "Removable Media")
                     continue;
-                
+
                 var index = Convert.ToInt32(mo.Properties["Index"].Value);
                 var model = mo.Properties["Model"].Value?.ToString()?.Trim() ?? string.Empty;
                 var serialNumber = mo.Properties["SerialNumber"].Value?.ToString()?.Trim() ?? string.Empty;
                 var size = Convert.ToInt64(mo.Properties["Size"].Value);
                 var partitions = Convert.ToInt32(mo.Properties["Partitions"].Value);
                 var driveLetters = (from ManagementObject diskPartition in mo.GetRelated("Win32_DiskPartition")
-                               from ManagementBaseObject disk in diskPartition.GetRelated("Win32_LogicalDisk")
-                               select disk.Properties["Name"].Value.ToString()).ToList();
-                
+                                    from ManagementBaseObject disk in diskPartition.GetRelated("Win32_LogicalDisk")
+                                    select disk.Properties["Name"].Value.ToString()).ToList();
+
                 var outputString = "";
                 try
                 {
@@ -104,10 +104,12 @@ public partial class UsbDriveDialogViewModel : ObservableObject
     {
         if (SelectedEntry == null) return;
 
+        var selectedEntry = SelectedEntry;
+
         var confirm = await DialogHelper.ShowConfirmDialogAsync(
             "重新分区",
             "确认要重新分区U盘吗？ \n\n⚠ 警告，此操作将删除U盘中的所有分区和文件!",
-            Icon.Question);
+            Icon.Question, false);
 
         if (!confirm) return;
 
@@ -124,7 +126,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
             p.Start();
 
             //await p.StandardInput.WriteLineAsync("list disk");
-            await p.StandardInput.WriteLineAsync("select disk " + SelectedEntry.Index);
+            await p.StandardInput.WriteLineAsync("select disk " + selectedEntry.Index);
             await p.StandardInput.WriteLineAsync("clean");
 
             // 根据分区类型选择 MBR 或 GPT
@@ -138,7 +140,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
             await p.StandardInput.WriteLineAsync("format fs=ntfs quick");
 
             // 如果没有驱动器盘符，自动分配
-            if (string.IsNullOrEmpty(SelectedEntry.DriveLetter))
+            if (string.IsNullOrEmpty(selectedEntry.DriveLetter))
             {
                 await p.StandardInput.WriteLineAsync("assign");
             }

@@ -386,8 +386,8 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var lines = exportContent.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var count = lines.Count(line => !line.StartsWith('#')); // 排除以 # 开头的行（忽略前导空格）
-        
-        var cnXboxDownloadHint  = App.Settings.Culture == "zh-Hans" && exportContent.Contains(".xboxlive.cn") ?
+
+        var cnXboxDownloadHint = App.Settings.Culture == "zh-Hans" && exportContent.Contains(".xboxlive.cn") ?
             $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 下载游戏可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
             "";
 
@@ -533,7 +533,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
                 .Count(line => !string.IsNullOrWhiteSpace(line));
 
-            var cnXboxDownloadHint  = App.Settings.Culture == "zh-Hans" && dnsMapping.Contains(".xboxlive.cn") ?
+            var cnXboxDownloadHint = App.Settings.Culture == "zh-Hans" && dnsMapping.Contains(".xboxlive.cn") ?
                 $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 下载游戏可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
                 "";
 
@@ -745,7 +745,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         if (uri != null && !token.IsCancellationRequested)
         {
-            
+
             var rangeTo = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
             var timeout = TimeSpan.FromSeconds(SelectedTimeout);
             var userAgent = uri.Host.EndsWith(".nintendo.net") ? "XboxDownload/Nintendo NX" : "XboxDownload";

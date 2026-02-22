@@ -68,4 +68,3 @@ public class Query
         return list.ToArray();
     }
 }
-

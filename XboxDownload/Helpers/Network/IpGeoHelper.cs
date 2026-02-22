@@ -76,7 +76,7 @@ public static class IpGeoHelper
 
         if (useMainlandChinaApis)
         {
-            tasks.Add(QueryBaiduAsync(ip, token: token));
+            tasks.Add(QueryIp9CnAsync(ip, token: token));
             tasks.Add(QueryZxIncAsync(ip, token: token));
         }
 
@@ -117,7 +117,7 @@ public static class IpGeoHelper
 
         if (isSimplifiedChineseUser)
         {
-            tasks.Add(QueryBaiduAsync(ip, false, token));
+            tasks.Add(QueryIp9CnAsync(ip, false, token));
             tasks.Add(QueryZxIncAsync(ip, false, token));
         }
         else
@@ -168,7 +168,10 @@ public static class IpGeoHelper
             var cityValue = doc.RootElement.GetProperty("city").GetString();
             return $"{countryValue}, {regionValue}, {cityValue}";
         }
-        catch { return null; }
+        catch
+        {
+            return null;
+        }
     }
 
     private static async Task<string?> QueryIpApi(string? ip, bool onlyCountry = true, CancellationToken token = default)
@@ -212,11 +215,11 @@ public static class IpGeoHelper
             : null;
     }
 
-    private static async Task<string?> QueryBaiduAsync(string? ip, bool onlyCountry = true, CancellationToken token = default)
+    private static async Task<string?> QueryIp9CnAsync(string? ip, bool onlyCountry = true, CancellationToken token = default)
     {
         var url = string.IsNullOrWhiteSpace(ip)
-            ? "https://qifu-api.baidubce.com/ip/local/geo/v1/district"
-            : $"https://qifu-api.baidubce.com/ip/geo/v1/district?ip={ip}";
+            ? "https://ip9.com.cn/get"
+            : $"https://ip9.com.cn/get?ip={ip}";
 
         var json = await HttpClientHelper.GetStringContentAsync(url, timeout: 5000, token: token);
         if (string.IsNullOrEmpty(json)) return null;
@@ -225,7 +228,7 @@ public static class IpGeoHelper
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
 
-            if (!root.TryGetProperty("code", out var codeProp) || codeProp.GetString() != "Success")
+            if (root.GetProperty("ret").GetInt32() != 200)
                 return null;
 
             var data = root.GetProperty("data");

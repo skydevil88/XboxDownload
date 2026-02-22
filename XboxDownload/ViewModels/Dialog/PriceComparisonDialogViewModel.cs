@@ -166,7 +166,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
                 Icon.Error);
             return;
         }
-        
+
         foreach (var market in MarketMappings)
         {
             market.ConvertPrices = null;
@@ -273,7 +273,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task  VisitWebsite()
+    private async Task VisitWebsite()
     {
         var language = SelectedMarket?.Language;
         if (language == "de-DE")

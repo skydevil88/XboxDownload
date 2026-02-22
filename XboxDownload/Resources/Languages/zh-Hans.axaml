@@ -380,11 +380,14 @@
     <x:String x:Key="Storage.SerialNumber">序列号</x:String>
     <x:String x:Key="Storage.Size">容量</x:String>
     <x:String x:Key="Storage.Mode">模式</x:String>
+    <x:String x:Key="Storage.PartitionCount">分区数</x:String>
+    <x:String x:Key="Storage.DriveLetter">盘符</x:String>
     <x:String x:Key="Storage.EnablePcMode">启用 PC 模式</x:String>
     <x:String x:Key="Storage.EnableXboxMode">启用 Xbox 模式</x:String>
     <x:String x:Key="Storage.Scan">扫描</x:String>
     <x:String x:Key="Storage.FormatHardDrive">格式化硬盘</x:String>
     <x:String x:Key="Storage.UserGuide">使用教程</x:String>
+    <x:String x:Key="Storage.DriveRepair">硬盘修复</x:String>
     <x:String x:Key="Storage.XboxToPcModeDescription">此功能可以把Xbox主机外置移动硬盘转换为PC可读写模式。（注：操作可能导致安全软件拦截，建议提前关闭防护；该过程存在数据丢失风险，请务必使用空闲硬盘并做好备份，使用者需自行承担操作风险。）</x:String>
     <x:String x:Key="Storage.PcMode">PC 模式</x:String>
     <x:String x:Key="Storage.XboxMode">Xbox 模式</x:String>
@@ -410,7 +413,18 @@
     <x:String x:Key="Storage.RenameFileFailed">重命名本地文件失败，错误信息：&#x0a;{0}</x:String>
     <x:String x:Key="Storage.CopyAndRenameGame">将PC上下载的完整游戏文件复制到Xbox主机外置硬盘根目录并重命名为Content ID，然后连接硬盘到Xbox，最后将游戏移动到另一块硬盘即可使用。&#x0a;注意事项： 1. 请勿在外置硬盘上启动游戏，否则游戏会被重新下载并覆盖。 2. 应用不支持硬盘导入。 3. Xbox主机需要保持联网状态。</x:String>
 
-    <x:String x:Key="Storage.FormatHardDrive.Title">格式化 Xbox 外接式硬盘</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Title">格式化 Xbox 主机外置硬盘</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Refresh">刷新</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Show">显示：</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.ExternalDrives">移动硬盘</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.AllDrives">所有硬盘</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Format">格式化</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.FormatFeatureDescription">将硬盘格式化为适合 Xbox 主机 游戏和应用的格式。</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.DialogFormatHardDriveTitle">格式化硬盘</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.DialogFormatHardDriveMessage">确认要格式化硬盘吗？&#x0a;&#x0a;⚠ 警告：此操作将删除硬盘上的所有分区和文件！</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.DriveOperationError">硬盘操作错误：&#x0a;{0}</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.FormatFailedMessage">硬盘格式化失败，错误信息：&#x0a;{0}</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.FormatSuccessMessage">硬盘格式化已成功完成。</x:String>
     
     <x:String x:Key="Store.MicrosoftStore">微软商店</x:String>
     <x:String x:Key="Store.UrlProductId">链接/ProductID</x:String>

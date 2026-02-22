@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using MsBox.Avalonia.Enums;
 using XboxDownload.Helpers.IO;
+using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.System;
 using XboxDownload.Helpers.UI;
 using XboxDownload.Models.Storage;
@@ -21,29 +22,29 @@ namespace XboxDownload.ViewModels.Dialog;
 public partial class HardDriveDialogViewModel : ObservableObject
 {
     public ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
-    
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
     private StorageMappingEntry? _selectedEntry;
 
     public bool IsEnabled => SelectedEntry != null;
-    
+
     public HardDriveDialogViewModel()
     {
         RefreshHardDrivesCommand.Execute(null);
     }
-    
+
     [ObservableProperty]
     private MediaType _diskMediaType = MediaType.External;
-    
+
     partial void OnDiskMediaTypeChanged(MediaType value)
     {
         _ = value;
         RefreshHardDrivesCommand.Execute(null);
     }
-    
-    private const long MinDiskSize = 128L * 1024 * 1024 * 1024;
-    
+
+    private const long MinDiskSize = 256L * 1024 * 1024 * 1024;
+
     [RelayCommand]
     [SupportedOSPlatform("windows")]
     private async Task RefreshHardDrivesAsync()
@@ -62,7 +63,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
             var driveMap = BuildDiskDriveLetterMap();
 
             using var searcher = new ManagementObjectSearcher(
-                "SELECT DeviceID, MediaType, Size, Index, Model, SerialNumber FROM Win32_DiskDrive");
+                "SELECT DeviceID, MediaType, Size, Index, Model, SerialNumber, Partitions FROM Win32_DiskDrive");
 
             foreach (var mo in searcher.Get())
             {
@@ -85,7 +86,6 @@ public partial class HardDriveDialogViewModel : ObservableObject
                         continue;
                 }
 
-                // 所有过滤完成后再读 MBR
                 var mbrBytes = MbrHelper.ReadMbr(deviceId);
                 if (mbrBytes.Length != 512)
                     continue;
@@ -93,9 +93,10 @@ public partial class HardDriveDialogViewModel : ObservableObject
                 var model = mo["Model"]?.ToString()?.Trim() ?? string.Empty;
                 var serialNumber = mo["SerialNumber"]?.ToString()?.Trim() ?? string.Empty;
                 var bootSignature = mbrBytes.AsSpan(0x1FE, 2).ToArray();
+                var partitions = Convert.ToInt32(mo["Partitions"] ?? 0);
 
                 driveMap.TryGetValue(index, out var driveLetters);
-                driveLetters ??= new List<string>();
+                driveLetters ??= [];
 
                 var entry = new StorageMappingEntry(
                     index,
@@ -104,6 +105,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
                     serialNumber,
                     size,
                     bootSignature,
+                    partitions,
                     string.Join(',', driveLetters.ToArray())
                 );
 
@@ -116,7 +118,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
         StorageMappings.AddRange(entries.OrderBy(e => e.Index));
     }
 
-    
+
     [SupportedOSPlatform("windows")]
     private static int GetSystemDiskIndex()
     {
@@ -149,7 +151,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
 
         return -1;
     }
-    
+
     [SupportedOSPlatform("windows")]
     private static Dictionary<int, List<string>> BuildDiskDriveLetterMap()
     {
@@ -176,7 +178,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
 
                 if (!map.TryGetValue(diskIndex, out var list))
                 {
-                    list = new List<string>();
+                    list = [];
                     map[diskIndex] = list;
                 }
 
@@ -186,19 +188,21 @@ public partial class HardDriveDialogViewModel : ObservableObject
 
         return map;
     }
-    
+
     [RelayCommand]
     private async Task FormatHardDriveAsync()
     {
         if (SelectedEntry == null) return;
-        
+
+        var selectedEntry = SelectedEntry;
+
         var confirm = await DialogHelper.ShowConfirmDialogAsync(
-            "格式化硬盘",
-            "确认要格式化硬盘吗？\n\n⚠ 警告：此操作将删除硬盘上的所有分区和文件！",
-            Icon.Question);
+            ResourceHelper.GetString("Storage.FormatHardDrive.DialogFormatHardDriveTitle"),
+            ResourceHelper.GetString("Storage.FormatHardDrive.DialogFormatHardDriveMessage"),
+            Icon.Question, false);
 
         if (!confirm) return;
-        
+
         var success = false;
         try
         {
@@ -210,7 +214,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            await p.StandardInput.WriteLineAsync("select disk " + SelectedEntry.Index);
+            await p.StandardInput.WriteLineAsync("select disk " + selectedEntry.Index);
             await p.StandardInput.WriteLineAsync("clean");
             await p.StandardInput.WriteLineAsync("convert gpt");
             await p.StandardInput.WriteLineAsync("create partition primary");
@@ -221,12 +225,14 @@ public partial class HardDriveDialogViewModel : ObservableObject
             var errorOutput = await p.StandardError.ReadToEndAsync();
             if (!string.IsNullOrEmpty(errorOutput))
             {
-                await DialogHelper.ShowInfoDialogAsync("Error", "硬盘操作错误：\n" + errorOutput, Icon.Error);
+                await DialogHelper.ShowInfoDialogAsync("Error",
+                    string.Format(ResourceHelper.GetString("Storage.FormatHardDrive.DriveOperationError"), errorOutput),
+                    Icon.Error);
             }
             else
             {
                 success = true;
-                
+
             }
         }
         catch (Exception ex)
@@ -234,37 +240,40 @@ public partial class HardDriveDialogViewModel : ObservableObject
             // 捕获并显示详细的异常信息
             await DialogHelper.ShowInfoDialogAsync(
                 "Error",
-                "硬盘格式化失败，错误信息：\n" + ex.Message,
+                string.Format(ResourceHelper.GetString("Storage.FormatHardDrive.FormatFailedMessage"), ex.Message),
                 Icon.Error);
         }
-        
+
         if (success)
         {
             try
             {
-                await CommandHelper.RunCommandAsync("PowerShell.exe", $"Update-Disk -Number {SelectedEntry.Index}");
+                await CommandHelper.RunCommandAsync("PowerShell.exe", $"Update-Disk -Number {selectedEntry.Index}");
             }
             catch
             {
                 // ignored
             }
-            
-            var mbrBytes = MbrHelper.ReadMbr(SelectedEntry.DeviceId);
+
+            var mbrBytes = MbrHelper.ReadMbr(selectedEntry.DeviceId);
             if (mbrBytes.Length == 512)
             {
                 var mbrDiskSignature = mbrBytes.AsSpan(0x1B8, 4);
                 MbrHelper.DiskSignatureBytes.CopyTo(mbrDiskSignature);
                 var mbrTail = mbrBytes.AsSpan(0x1FE, 2);
                 MbrHelper.XboxMode.CopyTo(mbrTail);
-                MbrHelper.WriteMbr(SelectedEntry.DeviceId, mbrBytes);
+                MbrHelper.WriteMbr(selectedEntry.DeviceId, mbrBytes);
             }
 
-            await DialogHelper.ShowInfoDialogAsync("Success", "硬盘格式化已成功完成。", Icon.Success);
+            await DialogHelper.ShowInfoDialogAsync(
+                ResourceHelper.GetString("Storage.FormatHardDrive.DialogFormatHardDriveTitle"),
+                ResourceHelper.GetString("Storage.FormatHardDrive.FormatSuccessMessage"),
+                Icon.Success);
         }
 
         RefreshHardDrivesCommand.Execute(null);
     }
-    
+
     public enum MediaType
     {
         All,

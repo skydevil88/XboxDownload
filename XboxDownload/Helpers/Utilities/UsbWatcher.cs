@@ -54,7 +54,7 @@ public class UsbWatcher : IDisposable
             return null;
         }
     }
-    
+
     [SupportedOSPlatform("windows")]
     public void Dispose()
     {

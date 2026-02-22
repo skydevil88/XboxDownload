@@ -25,7 +25,7 @@
                 </DataGrid>
 
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="5" ColumnSpacing="10">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5" ColumnSpacing="10">
                         <Button Grid.Row="0" MinWidth="120" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                                 IsEnabled="{Binding IsEnablePcMode}"
                                 Content="{DynamicResource Storage.EnablePcMode}"
@@ -39,20 +39,25 @@
                         <Button Grid.Row="2" MinWidth="120" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                                 Content="{DynamicResource Storage.Scan}"
                                 Command="{Binding ScanCommand}"/>
-                        <Button Grid.Row="3" Margin="0,5,0,0"
+                        <Button Grid.Row="3" MinWidth="120" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Content="{DynamicResource Storage.FormatHardDrive}"
+                                Click="FormatHardDriveAsync"/>
+                        <Button Grid.Row="4"
                                 Classes="LinkLabel"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Command="{Binding OpenUrlCommand}">
+                                Command="{Binding OpenUrlCommand}"
+                                CommandParameter="Guide">
                             <TextBlock Text="{DynamicResource Storage.UserGuide}" 
                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                         </Button>
-                        <Button Grid.Row="4" Margin="0,5,0,0"
+                        <Button Grid.Row="5" 
                                 Classes="LinkLabel"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Click="FormatHardDriveAsync">
-                            <TextBlock Text="{DynamicResource Storage.FormatHardDrive}"
+                                Command="{Binding OpenUrlCommand}"
+                                CommandParameter="Repair">
+                            <TextBlock Text="{DynamicResource Storage.DriveRepair}" 
                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                         </Button>
                     </Grid>

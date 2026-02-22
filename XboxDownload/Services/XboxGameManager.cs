@@ -64,13 +64,13 @@ public static class XboxGameManager
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath!);
-                
+
                 if (!OperatingSystem.IsWindows())
                     await PathHelper.FixOwnershipAsync(directoryPath!, true);
             }
 
             await File.WriteAllTextAsync(XboxGameFilePath, json, token);
-            
+
             if (!OperatingSystem.IsWindows())
                 await PathHelper.FixOwnershipAsync(XboxGameFilePath);
         }

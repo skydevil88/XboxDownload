@@ -64,8 +64,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
         // Subject Alternative Names (SAN)
         var sanBuilder = new SubjectAlternativeNameBuilder();
-        if (OperatingSystem.IsWindows())
-            sanBuilder.AddDnsName("packagespc.xboxlive.com");
         sanBuilder.AddDnsName("*.akamai.net");
         sanBuilder.AddDnsName("*.akamaihd.net");
         sanBuilder.AddDnsName("*.akamaized.net");
@@ -793,10 +791,18 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         if (!result.Success) return;
 
         var key = result.Groups["ContentId"].Value.ToLowerInvariant();
-        if (XvcRegex().IsMatch(tmpPath))
+        if (MsiXvcRegex().IsMatch(tmpPath))
+        {
+            //WindeosPC
+        }
+        else if (XsXvcRegex().IsMatch(tmpPath))
+        {
             key += "_xs";
-        else if (!MsiXvcRegex().IsMatch(tmpPath))
+        }
+        else
+        {
             key += "_x";
+        }
         var version = new Version(result.Groups["Version"].Value);
         if (XboxGameManager.Dictionary.TryGetValue(key, out var xboxGame))
         {
@@ -984,45 +990,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             var url = $"https://{host}{filePath}";
                             switch (host)
                             {
-                                case "packagespc.xboxlive.com":
-                                    {
-                                        var ipAddresses = App.Settings.IsDoHEnabled
-                                            ? await DnsHelper.ResolveDohAsync(host, DnsHelper.CurrentDoH)
-                                            : await DnsHelper.ResolveDnsAsync(host, serviceViewModel.DnsIp);
-                                        if (ipAddresses?.Count > 0)
-                                        {
-                                            fileFound = true;
-                                            var m1 = AuthorizationRegex().Match(headers);
-                                            if (m1.Success)
-                                            {
-                                                App.Settings.Authorization = m1.Groups[1].Value.Trim();
-                                                SettingsManager.Save(App.Settings);
-                                            }
-                                            var httpHeaders = new Dictionary<string, string>() { { "Host", host }, { "Authorization", App.Settings.Authorization } };
-                                            using var response = await HttpClientHelper.SendRequestAsync(url.Replace(host, ipAddresses[0].ToString()), headers: httpHeaders);
-                                            if (response is { IsSuccessStatusCode: true })
-                                            {
-                                                var responseBytes = await response.Content.ReadAsByteArrayAsync();
-                                                var headersBytes = Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\n{response.Content.Headers}{response.Headers}\r\n");
-                                                ssl.Write(headersBytes);
-                                                ssl.Write(responseBytes);
-                                                ssl.Flush();
-                                            }
-                                            else
-                                            {
-                                                StringBuilder sb = new();
-                                                sb.Append("HTTP/1.1 500 Server Error\r\n");
-                                                sb.Append("Content-Type: text/html\r\n");
-                                                sb.Append("Content-Length: 0\r\n\r\n");
-                                                ssl.Write(Encoding.ASCII.GetBytes(sb.ToString()));
-                                                ssl.Flush();
-                                                if (serviceViewModel.IsLogging)
-                                                    serviceViewModel.AddLog("HTTP 500", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                                            }
-                                        }
-                                        break;
-                                    }
-
                                 case "epicgames-download1-1251447533.file.myqcloud.com":
                                 case "epicgames-download1.akamaized.net":
                                 case "download.epicgames.com":
@@ -1460,14 +1427,11 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     [GeneratedRegex(@"/(?<ContentId>\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/(?<Version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}", RegexOptions.Compiled)]
     private static partial Regex ContentIdVersionRegex();
 
-    [GeneratedRegex(@"_xs(-\d+)?\.xvc$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
-    private static partial Regex XvcRegex();
+    [GeneratedRegex(@"_xs(-?\d+)?\.xvc$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
+    private static partial Regex XsXvcRegex();
 
-    [GeneratedRegex(@"\.msixvc$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"\.(msixvc|msi)$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex MsiXvcRegex();
-
-    [GeneratedRegex(@"Authorization:(.+)", RegexOptions.Compiled)]
-    private static partial Regex AuthorizationRegex();
 
     [GeneratedRegex(@"^HTTP/\d+(\.\d*)? (?<StatusCode>\d+)", RegexOptions.Compiled)]
     private static partial Regex StatusCodeHeaderRegex();

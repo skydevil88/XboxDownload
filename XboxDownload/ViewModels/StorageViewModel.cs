@@ -43,7 +43,7 @@ public partial class StorageViewModel : ObservableObject
     {
         IsEnablePcMode = IsEnableXboxMode = false;
         if (value == null) return;
-        
+
         if (value.BootSignatureBytes.SequenceEqual(MbrHelper.PcMode))
         {
             IsEnableXboxMode = true;
@@ -59,59 +59,59 @@ public partial class StorageViewModel : ObservableObject
     private async Task ConvertStorageAsync(string parameter)
     {
         if (SelectedEntry == null) return;
-        
+
         var mbrBytes = MbrHelper.ReadMbr(SelectedEntry.DeviceId);
         if (mbrBytes.Length != 512)
             return;
-        
+
         var mbrDiskSignature = mbrBytes.AsSpan(0x1B8, 4);
         if (!mbrDiskSignature.SequenceEqual(MbrHelper.DiskSignatureBytes))
             return;
-        
+
         var mbrBootSignature = mbrBytes.AsSpan(0x1FE, 2);
-        
+
         switch (parameter)
         {
             case "Xbox" when mbrBootSignature.SequenceEqual(MbrHelper.PcMode) && SelectedEntry.BootSignatureBytes.SequenceEqual(MbrHelper.PcMode):
-            {
-                var mbrTail = mbrBytes.AsSpan(0x1FE, 2);
-                MbrHelper.XboxMode.CopyTo(mbrTail);
-                
-                if (!MbrHelper.WriteMbr(SelectedEntry.DeviceId, mbrBytes)) return;
-                
-                SelectedEntry.BootSignatureBytes = MbrHelper.XboxMode.ToArray();
-                SelectedEntry = null;
-                await DialogHelper.ShowInfoDialogAsync(
-                    ResourceHelper.GetString("Storage.SwitchToXboxMode"),
-                    ResourceHelper.GetString("Storage.SuccessfullySwitchedToXboxMode"),
-                    Icon.Success);
-                break;
-            }
+                {
+                    var mbrTail = mbrBytes.AsSpan(0x1FE, 2);
+                    MbrHelper.XboxMode.CopyTo(mbrTail);
+
+                    if (!MbrHelper.WriteMbr(SelectedEntry.DeviceId, mbrBytes)) return;
+
+                    SelectedEntry.BootSignatureBytes = MbrHelper.XboxMode.ToArray();
+                    SelectedEntry = null;
+                    await DialogHelper.ShowInfoDialogAsync(
+                        ResourceHelper.GetString("Storage.SwitchToXboxMode"),
+                        ResourceHelper.GetString("Storage.SuccessfullySwitchedToXboxMode"),
+                        Icon.Success);
+                    break;
+                }
             case "PC" when mbrBootSignature.SequenceEqual(MbrHelper.XboxMode) && SelectedEntry.BootSignatureBytes.SequenceEqual(MbrHelper.XboxMode):
-            {
-                var mbrTail = mbrBytes.AsSpan(0x1FE, 2);
-                MbrHelper.PcMode.CopyTo(mbrTail);
-                
-                if (!MbrHelper.WriteMbr(SelectedEntry.DeviceId, mbrBytes)) return;
-                
-                try
                 {
-                    await CommandHelper.RunCommandAsync("PowerShell.exe",
-                        $"Update-Disk -Number {SelectedEntry.Index}");
+                    var mbrTail = mbrBytes.AsSpan(0x1FE, 2);
+                    MbrHelper.PcMode.CopyTo(mbrTail);
+
+                    if (!MbrHelper.WriteMbr(SelectedEntry.DeviceId, mbrBytes)) return;
+
+                    try
+                    {
+                        await CommandHelper.RunCommandAsync("PowerShell.exe",
+                            $"Update-Disk -Number {SelectedEntry.Index}");
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+
+                    SelectedEntry.BootSignatureBytes = MbrHelper.PcMode.ToArray();
+                    SelectedEntry = null;
+                    await DialogHelper.ShowInfoDialogAsync(
+                        ResourceHelper.GetString("Storage.SwitchToPcMode"),
+                        ResourceHelper.GetString("Storage.SuccessfullySwitchedToPcMode"),
+                        Icon.Success);
+                    break;
                 }
-                catch
-                {
-                    // ignored
-                }
-                
-                SelectedEntry.BootSignatureBytes = MbrHelper.PcMode.ToArray();
-                SelectedEntry = null;
-                await DialogHelper.ShowInfoDialogAsync(
-                    ResourceHelper.GetString("Storage.SwitchToPcMode"),
-                    ResourceHelper.GetString("Storage.SuccessfullySwitchedToPcMode"),
-                    Icon.Success);
-                break;
-            }
         }
     }
 
@@ -139,12 +139,12 @@ public partial class StorageViewModel : ObservableObject
                 var mbrBytes = MbrHelper.ReadMbr(deviceId);
                 if (mbrBytes.Length != 512)
                     continue;
-                
+
                 // ===== 检查 Disk Signature（偏移 0x1B8） =====
                 var mbrDiskSignature = mbrBytes.AsSpan(0x1B8, 4);
                 if (!mbrDiskSignature.SequenceEqual(MbrHelper.DiskSignatureBytes))
                     continue;
-                
+
                 // 读取 MBR 尾部 2 个字节（偏移 0x1FE）
                 var mbrBootSignature = mbrBytes.AsSpan(0x1FE, 2);
                 if (!(mbrBootSignature.SequenceEqual(MbrHelper.XboxMode) || mbrBootSignature.SequenceEqual(MbrHelper.PcMode)))
@@ -175,11 +175,19 @@ public partial class StorageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static async Task OpenUrl()
+    private static async Task OpenUrl(string parameter)
     {
-        await HttpClientHelper.OpenUrlAsync(App.Settings.Culture == "zh-Hans"
-            ? "https://www.bilibili.com/video/BV1CN4y197Js?t=130"
-            : "https://www.youtube.com/watch?v=3F499kh_jfk&t=130");
+        switch (parameter)
+        {
+            case "Guide":
+                await HttpClientHelper.OpenUrlAsync(App.Settings.Culture == "zh-Hans"
+                    ? "https://www.bilibili.com/video/BV1CN4y197Js?t=130"
+                    : "https://www.youtube.com/watch?v=3F499kh_jfk&t=130");
+                break;
+            case "Repair":
+                await HttpClientHelper.OpenUrlAsync("https://github.com/skydevil88/XboxDownload/discussions/144");
+                break;
+        }
     }
 
     [ObservableProperty]
@@ -346,7 +354,7 @@ public partial class StorageViewModel : ObservableObject
             ResourceHelper.GetString("Storage.InvalidXboxPackageMessage"),
             Icon.Error);
     }
-    
+
     [RelayCommand]
     private static async Task QueryContentId(string productId)
     {

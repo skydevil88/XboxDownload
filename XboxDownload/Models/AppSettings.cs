@@ -41,5 +41,4 @@ public class AppSettings
     public string AkamaiCdnIp { get; set; } = string.Empty;
     public string StoreRegion { get; set; } = string.Empty;
     public string CurrencyCode { get; set; } = string.Empty;
-    public string Authorization { get; set; } = string.Empty;
 }

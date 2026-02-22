@@ -26,29 +26,30 @@
                     <DataGridTextColumn MinWidth="110" Header="{DynamicResource Storage.SerialNumber}" Binding="{Binding SerialNumber}"/>
                     <DataGridTextColumn MinWidth="80" Header="{DynamicResource Storage.Size}" Binding="{Binding FormatSize}"/>
                     <DataGridTextColumn MinWidth="100" Header="{DynamicResource Storage.Mode}" Binding="{Binding Mode}"/>
-                    <DataGridTextColumn MinWidth="80" Header="盘符" Binding="{Binding DriveLetter}"/>
+                    <DataGridTextColumn MinWidth="50" Header="{DynamicResource Storage.PartitionCount}" Binding="{Binding Partitions}"/>
+                    <DataGridTextColumn MinWidth="80" Header="{DynamicResource Storage.DriveLetter}" Binding="{Binding DriveLetter}"/>
                 </DataGrid.Columns>
             </DataGrid>
 
             <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="Auto,*,Auto">
                 <Button Grid.Column="0" Classes="LinkLabel" Command="{Binding RefreshHardDrivesCommand}">
-                    <TextBlock Text="刷新" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                    <TextBlock Text="{DynamicResource Storage.FormatHardDrive.Refresh}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                 </Button>
                 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
-                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="显示："/>
-                    <RadioButton Content="移动硬盘"
+                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="{DynamicResource Storage.FormatHardDrive.Show}"/>
+                    <RadioButton Content="{DynamicResource Storage.FormatHardDrive.ExternalDrives}"
                                  IsChecked="{Binding DiskMediaType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=External}"  />
-                    <RadioButton Content="所有硬盘"
+                    <RadioButton Content="{DynamicResource Storage.FormatHardDrive.AllDrives}"
                                  IsChecked="{Binding DiskMediaType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=All}"/>
                 </StackPanel>
             </Grid>
 
-            <Button Grid.Row="1" Grid.Column="1" MinWidth="80" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Content="格式化"
+            <Button Grid.Row="1" Grid.Column="1" MinWidth="80" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Content="{DynamicResource Storage.FormatHardDrive.Format}"
                     IsEnabled="{Binding IsEnabled}"
                     Command="{Binding FormatHardDriveCommand}"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="分区过程中弹出格式化或者其它错误信息请忽略取消"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource Storage.FormatHardDrive.FormatFeatureDescription}"/>
 
         </Grid>
 </Window>

@@ -37,7 +37,7 @@ public static class CertificateHelper
 
         // Export Root CRT (public key only, can be distributed to other devices)
         await File.WriteAllBytesAsync(RootCrt, caCert.Export(X509ContentType.Cert));
-        
+
         if (OperatingSystem.IsWindows())
         {
             using var cert = X509CertificateLoader.LoadPkcs12FromFile(RootCrt, password: null);

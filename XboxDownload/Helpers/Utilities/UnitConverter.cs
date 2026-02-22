@@ -33,15 +33,15 @@ public static class UnitConverter
     private static string FormatValue(long value, string[] units, double logBase, int baseUnit)
     {
         var order = Math.Min(
-            (int)(Math.Log(value) / logBase), 
+            (int)(Math.Log(value) / logBase),
             units.Length - 1);
-        
+
         if (value < baseUnit) order = 0;
-        
+
         var converted = value / Math.Pow(baseUnit, order);
 
-        return order > 0 
-            ? $"{converted:N2} {units[order]}" 
+        return order > 0
+            ? $"{converted:N2} {units[order]}"
             : $"{value:N0} {units[0]}";
     }
 }

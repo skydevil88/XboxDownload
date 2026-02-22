@@ -17,18 +17,18 @@ public partial class AboutDialogViewModel : ObservableObject
         Assembly.GetEntryAssembly()?
         .GetCustomAttribute<AssemblyFileVersionAttribute>()?
         .Version);
-    
+
     [ObservableProperty]
     private bool _isChineseUser = App.Settings.Culture == "zh-Hans";
 
     public static string Project => UpdateService.Project;
-    
+
     [RelayCommand]
     private static async Task OpenUrlAsync()
     {
         await HttpClientHelper.OpenUrlAsync(Project);
     }
-    
+
     [RelayCommand]
     private static async Task CopyAsync()
     {

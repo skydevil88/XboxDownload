@@ -396,7 +396,7 @@ internal static class ContentTypeHelper
         var index = path.LastIndexOf('.');
         return index < 0 ? null : path[index..];
     }
-    
+
     public static string GetMimeMapping(string path)
     {
         var extension = GetExtension(path);

@@ -211,7 +211,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
                     selected.ResolvedIp = ip.ToString();
 
                     // Get or create a delay test task
-                    var delayTask = delayTestCache.GetOrAdd(ip, _ => HttpLatencyTestWithLocationAsync(new Uri("https://"+ HostnameToResolve), ip));
+                    var delayTask = delayTestCache.GetOrAdd(ip, _ => HttpLatencyTestWithLocationAsync(new Uri("https://" + HostnameToResolve), ip));
 
                     // Wait for the result
                     var (delay, location) = await delayTask;
@@ -243,11 +243,11 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
             }
         }
         var normalizedIp = new IPAddress(normalizedBytes);
-        
+
         var isSimplifiedChineseUser = App.Settings.Culture.Equals("zh-Hans");
         var key = normalizedIp + "|" + isSimplifiedChineseUser;
         if (IpLocationCache.TryGetValue(key, out var cachedLocation)) return (latency, cachedLocation);
-        
+
         cachedLocation = await IpGeoHelper.GetIpLocationFromMultipleApisAsync(normalizedIp.ToString(), isSimplifiedChineseUser);
         if (!string.IsNullOrEmpty(cachedLocation))
         {

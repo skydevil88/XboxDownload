@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Models;
+using System.Threading.Tasks;
 
 namespace XboxDownload.Helpers.UI;
 
@@ -32,29 +34,32 @@ public static class DialogHelper
             await msgBox.ShowAsync();
     }
 
-    public static async Task<bool> ShowConfirmDialogAsync(string title, string message, Icon icon = Icon.None)
+    public static async Task<bool> ShowConfirmDialogAsync(string title, string message, Icon icon = Icon.None, bool defaultYes = true)
     {
         var mainWindow = GetMainWindow();
 
-        var msgBox = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams
+        var msgBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
         {
-            ButtonDefinitions = ButtonEnum.YesNo,
             ContentTitle = title,
             ContentMessage = message,
+            Icon = icon,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
             MinWidth = 300,
             MaxWidth = 600,
             MaxHeight = 550,
-            Icon = icon
+            ButtonDefinitions =
+            [
+                new ButtonDefinition { Name = "Yes", IsCancel = false, IsDefault = defaultYes },
+                new ButtonDefinition { Name = "No", IsCancel = true, IsDefault = !defaultYes }
+            ],
         });
 
         var result = mainWindow is not null
             ? await msgBox.ShowWindowDialogAsync(mainWindow)
             : await msgBox.ShowAsync();
 
-        return result == ButtonResult.Yes;
+        return string.Equals(result, "Yes", StringComparison.OrdinalIgnoreCase);
     }
-
 
     private static Window? GetMainWindow()
     {

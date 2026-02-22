@@ -50,12 +50,13 @@ public static class Setup
 
     private static SocketsHttpHandler CreateBaseHandler(bool isSpeedTest = false) => new()
     {
+        UseCookies = false,
         EnableMultipleHttp2Connections = true,
         AutomaticDecompression = isSpeedTest ? DecompressionMethods.None : DecompressionMethods.All,
-        PooledConnectionLifetime = TimeSpan.FromMinutes(5),
-        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
+        PooledConnectionLifetime = isSpeedTest ? TimeSpan.Zero : TimeSpan.FromMinutes(5),
+        PooledConnectionIdleTimeout = isSpeedTest ? TimeSpan.Zero :TimeSpan.FromMinutes(2),
         MaxConnectionsPerServer = isSpeedTest ? 50 : 20,
-        AllowAutoRedirect = true,
-        UseCookies = false
+        AllowAutoRedirect = !isSpeedTest,
+        UseProxy = !isSpeedTest
     };
 }

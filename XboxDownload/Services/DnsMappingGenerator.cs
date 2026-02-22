@@ -66,8 +66,8 @@ public static class DnsMappingGenerator
                 "atum.hac.lp1.d4c.nintendo.net",
                 "nemof.p01.lp1.nemo.srv.nintendo.net",
                 "nemof.hac.lp1.nemo.srv.nintendo.net",
-                "ctest-dl.p01.lp1.ctest.srv.nintendo.net",
                 "ctest-ul.p01.lp1.ctest.srv.nintendo.net",
+                "ctest-dl.p01.lp1.ctest.srv.nintendo.net",
                 "ctest-ul-lp1.cdn.nintendo.net",
                 "ctest-dl-lp1.cdn.nintendo.net"
             ],

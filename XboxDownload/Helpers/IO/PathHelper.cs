@@ -16,7 +16,7 @@ public static class PathHelper
         {
             if (!string.IsNullOrEmpty(_localFolder))
                 return _localFolder;
-            
+
             if (OperatingSystem.IsMacOS())
             {
                 var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;

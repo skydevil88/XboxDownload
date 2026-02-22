@@ -380,11 +380,14 @@
     <x:String x:Key="Storage.SerialNumber">Serial Number</x:String>
     <x:String x:Key="Storage.Size">Size</x:String>
     <x:String x:Key="Storage.Mode">Mode</x:String>
+    <x:String x:Key="Storage.PartitionCount">#Partitions</x:String>
+    <x:String x:Key="Storage.DriveLetter">Drive</x:String>
     <x:String x:Key="Storage.EnablePcMode">Enable PC Mode</x:String>
     <x:String x:Key="Storage.EnableXboxMode">Enable Xbox Mode</x:String>
     <x:String x:Key="Storage.Scan">Scan</x:String>
     <x:String x:Key="Storage.FormatHardDrive">Format Hard Drive</x:String>
     <x:String x:Key="Storage.UserGuide">User Guide</x:String>
+    <x:String x:Key="Storage.DriveRepair">Drive Repair</x:String>
     <x:String x:Key="Storage.XboxToPcModeDescription">This feature converts an Xbox Console external hard drive to PC-readable mode. (Note: Security software may block this operation. Data loss risk is possible, please use an empty drive and backup your data. User assumes all risks.)</x:String>
     <x:String x:Key="Storage.PcMode">PC Mode</x:String>
     <x:String x:Key="Storage.XboxMode">Xbox Mode</x:String>
@@ -411,6 +414,17 @@
     <x:String x:Key="Storage.CopyAndRenameGame">Copy the game files from PC to the Xbox external drive's root directory, rename to Content ID, then connect to Xbox and move the game to another drive.&#x0a;Note: 1. Do not launch from the external drive, it will be re-downloaded. 2. The app does not support hard drive import. 3. Xbox must be online.</x:String>
 
     <x:String x:Key="Storage.FormatHardDrive.Title">Format Xbox External Hard Drive</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Refresh">Refresh</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Show">Show: </x:String>
+    <x:String x:Key="Storage.FormatHardDrive.ExternalDrives">External Drives</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.AllDrives">All Drives</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.Format">Format</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.FormatFeatureDescription">Format this drive for Xbox console games and apps.</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.DialogFormatHardDriveTitle">Format Drive</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.DialogFormatHardDriveMessage">Are you sure you want to format this drive?&#x0a;&#x0a;⚠ Warning: This will erase all partitions and files on the drive!</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.DriveOperationError">Drive operation error:&#x0a;{0}</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.FormatFailedMessage">Drive format failed, error message:&#x0a;{0}</x:String>
+    <x:String x:Key="Storage.FormatHardDrive.FormatSuccessMessage">Drive formatting completed successfully.</x:String>
     
     <x:String x:Key="Store.MicrosoftStore">Microsoft Store</x:String>
     <x:String x:Key="Store.UrlProductId">URL/ProductID</x:String>

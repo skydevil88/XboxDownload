@@ -12,7 +12,7 @@ public static class ChineseConverter
     {
         return new string(input.Select(c => S2T.GetValueOrDefault(c, c)).ToArray());
     }
-    
+
     // 简体 → 繁体 映射
     private static readonly Dictionary<char, char> S2T = new()
     {

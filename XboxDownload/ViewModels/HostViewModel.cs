@@ -161,5 +161,3 @@ public partial class HostViewModel : ObservableObject
         }
     }
 }
-
-

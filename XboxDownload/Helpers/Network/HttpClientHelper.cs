@@ -20,7 +20,6 @@ using XboxDownload.Helpers.UI;
 
 namespace XboxDownload.Helpers.Network;
 
-
 public class HttpClientHelper
 {
     private static IHttpClientFactory? HttpClientFactory => App.Services?.GetRequiredService<IHttpClientFactory>();
@@ -77,7 +76,7 @@ public class HttpClientHelper
             return null;
         }
     }
-    
+
     public static async Task<string?> GetFastestProxyAsync(string[] proxies, string path, Dictionary<string, string> headers, int timeout)
     {
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeout));
@@ -162,7 +161,7 @@ public class HttpClientHelper
 
         return null;
     }
-    
+
     public static async Task<(HttpResponseMessage? Response, long Latency)> MeasureHttpLatencyAsync(Uri uri, IPAddress ip, TimeSpan timeout, long rangeFrom = 0, long rangeTo = 0, string? userAgent = null, CancellationToken token = default)
     {
         using var handler = new SocketsHttpHandler();
@@ -170,6 +169,7 @@ public class HttpClientHelper
         handler.AllowAutoRedirect = false;
         handler.AutomaticDecompression = DecompressionMethods.None;
         handler.PooledConnectionLifetime = TimeSpan.Zero;
+        handler.PooledConnectionIdleTimeout = TimeSpan.Zero;
         handler.ConnectTimeout = timeout;
         handler.ConnectCallback = async (context, cancellationToken) =>
         {
@@ -192,13 +192,13 @@ public class HttpClientHelper
 
             if (context.InitialRequestMessage.RequestUri?.Scheme != Uri.UriSchemeHttps)
                 return networkStream;
-            
+
             var ssl = new SslStream(
                 networkStream,
                 leaveInnerStreamOpen: false,
                 (_, _, _, errors) => errors == SslPolicyErrors.None
             );
-            
+
             try
             {
                 await ssl.AuthenticateAsClientAsync(
@@ -223,15 +223,15 @@ public class HttpClientHelper
         try
         {
             using var client = new HttpClient(handler, disposeHandler: true);
-            
+
             using var request = new HttpRequestMessage(HttpMethod.Get, uri);
             request.Headers.Range = new RangeHeaderValue(rangeFrom, rangeTo);
             request.Headers.UserAgent.ParseAdd(string.IsNullOrEmpty(userAgent) ? nameof(XboxDownload) : userAgent);
-            
+
             var sw = Stopwatch.StartNew();
             var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
             sw.Stop();
-            
+
             return (response, sw.ElapsedMilliseconds);
         }
         catch
@@ -253,7 +253,7 @@ public class HttpClientHelper
 
             if (topLevel?.Clipboard != null)
                 await topLevel.Clipboard.SetTextAsync(url);
-            
+
             await DialogHelper.ShowInfoDialogAsync(
                 "Notice",
                 $"The link has been copied to the clipboard:\n{url}\n\n" +

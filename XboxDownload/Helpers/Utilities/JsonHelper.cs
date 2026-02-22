@@ -8,7 +8,7 @@ public static class JsonHelper
     {
         WriteIndented = true
     };
-    
+
     public static readonly JsonSerializerOptions PropertyNameInsensitive = new()
     {
         PropertyNameCaseInsensitive = true

@@ -128,7 +128,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         if (!DohModelsMappings.Any(a => a.IsChecked))
             DohModelsMappings.FirstOrDefault()!.IsChecked = true;
 
-        Rules2Text = File.Exists(_serviceViewModel.SniProxy2FilePath) ? File.ReadAllText(_serviceViewModel.SniProxy2FilePath): string.Empty;
+        Rules2Text = File.Exists(_serviceViewModel.SniProxy2FilePath) ? File.ReadAllText(_serviceViewModel.SniProxy2FilePath) : string.Empty;
 
         using (var stream = AssetLoader.Open(new Uri($"avares://{nameof(XboxDownload)}/Resources/CertDomain.txt")))
         {
@@ -275,7 +275,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
         foreach (var line in RulesText.ReplaceLineEndings().Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
         {
             if (string.IsNullOrEmpty(line) || line.StartsWith('#')) continue;
-            
+
             if (!line.Contains('='))
             {
                 var proxy = line.Split('|');
@@ -391,7 +391,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
                 var host = proxy[0].ToLowerInvariant();
                 if (host.StartsWith('.')) host = "*" + host;
                 var arrHost = new ArrayList { host };
-                if (IPAddress.TryParse(proxy[1] , out var ipAddress))
+                if (IPAddress.TryParse(proxy[1], out var ipAddress))
                 {
                     var lsIp = new List<string> { ipAddress.ToString() };
                     lsSniProxy.Add([arrHost, string.Empty, lsIp]);
@@ -491,8 +491,8 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
         CloseDialog?.Invoke();
     }
-    
-    
+
+
     [RelayCommand]
     private async Task SaveCertVerifyRulesAsync()
     {
