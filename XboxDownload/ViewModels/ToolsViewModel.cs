@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
@@ -17,7 +16,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using MsBox.Avalonia.Enums;
-using XboxDownload.Helpers.IO;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.System;
 using XboxDownload.Helpers.UI;
@@ -74,8 +72,10 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
             {
                 using FileStream fs = new(SelectedDrivePath.DirectoryRoot + "\\.GamingRoot", FileMode.Open, FileAccess.Read, FileShare.Read);
                 using BinaryReader br = new(fs);
-                if (MbrHelper.ByteToHex(br.ReadBytes(0x8)) == "5247425801000000")
+                
+                if (br.ReadUInt32() == 0x58424752)
                 {
+                    br.BaseStream.Position = 0x8;
                     gamesPath = SelectedDrivePath.DirectoryRoot + Encoding.GetEncoding("UTF-16").GetString(br.ReadBytes((int)fs.Length - 0x8)).Trim('\0');
                     if (!Directory.Exists(gamesPath))
                     {

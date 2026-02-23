@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace XboxDownload.Helpers.IO;
 
@@ -83,29 +82,5 @@ public static class MbrHelper
         {
             CloseHandle(diskHandle);
         }
-    }
-
-    public static byte[] HexToByte(string byteStr)
-    {
-        byteStr = byteStr.ToUpperInvariant().Replace(" ", "");
-        var len = byteStr.Length / 2;
-        var data = new byte[len];
-        for (var i = 0; i < len; i++)
-        {
-            data[i] = Convert.ToByte(byteStr.Substring(i * 2, 2), 16);
-        }
-        return data;
-    }
-
-    public static string ByteToHex(byte[] bytes)
-    {
-        if (bytes.Length == 0) return string.Empty;
-
-        var sb = new StringBuilder();
-        foreach (var item in bytes)
-        {
-            sb.Append(item.ToString("X2"));
-        }
-        return sb.ToString();
     }
 }
