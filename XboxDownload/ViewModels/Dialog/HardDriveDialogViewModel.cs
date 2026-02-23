@@ -115,6 +115,9 @@ public partial class HardDriveDialogViewModel : ObservableObject
             return result;
         });
 
+        StorageMappings.Clear();
+        SelectedEntry = null;
+
         StorageMappings.AddRange(entries.OrderBy(e => e.Index));
     }
 

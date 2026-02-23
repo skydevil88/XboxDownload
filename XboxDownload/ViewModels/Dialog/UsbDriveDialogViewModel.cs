@@ -42,6 +42,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
             return;
 
         UsbDriveMappings.Clear();
+        SelectedEntry = null;
 
         var entries = await Task.Run(() =>
         {
@@ -95,6 +96,9 @@ public partial class UsbDriveDialogViewModel : ObservableObject
             }
             return result;
         });
+
+        UsbDriveMappings.Clear();
+        SelectedEntry = null;
 
         UsbDriveMappings.AddRange(entries);
     }
