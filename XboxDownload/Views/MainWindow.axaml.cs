@@ -15,25 +15,19 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        if (Application.Current?.ApplicationLifetime
+            is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.ShutdownRequested += async (_, e) =>
             {
+                if (_isSystemShutdown)
+                    return;
+
                 _isSystemShutdown = true;
-                
                 e.Cancel = true;
-                
-                if (desktop.MainWindow?.DataContext is MainWindowViewModel mainVm)
-                {
-                    var serviceVm = mainVm.ServiceViewModel;
-                    if (serviceVm.IsListening)
-                    {
-                        await serviceVm.ToggleListeningAsync();
-                    }
-                    
-                    var toolsVm = mainVm.ToolsViewModel;
-                    toolsVm.Dispose();
-                }
+
+                if (DataContext is MainWindowViewModel vm)
+                    await vm.OnShutdownAsync();
 
                 desktop.Shutdown();
             };

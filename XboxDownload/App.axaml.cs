@@ -77,12 +77,10 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (OperatingSystem.IsWindows())
-            TrayIconService.Initialize();
-        
         Services = Setup.ConfigureServices();
-
+        
         Ioc.Default.ConfigureServices(new ServiceCollection()
+            .AddSingleton<TrayIconService>()
             .AddSingleton<MainWindowViewModel>()
             .AddSingleton<ServiceViewModel>()
             .AddSingleton<SpeedTestViewModel>()
@@ -92,6 +90,12 @@ public partial class App : Application
             .AddSingleton<StoreViewModel>()
             .AddSingleton<ToolsViewModel>()
             .BuildServiceProvider());
+        
+        if (OperatingSystem.IsWindows())
+        {
+            var trayService = Ioc.Default.GetRequiredService<TrayIconService>();
+            trayService.Initialize();
+        }
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

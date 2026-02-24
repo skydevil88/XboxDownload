@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text.Json;
@@ -743,7 +744,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var uri = await EnsureValidTargetTestUrlAsync();
 
-        if (uri != null && !token.IsCancellationRequested)
+        if (uri != null)
         {
 
             var rangeTo = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
@@ -759,6 +760,21 @@ public partial class SpeedTestViewModel : ViewModelBase
             }
 
             _ = UploadPreferredAkamaiIpsIfInChinaAsync();
+        }
+        else
+        {
+            foreach (var item in IpItems.Where(p => p.IsSelected))
+            {
+                item.Ttl = null;
+                item.RoundtripTime = null;
+                item.Speed = null;
+                
+                if (token.IsCancellationRequested)
+                    break;
+
+                if (!IPAddress.TryParse(item.Ip, out var ip)) return;
+                await SpeedTestService.PingAsync(item, ip, token);
+            }
         }
 
         _speedTestCancellation?.Dispose();
@@ -782,7 +798,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var uri = await EnsureValidTargetTestUrlAsync();
 
-        if (uri != null && !token.IsCancellationRequested)
+        if (uri != null)
         {
             var rangeTo = SelectedImportOption!.Key.StartsWith("Akamai") ? 31457279 : 52428799; //国外IP测试下载30M，国内IP测试下载50M
             var timeout = TimeSpan.FromSeconds(SelectedTimeout);
@@ -791,6 +807,15 @@ public partial class SpeedTestViewModel : ViewModelBase
             await SpeedTestService.PingAndTestAsync(item, uri, rangeTo, timeout, userAgent, token);
 
             _ = UploadPreferredAkamaiIpsIfInChinaAsync();
+        }
+        else
+        {
+            item.Ttl = null;
+            item.RoundtripTime = null;
+            item.Speed = null;
+            
+            if (!IPAddress.TryParse(item.Ip, out var ip)) return;
+            await SpeedTestService.PingAsync(item, ip, token);
         }
     }
 
@@ -858,6 +883,13 @@ public partial class SpeedTestViewModel : ViewModelBase
         if (list.Count == 0)
             return;
 
+        // 请求 API 获取本地地理位置信息（用于判断是否在中国大陆）
+        var result = await IpGeoHelper.GetCountryFromMultipleApisAsync();
+
+        // 如果不在中国大陆，则跳过上传
+        if (!string.Equals(result, "CN", StringComparison.OrdinalIgnoreCase))
+            return;
+        
         // 构建 JSON 数组，用于上传
         var jsonArray = new JsonArray();
         foreach (var item in list)
@@ -870,13 +902,6 @@ public partial class SpeedTestViewModel : ViewModelBase
             });
             _uploadedIpTimes[item.Ip] = now;
         }
-
-        // 请求 API 获取本地地理位置信息（用于判断是否在中国大陆）
-        var result = await IpGeoHelper.GetCountryFromMultipleApisAsync();
-
-        // 如果不在中国大陆，则跳过上传
-        if (!string.Equals(result, "CN", StringComparison.OrdinalIgnoreCase))
-            return;
 
         // 发送 POST 请求上传到服务端接口
         using var response = await HttpClientHelper.SendRequestAsync(

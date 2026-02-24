@@ -195,7 +195,7 @@ public static class SpeedTestService
             await pingTask;
     }
 
-    private static async Task PingAsync(IpItem item, IPAddress ip, CancellationToken token)
+    public static async Task PingAsync(IpItem item, IPAddress ip, CancellationToken token)
     {
         try
         {

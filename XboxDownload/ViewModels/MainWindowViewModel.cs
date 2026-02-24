@@ -19,6 +19,7 @@ using XboxDownload.Services;
 namespace XboxDownload.ViewModels;
 
 public partial class MainWindowViewModel(
+    TrayIconService trayIconService,
     ServiceViewModel serviceViewModel,
     SpeedTestViewModel speedTestViewModel,
     HostViewModel hostViewModel,
@@ -28,6 +29,7 @@ public partial class MainWindowViewModel(
     ToolsViewModel toolsViewModel)
     : ObservableObject
 {
+    private TrayIconService TrayIconService { get; } = trayIconService;
     public ServiceViewModel ServiceViewModel { get; } = serviceViewModel;
     public SpeedTestViewModel SpeedTestViewModel { get; } = speedTestViewModel;
     public HostViewModel HostViewModel { get; } = hostViewModel;
@@ -198,24 +200,23 @@ public partial class MainWindowViewModel(
     }
 
     [RelayCommand]
-    private static async Task ExitAsync()
+    private async Task ExitAsync()
     {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        if (Application.Current?.ApplicationLifetime 
+            is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (desktop.MainWindow?.DataContext is MainWindowViewModel mainVm)
-            {
-                var serviceVm = mainVm.ServiceViewModel;
-                if (serviceVm.IsListening)
-                {
-                    await serviceVm.ToggleListeningAsync();
-                }
-
-                var toolsVm = mainVm.ToolsViewModel;
-                toolsVm.Dispose();
-            }
-
+            await OnShutdownAsync();
             desktop.Shutdown();
         }
+    }
+    
+    public async Task OnShutdownAsync()
+    {
+        if (ServiceViewModel.IsListening)
+            await ServiceViewModel.ToggleListeningAsync();
+        
+        ToolsViewModel.Dispose();
+        TrayIconService.Dispose();
     }
 
     [RelayCommand]

@@ -204,7 +204,12 @@ exit 0
                                 await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
                                 _ = CommandHelper.RunCommandAsync("/usr/bin/env", $"bash \"{scriptPath}\"");
                             }
-
+                            
+                            var toolsViewModel = Ioc.Default.GetRequiredService<ToolsViewModel>();
+                            toolsViewModel.Dispose();
+                            var trayService = Ioc.Default.GetRequiredService<TrayIconService>();
+                            trayService.Dispose();
+                            
                             Process.GetCurrentProcess().Kill();
                         }
                     }
