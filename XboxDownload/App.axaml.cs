@@ -140,26 +140,19 @@ public partial class App : Application
 
     private void ShowMainWindow()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var win = desktop.MainWindow;
-            if (win != null)
-            {
-                win.Show();
-                win.WindowState = WindowState.Normal;
-                win.Activate();
-            }
-        }
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+        var win = desktop.MainWindow;
+        if (win == null) return;
+        win.Show();
+        win.WindowState = WindowState.Normal;
+        win.Activate();
     }
 
     private IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
     {
-        if (msg == ShowWindowMessageId)
-        {
-            Dispatcher.UIThread.Post(ShowMainWindow);
-            return IntPtr.Zero;
-        }
-        return CallWindowProc(_oldWndProc, hWnd, msg, wParam, lParam);
+        if (msg != ShowWindowMessageId) return CallWindowProc(_oldWndProc, hWnd, msg, wParam, lParam);
+        Dispatcher.UIThread.Post(ShowMainWindow);
+        return IntPtr.Zero;
     }
 
     private void DisableAvaloniaDataAnnotationValidation()

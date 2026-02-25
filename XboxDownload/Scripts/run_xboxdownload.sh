@@ -69,10 +69,17 @@ chmod +x "$APP"
 echo "🚀 Launching XboxDownload"
 
 if [[ "$PLATFORM" == "macos" ]]; then
-if xattr "$APP" 2>/dev/null | grep -q com.apple.quarantine; then
-echo "🛡 Removing macOS quarantine attribute..."
-sudo xattr -dr com.apple.quarantine "$(dirname "$APP")"
-fi
+    DIR="$HOME/.net/XboxDownload"
+    if [ -d "$DIR" ]; then
+        #echo "Fixing ownership and permissions for $DIR ..."
+        sudo chown -R $(whoami):staff "$DIR"
+        sudo chmod -R u+rwX "$DIR"
+    fi
+
+    if [ -d "$DIR" ] && xattr "$APP" 2>/dev/null | grep -q com.apple.quarantine; then
+        echo "🛡 Removing macOS quarantine attribute..."
+        sudo xattr -dr com.apple.quarantine "$(dirname "$APP")"
+    fi
 fi
 
 echo "   Path: $APP"

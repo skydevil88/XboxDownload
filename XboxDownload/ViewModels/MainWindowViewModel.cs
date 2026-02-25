@@ -209,7 +209,7 @@ public partial class MainWindowViewModel(
             desktop.Shutdown();
         }
     }
-    
+
     public async Task OnShutdownAsync()
     {
         if (ServiceViewModel.IsListening)

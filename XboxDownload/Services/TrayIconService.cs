@@ -51,7 +51,7 @@ public class TrayIconService : IDisposable
         return menu;
     }
 
-    private void ShowMainWindow()
+    private static void ShowMainWindow()
     {
         if (Application.Current?.ApplicationLifetime
             is not IClassicDesktopStyleApplicationLifetime desktop ||
@@ -77,7 +77,7 @@ public class TrayIconService : IDisposable
         }
     }
 
-    private async Task ExitAsync()
+    private static async Task ExitAsync()
     {
         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
         await mainWindowVm.ExitAsync();
