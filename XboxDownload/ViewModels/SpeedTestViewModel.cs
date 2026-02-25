@@ -590,7 +590,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             if (!confirm) return;
 
             // 保留其余内容
-            var cleaned = string.Join(Environment.NewLine, lines.Where(line => !line.Contains($"# {nameof(XboxDownload)}")));
+            var cleaned = string.Join(Environment.NewLine, lines.Where(line => !line.Contains($"# {nameof(XboxDownload)}"))).Trim() + Environment.NewLine;
 
             // 写回 hosts 文件
             await File.WriteAllTextAsync(PathHelper.SystemHostsPath, cleaned);
@@ -768,7 +768,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 item.Ttl = null;
                 item.RoundtripTime = null;
                 item.Speed = null;
-                
+
                 if (token.IsCancellationRequested)
                     break;
 
@@ -813,7 +813,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             item.Ttl = null;
             item.RoundtripTime = null;
             item.Speed = null;
-            
+
             if (!IPAddress.TryParse(item.Ip, out var ip)) return;
             await SpeedTestService.PingAsync(item, ip, token);
         }
@@ -889,7 +889,7 @@ public partial class SpeedTestViewModel : ViewModelBase
         // 如果不在中国大陆，则跳过上传
         if (!string.Equals(result, "CN", StringComparison.OrdinalIgnoreCase))
             return;
-        
+
         // 构建 JSON 数组，用于上传
         var jsonArray = new JsonArray();
         foreach (var item in list)
