@@ -200,7 +200,7 @@ public partial class MainWindowViewModel(
     }
 
     [RelayCommand]
-    private async Task ExitAsync()
+    public async Task ExitAsync()
     {
         if (Application.Current?.ApplicationLifetime 
             is IClassicDesktopStyleApplicationLifetime desktop)

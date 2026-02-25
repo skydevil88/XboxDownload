@@ -1,9 +1,10 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Platform;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.ViewModels;
 
@@ -78,21 +79,8 @@ public class TrayIconService : IDisposable
 
     private async Task ExitAsync()
     {
-        if (Application.Current?.ApplicationLifetime
-            is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            if (desktop.MainWindow?.DataContext is MainWindowViewModel mainVm)
-            {
-                var serviceVm = mainVm.ServiceViewModel;
-                if (serviceVm.IsListening)
-                    await serviceVm.ToggleListeningAsync();
-
-                mainVm.ToolsViewModel.Dispose();
-            }
-
-            Dispose();
-            desktop.Shutdown();
-        }
+        var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
+        await mainWindowVm.ExitAsync();
     }
 
     public void UpdateToolTip()
@@ -104,13 +92,12 @@ public class TrayIconService : IDisposable
 
     public void Dispose()
     {
-        if (_trayIcon != null)
-        {
-            _trayIcon.IsVisible = false;
-            _trayIcon.Dispose();
-            _trayIcon = null;
-        }
+        if (_trayIcon == null) return;
         
+        _trayIcon.IsVisible = false;
+        _trayIcon.Dispose();
+        _trayIcon = null;
+            
         GC.SuppressFinalize(this);
     }
 }

@@ -153,8 +153,8 @@ public static partial class UpdateService
                         var extractDir = new DirectoryInfo(Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(fileName)));
                         if (extractDir.Exists)
                         {
-                            if (serviceVm.IsListening)
-                                await serviceVm.ToggleListeningAsync();
+                            var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
+                            await mainWindowVm.OnShutdownAsync();
 
                             var appPath = Process.GetCurrentProcess().MainModule?.FileName;
                             var appDir = Path.GetDirectoryName(appPath);
@@ -204,12 +204,7 @@ exit 0
                                 await CommandHelper.RunCommandAsync("chmod", $"+x \"{scriptPath}\"");
                                 _ = CommandHelper.RunCommandAsync("/usr/bin/env", $"bash \"{scriptPath}\"");
                             }
-                            
-                            var toolsViewModel = Ioc.Default.GetRequiredService<ToolsViewModel>();
-                            toolsViewModel.Dispose();
-                            var trayService = Ioc.Default.GetRequiredService<TrayIconService>();
-                            trayService.Dispose();
-                            
+
                             Process.GetCurrentProcess().Kill();
                         }
                     }
