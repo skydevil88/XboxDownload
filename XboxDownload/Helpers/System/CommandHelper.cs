@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace XboxDownload.Helpers.System;
@@ -110,5 +112,27 @@ public static class CommandHelper
         {
             // ignored
         }
+    }
+
+    private static readonly ConcurrentDictionary<string, string?> CommandCache = new();
+
+    public static string? GetCommandPath(string commandName)
+    {
+        return CommandCache.GetOrAdd(commandName, name =>
+        {
+            // 1. Windows 后缀处理
+            if (OperatingSystem.IsWindows() && !name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                name += ".exe";
+
+            // 2. 已经是全路径则直接校验
+            if (Path.IsPathRooted(name))
+                return File.Exists(name) ? name : null;
+
+            // 3. 通用 PATH 搜索 (PathSeparator 自动处理 ; 或 :)
+            return Environment.GetEnvironmentVariable("PATH")?
+                .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => Path.Combine(p, name))
+                .FirstOrDefault(File.Exists);
+        });
     }
 }

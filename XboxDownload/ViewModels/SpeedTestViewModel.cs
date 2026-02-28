@@ -32,6 +32,8 @@ namespace XboxDownload.ViewModels;
 
 public partial class SpeedTestViewModel : ViewModelBase
 {
+    private ServiceViewModel ServiceViewModel { get; }
+
     private readonly string _translationPath = PathHelper.GetResourceFilePath("Translation.json");
 
     public List<int> TimeoutOptions { get; } = [3, 5, 10];
@@ -51,8 +53,10 @@ public partial class SpeedTestViewModel : ViewModelBase
     [ObservableProperty]
     private ImportOption? _selectedImportOption;
 
-    public SpeedTestViewModel()
+    public SpeedTestViewModel(ServiceViewModel serviceViewModel)
     {
+        ServiceViewModel = serviceViewModel;
+
         SelectedImportOption = ImportOptions.FirstOrDefault();
         HeaderText = SelectedImportOption!.Display;
 
@@ -102,12 +106,12 @@ public partial class SpeedTestViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isXboxCn1Visible, _isXboxCn2Visible, _isXboxAppVisible, _isXboxSeparatorVisible, _isPsVisible, _isPsSeparatorVisible, _isUbisoftVisible, _isAkamaiVisible, _isUbisoftSeparatorVisible;
 
-    private string _selectedImportkey = string.Empty;
+    private string _selectedImportKey = string.Empty;
     [RelayCommand]
     private async Task LoadIpAsync()
     {
         if (string.IsNullOrEmpty(SelectedImportOption?.Target)) return;
-        _selectedImportkey = SelectedImportOption.Key;
+        _selectedImportKey = SelectedImportOption.Key;
 
         CancelFetchAppDownloadUrl();
         ClearSort();
@@ -369,10 +373,10 @@ public partial class SpeedTestViewModel : ViewModelBase
     #region MenuItem
 
     [RelayCommand]
-    private Task ExportDnsmasqAsync(Visual? visual) => ExportRulesAsync(visual, _selectedImportkey, SelectedItem?.Ip, "dnsmasq");
+    private Task ExportDnsmasqAsync(Visual? visual) => ExportRulesAsync(visual, _selectedImportKey, SelectedItem?.Ip, "dnsmasq");
 
     [RelayCommand]
-    private Task ExportHostsAsync(Visual? visual) => ExportRulesAsync(visual, _selectedImportkey, SelectedItem?.Ip, "hosts");
+    private Task ExportHostsAsync(Visual? visual) => ExportRulesAsync(visual, _selectedImportKey, SelectedItem?.Ip, "hosts");
 
     private static async Task ExportRulesAsync(Visual? visual, string key, string? ip, string exportFormat)
     {
@@ -404,70 +408,69 @@ public partial class SpeedTestViewModel : ViewModelBase
         var ip = SelectedItem?.Ip;
         if (ip == null) return;
 
-        var serviceVm = Ioc.Default.GetRequiredService<ServiceViewModel>();
-        if (serviceVm.IsListening && parameter != "Akamai")
-            await serviceVm.ToggleListeningAsync();
+        if (ServiceViewModel.IsListening && parameter != "Akamai")
+            await ServiceViewModel.ToggleListeningAsync();
 
         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
         const int tabIndex = 0;
         switch (parameter)
         {
             case "XboxGlobal":
-                serviceVm.XboxGlobalIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.XboxGlobalIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "XboxCn1":
-                serviceVm.XboxCn1Ip = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.XboxCn1Ip = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "XboxCn2":
-                serviceVm.XboxCn2Ip = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.XboxCn2Ip = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "XboxApp":
-                serviceVm.XboxAppIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.XboxAppIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "XboxGlobalCnApps":
-                serviceVm.XboxGlobalIp = ip;
-                serviceVm.XboxCn1Ip = ip;
-                serviceVm.XboxCn2Ip = ip;
-                serviceVm.XboxAppIp = ip;
-                serviceVm.FocusText("XboxGlobalIp");
+                ServiceViewModel.XboxGlobalIp = ip;
+                ServiceViewModel.XboxCn1Ip = ip;
+                ServiceViewModel.XboxCn2Ip = ip;
+                ServiceViewModel.XboxAppIp = ip;
+                ServiceViewModel.FocusText("XboxGlobalIp");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Ps":
-                serviceVm.PsIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.PsIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Ns":
-                serviceVm.NsIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.NsIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Ea":
-                serviceVm.EaIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.EaIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Battle":
-                serviceVm.BattleIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.BattleIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Epic":
-                serviceVm.EpicIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.EpicIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Ubisoft":
-                serviceVm.UbisoftIp = ip;
-                serviceVm.FocusText($"{parameter}Ip");
+                ServiceViewModel.UbisoftIp = ip;
+                ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
             case "Akamai":
@@ -513,11 +516,11 @@ public partial class SpeedTestViewModel : ViewModelBase
                 content = await sr.ReadToEndAsync();
             }
 
-            var patterns = DnsMappingGenerator.GenerateHostRegexPattern(_selectedImportkey);
+            var patterns = DnsMappingGenerator.GenerateHostRegexPattern(_selectedImportKey);
 
             content = Regex.Replace(content, patterns, "");
 
-            var dnsMapping = DnsMappingGenerator.GenerateDnsMapping(_selectedImportkey, ip, "hosts", "Write");
+            var dnsMapping = DnsMappingGenerator.GenerateDnsMapping(_selectedImportKey, ip, "hosts", "Write");
 
             content = content.Trim() + Environment.NewLine + dnsMapping;
 
@@ -553,14 +556,14 @@ public partial class SpeedTestViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private static async Task ClearHostsAsync()
+    private async Task ClearHostsAsync()
     {
         try
         {
             var content = await File.ReadAllTextAsync(PathHelper.SystemHostsPath);
 
             // 清理非正常退出残留内容
-            if (!Ioc.Default.GetRequiredService<ServiceViewModel>().IsListening && HostsHelper.RemoveAppSectionRegex().IsMatch(content))
+            if (!ServiceViewModel.IsListening && HostsHelper.RemoveAppSectionRegex().IsMatch(content))
             {
                 content = HostsHelper.RemoveAppSectionRegex().Replace(content, "").Trim();
                 await File.WriteAllTextAsync(PathHelper.SystemHostsPath, content);

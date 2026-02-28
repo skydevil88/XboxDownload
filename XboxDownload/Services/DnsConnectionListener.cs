@@ -375,6 +375,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         NetworkInterfaceDnsMap.Clear();
         var isSimplifiedChinese = App.Settings.Culture == "zh-Hans";
 
+        var localIpAddr = IPAddress.Parse(App.Settings.LocalIp);
+
         IPEndPoint? iPEndPoint = null;
         if (string.IsNullOrEmpty(serviceViewModel.DnsIp))
         {
@@ -389,9 +391,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     {
                         foreach (var dns in adapterProperties.DnsAddresses)
                         {
-                            if (dns.AddressFamily != AddressFamily.InterNetwork) continue;
-                            if (dns.ToString() == App.Settings.LocalIp || IPAddress.IsLoopback(dns))
-                                continue;
+                            if (dns.AddressFamily != AddressFamily.InterNetwork || !IsValidDnsServer(dns, localIpAddr)) continue;
                             iPEndPoint = new IPEndPoint(dns, Port);
                             break;
                         }
@@ -399,25 +399,27 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 }
                 else if (OperatingSystem.IsLinux())
                 {
-                    var dns = await GetDnsServers(serviceViewModel.SelectedAdapter.Adapter.Name);
-                    if (dns.AddressFamily == AddressFamily.InterNetwork &&
-                        dns.ToString() != App.Settings.LocalIp &&
-                        dns.ToString() != "255.255.255.255" &&
-                        !IPAddress.IsLoopback(dns))
+                    var dns = await GetDnsServer(serviceViewModel.SelectedAdapter.Adapter.Name, localIpAddr);
+                    if (!Equals(dns, IPAddress.None))
                     {
                         iPEndPoint = new IPEndPoint(dns, Port);
                     }
                 }
             }
-            iPEndPoint ??= new IPEndPoint(IPAddress.Parse(isSimplifiedChinese ? "114.114.114.114" : "8.8.8.8"), Port);
-            serviceViewModel.DnsIp = iPEndPoint.Address.ToString();
         }
         else
         {
-            iPEndPoint = new IPEndPoint(IPAddress.Parse(serviceViewModel.DnsIp), Port);
+            var dns = IPAddress.Parse(serviceViewModel.DnsIp);
+            if (IsValidDnsServer(dns, localIpAddr))
+            {
+                iPEndPoint = new IPEndPoint(dns, Port);
+            }
         }
 
-        var ipe = new IPEndPoint(App.Settings.ListeningIp == "LocalIp" ? IPAddress.Parse(App.Settings.LocalIp) : IPAddress.Any, Port);
+        iPEndPoint ??= new IPEndPoint(IPAddress.Parse(isSimplifiedChinese ? "114.114.114.114" : "8.8.8.8"), Port);
+        serviceViewModel.DnsIp = iPEndPoint.Address.ToString();
+
+        var ipe = new IPEndPoint(App.Settings.ListeningIp == "LocalIp" ? localIpAddr : IPAddress.Any, Port);
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         try
         {
@@ -429,8 +431,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             return string.Format(ResourceHelper.GetString("Service.Listening.DnsStartFailedDialogMessage"), ex.Message);
         }
 
-        var localIp = IPAddress.Parse(App.Settings.LocalIp).GetAddressBytes();
-        _localIpRecords = [new ResourceRecord { Data = localIp, TTL = 100, QueryClass = 1, QueryType = QueryType.A }];
+        var localIpBytes = localIpAddr.GetAddressBytes();
+        _localIpRecords = [new ResourceRecord { Data = localIpBytes, TTL = 100, QueryClass = 1, QueryType = QueryType.A }];
 
         byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null, epicIp = null, ubisoftIp = null;
         var ipMap = new List<(string host, Func<string?> get, Action<string> set, Action<byte[]?> setBytes)>
@@ -456,7 +458,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             else
             {
                 serviceViewModel.XboxGlobalIp = App.Settings.LocalIp;
-                xboxGlobalIp = localIp;
+                xboxGlobalIp = localIpBytes;
             }
         }
         else
@@ -597,27 +599,78 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         _socket = null;
     }
 
-    private static async Task<IPAddress> GetDnsServers(string name)
+    private async Task<IPAddress> GetDnsServer(string interfaceName, IPAddress localAddr)
     {
-        if (File.Exists("/usr/bin/nmcli"))
+        // 1. Try nmcli (NetworkManager)
+        var dns = await TryParseDnsCommand("nmcli", $"device show {interfaceName}", "IP4.DNS");
+        if (!Equals(dns, IPAddress.None)) return dns;
+
+        // 2. Try resolvectl (systemd-resolved)
+        return await TryParseDnsCommand("resolvectl", $"status {interfaceName}", "DNS Servers");
+
+        async Task<IPAddress> TryParseDnsCommand(string cmdName, string args, string dnsPrefix)
         {
-            var result = await CommandHelper.RunCommandWithOutputAsync("nmcli", $"device show {name} ");
-            foreach (var parts in from line in result where !string.IsNullOrWhiteSpace(line) && line.Contains(':') select line.Split(':', 2) into parts let key = parts[0].Trim() let value = parts[1].Trim() where key.StartsWith("IP4.DNS") select parts)
+            var command = CommandHelper.GetCommandPath(cmdName);
+            if (string.IsNullOrEmpty(command))
+                return IPAddress.None;
+
+            var output = await CommandHelper.RunCommandWithOutputAsync(command, args);
+
+            var query = from line in output
+                        where !string.IsNullOrWhiteSpace(line)
+                        let colonIndex = line.IndexOf(':')
+                        where colonIndex > 0
+                        let key = line[..colonIndex]
+                        where key.Contains(dnsPrefix, StringComparison.OrdinalIgnoreCase)
+                        let value = line[(colonIndex + 1)..].Trim()
+                        from part in value.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries)
+                        select part;
+            foreach (var part in query)
             {
-                if (IPAddress.TryParse(parts[1].Trim(), out var address))
-                    return address;
+                if (IPAddress.TryParse(part, out var ip) &&
+                    ip.AddressFamily == AddressFamily.InterNetwork &&
+                    IsValidDnsServer(ip, localAddr))
+                {
+                    return ip;
+                }
             }
+
+            return IPAddress.None;
         }
-        if (File.Exists("/usr/bin/resolvectl"))
+    }
+
+    private bool IsValidDnsServer(IPAddress ip, IPAddress localAddr)
+    {
+        // 1. Exclude obviously invalid addresses: loopback, local machine, all-zero, broadcast
+        if (IPAddress.IsLoopback(ip) || ip.Equals(localAddr) ||
+            ip.Equals(IPAddress.Any) || ip.Equals(IPAddress.IPv6Any) || ip.Equals(IPAddress.Broadcast))
         {
-            var result = await CommandHelper.RunCommandWithOutputAsync("resolvectl", $"status {name}");
-            foreach (var parts in from line in result where !string.IsNullOrWhiteSpace(line) && line.Contains(':') select line.Split(':', 2) into parts let key = parts[0].Trim() let value = parts[1].Trim() where key.StartsWith("DNS Servers") select parts)
-            {
-                if (IPAddress.TryParse(parts[1].Trim(), out var address))
-                    return address;
-            }
+            return false;
         }
-        return IPAddress.None;
+
+        // 2. Normalize IPv4-mapped IPv6 (::ffff:IPv4 -> IPv4)
+        var effectiveIp = ip.IsIPv4MappedToIPv6 ? ip.MapToIPv4() : ip;
+
+        switch (effectiveIp.AddressFamily)
+        {
+            case AddressFamily.InterNetwork: // IPv4
+                Span<byte> v4 = stackalloc byte[4];
+                effectiveIp.TryWriteBytes(v4, out _);
+
+                // Exclude link-local 169.254/16 and multicast 224.0.0.0/4
+                if ((v4[0] == 169 && v4[1] == 254) || (v4[0] & 0xF0) == 0xE0)
+                    return false;
+                break;
+
+            case AddressFamily.InterNetworkV6: // IPv6
+                // Exclude link-local fe80::/10 and multicast ff00::/8
+                if (effectiveIp.IsIPv6LinkLocal || effectiveIp.IsIPv6Multicast)
+                    return false;
+                break;
+        }
+
+        // 3. All other IPs are valid DNS servers (private or public)
+        return true;
     }
 
     public string
@@ -790,10 +843,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         var result = await CommandHelper.RunCommandWithOutputAsync("networksetup", "-listnetworkserviceorder");
         var currentService = string.Empty;
 
-        foreach (var line in result)
+        foreach (var line in result.Where(line => !string.IsNullOrWhiteSpace(line)))
         {
-            if (string.IsNullOrWhiteSpace(line)) continue;
-
             if (line.StartsWith('('))
             {
                 var idx = line.IndexOf(')');

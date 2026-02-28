@@ -8,50 +8,46 @@ namespace XboxDownload.Helpers.IO;
 
 public static class PathHelper
 {
-    private static string _localFolder = string.Empty;
-
     private static string LocalFolder
     {
         get
         {
-            if (!string.IsNullOrEmpty(_localFolder))
-                return _localFolder;
+            if (!string.IsNullOrWhiteSpace(field)) return field;
 
-            if (OperatingSystem.IsMacOS())
-            {
-                var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;
-                var home = $"/Users/{user}";
-                _localFolder = Path.Combine(home, "Library", "Application Support", nameof(XboxDownload));
-            }
-            else if (OperatingSystem.IsLinux())
-            {
-                var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;
-                var home = $"/home/{user}";
+            var sudoUser = Environment.GetEnvironmentVariable("SUDO_USER");
+            var rootPath = GetRootPath(sudoUser);
+            var targetPath = Path.Combine(rootPath, nameof(XboxDownload));
 
-                var xdgData = Environment.GetEnvironmentVariable("XDG_DATA_HOME")
-                              ?? Path.Combine(home, ".local", "share");
+            if (Directory.Exists(targetPath)) return field = targetPath;
 
-                _localFolder = Path.Combine(xdgData, nameof(XboxDownload));
-            }
-            else
+            Directory.CreateDirectory(targetPath);
+            if (!OperatingSystem.IsWindows() && !string.IsNullOrEmpty(sudoUser))
             {
-                _localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), nameof(XboxDownload));
+                _ = FixOwnershipAsync(targetPath, true);
             }
 
-            if (!Directory.Exists(_localFolder))
+            return field = targetPath;
+
+            static string GetRootPath(string? sudo)
             {
-                Directory.CreateDirectory(_localFolder);
+                if (OperatingSystem.IsWindows())
+                    return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-                if (!OperatingSystem.IsWindows())
-                    _ = FixOwnershipAsync(_localFolder, true);
+                var isMac = OperatingSystem.IsMacOS();
+                var home = !string.IsNullOrEmpty(sudo)
+                    ? (isMac ? $"/Users/{sudo}" : $"/home/{sudo}")
+                    : Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+                if (isMac)
+                    return Path.Combine(home, "Library", "Application Support");
+
+                var xdg = string.IsNullOrEmpty(sudo) ? Environment.GetEnvironmentVariable("XDG_DATA_HOME") : null;
+                return xdg ?? Path.Combine(home, ".local", "share");
             }
-
-            return _localFolder;
         }
-    }
+    } = string.Empty;
 
     public static string GetLocalFilePath(string fileName) => Path.Combine(LocalFolder, fileName);
-
 
     public static readonly string SystemHostsPath = GetSystemHostsPath();
 
