@@ -54,16 +54,16 @@ public static class CommandHelper
         var exitTask = process.WaitForExitAsync();
         var allTasks = Task.WhenAll(outputTask, errorTask, exitTask);
 
-        if (await Task.WhenAny(allTasks, Task.Delay(timeoutMs)) != allTasks)
+        if (await Task.WhenAny(allTasks, Task.Delay(timeoutMs)) == allTasks)
+            return output;
+        
+        try
         {
-            try
-            {
-                process.Kill(true);
-            }
-            catch
-            {
-                // ignored
-            }
+            process.Kill(true);
+        }
+        catch
+        {
+            // ignored
         }
 
         return output;

@@ -361,22 +361,14 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     public static void Stop()
     {
-        try
-        {
-            _httpSocket?.Shutdown(SocketShutdown.Both);
-            _httpsSocket?.Shutdown(SocketShutdown.Both);
-        }
-        catch
-        {
-            // ignored
-        }
+        SafeShutdown(_httpSocket);
+        SafeShutdown(_httpsSocket);
 
-        _httpSocket?.Close();
-        _httpsSocket?.Close();
-        _httpSocket?.Dispose();
-        _httpsSocket?.Dispose();
-        _httpSocket = null;
-        _httpsSocket = null;
+        var httpS = Interlocked.Exchange(ref _httpSocket, null);
+        var httpsS = Interlocked.Exchange(ref _httpsSocket, null);
+
+        httpS?.Dispose();
+        httpsS?.Dispose();
 
         if (OperatingSystem.IsWindows())
         {
@@ -394,6 +386,21 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
             var pipeline = $"security find-certificate -c \"{nameof(XboxDownload)}\" -a -Z \"{loginKeychain}\" | grep \"SHA-1\" | awk '{{print $NF}}' | xargs -I {{}} security delete-certificate -Z {{}} \"{loginKeychain}\"";
             _ = CommandHelper.RunCommandAsync("bash", $"-c \"{pipeline}\"");
+        }
+    }
+
+    private static void SafeShutdown(Socket? socket)
+    {
+        try
+        {
+            if (socket is { Connected: true })
+            {
+                socket.Shutdown(SocketShutdown.Both);
+            }
+        }
+        catch
+        {
+            // Optional
         }
     }
 

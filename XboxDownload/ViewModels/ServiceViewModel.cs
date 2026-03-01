@@ -375,23 +375,20 @@ public partial class ServiceViewModel : ObservableObject
             foreach (var fieldName in fieldNames)
             {
                 var property = GetType().GetProperty(fieldName);
-                if (property is null || property.PropertyType != typeof(string)) continue;
-
-                var ipValue = property.GetValue(this) as string;
-                if (string.IsNullOrWhiteSpace(ipValue)) continue;
-
-                if (IPAddress.TryParse(ipValue.Trim(), out var ipAddress))
+                if (property?.PropertyType != typeof(string)) continue;
+                var ipValue = (property.GetValue(this) as string ?? string.Empty).Trim();
+                if (string.IsNullOrEmpty(ipValue)) continue;              
+                var isParsed = IPAddress.TryParse(ipValue, out var ipAddress);
+                var isValid = isParsed && (fieldName != nameof(DnsIp) || DnsConnectionListener.IsValidDnsServer(ipAddress!));
+                if (isValid)
                 {
-                    // Format and assign the value back to the property
-                    property.SetValue(this, ipAddress.ToString());
+                    property.SetValue(this, ipAddress!.ToString());
                     continue;
                 }
-
                 await DialogHelper.ShowInfoDialogAsync(
                     ResourceHelper.GetString("Service.Service.InvalidIpTitle"),
                     ResourceHelper.GetString($"Service.Service.Invalid{fieldName}Message"),
                     Icon.Error);
-
                 FocusText(fieldName);
                 return;
             }
