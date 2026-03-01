@@ -10,63 +10,81 @@ namespace XboxDownload.Helpers.System;
 
 public static class CommandHelper
 {
-    public static async Task<int> RunCommandAsync(string fileName, string arguments, bool useShellExecute = false)
+    public static async Task<int> RunCommandAsync(string fileName, string arguments = "", bool useShellExecute = false)
     {
-        using var process = new Process();
-        process.StartInfo = new ProcessStartInfo
+        try
         {
-            FileName = fileName,
-            Arguments = arguments,
-            RedirectStandardOutput = false,
-            RedirectStandardError = false,
-            UseShellExecute = useShellExecute,
-            CreateNoWindow = true
-        };
-        process.Start();
-        await process.WaitForExitAsync();
-        return process.ExitCode;
+            using var process = new Process();
+
+            process.StartInfo = new ProcessStartInfo
+            {
+                FileName = fileName,
+                Arguments = arguments,
+                UseShellExecute = useShellExecute,
+                RedirectStandardOutput = !useShellExecute,
+                RedirectStandardError = !useShellExecute,
+                CreateNoWindow = true
+            };
+
+            process.Start();
+            await process.WaitForExitAsync();
+            return process.ExitCode;
+        }
+        catch
+        {
+            return -1;
+        }
     }
 
     public static async Task<List<string>> RunCommandWithOutputAsync(string fileName, string arguments, int timeoutMs = 30000)
     {
         var output = new List<string>();
-        var errorOutput = new List<string>();
+        var error = new List<string>();
 
-        using var process = new Process();
-        process.StartInfo = new ProcessStartInfo
-        {
-            FileName = fileName,
-            Arguments = arguments,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-
-        process.Start();
-
-        // Asynchronously read stdout
-        var outputTask = ReadStreamAsync(process.StandardOutput, output);
-        // Asynchronously read stderr
-        var errorTask = ReadStreamAsync(process.StandardError, errorOutput);
-
-        // Wait for the process to exit or timeout
-        var exitTask = process.WaitForExitAsync();
-        var allTasks = Task.WhenAll(outputTask, errorTask, exitTask);
-
-        if (await Task.WhenAny(allTasks, Task.Delay(timeoutMs)) == allTasks)
-            return output;
-        
         try
         {
-            process.Kill(true);
+            using var process = new Process();
+            process.StartInfo = new ProcessStartInfo
+            {
+                FileName = fileName,
+                Arguments = arguments,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            process.Start();
+
+            var outputTask = ReadStreamAsync(process.StandardOutput, output);
+            var errorTask = ReadStreamAsync(process.StandardError, error);
+
+            var exitTask = process.WaitForExitAsync();
+
+            var completed = await Task.WhenAny(exitTask, Task.Delay(timeoutMs));
+
+            if (completed != exitTask)
+            {
+                try
+                {
+                    process.Kill(true);
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                await process.WaitForExitAsync();
+            }
+
+            await Task.WhenAll(outputTask, errorTask);
+
+            return output;
         }
         catch
         {
-            // ignored
+            return output;
         }
-
-        return output;
     }
 
     private static async Task ReadStreamAsync(StreamReader reader, List<string> outputList)

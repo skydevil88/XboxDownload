@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -54,16 +57,9 @@ public static class CertificateHelper
 
             if (OperatingSystem.IsMacOS())
             {
-                try
-                {
-                    await CommandHelper.RunCommandAsync("security",
-                        $"delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
-                }
-                catch
-                {
-                    // ignored
-                }
-
+                await CommandHelper.RunCommandAsync("bash", 
+                    $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
+                
                 var exitCode = await CommandHelper.RunCommandAsync("security",
                     $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
                 if (exitCode != 0)
@@ -81,25 +77,7 @@ public static class CertificateHelper
                               + Convert.ToBase64String(raw, Base64FormattingOptions.InsertLineBreaks)
                               + "\n-----END CERTIFICATE-----\n";
 
-                    if (File.Exists("/etc/os-release"))
-                    {
-                        var osRelease = await File.ReadAllTextAsync("/etc/os-release");
-
-                        if (osRelease.Contains("ID_LIKE=debian") || osRelease.Contains("ID=debian") || osRelease.Contains("ID=ubuntu"))
-                        {
-                            // Debian/Ubuntu
-                            var certPath = $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt";
-                            await File.WriteAllTextAsync(certPath, pem);
-                            await CommandHelper.RunCommandAsync("update-ca-certificates", "--fresh");
-                        }
-                        else if (osRelease.Contains("ID_LIKE=\"rhel fedora\"") || osRelease.Contains("ID=fedora") || osRelease.Contains("ID=centos") || osRelease.Contains("ID=rhel"))
-                        {
-                            // RHEL/CentOS/Fedora
-                            var certPath = $"/etc/pki/ca-trust/source/anchors/{nameof(XboxDownload)}.crt";
-                            await File.WriteAllTextAsync(certPath, pem);
-                            await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
-                        }
-                    }
+                    await InstallCertificateAsync(pem);
                 }
                 catch
                 {
@@ -126,36 +104,193 @@ public static class CertificateHelper
         }
         else if (OperatingSystem.IsMacOS())
         {
-            try
-            {
-                await CommandHelper.RunCommandAsync("security", $"delete-certificate -c \"{nameof(XboxDownload)}\" /Library/Keychains/System.keychain");
-            }
-            catch
-            {
-                // ignored
-            }
-
+            await CommandHelper.RunCommandAsync("bash", 
+                $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
+            /*
             var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;
             var home = $"/Users/{user}";
             var loginKeychain = Path.Combine(home, "Library/Keychains/login.keychain-db");
-
-            var pipeline = $"security find-certificate -c \"{nameof(XboxDownload)}\" -a -Z \"{loginKeychain}\" | grep \"SHA-1\" | awk '{{print $NF}}' | xargs -I {{}} security delete-certificate -Z {{}} \"{loginKeychain}\"";
-            await CommandHelper.RunCommandAsync("bash", $"-c \"{pipeline}\"");
+            await CommandHelper.RunCommandAsync("bash",
+                $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' {loginKeychain} 2>/dev/null; do :; done\"");
+            */
         }
         else if (OperatingSystem.IsLinux())
         {
-            var certPath = $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt";
+            await RemoveCertificateAsync();
+        }
+    }
+    
+    /// <summary>
+    /// 安装系统 CA 证书
+    /// </summary>
+    /// <param name="pem">证书内容（PEM 格式）</param>
+    [SupportedOSPlatform("linux")]
+    private static async Task InstallCertificateAsync(string pem)
+    {
+        // 1. Debian / Ubuntu / Alpine / OpenSUSE
+        if (CommandExists("update-ca-certificates"))
+        {
+            var dir = Directory.Exists("/usr/share/pki/trust/anchors")
+                ? "/usr/share/pki/trust/anchors"        // OpenSUSE
+                : "/usr/local/share/ca-certificates";   // Debian / Ubuntu / Alpine
+
+            var certPath = Path.Combine(dir, $"{nameof(XboxDownload)}.crt");
+
+            await WriteCertAsync(certPath, pem);
+
+            // Debian/Ubuntu 下可安全使用 --fresh
+            var args = Directory.Exists("/usr/local/share/ca-certificates") ? "--fresh" : "";
+            await CommandHelper.RunCommandAsync("update-ca-certificates", args);
+            return;
+        }
+
+        // 2. RHEL / Fedora / CentOS / Rocky / AlmaLinux
+        if (CommandExists("update-ca-trust"))
+        {
+            const string dir = "/etc/pki/ca-trust/source/anchors";
+            var certPath = Path.Combine(dir, $"{nameof(XboxDownload)}.crt");
+
+            await WriteCertAsync(certPath, pem);
+
+            await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
+            return;
+        }
+
+        // 3. Arch / Manjaro / p11-kit
+        if (CommandExists("trust"))
+        {
+            const string dir = "/etc/ca-certificates/trust-source/anchors";
+            var certPath = Path.Combine(dir, $"{nameof(XboxDownload)}.crt");
+
+            await WriteCertAsync(certPath, pem);
+
+            await CommandHelper.RunCommandAsync("trust", "extract-compat");
+        }
+    }
+
+    /// <summary>
+    /// 卸载系统 CA 证书
+    /// </summary>
+    [SupportedOSPlatform("linux")]
+    private static async Task RemoveCertificateAsync()
+    {
+        // 1. Debian / Ubuntu / Alpine / OpenSUSE
+        if (CommandExists("update-ca-certificates"))
+        {
+            DeleteIfExists(
+                $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt",
+                $"/usr/share/pki/trust/anchors/{nameof(XboxDownload)}.crt"
+            );
+
+            var args = Directory.Exists("/usr/local/share/ca-certificates") ? "--fresh" : "";
+            await CommandHelper.RunCommandAsync("update-ca-certificates", args);
+            return;
+        }
+
+        // 2. RHEL / Fedora / CentOS / Rocky / AlmaLinux
+        if (CommandExists("update-ca-trust"))
+        {
+            DeleteIfExists($"/etc/pki/ca-trust/source/anchors/{nameof(XboxDownload)}.crt");
+            await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
+            return;
+        }
+
+        // 3. Arch / Manjaro / p11-kit
+        if (CommandExists("trust"))
+        {
+            DeleteIfExists($"/etc/ca-certificates/trust-source/anchors/{nameof(XboxDownload)}.crt");
+            await CommandHelper.RunCommandAsync("trust", "extract-compat");
+        }
+    }
+
+    #region Helpers
+
+    /// <summary>
+    /// 写入证书文件并设置权限 644
+    /// </summary>
+    private static async Task WriteCertAsync(string path, string content)
+    {
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            await File.WriteAllTextAsync(path, content);
+
             try
             {
-                if (File.Exists(certPath))
-                    File.Delete(certPath);
-
-                await CommandHelper.RunCommandAsync("update-ca-certificates", "--fresh");
+                await CommandHelper.RunCommandAsync("chmod", $"644 {path}");
             }
             catch
             {
-                // ignored
+                // 忽略 chmod 失败
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[LinuxCertificateHelper] 写入证书失败: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 删除文件，如果不存在或失败则忽略
+    /// </summary>
+    private static void DeleteIfExists(params string[] paths)
+    {
+        foreach (var path in paths)
+        {
+            try
+            {
+                if (File.Exists(path)) File.Delete(path);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[LinuxCertificateHelper] 删除证书失败: {path} - {ex.Message}");
             }
         }
     }
+
+    /// <summary>
+    /// 检查命令是否存在
+    /// </summary>
+    private static bool CommandExists(string command)
+    {
+        if (string.IsNullOrWhiteSpace(command)) return false;
+
+        // 1. 使用 which 检查 (最快最准确，能处理别名和符号链接)
+        try
+        {
+            using var process = Process.Start(new ProcessStartInfo
+            {
+                FileName = "which",
+                Arguments = command,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            });
+            process?.WaitForExit();
+            if (process?.ExitCode == 0) return true;
+        }
+        catch
+        {
+            // 忽略，降级到手动 PATH 检查
+        }
+
+        // 2. PATH 手动检查
+        var pathEnv = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+    
+        // 即使 PATH 环境变量缺失，ROOT 权限下也要尝试搜索这些核心系统目录
+        var searchPaths = pathEnv.Split(':', StringSplitOptions.RemoveEmptyEntries).ToList();
+        var systemDirs = new[] { "/usr/sbin", "/usr/bin", "/sbin", "/bin", "/usr/local/sbin" };
+    
+        foreach (var dir in systemDirs)
+        {
+            if (!searchPaths.Contains(dir)) searchPaths.Add(dir);
+        }
+
+        return searchPaths
+            .Select(dir => Path.Combine(dir, command))
+            .Any(File.Exists);
+    }
+
+    #endregion
 }

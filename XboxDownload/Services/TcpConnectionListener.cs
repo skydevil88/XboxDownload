@@ -361,42 +361,30 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     public static void Stop()
     {
-        SafeShutdown(_httpSocket);
-        SafeShutdown(_httpsSocket);
-
         var httpS = Interlocked.Exchange(ref _httpSocket, null);
         var httpsS = Interlocked.Exchange(ref _httpsSocket, null);
+
+        SafeShutdown(httpS);
+        SafeShutdown(httpsS);
 
         httpS?.Dispose();
         httpsS?.Dispose();
 
-        if (OperatingSystem.IsWindows())
-        {
-            using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-            store.Open(OpenFlags.ReadWrite);
-            var existing = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
-            if (existing.Count > 0) store.RemoveRange(existing);
-            store.Close();
-        }
-        else if (OperatingSystem.IsMacOS())
-        {
-            var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;
-            var home = $"/Users/{user}";
-            var loginKeychain = Path.Combine(home, "Library/Keychains/login.keychain-db");
-
-            var pipeline = $"security find-certificate -c \"{nameof(XboxDownload)}\" -a -Z \"{loginKeychain}\" | grep \"SHA-1\" | awk '{{print $NF}}' | xargs -I {{}} security delete-certificate -Z {{}} \"{loginKeychain}\"";
-            _ = CommandHelper.RunCommandAsync("bash", $"-c \"{pipeline}\"");
-        }
+        if (!OperatingSystem.IsWindows()) return;
+        
+        using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+        store.Open(OpenFlags.ReadWrite);
+        var existing = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
+        if (existing.Count > 0) store.RemoveRange(existing);
     }
 
     private static void SafeShutdown(Socket? socket)
     {
+        if (socket is not { Connected: true }) return;
+
         try
         {
-            if (socket is { Connected: true })
-            {
-                socket.Shutdown(SocketShutdown.Both);
-            }
+            socket.Shutdown(SocketShutdown.Both);
         }
         catch
         {

@@ -25,7 +25,7 @@ namespace XboxDownload.Services;
 public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 {
     private static Socket? _socket;
-    private const int Port = 53;
+    private const int DnsPort = 53;
     private static readonly ConcurrentDictionary<string, DnsServer> NetworkInterfaceDnsMap = new();
     private const string TcpIpV4Path = @"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\";
     private const string TcpIpV6Path = @"SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters\Interfaces\";
@@ -386,7 +386,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 var dns = await GetDnsServer(serviceViewModel.SelectedAdapter.Adapter, localIpAddr);
                 if (dns != null)
                 {
-                    iPEndPoint = new IPEndPoint(dns, Port);
+                    iPEndPoint = new IPEndPoint(dns, DnsPort);
                 }
             }
         }
@@ -395,13 +395,13 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             var dns = IPAddress.Parse(App.Settings.DnsIp);
             if (!Equals(dns, localIpAddr))
             {
-                iPEndPoint = new IPEndPoint(dns, Port);
+                iPEndPoint = new IPEndPoint(dns, DnsPort);
             }
         }
-        iPEndPoint ??= new IPEndPoint(IPAddress.Parse(isSimplifiedChinese ? "114.114.114.114" : "8.8.8.8"), Port);
+        iPEndPoint ??= new IPEndPoint(IPAddress.Parse(isSimplifiedChinese ? "114.114.114.114" : "8.8.8.8"), DnsPort);
         serviceViewModel.DnsIp = iPEndPoint.Address.ToString();
 
-        var ipe = new IPEndPoint(App.Settings.ListeningIp == "LocalIp" ? localIpAddr : IPAddress.Any, Port);
+        var ipe = new IPEndPoint(App.Settings.ListeningIp == "LocalIp" ? localIpAddr : IPAddress.Any, DnsPort);
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         try
         {
@@ -551,11 +551,14 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
     {
         await ApplyDns();
 
+        var dnsS = Interlocked.Exchange(ref _socket, null);
+        if (dnsS == null) return;
+
         try
         {
-            if (_socket is { Connected: true })
+            if (dnsS is { Connected: true })
             {
-                _socket.Shutdown(SocketShutdown.Both);
+                dnsS.Shutdown(SocketShutdown.Both);
             }
         }
         catch
@@ -563,16 +566,14 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             // Optional
         }
 
-        // On non-Windows platforms, send a dummy packet to unblock ReceiveFrom
         if (!OperatingSystem.IsWindows())
         {
             try
             {
                 using var dummy = new UdpClient();
                 dummy.Client.SendTimeout = 100;
-                dummy.Client.ReceiveTimeout = 100;
-
-                await dummy.SendAsync(new byte[1], 1, new IPEndPoint(IPAddress.Parse(App.Settings.LocalIp), Port));
+                var target = new IPEndPoint(IPAddress.Parse(App.Settings.LocalIp), DnsPort);
+                await dummy.SendAsync(new byte[1], 1, target);
             }
             catch
             {
@@ -580,8 +581,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             }
         }
 
-        var dnsS = Interlocked.Exchange(ref _socket, null);
-        dnsS?.Close();
+        dnsS.Dispose();
     }
 
     private static readonly SearchValues<char> DnsSplitValues = SearchValues.Create([' ', ',', '\t', '\r', '\n']);
