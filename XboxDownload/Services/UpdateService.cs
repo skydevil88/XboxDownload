@@ -185,6 +185,11 @@ sleep 3
 cp -Rf ""{extractDir.FullName}""/. ""{appDir}""
 
 if [[ ""$(uname)"" == ""Darwin"" ]]; then
+    DOTNET_EXTRACT_DIR=""$(eval echo ~$SUDO_USER)/.net/XboxDownload""
+    if [[ -d ""$DOTNET_EXTRACT_DIR"" ]]; then
+        rm -rf -- ""$DOTNET_EXTRACT_DIR""/* 2>/dev/null || true
+    fi
+
     xattr -dr com.apple.quarantine ""{appPath}"" 2>/dev/null || true
     xattr -dr com.apple.quarantine ""{appDir}/run_xboxdownload.command"" 2>/dev/null || true
     chmod +x ""{appPath}"" 2>/dev/null || true

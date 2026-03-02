@@ -280,7 +280,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             var pfxData = cert.Export(X509ContentType.Pfx);
             _certificate = X509CertificateLoader.LoadPkcs12(pfxData, password: null);
 
-            using X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
+            using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
             var existing = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
             if (existing.Count > 0) store.RemoveRange(existing);

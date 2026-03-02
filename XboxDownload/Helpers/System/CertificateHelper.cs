@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -17,10 +15,12 @@ public static class CertificateHelper
 
     public static async Task CreateRootCertificate(bool force = false)
     {
-        if (!force && File.Exists(RootPfx) && File.Exists(RootCrt))
-            return; // Root CA already exists, skip unless force = true
+        // Skip if not running as root (Windows will also skip)
+        if (!Program.UnixUserIsRoot())
+            return;
 
-        if (!OperatingSystem.IsWindows() && !Program.UnixUserIsRoot())
+        // Skip if the Root CA already exists and force is not enabled
+        if (!force && File.Exists(RootPfx) && File.Exists(RootCrt))
             return;
 
         using var rsa = RSA.Create(4096);
@@ -41,58 +41,81 @@ public static class CertificateHelper
         // Export Root CRT (public key only, can be distributed to other devices)
         await File.WriteAllBytesAsync(RootCrt, caCert.Export(X509ContentType.Cert));
 
-        if (OperatingSystem.IsWindows())
-        {
-            using var cert = X509CertificateLoader.LoadPkcs12FromFile(RootCrt, password: null);
-            using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-            store.Open(OpenFlags.ReadWrite);
-            var existing = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
-            if (existing.Count > 0) store.RemoveRange(existing);
-            store.Add(cert);
-        }
-        else
-        {
-            await PathHelper.FixOwnershipAsync(RootPfx);
-            await PathHelper.FixOwnershipAsync(RootCrt);
+        await PathHelper.FixOwnershipAsync(RootPfx);
+        await PathHelper.FixOwnershipAsync(RootCrt);
 
-            if (OperatingSystem.IsMacOS())
+        if (OperatingSystem.IsMacOS())
+        {
+            await CommandHelper.RunCommandAsync("bash",
+                $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
+
+            var exitCode = await CommandHelper.RunCommandAsync("security",
+                $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
+            if (exitCode != 0)
             {
-                await CommandHelper.RunCommandAsync("bash", 
-                    $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
-                
-                var exitCode = await CommandHelper.RunCommandAsync("security",
-                    $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
-                if (exitCode != 0)
-                {
-                    File.Delete(RootPfx);
-                    File.Delete(RootCrt);
-                }
+                DeleteIfExists(RootPfx, RootCrt);
             }
-            else if (OperatingSystem.IsLinux())
-            {
-                try
-                {
-                    var raw = await File.ReadAllBytesAsync(RootCrt);
-                    var pem = "-----BEGIN CERTIFICATE-----\n"
-                              + Convert.ToBase64String(raw, Base64FormattingOptions.InsertLineBreaks)
-                              + "\n-----END CERTIFICATE-----\n";
+        }
+        else if (OperatingSystem.IsLinux())
+        {
+            var raw = await File.ReadAllBytesAsync(RootCrt);
+            var pem = "-----BEGIN CERTIFICATE-----\n"
+                      + Convert.ToBase64String(raw, Base64FormattingOptions.InsertLineBreaks)
+                      + "\n-----END CERTIFICATE-----\n";
 
-                    await InstallCertificateAsync(pem);
-                }
-                catch
-                {
-                    // ignored
-                }
+            const string certName = $"{nameof(XboxDownload)}.crt";
+
+            // 1. Debian / Ubuntu / Alpine / OpenSUSE
+            var updateCaCertificates = FindCommand("update-ca-certificates");
+            if (updateCaCertificates != null)
+            {
+                var dir = Directory.Exists("/usr/share/pki/trust/anchors")
+                    ? "/usr/share/pki/trust/anchors"        // OpenSUSE
+                    : "/usr/local/share/ca-certificates";   // Debian / Ubuntu / Alpine
+
+                var certPath = Path.Combine(dir, certName);
+
+                await WriteCertAsync(certPath, pem);
+
+                // Debian/Ubuntu support the --fresh option
+                if (Directory.Exists("/usr/local/share/ca-certificates"))
+                    await CommandHelper.RunCommandAsync(updateCaCertificates, "--fresh");
+                else
+                    await CommandHelper.RunCommandAsync(updateCaCertificates);
+
+                return;
+            }
+
+            // 2. RHEL / Fedora / CentOS / Rocky / AlmaLinux
+            var updateCaTrust = FindCommand("update-ca-trust");
+            if (updateCaTrust != null)
+            {
+                const string dir = "/etc/pki/ca-trust/source/anchors";
+                var certPath = Path.Combine(dir, certName);
+
+                await WriteCertAsync(certPath, pem);
+
+                await CommandHelper.RunCommandAsync(updateCaTrust, "extract");
+                return;
+            }
+
+            // 3. Arch / Manjaro / p11-kit
+            var trust = FindCommand("trust");
+            if (trust != null)
+            {
+                const string dir = "/etc/ca-certificates/trust-source/anchors";
+                var certPath = Path.Combine(dir, certName);
+
+                await WriteCertAsync(certPath, pem);
+
+                await CommandHelper.RunCommandAsync(trust, "extract-compat");
             }
         }
     }
 
     public static async Task DeleteRootCertificateAsync()
     {
-        if (File.Exists(RootPfx))
-            File.Delete(RootPfx);
-        if (File.Exists(RootCrt))
-            File.Delete(RootCrt);
+        DeleteIfExists(RootPfx, RootCrt);
 
         if (OperatingSystem.IsWindows())
         {
@@ -116,97 +139,45 @@ public static class CertificateHelper
         }
         else if (OperatingSystem.IsLinux())
         {
-            await RemoveCertificateAsync();
-        }
-    }
-    
-    /// <summary>
-    /// 安装系统 CA 证书
-    /// </summary>
-    /// <param name="pem">证书内容（PEM 格式）</param>
-    [SupportedOSPlatform("linux")]
-    private static async Task InstallCertificateAsync(string pem)
-    {
-        // 1. Debian / Ubuntu / Alpine / OpenSUSE
-        if (CommandExists("update-ca-certificates"))
-        {
-            var dir = Directory.Exists("/usr/share/pki/trust/anchors")
-                ? "/usr/share/pki/trust/anchors"        // OpenSUSE
-                : "/usr/local/share/ca-certificates";   // Debian / Ubuntu / Alpine
+            // 1. Debian / Ubuntu / Alpine / OpenSUSE
+            var updateCaCertificates = FindCommand("update-ca-certificates");
+            if (updateCaCertificates != null)
+            {
+                DeleteIfExists(
+                    $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt",
+                    $"/usr/share/pki/trust/anchors/{nameof(XboxDownload)}.crt"
+                );
 
-            var certPath = Path.Combine(dir, $"{nameof(XboxDownload)}.crt");
+                // Debian/Ubuntu can safely use --fresh
+                if (Directory.Exists("/usr/local/share/ca-certificates"))
+                    await CommandHelper.RunCommandAsync(updateCaCertificates, "--fresh");
+                else
+                    await CommandHelper.RunCommandAsync(updateCaCertificates);
 
-            await WriteCertAsync(certPath, pem);
+                return;
+            }
 
-            // Debian/Ubuntu 下可安全使用 --fresh
-            var args = Directory.Exists("/usr/local/share/ca-certificates") ? "--fresh" : "";
-            await CommandHelper.RunCommandAsync("update-ca-certificates", args);
-            return;
-        }
+            // 2. RHEL / Fedora / CentOS / Rocky / AlmaLinux
+            var updateCaTrust = FindCommand("update-ca-trust");
+            if (updateCaTrust != null)
+            {
+                DeleteIfExists($"/etc/pki/ca-trust/source/anchors/{nameof(XboxDownload)}.crt");
+                await CommandHelper.RunCommandAsync(updateCaTrust, "extract");
+                return;
+            }
 
-        // 2. RHEL / Fedora / CentOS / Rocky / AlmaLinux
-        if (CommandExists("update-ca-trust"))
-        {
-            const string dir = "/etc/pki/ca-trust/source/anchors";
-            var certPath = Path.Combine(dir, $"{nameof(XboxDownload)}.crt");
-
-            await WriteCertAsync(certPath, pem);
-
-            await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
-            return;
-        }
-
-        // 3. Arch / Manjaro / p11-kit
-        if (CommandExists("trust"))
-        {
-            const string dir = "/etc/ca-certificates/trust-source/anchors";
-            var certPath = Path.Combine(dir, $"{nameof(XboxDownload)}.crt");
-
-            await WriteCertAsync(certPath, pem);
-
-            await CommandHelper.RunCommandAsync("trust", "extract-compat");
+            // 3. Arch / Manjaro / p11-kit
+            var trust = FindCommand("trust");
+            if (trust != null)
+            {
+                DeleteIfExists($"/etc/ca-certificates/trust-source/anchors/{nameof(XboxDownload)}.crt");
+                await CommandHelper.RunCommandAsync(trust, "extract-compat");
+            }
         }
     }
 
-    /// <summary>
-    /// 卸载系统 CA 证书
-    /// </summary>
-    [SupportedOSPlatform("linux")]
-    private static async Task RemoveCertificateAsync()
-    {
-        // 1. Debian / Ubuntu / Alpine / OpenSUSE
-        if (CommandExists("update-ca-certificates"))
-        {
-            DeleteIfExists(
-                $"/usr/local/share/ca-certificates/{nameof(XboxDownload)}.crt",
-                $"/usr/share/pki/trust/anchors/{nameof(XboxDownload)}.crt"
-            );
-
-            var args = Directory.Exists("/usr/local/share/ca-certificates") ? "--fresh" : "";
-            await CommandHelper.RunCommandAsync("update-ca-certificates", args);
-            return;
-        }
-
-        // 2. RHEL / Fedora / CentOS / Rocky / AlmaLinux
-        if (CommandExists("update-ca-trust"))
-        {
-            DeleteIfExists($"/etc/pki/ca-trust/source/anchors/{nameof(XboxDownload)}.crt");
-            await CommandHelper.RunCommandAsync("update-ca-trust", "extract");
-            return;
-        }
-
-        // 3. Arch / Manjaro / p11-kit
-        if (CommandExists("trust"))
-        {
-            DeleteIfExists($"/etc/ca-certificates/trust-source/anchors/{nameof(XboxDownload)}.crt");
-            await CommandHelper.RunCommandAsync("trust", "extract-compat");
-        }
-    }
-
-    #region Helpers
-
-    /// <summary>
-    /// 写入证书文件并设置权限 644
+     /// <summary>
+    /// Writes the certificate file and sets the permission to 644 (rw-r--r--)
     /// </summary>
     private static async Task WriteCertAsync(string path, string content)
     {
@@ -221,76 +192,67 @@ public static class CertificateHelper
             }
             catch
             {
-                // 忽略 chmod 失败
+                // Ignore chmod failure
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[LinuxCertificateHelper] 写入证书失败: {ex.Message}");
+            Console.WriteLine($"[LinuxCertificateHelper] Failed to write certificate: {ex.Message}");
         }
     }
 
     /// <summary>
-    /// 删除文件，如果不存在或失败则忽略
+    /// Deletes files if they exist.
     /// </summary>
     private static void DeleteIfExists(params string[] paths)
     {
         foreach (var path in paths)
         {
+            if (!File.Exists(path)) continue;
+
             try
             {
-                if (File.Exists(path)) File.Delete(path);
+                File.Delete(path);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"[LinuxCertificateHelper] 删除证书失败: {path} - {ex.Message}");
+                // Ignore
             }
         }
     }
-
+    
     /// <summary>
-    /// 检查命令是否存在
+    /// Finds the full path of a command in PATH.
+    /// Returns null if the command cannot be found.
     /// </summary>
-    private static bool CommandExists(string command)
+    private static string? FindCommand(string command)
     {
-        if (string.IsNullOrWhiteSpace(command)) return false;
+        if (string.IsNullOrWhiteSpace(command))
+            return null;
 
-        // 1. 使用 which 检查 (最快最准确，能处理别名和符号链接)
-        try
-        {
-            using var process = Process.Start(new ProcessStartInfo
-            {
-                FileName = "which",
-                Arguments = command,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            });
-            process?.WaitForExit();
-            if (process?.ExitCode == 0) return true;
-        }
-        catch
-        {
-            // 忽略，降级到手动 PATH 检查
-        }
-
-        // 2. PATH 手动检查
         var pathEnv = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
-    
-        // 即使 PATH 环境变量缺失，ROOT 权限下也要尝试搜索这些核心系统目录
-        var searchPaths = pathEnv.Split(':', StringSplitOptions.RemoveEmptyEntries).ToList();
-        var systemDirs = new[] { "/usr/sbin", "/usr/bin", "/sbin", "/bin", "/usr/local/sbin" };
-    
-        foreach (var dir in systemDirs)
+
+        var searchPaths = pathEnv
+            .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+            .Concat(
+            [
+                "/usr/local/sbin",
+                "/usr/local/bin",
+                "/usr/sbin",
+                "/usr/bin",
+                "/sbin",
+                "/bin"
+            ])
+            .Distinct();
+
+        foreach (var dir in searchPaths)
         {
-            if (!searchPaths.Contains(dir)) searchPaths.Add(dir);
+            var fullPath = Path.Combine(dir, command);
+
+            if (File.Exists(fullPath) && !Directory.Exists(fullPath))
+                return fullPath;
         }
 
-        return searchPaths
-            .Select(dir => Path.Combine(dir, command))
-            .Any(File.Exists);
+        return null;
     }
-
-    #endregion
 }
