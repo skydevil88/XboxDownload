@@ -23,10 +23,10 @@ $commonArgs = @(
 # --------------------------------------------------
 # Utils
 # --------------------------------------------------
-function Clean-ReleaseDir {
+function Clear-ReleaseDir {
     if (Test-Path $outputRoot) {
         Write-Host "Cleaning Release directory: $outputRoot" -ForegroundColor Yellow
-        Remove-Item $outputRoot -Recurse -Force
+        Remove-Item -Path "$outputRoot" -Recurse -Force
         Write-Host "[OK] Release directory removed" -ForegroundColor Green
     }
 }
@@ -65,7 +65,7 @@ function Publish-Target {
     # -------------------------------
     # Clean old directory
     # -------------------------------
-    if (Test-Path $outputDir) { Remove-Item $outputDir -Recurse -Force }
+    if (Test-Path $outputDir) { Remove-Item -Path "$outputDir" -Recurse -Force }
 
     Write-Host "Publishing for $rid -> $outputDir" -ForegroundColor Yellow
 
@@ -97,7 +97,7 @@ function Publish-Target {
     # Create ZIP (tar preferred, fallback to Compress-Archive)
     # -------------------------------
     $zipPath = "$outputDir.zip"
-    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+    if (Test-Path $zipPath) { Remove-Item -Path "$zipPath" -Force }
 
     Write-Host "Creating ZIP: $zipPath" -ForegroundColor Cyan
     Push-Location $outputRoot
@@ -204,7 +204,7 @@ do {
         "3" { Publish-MacOS }
         "4" { Publish-Linux }
         "5" {
-            Clean-ReleaseDir
+            Clear-ReleaseDir
             Publish-Windows
             Publish-MacOS
             Publish-Linux

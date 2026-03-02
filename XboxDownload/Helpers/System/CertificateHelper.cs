@@ -117,25 +117,10 @@ public static class CertificateHelper
     {
         DeleteIfExists(RootPfx, RootCrt);
 
-        if (OperatingSystem.IsWindows())
+        if (OperatingSystem.IsMacOS())
         {
-            using var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-            store.Open(OpenFlags.ReadWrite);
-
-            var certificates = store.Certificates.Find(X509FindType.FindBySubjectName, nameof(XboxDownload), false);
-            if (certificates.Count > 0) store.RemoveRange(certificates);
-        }
-        else if (OperatingSystem.IsMacOS())
-        {
-            await CommandHelper.RunCommandAsync("bash", 
-                $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
-            /*
-            var user = Environment.GetEnvironmentVariable("SUDO_USER") ?? Environment.UserName;
-            var home = $"/Users/{user}";
-            var loginKeychain = Path.Combine(home, "Library/Keychains/login.keychain-db");
             await CommandHelper.RunCommandAsync("bash",
-                $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' {loginKeychain} 2>/dev/null; do :; done\"");
-            */
+                $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
         }
         else if (OperatingSystem.IsLinux())
         {
@@ -176,7 +161,7 @@ public static class CertificateHelper
         }
     }
 
-     /// <summary>
+    /// <summary>
     /// Writes the certificate file and sets the permission to 644 (rw-r--r--)
     /// </summary>
     private static async Task WriteCertAsync(string path, string content)
@@ -220,7 +205,7 @@ public static class CertificateHelper
             }
         }
     }
-    
+
     /// <summary>
     /// Finds the full path of a command in PATH.
     /// Returns null if the command cannot be found.

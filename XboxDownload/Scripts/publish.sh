@@ -29,7 +29,7 @@ COMMON_ARGS=(
 clean_release_dir() {
     if [[ -d "$OUTPUT_ROOT" ]]; then
         echo -e "\033[33mCleaning Release directory: $OUTPUT_ROOT\033[0m"
-        rm -rf "$OUTPUT_ROOT"
+        rm -rf -- "$OUTPUT_ROOT"
         echo -e "\033[32m[OK] Release directory removed\033[0m"
     fi
 }
@@ -66,7 +66,7 @@ publish_target() {
     # Clean old directory
     # -------------------------------
     if [[ -d "$output_dir" ]]; then
-        rm -rf "$output_dir"
+        rm -rf -- "$output_dir"
     fi
 
     mkdir -p "$output_dir"
@@ -107,7 +107,7 @@ publish_target() {
     # Create ZIP
     # -------------------------------
     zip_file="$output_dir.zip"
-    [[ -f "$zip_file" ]] && rm -f "$zip_file"
+    [[ -f "$zip_file" ]] && rm -f -- "$zip_file"
     echo -e "\033[96mCreating ZIP: $zip_file\033[0m"
     (cd "$OUTPUT_ROOT" && zip -r "$(basename "$zip_file")" "XboxDownload-$output_rid" > /dev/null)
     echo -e "\033[92m[OK] ZIP created: $zip_file\033[0m"
