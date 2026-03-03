@@ -835,7 +835,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                     };
                     XboxGameManager.Dictionary.AddOrUpdate(key, xboxGame, (_, _) => xboxGame);
                     _ = XboxGameManager.SaveAsync();
-                    _ = HttpClientHelper.GetStringContentAsync(UpdateService.Website + "/Game/AddGameUrl?url=" + HttpUtility.UrlEncode(xboxGame.Url), method: "PUT", name: HttpClientNames.XboxDownload);
+                    _ = HttpClientHelper.GetStringContentAsync(
+                        $"Game/AddGameUrl?url={HttpUtility.UrlEncode(xboxGame.Url)}",
+                        method: "PUT", 
+                        name: HttpClientNames.XboxDownload);
                 }
             }
         }

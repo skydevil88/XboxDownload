@@ -892,7 +892,7 @@ public partial class StoreViewModel : ObservableObject
             _platformPackageFetchTimes[platformDownload.Key] = DateTime.Now.AddMinutes(3);
 
             var responseString = await HttpClientHelper.GetStringContentAsync(
-                $"{UpdateService.Website}/Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}&size={platformDownload.ExpectedSize}",
+                $"Game/GetGamePackage?contentId={contentId}&platform={(int)platformDownload.Platform}&size={platformDownload.ExpectedSize}",
                 name: HttpClientNames.XboxDownload,
                 token: token
             );
@@ -957,7 +957,7 @@ public partial class StoreViewModel : ObservableObject
     private async Task GetAppPackageAsync(string wuCategoryId, List<PlatformDownloadItem> platformDownloadList, CancellationToken token)
     {
         var responseString = await HttpClientHelper.GetStringContentAsync(
-            $"{UpdateService.Website}/Game/GetAppPackage?WuCategoryId={wuCategoryId}",
+            $"Game/GetAppPackage?WuCategoryId={wuCategoryId}",
             name: HttpClientNames.XboxDownload,
             token: token
         );
@@ -1020,7 +1020,7 @@ public partial class StoreViewModel : ObservableObject
         PlatformDownloadInfo.Add(tmp);
 
         var responseString = await HttpClientHelper.GetStringContentAsync(
-            $"{UpdateService.Website}/Game/GetAppPackage2?WuCategoryId={SelectedPlatformDownloadItem.WuCategoryId}",
+            $"Game/GetAppPackage2?WuCategoryId={SelectedPlatformDownloadItem.WuCategoryId}",
             name: HttpClientNames.XboxDownload
         );
 

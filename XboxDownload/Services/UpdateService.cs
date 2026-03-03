@@ -285,10 +285,9 @@ exit 0
 
         var wuCategoryId = products[0];
         var json = await HttpClientHelper.GetStringContentAsync(
-            Website + "/Game/GetAppPackage?WuCategoryId=" + wuCategoryId,
+            $"Game/GetAppPackage?WuCategoryId={wuCategoryId}",
             name: HttpClientNames.XboxDownload,
-            token: token
-        );
+            token: token);
 
         try
         {

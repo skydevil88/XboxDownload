@@ -138,7 +138,6 @@ function Publish-Current {
         switch ($arch) {
             "X64"   { $rid = "win-x64";   $outputFolder = "windows-x64" }
             "Arm64" { $rid = "win-arm64"; $outputFolder = "windows-arm64" }
-            "X86"   { $rid = "win-x86";   $outputFolder = "windows-x86" }
             default { Write-Host "Unsupported Windows architecture: $arch" -ForegroundColor Red; return }
         }
     }
@@ -153,8 +152,6 @@ function Publish-Current {
         switch ($arch) {
             "X64"   { $rid = "linux-x64";   $outputFolder = "linux-x64" }
             "Arm64" { $rid = "linux-arm64"; $outputFolder = "linux-arm64" }
-            "X86"   { $rid = "linux-x86";   $outputFolder = "linux-x86" }
-            "Arm"   { $rid = "linux-arm";   $outputFolder = "linux-arm" }
             default { Write-Host "Unsupported Linux architecture: $arch" -ForegroundColor Red; return }
         }
     }

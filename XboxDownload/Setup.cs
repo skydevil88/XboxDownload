@@ -29,6 +29,7 @@ public static class Setup
             client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
             client.DefaultRequestHeaders.Add("X-Organization", nameof(XboxDownload));
             client.DefaultRequestHeaders.Add("X-Author", "Devil");
+            client.BaseAddress = new Uri(UpdateService.Website);
         }).ConfigurePrimaryHttpMessageHandler(() => CreateBaseHandler());
 
         services.AddHttpClient(HttpClientNames.SpeedTest, client =>

@@ -908,12 +908,11 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         // 发送 POST 请求上传到服务端接口
         using var response = await HttpClientHelper.SendRequestAsync(
-            UpdateService.Website + "/Akamai/Better",
+            "Akamai/Better",
             "POST",
             jsonArray.ToJsonString(),
             "application/json",
             name: HttpClientNames.XboxDownload);
-        //Console.WriteLine(response?.StatusCode);
 
         var filePath = PathHelper.GetResourceFilePath("IP.AkamaiV2.txt");
         if (File.Exists(filePath)) File.SetLastWriteTime(filePath, DateTime.UtcNow.AddDays(-7));
