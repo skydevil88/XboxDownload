@@ -56,7 +56,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         {
             // Ensure Root CA is created
             await CertificateHelper.CreateRootCertificate();
-            if (!File.Exists(CertificateHelper.RootPfx)) return;
+            if (!File.Exists(CertificateHelper.RootPfxPath)) return;
         }
 
         using var serverRsa = RSA.Create(2048);
@@ -299,7 +299,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             serverReq.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(oids, false));
 
             // Load Root CA
-            using var caCert = X509CertificateLoader.LoadPkcs12FromFile(CertificateHelper.RootPfx, password: null, keyStorageFlags: X509KeyStorageFlags.Exportable);
+            using var caCert = X509CertificateLoader.LoadPkcs12FromFile(CertificateHelper.RootPfxPath, password: null, keyStorageFlags: X509KeyStorageFlags.Exportable);
 
             var notBefore = DateTimeOffset.UtcNow;
             if (notBefore < caCert.NotBefore)

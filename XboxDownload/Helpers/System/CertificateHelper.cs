@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 using XboxDownload.Helpers.IO;
 
@@ -10,8 +11,8 @@ namespace XboxDownload.Helpers.System;
 
 public static class CertificateHelper
 {
-    public static readonly string RootPfx = PathHelper.GetLocalFilePath($"{nameof(XboxDownload)}.pfx");
-    public static readonly string RootCrt = PathHelper.GetLocalFilePath($"{nameof(XboxDownload)}.crt");
+    public static readonly string RootPfxPath = PathHelper.GetLocalFilePath($"{nameof(XboxDownload)}.pfx");
+    public static readonly string RootCrtPath = PathHelper.GetLocalFilePath($"{nameof(XboxDownload)}.crt");
 
     public static async Task CreateRootCertificate(bool force = false)
     {
@@ -20,7 +21,7 @@ public static class CertificateHelper
             return;
 
         // Skip if the Root CA already exists and force is not enabled
-        if (!force && File.Exists(RootPfx) && File.Exists(RootCrt))
+        if (!force && File.Exists(RootPfxPath) && File.Exists(RootCrtPath))
             return;
 
         using var rsa = RSA.Create(4096);
@@ -35,14 +36,26 @@ public static class CertificateHelper
         var utcNow = DateTimeOffset.UtcNow;
         var caCert = caReq.CreateSelfSigned(utcNow, utcNow.AddYears(10));
 
+        var pfxOptions = new FileStreamOptions { Access = FileAccess.Write, Mode = FileMode.Create, Share = FileShare.Read };
+        var crtOptions = new FileStreamOptions { Access = FileAccess.Write, Mode = FileMode.Create, Share = FileShare.Read };
+        if (!OperatingSystem.IsWindows())
+        {
+            // 600: rw-------
+            pfxOptions.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+            // 644: rw-r--r--
+            crtOptions.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.GroupRead | UnixFileMode.OtherRead;
+        }
+
         // Export Root PFX (contains private key, only for development)
-        await File.WriteAllBytesAsync(RootPfx, caCert.Export(X509ContentType.Pfx));
+        var pfxData = caCert.Export(X509ContentType.Pfx);
+        await WriteCertAsync(RootPfxPath, pfxOptions, pfxData);
 
-        // Export Root CRT (public key only, can be distributed to other devices)
-        await File.WriteAllBytesAsync(RootCrt, caCert.Export(X509ContentType.Cert));
+        // Export root certificate in PEM format (public certificate only, safe to distribute)
+        var pemBytes = Encoding.UTF8.GetBytes(caCert.ExportCertificatePem());
+        await WriteCertAsync(RootCrtPath, crtOptions, pemBytes);
 
-        await PathHelper.FixOwnershipAsync(RootPfx);
-        await PathHelper.FixOwnershipAsync(RootCrt);
+        await PathHelper.FixOwnershipAsync(RootPfxPath);
+        await PathHelper.FixOwnershipAsync(RootCrtPath);
 
         if (OperatingSystem.IsMacOS())
         {
@@ -50,19 +63,14 @@ public static class CertificateHelper
                 $"-c \"while security delete-certificate -c '{nameof(XboxDownload)}' /Library/Keychains/System.keychain 2>/dev/null; do :; done\"");
 
             var exitCode = await CommandHelper.RunCommandAsync("security",
-                $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrt}\"");
+                $"add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \"{RootCrtPath}\"");
             if (exitCode != 0)
             {
-                DeleteIfExists(RootPfx, RootCrt);
+                DeleteIfExists(RootPfxPath, RootCrtPath);
             }
         }
         else if (OperatingSystem.IsLinux())
         {
-            var raw = await File.ReadAllBytesAsync(RootCrt);
-            var pem = "-----BEGIN CERTIFICATE-----\n"
-                      + Convert.ToBase64String(raw, Base64FormattingOptions.InsertLineBreaks)
-                      + "\n-----END CERTIFICATE-----\n";
-
             const string certName = $"{nameof(XboxDownload)}.crt";
 
             // 1. Debian / Ubuntu / Alpine / OpenSUSE
@@ -75,7 +83,7 @@ public static class CertificateHelper
 
                 var certPath = Path.Combine(dir, certName);
 
-                await WriteCertAsync(certPath, pem);
+                await WriteCertAsync(certPath, crtOptions, pemBytes);
 
                 // Debian/Ubuntu support the --fresh option
                 if (Directory.Exists("/usr/local/share/ca-certificates"))
@@ -93,7 +101,7 @@ public static class CertificateHelper
                 const string dir = "/etc/pki/ca-trust/source/anchors";
                 var certPath = Path.Combine(dir, certName);
 
-                await WriteCertAsync(certPath, pem);
+                await WriteCertAsync(certPath, crtOptions, pemBytes);
 
                 await CommandHelper.RunCommandAsync(updateCaTrust, "extract");
                 return;
@@ -106,7 +114,7 @@ public static class CertificateHelper
                 const string dir = "/etc/ca-certificates/trust-source/anchors";
                 var certPath = Path.Combine(dir, certName);
 
-                await WriteCertAsync(certPath, pem);
+                await WriteCertAsync(certPath, crtOptions, pemBytes);
 
                 await CommandHelper.RunCommandAsync(trust, "extract-compat");
             }
@@ -115,7 +123,7 @@ public static class CertificateHelper
 
     public static async Task DeleteRootCertificateAsync()
     {
-        DeleteIfExists(RootPfx, RootCrt);
+        DeleteIfExists(RootPfxPath, RootCrtPath);
 
         if (OperatingSystem.IsMacOS())
         {
@@ -162,27 +170,29 @@ public static class CertificateHelper
     }
 
     /// <summary>
-    /// Writes the certificate file and sets the permission to 644 (rw-r--r--)
+    /// Writes the specified byte array to the given file path asynchronously.
+    /// If the parent directory does not exist, it will be created.
+    /// The file permissions can be controlled via the provided <see cref="FileStreamOptions"/>.
     /// </summary>
-    private static async Task WriteCertAsync(string path, string content)
+    /// <param name="path">The full path of the file to write.</param>
+    /// <param name="options">File stream options controlling access, mode, sharing, and Unix permissions.</param>
+    /// <param name="data">The byte array content to write to the file.</param>
+    private static async Task WriteCertAsync(string path, FileStreamOptions options, byte[] data)
     {
+        var directory = Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            await File.WriteAllTextAsync(path, content);
-
-            try
-            {
-                await CommandHelper.RunCommandAsync("chmod", $"644 {path}");
-            }
-            catch
-            {
-                // Ignore chmod failure
-            }
+            await using var fs = new FileStream(path, options);
+            await fs.WriteAsync(data.AsMemory());
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"[LinuxCertificateHelper] Failed to write certificate: {ex.Message}");
+            // Ignore
         }
     }
 

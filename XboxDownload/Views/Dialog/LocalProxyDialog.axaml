@@ -70,8 +70,8 @@
                                     <TextBlock Text="{DynamicResource Service.LocalProxy.LinuxUserGuide}"
                                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                                 </Button>
-                                <Button Classes="LinkLabel" Command="{Binding SaveCertificateCommand}">
-                                    <TextBlock Text="{DynamicResource Service.LocalProxy.SaveCertificate}"
+                                <Button Classes="LinkLabel" Command="{Binding DownloadRootCertificateCommand}">
+                                    <TextBlock Text="{DynamicResource Service.LocalProxy.DownloadRootCertificate}"
                                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                                 </Button>
                             </StackPanel>

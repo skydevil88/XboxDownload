@@ -10,10 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
-using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia.Enums;
@@ -198,9 +195,9 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static async Task SaveCertificateAsync()
+    private static async Task DownloadRootCertificateAsync()
     {
-        if (!File.Exists(CertificateHelper.RootCrt))
+        if (!File.Exists(CertificateHelper.RootCrtPath))
         {
             await DialogHelper.ShowInfoDialogAsync(
                 ResourceHelper.GetString("Service.LocalProxy.FailedDialogTitle"),
@@ -209,61 +206,30 @@ public partial class LocalProxyDialogViewModel : ObservableObject
             return;
         }
 
-        var topLevel = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-            ? desktop.MainWindow
-            : null;
-
-        if (topLevel == null)
-            return;
-
-        var currentWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime currentDesktop
-            ? currentDesktop.MainWindow
-            : null;
-
-        currentWindow?.Hide();
-
-        var resourceDirectory = Path.Combine(AppContext.BaseDirectory, "Resource");
-        if (!Directory.Exists(resourceDirectory))
+        try
         {
-            Directory.CreateDirectory(resourceDirectory);
+            var path = PathHelper.GetLinuxDownloadsPath() ?? AppContext.BaseDirectory;
+            var saveFile = Path.Combine(path, $"{nameof(XboxDownload)}.crt");
 
+            if (File.Exists(saveFile))
+                File.Delete(saveFile);
+
+            File.Copy(CertificateHelper.RootCrtPath, saveFile);
             if (!OperatingSystem.IsWindows())
-                await PathHelper.FixOwnershipAsync(resourceDirectory, true);
+                _ = PathHelper.FixOwnershipAsync(saveFile);
+
+            await DialogHelper.ShowInfoDialogAsync(
+                ResourceHelper.GetString("Service.LocalProxy.SuccessDialogTitle"),
+                string.Format(ResourceHelper.GetString("Service.LocalProxy.SuccessDialogMessage"), saveFile),
+                Icon.Success);
         }
-
-        var startLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(resourceDirectory);
-        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        catch (Exception ex)
         {
-            Title = "Save Certificate",
-            SuggestedFileName = "XboxDownload.crt",
-            DefaultExtension = "crt",
-            ShowOverwritePrompt = true,
-            SuggestedStartLocation = startLocation,
-            FileTypeChoices =
-            [
-                new FilePickerFileType("Certificate File")
-                {
-                    Patterns = ["*.crt"]
-                }
-            ]
-        });
-
-        currentWindow?.Show();
-
-        var localPath = file?.TryGetLocalPath();
-        if (localPath == null) return;
-
-        if (File.Exists(localPath))
-            File.Delete(localPath);
-
-        File.Copy(CertificateHelper.RootCrt, localPath);
-        if (!OperatingSystem.IsWindows())
-            _ = PathHelper.FixOwnershipAsync(localPath);
-
-        await DialogHelper.ShowInfoDialogAsync(
-            ResourceHelper.GetString("Service.LocalProxy.SuccessDialogTitle"),
-            string.Format(ResourceHelper.GetString("Service.LocalProxy.SuccessDialogMessage"), localPath),
-            Icon.Success);
+            await DialogHelper.ShowInfoDialogAsync(
+                ResourceHelper.GetString("Service.LocalProxy.FailedDialogTitle"),
+                ex.Message,
+                Icon.Error);
+        }
     }
 
     public Action? CloseDialog { get; init; }

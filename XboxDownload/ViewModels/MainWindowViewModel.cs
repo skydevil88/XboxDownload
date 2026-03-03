@@ -163,7 +163,7 @@ public partial class MainWindowViewModel(
 
         await CertificateHelper.CreateRootCertificate(true);
 
-        if (File.Exists(CertificateHelper.RootPfx) && File.Exists(CertificateHelper.RootCrt))
+        if (File.Exists(CertificateHelper.RootPfxPath) && File.Exists(CertificateHelper.RootCrtPath))
         {
             await DialogHelper.ShowInfoDialogAsync(
                 ResourceHelper.GetString("Menu.RootCertificate.DialogInstallTitle"),
