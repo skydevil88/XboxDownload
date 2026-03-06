@@ -30,8 +30,7 @@ public partial class ServiceView : UserControl
             ["NsIp"] = NsIpTextBox,
             ["EaIp"] = EaIpTextBox,
             ["BattleIp"] = BattleIpTextBox,
-            ["EpicIp"] = EpicIpTextBox,
-            ["UbisoftIp"] = UbisoftIpTextBox
+            ["EpicIp"] = EpicIpTextBox
         };
 
         DataContextChanged += OnDataContextChanged;

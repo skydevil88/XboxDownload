@@ -15,6 +15,10 @@ s7mbrstream.scene7.com  # Game trailers
 cdn2.epicgames.com
 shared-static-prod.epicgames.com
 
+################## Ubisoft Connect ##################
+*.cdn.ubi.com
+*.cdn.ubisoft.com
+
 ##################### Riot Games ####################
 *.dyn.riotcdn.net
 

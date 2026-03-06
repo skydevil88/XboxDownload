@@ -28,7 +28,6 @@ public static class SpeedTestDataBuilder
         new ImportOption("XboxCn2", "XboxCn2", ResourceHelper.GetString("SpeedTest.ImportIp.XboxCn2.Display"), ResourceHelper.GetString("SpeedTest.ImportIp.XboxCn2.Hint")),
         new ImportOption("XboxApp", "XboxApp", ResourceHelper.GetString("SpeedTest.ImportIp.XboxApp.Display"), ResourceHelper.GetString("SpeedTest.ImportIp.XboxApp.Hint")),
         new ImportOption("Ps", "Ps", ResourceHelper.GetString("SpeedTest.ImportIp.Ps.Display"), ResourceHelper.GetString("SpeedTest.ImportIp.Ps.Hint")),
-        new ImportOption("UbisoftCn", "UbisoftCn", ResourceHelper.GetString("SpeedTest.ImportIp.UbisoftCn.Display"), ResourceHelper.GetString("SpeedTest.ImportIp.UbisoftCn.Hint")),
     ];
 
     public static IEnumerable<SpeedTestFile> BuildSpeedTestFiles() =>

@@ -597,11 +597,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 redirect = true;
                                 newHost = "blzddist1-a.akamaihd.net";
                                 break;
-
-                            case "uplaypc-s-ubisoft.cdn.ubi.com":
-                                redirect = true;
-                                newHost = "uplaypc-s-ubisoft.cdn.ubionline.com.cn";
-                                break;
                         }
                         if (redirect)
                         {
@@ -703,28 +698,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                     if (!socket.Connected) break;
                                                     socket.Send(dataBuffer, 0, readLength, SocketFlags.None, out _);
                                                 }
-                                            }
-                                        }
-                                        break;
-                                    }
-                                case "uplaypc-s-ubisoft.cdn.ubionline.com.cn":
-                                    {
-                                        if (IPAddress.TryParse(App.Settings.UbisoftIp, out var address) && address.AddressFamily == AddressFamily.InterNetworkV6)
-                                        {
-                                            var httpHeaders = new Dictionary<string, string>() { { "Host", host } };
-                                            using var response = await HttpClientHelper.SendRequestAsync(url.Replace(host, "[" + address + "]"), headers: httpHeaders);
-                                            if (response is { IsSuccessStatusCode: true })
-                                            {
-                                                fileFound = true;
-                                                var responseBytes = await response.Content.ReadAsByteArrayAsync();
-                                                StringBuilder sb = new();
-                                                sb.Append("HTTP/1.1 200 OK\r\n");
-                                                sb.Append("Content-Type: text/plain\r\n");
-                                                sb.Append("Connection: keep-alive\r\n");
-                                                sb.Append($"Content-Length: {responseBytes.Length}\r\n\r\n");
-                                                var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                                socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-                                                socket.Send(responseBytes, 0, responseBytes.Length, SocketFlags.None, out _);
                                             }
                                         }
                                         break;

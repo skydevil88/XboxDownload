@@ -416,7 +416,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         var localIpBytes = localIpAddr.GetAddressBytes();
         _localIpRecords = [new ResourceRecord { Data = localIpBytes, TTL = 100, QueryClass = 1, QueryType = QueryType.A }];
 
-        byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null, epicIp = null, ubisoftIp = null;
+        byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null, epicIp = null;
         var ipMap = new List<(string host, Func<string?> get, Action<string> set, Action<byte[]?> setBytes)>
         {
             ("assets2.xboxlive.cn", () => serviceViewModel.XboxCn1Ip, val => serviceViewModel.XboxCn1Ip = val, val => xboxCn1Ip = val),
@@ -428,8 +428,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             ("blzddist1-a.akamaihd.net", () => serviceViewModel.BattleIp, val => serviceViewModel.BattleIp = val, val => battleIp = val),
             (isSimplifiedChinese && serviceViewModel.IsHttpServiceEnabled ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net",
                 () => serviceViewModel.EpicIp, val => serviceViewModel.EpicIp = val, val => epicIp = val),
-            (isSimplifiedChinese && serviceViewModel.IsHttpServiceEnabled ? "uplaypc-s-ubisoft.cdn.ubionline.com.cn" : "uplaypc-s-ubisoft.cdn.ubi.com",
-                () => serviceViewModel.UbisoftIp, val => serviceViewModel.UbisoftIp = val, val => ubisoftIp = val),
         };
         if (isSimplifiedChinese)
         {
@@ -458,10 +456,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 set(resolved);
         }).ToArray();
         var epicTask = IpGeoHelper.IsMainlandChinaAsync(serviceViewModel.EpicIp);
-        var ubisoftTask = IpGeoHelper.IsMainlandChinaAsync(serviceViewModel.UbisoftIp);
-        await Task.WhenAll(ipResolveTasks.Concat([epicTask, ubisoftTask]));
+        await Task.WhenAll(ipResolveTasks.Concat([epicTask]));
         var isEpicMainlandChina = epicTask.Result;
-        var isUbisoftMainlandChina = ubisoftTask.Result;
 
         Ipv4ServiceMap.Clear();
         Ipv6ServiceMap.Clear();
@@ -475,7 +471,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         AddDnsMappings("Ea", eaIp, _localIpRecords, EmptyIpRecords);
         AddDnsMappings("Battle", battleIp, _localIpRecords, EmptyIpRecords);
         AddDnsMappings("Epic", epicIp, _localIpRecords, EmptyIpRecords, isEpicMainlandChina);
-        AddDnsMappings("Ubisoft", ubisoftIp, _localIpRecords, EmptyIpRecords, isUbisoftMainlandChina);
 
         if (serviceViewModel.IsSetLocalDnsEnabled)
         {
@@ -935,20 +930,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                                 AddMapping(hostname, localIpRecords, emptyIpRecords);
                         }
                     }
-                }
-                break;
-            case "Ubisoft":
-                foreach (var hostname in rule.Hosts)
-                {
-                    if (serviceViewModel.IsHttpServiceEnabled && isXboxGameDownloadLinksShownOrMainlandChina)
-                        AddMapping(hostname, localIpRecords, emptyIpRecords);
-                    else
-                        AddMapping(hostname, ipv4Records, ipv6Records);
-                }
-                if (DnsMappingGenerator.HostRules.TryGetValue("UbisoftCn", out var ubisoftCnRule))
-                {
-                    foreach (var hostname in ubisoftCnRule.Hosts)
-                        AddMapping(hostname, ipv4Records, ipv6Records);
                 }
                 break;
             default:

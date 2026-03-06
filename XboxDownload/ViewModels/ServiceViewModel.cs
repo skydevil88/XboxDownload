@@ -350,7 +350,6 @@ public partial class ServiceViewModel : ObservableObject
             EaIp = App.Settings.EaIp;
             BattleIp = App.Settings.BattleIp;
             EpicIp = App.Settings.EpicIp;
-            UbisoftIp = App.Settings.UbisoftIp;
 
             _ = HostsHelper.ApplySystemHostsAsync();
             if (IsDnsServiceEnabled) _ = DnsConnectionListener.StopAsync();
@@ -369,7 +368,7 @@ public partial class ServiceViewModel : ObservableObject
             var fieldNames = new[]
             {
                 nameof(DnsIp), nameof(XboxGlobalIp), nameof(XboxCn1Ip), nameof(XboxCn2Ip), nameof(XboxAppIp),
-                nameof(PsIp), nameof(NsIp), nameof(EaIp), nameof(BattleIp), nameof(EpicIp), nameof(UbisoftIp)
+                nameof(PsIp), nameof(NsIp), nameof(EaIp), nameof(BattleIp), nameof(EpicIp)
             };
 
             foreach (var fieldName in fieldNames)
@@ -406,7 +405,6 @@ public partial class ServiceViewModel : ObservableObject
             App.Settings.EaIp = EaIp.Trim();
             App.Settings.BattleIp = BattleIp.Trim();
             App.Settings.EpicIp = EpicIp.Trim();
-            App.Settings.UbisoftIp = UbisoftIp.Trim();
             App.Settings.IsXboxGameDownloadLinksShown = IsXboxGameDownloadLinksShown;
             App.Settings.IsLocalUploadEnabled = IsLocalUploadEnabled;
             App.Settings.LocalUploadPath = LocalUploadPath.Equals(Path.Combine(AppContext.BaseDirectory, "Upload")) ? string.Empty : LocalUploadPath;
@@ -515,14 +513,13 @@ public partial class ServiceViewModel : ObservableObject
             _backupIps.TryAdd("EaIp", EaIp);
             _backupIps.TryAdd("BattleIp", BattleIp);
             _backupIps.TryAdd("EpicIp", EpicIp);
-            _backupIps.TryAdd("UbisoftIp", UbisoftIp);
 
             var bestIp = await SpeedTestService.FindFastestOrBestAkamaiIpAsync(items, ListeningToken);
             if (IsListening)
             {
                 if (bestIp != null)
                 {
-                    XboxGlobalIp = XboxCn1Ip = XboxCn2Ip = XboxAppIp = PsIp = NsIp = EaIp = BattleIp = EpicIp = UbisoftIp = bestIp.Ip;
+                    XboxGlobalIp = XboxCn1Ip = XboxCn2Ip = XboxAppIp = PsIp = NsIp = EaIp = BattleIp = EpicIp = bestIp.Ip;
                     DnsConnectionListener.ApplyAkamaiIpOverride(bestIp.Ip);
                     await DnsConnectionListener.LoadHostAndAkamaiMapAsync(bestIp.Ip);
                     await HostsHelper.ApplySystemHostsAsync(true);
@@ -548,7 +545,6 @@ public partial class ServiceViewModel : ObservableObject
             EaIp = _backupIps.GetValueOrDefault("EaIp") ?? "";
             BattleIp = _backupIps.GetValueOrDefault("BattleIp") ?? "";
             EpicIp = _backupIps.GetValueOrDefault("EpicIp") ?? "";
-            UbisoftIp = _backupIps.GetValueOrDefault("UbisoftIp") ?? "";
             DnsConnectionListener.ApplyAkamaiIpOverride();
             await DnsConnectionListener.LoadHostAndAkamaiMapAsync();
             await HostsHelper.ApplySystemHostsAsync(true);
@@ -572,14 +568,11 @@ public partial class ServiceViewModel : ObservableObject
         _battleDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Battle")),
         _epicDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Epic")) +
                        Environment.NewLine +
-                       string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("EpicCn")),
-        _ubisoftDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ubisoft")) +
-                          Environment.NewLine +
-                          string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("UbisoftCn"));
+                       string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("EpicCn"));
 
     [ObservableProperty]
     private string _dnsIp = App.Settings.DnsIp, _xboxGlobalIp = App.Settings.XboxGlobalIp, _xboxCn1Ip = App.Settings.XboxCn1Ip, _xboxCn2Ip = App.Settings.XboxCn2Ip, _xboxAppIp = App.Settings.XboxAppIp,
-        _psIp = App.Settings.PsIp, _nsIp = App.Settings.NsIp, _eaIp = App.Settings.EaIp, _battleIp = App.Settings.BattleIp, _epicIp = App.Settings.EpicIp, _ubisoftIp = App.Settings.UbisoftIp,
+        _psIp = App.Settings.PsIp, _nsIp = App.Settings.NsIp, _eaIp = App.Settings.EaIp, _battleIp = App.Settings.BattleIp, _epicIp = App.Settings.EpicIp,
         _localUploadPath = App.Settings.LocalUploadPath;
 
     [ObservableProperty]

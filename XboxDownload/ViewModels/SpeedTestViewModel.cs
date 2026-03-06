@@ -104,7 +104,7 @@ public partial class SpeedTestViewModel : ViewModelBase
     private static partial Regex MatchIp();
 
     [ObservableProperty]
-    private bool _isXboxCn1Visible, _isXboxCn2Visible, _isXboxAppVisible, _isXboxSeparatorVisible, _isPsVisible, _isPsSeparatorVisible, _isUbisoftVisible, _isAkamaiVisible, _isUbisoftSeparatorVisible;
+    private bool _isXboxCn1Visible, _isXboxCn2Visible, _isXboxAppVisible, _isXboxSeparatorVisible, _isPsVisible, _isPsSeparatorVisible, _isAkamaiVisible;
 
     private string _selectedImportKey = string.Empty;
     [RelayCommand]
@@ -153,7 +153,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 : option.Key is "ChinaTelecom" or "ChinaUnicom" or "ChinaMobile";
         }
 
-        IsXboxCn1Visible = IsXboxCn2Visible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = IsUbisoftVisible = IsUbisoftSeparatorVisible = IsAkamaiVisible = UploadAkamaiIpsVisible = false;
+        IsXboxCn1Visible = IsXboxCn2Visible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = IsAkamaiVisible = UploadAkamaiIpsVisible = false;
         switch (SelectedImportOption.Key)
         {
             case "XboxCn1":
@@ -171,11 +171,8 @@ public partial class SpeedTestViewModel : ViewModelBase
             case "Akamai":
             case "AkamaiV2":
             case "AkamaiV6":
-                IsAkamaiVisible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = IsUbisoftVisible = IsUbisoftSeparatorVisible = true;
+                IsAkamaiVisible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = true;
                 if (App.Settings.Culture == "zh-Hans") UploadAkamaiIpsVisible = true;
-                break;
-            case "UbisoftCn":
-                IsUbisoftVisible = IsUbisoftSeparatorVisible = true;
                 break;
         }
 
@@ -465,11 +462,6 @@ public partial class SpeedTestViewModel : ViewModelBase
                 break;
             case "Epic":
                 ServiceViewModel.EpicIp = ip;
-                ServiceViewModel.FocusText($"{parameter}Ip");
-                mainWindowVm.SelectedTabIndex = tabIndex;
-                break;
-            case "Ubisoft":
-                ServiceViewModel.UbisoftIp = ip;
                 ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;

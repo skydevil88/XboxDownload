@@ -72,7 +72,6 @@
     <x:String x:Key="Service.Settings.EaDlIp">EA 下載 IP</x:String>
     <x:String x:Key="Service.Settings.BattleDlIp">戰網 下載 IP</x:String>
     <x:String x:Key="Service.Settings.EpicDlIp">Epic 下載 IP</x:String>
-    <x:String x:Key="Service.Settings.UbisoftDlIp">育碧 下載 IP</x:String>
     <x:String x:Key="Service.Settings.LocalUpload">本地上傳</x:String>
     <x:String x:Key="Service.Settings.Browse">瀏覽</x:String>
     <x:String x:Key="Service.Settings.SelectFolder">選擇資料夾</x:String>
@@ -126,7 +125,6 @@
     <x:String x:Key="Service.Service.InvalidEaIpMessage">輸入的 EA 下載 IP 位址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidBattleIpMessage">輸入的 戰網 下載 IP 位址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidEpicIpMessage">輸入的 Epic 下載 IP 位址不合法。</x:String>
-    <x:String x:Key="Service.Service.InvalidUbisoftIpMessage">輸入的 育碧 下載 IP 位址不合法。</x:String>
     <x:String x:Key="Service.Service.PortConflict">埠佔用</x:String>
     <x:String x:Key="Service.Service.PortConflictMessage">以下埠被佔用：&#x0a;{0}&#x0a;是否嘗試強制結束這些進程？</x:String>
     <x:String x:Key="Service.Service.ServiceEnableFailedDialogTitle">啟用服務失敗</x:String>
@@ -226,7 +224,6 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEa">指定 EA 下載 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForBattle">指定 Battle.net 下載 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEpic">指定 Epic Games 下載 IP</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.CustomIpForUbisoft">指定 Ubisoft 下載 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">指定 Akamai CDN IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">寫入系統 hosts 檔（可選操作，普通用戶建議跳過）</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">寫入成功</x:String>
@@ -277,8 +274,6 @@
     <x:String x:Key="SpeedTest.ImportIp.XboxApp.Hint">應用和部分PC遊戲下載域名 (tlu.dl.delivery.mp.microsoft.com)。&#x0a;Xbox app提示“此遊戲不支援安裝到特定資料夾，它將與其他Windows應用一起安裝”。這些都通過此域名進行下載。</x:String>
     <x:String x:Key="SpeedTest.ImportIp.Ps.Display">7. PlayStation 遊戲下載 IP (cn)</x:String>
     <x:String x:Key="SpeedTest.ImportIp.Ps.Hint">PlayStation 遊戲下載域名 (gst.prod.dl.playstation.net)。</x:String>
-    <x:String x:Key="SpeedTest.ImportIp.UbisoftCn.Display">8. Ubisoft Connect 遊戲下載 IP (cn)</x:String>
-    <x:String x:Key="SpeedTest.ImportIp.UbisoftCn.Hint">沒有可用測試檔，只測試 ping。</x:String>
 
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-1">Xbox測試檔</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-2">光環無限(XS)</x:String>

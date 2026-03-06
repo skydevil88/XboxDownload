@@ -72,7 +72,6 @@
     <x:String x:Key="Service.Settings.EaDlIp">EA 下载 IP</x:String>
     <x:String x:Key="Service.Settings.BattleDlIp">战网 下载 IP</x:String>
     <x:String x:Key="Service.Settings.EpicDlIp">Epic 下载 IP</x:String>
-    <x:String x:Key="Service.Settings.UbisoftDlIp">育碧 下载 IP</x:String>
     <x:String x:Key="Service.Settings.LocalUpload">本地上传</x:String>
     <x:String x:Key="Service.Settings.Browse">浏览</x:String>
     <x:String x:Key="Service.Settings.SelectFolder">选择文件夹</x:String>
@@ -126,7 +125,6 @@
     <x:String x:Key="Service.Service.InvalidEaIpMessage">输入的 EA 下载 IP 地址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidBattleIpMessage">输入的 战网 下载 IP 地址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidEpicIpMessage">输入的 Epic 下载 IP 地址不合法。</x:String>
-    <x:String x:Key="Service.Service.InvalidUbisoftIpMessage">输入的 育碧 下载 IP 地址不合法。</x:String>
     <x:String x:Key="Service.Service.PortConflict">端口占用</x:String>
     <x:String x:Key="Service.Service.PortConflictMessage">以下端口被占用：&#x0a;{0}&#x0a;是否尝试强制结束这些进程？</x:String>
     <x:String x:Key="Service.Service.ServiceEnableFailedDialogTitle">启用服务失败</x:String>
@@ -226,7 +224,6 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEa">指定 EA 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForBattle">指定 Battle.net 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEpic">指定 Epic Games 下载 IP</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.CustomIpForUbisoft">指定 Ubisoft 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">指定 Akamai CDN IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">写入系统 hosts 文件（可选操作，普通用户建议跳过）</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">写入成功</x:String>
@@ -277,8 +274,6 @@
     <x:String x:Key="SpeedTest.ImportIp.XboxApp.Hint">应用和部分PC游戏下载域名 (tlu.dl.delivery.mp.microsoft.com)。&#x0a;Xbox app提示“此游戏不支持安装到特定文件夹，它将与其他Windows应用一起安装”。这些都通过此域名进行下载。</x:String>
     <x:String x:Key="SpeedTest.ImportIp.Ps.Display">7. PlayStation 游戏下载 IP (cn)</x:String>
     <x:String x:Key="SpeedTest.ImportIp.Ps.Hint">PlayStation 游戏下载域名 (gst.prod.dl.playstation.net)。</x:String>
-    <x:String x:Key="SpeedTest.ImportIp.UbisoftCn.Display">8. Ubisoft Connect 游戏下载 IP (cn)</x:String>
-    <x:String x:Key="SpeedTest.ImportIp.UbisoftCn.Hint">没有可用测试文件，只测试 ping。</x:String>
 
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-1">Xbox测试文件</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-2">光环无限(XS)</x:String>

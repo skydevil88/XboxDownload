@@ -125,25 +125,7 @@ public static class DnsMappingGenerator
             ],
             [],
             []
-        ),
-        ["Ubisoft"] = (
-            "Ubisoft Entertainment",
-            [
-                "uplaypc-s-ubisoft.cdn.ubi.com",
-            ],
-            [],
-            [
-                //"ubisoftconnect.cdn.ubi.com",
-            ]
-        ),
-        ["UbisoftCn"] = (
-            "Ubisoft Entertainment CN",
-            [
-                "uplaypc-s-ubisoft.cdn.ubionline.com.cn"
-            ],
-            [],
-            []
-        ),
+        )
     };
 
     /// <summary>
@@ -251,7 +233,7 @@ public static class DnsMappingGenerator
     private static string[] ResolveKeys(string key)
     {
         return key.StartsWith("Akamai")
-            ? ["XboxGlobal", "XboxApp", "Ps", "Ns", "Ea", "Battle", "Epic", "Ubisoft"]
+            ? ["XboxGlobal", "XboxApp", "Ps", "Ns", "Ea", "Battle", "Epic"]
             : [key];
     }
 
