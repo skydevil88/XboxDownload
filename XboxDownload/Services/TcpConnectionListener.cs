@@ -636,6 +636,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 case "epicgames-download1-1251447533.file.myqcloud.com":
                                 case "epicgames-download1.akamaized.net":
                                 case "download.epicgames.com":
+                                case "egdownload.fastly-edge.com":
                                 case "fastly-download.epicgames.com":
                                 case "cloudflare.epicgamescdn.com":
                                     if (filePath.Contains(".manifest") && !host.Equals("epicgames-download1-1251447533.file.myqcloud.com"))
@@ -964,6 +965,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 case "epicgames-download1-1251447533.file.myqcloud.com":
                                 case "epicgames-download1.akamaized.net":
                                 case "download.epicgames.com":
+                                case "egdownload.fastly-edge.com":
                                 case "fastly-download.epicgames.com":
                                     if (filePath.Contains(".manifest") && !host.Equals("epicgames-download1-1251447533.file.myqcloud.com"))
                                     {
@@ -990,7 +992,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     else
                                     {
                                         fileFound = true;
-                                        url = $"http://{(host == "epicgames-download1-1251447533.file.myqcloud.com" ? "epicgames-download1.akamaized.net" : "epicgames-download1-1251447533.file.myqcloud.com")}{filePath}";
+                                        url = $"https://{(host == "epicgames-download1-1251447533.file.myqcloud.com" ? "epicgames-download1.akamaized.net" : "epicgames-download1-1251447533.file.myqcloud.com")}{filePath}";
                                         var sb = new StringBuilder();
                                         sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                                         sb.Append("Content-Type: text/html\r\n");

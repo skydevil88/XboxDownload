@@ -113,14 +113,16 @@ public static class DnsMappingGenerator
             ],
             [
                 "download.epicgames.com",
+                "egdownload.fastly-edge.com",
                 "fastly-download.epicgames.com",
-                //"cloudflare.epicgamescdn.com"
+                "cloudflare.epicgamescdn.com"
             ],
             []
         ),
         ["EpicCn"] = (
             "Epic Games (Tencent Cloud)",
             [
+
                 "epicgames-download1-1251447533.file.myqcloud.com"
             ],
             [],

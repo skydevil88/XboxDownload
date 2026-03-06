@@ -12,6 +12,7 @@ s7mbrstream.scene7.com  # Game trailers
 
 ####################### Epic #######################
 *.ak.epicgames.com
+cdn1.epicgames.com
 cdn2.epicgames.com
 shared-static-prod.epicgames.com
 
