@@ -967,6 +967,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 case "download.epicgames.com":
                                 case "egdownload.fastly-edge.com":
                                 case "fastly-download.epicgames.com":
+                                case "cloudflare.epicgamescdn.com":
                                     if (filePath.Contains(".manifest") && !host.Equals("epicgames-download1-1251447533.file.myqcloud.com"))
                                     {
                                         var ipAddresses = App.Settings.IsDoHEnabled
