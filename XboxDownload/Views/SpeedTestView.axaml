@@ -98,14 +98,6 @@
                                                     <Image Source="/Assets/Speedtest/battle.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForEpic}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
-                                                      CommandParameter="Epic">
-                                                <MenuItem.Icon>
-                                                    <Image Source="/Assets/Speedtest/epic.ico" Width="16" Height="16"/>
-                                                </MenuItem.Icon>
-                                            </MenuItem>
                                             <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"/>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForAkamaiCdn}"
                                                       IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"

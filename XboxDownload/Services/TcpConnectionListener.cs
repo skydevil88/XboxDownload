@@ -67,8 +67,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         sanBuilder.AddDnsName("*.akamai.net");
         sanBuilder.AddDnsName("*.akamaihd.net");
         sanBuilder.AddDnsName("*.akamaized.net");
-        sanBuilder.AddDnsName("epicgames-download1-1251447533.file.myqcloud.com");
-        sanBuilder.AddDnsName("download.epicgames.com");
 
         // Load SNI proxy file if exists
         if (App.Settings.IsLocalProxyEnabled)
@@ -633,48 +631,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                             serviceViewModel.AddLog("HTTP 200", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                                     }
                                     break;
-                                case "epicgames-download1-1251447533.file.myqcloud.com":
-                                case "epicgames-download1.akamaized.net":
-                                case "download.epicgames.com":
-                                case "egdownload.fastly-edge.com":
-                                case "fastly-download.epicgames.com":
-                                case "cloudflare.epicgamescdn.com":
-                                    if (filePath.Contains(".manifest") && !host.Equals("epicgames-download1-1251447533.file.myqcloud.com"))
-                                    {
-                                        var ipAddresses = App.Settings.IsDoHEnabled
-                                            ? await DnsHelper.ResolveDohAsync(host, DnsHelper.CurrentDoH)
-                                            : await DnsHelper.ResolveDnsAsync(host, serviceViewModel.DnsIp);
-                                        if (ipAddresses?.Count > 0)
-                                        {
-                                            var httpHeaders = new Dictionary<string, string>() { { "Host", host } };
-                                            using var response = await HttpClientHelper.SendRequestAsync(url.Replace(host, ipAddresses[0].ToString()), headers: httpHeaders);
-                                            if (response is { IsSuccessStatusCode: true })
-                                            {
-                                                fileFound = true;
-                                                var headersBytes = Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\n{response.Content.Headers}{response.Headers}\r\n");
-                                                var responseData = await response.Content.ReadAsByteArrayAsync();
-                                                socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-                                                socket.Send(responseData, 0, responseData.Length, SocketFlags.None, out _);
-                                                if (serviceViewModel.IsLogging)
-                                                    serviceViewModel.AddLog("HTTP 200", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        fileFound = true;
-                                        url = $"http://{(host == "epicgames-download1-1251447533.file.myqcloud.com" ? "epicgames-download1.akamaized.net" : "epicgames-download1-1251447533.file.myqcloud.com")}{filePath}";
-                                        var sb = new StringBuilder();
-                                        sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                        sb.Append("Content-Type: text/html\r\n");
-                                        sb.Append($"Location: {url}\r\n");
-                                        sb.Append("Content-Length: 0\r\n\r\n");
-                                        var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                        socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-                                        if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog("HTTP 302", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                                    }
-                                    break;
                                 case "blzddist1-a.akamaihd.net":
                                     {
                                         if (IPAddress.TryParse(App.Settings.BattleIp, out var address) && address.AddressFamily == AddressFamily.InterNetworkV6)
@@ -960,196 +916,147 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         {
                             var fileFound = false;
                             var url = $"https://{host}{filePath}";
-                            switch (host)
+                            if (App.Settings.IsLocalProxyEnabled)
                             {
-                                case "epicgames-download1-1251447533.file.myqcloud.com":
-                                case "epicgames-download1.akamaized.net":
-                                case "download.epicgames.com":
-                                case "egdownload.fastly-edge.com":
-                                case "fastly-download.epicgames.com":
-                                case "cloudflare.epicgamescdn.com":
-                                    if (filePath.Contains(".manifest") && !host.Equals("epicgames-download1-1251447533.file.myqcloud.com"))
-                                    {
-                                        var ipAddresses = App.Settings.IsDoHEnabled
-                                            ? await DnsHelper.ResolveDohAsync(host, DnsHelper.CurrentDoH)
-                                            : await DnsHelper.ResolveDnsAsync(host, serviceViewModel.DnsIp);
-                                        if (ipAddresses?.Count > 0)
-                                        {
-                                            var httpHeaders = new Dictionary<string, string>() { { "Host", host } };
-                                            using var response = await HttpClientHelper.SendRequestAsync(url.Replace(host, ipAddresses[0].ToString()), headers: httpHeaders);
-                                            if (response is { IsSuccessStatusCode: true })
-                                            {
-                                                fileFound = true;
-                                                var headersBytes = Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\n{response.Content.Headers}{response.Headers}\r\n");
-                                                var responseData = await response.Content.ReadAsByteArrayAsync();
-                                                ssl.Write(headersBytes);
-                                                ssl.Write(responseData);
-                                                ssl.Flush();
-                                                if (serviceViewModel.IsLogging)
-                                                    serviceViewModel.AddLog("HTTP 200", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                                            }
-                                        }
-                                    }
-                                    else
+                                if (host == "github.com" && filePath.Contains("/releases/download/"))
+                                {
+                                    var fastestUrl = await HttpClientHelper.GetFastestProxyAsync(UpdateService.Proxies1, url, new Dictionary<string, string> { { "Range", "bytes=0-10239" } }, 3000);
+                                    if (fastestUrl != null)
                                     {
                                         fileFound = true;
-                                        url = $"https://{(host == "epicgames-download1-1251447533.file.myqcloud.com" ? "epicgames-download1.akamaized.net" : "epicgames-download1-1251447533.file.myqcloud.com")}{filePath}";
-                                        var sb = new StringBuilder();
+                                        StringBuilder sb = new();
                                         sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
                                         sb.Append("Content-Type: text/html\r\n");
-                                        sb.Append($"Location: {url}\r\n");
+                                        sb.Append($"Location: {fastestUrl}\r\n");
                                         sb.Append("Content-Length: 0\r\n\r\n");
                                         var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
                                         ssl.Write(headersBytes);
-                                        if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog("HTTP 302", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
+                                        ssl.Flush();
                                     }
-                                    break;
+                                }
 
-                                default:
-                                    if (App.Settings.IsLocalProxyEnabled)
+                                if (!fileFound)
+                                {
+                                    SniProxy? proxy = null;
+                                    string[]? expectedHosts = null;
+                                    if (DicSniProxy.TryGetValue(host, out var tuple))
                                     {
-                                        if (host == "github.com" && filePath.Contains("/releases/download/"))
+                                        proxy = tuple.Item1;
+                                        expectedHosts = tuple.Item2;
+                                    }
+                                    else
+                                    {
+                                        tuple = DicSniProxy2.Where(kvp => host.EndsWith(kvp.Key)).Select(x => x.Value).FirstOrDefault();
+                                        if (tuple.Item1 != null)
                                         {
-                                            var fastestUrl = await HttpClientHelper.GetFastestProxyAsync(UpdateService.Proxies1, url, new Dictionary<string, string> { { "Range", "bytes=0-10239" } }, 3000);
-                                            if (fastestUrl != null)
+                                            proxy = new SniProxy
                                             {
-                                                fileFound = true;
-                                                StringBuilder sb = new();
-                                                sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                                sb.Append("Content-Type: text/html\r\n");
-                                                sb.Append($"Location: {fastestUrl}\r\n");
-                                                sb.Append("Content-Length: 0\r\n\r\n");
-                                                var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                                ssl.Write(headersBytes);
-                                                ssl.Flush();
-                                            }
-                                        }
-
-                                        if (!fileFound)
-                                        {
-                                            SniProxy? proxy = null;
-                                            string[]? expectedHosts = null;
-                                            if (DicSniProxy.TryGetValue(host, out var tuple))
-                                            {
-                                                proxy = tuple.Item1;
-                                                expectedHosts = tuple.Item2;
-                                            }
-                                            else
-                                            {
-                                                tuple = DicSniProxy2.Where(kvp => host.EndsWith(kvp.Key)).Select(x => x.Value).FirstOrDefault();
-                                                if (tuple.Item1 != null)
-                                                {
-                                                    proxy = new SniProxy
-                                                    {
-                                                        Branch = tuple.Item1.Branch,
-                                                        Sni = tuple.Item1.Sni,
-                                                        IpAddressesV4 = tuple.Item1.IpAddressesV4,
-                                                        IpAddressesV6 = tuple.Item1.IpAddressesV6,
-                                                        UseCustomIpAddress = tuple.Item1.UseCustomIpAddress
-                                                    };
-                                                    expectedHosts = tuple.Item2;
-                                                    DicSniProxy.TryAdd(host, (proxy, expectedHosts));
-                                                }
-                                            }
-
-                                            if (proxy != null)
-                                            {
-                                                if (serviceViewModel.IsLogging)
-                                                    serviceViewModel.AddLog("Proxy", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-
-                                                fileFound = true;
-                                                IPAddress[]? ips = null;
-                                                if (proxy is { UseCustomIpAddress: true, IpAddresses: null })
-                                                {
-                                                    IPAddress[]? ipV6 = proxy.IpAddressesV6, ipV4 = proxy.IpAddressesV4;
-                                                    proxy.IpAddresses = serviceViewModel.IsIPv6Support switch
-                                                    {
-                                                        true when ipV6 != null && ipV4 != null => [.. ipV6, .. ipV4],
-                                                        true => ipV6 ?? ipV4,
-                                                        _ => ipV4
-                                                    };
-                                                    if (proxy.IpAddresses?.Length >= 2)
-                                                    {
-                                                        await proxy.Semaphore.WaitAsync();
-                                                        if (proxy.IpAddresses?.Length >= 2)
-                                                        {
-                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
-                                                            if (fastestIp != null)
-                                                                ips = proxy.IpAddresses = [fastestIp];
-                                                        }
-                                                        proxy.Semaphore.Release();
-                                                    }
-                                                }
-                                                else if (proxy.IpAddresses == null)
-                                                {
-                                                    await proxy.Semaphore.WaitAsync();
-                                                    if (proxy.IpAddresses == null)
-                                                    {
-                                                        var domain = proxy.Branch ?? host;
-
-                                                        List<IPAddress> ipAddresses = [];
-                                                        var tasks = new List<Task>();
-                                                        foreach (var sniProxyId in App.Settings.SniProxyId)
-                                                        {
-                                                            var selectedDohServer = serviceViewModel.DohServersMappings.FirstOrDefault(d => d.Id == sniProxyId);
-                                                            if (selectedDohServer == null) continue;
-                                                            var useProxy = App.Settings.DohServerUseProxyId.Contains(selectedDohServer.Id) && !selectedDohServer.IsProxyDisabled;
-                                                            var doHServer = DnsHelper.GetConfigureDoH(selectedDohServer.Url, selectedDohServer.Ip, useProxy);
-                                                            if (serviceViewModel.IsIPv6Support)
-                                                            {
-                                                                tasks.Add(Task.Run(async () =>
-                                                                {
-                                                                    var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
-                                                                    if (ipV6 != null)
-                                                                        ipAddresses = [.. ipAddresses, .. ipV6];
-                                                                }));
-                                                            }
-                                                            tasks.Add(Task.Run(async () =>
-                                                            {
-                                                                var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
-                                                                if (ipV4 != null)
-                                                                    ipAddresses = [.. ipAddresses, .. ipV4];
-                                                            }));
-                                                        }
-                                                        await Task.WhenAll(tasks);
-                                                        if (ipAddresses.Count > 0)
-                                                            proxy.IpAddresses = [.. ipAddresses.Distinct()];
-
-                                                        if (proxy.IpAddresses?.Length >= 2)
-                                                        {
-                                                            var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
-                                                            if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
-                                                        }
-                                                    }
-                                                    proxy.Semaphore.Release();
-                                                }
-                                                ips ??= proxy.IpAddresses?.Length >= 2 ? [.. proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16)] : proxy.IpAddresses;
-
-                                                string? errMessae;
-                                                if (ips != null)
-                                                {
-                                                    if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, Encoding.ASCII.GetBytes(headers), [.. list], ssl, out errMessae))
-                                                    {
-                                                        proxy.IpAddresses = null;
-                                                    }
-                                                }
-                                                else errMessae = $"Unable to query domain {host}. Please check whether the DoH server is reachable. If necessary, enable proxy forwarding for the request.";
-                                                if (!string.IsNullOrEmpty(errMessae))
-                                                {
-                                                    var response = Encoding.UTF8.GetBytes(errMessae);
-                                                    StringBuilder sb = new();
-                                                    sb.Append("HTTP/1.1 500 Server Error\r\n");
-                                                    sb.Append("Content-Type: text/html; charset=utf-8\r\n");
-                                                    sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                                                    ssl.Write(Encoding.UTF8.GetBytes(sb.ToString()));
-                                                    ssl.Write(response);
-                                                    ssl.Flush();
-                                                }
-                                            }
+                                                Branch = tuple.Item1.Branch,
+                                                Sni = tuple.Item1.Sni,
+                                                IpAddressesV4 = tuple.Item1.IpAddressesV4,
+                                                IpAddressesV6 = tuple.Item1.IpAddressesV6,
+                                                UseCustomIpAddress = tuple.Item1.UseCustomIpAddress
+                                            };
+                                            expectedHosts = tuple.Item2;
+                                            DicSniProxy.TryAdd(host, (proxy, expectedHosts));
                                         }
                                     }
-                                    break;
+
+                                    if (proxy != null)
+                                    {
+                                        if (serviceViewModel.IsLogging)
+                                            serviceViewModel.AddLog("Proxy", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
+
+                                        fileFound = true;
+                                        IPAddress[]? ips = null;
+                                        if (proxy is { UseCustomIpAddress: true, IpAddresses: null })
+                                        {
+                                            IPAddress[]? ipV6 = proxy.IpAddressesV6, ipV4 = proxy.IpAddressesV4;
+                                            proxy.IpAddresses = serviceViewModel.IsIPv6Support switch
+                                            {
+                                                true when ipV6 != null && ipV4 != null => [.. ipV6, .. ipV4],
+                                                true => ipV6 ?? ipV4,
+                                                _ => ipV4
+                                            };
+                                            if (proxy.IpAddresses?.Length >= 2)
+                                            {
+                                                await proxy.Semaphore.WaitAsync();
+                                                if (proxy.IpAddresses?.Length >= 2)
+                                                {
+                                                    var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
+                                                    if (fastestIp != null)
+                                                        ips = proxy.IpAddresses = [fastestIp];
+                                                }
+                                                proxy.Semaphore.Release();
+                                            }
+                                        }
+                                        else if (proxy.IpAddresses == null)
+                                        {
+                                            await proxy.Semaphore.WaitAsync();
+                                            if (proxy.IpAddresses == null)
+                                            {
+                                                var domain = proxy.Branch ?? host;
+
+                                                List<IPAddress> ipAddresses = [];
+                                                var tasks = new List<Task>();
+                                                foreach (var sniProxyId in App.Settings.SniProxyId)
+                                                {
+                                                    var selectedDohServer = serviceViewModel.DohServersMappings.FirstOrDefault(d => d.Id == sniProxyId);
+                                                    if (selectedDohServer == null) continue;
+                                                    var useProxy = App.Settings.DohServerUseProxyId.Contains(selectedDohServer.Id) && !selectedDohServer.IsProxyDisabled;
+                                                    var doHServer = DnsHelper.GetConfigureDoH(selectedDohServer.Url, selectedDohServer.Ip, useProxy);
+                                                    if (serviceViewModel.IsIPv6Support)
+                                                    {
+                                                        tasks.Add(Task.Run(async () =>
+                                                        {
+                                                            var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
+                                                            if (ipV6 != null)
+                                                                ipAddresses = [.. ipAddresses, .. ipV6];
+                                                        }));
+                                                    }
+                                                    tasks.Add(Task.Run(async () =>
+                                                    {
+                                                        var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
+                                                        if (ipV4 != null)
+                                                            ipAddresses = [.. ipAddresses, .. ipV4];
+                                                    }));
+                                                }
+                                                await Task.WhenAll(tasks);
+                                                if (ipAddresses.Count > 0)
+                                                    proxy.IpAddresses = [.. ipAddresses.Distinct()];
+
+                                                if (proxy.IpAddresses?.Length >= 2)
+                                                {
+                                                    var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
+                                                    if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
+                                                }
+                                            }
+                                            proxy.Semaphore.Release();
+                                        }
+                                        ips ??= proxy.IpAddresses?.Length >= 2 ? [.. proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16)] : proxy.IpAddresses;
+
+                                        string? errMessae;
+                                        if (ips != null)
+                                        {
+                                            if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, Encoding.ASCII.GetBytes(headers), [.. list], ssl, out errMessae))
+                                            {
+                                                proxy.IpAddresses = null;
+                                            }
+                                        }
+                                        else errMessae = $"Unable to query domain {host}. Please check whether the DoH server is reachable. If necessary, enable proxy forwarding for the request.";
+                                        if (!string.IsNullOrEmpty(errMessae))
+                                        {
+                                            var response = Encoding.UTF8.GetBytes(errMessae);
+                                            StringBuilder sb = new();
+                                            sb.Append("HTTP/1.1 500 Server Error\r\n");
+                                            sb.Append("Content-Type: text/html; charset=utf-8\r\n");
+                                            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+                                            ssl.Write(Encoding.UTF8.GetBytes(sb.ToString()));
+                                            ssl.Write(response);
+                                            ssl.Flush();
+                                        }
+                                    }
+                                }
                             }
                             if (!fileFound)
                             {

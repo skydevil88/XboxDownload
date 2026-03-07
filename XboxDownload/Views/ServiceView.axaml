@@ -70,10 +70,7 @@
                                            ToolTip.Tip="{Binding XboxAppDlIpTip}"/>
                                 <TextBox Name="XboxAppIpTextBox" Text="{Binding XboxAppIp}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Classes="hosts-row">
-                                <CheckBox Content="{DynamicResource Service.Settings.ShowXboxGameDownloadLinks}"
-                                          IsChecked="{Binding IsXboxGameDownloadLinksShown}"/>
-                            </StackPanel>
+                           
                         </StackPanel>
 
                         <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4" Margin="5,0">
@@ -98,9 +95,8 @@
                                 <TextBox Name="BattleIpTextBox" Text="{Binding BattleIp}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Classes="hosts-row">
-                                <TextBlock Text="{DynamicResource Service.Settings.EpicDlIp}"
-                                           ToolTip.Tip="{Binding EpicDlIpTip}"/>
-                                <TextBox Name="EpicIpTextBox" Text="{Binding EpicIp}"/>
+                                <CheckBox Content="{DynamicResource Service.Settings.ShowXboxGameDownloadLinks}"
+                                          IsChecked="{Binding IsXboxGameDownloadLinksShown}"/>
                             </StackPanel>
                         </StackPanel>
 

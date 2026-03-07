@@ -17,7 +17,6 @@ public class AppSettings
     public string NsIp { get; set; } = string.Empty;
     public string EaIp { get; set; } = string.Empty;
     public string BattleIp { get; set; } = string.Empty;
-    public string EpicIp { get; set; } = string.Empty;
     public bool IsXboxGameDownloadLinksShown { get; set; } = true;
     public bool IsLocalUploadEnabled { get; set; }
     public string LocalUploadPath { get; set; } = string.Empty;

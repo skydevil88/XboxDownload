@@ -71,7 +71,6 @@
     <x:String x:Key="Service.Settings.NsDlIp">NS DL IP</x:String>
     <x:String x:Key="Service.Settings.EaDlIp">EA DL IP</x:String>
     <x:String x:Key="Service.Settings.BattleDlIp">Battle.net DL IP</x:String>
-    <x:String x:Key="Service.Settings.EpicDlIp">Epic DL IP</x:String>
     <x:String x:Key="Service.Settings.LocalUpload">Local Upload</x:String>
     <x:String x:Key="Service.Settings.Browse">Browse</x:String>
     <x:String x:Key="Service.Settings.SelectFolder">Select Folder</x:String>
@@ -124,7 +123,6 @@
     <x:String x:Key="Service.Service.InvalidNsIpMessage">Please enter a valid IP address for the NS download server.</x:String>
     <x:String x:Key="Service.Service.InvalidEaIpMessage">Please enter a valid IP address for the EA download server.</x:String>
     <x:String x:Key="Service.Service.InvalidBattleIpMessage">Please enter a valid IP address for the Battle.net download server.</x:String>
-    <x:String x:Key="Service.Service.InvalidEpicIpMessage">Please enter a valid IP address for the Epic download server.</x:String>
     <x:String x:Key="Service.Service.PortConflict">Port Conflict</x:String>
     <x:String x:Key="Service.Service.PortConflictMessage">The following ports are currently in use:&#x0a;{0}&#x0a;Do you want to try forcibly terminating the occupying processes?</x:String>
     <x:String x:Key="Service.Service.ServiceEnableFailedDialogTitle">Failed to Enable the Service</x:String>
@@ -223,7 +221,6 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForNs">Custom IP for Nintendo Switch</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEa">Custom IP for EA</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForBattle">Custom IP for Battle.net</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.CustomIpForEpic">Custom IP for Epic Games</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">Custom IP for Akamai CDN</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">Write to System hosts file (not for beginners)</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">Write Successful</x:String>

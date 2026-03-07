@@ -71,7 +71,6 @@
     <x:String x:Key="Service.Settings.NsDlIp">NS 下載 IP</x:String>
     <x:String x:Key="Service.Settings.EaDlIp">EA 下載 IP</x:String>
     <x:String x:Key="Service.Settings.BattleDlIp">戰網 下載 IP</x:String>
-    <x:String x:Key="Service.Settings.EpicDlIp">Epic 下載 IP</x:String>
     <x:String x:Key="Service.Settings.LocalUpload">本地上傳</x:String>
     <x:String x:Key="Service.Settings.Browse">瀏覽</x:String>
     <x:String x:Key="Service.Settings.SelectFolder">選擇資料夾</x:String>
@@ -124,7 +123,6 @@
     <x:String x:Key="Service.Service.InvalidNsIpMessage">輸入的 NS 下載 IP 位址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidEaIpMessage">輸入的 EA 下載 IP 位址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidBattleIpMessage">輸入的 戰網 下載 IP 位址不合法。</x:String>
-    <x:String x:Key="Service.Service.InvalidEpicIpMessage">輸入的 Epic 下載 IP 位址不合法。</x:String>
     <x:String x:Key="Service.Service.PortConflict">埠佔用</x:String>
     <x:String x:Key="Service.Service.PortConflictMessage">以下埠被佔用：&#x0a;{0}&#x0a;是否嘗試強制結束這些進程？</x:String>
     <x:String x:Key="Service.Service.ServiceEnableFailedDialogTitle">啟用服務失敗</x:String>
@@ -223,7 +221,6 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForNs">指定 Nintendo Switch 下載 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEa">指定 EA 下載 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForBattle">指定 Battle.net 下載 IP</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.CustomIpForEpic">指定 Epic Games 下載 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">指定 Akamai CDN IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">寫入系統 hosts 檔（可選操作，普通用戶建議跳過）</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">寫入成功</x:String>

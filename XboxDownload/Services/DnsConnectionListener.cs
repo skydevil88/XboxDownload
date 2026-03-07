@@ -349,15 +349,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     Ipv4ServiceMapBackup.TryAdd(hostsMap.Key, v4);
                 }
 
-                // Use local IP record for EpicCn, override with specified IP otherwise
-                if (hostsMap.Value == "EpicCn")
-                {
-                    Ipv4ServiceMap.AddOrUpdate(hostsMap.Key, _localIpRecords!, (_, _) => _localIpRecords!);
-                }
-                else
-                {
-                    Ipv4ServiceMap.AddOrUpdate(hostsMap.Key, ipRecords, (_, _) => ipRecords);
-                }
+                Ipv4ServiceMap.AddOrUpdate(hostsMap.Key, ipRecords, (_, _) => ipRecords);
 
                 // Backup current IPv6 mapping if exists
                 if (Ipv6ServiceMap.TryGetValue(hostsMap.Key, out var v6))
@@ -416,7 +408,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         var localIpBytes = localIpAddr.GetAddressBytes();
         _localIpRecords = [new ResourceRecord { Data = localIpBytes, TTL = 100, QueryClass = 1, QueryType = QueryType.A }];
 
-        byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null, epicIp = null;
+        byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null;
         var ipMap = new List<(string host, Func<string?> get, Action<string> set, Action<byte[]?> setBytes)>
         {
             ("assets2.xboxlive.cn", () => serviceViewModel.XboxCn1Ip, val => serviceViewModel.XboxCn1Ip = val, val => xboxCn1Ip = val),
@@ -425,9 +417,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             ("gst.prod.dl.playstation.net", () => serviceViewModel.PsIp, val => serviceViewModel.PsIp = val, val => psIp = val),
             ("atum.hac.lp1.d4c.nintendo.net", () => serviceViewModel.NsIp, val => serviceViewModel.NsIp = val, val => nsIp = val),
             ("origin-a.akamaihd.net", () => serviceViewModel.EaIp, val => serviceViewModel.EaIp = val, val => eaIp = val),
-            ("blzddist1-a.akamaihd.net", () => serviceViewModel.BattleIp, val => serviceViewModel.BattleIp = val, val => battleIp = val),
-            (isSimplifiedChinese && serviceViewModel.IsHttpServiceEnabled ? "epicgames-download1-1251447533.file.myqcloud.com" : "epicgames-download1.akamaized.net",
-                () => serviceViewModel.EpicIp, val => serviceViewModel.EpicIp = val, val => epicIp = val),
+            ("blzddist1-a.akamaihd.net", () => serviceViewModel.BattleIp, val => serviceViewModel.BattleIp = val, val => battleIp = val)
         };
         if (isSimplifiedChinese)
         {
@@ -455,9 +445,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             if (string.IsNullOrEmpty(ip) && resolved is not null)
                 set(resolved);
         }).ToArray();
-        var epicTask = IpGeoHelper.IsMainlandChinaAsync(serviceViewModel.EpicIp);
-        await Task.WhenAll(ipResolveTasks.Concat([epicTask]));
-        var isEpicMainlandChina = epicTask.Result;
+        await Task.WhenAll(ipResolveTasks);
 
         Ipv4ServiceMap.Clear();
         Ipv6ServiceMap.Clear();
@@ -470,7 +458,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         AddDnsMappings("Ns", nsIp, _localIpRecords, EmptyIpRecords);
         AddDnsMappings("Ea", eaIp, _localIpRecords, EmptyIpRecords);
         AddDnsMappings("Battle", battleIp, _localIpRecords, EmptyIpRecords);
-        AddDnsMappings("Epic", epicIp, _localIpRecords, EmptyIpRecords, isEpicMainlandChina);
 
         if (serviceViewModel.IsSetLocalDnsEnabled)
         {
@@ -587,7 +574,10 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         // Windows / macOS
         if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
         {
-            return adapter.GetIPProperties()
+            return NetworkInterface
+                .GetAllNetworkInterfaces()
+                .FirstOrDefault(x => x.Id == adapter.Id)?
+                .GetIPProperties()
                 .DnsAddresses.FirstOrDefault(dns =>
                     dns.AddressFamily == AddressFamily.InterNetwork &&
                     !dns.Equals(localIpAddr) &&
@@ -905,56 +895,26 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         var ipv4Records = isV4 ? ipRecords : emptyIpRecords;
         var ipv6Records = isV4 ? emptyIpRecords : ipRecords;
 
-        switch (ruleKey)
+        foreach (var hostname in rule.Hosts)
         {
-            case "Epic":
-                if (serviceViewModel.IsHttpServiceEnabled && isXboxGameDownloadLinksShownOrMainlandChina)
+            if (serviceViewModel.IsHttpServiceEnabled && isXboxGameDownloadLinksShownOrMainlandChina)
+            {
+                if (isSimplifiedChinese)
                 {
-                    foreach (var hostname in rule.Hosts)
-                        AddMapping(hostname, localIpRecords, emptyIpRecords);
-                    if (DnsMappingGenerator.HostRules.TryGetValue("EpicCn", out var epicCnRule))
-                    {
-                        foreach (var hostname in epicCnRule.Hosts)
-                            AddMapping(hostname, ipv4Records, ipv6Records);
-                    }
+                    AddMapping(hostname, localIpRecords, emptyIpRecords);
                 }
                 else
                 {
-                    foreach (var hostname in rule.Hosts)
+                    if (hostname.Contains('2'))
                         AddMapping(hostname, ipv4Records, ipv6Records);
-                    if (serviceViewModel.IsHttpServiceEnabled)
-                    {
-                        if (DnsMappingGenerator.HostRules.TryGetValue("EpicCn", out var epicCnRule))
-                        {
-                            foreach (var hostname in epicCnRule.Hosts)
-                                AddMapping(hostname, localIpRecords, emptyIpRecords);
-                        }
-                    }
-                }
-                break;
-            default:
-                foreach (var hostname in rule.Hosts)
-                {
-                    if (serviceViewModel.IsHttpServiceEnabled && isXboxGameDownloadLinksShownOrMainlandChina)
-                    {
-                        if (isSimplifiedChinese)
-                        {
-                            AddMapping(hostname, localIpRecords, emptyIpRecords);
-                        }
-                        else
-                        {
-                            if (hostname.Contains('2'))
-                                AddMapping(hostname, ipv4Records, ipv6Records);
-                            else
-                                AddMapping(hostname, localIpRecords, emptyIpRecords);
-                        }
-                    }
                     else
-                    {
-                        AddMapping(hostname, ipv4Records, ipv6Records);
-                    }
+                        AddMapping(hostname, localIpRecords, emptyIpRecords);
                 }
-                break;
+            }
+            else
+            {
+                AddMapping(hostname, ipv4Records, ipv6Records);
+            }
         }
 
         if (serviceViewModel.IsHttpServiceEnabled)

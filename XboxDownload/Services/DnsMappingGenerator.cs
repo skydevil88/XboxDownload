@@ -105,28 +105,6 @@ public static class DnsMappingGenerator
             [
                 "level3.ssl.blizzard.com"
             ]
-        ),
-        ["Epic"] = (
-            "Epic Games",
-            [
-                "epicgames-download1.akamaized.net"
-            ],
-            [
-                "download.epicgames.com",
-                "egdownload.fastly-edge.com",
-                "fastly-download.epicgames.com",
-                "cloudflare.epicgamescdn.com"
-            ],
-            []
-        ),
-        ["EpicCn"] = (
-            "Epic Games (Tencent Cloud)",
-            [
-
-                "epicgames-download1-1251447533.file.myqcloud.com"
-            ],
-            [],
-            []
         )
     };
 
@@ -235,7 +213,7 @@ public static class DnsMappingGenerator
     private static string[] ResolveKeys(string key)
     {
         return key.StartsWith("Akamai")
-            ? ["XboxGlobal", "XboxApp", "Ps", "Ns", "Ea", "Battle", "Epic"]
+            ? ["XboxGlobal", "XboxApp", "Ps", "Ns", "Ea", "Battle"]
             : [key];
     }
 

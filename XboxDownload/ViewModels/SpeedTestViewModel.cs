@@ -460,11 +460,6 @@ public partial class SpeedTestViewModel : ViewModelBase
                 ServiceViewModel.FocusText($"{parameter}Ip");
                 mainWindowVm.SelectedTabIndex = tabIndex;
                 break;
-            case "Epic":
-                ServiceViewModel.EpicIp = ip;
-                ServiceViewModel.FocusText($"{parameter}Ip");
-                mainWindowVm.SelectedTabIndex = tabIndex;
-                break;
             case "Akamai":
                 var cdnVm = Ioc.Default.GetRequiredService<CdnViewModel>();
                 cdnVm.AkamaiCdnIp = ip;

@@ -11,10 +11,9 @@ s7mbrstream.scene7.com  # Game trailers
 *.hac.lp1.d4c.nintendo.net  # System updates, Content Servers (Switch 1)
 
 ####################### Epic #######################
-*.ak.epicgames.com
+epicgames-download1.akamaized.net
 cdn1.epicgames.com
 cdn2.epicgames.com
-shared-static-prod.epicgames.com
 
 ################## Ubisoft Connect ##################
 *.cdn.ubi.com
