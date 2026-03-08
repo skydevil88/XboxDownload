@@ -237,7 +237,7 @@
                                 IsEnabled="{Binding !IsSpeedTest}"
                                 Command="{Binding FilterByLocationCommand}"/>
 
-                        <ComboBox VerticalContentAlignment="Center" MinWidth="310"
+                        <ComboBox VerticalContentAlignment="Center" MinWidth="325"
                                   IsEnabled="{Binding IsImportEnabled}"
                                   ItemsSource="{Binding ImportOptions}"
                                   SelectedItem="{Binding SelectedImportOption}">

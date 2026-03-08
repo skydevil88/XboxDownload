@@ -10,6 +10,9 @@ s7mbrstream.scene7.com  # Game trailers
 *.lp1.d4c.srv.nintendo.net  # System updates, Content Servers (Switch 2)
 *.hac.lp1.d4c.nintendo.net  # System updates, Content Servers (Switch 1)
 
+##################### Riot Games ####################
+*.dyn.riotcdn.net
+
 ####################### Epic #######################
 epicgames-download1.akamaized.net
 cdn1.epicgames.com
@@ -18,9 +21,6 @@ cdn2.epicgames.com
 ################## Ubisoft Connect ##################
 *.cdn.ubi.com
 *.cdn.ubisoft.com
-
-##################### Riot Games ####################
-*.dyn.riotcdn.net
 
 ###################### Steam #######################
 *.akamai.steamstatic.com

@@ -585,8 +585,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         }
 
         // Linux
-        return await TryParseDnsCommand("nmcli", $"device show {adapter.Name}", "IP4.DNS")
-            ?? await TryParseDnsCommand("resolvectl", $"status {adapter.Name}", "DNS Servers");
+        return await TryParseDnsCommand("nmcli", $"device show \"{adapter.Name}\"", "IP4.DNS")
+            ?? await TryParseDnsCommand("resolvectl", $"status \"{adapter.Name}\"", "DNS Servers");
 
         async Task<IPAddress?> TryParseDnsCommand(string cmd, string args, string prefix)
         {

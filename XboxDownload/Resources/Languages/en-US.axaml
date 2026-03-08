@@ -454,7 +454,7 @@
     <x:String x:Key="Store.ViewAllDownloads">View All Related Downloads</x:String>
     <x:String x:Key="Store.FetchingDownloadLink">Fetching download link, please wait…</x:String>
     <x:String x:Key="Store.Expires">Expires: {0}</x:String>
-    <x:String x:Key="Store.UpdateAvailable">Update Available</x:String>
+    <x:String x:Key="Store.UpdateAvailable">Update available</x:String>
     <x:String x:Key="Store.InThisBundle">In This Bundle ({0})</x:String>
     <x:String x:Key="Store.InvalidUrlOrProductIdTitle">Invalid URL/ProductId</x:String>
     <x:String x:Key="Store.InvalidUrlOrProductIdMessage">Please enter a valid URL/ProductId.</x:String>

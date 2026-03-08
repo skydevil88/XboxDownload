@@ -74,7 +74,7 @@
                               SelectionChanged="OnGamePass1SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent.Bounds.Width}"/>
+                                <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent[ListBoxItem].Bounds.Width}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -85,7 +85,7 @@
                               SelectionChanged="OnGamePass2SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent.Bounds.Width}"/>
+                                <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent[ListBoxItem].Bounds.Width}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -235,7 +235,7 @@
                                     <ContextMenu IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowContextMenu}">
                                         <MenuItem Header="{DynamicResource Store.CopyGlobalDownloadLink}"
                                                   Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
-                                                  CommandParameter="Globa"/>
+                                                  CommandParameter="Global"/>
                                         <MenuItem Header="{DynamicResource Store.CopyCnDownloadLink}" Foreground="{DynamicResource Green}"
                                                   IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowGameCnMenu}"
                                                   Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"

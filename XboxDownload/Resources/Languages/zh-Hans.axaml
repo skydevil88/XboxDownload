@@ -221,7 +221,7 @@
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForNs">指定 Nintendo Switch 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForEa">指定 EA 下载 IP</x:String>
     <x:String x:Key="SpeedTest.MenuItem.CustomIpForBattle">指定 Battle.net 下载 IP</x:String>
-    <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">指定 Akamai CDN IP</x:String>
+    <x:String x:Key="SpeedTest.MenuItem.CustomIpForAkamaiCdn">指定 Akamai CDN IP（Riot Games、Rockstar 等）</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFile">写入系统 hosts 文件（可选操作，普通用户建议跳过）</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessful">写入成功</x:String>
     <x:String x:Key="SpeedTest.MenuItem.WriteToSystemHostsFileSuccessfulMsg">已成功将以下 {0} 行规则写入系统 hosts 文件：</x:String>
@@ -257,7 +257,7 @@
 
     <x:String x:Key="SpeedTest.ImportIp.Select.Display">请选择导入 IP</x:String>
     <x:String x:Key="SpeedTest.ImportIp.Select.Hint">请关闭加速器、代理软件再开始测速，国内IP一般只需测本省IP，可以使用搜索功能查找；下载速度换算公式：1 MB/s = 8 Mbps。</x:String>
-    <x:String x:Key="SpeedTest.ImportIp.Akamai.Display">1. Akamai (NS、EA 、战网、Epic、育碧)</x:String>
+    <x:String x:Key="SpeedTest.ImportIp.Akamai.Display">1. Akamai (NS、EA 、战网、拳头游戏、R星)</x:String>
     <x:String x:Key="SpeedTest.ImportIp.Akamai.Hint">包括 Xbox、PS、NS、EA、战网、Epic、育碧、Riot Games、Rockstar、Spotify 等&#x0a;其它使用了 Akamai CDN 服务的域名，大部分都可以在 'CDN' 标签页自行添加来使用。</x:String>
     <x:String x:Key="SpeedTest.ImportIp.AkamaiV2.Display">2. Akamai (优选 IP)</x:String>
     <x:String x:Key="SpeedTest.ImportIp.AkamaiV2.Hint">从 Akamai 的 IP 列表中筛选出来，下载速度快的 IP 地址。</x:String>

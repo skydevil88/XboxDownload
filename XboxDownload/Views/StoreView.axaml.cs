@@ -78,7 +78,7 @@ public partial class StoreView : UserControl
         e.Handled = true;
     }
 
-    private void ResultListBox_OnTapped(object? sender, RoutedEventArgs e)
+    private void ResultListBox_OnTapped(object? sender, TappedEventArgs e)
     {
         if (ResultListBox.SelectedItem is not StoreSearchResult selected ||
             DataContext is not StoreViewModel vm) return;
@@ -90,7 +90,6 @@ public partial class StoreView : UserControl
                 QueryButton.Focus();
             }, DispatcherPriority.Input);
         }
-        //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{selected.ProductId}";
         vm.QueryUrl = $"https://apps.microsoft.com/detail/{selected.ProductId}";
         QueryButton.Command?.Execute(null);
     }
@@ -108,7 +107,6 @@ public partial class StoreView : UserControl
                 QueryButton.Focus();
             }, DispatcherPriority.Input);
         }
-        //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{selected.ProductId}";
         vm.QueryUrl = $"https://apps.microsoft.com/detail/{selected.ProductId}";
         QueryButton.Command?.Execute(null);
         e.Handled = true;
