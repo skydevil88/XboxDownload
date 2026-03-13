@@ -8,8 +8,8 @@ public abstract class MarketBuilder
     public static IEnumerable<Market> BuildMarket() =>
     [
         new Market { Region = ResourceHelper.GetString("Store.Region.Argentina"), Language = "es-AR" },
-        new Market { Region = ResourceHelper.GetString("Store.Region.Austria"), Language = "de-AT" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Australia"), Language = "en-AU" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Austria"), Language = "de-AT" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Belgium"), Language = "nl-BE" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Brazil"), Language = "pt-BR" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Canada"), Language = "en-CA" },
@@ -25,7 +25,7 @@ public abstract class MarketBuilder
         new Market { Region = ResourceHelper.GetString("Store.Region.HongKongSar"), Language = "zh-HK" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Hungary"), Language = "hu-HU" },
         new Market { Region = ResourceHelper.GetString("Store.Region.India"), Language = "en-IN" },
-        new Market { Region = ResourceHelper.GetString("Store.Region.Ireland"), Language = "ar-AE" },
+        new Market { Region = ResourceHelper.GetString("Store.Region.Ireland"), Language = "en-IE" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Israel"), Language = "he-IL" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Italy"), Language = "it-IT" },
         new Market { Region = ResourceHelper.GetString("Store.Region.Japan"), Language = "ja-JP" },

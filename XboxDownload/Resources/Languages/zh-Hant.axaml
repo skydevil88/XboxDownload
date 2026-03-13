@@ -420,10 +420,10 @@
     
     <x:String x:Key="Store.MicrosoftStore">微軟商店</x:String>
     <x:String x:Key="Store.UrlProductId">連結/ProductID</x:String>
-    <x:String x:Key="Store.Query">查詢</x:String>
+    <x:String x:Key="Store.Submit">提交</x:String>
     <x:String x:Key="Store.Search">商店搜索</x:String>
     <x:String x:Key="Store.SearchWatermark">請輸入遊戲名稱（建議使用英文）</x:String>
-    <x:String x:Key="Store.Information">信息</x:String>
+    <x:String x:Key="Store.Information">資訊</x:String>
     <x:String x:Key="Store.LoadingMostPopularGames">正在載入最受歡迎 XGP 遊戲…</x:String>
     <x:String x:Key="Store.LoadingRecentlyAddedGames">正在載入近期新增 XGP 遊戲…</x:String>
     <x:String x:Key="Store.FailedToLoadPopularGames">無法載入最受歡迎的 XGP 遊戲</x:String>
@@ -444,15 +444,15 @@
     <x:String x:Key="Store.QuickInstallation">快速安裝</x:String>
     <x:String x:Key="Store.WebStore">網頁版商店</x:String>
     <x:String x:Key="Store.ConsoleGuide">主機安裝教程</x:String>
-    <x:String x:Key="Store.PlatformName">播放平臺</x:String>
+    <x:String x:Key="Store.PlatformName">平臺</x:String>
     <x:String x:Key="Store.Market">商店</x:String>
     <x:String x:Key="Store.Size">容量</x:String>
     <x:String x:Key="Store.DownloadLink">下載連結 (右鍵複製)</x:String>
     <x:String x:Key="Store.CopyGlobalDownloadLink">複製下載連結</x:String>
     <x:String x:Key="Store.CopyCnDownloadLink">複製下載連結(.cn 域名)</x:String>
     <x:String x:Key="Store.CopyAzureDownloadLink">複製下載連結(Azure)</x:String>
-    <x:String x:Key="Store.ViewAllDownloads">查看運行庫等所有相關下載</x:String>
-    <x:String x:Key="Store.FetchingDownloadLink">正在獲取下載連結，請稍候…</x:String>
+    <x:String x:Key="Store.ShowAllDownloadFiles">顯示所有下載檔案</x:String>
+    <x:String x:Key="Store.GettingDownloadLink">正在獲取下載連結，請稍候…</x:String>
     <x:String x:Key="Store.Expires">有效期：{0}</x:String>
     <x:String x:Key="Store.UpdateAvailable">已有新版本</x:String>
     <x:String x:Key="Store.InThisBundle">在此搭售方案中 ({0})</x:String>

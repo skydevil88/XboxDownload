@@ -420,7 +420,7 @@
     
     <x:String x:Key="Store.MicrosoftStore">Microsoft Store</x:String>
     <x:String x:Key="Store.UrlProductId">URL/ProductID</x:String>
-    <x:String x:Key="Store.Query">Query</x:String>
+    <x:String x:Key="Store.Submit">Submit</x:String>
     <x:String x:Key="Store.Search">Search</x:String>
     <x:String x:Key="Store.SearchWatermark">Enter game name</x:String>
     <x:String x:Key="Store.Information">Information</x:String>
@@ -444,15 +444,15 @@
     <x:String x:Key="Store.QuickInstallation">Quick Installation</x:String>
     <x:String x:Key="Store.WebStore">Web Store</x:String>
     <x:String x:Key="Store.ConsoleGuide">Console Guide</x:String>
-    <x:String x:Key="Store.PlatformName">Platform Name</x:String>
+    <x:String x:Key="Store.PlatformName">Platform</x:String>
     <x:String x:Key="Store.Market">Market</x:String>
     <x:String x:Key="Store.Size">Size</x:String>
-    <x:String x:Key="Store.DownloadLink">Download Link (Right-click to Copy)</x:String>
-    <x:String x:Key="Store.CopyGlobalDownloadLink">Copy Download Link</x:String>
-    <x:String x:Key="Store.CopyCnDownloadLink">Copy Download Link (CN Domain)</x:String>
-    <x:String x:Key="Store.CopyAzureDownloadLink">Copy Download Link (Azure)</x:String>
-    <x:String x:Key="Store.ViewAllDownloads">View All Related Downloads</x:String>
-    <x:String x:Key="Store.FetchingDownloadLink">Fetching download link, please wait…</x:String>
+    <x:String x:Key="Store.DownloadLink">Download Link (Right-click to copy)</x:String>
+    <x:String x:Key="Store.CopyGlobalDownloadLink">Copy download link</x:String>
+    <x:String x:Key="Store.CopyCnDownloadLink">Copy download link (CN Domain)</x:String>
+    <x:String x:Key="Store.CopyAzureDownloadLink">Copy download link (Azure)</x:String>
+    <x:String x:Key="Store.ShowAllDownloadFiles">Show all download files</x:String>
+    <x:String x:Key="Store.GettingDownloadLink">Getting download link, please wait…</x:String>
     <x:String x:Key="Store.Expires">Expires: {0}</x:String>
     <x:String x:Key="Store.UpdateAvailable">Update available</x:String>
     <x:String x:Key="Store.InThisBundle">In This Bundle ({0})</x:String>

@@ -29,7 +29,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button x:Name="QueryButton" Grid.Row="0" Grid.Column="3" MinWidth="100" HorizontalContentAlignment="Center" Content="{DynamicResource Store.Query}"
+                <Button x:Name="QueryButton" Grid.Row="0" Grid.Column="3" MinWidth="100" HorizontalContentAlignment="Center" Content="{DynamicResource Store.Submit}"
                         Command="{Binding QueryCommand}" />
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Store.Search}"/>
@@ -244,7 +244,7 @@
                                                   IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAzureMenu}"
                                                   Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
                                                   CommandParameter="Azure"/>
-                                        <MenuItem Header="{DynamicResource Store.ViewAllDownloads}"
+                                        <MenuItem Header="{DynamicResource Store.ShowAllDownloadFiles}"
                                                   IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAllAppMenu}"
                                                   Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).GetAllAppPackageCommand}"/>
                                     </ContextMenu>

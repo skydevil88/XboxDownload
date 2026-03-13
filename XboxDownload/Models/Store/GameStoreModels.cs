@@ -160,7 +160,7 @@ public partial class PlatformDownloadItem : ObservableObject
     public long ExpectedSize { get; init; }
 
     [ObservableProperty]
-    private string _display = ResourceHelper.GetString("Store.FetchingDownloadLink");
+    private string _display = ResourceHelper.GetString("Store.GettingDownloadLink");
 
     [ObservableProperty]
     private string _url = "";

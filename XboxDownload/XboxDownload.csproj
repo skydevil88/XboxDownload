@@ -6,7 +6,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <FileVersion>3.0.0.48</FileVersion>
+        <FileVersion>3.0.0.49</FileVersion>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 
@@ -35,11 +35,11 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="DnsClient" Version="1.8.0" />
-        <PackageReference Include="DynamicData" Version="9.4.1" />
+        <PackageReference Include="DynamicData" Version="9.4.31" />
         <PackageReference Include="MessageBox.Avalonia" Version="3.3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.3" />
-        <PackageReference Include="System.Management" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.4" />
+        <PackageReference Include="System.Management" Version="10.0.4" />
         <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
     </ItemGroup>
 </Project>

@@ -420,7 +420,7 @@
     
     <x:String x:Key="Store.MicrosoftStore">微软商店</x:String>
     <x:String x:Key="Store.UrlProductId">链接/ProductID</x:String>
-    <x:String x:Key="Store.Query">查询</x:String>
+    <x:String x:Key="Store.Submit">提交</x:String>
     <x:String x:Key="Store.Search">商店搜索</x:String>
     <x:String x:Key="Store.SearchWatermark">请输入游戏名称（建议使用英文）</x:String>
     <x:String x:Key="Store.Information">信息</x:String>
@@ -444,15 +444,15 @@
     <x:String x:Key="Store.QuickInstallation">快速安装</x:String>
     <x:String x:Key="Store.WebStore">网页版商店</x:String>
     <x:String x:Key="Store.ConsoleGuide">主机安装教程</x:String>
-    <x:String x:Key="Store.PlatformName">播放平台</x:String>
+    <x:String x:Key="Store.PlatformName">平台</x:String>
     <x:String x:Key="Store.Market">商店</x:String>
     <x:String x:Key="Store.Size">容量</x:String>
     <x:String x:Key="Store.DownloadLink">下载链接 (右键复制)</x:String>
     <x:String x:Key="Store.CopyGlobalDownloadLink">复制下载链接(.com 域名)</x:String>
     <x:String x:Key="Store.CopyCnDownloadLink">复制下载链接(.cn 域名)</x:String>
     <x:String x:Key="Store.CopyAzureDownloadLink">复制下载链接(Azure)</x:String>
-    <x:String x:Key="Store.ViewAllDownloads">查看运行库等所有相关下载</x:String>
-    <x:String x:Key="Store.FetchingDownloadLink">正在获取下载链接，请稍候…</x:String>
+    <x:String x:Key="Store.ShowAllDownloadFiles">显示所有下载文件</x:String>
+    <x:String x:Key="Store.GettingDownloadLink">正在获取下载链接，请稍候…</x:String>
     <x:String x:Key="Store.Expires">有效期：{0}</x:String>
     <x:String x:Key="Store.UpdateAvailable">已有新版本</x:String>
     <x:String x:Key="Store.InThisBundle">此捆绑包内容 ({0})</x:String>
