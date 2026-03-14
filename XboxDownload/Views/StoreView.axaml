@@ -25,12 +25,12 @@
                           SelectedItem="{Binding SelectedMarket}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Region}" />
+                            <TextBlock Text="{Binding Name}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button x:Name="QueryButton" Grid.Row="0" Grid.Column="3" MinWidth="100" HorizontalContentAlignment="Center" Content="{DynamicResource Store.Submit}"
-                        Command="{Binding QueryCommand}" />
+                <Button x:Name="SubmitButton" Grid.Row="0" Grid.Column="3" MinWidth="100" HorizontalContentAlignment="Center" Content="{DynamicResource Store.Submit}"
+                        Command="{Binding SubmitCommand}" />
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Store.Search}"/>
                 <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ColumnDefinitions="*,1.5*,1.5*" ColumnSpacing="5">

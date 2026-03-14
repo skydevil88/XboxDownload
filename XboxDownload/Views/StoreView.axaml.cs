@@ -72,9 +72,9 @@ public partial class StoreView : UserControl
         if (e.Key != Key.Enter) return;
         Dispatcher.UIThread.Post(() =>
         {
-            QueryButton.Focus();
+            SubmitButton.Focus();
         }, DispatcherPriority.Input);
-        QueryButton.Command?.Execute(null);
+        SubmitButton.Command?.Execute(null);
         e.Handled = true;
     }
 
@@ -87,11 +87,11 @@ public partial class StoreView : UserControl
             f.Hide();
             Dispatcher.UIThread.Post(() =>
             {
-                QueryButton.Focus();
+                SubmitButton.Focus();
             }, DispatcherPriority.Input);
         }
         vm.QueryUrl = $"https://apps.microsoft.com/detail/{selected.ProductId}";
-        QueryButton.Command?.Execute(null);
+        SubmitButton.Command?.Execute(null);
     }
 
     private void ResultListBox_OnKeyDown(object? sender, KeyEventArgs e)
@@ -104,11 +104,11 @@ public partial class StoreView : UserControl
             f.Hide();
             Dispatcher.UIThread.Post(() =>
             {
-                QueryButton.Focus();
+                SubmitButton.Focus();
             }, DispatcherPriority.Input);
         }
         vm.QueryUrl = $"https://apps.microsoft.com/detail/{selected.ProductId}";
-        QueryButton.Command?.Execute(null);
+        SubmitButton.Command?.Execute(null);
         e.Handled = true;
     }
 
@@ -183,7 +183,7 @@ public partial class StoreView : UserControl
         
         //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{vm.SelectedGamePass1.ProductId}";
         vm.QueryUrl = $"https://apps.microsoft.com/detail/{vm.SelectedGamePass1.ProductId}";
-        QueryButton.Command?.Execute(null);
+        SubmitButton.Command?.Execute(null);
     }
 
     private int? _selectedXgp2;
@@ -203,7 +203,7 @@ public partial class StoreView : UserControl
         
         //vm.QueryUrl = $"https://www.microsoft.com/store/productid/{vm.SelectedGamePass2.ProductId}";
         vm.QueryUrl = $"https://apps.microsoft.com/detail/{vm.SelectedGamePass2.ProductId}";
-        QueryButton.Command?.Execute(null);
+        SubmitButton.Command?.Execute(null);
     }
     
     private void OnProductSelectionChanged(object? sender, SelectionChangedEventArgs e)

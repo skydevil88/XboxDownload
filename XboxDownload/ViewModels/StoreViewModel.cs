@@ -95,8 +95,8 @@ public partial class StoreViewModel : ObservableObject
 
     partial void OnSelectedMarketChanged(Market? value)
     {
-        if (value == null || App.Settings.StoreRegion == value.Language) return;
-        App.Settings.StoreRegion = value.Language;
+        if (value == null || App.Settings.StoreRegion == value.Code) return;
+        App.Settings.StoreRegion = value.Code;
         SettingsManager.Save(App.Settings);
 
         NextXgpUpdated = DateTime.MinValue;
@@ -108,7 +108,7 @@ public partial class StoreViewModel : ObservableObject
     private void ReloadMarketList()
     {
         var sorted = MarketBuilder.BuildMarket()
-            .OrderBy(m => m.Region, StringComparer.CurrentCultureIgnoreCase);
+            .OrderBy(m => m.Name, StringComparer.CurrentCultureIgnoreCase);
 
         Markets.Clear();
         foreach (var item in sorted)
@@ -126,9 +126,9 @@ public partial class StoreViewModel : ObservableObject
                 _ => raw
             };
         }
-        SelectedMarket = Markets.FirstOrDefault(m => m.Language == storeLanguage)
-                         ?? Markets.FirstOrDefault(m => m.Language.StartsWith(storeLanguage[..2]))
-                         ?? Markets.FirstOrDefault(m => m.Language == "en-US");
+        SelectedMarket = Markets.FirstOrDefault(m => m.Code == storeLanguage)
+                         ?? Markets.FirstOrDefault(m => m.Code.StartsWith(storeLanguage[..2]))
+                         ?? Markets.FirstOrDefault(m => m.Code == "en-US");
     }
 
     private CancellationTokenSource? _xgpToken;
@@ -146,163 +146,84 @@ public partial class StoreViewModel : ObservableObject
 
     private async Task ReloadGamePassListAsync(CancellationToken token)
     {
-        var isAllSucceeded = true;
+        SetGamePassLoadingState();
 
-        GamePass1Mappings.Clear();
-        GamePass2Mappings.Clear();
-        GamePass1Mappings.Add(new GamePassEntry { Title = ResourceHelper.GetString("Store.LoadingMostPopularGames") });
-        GamePass2Mappings.Add(new GamePassEntry { Title = ResourceHelper.GetString("Store.LoadingRecentlyAddedGames") });
+        try
+        {
+            var url = $"Game/GamePassList?language={SelectedMarket?.Code}";
+            var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token, name: HttpClientNames.XboxDownload);
+
+            if (string.IsNullOrEmpty(responseString)) throw new Exception("Empty response");
+
+            using var doc = JsonDocument.Parse(responseString);
+            var root = doc.RootElement;
+
+            var list1 = new List<GamePassEntry>();
+            var list2 = new List<GamePassEntry>();
+
+            PopulateList(list1, root.GetProperty("bigIds1"), "Store.MostPopularConsoleGames");
+            PopulateList(list1, root.GetProperty("bigIds2"), "Store.MostPopularPcGames");
+
+            PopulateList(list2, root.GetProperty("bigIds3"), "Store.RecentlyAddedConsoleGames");
+            PopulateList(list2, root.GetProperty("bigIds4"), "Store.RecentlyAddedPcGames");
+
+            UpdateCollection(GamePass1Mappings, list1);
+            UpdateCollection(GamePass2Mappings, list2);
+
+            SelectedGamePass1 = GamePass1Mappings.FirstOrDefault();
+            SelectedGamePass2 = GamePass2Mappings.FirstOrDefault();
+
+            NextXgpUpdated = DateTime.UtcNow.AddHours(12);
+        }
+        catch
+        {
+            SetGamePassErrorState();
+            NextXgpUpdated = DateTime.MinValue;
+        }
+    }
+
+    private static void PopulateList(List<GamePassEntry> targetList, JsonElement arrayElement, string resourceKey)
+    {
+        if (arrayElement.ValueKind != JsonValueKind.Array) return;
+
+        targetList.Add(new GamePassEntry
+        {
+            Title = string.Format(ResourceHelper.GetString(resourceKey), arrayElement.GetArrayLength())
+        });
+
+        int index = 1;
+        foreach (var item in arrayElement.EnumerateArray())
+        {
+            targetList.Add(new GamePassEntry
+            {
+                Title = $"{index++}. {item[1].GetString()}",
+                ProductId = item[0].GetString() ?? string.Empty
+            });
+        }
+    }
+
+    private void SetGamePassLoadingState()
+    {
+        UpdateCollection(GamePass1Mappings, [new() { Title = ResourceHelper.GetString("Store.LoadingMostPopularGames") }]);
+        UpdateCollection(GamePass2Mappings, [new() { Title = ResourceHelper.GetString("Store.LoadingRecentlyAddedGames") }]);
         SelectedGamePass1 = GamePass1Mappings[0];
         SelectedGamePass2 = GamePass2Mappings[0];
+        SubmitCommand.Execute(null);
+    }
 
-        var gamePassInfoArray = new[,]
-        {
-            { ResourceHelper.GetString("Store.MostPopularConsoleGames"), "eab7757c-ff70-45af-bfa6-79d3cfb2bf81" },
-            { ResourceHelper.GetString("Store.MostPopularPcGames"), "a884932a-f02b-40c8-a903-a008c23b1df1" },
-            { ResourceHelper.GetString("Store.RecentlyAddedConsoleGames"), "f13cf6b4-57e6-4459-89df-6aec18cf0538" },
-            { ResourceHelper.GetString("Store.RecentlyAddedPcGames"), "163cdff5-442e-4957-97f5-1050a3546511" }
-        };
+    private void SetGamePassErrorState()
+    {
+        UpdateCollection(GamePass1Mappings, [new() { Title = ResourceHelper.GetString("Store.FailedToLoadPopularGames") }]);
+        UpdateCollection(GamePass2Mappings, [new() { Title = ResourceHelper.GetString("Store.FailedToLoadNewGames") }]);
+        SelectedGamePass1 = GamePass1Mappings[0];
+        SelectedGamePass2 = GamePass2Mappings[0];
+    }
 
-        ConcurrentDictionary<string, List<string>> gamePassDictionary = new();
-
-        var tasks = Enumerable.Range(0, gamePassInfoArray.GetLength(0))
-            .Select(async i =>
-            {
-                var sigId = gamePassInfoArray[i, 1];
-
-                var url = $"https://catalog.gamepass.com/sigls/v2?id={sigId}&market={SelectedMarket?.Code}";
-                var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token);
-                try
-                {
-                    using var doc = JsonDocument.Parse(responseString);
-                    var root = doc.RootElement;
-                    if (root.ValueKind == JsonValueKind.Array)
-                    {
-                        foreach (var element in root.EnumerateArray())
-                        {
-                            if (!element.TryGetProperty("id", out JsonElement idElement)) continue;
-                            var productId = idElement.GetString();
-                            if (string.IsNullOrEmpty(productId)) continue;
-
-                            var list = gamePassDictionary.GetOrAdd(sigId, _ => []);
-                            list.Add(productId);
-                        }
-                    }
-                }
-                catch
-                {
-                    isAllSucceeded = false;
-                }
-            });
-
-        await Task.WhenAll(tasks);
-
-        if (token.IsCancellationRequested) return;
-
-        var allProductIds = gamePassDictionary.Values
-            .SelectMany(list => list)
-            .Distinct().ToArray();
-
-        if (allProductIds.Length > 0)
-        {
-            var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={string.Join(',', allProductIds)}&market=US&languages={SelectedMarket?.Language}&MS-CV=DGU1mcuYo0WMMp+F.1";
-            var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token);
-            if (token.IsCancellationRequested) return;
-
-            ConcurrentDictionary<string, string> gameDictionary = new();
-            try
-            {
-                using var doc = JsonDocument.Parse(responseString);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("Products", out var products) && products.ValueKind == JsonValueKind.Array)
-                {
-                    foreach (var product in products.EnumerateArray())
-                    {
-                        var productId = product.GetProperty("ProductId").GetString();
-
-                        var title = product
-                            .GetProperty("LocalizedProperties")[0]
-                            .GetProperty("ProductTitle")
-                            .GetString();
-
-                        if (string.IsNullOrEmpty(productId) || string.IsNullOrEmpty(title)) continue;
-                        gameDictionary[productId] = title;
-                    }
-                }
-            }
-            catch
-            {
-                isAllSucceeded = false;
-            }
-
-            GamePass1Mappings.Clear();
-            GamePass2Mappings.Clear();
-
-            for (var i = 0; i < gamePassInfoArray.GetLength(0); i++)
-            {
-                var title = gamePassInfoArray[i, 0];
-                var sigId = gamePassInfoArray[i, 1];
-
-                if (i <= 1)
-                {
-                    if (gamePassDictionary.TryGetValue(sigId, out var list))
-                    {
-                        GamePass1Mappings.Add(new GamePassEntry { Title = string.Format(title, list.Count), SigId = sigId });
-                        var no = 0;
-                        foreach (var productId in list)
-                        {
-                            no++;
-                            if (gameDictionary.TryGetValue(productId, out var value))
-                            {
-                                GamePass1Mappings.Add(new GamePassEntry { Title = $"{no}. {value}", ProductId = productId });
-                            }
-                        }
-                    }
-                    else
-                    {
-                        isAllSucceeded = false;
-                        GamePass1Mappings.Add(new GamePassEntry { Title = string.Format(title, 0) });
-                    }
-                }
-                else
-                {
-                    if (gamePassDictionary.TryGetValue(sigId, out var list))
-                    {
-                        GamePass2Mappings.Add(new GamePassEntry { Title = string.Format(title, list.Count), SigId = sigId });
-                        var no = 0;
-                        foreach (var productId in list)
-                        {
-                            no++;
-                            if (gameDictionary.TryGetValue(productId, out var value))
-                            {
-                                GamePass2Mappings.Add(new GamePassEntry { Title = $"{no}. {value}", ProductId = productId });
-                            }
-                        }
-                    }
-                    else
-                    {
-                        isAllSucceeded = false;
-                        GamePass2Mappings.Add(new GamePassEntry { Title = string.Format(title, 0) });
-                    }
-                }
-            }
-
-            if (GamePass1Mappings.Any()) SelectedGamePass1 = GamePass1Mappings[0];
-            if (GamePass2Mappings.Any()) SelectedGamePass2 = GamePass2Mappings[0];
-        }
-        else
-        {
-            isAllSucceeded = false;
-            GamePass1Mappings.Clear();
-            GamePass2Mappings.Clear();
-            GamePass1Mappings.Add(new GamePassEntry { Title = ResourceHelper.GetString("Store.FailedToLoadPopularGames") });
-            GamePass2Mappings.Add(new GamePassEntry { Title = ResourceHelper.GetString("Store.FailedToLoadNewGames") });
-            SelectedGamePass1 = GamePass1Mappings[0];
-            SelectedGamePass2 = GamePass2Mappings[0];
-        }
-
-        NextXgpUpdated = isAllSucceeded ? DateTime.UtcNow.AddHours(12) : DateTime.MinValue;
+    private static void UpdateCollection(ObservableCollection<GamePassEntry> collection, IEnumerable<GamePassEntry> items)
+    {
+        collection.Clear();
+        foreach (var item in items)
+            collection.Add(item);
     }
 
     [ObservableProperty]
@@ -336,7 +257,7 @@ public partial class StoreViewModel : ObservableObject
 
     private async Task PerformSearchAsync(string query, CancellationToken token)
     {
-        var requestUrl = "https://www.microsoft.com/msstoreapiprod/api/autosuggest?market=" + SelectedMarket?.Language + "&clientId=7F27B536-CF6B-4C65-8638-A0F8CBDFCA65&sources=Microsoft-Terms,Iris-Products,xSearch-Products&filter=+ClientType:StoreWeb&counts=5,1,5&query=" + HttpUtility.UrlEncode(query);
+        var requestUrl = "https://www.microsoft.com/msstoreapiprod/api/autosuggest?market=" + SelectedMarket?.Code + "&clientId=7F27B536-CF6B-4C65-8638-A0F8CBDFCA65&sources=Microsoft-Terms,Iris-Products,xSearch-Products&filter=+ClientType:StoreWeb&counts=5,1,5&query=" + HttpUtility.UrlEncode(query);
         var responseString = await HttpClientHelper.GetStringContentAsync(requestUrl, token: token);
         if (string.IsNullOrWhiteSpace(responseString)) return;
 
@@ -392,7 +313,7 @@ public partial class StoreViewModel : ObservableObject
     private CancellationTokenSource? _ctsQuery;
 
     [RelayCommand]
-    private async Task QueryAsync()
+    private async Task SubmitAsync()
     {
         if (string.IsNullOrWhiteSpace(QueryUrl)) return;
 
@@ -424,7 +345,7 @@ public partial class StoreViewModel : ObservableObject
         PlatformDownloadInfo.Clear();
 
         _currentProductMarket = SelectedMarket;
-        var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={productId}&market={_currentProductMarket?.Code}&languages={_currentProductMarket?.Language},neutral&MS-CV=DGU1mcuYo0WMMp+F.1";
+        var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={productId}&market={_currentProductMarket?.Region}&languages={_currentProductMarket?.Code},neutral&MS-CV=DGU1mcuYo0WMMp+F.1";
         var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token);
         if (string.IsNullOrEmpty(responseString.Trim()))
         {
@@ -555,7 +476,7 @@ public partial class StoreViewModel : ObservableObject
                                                     Key = key,
                                                     ContentId = contentId,
                                                     Category = "Game",
-                                                    Market = _currentProductMarket!.Region,
+                                                    Market = _currentProductMarket!.Name,
                                                     FileSize = package.MaxDownloadSizeInBytes,
                                                     ExpectedSize = package.MaxDownloadSizeInBytes
                                                 };
@@ -593,7 +514,7 @@ public partial class StoreViewModel : ObservableObject
                                                     Key = key,
                                                     ContentId = contentId,
                                                     Category = "Game",
-                                                    Market = _currentProductMarket!.Region,
+                                                    Market = _currentProductMarket!.Name,
                                                     FileSize = package.MaxDownloadSizeInBytes,
                                                     ExpectedSize = package.MaxDownloadSizeInBytes
                                                 };
@@ -637,7 +558,7 @@ public partial class StoreViewModel : ObservableObject
                                                         Key = key,
                                                         ContentId = contentId,
                                                         Category = "App",
-                                                        Market = _currentProductMarket!.Region,
+                                                        Market = _currentProductMarket!.Name,
                                                         FileSize = package.MaxDownloadSizeInBytes,
                                                         WuCategoryId = wuCategoryId,
                                                         AppVersion = version,
@@ -671,7 +592,7 @@ public partial class StoreViewModel : ObservableObject
                                                     Key = key,
                                                     ContentId = contentId,
                                                     Category = "Game",
-                                                    Market = _currentProductMarket!.Region,
+                                                    Market = _currentProductMarket!.Name,
                                                     FileSize = package.MaxDownloadSizeInBytes,
                                                     ExpectedSize = package.MaxDownloadSizeInBytes
                                                 };
@@ -719,7 +640,7 @@ public partial class StoreViewModel : ObservableObject
                                                         Key = key,
                                                         ContentId = contentId,
                                                         Category = "App",
-                                                        Market = _currentProductMarket!.Region,
+                                                        Market = _currentProductMarket!.Name,
                                                         FileSize = package.MaxDownloadSizeInBytes,
                                                         WuCategoryId = wuCategoryId,
                                                         AppVersion = version,
@@ -845,7 +766,7 @@ public partial class StoreViewModel : ObservableObject
 
                 tasks.Add(Task.Run(async () =>
                 {
-                    var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={string.Join(',', bundledId.ToArray())}&market={_currentProductMarket?.Code}&languages={_currentProductMarket?.Language},neutral&MS-CV=DGU1mcuYo0WMMp+F.1";
+                    var url = $"https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds={string.Join(',', bundledId.ToArray())}&market={_currentProductMarket?.Region}&languages={_currentProductMarket?.Code},neutral&MS-CV=DGU1mcuYo0WMMp+F.1";
                     var responseString = await HttpClientHelper.GetStringContentAsync(url, token: token);
                     if (!string.IsNullOrWhiteSpace(responseString))
                     {
@@ -1082,7 +1003,7 @@ public partial class StoreViewModel : ObservableObject
         {
             "Store" => $"ms-windows-store://pdp/?productid={productId}",
             "Xbox" => $"msxbox://game/?productId={productId}",
-            _ => $"https://www.xbox.com/{_currentProductMarket?.Language}/games/store/_/{productId}"
+            _ => $"https://www.xbox.com/{_currentProductMarket?.Code}/games/store/_/{productId}"
         };
         await HttpClientHelper.OpenUrlAsync(url);
     }

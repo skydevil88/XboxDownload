@@ -82,12 +82,12 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
         // 合并市场并过滤
         var filteredMarkets = _storeViewModel.Markets
             .Union(MarketBuilder.BuildMarket2())
-            .Where(m => !excludedLanguages.Contains(m.Language))
+            .Where(m => !excludedLanguages.Contains(m.Code))
             .ToList();
 
         // 构造 MarketMappingEntry 列表
         var marketMappings = filteredMarkets
-            .Select(m => new MarketMappingEntry(m.Region, m.Language))
+            .Select(m => new MarketMappingEntry(m.Name, m.Code))
             .ToList();
 
         // 添加额外的区域项

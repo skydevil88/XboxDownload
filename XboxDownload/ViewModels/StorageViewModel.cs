@@ -364,7 +364,7 @@ public partial class StorageViewModel : ObservableObject
         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
         mainWindowVm.SelectedTabIndex = 5;
 
-        await storeVm.QueryCommand.ExecuteAsync(null);
+        await storeVm.SubmitCommand.ExecuteAsync(null);
     }
 
     private static string TryExtractProductId2(byte[] productIdBytes)
