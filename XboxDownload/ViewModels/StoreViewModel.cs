@@ -454,7 +454,11 @@ public partial class StoreViewModel : ObservableObject
                 if (packages is { Count: > 0 })
                 {
                     var wuCategoryId = packages[0].FulfillmentData.WuCategoryId.ToLowerInvariant();
-                    GameLanguages = string.Join(", ", packages[0].Languages);
+                    var allLanguages = packages
+                        .SelectMany(p => p.Languages)
+                        .Distinct()
+                        .OrderBy(l => l);
+                    GameLanguages = string.Join(", ", allLanguages);
 
                     List<PlatformDownloadItem> platformDownloadList = [];
                     foreach (var package in packages)
