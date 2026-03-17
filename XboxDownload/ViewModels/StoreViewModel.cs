@@ -52,16 +52,16 @@ public partial class StoreViewModel : ObservableObject
 
         var gamePassInfoArray = new[,]
         {
-            { ResourceHelper.GetString("Store.MostPopularConsoleGames"), "eab7757c-ff70-45af-bfa6-79d3cfb2bf81" },
-            { ResourceHelper.GetString("Store.MostPopularPcGames"), "a884932a-f02b-40c8-a903-a008c23b1df1" },
-            { ResourceHelper.GetString("Store.RecentlyAddedConsoleGames"), "f13cf6b4-57e6-4459-89df-6aec18cf0538" },
-            { ResourceHelper.GetString("Store.RecentlyAddedPcGames"), "163cdff5-442e-4957-97f5-1050a3546511" }
+            { ResourceHelper.GetString("Store.MostPopularConsoleGames"), "Store.MostPopularConsoleGames" },
+            { ResourceHelper.GetString("Store.MostPopularPcGames"), "Store.MostPopularPcGames" },
+            { ResourceHelper.GetString("Store.RecentlyAddedConsoleGames"), "Store.RecentlyAddedConsoleGames" },
+            { ResourceHelper.GetString("Store.RecentlyAddedPcGames"), "Store.RecentlyAddedPcGames" }
         };
         for (var i = 0; i < gamePassInfoArray.GetLength(0); i++)
         {
             var xgp = i <= 1
-                ? GamePass1Mappings.FirstOrDefault(m => m.SigId == gamePassInfoArray[i, 1])
-                : GamePass2Mappings.FirstOrDefault(m => m.SigId == gamePassInfoArray[i, 1]);
+                ? GamePass1Mappings.FirstOrDefault(m => m.ResourceKey == gamePassInfoArray[i, 1])
+                : GamePass2Mappings.FirstOrDefault(m => m.ResourceKey == gamePassInfoArray[i, 1]);
             if (xgp == null) continue;
 
             var match = GetNumberRegex().Match(xgp.Title);
@@ -188,10 +188,11 @@ public partial class StoreViewModel : ObservableObject
 
         targetList.Add(new GamePassEntry
         {
-            Title = string.Format(ResourceHelper.GetString(resourceKey), arrayElement.GetArrayLength())
+            Title = string.Format(ResourceHelper.GetString(resourceKey), arrayElement.GetArrayLength()),
+            ResourceKey = resourceKey
         });
 
-        int index = 1;
+        var index = 1;
         foreach (var item in arrayElement.EnumerateArray())
         {
             targetList.Add(new GamePassEntry
@@ -204,8 +205,8 @@ public partial class StoreViewModel : ObservableObject
 
     private void SetGamePassLoadingState()
     {
-        UpdateCollection(GamePass1Mappings, [new() { Title = ResourceHelper.GetString("Store.LoadingMostPopularGames") }]);
-        UpdateCollection(GamePass2Mappings, [new() { Title = ResourceHelper.GetString("Store.LoadingRecentlyAddedGames") }]);
+        UpdateCollection(GamePass1Mappings, [new GamePassEntry { Title = ResourceHelper.GetString("Store.LoadingMostPopularGames") }]);
+        UpdateCollection(GamePass2Mappings, [new GamePassEntry { Title = ResourceHelper.GetString("Store.LoadingRecentlyAddedGames") }]);
         SelectedGamePass1 = GamePass1Mappings[0];
         SelectedGamePass2 = GamePass2Mappings[0];
         SubmitCommand.Execute(null);
@@ -213,8 +214,8 @@ public partial class StoreViewModel : ObservableObject
 
     private void SetGamePassErrorState()
     {
-        UpdateCollection(GamePass1Mappings, [new() { Title = ResourceHelper.GetString("Store.FailedToLoadPopularGames") }]);
-        UpdateCollection(GamePass2Mappings, [new() { Title = ResourceHelper.GetString("Store.FailedToLoadNewGames") }]);
+        UpdateCollection(GamePass1Mappings, [new GamePassEntry { Title = ResourceHelper.GetString("Store.FailedToLoadPopularGames") }]);
+        UpdateCollection(GamePass2Mappings, [new GamePassEntry { Title = ResourceHelper.GetString("Store.FailedToLoadNewGames") }]);
         SelectedGamePass1 = GamePass1Mappings[0];
         SelectedGamePass2 = GamePass2Mappings[0];
     }
