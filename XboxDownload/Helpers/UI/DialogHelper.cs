@@ -107,7 +107,7 @@ public static class DialogHelper
 
         private static Grid BuildMessageBlock(string message, Icon icon)
         {
-            var (marker, brush) = GetIconStyle(icon);
+            var (marker, background, foreground) = GetIconStyle(icon);
 
             var iconBadge = new Border
             {
@@ -115,12 +115,14 @@ public static class DialogHelper
                 Height = 40,
                 Padding = new Thickness(8, 4),
                 CornerRadius = new CornerRadius(20),
-                Background = brush,
+                Background = background,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(0, 4, 0, 0),
                 Child = new TextBlock
                 {
                     Text = marker,
+                    Foreground = foreground,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                     FontWeight = FontWeight.Bold
@@ -203,16 +205,16 @@ public static class DialogHelper
             Close();
         }
 
-        private static (string Marker, IBrush Brush) GetIconStyle(Icon icon)
+        private static (string Marker, IBrush Background, IBrush Foreground) GetIconStyle(Icon icon)
         {
             return icon switch
             {
-                MsBox.Avalonia.Enums.Icon.Error => ("X", Brush.Parse("#FDE7E9")),
-                MsBox.Avalonia.Enums.Icon.Success => ("OK", Brush.Parse("#E7F6EC")),
-                MsBox.Avalonia.Enums.Icon.Question => ("?", Brush.Parse("#E8F0FE")),
-                MsBox.Avalonia.Enums.Icon.Info => ("i", Brush.Parse("#EAF4FD")),
-                MsBox.Avalonia.Enums.Icon.Warning => ("!", Brush.Parse("#FFF4E5")),
-                _ => ("", Brush.Parse("#F3F4F6"))
+                MsBox.Avalonia.Enums.Icon.Error => ("X", Brush.Parse("#7F1D1D"), Brush.Parse("#FEE2E2")),
+                MsBox.Avalonia.Enums.Icon.Success => ("OK", Brush.Parse("#14532D"), Brush.Parse("#DCFCE7")),
+                MsBox.Avalonia.Enums.Icon.Question => ("?", Brush.Parse("#1E3A8A"), Brush.Parse("#DBEAFE")),
+                MsBox.Avalonia.Enums.Icon.Info => ("i", Brush.Parse("#0C4A6E"), Brush.Parse("#E0F2FE")),
+                MsBox.Avalonia.Enums.Icon.Warning => ("!", Brush.Parse("#78350F"), Brush.Parse("#FEF3C7")),
+                _ => ("", Brush.Parse("#374151"), Brush.Parse("#F3F4F6"))
             };
         }
     }
