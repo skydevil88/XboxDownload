@@ -35,7 +35,7 @@ public partial class StoreViewModel : ObservableObject
     public partial Bitmap? BoxArt { get; set; }
 
     [ObservableProperty]
-    public partial Bitmap? CachedBoxArt { get; set; }
+    private partial Bitmap? CachedBoxArt { get; set; }
 
     public static bool IsWindows => OperatingSystem.IsWindows();
 
@@ -82,8 +82,8 @@ public partial class StoreViewModel : ObservableObject
     [GeneratedRegex(@"\((\d+)\)")]
     private static partial Regex GetNumberRegex();
 
-    public ObservableCollection<GamePassEntry> GamePass1Mappings { get; } = [];
-    public ObservableCollection<GamePassEntry> GamePass2Mappings { get; } = [];
+    private ObservableCollection<GamePassEntry> GamePass1Mappings { get; } = [];
+    private ObservableCollection<GamePassEntry> GamePass2Mappings { get; } = [];
 
     [ObservableProperty]
     public partial GamePassEntry? SelectedGamePass1 { get; set; }
@@ -92,12 +92,12 @@ public partial class StoreViewModel : ObservableObject
     public partial GamePassEntry? SelectedGamePass2 { get; set; }
 
     [ObservableProperty]
-    public partial DateTime NextXgpUpdated { get; set; } = DateTime.MinValue;
+    private partial DateTime NextXgpUpdated { get; set; } = DateTime.MinValue;
 
     public ObservableCollection<Market> Markets { get; } = [];
 
     [ObservableProperty]
-    public partial Market? SelectedMarket { get; set; }
+    private partial Market? SelectedMarket { get; set; }
 
     partial void OnSelectedMarketChanged(Market? value)
     {
@@ -409,9 +409,9 @@ public partial class StoreViewModel : ObservableObject
     public partial string? GameLanguages { get; set; }
 
     [ObservableProperty]
-    public partial string? Price { get; set; }
+    private partial string? Price { get; set; }
 
-    public ObservableCollection<Bundled> BundledMappings { get; } = [];
+    private ObservableCollection<Bundled> BundledMappings { get; } = [];
 
     [ObservableProperty]
     public partial int SelectedBundledIndex { get; set; } = -1;
@@ -431,7 +431,7 @@ public partial class StoreViewModel : ObservableObject
     public ObservableCollection<PlatformDownloadItem> PlatformDownloadInfo { get; } = [];
 
     [ObservableProperty]
-    public partial PlatformDownloadItem? SelectedPlatformDownloadItem { get; set; } = new();
+    private partial PlatformDownloadItem? SelectedPlatformDownloadItem { get; set; } = new();
 
     public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>

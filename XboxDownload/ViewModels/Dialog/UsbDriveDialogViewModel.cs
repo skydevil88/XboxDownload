@@ -18,11 +18,11 @@ namespace XboxDownload.ViewModels.Dialog;
 
 public partial class UsbDriveDialogViewModel : ObservableObject
 {
-    public ObservableCollection<UsbDriveMappingEntry> UsbDriveMappings { get; } = [];
+    private ObservableCollection<UsbDriveMappingEntry> UsbDriveMappings { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
-    public partial UsbDriveMappingEntry? SelectedEntry { get; set; }
+    private partial UsbDriveMappingEntry? SelectedEntry { get; set; }
 
     public bool IsEnabled => SelectedEntry != null;
 
@@ -32,7 +32,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial PartitionScheme DiskPartitionType { get; set; } = PartitionScheme.Mbr;
+    private partial PartitionScheme DiskPartitionType { get; set; } = PartitionScheme.Mbr;
 
     [RelayCommand]
     [SupportedOSPlatform("windows")]

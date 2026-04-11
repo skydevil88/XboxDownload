@@ -31,12 +31,12 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
     public static bool IsLinux => OperatingSystem.IsLinux();
 
-    public ObservableCollection<DohModels> DohModelsMappings { get; } = [];
+    private ObservableCollection<DohModels> DohModelsMappings { get; } = [];
 
     [ObservableProperty]
     private static string _rulesText = string.Empty, _rules2Text = string.Empty, _certDomain1Text = string.Empty, _certDomain2Text = string.Empty;
 
-    public ObservableCollection<ProxyModels> ProxyRules { get; } = LocalProxyBuilder.GetProxyRulesList();
+    private ObservableCollection<ProxyModels> ProxyRules { get; } = LocalProxyBuilder.GetProxyRulesList();
 
     public LocalProxyDialogViewModel(ServiceViewModel serviceViewModel)
     {

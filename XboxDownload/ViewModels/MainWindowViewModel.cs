@@ -30,13 +30,13 @@ public partial class MainWindowViewModel(
     : ObservableObject
 {
     private TrayIconService TrayIconService { get; } = trayIconService;
-    public ServiceViewModel ServiceViewModel { get; } = serviceViewModel;
-    public SpeedTestViewModel SpeedTestViewModel { get; } = speedTestViewModel;
+    private ServiceViewModel ServiceViewModel { get; } = serviceViewModel;
+    private SpeedTestViewModel SpeedTestViewModel { get; } = speedTestViewModel;
     public HostViewModel HostViewModel { get; } = hostViewModel;
     public CdnViewModel CdnViewModel { get; } = cdnViewModel;
     public StorageViewModel StorageViewModel { get; } = storageViewModel;
-    public StoreViewModel StoreViewModel { get; } = storeViewModel;
-    public ToolsViewModel ToolsViewModel { get; } = toolsViewModel;
+    private StoreViewModel StoreViewModel { get; } = storeViewModel;
+    private ToolsViewModel ToolsViewModel { get; } = toolsViewModel;
 
     [ObservableProperty]
     public partial int SelectedTabIndex { get; set; }

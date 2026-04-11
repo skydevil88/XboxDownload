@@ -19,7 +19,7 @@
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
                                     <ContextMenu>
-                                        <MenuItem Header="{DynamicResource Host.Delete}" Command="{Binding $parent[DataGrid].((vm:HostViewModel)DataContext).DeleteEntryCommand}"/>
+                                        <MenuItem Header="{DynamicResource Host.Delete}" Command="{Binding $parent[DataGrid].((vm:HostViewModel)DataContext).DeleteEntryCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
                                     </ContextMenu>
                                 </Setter.Value>
                             </Setter>

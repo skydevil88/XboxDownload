@@ -1,6 +1,5 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         x:Class="XboxDownload.Views.Dialog.EditHostsDialog"
         x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"

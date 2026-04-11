@@ -39,13 +39,13 @@ public partial class SpeedTestViewModel : ViewModelBase
     public List<int> TimeoutOptions { get; } = [3, 5, 10];
 
     [ObservableProperty]
-    public partial int SelectedTimeout { get; set; } = 3;
+    private partial int SelectedTimeout { get; set; } = 3;
 
     [ObservableProperty]
-    public partial string HeaderText { get; set; } = string.Empty;
+    public partial string HeaderText { get; set; }
 
     [ObservableProperty]
-    public partial string SearchLocation { get; set; } = App.Settings.SearchLocation;
+    private partial string SearchLocation { get; set; } = App.Settings.SearchLocation;
 
     public ObservableCollection<LocationFilter> LocationFilters { get; } = [.. SpeedTestDataBuilder.BuildLocationFilters()];
 
@@ -98,7 +98,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
     private readonly ReadOnlyObservableCollection<IpItem> _ipItems;
 
-    public ReadOnlyObservableCollection<IpItem> IpItems => _ipItems;
+    private ReadOnlyObservableCollection<IpItem> IpItems => _ipItems;
 
     partial void OnSelectedImportOptionChanged(ImportOption? value)
     {
@@ -257,7 +257,7 @@ public partial class SpeedTestViewModel : ViewModelBase
     public partial bool UploadAkamaiIpsVisible { get; set; }
 
     [ObservableProperty]
-    public partial bool UploadAkamaiIpsEnabled { get; set; } = App.Settings.UploadAkamaiIpsEnabled;
+    private partial bool UploadAkamaiIpsEnabled { get; set; } = App.Settings.UploadAkamaiIpsEnabled;
 
     partial void OnUploadAkamaiIpsEnabledChanged(bool value)
     {
@@ -380,7 +380,7 @@ public partial class SpeedTestViewModel : ViewModelBase
     public partial string TargetTestUrl { get; set; } = "";
 
     [ObservableProperty]
-    public partial string WatermarkText { get; set; } = "";
+    public partial string WatermarkText { get; set; }
 
     [RelayCommand]
     private async Task FileClickedAsync(object? parameter)

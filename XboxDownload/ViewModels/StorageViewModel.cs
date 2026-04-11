@@ -31,10 +31,10 @@ public partial class StorageViewModel : ObservableObject
 {
     public static bool IsWindows => OperatingSystem.IsWindows();
 
-    public ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
+    private ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
 
     [ObservableProperty]
-    public partial StorageMappingEntry? SelectedEntry { get; set; }
+    private partial StorageMappingEntry? SelectedEntry { get; set; }
 
     [ObservableProperty]
     public partial bool IsEnablePcMode { get; set; }
@@ -194,10 +194,10 @@ public partial class StorageViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial string DownloadUrl { get; set; } = string.Empty;
+    private partial string DownloadUrl { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string FilePath { get; set; } = string.Empty;
+    private partial string FilePath { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string FileTimeCreated { get; set; } = string.Empty;
@@ -206,13 +206,13 @@ public partial class StorageViewModel : ObservableObject
     public partial string DriveSize { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ContentId { get; set; } = string.Empty;
+    private partial string ContentId { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string ProductId { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ProductId2 { get; set; } = string.Empty;
+    private partial string ProductId2 { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial string BuildId { get; set; } = string.Empty;

@@ -26,90 +26,90 @@
                                                 </Viewbox>
                                             </MenuItem.Icon>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxGlobal}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="XboxGlobal">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxCn1}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxCn1Visible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxCn1Visible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="XboxCn1">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxCn2}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxCn2Visible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxCn2Visible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="XboxCn2">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxApp}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxAppVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxAppVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="XboxApp">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForXboxGlobalCnApps}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="XboxGlobalCnApps">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/xbox.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxSeparatorVisible}"/>
+                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsXboxSeparatorVisible, FallbackValue=False, TargetNullValue=False}"/>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForPs}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsPsVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsPsVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="Ps">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/Speedtest/ps.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForNs}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="Ns">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/Speedtest/ns.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsPsSeparatorVisible}"/>
+                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsPsSeparatorVisible, FallbackValue=False, TargetNullValue=False}"/>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForEa}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="Ea">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/Speedtest/ea.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForBattle}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="Battle">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/Speedtest/battle.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"/>
+                                            <Separator IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"/>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CustomIpForAkamaiCdn}"
-                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand}"
+                                                      IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsAkamaiVisible, FallbackValue=False, TargetNullValue=False}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CustomIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="Akamai">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/Speedtest/akamai.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.WriteToSystemHostsFile}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).WriteHostsCommand}">
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).WriteHostsCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}">
                                                 <MenuItem.Icon>
                                                     <Image Source="/Assets/Speedtest/windows.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
@@ -123,7 +123,7 @@
                                                 </Viewbox>
                                             </MenuItem.Icon>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.HostsFormat}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).ExportHostsCommand}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).ExportHostsCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                                 <MenuItem.Icon>
                                                     <Viewbox Width="16" Height="16">
@@ -132,7 +132,7 @@
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{DynamicResource SpeedTest.MenuItem.DnsmasqFormat}"
-                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).ExportDnsmasqCommand}"
+                                                      Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).ExportDnsmasqCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                       CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                                 <MenuItem.Icon>
                                                     <Viewbox Width="16" Height="16">
@@ -142,7 +142,7 @@
                                             </MenuItem>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource SpeedTest.MenuItem.CopyIpToClipboard}"
-                                                  Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CopyIpCommand}"
+                                                  Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).CopyIpCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                   CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                             <MenuItem.Icon>
                                                 <Viewbox Width="16" Height="16">
@@ -161,7 +161,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:DataType="speed:IpItem">
                                     <CheckBox
-                                        IsEnabled="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsSortingEnabled}"
+                                        IsEnabled="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsSortingEnabled, FallbackValue=False, TargetNullValue=False}"
                                         IsChecked="{Binding IsSelected}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -211,7 +211,7 @@
                                               Content="{Binding Display}"
                                               IsChecked="{Binding IsSelected}"
                                               IsVisible="{Binding IsVisible}"
-                                              IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest}"/>
+                                              IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest, FallbackValue=False, TargetNullValue=False}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -264,8 +264,8 @@
                                 <DataTemplate x:DataType="speed:SpeedTestFile">
                                     <Button Classes="LinkLabel" Margin="5,0"
                                             IsVisible="{Binding IsVisible}"
-                                            IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest}"
-                                            Command="{Binding $parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).FileClickedCommand}"
+                                            IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest, FallbackValue=False, TargetNullValue=False}"
+                                            Command="{Binding $parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).FileClickedCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                             CommandParameter="{Binding}">
                                         <TextBlock Text="{Binding Display}"
                                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />

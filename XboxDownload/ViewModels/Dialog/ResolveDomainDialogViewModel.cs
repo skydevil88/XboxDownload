@@ -27,7 +27,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
 
     private ObservableCollection<DohServerOption> DohServersMappings => _serviceViewModel.DohServersMappings;
 
-    public ObservableCollection<ResolveHostMappingEntry> ResolveHostMappings { get; } = [];
+    private ObservableCollection<ResolveHostMappingEntry> ResolveHostMappings { get; } = [];
 
     public ResolveDomainDialogViewModel(ServiceViewModel serviceViewModel, HostViewModel hostViewModel)
     {
@@ -45,10 +45,10 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
     public partial ResolveHostMappingEntry? SelectedItem { get; set; }
 
     [ObservableProperty]
-    public partial string HostnameToResolve { get; set; } = string.Empty;
+    private partial string HostnameToResolve { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string ResolveIp { get; set; } = string.Empty;
+    private partial string ResolveIp { get; set; } = string.Empty;
 
     [RelayCommand]
     private void SetIpForHost(ResolveHostMappingEntry? item)

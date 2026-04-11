@@ -161,7 +161,8 @@
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
                                     <ContextMenu>
-                                        <MenuItem Header="{DynamicResource Service.SecureDns.Delete}" Command="{Binding $parent[DataGrid].((dialog:DohServerDialogViewModel)DataContext).DeleteEntryCommand}"/>
+                                        <MenuItem Header="{DynamicResource Service.SecureDns.Delete}"
+                                                  Command="{Binding $parent[DataGrid].((dialog:DohServerDialogViewModel)DataContext).DeleteEntryCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
                                     </ContextMenu>
                                 </Setter.Value>
                             </Setter>
@@ -187,7 +188,7 @@
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
                                     <ComboBox MinWidth="280"
-                                              ItemsSource="{Binding $parent.((dialog:DohServerDialogViewModel)DataContext).DohServersMappings}"
+                                              ItemsSource="{Binding $parent.((dialog:DohServerDialogViewModel)DataContext).DohServersMappings, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                               SelectedItem="{Binding DohServer}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate x:DataType="service:DohServerOption">

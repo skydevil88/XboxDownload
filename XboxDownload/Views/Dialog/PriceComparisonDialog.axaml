@@ -23,7 +23,7 @@
                             <Setter.Value>
                                 <ContextMenu>
                                     <MenuItem Header="{DynamicResource Store.PriceComparison.VisitWebsite}"
-                                              Command="{Binding $parent[DataGrid].((dialog:PriceComparisonDialogViewModel)DataContext).VisitWebsiteCommand}"/>
+                                              Command="{Binding $parent[DataGrid].((dialog:PriceComparisonDialogViewModel)DataContext).VisitWebsiteCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
                                 </ContextMenu>
                             </Setter.Value>
                         </Setter>

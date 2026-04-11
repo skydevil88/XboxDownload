@@ -150,7 +150,7 @@
                         <ComboBox ItemsSource="{Binding ListeningIpOptions}"
                                   SelectedItem="{Binding SelectedListeningIp}">
                             <ComboBox.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="service:ListeningIpOption">
                                     <TextBlock Text="{Binding Display}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>

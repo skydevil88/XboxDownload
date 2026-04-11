@@ -14,7 +14,8 @@ namespace XboxDownload.ViewModels.Dialog;
 
 public partial class StartupSettingsDialogViewModel : ObservableObject
 {
-    [ObservableProperty] public partial bool IsRunAtStartup { get; set; }
+    [ObservableProperty]
+    private partial bool IsRunAtStartup { get; set; }
 
     public StartupSettingsDialogViewModel()
     {

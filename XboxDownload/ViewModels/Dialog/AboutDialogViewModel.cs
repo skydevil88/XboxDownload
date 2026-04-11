@@ -22,7 +22,7 @@ public partial class AboutDialogViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IsChineseUser { get; set; } = App.Settings.Culture == "zh-Hans";
 
-    public static string Project => UpdateService.Project;
+    private static string Project => UpdateService.Project;
 
     [RelayCommand]
     private static async Task OpenUrlAsync()

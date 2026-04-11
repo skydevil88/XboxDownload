@@ -22,7 +22,7 @@ public partial class ImportHostDialogViewModel(HostViewModel hostViewModel) : Ob
     public Action? CloseDialog { get; init; }
 
     [ObservableProperty]
-    public partial string Content { get; set; } = string.Empty;
+    private partial string Content { get; set; } = string.Empty;
 
     [RelayCommand]
     private void Confirm()

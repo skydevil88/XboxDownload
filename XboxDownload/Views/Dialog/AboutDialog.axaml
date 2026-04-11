@@ -1,5 +1,6 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         x:Class="XboxDownload.Views.Dialog.AboutDialog"
         x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
@@ -19,12 +20,14 @@
 
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{DynamicResource About.Donate}"/>
 
-        <Grid ColumnDefinitions="*,*" ColumnSpacing="20" IsVisible="{Binding IsChineseUser}">
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="20" x:DataType="dialog:AboutDialogViewModel"
+              IsVisible="{Binding $parent[Window].((dialog:AboutDialogViewModel)DataContext).IsChineseUser, FallbackValue=False, TargetNullValue=False}">
             <Image Grid.Column="0" Height="120" Width="120" Source="/Assets/About/Alipay.png"/>
             <Image Grid.Column="1" Height="120" Width="120" Source="/Assets/About/WeChat.png"/>
         </Grid>
 
-        <StackPanel Spacing="10" IsVisible="{Binding !IsChineseUser}">
+        <StackPanel Spacing="10" x:DataType="dialog:AboutDialogViewModel"
+                    IsVisible="{Binding !$parent[Window].((dialog:AboutDialogViewModel)DataContext).IsChineseUser, FallbackValue=False, TargetNullValue=False}">
             <Image Height="120" Width="120" Source="/Assets/About/USDT.png"/>
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="5">
                 <TextBlock VerticalAlignment="Center" Text="USDT(TRC20): TT9CzksU5KuXkkYaox2ifvF5tbGaQRmSZw" />

@@ -20,7 +20,7 @@ public partial class EditHostsDialogViewModel : ObservableObject
     public Action? CloseDialog { get; init; }
 
     [ObservableProperty]
-    public partial string Content { get; set; } = string.Empty;
+    private partial string Content { get; set; } = string.Empty;
 
     [RelayCommand]
     private async Task SaveHostsAsync()

@@ -23,14 +23,14 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
     private readonly StoreViewModel _storeViewModel;
 
     [ObservableProperty]
-    public partial string Title { get; set; } = string.Empty;
+    public partial string Title { get; set; }
 
     [ObservableProperty]
-    public partial string UseCurrencyCode { get; set; } = string.Empty;
+    private partial string UseCurrencyCode { get; set; }
 
     private readonly string? _productId;
 
-    public ObservableCollection<MarketMappingEntry> MarketMappings { get; } = [];
+    private ObservableCollection<MarketMappingEntry> MarketMappings { get; } = [];
 
     [ObservableProperty]
     public partial MarketMappingEntry? SelectedMarket { get; set; }
