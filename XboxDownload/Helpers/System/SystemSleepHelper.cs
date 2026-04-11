@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace XboxDownload.Helpers.System;
 
-public static class SystemSleepHelper
+public static partial class SystemSleepHelper
 {
     public static void PreventSleep(bool keepDisplayOn = true)
     {
@@ -39,8 +39,8 @@ public static class SystemSleepHelper
     }
 
     // --- Windows Implementation ---
-    [DllImport("kernel32")]
-    private static extern uint SetThreadExecutionState(uint esFlags);
+    [LibraryImport("kernel32")]
+    private static partial uint SetThreadExecutionState(uint esFlags);
 
     private const uint EsContinuous = 0x80000000;
     private const uint EsSystemRequired = 0x00000001;
@@ -50,12 +50,17 @@ public static class SystemSleepHelper
     {
         var flags = EsContinuous | EsSystemRequired;
         if (keepDisplayOn) flags |= EsDisplayRequired;
-        SetThreadExecutionState(flags);
+
+        var result = SetThreadExecutionState(flags);
+        if (result == 0)
+            Debug.WriteLine("SetThreadExecutionState failed while preventing sleep.");
     }
 
     private static void WindowsRestoreSleep()
     {
-        SetThreadExecutionState(EsContinuous);
+        var result = SetThreadExecutionState(EsContinuous);
+        if (result == 0)
+            Debug.WriteLine("SetThreadExecutionState failed while restoring sleep behavior.");
     }
 
     // --- macOS Implementation ---

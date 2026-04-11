@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
@@ -7,7 +6,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
-using MsBox.Avalonia.Enums;
 
 namespace XboxDownload.Helpers.UI;
 
@@ -23,7 +21,7 @@ public static class DialogHelper
         await ShowDialogAsync(dialog);
     }
 
-    public static async Task<bool> ShowConfirmDialogAsync(string title, string message, Icon icon = Icon.None, bool defaultYes = true)
+    public static async Task<bool> ShowConfirmDialogAsync(string title, string message, Icon icon = Icon.None, bool defaultYes = false)
     {
         var dialog = new DialogWindow(title, message, icon,
         [
@@ -209,11 +207,11 @@ public static class DialogHelper
         {
             return icon switch
             {
-                MsBox.Avalonia.Enums.Icon.Error => ("X", Brush.Parse("#7F1D1D"), Brush.Parse("#FEE2E2")),
-                MsBox.Avalonia.Enums.Icon.Success => ("OK", Brush.Parse("#14532D"), Brush.Parse("#DCFCE7")),
-                MsBox.Avalonia.Enums.Icon.Question => ("?", Brush.Parse("#1E3A8A"), Brush.Parse("#DBEAFE")),
-                MsBox.Avalonia.Enums.Icon.Info => ("i", Brush.Parse("#0C4A6E"), Brush.Parse("#E0F2FE")),
-                MsBox.Avalonia.Enums.Icon.Warning => ("!", Brush.Parse("#78350F"), Brush.Parse("#FEF3C7")),
+                UI.Icon.Error => ("X", Brush.Parse("#7F1D1D"), Brush.Parse("#FEE2E2")),
+                UI.Icon.Success => ("OK", Brush.Parse("#14532D"), Brush.Parse("#DCFCE7")),
+                UI.Icon.Question => ("?", Brush.Parse("#1E3A8A"), Brush.Parse("#DBEAFE")),
+                UI.Icon.Info => ("i", Brush.Parse("#0C4A6E"), Brush.Parse("#E0F2FE")),
+                UI.Icon.Warning => ("!", Brush.Parse("#78350F"), Brush.Parse("#FEF3C7")),
                 _ => ("", Brush.Parse("#374151"), Brush.Parse("#F3F4F6"))
             };
         }

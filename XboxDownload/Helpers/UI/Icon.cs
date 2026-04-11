@@ -1,4 +1,4 @@
-namespace MsBox.Avalonia.Enums;
+namespace XboxDownload.Helpers.UI;
 
 public enum Icon
 {

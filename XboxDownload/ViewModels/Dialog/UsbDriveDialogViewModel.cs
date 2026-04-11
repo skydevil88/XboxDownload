@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using MsBox.Avalonia.Enums;
 using XboxDownload.Helpers.UI;
 using XboxDownload.Helpers.Utilities;
 

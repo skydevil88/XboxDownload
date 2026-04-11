@@ -17,8 +17,8 @@ public class DnsMessage
     public int Rcode { get; set; }  // Response code (0 = no error, 3 = name error)
 
     // ===== Section Counts =====
-    public List<Query> Queries { get; set; } = new();
-    public List<ResourceRecord> ResourceRecords { get; set; } = new();
+    public List<Query> Queries { get; set; } = [];
+    public List<ResourceRecord> ResourceRecords { get; set; } = [];
     public short AuthorityRecordCount { get; set; }
     public short AdditionalRecordCount { get; set; }
 
@@ -60,7 +60,7 @@ public class DnsMessage
         foreach (var r in ResourceRecords)
             list.AddRange(r.ToBytes());
 
-        return list.ToArray();
+        return [.. list];
     }
 
     // ===== Deserialization =====
@@ -106,12 +106,12 @@ public class DnsMessage
         AdditionalRecordCount = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(ReadBytes(2), 0));
 
         // 4. Queries
-        Queries = new List<Query>();
+        Queries = [];
         for (int i = 0; i < queryCount; i++)
             Queries.Add(new Query(ReadBytes));
 
         // 5. Answers
-        ResourceRecords = new List<ResourceRecord>();
+        ResourceRecords = [];
         for (int i = 0; i < rrCount; i++)
             ResourceRecords.Add(new ResourceRecord(ReadBytes));
     }
@@ -119,6 +119,6 @@ public class DnsMessage
     // Optional: default constructor for manual build
     public DnsMessage()
     {
-        package = Array.Empty<byte>(); // Initialize to an empty array
+        package = []; // Initialize to an empty array
     }
 }

@@ -65,6 +65,6 @@ public class Query
         list.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)QueryType)));
         list.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(QueryClass)));
 
-        return list.ToArray();
+        return [.. list];
     }
 }

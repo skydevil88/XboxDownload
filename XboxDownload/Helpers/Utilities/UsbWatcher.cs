@@ -60,8 +60,12 @@ public class UsbWatcher : IDisposable
     {
         _insertWatcher?.Stop();
         _insertWatcher?.Dispose();
+        _insertWatcher = null;
 
         _removeWatcher?.Stop();
         _removeWatcher?.Dispose();
+        _removeWatcher = null;
+
+        GC.SuppressFinalize(this);
     }
 }

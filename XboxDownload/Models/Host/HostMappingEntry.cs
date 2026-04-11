@@ -3,18 +3,17 @@
 namespace XboxDownload.Models.Host;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class HostMappingEntry : ObservableObject
+public partial class HostMappingEntry(bool isEnabled, string hostName, string ip, string note) : ObservableObject
 {
-    [ObservableProperty] public partial bool IsEnabled { get; set; }
-    [ObservableProperty] public partial string HostName { get; set; }
-    [ObservableProperty] public partial string Ip { get; set; }
-    [ObservableProperty] public partial string Note { get; set; }
+    [ObservableProperty]
+    public partial bool IsEnabled { get; set; } = isEnabled;
 
-    public HostMappingEntry(bool isEnabled, string hostName, string ip, string note)
-    {
-        IsEnabled = isEnabled;
-        HostName = hostName;
-        Ip = ip;
-        Note = note;
-    }
+    [ObservableProperty]
+    public partial string HostName { get; set; } = hostName;
+
+    [ObservableProperty]
+    public partial string Ip { get; set; } = ip;
+
+    [ObservableProperty]
+    public partial string Note { get; set; } = note;
 }

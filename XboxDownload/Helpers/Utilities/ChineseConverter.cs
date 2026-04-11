@@ -10,7 +10,7 @@ public static class ChineseConverter
     /// </summary>
     public static string SimplifiedToTraditional(string input)
     {
-        return new string(input.Select(c => S2T.GetValueOrDefault(c, c)).ToArray());
+        return new string([.. input.Select(c => S2T.GetValueOrDefault(c, c))]);
     }
 
     // 简体 → 繁体 映射

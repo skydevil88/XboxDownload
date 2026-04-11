@@ -49,13 +49,12 @@ public static class NetworkAdapterHelper
         // If no adapters found, relax filtering criteria
         if (adapters.Length == 0)
         {
-            adapters = NetworkInterface.GetAllNetworkInterfaces()
+            adapters = [.. NetworkInterface.GetAllNetworkInterfaces()
                 .Where(nic =>
                     nic.NetworkInterfaceType != NetworkInterfaceType.Loopback
                     && nic.OperationalStatus == OperationalStatus.Up
                     && nic.GetIPProperties().UnicastAddresses.Any(ip =>
-                        ip.Address.AddressFamily == AddressFamily.InterNetwork))
-                .ToArray();
+                        ip.Address.AddressFamily == AddressFamily.InterNetwork))];
         }
 
         return adapters;

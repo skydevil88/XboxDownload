@@ -6,7 +6,6 @@ using System.ServiceProcess;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MsBox.Avalonia.Enums;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.UI;
 

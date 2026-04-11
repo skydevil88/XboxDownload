@@ -6,33 +6,33 @@ using XboxDownload.Helpers.Utilities;
 
 namespace XboxDownload.Models.Storage;
 
-public partial class StorageMappingEntry : ObservableObject
+public partial class StorageMappingEntry(int index, string deviceId, string model, string serialNumber, long size, byte[] bootSignatureBytes, int partitions = 0, string driveLetter = "") : ObservableObject
 {
     [ObservableProperty]
-    private int _index;
+    public partial int Index { get; set; } = index;
 
     [ObservableProperty]
-    private string _deviceId;
+    public partial string DeviceId { get; set; } = deviceId;
 
     [ObservableProperty]
-    private string _model;
+    public partial string Model { get; set; } = model;
 
     [ObservableProperty]
-    private string _serialNumber;
+    public partial string SerialNumber { get; set; } = serialNumber;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FormatSize))]
-    private long _size;
+    public partial long Size { get; set; } = size;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Mode))]
-    private byte[] _bootSignatureBytes;
+    public partial byte[] BootSignatureBytes { get; set; } = bootSignatureBytes;
 
     [ObservableProperty]
-    private int _partitions;
+    public partial int Partitions { get; set; } = partitions;
 
     [ObservableProperty]
-    private string _driveLetter;
+    public partial string DriveLetter { get; set; } = driveLetter;
 
     public string FormatSize => UnitConverter.ConvertBytes(Size);
 
@@ -41,16 +41,4 @@ public partial class StorageMappingEntry : ObservableObject
         : BootSignatureBytes.SequenceEqual(MbrHelper.PcMode)
             ? ResourceHelper.GetString("Storage.PcMode")
             : "Unknown";
-
-    public StorageMappingEntry(int index, string deviceId, string model, string serialNumber, long size, byte[] bootSignatureBytes, int partitions = 0, string driveLetter = "")
-    {
-        Index = index;
-        DeviceId = deviceId;
-        Model = model;
-        SerialNumber = serialNumber;
-        Size = size;
-        BootSignatureBytes = bootSignatureBytes;
-        Partitions = partitions;
-        DriveLetter = driveLetter;
-    }
 }

@@ -130,13 +130,13 @@ public static class DnsHelper
             {
                 var result = await lookup.QueryAsync(queryName, QueryType.AAAA);
                 var records = result.Answers.AaaaRecords().Select(r => r.Address);
-                return records.ToList();
+                return [.. records];
             }
             else
             {
                 var result = await lookup.QueryAsync(queryName, QueryType.A);
                 var records = result.Answers.ARecords().Select(r => r.Address);
-                return records.ToList();
+                return [.. records];
             }
         }
         catch

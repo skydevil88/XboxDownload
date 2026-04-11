@@ -1,10 +1,11 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:storage="clr-namespace:XboxDownload.Models.Storage"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
-              x:Class="XboxDownload.Views.StorageView"
-              x:CompileBindings="False">
+               x:Class="XboxDownload.Views.StorageView"
+               x:CompileBindings="False">
 
     <Grid RowDefinitions="*,Auto">
         <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Storage.XboxExternalStorageDevice}"
@@ -15,11 +16,41 @@
                           ItemsSource="{Binding StorageMappings}"
                           SelectedItem="{Binding SelectedEntry}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn MinWidth="40" Header="{DynamicResource Storage.Index}" Binding="{Binding Index}"/>
-                        <DataGridTextColumn Width="*" Header="{DynamicResource Storage.Model}" Binding="{Binding Model}"/>
-                        <DataGridTextColumn MinWidth="110" Header="{DynamicResource Storage.SerialNumber}" Binding="{Binding SerialNumber}"/>
-                        <DataGridTextColumn MinWidth="80" Header="{DynamicResource Storage.Size}" Binding="{Binding FormatSize}"/>
-                        <DataGridTextColumn MinWidth="100" Header="{DynamicResource Storage.Mode}" Binding="{Binding Mode}"/>
+                        <DataGridTemplateColumn MinWidth="40" Header="{DynamicResource Storage.Index}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="storage:StorageMappingEntry">
+                                    <TextBlock Text="{Binding Index}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="*" Header="{DynamicResource Storage.Model}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="storage:StorageMappingEntry">
+                                    <TextBlock Text="{Binding Model}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="110" Header="{DynamicResource Storage.SerialNumber}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="storage:StorageMappingEntry">
+                                    <TextBlock Text="{Binding SerialNumber}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="80" Header="{DynamicResource Storage.Size}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="storage:StorageMappingEntry">
+                                    <TextBlock Text="{Binding FormatSize}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="100" Header="{DynamicResource Storage.Mode}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="storage:StorageMappingEntry">
+                                    <TextBlock Text="{Binding Mode}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 

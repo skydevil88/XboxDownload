@@ -3,7 +3,7 @@ using XboxDownload.Helpers.Resources;
 
 namespace XboxDownload.Models.Store;
 
-public abstract class MarketBuilder
+public static class MarketBuilder
 {
     public static IEnumerable<Market> BuildMarket() =>
     [

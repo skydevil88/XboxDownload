@@ -29,7 +29,7 @@ public class LocalizedProperties
     public string DeveloperName { get; set; } = "";
     public string PublisherName { get; set; } = "";
     public EligibilityProperties EligibilityProperties { get; set; } = new EligibilityProperties();
-    public List<Images> Images { get; set; } = new List<Images>();
+    public List<Images> Images { get; set; } = [];
     public string ProductDescription { get; set; } = "";
     public string ProductTitle { get; set; } = "";
     public string[] Markets { get; set; } = [];
@@ -141,7 +141,7 @@ public class Price
 public partial class Bundled : ObservableObject
 {
     [ObservableProperty]
-    private string _title = "";
+    public partial string Title { get; set; } = "";
 
     public string ProductId { get; init; } = "";
 }
@@ -160,20 +160,20 @@ public partial class PlatformDownloadItem : ObservableObject
     public long ExpectedSize { get; init; }
 
     [ObservableProperty]
-    private string _display = ResourceHelper.GetString("Store.GettingDownloadLink");
+    public partial string Display { get; set; } = ResourceHelper.GetString("Store.GettingDownloadLink");
 
     [ObservableProperty]
-    private string _url = "";
+    public partial string Url { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FormatSize))]
-    private long _fileSize;
+    public partial long FileSize { get; set; }
     public string FormatSize => FileSize > 0 ? UnitConverter.ConvertBytes(FileSize) : string.Empty;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Foreground))]
     [NotifyPropertyChangedFor(nameof(TextDecorations))]
-    private bool _outdated;
+    public partial bool Outdated { get; set; }
 
     public string Foreground => Application.Current?.ActualThemeVariant == ThemeVariant.Dark
         ? Outdated ? "#C2185B" : "White"

@@ -51,6 +51,6 @@ public class ResourceRecord : Query
             list.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)0)));
         }
 
-        return list.ToArray();
+        return [.. list];
     }
 }

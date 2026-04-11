@@ -15,7 +15,6 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using MsBox.Avalonia.Enums;
 using XboxDownload.Helpers.Resources;
 using XboxDownload.Helpers.System;
 using XboxDownload.Helpers.UI;

@@ -184,7 +184,7 @@ public static class PathHelper
                 {
                     var trimmed = line.Trim();
                     // Ensure it matches the key and is not a comment
-                    if (trimmed.StartsWith("XDG_DOWNLOAD_DIR", StringComparison.Ordinal) && !trimmed.StartsWith("#"))
+                    if (trimmed.StartsWith("XDG_DOWNLOAD_DIR", StringComparison.Ordinal) && !trimmed.StartsWith('#'))
                     {
                         var parts = trimmed.Split('=', 2);
                         if (parts.Length == 2)

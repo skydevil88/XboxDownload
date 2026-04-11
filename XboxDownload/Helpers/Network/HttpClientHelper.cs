@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Microsoft.Extensions.DependencyInjection;
-using MsBox.Avalonia.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -115,7 +115,7 @@ public static class DnsMappingGenerator
     public static string GenerateHostRegexPattern(string? key, bool includeHosts = true, bool includeRedirects = true, bool includeBlacklist = true)
     {
         var patterns = new List<string>();
-        var keys = string.IsNullOrWhiteSpace(key) ? HostRules.Keys.ToArray() : ResolveKeys(key);
+        var keys = string.IsNullOrWhiteSpace(key) ? [.. HostRules.Keys] : ResolveKeys(key);
 
         foreach (var hostKey in keys)
         {
@@ -140,7 +140,7 @@ public static class DnsMappingGenerator
     public static List<string> GenerateHostList(string? key, bool includeHosts = true, bool includeRedirects = false, bool includeBlacklist = false)
     {
         var result = new List<string>();
-        var keys = string.IsNullOrWhiteSpace(key) ? HostRules.Keys.ToArray() : ResolveKeys(key);
+        var keys = string.IsNullOrWhiteSpace(key) ? [.. HostRules.Keys] : ResolveKeys(key);
 
         foreach (var hostKey in keys)
         {

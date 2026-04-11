@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
-using MsBox.Avalonia.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
