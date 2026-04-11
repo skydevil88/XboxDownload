@@ -21,7 +21,13 @@ public partial class CdnViewModel : ObservableObject
     private readonly ServiceViewModel _serviceViewModel;
 
     [ObservableProperty]
-    private string _akamaiCdnIp = string.Empty, _akamaiHost1 = string.Empty, _akamaiHost2 = string.Empty;
+    public partial string AkamaiCdnIp { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string AkamaiHost1 { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string AkamaiHost2 { get; set; } = string.Empty;
 
     public CdnViewModel(ServiceViewModel serviceViewModel)
     {

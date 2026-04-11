@@ -23,14 +23,17 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
     private readonly StoreViewModel _storeViewModel;
 
     [ObservableProperty]
-    private string _title, _useCurrencyCode;
+    public partial string Title { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string UseCurrencyCode { get; set; } = string.Empty;
 
     private readonly string? _productId;
 
     public ObservableCollection<MarketMappingEntry> MarketMappings { get; } = [];
 
     [ObservableProperty]
-    private MarketMappingEntry? _selectedMarket;
+    public partial MarketMappingEntry? SelectedMarket { get; set; }
 
     public string ConvertedPrice => string.Format(ResourceHelper.GetString("Store.PriceComparison.ConvertedPrice"), UseCurrencyCode);
 
@@ -38,7 +41,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
     {
         _storeViewModel = storeViewModel;
         Title = _storeViewModel.Title!;
-        _useCurrencyCode = _storeViewModel.UseCurrencyCode;
+        UseCurrencyCode = _storeViewModel.UseCurrencyCode;
         _productId = _storeViewModel.SelectedBundledIndex <= 0 ? _storeViewModel.GameData?.Products[0].ProductId : _storeViewModel.SelectedBundled?.ProductId;
 
         // 要排除的 Language（根据货币或不支持的地区）
@@ -321,7 +324,7 @@ public partial class PriceComparisonDialogViewModel : ObservableObject
 public partial class MarketMappingEntry(string market, string language) : ObservableObject
 {
     [ObservableProperty]
-    private bool _isSelect = true;
+    public partial bool IsSelect { get; set; } = true;
 
     public string Market { get; set; } = market;
 
@@ -329,16 +332,16 @@ public partial class MarketMappingEntry(string market, string language) : Observ
 
 
     [ObservableProperty]
-    private string _currency = string.Empty;
+    public partial string Currency { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private decimal? _listPrice;
+    public partial decimal? ListPrice { get; set; }
 
     [ObservableProperty]
-    private decimal? _convertPrices;
+    public partial decimal? ConvertPrices { get; set; }
 
     [ObservableProperty]
-    private decimal? _exchangeRates;
+    public partial decimal? ExchangeRates { get; set; }
 
     public string Code =>
         string.IsNullOrEmpty(Language) ? string.Empty :

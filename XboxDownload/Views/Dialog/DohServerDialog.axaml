@@ -1,11 +1,12 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        xmlns:service="clr-namespace:XboxDownload.Models.Services"
         x:Class="XboxDownload.Views.Dialog.DohServerDialog"
-        x:DataType="dialog:DohServerDialogViewModel"
+        x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
         Width="980" Height="600"
         Title="{DynamicResource Service.SecureDns.Title}">
@@ -22,13 +23,13 @@
                                           ItemsSource="{Binding DohServersMappings}"
                                           SelectedItem="{Binding SelectedDohServer}">
                                     <ComboBox.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate x:DataType="service:DohServerOption">
                                             <TextBlock Text="{Binding Name}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                                 <TextBlock VerticalAlignment="Center" Text="{DynamicResource Service.SecureDns.CloudflareProxyIp}"/>
-                                <TextBox x:Name="ProxyIp" MinWidth="250" Watermark="{DynamicResource Service.SecureDns.CloudflareProxyIpWatermark}"
+                                <TextBox x:Name="ProxyIp" MinWidth="250" PlaceholderText="{DynamicResource Service.SecureDns.CloudflareProxyIpWatermark}"
                                          Text="{Binding DohServerProxyIp}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
@@ -50,7 +51,7 @@
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Width="70" Header="{DynamicResource Service.SecureDns.Select}">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="dialog:SpeedTestMappingEntry">
                                                 <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
                                                           IsEnabled="True"
                                                           IsChecked="{Binding IsSelect}"/>
@@ -60,7 +61,7 @@
 
                                     <DataGridTemplateColumn Header="{DynamicResource Service.SecureDns.DohServer}" Width="*" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="dialog:SpeedTestMappingEntry">
                                                 <TextBlock VerticalAlignment="Center" Margin="10,0"
                                                            Text="{Binding Name}"
                                                            ToolTip.Tip="{Binding Url}"/>
@@ -70,7 +71,7 @@
 
                                     <DataGridTemplateColumn Header="www.xbox.com" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="dialog:SpeedTestMappingEntry">
                                                 <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                                            Text="{Binding Website1, StringFormat='{}{0:F0}'}"
                                                            ToolTip.Tip="{Binding Tip1}"/>
@@ -80,7 +81,7 @@
 
                                     <DataGridTemplateColumn Header="www.playstation.com" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="dialog:SpeedTestMappingEntry">
                                                 <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                                            Text="{Binding Website2, StringFormat='{}{0:F0}'}"
                                                            ToolTip.Tip="{Binding Tip2}"/>
@@ -90,7 +91,7 @@
 
                                     <DataGridTemplateColumn Header="www.nintendo.com" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="dialog:SpeedTestMappingEntry">
                                                 <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                                            Text="{Binding Website3, StringFormat='{}{0:F0}'}"
                                                            ToolTip.Tip="{Binding Tip3}"/>
@@ -100,7 +101,7 @@
 
                                     <DataGridTemplateColumn Header="{DynamicResource Service.SecureDns.Proxy}">
                                         <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="dialog:SpeedTestMappingEntry">
                                                 <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
                                                           IsEnabled="{Binding CanEditProxy}"
                                                           IsChecked="{Binding UseProxy}"/>
@@ -170,7 +171,7 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Service.SecureDns.Enable}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
                                     <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
                                               IsChecked="{Binding IsEnabled}"/>
                                 </DataTemplate>
@@ -179,17 +180,17 @@
                         <DataGridTextColumn MinWidth="300" Binding="{Binding Domain}" Header="{DynamicResource Service.SecureDns.Domain}"/>
                         <DataGridTemplateColumn MinWidth="280" Header="{DynamicResource Service.SecureDns.DohServer}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
                                     <TextBlock VerticalAlignment="Center" Margin="12, 0" Text="{Binding DohServer}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
                                     <ComboBox MinWidth="280"
                                               ItemsSource="{Binding $parent.((dialog:DohServerDialogViewModel)DataContext).DohServersMappings}"
                                               SelectedItem="{Binding DohServer}">
                                         <ComboBox.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="service:DohServerOption">
                                                 <TextBlock Text="{Binding Name}"/>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>

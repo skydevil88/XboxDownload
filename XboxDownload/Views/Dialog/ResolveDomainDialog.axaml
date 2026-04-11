@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         x:Class="XboxDownload.Views.Dialog.ResolveDomainDialog"
-        x:DataType="dialog:ResolveDomainDialogViewModel"
+        x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
         Width="980" Height="600"
         Title="{DynamicResource Host.ResolveDomain.Title}">
@@ -16,7 +16,7 @@
                 <DockPanel LastChildFill="True" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Spacing="10">
                         <TextBlock VerticalAlignment="Center" Text="{DynamicResource Host.ResolveDomain.DomainName}"/>
-                        <TextBox x:Name="Host" Width="280" Watermark="{DynamicResource Host.ResolveDomain.DomainNameWatermark}"
+                        <TextBox x:Name="Host" Width="280" PlaceholderText="{DynamicResource Host.ResolveDomain.DomainNameWatermark}"
                                  Text="{Binding HostnameToResolve}" KeyDown="Host_KeyDown"/>
                         <TextBlock VerticalAlignment="Center" Text="{DynamicResource Host.ResolveDomain.IpAddress}"/>
                         <TextBox x:Name="Ip" MinWidth="280" MaxWidth="450" Text="{Binding ResolveIp}" IsReadOnly="True"/>
@@ -40,7 +40,7 @@
                         <DataGrid.Columns>
                             <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Host.ResolveDomain.Select}">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dialog:ResolveHostMappingEntry">
                                         <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
                                                   IsEnabled="True"
                                                   IsChecked="{Binding IsSelect}"/>
@@ -50,7 +50,7 @@
 
                             <DataGridTemplateColumn Header="{DynamicResource Host.ResolveDomain.DohServer}" MinWidth="265">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dialog:ResolveHostMappingEntry">
                                         <TextBlock VerticalAlignment="Center" Margin="10,0"
                                                    Text="{Binding Name}"
                                                    ToolTip.Tip="{Binding Url}"/>
@@ -60,7 +60,7 @@
 
                             <DataGridTemplateColumn Header="{DynamicResource Host.ResolveDomain.IpAddress2}" MinWidth="220">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dialog:ResolveHostMappingEntry">
                                         <TextBlock Text="{Binding ResolvedIp}"
                                                    VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="6,0">
                                             <ToolTip.Tip>
@@ -73,7 +73,7 @@
 
                             <DataGridTemplateColumn MinWidth="80" Header="{DynamicResource Host.ResolveDomain.Delay}">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dialog:ResolveHostMappingEntry">
                                         <TextBlock Text="{Binding Delay}" TextAlignment="Right"
                                                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
                                     </DataTemplate>
@@ -82,7 +82,7 @@
 
                             <DataGridTemplateColumn MinWidth="230" Width="*" Header="{DynamicResource Host.ResolveDomain.Location}">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dialog:ResolveHostMappingEntry">
                                         <TextBlock Text="{Binding Location}" VerticalAlignment="Center"
                                                    TextTrimming="CharacterEllipsis" Margin="6,0">
                                             <ToolTip.Tip>
@@ -95,7 +95,7 @@
 
                             <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Host.ResolveDomain.Proxy}">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="dialog:ResolveHostMappingEntry">
                                         <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
                                                   IsEnabled="{Binding CanEditProxy}"
                                                   IsChecked="{Binding UseProxy}"/>

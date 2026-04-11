@@ -6,7 +6,7 @@ namespace XboxDownload.Models.Store;
 public partial class Market : ObservableObject
 {
     [ObservableProperty]
-    private string _name = string.Empty;
+    public partial string Name { get; set; } = string.Empty;
 
     public string Code { get; init; } = string.Empty;
 

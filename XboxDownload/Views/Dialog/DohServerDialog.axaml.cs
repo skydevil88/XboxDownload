@@ -16,8 +16,6 @@ public partial class DohServerDialog : Window
     
     public DohServerDialog(ServiceViewModel serviceViewModel) : this()
     {
-        InitializeComponent();
-        
         DataContextChanged += OnDataContextChanged;
         
         var vm = new DohServerDialogViewModel(serviceViewModel)

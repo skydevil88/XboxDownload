@@ -62,7 +62,7 @@ public partial class HostViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private HostMappingEntry? _selectedEntry;
+    public partial HostMappingEntry? SelectedEntry { get; set; }
 
     [RelayCommand]
     private void AddHost()

@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
@@ -108,8 +107,6 @@ public partial class App : Application
             };
             RequestedThemeVariant = themeVariant;
 
-            DisableAvaloniaDataAnnotationValidation();
-
             var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = new MainWindow { DataContext = mainWindowVm };
 
@@ -153,12 +150,5 @@ public partial class App : Application
         if (msg != ShowWindowMessageId) return CallWindowProc(_oldWndProc, hWnd, msg, wParam, lParam);
         Dispatcher.UIThread.Post(ShowMainWindow);
         return IntPtr.Zero;
-    }
-
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        var plugins = BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-        foreach (var plugin in plugins)
-            BindingPlugins.DataValidators.Remove(plugin);
     }
 }

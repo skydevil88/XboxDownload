@@ -15,7 +15,7 @@ public partial class ListeningIpOption : ObservableObject
     public string Key { get; }
 
     [ObservableProperty]
-    private string _display;
+    public partial string Display { get; set; }
 
     public ListeningIpOption(string key, string display)
     {
@@ -35,13 +35,13 @@ public partial class ServiceModels : ObservableObject
     }
 
     [ObservableProperty]
-    private string _requestMethod;
+    public partial string RequestMethod { get; set; }
 
     [ObservableProperty]
-    private string _content;
+    public partial string Content { get; set; }
 
     [ObservableProperty]
-    private string _clientIp;
+    public partial string ClientIp { get; set; }
 
     private DateTime Timestamp { get; }
 
@@ -53,23 +53,23 @@ public partial class DohServerOption : ObservableObject
     public string Id { get; }
 
     [ObservableProperty]
-    private string _name;
+    public partial string Name { get; set; }
 
     public string Url { get; }
 
     [ObservableProperty]
-    private string _ip;
+    public partial string Ip { get; set; }
 
     [ObservableProperty]
-    private bool _isChecked;
+    public partial bool IsChecked { get; set; }
 
     [ObservableProperty]
-    private bool _isProxyDisabled;
+    public partial bool IsProxyDisabled { get; set; }
 
     public DohServerOption(string id, string name, string url, string ip = "", bool isChecked = false, bool isProxyDisabled = false)
     {
         Id = id;
-        _name = name;
+        Name = name;
         Url = url;
         Ip = ip;
         IsChecked = isChecked;

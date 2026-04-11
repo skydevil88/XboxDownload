@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -39,19 +39,22 @@ public partial class SpeedTestViewModel : ViewModelBase
     public List<int> TimeoutOptions { get; } = [3, 5, 10];
 
     [ObservableProperty]
-    private int _selectedTimeout = 3;
+    public partial int SelectedTimeout { get; set; } = 3;
 
     [ObservableProperty]
-    private string _headerText, _searchLocation = App.Settings.SearchLocation;
-
-    public ObservableCollection<LocationFilter> LocationFilters { get; } = new(SpeedTestDataBuilder.BuildLocationFilters());
-
-    public ObservableCollection<ImportOption> ImportOptions { get; } = new(SpeedTestDataBuilder.BuildImportOptions());
-
-    public ObservableCollection<SpeedTestFile> SpeedTestFiles { get; } = new(SpeedTestDataBuilder.BuildSpeedTestFiles());
+    public partial string HeaderText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private ImportOption? _selectedImportOption;
+    public partial string SearchLocation { get; set; } = App.Settings.SearchLocation;
+
+    public ObservableCollection<LocationFilter> LocationFilters { get; } = [.. SpeedTestDataBuilder.BuildLocationFilters()];
+
+    public ObservableCollection<ImportOption> ImportOptions { get; } = [.. SpeedTestDataBuilder.BuildImportOptions()];
+
+    public ObservableCollection<SpeedTestFile> SpeedTestFiles { get; } = [.. SpeedTestDataBuilder.BuildSpeedTestFiles()];
+
+    [ObservableProperty]
+    public partial ImportOption? SelectedImportOption { get; set; }
 
     public SpeedTestViewModel(ServiceViewModel serviceViewModel)
     {
@@ -85,7 +88,13 @@ public partial class SpeedTestViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private bool _isSortingEnabled = true, _isImportEnabled = true, _isSpeedTest;
+    public partial bool IsSortingEnabled { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool IsImportEnabled { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool IsSpeedTest { get; set; }
 
     private readonly ReadOnlyObservableCollection<IpItem> _ipItems;
 
@@ -104,7 +113,25 @@ public partial class SpeedTestViewModel : ViewModelBase
     private static partial Regex MatchIp();
 
     [ObservableProperty]
-    private bool _isXboxCn1Visible, _isXboxCn2Visible, _isXboxAppVisible, _isXboxSeparatorVisible, _isPsVisible, _isPsSeparatorVisible, _isAkamaiVisible;
+    public partial bool IsXboxCn1Visible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsXboxCn2Visible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsXboxAppVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsXboxSeparatorVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsPsVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsPsSeparatorVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsAkamaiVisible { get; set; }
 
     private string _selectedImportKey = string.Empty;
     [RelayCommand]
@@ -224,10 +251,13 @@ public partial class SpeedTestViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private IpItem? _selectedItem;
+    public partial IpItem? SelectedItem { get; set; }
 
     [ObservableProperty]
-    private bool _uploadAkamaiIpsVisible, _uploadAkamaiIpsEnabled = App.Settings.UploadAkamaiIpsEnabled;
+    public partial bool UploadAkamaiIpsVisible { get; set; }
+
+    [ObservableProperty]
+    public partial bool UploadAkamaiIpsEnabled { get; set; } = App.Settings.UploadAkamaiIpsEnabled;
 
     partial void OnUploadAkamaiIpsEnabledChanged(bool value)
     {
@@ -347,7 +377,10 @@ public partial class SpeedTestViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private string _targetTestUrl = "", _watermarkText = "";
+    public partial string TargetTestUrl { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string WatermarkText { get; set; } = "";
 
     [RelayCommand]
     private async Task FileClickedAsync(object? parameter)
@@ -384,7 +417,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var exportContent = DnsMappingGenerator.GenerateDnsMapping(key, ip, exportFormat, "Export");
 
-        await clipboard.SetTextAsync(exportContent);
+        await ClipboardHelper.SetTextAsync(clipboard, exportContent);
 
         var lines = exportContent.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var count = lines.Count(line => !line.StartsWith('#')); // 排除以 # 开头的行（忽略前导空格）
@@ -479,7 +512,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var ip = SelectedItem?.Ip;
         if (string.IsNullOrEmpty(ip)) return;
-        await clipboard.SetTextAsync(ip);
+        await ClipboardHelper.SetTextAsync(clipboard, ip);
     }
 
     #endregion

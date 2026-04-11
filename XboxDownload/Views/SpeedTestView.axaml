@@ -1,11 +1,12 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             xmlns:speed="clr-namespace:XboxDownload.Models.SpeedTest"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="XboxDownload.Views.SpeedTestView"
-             x:DataType="vm:SpeedTestViewModel">
+              x:Class="XboxDownload.Views.SpeedTestView"
+              x:CompileBindings="False">
 
     <Grid RowDefinitions="*,Auto">
         <Border>
@@ -158,32 +159,32 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.Select}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:IpItem">
                                     <CheckBox
                                         IsEnabled="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).IsSortingEnabled}"
                                         IsChecked="{Binding IsSelected}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Width="260" Header="{DynamicResource SpeedTest.DataGrid.Ip}" SortMemberPath="Ip" Binding="{Binding Path=Ip}" IsReadOnly="True"/>
-                        <DataGridTextColumn Width="*" Header="{DynamicResource SpeedTest.DataGrid.Location}" SortMemberPath="Location" Binding="{Binding Path=Location}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="260" Header="{DynamicResource SpeedTest.DataGrid.Ip}" SortMemberPath="Ip" Binding="{Binding Ip}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="*" Header="{DynamicResource SpeedTest.DataGrid.Location}" SortMemberPath="Location" Binding="{Binding Location}" IsReadOnly="True"/>
                         <DataGridTemplateColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.Ttl}" SortMemberPath="Ttl">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:IpItem">
                                     <TextBlock Text="{Binding Ttl}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Width="145" Header="{DynamicResource SpeedTest.DataGrid.RoundtripTime}" SortMemberPath="RoundtripTime">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:IpItem">
                                     <TextBlock Text="{Binding RoundtripTime}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Width="155" Header="{DynamicResource SpeedTest.DataGrid.Speed}" SortMemberPath="Speed">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:IpItem">
                                     <TextBlock Text="{Binding Speed, StringFormat='{}{0:F2}'}" TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -205,7 +206,7 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:LocationFilter">
                                     <CheckBox VerticalAlignment="Center" Margin="5 0"
                                               Content="{Binding Display}"
                                               IsChecked="{Binding IsSelected}"
@@ -230,7 +231,7 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="1" Spacing="5">
                         <TextBox VerticalAlignment="Center" Width="140" MaxLength="16" KeyDown="OnLocationQueryKeyDown"
                                  Text="{Binding SearchLocation}"
-                                 Watermark="{DynamicResource SpeedTest.SearchLocationHint}"
+                                 PlaceholderText="{DynamicResource SpeedTest.SearchLocationHint}"
                                  IsEnabled="{Binding !IsSpeedTest}"/>
                         <Button VerticalContentAlignment="Center"
                                 Content="{DynamicResource SpeedTest.Search}"
@@ -242,7 +243,7 @@
                                   ItemsSource="{Binding ImportOptions}"
                                   SelectedItem="{Binding SelectedImportOption}">
                             <ComboBox.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:ImportOption">
                                     <TextBlock Text="{Binding Display}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -260,7 +261,7 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="speed:SpeedTestFile">
                                     <Button Classes="LinkLabel" Margin="5,0"
                                             IsVisible="{Binding IsVisible}"
                                             IsEnabled="{Binding !$parent[ItemsControl].((vm:SpeedTestViewModel)DataContext).IsSpeedTest}"
@@ -290,7 +291,7 @@
                 </Grid>
 
                 <Grid ColumnDefinitions="*,Auto,Auto">
-                    <TextBox Grid.Column="0" Height="50" MaxLength="2083" Margin="0 0 2 0" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding !IsSpeedTest}" Text="{Binding TargetTestUrl}" Watermark="{Binding WatermarkText}"/>
+                    <TextBox Grid.Column="0" Height="50" MaxLength="2083" Margin="0 0 2 0" AcceptsReturn="True" TextWrapping="Wrap" IsEnabled="{Binding !IsSpeedTest}" Text="{Binding TargetTestUrl}" PlaceholderText="{Binding WatermarkText}"/>
                     <Button Grid.Column="1" Height="50" MinWidth="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{DynamicResource SpeedTest.StartTest}" Command="{Binding StartSpeedTestCommand}" IsVisible="{Binding !IsSpeedTest}"/>
                     <Button Grid.Column="2" Height="50" MinWidth="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{DynamicResource SpeedTest.StopTest}" Command="{Binding StopSpeedTestCommand}" IsVisible="{Binding IsSpeedTest}"/>
                 </Grid>

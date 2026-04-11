@@ -1,11 +1,12 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+             xmlns:service="clr-namespace:XboxDownload.Models.Services"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="XboxDownload.Views.ServiceView"
-             x:DataType="vm:ServiceViewModel">
+               x:Class="XboxDownload.Views.ServiceView"
+               x:CompileBindings="False">
 
     <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,200">
         <!-- Settings Group -->
@@ -47,13 +48,13 @@
                                 <TextBlock Text="{DynamicResource Service.Settings.UpstreamDnsServer}"
                                            ToolTip.Tip="{DynamicResource Service.Settings.UpstreamDnsServerTip}"/>
                                 <TextBox Name="DnsIpTextBox" Text="{Binding DnsIp}"
-                                         Watermark="{DynamicResource Service.Settings.OptionalDns}"/>
+                                         PlaceholderText="{DynamicResource Service.Settings.OptionalDns}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Classes="hosts-row">
                                 <TextBlock Text="{DynamicResource Service.Settings.XboxGlobalDlIp}"
                                            ToolTip.Tip="{Binding XboxGlobalDlIpTip}"/>
                                 <TextBox Name="XboxGlobalIpTextBox" Text="{Binding XboxGlobalIp}"
-                                          Watermark="{DynamicResource Service.Settings.XboxGlobalDlIpTip}"/>
+                                          PlaceholderText="{DynamicResource Service.Settings.XboxGlobalDlIpTip}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Classes="hosts-row">
                                 <TextBlock Text="{DynamicResource Service.Settings.XboxCn1DlIp}"
@@ -235,7 +236,7 @@
                         <DataGridTextColumn Header="{DynamicResource Service.Logs.RequestMethod}" MinWidth="80" Binding="{Binding RequestMethod}"/>
                         <DataGridTemplateColumn Header="{DynamicResource Service.Logs.Content}" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="service:ServiceModels">
                                     <TextBlock Text="{Binding Content}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="6,0">
                                         <ToolTip.Tip>
                                             <TextBlock Text="{Binding $parent[TextBlock].Text}" TextWrapping="Wrap"/>
@@ -259,7 +260,7 @@
                     <ComboBox ItemsSource="{Binding AdapterList}" SelectedItem="{Binding SelectedAdapter}"
                               IsEnabled="{Binding !IsListening}">
                         <ComboBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="service:AdapterInfo">
                                 <TextBlock Text="{Binding Ip}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>

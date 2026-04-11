@@ -25,7 +25,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
-    private StorageMappingEntry? _selectedEntry;
+    public partial StorageMappingEntry? SelectedEntry { get; set; }
 
     public bool IsEnabled => SelectedEntry != null;
 
@@ -35,7 +35,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private MediaType _diskMediaType = MediaType.External;
+    public partial MediaType DiskMediaType { get; set; } = MediaType.External;
 
     partial void OnDiskMediaTypeChanged(MediaType value)
     {

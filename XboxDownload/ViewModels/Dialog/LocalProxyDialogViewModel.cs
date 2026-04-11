@@ -138,7 +138,10 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private int _selectionStart, _selectionEnd;
+    public partial int SelectionStart { get; set; }
+
+    [ObservableProperty]
+    public partial int SelectionEnd { get; set; }
 
     [RelayCommand]
     private void ApplyProxyRule(ProxyModels models)
@@ -168,7 +171,7 @@ public partial class LocalProxyDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _doHServers = string.Empty;
+    public partial string DoHServers { get; set; } = string.Empty;
 
     private void RefreshDoHSelectionState()
     {

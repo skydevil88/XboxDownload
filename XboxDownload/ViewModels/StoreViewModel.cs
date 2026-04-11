@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -32,7 +32,10 @@ namespace XboxDownload.ViewModels;
 public partial class StoreViewModel : ObservableObject
 {
     [ObservableProperty]
-    private Bitmap? _boxArt, _cachedBoxArt;
+    public partial Bitmap? BoxArt { get; set; }
+
+    [ObservableProperty]
+    public partial Bitmap? CachedBoxArt { get; set; }
 
     public static bool IsWindows => OperatingSystem.IsWindows();
 
@@ -83,15 +86,18 @@ public partial class StoreViewModel : ObservableObject
     public ObservableCollection<GamePassEntry> GamePass2Mappings { get; } = [];
 
     [ObservableProperty]
-    private GamePassEntry? _selectedGamePass1, _selectedGamePass2;
+    public partial GamePassEntry? SelectedGamePass1 { get; set; }
 
     [ObservableProperty]
-    private DateTime _nextXgpUpdated = DateTime.MinValue;
+    public partial GamePassEntry? SelectedGamePass2 { get; set; }
+
+    [ObservableProperty]
+    public partial DateTime NextXgpUpdated { get; set; } = DateTime.MinValue;
 
     public ObservableCollection<Market> Markets { get; } = [];
 
     [ObservableProperty]
-    private Market? _selectedMarket;
+    public partial Market? SelectedMarket { get; set; }
 
     partial void OnSelectedMarketChanged(Market? value)
     {
@@ -228,7 +234,7 @@ public partial class StoreViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _isSuggestsOpen;
+    public partial bool IsSuggestsOpen { get; set; }
 
     private string _query = string.Empty;
 
@@ -307,7 +313,10 @@ public partial class StoreViewModel : ObservableObject
     public event Action? RequestFocus;
 
     [ObservableProperty]
-    private string _queryUrl = string.Empty, _searchText = string.Empty;
+    public partial string QueryUrl { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string SearchText { get; set; } = string.Empty;
 
     private Market? _currentProductMarket;
 
@@ -382,23 +391,47 @@ public partial class StoreViewModel : ObservableObject
     public Game? GameData;
 
     [ObservableProperty]
-    private string? _title, _publisherAndDeveloper, _category, _originalReleaseDate, _description, _gameLanguages, _price;
+    public partial string? Title { get; set; }
+
+    [ObservableProperty]
+    public partial string? PublisherAndDeveloper { get; set; }
+
+    [ObservableProperty]
+    public partial string? Category { get; set; }
+
+    [ObservableProperty]
+    public partial string? OriginalReleaseDate { get; set; }
+
+    [ObservableProperty]
+    public partial string? Description { get; set; }
+
+    [ObservableProperty]
+    public partial string? GameLanguages { get; set; }
+
+    [ObservableProperty]
+    public partial string? Price { get; set; }
 
     public ObservableCollection<Bundled> BundledMappings { get; } = [];
 
     [ObservableProperty]
-    private int _selectedBundledIndex = -1;
+    public partial int SelectedBundledIndex { get; set; } = -1;
 
     [ObservableProperty]
-    private bool _bundledLoaded, _productLoaded, _isEnablePriceComparison;
+    public partial bool BundledLoaded { get; set; }
 
     [ObservableProperty]
-    private Bundled? _selectedBundled;
+    public partial bool ProductLoaded { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsEnablePriceComparison { get; set; }
+
+    [ObservableProperty]
+    public partial Bundled? SelectedBundled { get; set; }
 
     public ObservableCollection<PlatformDownloadItem> PlatformDownloadInfo { get; } = [];
 
     [ObservableProperty]
-    private PlatformDownloadItem? _selectedPlatformDownloadItem = new();
+    public partial PlatformDownloadItem? SelectedPlatformDownloadItem { get; set; } = new();
 
     public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>
@@ -416,7 +449,7 @@ public partial class StoreViewModel : ObservableObject
     public readonly ConcurrentDictionary<string, decimal> ExchangeRates = new();
 
     [ObservableProperty]
-    private string _useCurrencyCode = !string.IsNullOrEmpty(App.Settings.CurrencyCode) ? App.Settings.CurrencyCode : ExchangeRateHelper.GetSystemCurrencyCode();
+    public partial string UseCurrencyCode { get; set; } = !string.IsNullOrEmpty(App.Settings.CurrencyCode) ? App.Settings.CurrencyCode : ExchangeRateHelper.GetSystemCurrencyCode();
 
     partial void OnUseCurrencyCodeChanged(string value)
     {
@@ -1064,7 +1097,7 @@ public partial class StoreViewModel : ObservableObject
                     break;
                 }
         }
-        await provider.SetTextAsync(url);
+        await ClipboardHelper.SetTextAsync(provider, url);
     }
 
 

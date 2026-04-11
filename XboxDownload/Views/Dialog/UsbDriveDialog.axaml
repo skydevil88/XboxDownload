@@ -3,10 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="250"
-        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         xmlns:converters="clr-namespace:XboxDownload.Converters"
         x:Class="XboxDownload.Views.Dialog.UsbDriveDialog"
-        x:DataType="dialog:UsbDriveDialogViewModel"
+        x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
         Width="980" Height="250"
         Title="Usb Device (MBR磁盘存在2TB分区限制，超出后的容量无法被使用)">

@@ -5,7 +5,7 @@
         xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="XboxDownload.Views.Dialog.PriceComparisonDialog"
-        x:DataType="dialog:PriceComparisonDialogViewModel"
+        x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
         Width="980" Height="600"
         Title="{DynamicResource Store.PriceComparison.Title}">
@@ -33,7 +33,7 @@
                 <DataGrid.Columns>
                     <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Store.PriceComparison.Select}">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="dialog:MarketMappingEntry">
                                 <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
                                           IsChecked="{Binding IsSelect}"/>
                             </DataTemplate>
@@ -47,7 +47,7 @@
                                         Binding="{Binding Currency}"/>
                     <DataGridTemplateColumn Width="150" Header="{DynamicResource Store.PriceComparison.ListPrice}" SortMemberPath="ListPrice">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="dialog:MarketMappingEntry">
                                 <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                            Text="{Binding ListPrice, StringFormat=N2}"/>
                             </DataTemplate>
@@ -55,7 +55,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="150" Header="{Binding ConvertedPrice}" SortMemberPath="ConvertPrices">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="dialog:MarketMappingEntry">
                                 <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                            Foreground="{DynamicResource Green}"
                                            Text="{Binding ConvertPrices, StringFormat=N2}"/>
@@ -64,7 +64,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="150" Header="{DynamicResource Store.PriceComparison.ExchangeRates}" SortMemberPath="ExchangeRates">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="dialog:MarketMappingEntry">
                                 <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                            Text="{Binding ExchangeRates, StringFormat=N8}"/>
                             </DataTemplate>

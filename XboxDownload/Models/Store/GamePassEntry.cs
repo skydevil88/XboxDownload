@@ -8,5 +8,5 @@ public partial class GamePassEntry : ObservableObject
     public string ProductId { get; init; } = string.Empty;
 
     [ObservableProperty]
-    private string _title = string.Empty;
+    public partial string Title { get; set; } = string.Empty;
 }

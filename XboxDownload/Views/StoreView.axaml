@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:XboxDownload.ViewModels"
-             x:Class="XboxDownload.Views.StoreView"
-             x:DataType="vm:StoreViewModel">
+             xmlns:store="clr-namespace:XboxDownload.Models.Store"
+              x:Class="XboxDownload.Views.StoreView"
+              x:CompileBindings="False">
 
     <Grid RowDefinitions="Auto,*">
         <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Store.MicrosoftStore}">
@@ -24,7 +25,7 @@
                           ItemsSource="{Binding Markets}"
                           SelectedItem="{Binding SelectedMarket}">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="store:Market">
                             <TextBlock Text="{Binding Name}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -37,7 +38,7 @@
 
                     <StackPanel Grid.Column="0">
                         <TextBox x:Name="SearchBox" MaxLength="50"
-                                 Watermark="{DynamicResource Store.SearchWatermark}"
+                                 PlaceholderText="{DynamicResource Store.SearchWatermark}"
                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                  KeyDown="SearchBox_KeyDown" PointerPressed="SearchBox_PointerPressed" LostFocus="SearchBox_LostFocus">
                             <FlyoutBase.AttachedFlyout>
@@ -55,7 +56,7 @@
                                             </Style>
                                         </ListBox.Styles>
                                         <ListBox.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="store:StoreSearchResult">
                                                 <StackPanel Orientation="Horizontal" Spacing="10">
                                                     <Image Source="{Binding IconBitmap}" Width="32" Height="32"/>
                                                     <TextBlock Text="{Binding Title}" VerticalAlignment="Center" MinWidth="180"/>
@@ -73,7 +74,7 @@
                               SelectedItem="{Binding SelectedGamePass1}"
                               SelectionChanged="OnGamePass1SelectionChanged">
                         <ComboBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="store:GamePassEntry">
                                 <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent[ListBoxItem].Bounds.Width}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
@@ -84,7 +85,7 @@
                               SelectedItem="{Binding SelectedGamePass2}"
                               SelectionChanged="OnGamePass2SelectionChanged">
                         <ComboBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="store:GamePassEntry">
                                 <TextBlock Text="{Binding Title}" MaxWidth="{Binding $parent[ListBoxItem].Bounds.Width}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
@@ -149,7 +150,7 @@
                                   SelectedIndex="{Binding SelectedBundledIndex}"
                                   SelectionChanged="OnProductSelectionChanged">
                             <ComboBox.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="store:Bundled">
                                     <TextBlock Text="{Binding Title}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -258,7 +259,7 @@
                         <DataGridTextColumn MinWidth="90" Header="{DynamicResource Store.Market}" Binding="{Binding Market}"/>
                         <DataGridTemplateColumn MinWidth="95" Header="{DynamicResource Store.Size}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="store:PlatformDownloadItem">
                                     <TextBlock TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0"
                                                Text="{Binding FormatSize}"/>
                                 </DataTemplate>
@@ -266,7 +267,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Width="*" Header="{DynamicResource Store.DownloadLink}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="store:PlatformDownloadItem">
                                     <TextBlock VerticalAlignment="Center" Margin="10,0" TextTrimming="CharacterEllipsis"
                                                Foreground="{Binding Foreground}"
                                                TextDecorations="{Binding TextDecorations}"

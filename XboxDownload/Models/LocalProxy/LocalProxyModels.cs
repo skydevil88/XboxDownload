@@ -30,7 +30,7 @@ public partial class DohModels : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _isEnabled;
+    public partial bool IsEnabled { get; set; }
 
     public DohModels(string id, string name, bool isChecked = false, bool isEnabled = true)
     {

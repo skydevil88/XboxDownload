@@ -16,7 +16,7 @@ public partial class StorageView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
 
             var dialog = new Dialog.HardDriveDialog();
             await dialog.ShowDialog(window);

@@ -10,13 +10,13 @@ namespace XboxDownload.Models.Store;
 public partial class StoreSearchResult : ObservableObject
 {
     [ObservableProperty]
-    private string _title = string.Empty;
+    public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _productId = string.Empty;
+    public partial string ProductId { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private Bitmap? _iconBitmap;
+    public partial Bitmap? IconBitmap { get; set; }
 
     public async Task LoadIconFromUrlAsync(string? url)
     {

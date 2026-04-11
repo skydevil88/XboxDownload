@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia.Enums;
@@ -252,7 +252,7 @@ public class HttpClientHelper
              : null;
 
             if (topLevel?.Clipboard != null)
-                await topLevel.Clipboard.SetTextAsync(url);
+                await ClipboardHelper.SetTextAsync(topLevel.Clipboard, url);
 
             await DialogHelper.ShowInfoDialogAsync(
                 "Notice",

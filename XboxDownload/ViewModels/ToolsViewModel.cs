@@ -29,12 +29,12 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     private UsbWatcher? _usbWatcher;
 
     [ObservableProperty]
-    private bool _isChineseUsers = App.Settings.Culture == "zh-Hans";
+    public partial bool IsChineseUsers { get; set; } = App.Settings.Culture == "zh-Hans";
 
     public ObservableCollection<DeviceMappingEntry> DrivePaths { get; } = [];
 
     [ObservableProperty]
-    private DeviceMappingEntry? _selectedDrivePath;
+    public partial DeviceMappingEntry? SelectedDrivePath { get; set; }
 
     public void LanguageChanged()
     {
@@ -101,7 +101,13 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     }
 
     [ObservableProperty]
-    private string _filePath = string.Empty, _appInstallPath = string.Empty, _gameInstallPath = string.Empty;
+    public partial string FilePath { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string AppInstallPath { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string GameInstallPath { get; set; } = string.Empty;
 
     [RelayCommand]
     private async Task OpenFileAsync()
@@ -210,13 +216,13 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     public partial class DeviceMappingEntry : ObservableObject
     {
         [ObservableProperty]
-        private string _directoryRoot;
+        public partial string DirectoryRoot { get; set; }
 
         [ObservableProperty]
-        private string _storePath;
+        public partial string StorePath { get; set; }
 
         [ObservableProperty]
-        private bool _isOffline;
+        public partial bool IsOffline { get; set; }
 
         public DeviceMappingEntry(string directoryRoot, string storePath = "", bool isOffline = false)
         {
@@ -281,12 +287,15 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     }
 
     [ObservableProperty]
-    private PlatformType _selectedPlatformType = PlatformType.XboxSeries;
+    public partial PlatformType SelectedPlatformType { get; set; } = PlatformType.XboxSeries;
 
     public ObservableCollection<string> UsbDrivePaths { get; } = [];
 
     [ObservableProperty]
-    private string? _selectedUsbDrivePath, _usbDriveStatus = string.Empty;
+    public partial string? SelectedUsbDrivePath { get; set; }
+
+    [ObservableProperty]
+    public partial string UsbDriveStatus { get; set; } = string.Empty;
 
     partial void OnSelectedUsbDrivePathChanged(string? value)
     {

@@ -1,8 +1,9 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
+        xmlns:proxy="clr-namespace:XboxDownload.Models.LocalProxy"
         x:Class="XboxDownload.Views.Dialog.LocalProxyDialog"
-        x:DataType="dialog:LocalProxyDialogViewModel"
+        x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
         Width="980" Height="600"
         Title="{DynamicResource Service.LocalProxy.Title}">
@@ -16,7 +17,7 @@
                                  SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                                  SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
                                  Text="{Binding RulesText}"
-                                 Watermark="{DynamicResource Service.LocalProxy.ProxyRulesWatermark}"/>
+                                 PlaceholderText="{DynamicResource Service.LocalProxy.ProxyRulesWatermark}"/>
                     </HeaderedContentControl>
 
                     <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="6" MinWidth="180">
@@ -30,7 +31,7 @@
                                         </Style>
                                     </ListBox.Styles>
                                     <ListBox.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate x:DataType="proxy:ProxyModels">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                 <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Display}"
                                                           Command="{Binding $parent[ListBox].((dialog:LocalProxyDialogViewModel)DataContext).ApplyProxyRuleCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
@@ -52,7 +53,7 @@
                                         </Style>
                                     </ListBox.Styles>
                                     <ListBox.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate x:DataType="proxy:DohModels">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                 <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Name}"
                                                           IsEnabled="{Binding IsEnabled}"/>
@@ -142,7 +143,7 @@
                     <HeaderedContentControl Grid.Column="1" Header="{DynamicResource Service.LocalProxy.CustomValidationPolicy}">
                         <TextBox BorderThickness="0" AcceptsReturn="True"
                                  Text="{Binding CertDomain2Text}"
-                                 Watermark="{DynamicResource Service.LocalProxy.CustomValidationPolicyWatermark}"/>
+                                 PlaceholderText="{DynamicResource Service.LocalProxy.CustomValidationPolicyWatermark}"/>
                     </HeaderedContentControl>
                 </Grid>
                 

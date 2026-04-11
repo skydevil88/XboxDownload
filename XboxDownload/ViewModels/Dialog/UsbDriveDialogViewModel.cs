@@ -22,7 +22,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
-    private UsbDriveMappingEntry? _selectedEntry;
+    public partial UsbDriveMappingEntry? SelectedEntry { get; set; }
 
     public bool IsEnabled => SelectedEntry != null;
 
@@ -32,7 +32,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private PartitionScheme _diskPartitionType = PartitionScheme.Mbr;
+    public partial PartitionScheme DiskPartitionType { get; set; } = PartitionScheme.Mbr;
 
     [RelayCommand]
     [SupportedOSPlatform("windows")]

@@ -3,9 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        xmlns:dialog="clr-namespace:XboxDownload.ViewModels.Dialog"
         x:Class="XboxDownload.Views.Dialog.ImportHostDialog"
-        x:DataType="dialog:ImportHostDialogViewModel"
+        x:CompileBindings="False"
         WindowStartupLocation="CenterOwner"
         Width="800" Height="450"
         Title="{DynamicResource Host.ImportHost.Title}">
@@ -15,7 +14,7 @@
         <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                  Margin="10,10, 10,0" AcceptsReturn="True"
                  Text="{Binding Content}"
-                 Watermark="{DynamicResource Host.ImportHost.Watermark}"/>
+                 PlaceholderText="{DynamicResource Host.ImportHost.Watermark}"/>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Spacing="10" Orientation="Horizontal">
 

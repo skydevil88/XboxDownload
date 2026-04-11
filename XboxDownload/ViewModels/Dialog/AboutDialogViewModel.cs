@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
+using XboxDownload.Helpers.UI;
 using XboxDownload.Services;
 
 namespace XboxDownload.ViewModels.Dialog;
@@ -13,13 +14,13 @@ namespace XboxDownload.ViewModels.Dialog;
 public partial class AboutDialogViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string? _version = string.Format(ResourceHelper.GetString("About.Version"),
+    public partial string? Version { get; set; } = string.Format(ResourceHelper.GetString("About.Version"),
         Assembly.GetEntryAssembly()?
         .GetCustomAttribute<AssemblyFileVersionAttribute>()?
         .Version);
 
     [ObservableProperty]
-    private bool _isChineseUser = App.Settings.Culture == "zh-Hans";
+    public partial bool IsChineseUser { get; set; } = App.Settings.Culture == "zh-Hans";
 
     public static string Project => UpdateService.Project;
 
@@ -36,6 +37,6 @@ public partial class AboutDialogViewModel : ObservableObject
             desktop.MainWindow?.Clipboard is not { } provider)
             return;
 
-        await provider.SetTextAsync("TT9CzksU5KuXkkYaox2ifvF5tbGaQRmSZw");
+        await ClipboardHelper.SetTextAsync(provider, "TT9CzksU5KuXkkYaox2ifvF5tbGaQRmSZw");
     }
 }

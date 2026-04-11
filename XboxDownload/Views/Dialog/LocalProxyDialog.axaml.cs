@@ -16,8 +16,6 @@ public partial class LocalProxyDialog : Window
     
     public LocalProxyDialog(ServiceViewModel serviceVm) : this()
     {
-        InitializeComponent();
-        
         var vm = new LocalProxyDialogViewModel(serviceVm)
         {
             CloseDialog = () => Close(null)
@@ -30,7 +28,7 @@ public partial class LocalProxyDialog : Window
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
             var serviceVm = Ioc.Default.GetRequiredService<ServiceViewModel>();
             var dialog = new DohServerDialog(serviceVm);
             await dialog.ShowDialog(window);

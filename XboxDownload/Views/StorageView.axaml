@@ -3,9 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
-             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
-             x:Class="XboxDownload.Views.StorageView"
-             x:DataType="vm:StorageViewModel">
+              x:Class="XboxDownload.Views.StorageView"
+              x:CompileBindings="False">
 
     <Grid RowDefinitions="*,Auto">
         <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Storage.XboxExternalStorageDevice}"

@@ -42,10 +42,13 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ResolveHostMappingEntry? _selectedItem;
+    public partial ResolveHostMappingEntry? SelectedItem { get; set; }
 
     [ObservableProperty]
-    private string _hostnameToResolve = string.Empty, _resolveIp = string.Empty;
+    public partial string HostnameToResolve { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ResolveIp { get; set; } = string.Empty;
 
     [RelayCommand]
     private void SetIpForHost(ResolveHostMappingEntry? item)
@@ -135,7 +138,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
     public event Action<string>? RequestFocus;
 
     [ObservableProperty]
-    private bool _preferIPv6;
+    public partial bool PreferIPv6 { get; set; }
 
     [RelayCommand]
     public async Task QueryAsync()

@@ -1,11 +1,12 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
-             x:Class="XboxDownload.Views.HostView"
-             x:DataType="vm:HostViewModel">
+              xmlns:vm="clr-namespace:XboxDownload.ViewModels"
+              xmlns:host="clr-namespace:XboxDownload.Models.Host"
+               x:Class="XboxDownload.Views.HostView"
+               x:CompileBindings="False">
 
     <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto">
         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
@@ -28,9 +29,9 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn MinWidth="70" Header="{DynamicResource Host.Enable}">
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="host:HostMappingEntry">
                                     <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              IsChecked="{Binding IsEnabled}"/>
+                                               IsChecked="{Binding IsEnabled}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

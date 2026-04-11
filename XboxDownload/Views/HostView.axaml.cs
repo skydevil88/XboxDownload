@@ -17,7 +17,7 @@ public partial class HostView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
 
             // Ensure DataContext is HostViewModel
             if (DataContext is HostViewModel hostViewModel)
@@ -43,7 +43,7 @@ public partial class HostView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
             
             if (DataContext is HostViewModel hostViewModel)
             {

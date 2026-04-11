@@ -34,7 +34,7 @@ public partial class ToolsView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
 
             // Ensure DataContext is HostViewModel
             if (DataContext is ToolsViewModel toolsVm)

@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -188,13 +188,31 @@ public partial class ServiceViewModel : ObservableObject
     #region Service
 
     [ObservableProperty]
-    private ListeningIpOption? _selectedListeningIp;
+    public partial ListeningIpOption? SelectedListeningIp { get; set; }
 
     [ObservableProperty]
-    private bool _isDnsServiceEnabled = App.Settings.IsDnsServiceEnabled, _isHttpServiceEnabled = App.Settings.IsHttpServiceEnabled,
-        _isSetLocalDnsEnabled = App.Settings.IsSetLocalDnsEnabled, _isSystemSleepPrevented = App.Settings.IsSystemSleepPrevented,
-        _isDoHEnabled = App.Settings.IsDoHEnabled, _isIPv6DomainFilterEnabled = App.Settings.IsIPv6DomainFilterEnabled,
-        _isLocalProxyEnabled = App.Settings.IsLocalProxyEnabled, _isFastestAkamaiIp;
+    public partial bool IsDnsServiceEnabled { get; set; } = App.Settings.IsDnsServiceEnabled;
+
+    [ObservableProperty]
+    public partial bool IsHttpServiceEnabled { get; set; } = App.Settings.IsHttpServiceEnabled;
+
+    [ObservableProperty]
+    public partial bool IsSetLocalDnsEnabled { get; set; } = App.Settings.IsSetLocalDnsEnabled;
+
+    [ObservableProperty]
+    public partial bool IsSystemSleepPrevented { get; set; } = App.Settings.IsSystemSleepPrevented;
+
+    [ObservableProperty]
+    public partial bool IsDoHEnabled { get; set; } = App.Settings.IsDoHEnabled;
+
+    [ObservableProperty]
+    public partial bool IsIPv6DomainFilterEnabled { get; set; } = App.Settings.IsIPv6DomainFilterEnabled;
+
+    [ObservableProperty]
+    public partial bool IsLocalProxyEnabled { get; set; } = App.Settings.IsLocalProxyEnabled;
+
+    [ObservableProperty]
+    public partial bool IsFastestAkamaiIp { get; set; }
 
     partial void OnIsDoHEnabledChanged(bool value)
     {
@@ -283,7 +301,13 @@ public partial class ServiceViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private bool _isListening, _isListeningFailed, _isDnsReady;
+    public partial bool IsListening { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsListeningFailed { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsDnsReady { get; set; }
 
     public string ListeningStatusText =>
         IsListening
@@ -308,7 +332,7 @@ public partial class ServiceViewModel : ObservableObject
     public ObservableCollection<DohServerOption> DohServersMappings { get; } = ServiceDataBuilder.GetDohServerList();
 
     [ObservableProperty]
-    private DohServerOption? _selectedDohServer;
+    public partial DohServerOption? SelectedDohServer { get; set; }
 
     partial void OnSelectedDohServerChanged(DohServerOption? oldValue, DohServerOption? newValue)
     {
@@ -553,23 +577,64 @@ public partial class ServiceViewModel : ObservableObject
     #region Settings
 
     [ObservableProperty]
-    private string
-        _xboxGlobalDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxGlobal")),
-        _xboxCn1DlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxCn1")),
-        _xboxCn2DlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxCn2")),
-        _xboxAppDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxApp")),
-        _psDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ps")),
-        _nsDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ns")),
-        _eaDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ea")),
-        _battleDlIpTip = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Battle"));
+    public partial string XboxGlobalDlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxGlobal"));
 
     [ObservableProperty]
-    private string _dnsIp = App.Settings.DnsIp, _xboxGlobalIp = App.Settings.XboxGlobalIp, _xboxCn1Ip = App.Settings.XboxCn1Ip, _xboxCn2Ip = App.Settings.XboxCn2Ip, _xboxAppIp = App.Settings.XboxAppIp,
-        _psIp = App.Settings.PsIp, _nsIp = App.Settings.NsIp, _eaIp = App.Settings.EaIp, _battleIp = App.Settings.BattleIp,
-        _localUploadPath = App.Settings.LocalUploadPath;
+    public partial string XboxCn1DlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxCn1"));
 
     [ObservableProperty]
-    private bool _isXboxGameDownloadLinksShown = App.Settings.IsXboxGameDownloadLinksShown, _isLocalUploadEnabled = App.Settings.IsLocalUploadEnabled;
+    public partial string XboxCn2DlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxCn2"));
+
+    [ObservableProperty]
+    public partial string XboxAppDlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("XboxApp"));
+
+    [ObservableProperty]
+    public partial string PsDlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ps"));
+
+    [ObservableProperty]
+    public partial string NsDlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ns"));
+
+    [ObservableProperty]
+    public partial string EaDlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Ea"));
+
+    [ObservableProperty]
+    public partial string BattleDlIpTip { get; set; } = string.Join(Environment.NewLine, DnsMappingGenerator.GenerateHostList("Battle"));
+
+    [ObservableProperty]
+    public partial string DnsIp { get; set; } = App.Settings.DnsIp;
+
+    [ObservableProperty]
+    public partial string XboxGlobalIp { get; set; } = App.Settings.XboxGlobalIp;
+
+    [ObservableProperty]
+    public partial string XboxCn1Ip { get; set; } = App.Settings.XboxCn1Ip;
+
+    [ObservableProperty]
+    public partial string XboxCn2Ip { get; set; } = App.Settings.XboxCn2Ip;
+
+    [ObservableProperty]
+    public partial string XboxAppIp { get; set; } = App.Settings.XboxAppIp;
+
+    [ObservableProperty]
+    public partial string PsIp { get; set; } = App.Settings.PsIp;
+
+    [ObservableProperty]
+    public partial string NsIp { get; set; } = App.Settings.NsIp;
+
+    [ObservableProperty]
+    public partial string EaIp { get; set; } = App.Settings.EaIp;
+
+    [ObservableProperty]
+    public partial string BattleIp { get; set; } = App.Settings.BattleIp;
+
+    [ObservableProperty]
+    public partial string LocalUploadPath { get; set; } = App.Settings.LocalUploadPath;
+
+    [ObservableProperty]
+    public partial bool IsXboxGameDownloadLinksShown { get; set; } = App.Settings.IsXboxGameDownloadLinksShown;
+
+    [ObservableProperty]
+    public partial bool IsLocalUploadEnabled { get; set; } = App.Settings.IsLocalUploadEnabled;
 
     partial void OnIsXboxGameDownloadLinksShownChanged(bool value)
     {
@@ -615,7 +680,7 @@ public partial class ServiceViewModel : ObservableObject
     #region Logs
 
     [ObservableProperty]
-    private bool _isLogging = App.Settings.IsLogging;
+    public partial bool IsLogging { get; set; } = App.Settings.IsLogging;
 
     partial void OnIsLoggingChanged(bool value)
     {
@@ -650,7 +715,7 @@ public partial class ServiceViewModel : ObservableObject
 
         if (topLevel?.Clipboard != null)
         {
-            await topLevel.Clipboard.SetTextAsync(log.Content);
+            await ClipboardHelper.SetTextAsync(topLevel.Clipboard, log.Content);
         }
     }
 
@@ -714,10 +779,13 @@ public partial class ServiceViewModel : ObservableObject
 
     public ObservableCollection<AdapterInfo> AdapterList { get; } = [];
 
-    [ObservableProperty] private AdapterInfo? _selectedAdapter;
+    [ObservableProperty] public partial AdapterInfo? SelectedAdapter { get; set; }
 
     [ObservableProperty]
-    private string _traffic = string.Empty, _adapterInfo = string.Empty;
+    public partial string Traffic { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string AdapterInfo { get; set; } = string.Empty;
 
     partial void OnSelectedAdapterChanged(AdapterInfo? oldValue, AdapterInfo? newValue)
     {

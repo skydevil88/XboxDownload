@@ -142,7 +142,7 @@ public partial class StoreView : UserControl
         vm.IsSuggestsOpen = true;
     }
 
-    private void SearchBox_LostFocus(object? sender, RoutedEventArgs e)
+    private void SearchBox_LostFocus(object? sender, FocusChangedEventArgs e)
     {
         var topLevel = TopLevel.GetTopLevel(this);
         var focused = topLevel?.FocusManager?.GetFocusedElement();
@@ -221,7 +221,7 @@ public partial class StoreView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
 
             // Ensure DataContext is HostViewModel
             if (DataContext is StoreViewModel storeViewModel)

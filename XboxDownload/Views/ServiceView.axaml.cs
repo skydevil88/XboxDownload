@@ -39,7 +39,7 @@ public partial class ServiceView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
             if (DataContext is ServiceViewModel serviceVm)
             {
                 var dialog = new Dialog.DohServerDialog(serviceVm);
@@ -60,7 +60,7 @@ public partial class ServiceView : UserControl
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
             if (DataContext is ServiceViewModel serviceVm)
             {
                 var dialog = new Dialog.LocalProxyDialog(serviceVm);
@@ -97,7 +97,7 @@ public partial class ServiceView : UserControl
     {
         try
         {
-            if (this.GetVisualRoot() is not Window topWindow)
+            if (TopLevel.GetTopLevel(this) is not Window topWindow)
                 return;
 
             var result = await topWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions

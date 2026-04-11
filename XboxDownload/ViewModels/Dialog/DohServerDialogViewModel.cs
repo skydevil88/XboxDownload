@@ -23,13 +23,13 @@ namespace XboxDownload.ViewModels.Dialog;
 public partial class DohServerDialogViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _dohServerProxyIp = App.Settings.DohServerProxyIp;
+    public partial string DohServerProxyIp { get; set; } = App.Settings.DohServerProxyIp;
 
 
     private readonly ServiceViewModel _serviceViewModel;
 
     [ObservableProperty]
-    private DohServerOption? _selectedDohServer;
+    public partial DohServerOption? SelectedDohServer { get; set; }
 
     public ObservableCollection<DohServerOption> DohServersMappings => _serviceViewModel.DohServersMappings;
 
@@ -38,7 +38,7 @@ public partial class DohServerDialogViewModel : ObservableObject
     public DohServerDialogViewModel(ServiceViewModel serviceViewModel)
     {
         _serviceViewModel = serviceViewModel;
-        _selectedDohServer = _serviceViewModel.SelectedDohServer;
+        SelectedDohServer = _serviceViewModel.SelectedDohServer;
 
         foreach (var dohServer in DohServersMappings)
         {
@@ -220,7 +220,7 @@ public partial class DohServerDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private DohHostMappingEntry? _selectedEntry;
+    public partial DohHostMappingEntry? SelectedEntry { get; set; }
 
     [RelayCommand]
     private async Task LoadDohHostsFromJsonAsync()

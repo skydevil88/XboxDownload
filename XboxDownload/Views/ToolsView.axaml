@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
              xmlns:converters="clr-namespace:XboxDownload.Converters"
-             x:Class="XboxDownload.Views.ToolsView"
-             x:DataType="vm:ToolsViewModel">
+             xmlns:tools="clr-namespace:XboxDownload.ViewModels"
+               x:Class="XboxDownload.Views.ToolsView"
+               x:CompileBindings="False">
 
     <UserControl.Resources>
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
@@ -27,7 +27,7 @@
                                   ItemsSource="{Binding DrivePaths}"
                                   SelectedItem="{Binding SelectedDrivePath}">
                             <ComboBox.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="tools:ToolsViewModel+DeviceMappingEntry">
                                     <TextBlock Text="{Binding DirectoryRoot}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>

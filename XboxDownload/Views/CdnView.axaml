@@ -3,16 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:XboxDownload.ViewModels"
-             x:Class="XboxDownload.Views.CdnView"
-             x:DataType="vm:CdnViewModel">
+              x:Class="XboxDownload.Views.CdnView"
+              x:CompileBindings="False">
 
     <Grid RowDefinitions="Auto,*,Auto">
         <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Cdn.AkamaiCdn}">
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                 <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{DynamicResource Cdn.CustomIPs}"/>
                 <TextBox x:Name="CdnIpAddressInput" Grid.Column="1" MinWidth="680" Text="{Binding AkamaiCdnIp}"
-                         Watermark="{DynamicResource Cdn.CustomIPs.Watermark}"/>
+                         PlaceholderText="{DynamicResource Cdn.CustomIPs.Watermark}"/>
             </Grid>
         </HeaderedContentControl>
 
@@ -23,7 +22,7 @@
 
             <HeaderedContentControl Grid.Column="1" Header="{DynamicResource Cdn.CustomDomain}">
                 <TextBox BorderThickness="0" Text="{Binding AkamaiHost2}" AcceptsReturn="True"
-                         Watermark="{DynamicResource Cdn.CustomDomain.Watermark}"/>
+                         PlaceholderText="{DynamicResource Cdn.CustomDomain.Watermark}"/>
             </HeaderedContentControl>
         </Grid>
 

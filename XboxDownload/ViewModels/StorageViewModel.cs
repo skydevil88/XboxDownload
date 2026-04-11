@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -34,10 +34,13 @@ public partial class StorageViewModel : ObservableObject
     public ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
 
     [ObservableProperty]
-    private StorageMappingEntry? _selectedEntry;
+    public partial StorageMappingEntry? SelectedEntry { get; set; }
 
     [ObservableProperty]
-    private bool _isEnablePcMode, _isEnableXboxMode;
+    public partial bool IsEnablePcMode { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsEnableXboxMode { get; set; }
 
     partial void OnSelectedEntryChanged(StorageMappingEntry? value)
     {
@@ -191,10 +194,40 @@ public partial class StorageViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _downloadUrl = string.Empty, _filePath = string.Empty, _fileTimeCreated = string.Empty, _driveSize = string.Empty, _contentId = string.Empty, _productId = string.Empty, _productId2 = string.Empty, _buildId = string.Empty, _packageVersion = string.Empty;
+    public partial string DownloadUrl { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private bool _isProductId2, _isCopyContentId, _isRename;
+    public partial string FilePath { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string FileTimeCreated { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string DriveSize { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ContentId { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ProductId { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string ProductId2 { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string BuildId { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string PackageVersion { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial bool IsProductId2 { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsCopyContentId { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsRename { get; set; }
 
     [RelayCommand]
     private async Task CopyContentIdAsync()
@@ -203,7 +236,7 @@ public partial class StorageViewModel : ObservableObject
             desktop.MainWindow?.Clipboard is not { } provider)
             return;
 
-        await provider.SetTextAsync(ContentId.ToUpperInvariant());
+        await ClipboardHelper.SetTextAsync(provider, ContentId.ToUpperInvariant());
     }
 
     [RelayCommand]

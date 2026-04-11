@@ -52,7 +52,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
             
             var dialog = new Dialog.StartupSettingsDialog();
             await dialog.ShowDialog(window);
@@ -67,7 +67,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (VisualRoot is not Window window) return;
+            if (TopLevel.GetTopLevel(this) is not Window window) return;
             
             var dialog = new Dialog.AboutDialog();
             await dialog.ShowDialog(window);

@@ -39,7 +39,7 @@ public partial class MainWindowViewModel(
     public ToolsViewModel ToolsViewModel { get; } = toolsViewModel;
 
     [ObservableProperty]
-    private int _selectedTabIndex;
+    public partial int SelectedTabIndex { get; set; }
 
     public static bool IsWindows => OperatingSystem.IsWindows();
 

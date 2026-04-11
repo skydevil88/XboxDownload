@@ -8,13 +8,13 @@ public partial class LocationFilter : ObservableObject
     public string[] Keywords { get; }
 
     [ObservableProperty]
-    private string _display;
+    public partial string Display { get; set; }
 
     [ObservableProperty]
-    private bool _isSelected;
+    public partial bool IsSelected { get; set; }
 
     [ObservableProperty]
-    private bool _isVisible;
+    public partial bool IsVisible { get; set; }
 
     public LocationFilter(string key, string[] keywords, string display, bool isVisible = false)
     {
@@ -31,10 +31,10 @@ public partial class ImportOption : ObservableObject
     public string Target { get; }
 
     [ObservableProperty]
-    private string _display;
+    public partial string Display { get; set; }
 
     [ObservableProperty]
-    private string _hint;
+    public partial string Hint { get; set; }
 
     public ImportOption(string key, string target, string display, string hint)
     {
@@ -51,12 +51,12 @@ public partial class SpeedTestFile : ObservableObject
     public string Target { get; }
 
     [ObservableProperty]
-    private string _display;
+    public partial string Display { get; set; }
 
     public string Url { get; }
 
     [ObservableProperty]
-    private bool _isVisible;
+    public partial bool IsVisible { get; set; }
 
     public SpeedTestFile(string key, string target, string display, string url)
     {
@@ -70,23 +70,23 @@ public partial class SpeedTestFile : ObservableObject
 public partial class IpItem : ObservableObject
 {
     [ObservableProperty]
-    private bool _isSelected;
+    public partial bool IsSelected { get; set; }
 
     [ObservableProperty]
-    private string _ip = string.Empty;
+    public partial string Ip { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _location = string.Empty;
+    public partial string Location { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private int? _ttl;
+    public partial int? Ttl { get; set; }
 
     [ObservableProperty]
-    private long? _roundtripTime;
+    public partial long? RoundtripTime { get; set; }
 
     [ObservableProperty]
-    private double? _speed;
+    public partial double? Speed { get; set; }
 
     [ObservableProperty]
-    private bool _isFilterMatched;
+    public partial bool IsFilterMatched { get; set; }
 }
