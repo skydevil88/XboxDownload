@@ -8,7 +8,7 @@
               x:Class="XboxDownload.Views.StoreView"
               x:CompileBindings="False">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*" x:DataType="vm:StoreViewModel">
         <HeaderedContentControl Grid.Row="0" Header="{DynamicResource Store.MicrosoftStore}">
             <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*,Auto,Auto" RowSpacing="5" ColumnSpacing="5">
                 <Grid.Styles>
@@ -255,8 +255,20 @@
                     </DataGrid.Styles>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn MinWidth="138" Header="{DynamicResource Store.PlatformName}" Binding="{Binding DisplayName}"/>
-                        <DataGridTextColumn MinWidth="90" Header="{DynamicResource Store.Market}" Binding="{Binding Market}"/>
+                        <DataGridTemplateColumn MinWidth="138" Header="{DynamicResource Store.PlatformName}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="store:PlatformDownloadItem">
+                                    <TextBlock Text="{Binding DisplayName}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="90" Header="{DynamicResource Store.Market}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="store:PlatformDownloadItem">
+                                    <TextBlock Text="{Binding Market}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="95" Header="{DynamicResource Store.Size}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:DataType="store:PlatformDownloadItem">

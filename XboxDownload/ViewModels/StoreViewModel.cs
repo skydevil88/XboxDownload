@@ -81,8 +81,8 @@ public partial class StoreViewModel : ObservableObject
     [GeneratedRegex(@"\((\d+)\)")]
     private static partial Regex GetNumberRegex();
 
-    private ObservableCollection<GamePassEntry> GamePass1Mappings { get; } = [];
-    private ObservableCollection<GamePassEntry> GamePass2Mappings { get; } = [];
+    public ObservableCollection<GamePassEntry> GamePass1Mappings { get; } = [];
+    public ObservableCollection<GamePassEntry> GamePass2Mappings { get; } = [];
 
     [ObservableProperty]
     public partial GamePassEntry? SelectedGamePass1 { get; set; }
@@ -96,7 +96,7 @@ public partial class StoreViewModel : ObservableObject
     public ObservableCollection<Market> Markets { get; } = [];
 
     [ObservableProperty]
-    private partial Market? SelectedMarket { get; set; }
+    public partial Market? SelectedMarket { get; set; }
 
     partial void OnSelectedMarketChanged(Market? value)
     {
@@ -408,9 +408,9 @@ public partial class StoreViewModel : ObservableObject
     public partial string? GameLanguages { get; set; }
 
     [ObservableProperty]
-    private partial string? Price { get; set; }
+    public partial string? Price { get; set; }
 
-    private ObservableCollection<Bundled> BundledMappings { get; } = [];
+    public ObservableCollection<Bundled> BundledMappings { get; } = [];
 
     [ObservableProperty]
     public partial int SelectedBundledIndex { get; set; } = -1;
@@ -430,7 +430,7 @@ public partial class StoreViewModel : ObservableObject
     public ObservableCollection<PlatformDownloadItem> PlatformDownloadInfo { get; } = [];
 
     [ObservableProperty]
-    private partial PlatformDownloadItem? SelectedPlatformDownloadItem { get; set; } = new();
+    public partial PlatformDownloadItem? SelectedPlatformDownloadItem { get; set; } = new();
 
     public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>

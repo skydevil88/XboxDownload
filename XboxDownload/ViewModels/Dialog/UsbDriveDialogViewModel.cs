@@ -17,11 +17,11 @@ namespace XboxDownload.ViewModels.Dialog;
 
 public partial class UsbDriveDialogViewModel : ObservableObject
 {
-    private ObservableCollection<UsbDriveMappingEntry> UsbDriveMappings { get; } = [];
+    public ObservableCollection<UsbDriveMappingEntry> UsbDriveMappings { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
-    private partial UsbDriveMappingEntry? SelectedEntry { get; set; }
+    public partial UsbDriveMappingEntry? SelectedEntry { get; set; }
 
     public bool IsEnabled => SelectedEntry != null;
 
@@ -31,7 +31,7 @@ public partial class UsbDriveDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private partial PartitionScheme DiskPartitionType { get; set; } = PartitionScheme.Mbr;
+    public partial PartitionScheme DiskPartitionType { get; set; } = PartitionScheme.Mbr;
 
     [RelayCommand]
     [SupportedOSPlatform("windows")]
@@ -190,45 +190,33 @@ public partial class UsbDriveDialogViewModel : ObservableObject
         Mbr
     }
 
-    public partial class UsbDriveMappingEntry : ObservableObject
+    public partial class UsbDriveMappingEntry(int index, string model, string interfaceType, string serialNumber, long size, string partitionScheme, int partitions, string driveLetter) : ObservableObject
     {
         [ObservableProperty]
-        private int _index;
+        public partial int Index { get; set; } = index;
 
         [ObservableProperty]
-        private string _model;
+        public partial string Model { get; set; } = model;
 
         [ObservableProperty]
-        private string _interfaceType;
+        public partial string InterfaceType { get; set; } = interfaceType;
 
         [ObservableProperty]
-        private string _serialNumber;
+        public partial string SerialNumber { get; set; } = serialNumber;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(FormatSize))]
-        private long _size;
+        public partial long Size { get; set; } = size;
 
         [ObservableProperty]
-        private string _partitionScheme;
+        public partial string PartitionScheme { get; set; } = partitionScheme;
 
         [ObservableProperty]
-        private int _partitions;
+        public partial int Partitions { get; set; } = partitions;
 
         [ObservableProperty]
-        private string _driveLetter;
+        public partial string DriveLetter { get; set; } = driveLetter;
 
         public string FormatSize => UnitConverter.ConvertBytes(Size);
-
-        public UsbDriveMappingEntry(int index, string model, string interfaceType, string serialNumber, long size, string partitionScheme, int partitions, string driveLetter)
-        {
-            Index = index;
-            Model = model;
-            InterfaceType = interfaceType;
-            SerialNumber = serialNumber;
-            Size = size;
-            PartitionScheme = partitionScheme;
-            Partitions = partitions;
-            DriveLetter = driveLetter;
-        }
     }
 }

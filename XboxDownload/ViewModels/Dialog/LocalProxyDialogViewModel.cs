@@ -128,10 +128,8 @@ public partial class LocalProxyDialogViewModel : ObservableObject
 
         using (var stream = AssetLoader.Open(new Uri($"avares://{nameof(XboxDownload)}/Resources/CertDomain.txt")))
         {
-            using (var reader = new StreamReader(stream))
-            {
-                CertDomain1Text = reader.ReadToEnd().Trim() + Environment.NewLine;
-            }
+            using var reader = new StreamReader(stream);
+            CertDomain1Text = reader.ReadToEnd().Trim() + Environment.NewLine;
         }
         CertDomain2Text = File.Exists(_serviceViewModel.CertDomainFilePath) ? File.ReadAllText(_serviceViewModel.CertDomainFilePath) + Environment.NewLine : string.Empty;
     }

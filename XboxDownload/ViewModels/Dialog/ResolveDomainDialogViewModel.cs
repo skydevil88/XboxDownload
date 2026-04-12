@@ -260,36 +260,25 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
     }
 }
 
-public partial class ResolveHostMappingEntry : ObservableObject
+public partial class ResolveHostMappingEntry(bool isSelect, string id, string name, string url, string ip, bool useProxy, bool isProxyDisabled) : ObservableObject
 {
     [ObservableProperty]
-    private bool _isSelect;
-    public string Id { get; }
-    public string Name { get; }
-    public string Url { get; }
-    public string Ip { get; }
+    public partial bool IsSelect { get; set; } = isSelect;
+    public string Id { get; } = id;
+    public string Name { get; } = name;
+    public string Url { get; } = url;
+    public string Ip { get; } = ip;
 
     [ObservableProperty]
-    private string? _resolvedIp;
+    public partial string? ResolvedIp { get; set; }
 
     [ObservableProperty]
-    private long? _delay;
+    public partial long? Delay { get; set; }
 
     [ObservableProperty]
-    private string? _location;
+    public partial string? Location { get; set; }
 
     [ObservableProperty]
-    private bool _useProxy;
-    public bool CanEditProxy { get; }
-
-    public ResolveHostMappingEntry(bool isSelect, string id, string name, string url, string ip, bool useProxy, bool isProxyDisabled)
-    {
-        IsSelect = isSelect;
-        Id = id;
-        Name = name;
-        Url = url;
-        Ip = ip;
-        UseProxy = useProxy;
-        CanEditProxy = !isProxyDisabled;
-    }
+    public partial bool UseProxy { get; set; } = useProxy;
+    public bool CanEditProxy { get; } = !isProxyDisabled;
 }

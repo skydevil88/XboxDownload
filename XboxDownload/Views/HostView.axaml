@@ -8,7 +8,7 @@
                x:Class="XboxDownload.Views.HostView"
                x:CompileBindings="False">
 
-    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto">
+    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto" x:DataType="vm:HostViewModel">
         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <HeaderedContentControl Header="{DynamicResource Host.CustomHostRules}">
                 <DataGrid CanUserSortColumns="False" CanUserResizeColumns="True" GridLinesVisibility="All"
@@ -35,9 +35,27 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="300" Binding="{Binding HostName}" Header="{DynamicResource Host.HostName}"/>
-                        <DataGridTextColumn MinWidth="300" Binding="{Binding Ip}" Header="{DynamicResource Host.Ip}"/>
-                        <DataGridTextColumn MinWidth="100" Width="*" Binding="{Binding Note}" Header="{DynamicResource Host.Note}"/>
+                        <DataGridTemplateColumn MinWidth="300" Header="{DynamicResource Host.HostName}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="host:HostMappingEntry">
+                                    <TextBlock Text="{Binding HostName}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="300" Header="{DynamicResource Host.Ip}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="host:HostMappingEntry">
+                                    <TextBlock Text="{Binding Ip}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="100" Width="*" Header="{DynamicResource Host.Note}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="host:HostMappingEntry">
+                                    <TextBlock Text="{Binding Note}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </HeaderedContentControl>

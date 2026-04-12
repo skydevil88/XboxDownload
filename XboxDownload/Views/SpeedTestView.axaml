@@ -166,8 +166,20 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Width="260" Header="{DynamicResource SpeedTest.DataGrid.Ip}" SortMemberPath="Ip" Binding="{Binding Ip}" IsReadOnly="True"/>
-                        <DataGridTextColumn Width="*" Header="{DynamicResource SpeedTest.DataGrid.Location}" SortMemberPath="Location" Binding="{Binding Location}" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Width="260" Header="{DynamicResource SpeedTest.DataGrid.Ip}" SortMemberPath="Ip" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="speed:IpItem">
+                                    <TextBlock Text="{Binding Ip}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="*" Header="{DynamicResource SpeedTest.DataGrid.Location}" SortMemberPath="Location" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="speed:IpItem">
+                                    <TextBlock Text="{Binding Location}" Margin="6,0" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Width="70" Header="{DynamicResource SpeedTest.DataGrid.Ttl}" SortMemberPath="Ttl">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:DataType="speed:IpItem">

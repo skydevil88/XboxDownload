@@ -366,41 +366,36 @@ public partial class DohServerDialogViewModel : ObservableObject
 
 }
 
-public partial class SpeedTestMappingEntry : ObservableObject
+public partial class SpeedTestMappingEntry(bool isSelect, string id, string name, string url, string ip, bool useProxy, bool isProxyDisabled) : ObservableObject
 {
     [ObservableProperty]
-    private bool _isSelect;
+    public partial bool IsSelect { get; set; } = isSelect;
 
-    public string Id { get; }
-    public string Name { get; }
-    public string Url { get; }
-    public string Ip { get; }
-
-    [ObservableProperty]
-    private int? _website1, _website2, _website3;
+    public string Id { get; } = id;
+    public string Name { get; } = name;
+    public string Url { get; } = url;
+    public string Ip { get; } = ip;
 
     [ObservableProperty]
-    private string _tip1 = string.Empty;
+    public partial int? Website1 { get; set; }
 
     [ObservableProperty]
-    private string _tip2 = string.Empty;
+    public partial int? Website2 { get; set; }
 
     [ObservableProperty]
-    private string _tip3 = string.Empty;
+    public partial int? Website3 { get; set; }
 
     [ObservableProperty]
-    private bool _useProxy;
+    public partial string Tip1 { get; set; } = string.Empty;
 
-    public bool CanEditProxy { get; }
+    [ObservableProperty]
+    public partial string Tip2 { get; set; } = string.Empty;
 
-    public SpeedTestMappingEntry(bool isSelect, string id, string name, string url, string ip, bool useProxy, bool isProxyDisabled)
-    {
-        IsSelect = isSelect;
-        Id = id;
-        Name = name;
-        Url = url;
-        Ip = ip;
-        UseProxy = useProxy;
-        CanEditProxy = !isProxyDisabled;
-    }
+    [ObservableProperty]
+    public partial string Tip3 { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial bool UseProxy { get; set; } = useProxy;
+
+    public bool CanEditProxy { get; } = !isProxyDisabled;
 }

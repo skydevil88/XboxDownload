@@ -10,7 +10,7 @@
         Width="980" Height="600"
         Title="{DynamicResource Store.PriceComparison.Title}">
 
-    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto" RowSpacing="6">
+    <Grid ColumnDefinitions="*,200,*" RowDefinitions="*,Auto" RowSpacing="6" x:DataType="dialog:PriceComparisonDialogViewModel">
         <HeaderedContentControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,10,10,0"
                                 Header="{Binding Title}">
             <DataGrid IsReadOnly="True" CanUserSortColumns="True" GridLinesVisibility="All"
@@ -39,12 +39,20 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="220"
-                                        Header="{DynamicResource Store.PriceComparison.Market}"
-                                        Binding="{Binding Market}"/>
-                    <DataGridTextColumn MinWidth="100"
-                                        Header="{DynamicResource Store.PriceComparison.Currency}"
-                                        Binding="{Binding Currency}"/>
+                    <DataGridTemplateColumn MinWidth="220" Header="{DynamicResource Store.PriceComparison.Market}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="dialog:MarketMappingEntry">
+                                <TextBlock Text="{Binding Market}" Margin="6,0" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="100" Header="{DynamicResource Store.PriceComparison.Currency}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="dialog:MarketMappingEntry">
+                                <TextBlock Text="{Binding Currency}" Margin="6,0" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="150" Header="{DynamicResource Store.PriceComparison.ListPrice}" SortMemberPath="ListPrice">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="dialog:MarketMappingEntry">

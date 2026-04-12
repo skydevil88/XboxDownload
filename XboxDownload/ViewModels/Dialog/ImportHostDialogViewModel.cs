@@ -26,7 +26,7 @@ public partial class ImportHostDialogViewModel(HostViewModel hostViewModel) : Ob
     [RelayCommand]
     private void Confirm()
     {
-        Dictionary<string, (List<IPAddress>, string)> dic = new();
+        Dictionary<string, (List<IPAddress>, string)> dic = [];
 
         var lines = Content.Split(["\r\n", "\n", "\r"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 

@@ -8,7 +8,7 @@
                x:Class="XboxDownload.Views.ServiceView"
                x:CompileBindings="False">
 
-    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,200">
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,200" x:DataType="vm:ServiceViewModel">
         <!-- Settings Group -->
         <Border Grid.Row="0" Grid.Column="0">
             <HeaderedContentControl Header="{DynamicResource Service.Settings}">
@@ -220,20 +220,24 @@
                         <Style Selector="DataGridRow">
                             <Setter Property="ContextMenu">
                                 <ContextMenu>
-                                    <!-- ReSharper disable once Xaml.PossibleNullReferenceException -->
                                     <MenuItem Header="{DynamicResource Service.Logs.CopyContent}"
-                                              Command="{Binding $parent[DataGrid].((vm:ServiceViewModel)DataContext).CopyContentCommand}"
+                                              Command="{Binding CopyContentCommand}"
                                               CommandParameter="{Binding }" />
-                                    <!-- ReSharper disable once Xaml.PossibleNullReferenceException -->
                                     <MenuItem Header="{DynamicResource Service.Logs.ExportAllLogs}"
-                                              Command="{Binding $parent[DataGrid].((vm:ServiceViewModel)DataContext).ExportAllLogsCommand}"/>
+                                              Command="{Binding ExportAllLogsCommand}"/>
                                 </ContextMenu>
                             </Setter>
                         </Style>
                     </DataGrid.Styles>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="{DynamicResource Service.Logs.RequestMethod}" MinWidth="80" Binding="{Binding RequestMethod}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Service.Logs.RequestMethod}" MinWidth="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="service:ServiceModels">
+                                    <TextBlock Text="{Binding RequestMethod}" VerticalAlignment="Center" Margin="6,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="{DynamicResource Service.Logs.Content}" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:DataType="service:ServiceModels">
@@ -245,8 +249,20 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{DynamicResource Service.Logs.ClientIp}" Width="128" MinWidth="120" Binding="{Binding ClientIp}"/>
-                        <DataGridTextColumn Header="{DynamicResource Service.Logs.Timestamp}" CanUserResize="False" Width="120" Binding="{Binding TimestampFormatted}"/>
+                        <DataGridTemplateColumn Header="{DynamicResource Service.Logs.ClientIp}" Width="128" MinWidth="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="service:ServiceModels">
+                                    <TextBlock Text="{Binding ClientIp}" VerticalAlignment="Center" Margin="6,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{DynamicResource Service.Logs.Timestamp}" CanUserResize="False" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="service:ServiceModels">
+                                    <TextBlock Text="{Binding TimestampFormatted}" VerticalAlignment="Center" Margin="6,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </HeaderedContentControl>

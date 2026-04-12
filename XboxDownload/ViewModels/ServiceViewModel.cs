@@ -187,10 +187,10 @@ public partial class ServiceViewModel : ObservableObject
     #region Service
 
     [ObservableProperty]
-    private partial ListeningIpOption? SelectedListeningIp { get; set; }
+    public partial ListeningIpOption? SelectedListeningIp { get; set; }
 
     [ObservableProperty]
-    private partial bool IsDnsServiceEnabled { get; set; } = App.Settings.IsDnsServiceEnabled;
+    public partial bool IsDnsServiceEnabled { get; set; } = App.Settings.IsDnsServiceEnabled;
 
     [ObservableProperty]
     public partial bool IsHttpServiceEnabled { get; set; } = App.Settings.IsHttpServiceEnabled;
@@ -199,7 +199,7 @@ public partial class ServiceViewModel : ObservableObject
     public partial bool IsSetLocalDnsEnabled { get; set; } = App.Settings.IsSetLocalDnsEnabled;
 
     [ObservableProperty]
-    private partial bool IsSystemSleepPrevented { get; set; } = App.Settings.IsSystemSleepPrevented;
+    public partial bool IsSystemSleepPrevented { get; set; } = App.Settings.IsSystemSleepPrevented;
 
     [ObservableProperty]
     public partial bool IsDoHEnabled { get; set; } = App.Settings.IsDoHEnabled;
@@ -208,10 +208,10 @@ public partial class ServiceViewModel : ObservableObject
     public partial bool IsIPv6DomainFilterEnabled { get; set; } = App.Settings.IsIPv6DomainFilterEnabled;
 
     [ObservableProperty]
-    private partial bool IsLocalProxyEnabled { get; set; } = App.Settings.IsLocalProxyEnabled;
+    public partial bool IsLocalProxyEnabled { get; set; } = App.Settings.IsLocalProxyEnabled;
 
     [ObservableProperty]
-    private partial bool IsFastestAkamaiIp { get; set; }
+    public partial bool IsFastestAkamaiIp { get; set; }
 
     partial void OnIsDoHEnabledChanged(bool value)
     {
@@ -326,7 +326,7 @@ public partial class ServiceViewModel : ObservableObject
         _ = value;
     }
 
-    private ObservableCollection<ListeningIpOption> ListeningIpOptions { get; } = ServiceDataBuilder.GetListeningIpOptions();
+    public ObservableCollection<ListeningIpOption> ListeningIpOptions { get; } = ServiceDataBuilder.GetListeningIpOptions();
 
     public ObservableCollection<DohServerOption> DohServersMappings { get; } = ServiceDataBuilder.GetDohServerList();
 
@@ -687,7 +687,7 @@ public partial class ServiceViewModel : ObservableObject
         SettingsManager.Save(App.Settings);
     }
 
-    private ObservableCollection<ServiceModels> Logs { get; } = [];
+    public ObservableCollection<ServiceModels> Logs { get; } = [];
 
     public void AddLog(string method, string content, string ip)
     {
@@ -784,7 +784,7 @@ public partial class ServiceViewModel : ObservableObject
     public partial string Traffic { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private partial string AdapterInfo { get; set; } = string.Empty;
+    public partial string AdapterInfo { get; set; } = string.Empty;
 
     partial void OnSelectedAdapterChanged(AdapterInfo? oldValue, AdapterInfo? newValue)
     {

@@ -20,11 +20,11 @@ namespace XboxDownload.ViewModels.Dialog;
 
 public partial class HardDriveDialogViewModel : ObservableObject
 {
-    private ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
+    public ObservableCollection<StorageMappingEntry> StorageMappings { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnabled))]
-    private partial StorageMappingEntry? SelectedEntry { get; set; }
+    public partial StorageMappingEntry? SelectedEntry { get; set; }
 
     public bool IsEnabled => SelectedEntry != null;
 
@@ -34,7 +34,7 @@ public partial class HardDriveDialogViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private partial MediaType DiskMediaType { get; set; } = MediaType.External;
+    public partial MediaType DiskMediaType { get; set; } = MediaType.External;
 
     partial void OnDiskMediaTypeChanged(MediaType value)
     {

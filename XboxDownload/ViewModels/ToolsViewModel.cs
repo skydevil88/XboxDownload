@@ -212,23 +212,16 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
             SelectedDrivePath = DrivePaths[0];
     }
 
-    public partial class DeviceMappingEntry : ObservableObject
+    public partial class DeviceMappingEntry(string directoryRoot, string storePath = "", bool isOffline = false) : ObservableObject
     {
         [ObservableProperty]
-        public partial string DirectoryRoot { get; set; }
+        public partial string DirectoryRoot { get; set; } = directoryRoot;
 
         [ObservableProperty]
-        public partial string StorePath { get; set; }
+        public partial string StorePath { get; set; } = storePath;
 
         [ObservableProperty]
-        public partial bool IsOffline { get; set; }
-
-        public DeviceMappingEntry(string directoryRoot, string storePath = "", bool isOffline = false)
-        {
-            DirectoryRoot = directoryRoot;
-            StorePath = storePath;
-            IsOffline = isOffline;
-        }
+        public partial bool IsOffline { get; set; } = isOffline;
     }
 
     public event Action? RequestFocus;
