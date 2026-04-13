@@ -233,21 +233,21 @@
                         <Style Selector="DataGridRow">
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowContextMenu}">
+                                    <ContextMenu IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowContextMenu, FallbackValue=False, TargetNullValue=False}">
                                         <MenuItem Header="{DynamicResource Store.CopyGlobalDownloadLink}"
-                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                   CommandParameter="Global"/>
                                         <MenuItem Header="{DynamicResource Store.CopyCnDownloadLink}" Foreground="{DynamicResource Green}"
-                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowGameCnMenu}"
-                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
+                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowGameCnMenu, FallbackValue=False, TargetNullValue=False}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                   CommandParameter="Cn"/>
                                         <MenuItem Header="{DynamicResource Store.CopyAzureDownloadLink}"
-                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAzureMenu}"
-                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand}"
+                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAzureMenu, FallbackValue=False, TargetNullValue=False}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).CopyUrlCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                                   CommandParameter="Azure"/>
                                         <MenuItem Header="{DynamicResource Store.ShowAllDownloadFiles}"
-                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAllAppMenu}"
-                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).GetAllAppPackageCommand}"/>
+                                                  IsVisible="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).IsShowAllAppMenu, FallbackValue=False, TargetNullValue=False}"
+                                                  Command="{Binding $parent[DataGrid].((vm:StoreViewModel)DataContext).GetAllAppPackageCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
                                     </ContextMenu>
                                 </Setter.Value>
                             </Setter>

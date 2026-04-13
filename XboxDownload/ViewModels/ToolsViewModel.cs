@@ -176,7 +176,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
         var results = new ConcurrentDictionary<string, (string StorePath, bool IsOffline)>();
         foreach (var line in appxVolumeOutput)
         {
-            var match = Regex.Match(line, @"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)");
+            var match = AppxVolumeRegex().Match(line);
             if (match.Success)
             {
                 var storePath = match.Groups["PackageStorePath"].Value.Trim();
@@ -412,4 +412,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
         }
         OnSelectedUsbDrivePathChanged(SelectedUsbDrivePath);
     }
+
+    [GeneratedRegex(@"(?<Name>\\\\\?\\Volume\{\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\})\s+(?<PackageStorePath>.+)\s+(?<IsOffline>True|False)\s+(?<IsSystemVolume>True|False)")]
+    private static partial Regex AppxVolumeRegex();
 }

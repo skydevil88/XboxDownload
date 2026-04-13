@@ -2,69 +2,45 @@
 
 namespace XboxDownload.Models.SpeedTest;
 
-public partial class LocationFilter : ObservableObject
+public partial class LocationFilter(string key, string[] keywords, string display, bool isVisible = false) : ObservableObject
 {
-    public string Key { get; }
-    public string[] Keywords { get; }
+    public string Key { get; } = key;
+    public string[] Keywords { get; } = keywords;
 
     [ObservableProperty]
-    public partial string Display { get; set; }
+    public partial string Display { get; set; } = display;
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
 
     [ObservableProperty]
-    public partial bool IsVisible { get; set; }
-
-    public LocationFilter(string key, string[] keywords, string display, bool isVisible = false)
-    {
-        Key = key;
-        Keywords = keywords;
-        Display = display;
-        IsVisible = isVisible;
-    }
+    public partial bool IsVisible { get; set; } = isVisible;
 }
 
-public partial class ImportOption : ObservableObject
+public partial class ImportOption(string key, string target, string display, string hint) : ObservableObject
 {
-    public string Key { get; }
-    public string Target { get; }
+    public string Key { get; } = key;
+    public string Target { get; } = target;
 
     [ObservableProperty]
-    public partial string Display { get; set; }
+    public partial string Display { get; set; } = display;
 
     [ObservableProperty]
-    public partial string Hint { get; set; }
-
-    public ImportOption(string key, string target, string display, string hint)
-    {
-        Key = key;
-        Target = target;
-        Display = display;
-        Hint = hint;
-    }
+    public partial string Hint { get; set; } = hint;
 }
 
-public partial class SpeedTestFile : ObservableObject
+public partial class SpeedTestFile(string key, string target, string display, string url) : ObservableObject
 {
-    public string Key { get; }
-    public string Target { get; }
+    public string Key { get; } = key;
+    public string Target { get; } = target;
 
     [ObservableProperty]
-    public partial string Display { get; set; }
+    public partial string Display { get; set; } = display;
 
-    public string Url { get; }
+    public string Url { get; } = url;
 
     [ObservableProperty]
     public partial bool IsVisible { get; set; }
-
-    public SpeedTestFile(string key, string target, string display, string url)
-    {
-        Key = key;
-        Target = target;
-        Display = display;
-        Url = url;
-    }
 }
 
 public partial class IpItem : ObservableObject

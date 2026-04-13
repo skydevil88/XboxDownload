@@ -106,10 +106,8 @@ public partial class CdnViewModel : ObservableObject
         AkamaiCdnIp = App.Settings.AkamaiCdnIp;
         using (var stream = AssetLoader.Open(new Uri($"avares://{nameof(XboxDownload)}/Resources/Akamai.txt")))
         {
-            using (var reader = new StreamReader(stream))
-            {
-                AkamaiHost1 = reader.ReadToEnd();
-            }
+            using var reader = new StreamReader(stream);
+            AkamaiHost1 = reader.ReadToEnd();
         }
         AkamaiHost2 = File.Exists(_serviceViewModel.AkamaiFilePath) ? File.ReadAllText(_serviceViewModel.AkamaiFilePath) : string.Empty;
     }
