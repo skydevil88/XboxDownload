@@ -221,10 +221,10 @@
                             <Setter Property="ContextMenu">
                                 <ContextMenu>
                                     <MenuItem Header="{DynamicResource Service.Logs.CopyContent}"
-                                              Command="{Binding CopyContentCommand}"
+                                              Command="{Binding $parent[DataGrid].((vm:ServiceViewModel)DataContext).CopyContentCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                               CommandParameter="{Binding }" />
                                     <MenuItem Header="{DynamicResource Service.Logs.ExportAllLogs}"
-                                              Command="{Binding ExportAllLogsCommand}"/>
+                                              Command="{Binding $parent[DataGrid].((vm:ServiceViewModel)DataContext).ExportAllLogsCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
                                 </ContextMenu>
                             </Setter>
                         </Style>
