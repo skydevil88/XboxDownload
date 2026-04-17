@@ -7,7 +7,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <FileVersion>3.0.0.53</FileVersion>
+        <FileVersion>3.0.0.54</FileVersion>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 
