@@ -189,7 +189,7 @@ public static class IpGeoHelper
 
             if (onlyCountry)
             {
-                return doc.RootElement.GetProperty("country").GetString();
+                return countryCode;
             }
 
             var regionName = doc.RootElement.GetProperty("regionName").GetString();
