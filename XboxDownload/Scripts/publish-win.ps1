@@ -31,12 +31,12 @@ function Clear-ReleaseDir {
     }
 }
 
-function Remove-NativePdbs {
+function Remove-Pdbs {
     param (
         [string]$outputDir
     )
 
-    Get-ChildItem -Path $outputDir -Recurse -File -Include "libSkiaSharp.pdb", "libHarfBuzzSharp.pdb" |
+    Get-ChildItem -Path $outputDir -Recurse -File -Filter "*.pdb" |
         Remove-Item -Force
 }
 
@@ -84,7 +84,7 @@ function Publish-Target {
         return
     }
 
-    Remove-NativePdbs $outputDir
+    Remove-Pdbs $outputDir
     Write-Host "[OK] Success: $outputDir" -ForegroundColor Green
 
     # -------------------------------

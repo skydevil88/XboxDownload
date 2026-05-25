@@ -34,9 +34,9 @@ clean_release_dir() {
     fi
 }
 
-remove_native_pdbs() {
+remove_pdbs() {
     local output_dir="$1"
-    find "$output_dir" -type f \( -name "libSkiaSharp.pdb" -o -name "libHarfBuzzSharp.pdb" \) -delete
+    find "$output_dir" -type f -name "*.pdb" -delete
 }
 
 # --------------------------------------------------
@@ -79,7 +79,7 @@ publish_target() {
     echo
     echo -e "\033[93mPublishing for $rid -> $output_dir\033[0m"
     dotnet publish "$PROJECT_FILE" -r "$rid" -o "$output_dir" "${COMMON_ARGS[@]}"
-    remove_native_pdbs "$output_dir"
+    remove_pdbs "$output_dir"
     echo -e "\033[92m[OK] Publish success: $output_dir\033[0m"
 
     # -------------------------------
