@@ -31,7 +31,7 @@ function Clear-ReleaseDir {
     }
 }
 
-function Remove-Pdbs {
+function Remove-SymbolFiles {
     param (
         [string]$outputDir
     )
@@ -79,12 +79,12 @@ function Publish-Target {
     Write-Host "Publishing for $rid -> $outputDir" -ForegroundColor Yellow
 
     dotnet publish $projectFile -r $rid -o $outputDir @commonArgs
-    if ($LASTEXITCODE -ne 0) {
+    if ($LastExitCode -ne 0) {
         Write-Host "[ERROR] Failed to publish for $rid" -ForegroundColor Red
         return
     }
 
-    Remove-Pdbs $outputDir
+    Remove-SymbolFiles $outputDir
     Write-Host "[OK] Success: $outputDir" -ForegroundColor Green
 
     # -------------------------------
@@ -117,7 +117,7 @@ function Publish-Target {
     if ($tarCmd) {
         # ---- Use tar if available ----
         & tar.exe -a -cf "$outputDir.zip" "XboxDownload-$outputFolder"
-        if ($LASTEXITCODE -eq 0) {
+        if ($LastExitCode -eq 0) {
             Write-Host "[OK] ZIP created using tar.exe: $zipPath" -ForegroundColor Green
         } else {
             Write-Host "[ERROR] tar.exe failed, trying Compress-Archive..." -ForegroundColor Yellow
