@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 
+# Shell scripts must use LF line endings.
+*.sh text eol=lf
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
