@@ -511,7 +511,6 @@
     <x:String x:Key="Store.Region.Algeria">阿尔及利亚</x:String>
     <x:String x:Key="Store.Region.Bahrain">巴林</x:String>
     <x:String x:Key="Store.Region.Bangladesh">孟加拉</x:String>
-    <x:String x:Key="Store.Region.Bulgaria">保加利亚</x:String>
     <x:String x:Key="Store.Region.CostaRica">哥斯达黎加</x:String>
     <x:String x:Key="Store.Region.Egypt">埃及</x:String>
     <x:String x:Key="Store.Region.Guatemala">危地马拉</x:String>

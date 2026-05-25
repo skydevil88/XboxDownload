@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -9,7 +8,6 @@ namespace XboxDownload;
 sealed class Program
 {
     private const string MutexName = $"Global\\{nameof(XboxDownload)}_Mutex";
-    private static string SocketPath => Path.Combine(Path.GetTempPath(), $"{nameof(XboxDownload)}.sock");
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern uint RegisterWindowMessage(string lpString);

@@ -511,7 +511,6 @@
     <x:String x:Key="Store.Region.Algeria">Algeria</x:String>
     <x:String x:Key="Store.Region.Bahrain">Bahrain</x:String>
     <x:String x:Key="Store.Region.Bangladesh">Bangladesh</x:String>
-    <x:String x:Key="Store.Region.Bulgaria">Bulgaria</x:String>
     <x:String x:Key="Store.Region.CostaRica">Costa Rica</x:String>
     <x:String x:Key="Store.Region.Egypt">Egypt</x:String>
     <x:String x:Key="Store.Region.Guatemala">Guatemala</x:String>
