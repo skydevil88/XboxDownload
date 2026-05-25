@@ -828,8 +828,7 @@ public partial class StoreViewModel : ObservableObject
 
                 }, token));
             }
-
-
+            
             try
             {
                 await Task.WhenAll(tasks);

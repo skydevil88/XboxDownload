@@ -56,7 +56,6 @@ public static class MarketBuilder
         new Market { Name = ResourceHelper.GetString("Store.Region.Algeria"), Code = "ar-DZ" },
         new Market { Name = ResourceHelper.GetString("Store.Region.Bahrain"), Code = "ar-BH" },
         new Market { Name = ResourceHelper.GetString("Store.Region.Bangladesh"), Code = "en-BD" },
-        new Market { Name = ResourceHelper.GetString("Store.Region.Bulgaria"), Code = "bg-BG" },
         new Market { Name = ResourceHelper.GetString("Store.Region.CostaRica"), Code = "es-CR" },
         new Market { Name = ResourceHelper.GetString("Store.Region.Egypt"), Code = "ar-EG" },
         new Market { Name = ResourceHelper.GetString("Store.Region.Guatemala"), Code = "es-GT" },
