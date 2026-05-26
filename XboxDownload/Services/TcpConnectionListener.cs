@@ -503,7 +503,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         }
                         else
                         {
-                            var response = Encoding.ASCII.GetBytes("Internal Server Error");
+                            var response = "Internal Server Error"u8.ToArray();
                             var sb = new StringBuilder();
                             sb.Append("HTTP/1.1 500 Server Error\r\n");
                             sb.Append("Content-Type: text/html\r\n");
@@ -795,34 +795,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 {
                     while (serviceViewModel.IsListening && socket.Connected)
                     {
-                        var receive = new byte[4096];
-                        var num = ssl.Read(receive, 0, receive.Length);
-                        var headers = string.Empty;
-                        long contentLength = 0, bodyLength = 0;
-                        var list = new List<byte>();
-                        for (var i = 1; i <= num - 4; i++)
-                        {
-                            if (BitConverter.ToString(receive, i, 4) != "0D-0A-0D-0A") continue;
-                            headers = Encoding.ASCII.GetString(receive, 0, i + 4);
-                            var m1 = ContentLengthHeaderRegex().Match(headers);
-                            if (m1.Success)
-                            {
-                                contentLength = Convert.ToInt32(m1.Groups["ContentLength"].Value);
-                            }
-                            var dest = new byte[num - i - 4];
-                            Buffer.BlockCopy(receive, i + 4, dest, 0, dest.Length);
-                            list.AddRange(dest);
-                            bodyLength = dest.Length;
-                            break;
-                        }
-                        while (bodyLength < contentLength)
-                        {
-                            num = ssl.Read(receive, 0, receive.Length);
-                            var dest = new byte[num];
-                            Buffer.BlockCopy(receive, 0, dest, 0, dest.Length);
-                            list.AddRange(dest);
-                            bodyLength += num;
-                        }
+                        if (!TryReadHttpRequestStart(ssl, out var request)) break;
+                        var headers = request.Headers;
                         var result = HttpRequestMethodAndPathRegex().Match(headers);
                         if (!result.Success) break;
                         //var method = result.Groups["method"].Value;
@@ -902,7 +876,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             }
                             else
                             {
-                                var response = Encoding.ASCII.GetBytes("Internal Server Error");
+                                var response = "Internal Server Error"u8.ToArray();
                                 var sb = new StringBuilder();
                                 sb.Append("HTTP/1.1 500 Server Error\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
@@ -1038,7 +1012,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         string? errMessae;
                                         if (ips != null)
                                         {
-                                            if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, Encoding.ASCII.GetBytes(headers), [.. list], ssl, out errMessae))
+                                            if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, request, ssl, out errMessae))
                                             {
                                                 proxy.IpAddresses = null;
                                             }
@@ -1060,7 +1034,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             }
                             if (!fileFound)
                             {
-                                var response = Encoding.ASCII.GetBytes("File not found.");
+                                var response = "File not found."u8.ToArray();
                                 StringBuilder sb = new();
                                 sb.Append("HTTP/1.1 404 Not Found\r\n");
                                 sb.Append("Content-Type: text/html\r\n");
@@ -1088,7 +1062,57 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
     }
 
-    private static bool ExecuteSniProxy(string targetHost, IPAddress[] ips, string? sni, string[]? expectedHosts, byte[] send1, byte[] send2, SslStream client, out string? errMessage)
+    private sealed class HttpRequestStart
+    {
+        public required string Headers { get; init; }
+        public required byte[] HeaderBytes { get; init; }
+        public required byte[] InitialBodyBytes { get; init; }
+    }
+
+    private static bool TryReadHttpRequestStart(SslStream ssl, out HttpRequestStart requestStart)
+    {
+        requestStart = null!;
+
+        const int maxHeaderBytes = 64 * 1024;
+        var buffer = new byte[4096];
+        var request = new List<byte>();
+        var headerLength = -1;
+
+        while (headerLength < 0)
+        {
+            var len = ssl.Read(buffer, 0, buffer.Length);
+            if (len <= 0) return false;
+
+            request.AddRange(buffer.Take(len));
+            if (request.Count > maxHeaderBytes) return false;
+
+            headerLength = FindHeaderLength(request);
+        }
+
+        var headerBytes = request.Take(headerLength).ToArray();
+        var headers = Encoding.ASCII.GetString(headerBytes);
+
+        requestStart = new HttpRequestStart
+        {
+            Headers = headers,
+            HeaderBytes = headerBytes,
+            InitialBodyBytes = request.Skip(headerLength).ToArray()
+        };
+        return true;
+    }
+
+    private static int FindHeaderLength(List<byte> bytes)
+    {
+        for (var i = 0; i <= bytes.Count - 4; i++)
+        {
+            if (bytes[i] == '\r' && bytes[i + 1] == '\n' && bytes[i + 2] == '\r' && bytes[i + 3] == '\n')
+                return i + 4;
+        }
+
+        return -1;
+    }
+
+    private static bool ExecuteSniProxy(string targetHost, IPAddress[] ips, string? sni, string[]? expectedHosts, HttpRequestStart request, SslStream client, out string? errMessage)
     {
         var isOk = true;
         errMessage = null;
@@ -1154,7 +1178,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                             );
                                             result.Add(dns);
 
-                                            if (!useCustomValidation && !domainMatched && (targetHost.Equals(dns) || dns.StartsWith('*') && targetHost.EndsWith(dns[1..])))
+                                            if (!useCustomValidation && !domainMatched && CertificateHostMatches(targetHost, dns))
                                                 domainMatched = true;
                                         }
                                         else
@@ -1168,7 +1192,8 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                             // Check if a matching domain exists
                             if (!domainMatched && useCustomValidation)
-                                domainMatched = expectedHosts!.Any(host => dnsNames.Any(dns => dns.Equals(host)));
+                                domainMatched = dnsNames.Any(dns => CertificateHostMatches(targetHost, dns)) ||
+                                                expectedHosts!.Any(host => dnsNames.Any(dns => CertificateHostMatches(host, dns)));
 
                             if (!domainMatched)
                             {
@@ -1187,74 +1212,12 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                     if (isOk)
                     {
-                        ssl.Write(send1);
-                        ssl.Write(send2);
+                        ssl.Write(request.HeaderBytes);
+                        if (request.InitialBodyBytes.Length > 0)
+                            ssl.Write(request.InitialBodyBytes);
                         ssl.Flush();
-                        long count = 0, contentLength = -1;
-                        int len;
-                        string headers = string.Empty, transferEncoding = string.Empty;
-                        var list = new List<byte>();
-                        var bReceive = new byte[4096];
-                        while ((len = ssl.Read(bReceive, 0, bReceive.Length)) > 0)
-                        {
-                            count += len;
-                            var dest = new byte[len];
-                            if (len == bReceive.Length)
-                            {
-                                dest = bReceive;
-                                if (string.IsNullOrEmpty(headers)) list.AddRange(bReceive);
-                            }
-                            else
-                            {
-                                Buffer.BlockCopy(bReceive, 0, dest, 0, len);
-                                if (string.IsNullOrEmpty(headers)) list.AddRange(dest);
-                            }
-                            client.Write(dest);
-                            if (string.IsNullOrEmpty(headers))
-                            {
-                                var bytes = list.ToArray();
-                                for (var i = 1; i <= bytes.Length - 4; i++)
-                                {
-                                    if (BitConverter.ToString(bytes, i, 4) != "0D-0A-0D-0A") continue;
 
-                                    headers = Encoding.ASCII.GetString(bytes, 0, i + 4);
-                                    count = bytes.Length - i - 4;
-                                    list.Clear();
-                                    var result = StatusCodeHeaderRegex().Match(headers);
-                                    if (result.Success && int.TryParse(result.Groups["StatusCode"].Value, out var statusCode) && statusCode >= 400)
-                                    {
-                                        isOk = false;
-                                    }
-                                    result = ContentLengthHeaderRegex().Match(headers);
-                                    if (result.Success)
-                                    {
-                                        contentLength = Convert.ToInt32(result.Groups["ContentLength"].Value);
-                                    }
-                                    result = TransferEncodingHeaderRegex().Match(headers);
-                                    if (result.Success)
-                                    {
-                                        transferEncoding = result.Groups["TransferEncoding"].Value.Trim();
-                                    }
-                                    break;
-                                }
-                            }
-                            if (!string.IsNullOrEmpty(headers))
-                            {
-                                if (transferEncoding == "chunked")
-                                {
-                                    if (dest.Length >= 5 && BitConverter.ToString(dest, dest.Length - 5) == "30-0D-0A-0D-0A")
-                                    {
-                                        break;
-                                    }
-                                }
-                                else if (contentLength >= 0)
-                                {
-                                    if (count == contentLength) break;
-                                }
-                                else break;
-                            }
-                        }
-                        client.Flush();
+                        RelayStreams(client, ssl);
                     }
                 }
             }
@@ -1284,7 +1247,64 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         return isOk;
     }
 
-    [GeneratedRegex(@"(?<method>GET|POST|PUP|DELETE|OPTIONS|HEAD) (?<path>[^\s]+)", RegexOptions.Compiled)]
+    private static bool CertificateHostMatches(string host, string certificateHost)
+    {
+        host = host.Trim().TrimEnd('.').ToLowerInvariant();
+        certificateHost = certificateHost.Trim().TrimEnd('.').ToLowerInvariant();
+        if (host.Equals(certificateHost)) return true;
+        if (!certificateHost.StartsWith("*.")) return false;
+
+        var suffix = certificateHost[1..];
+        return host.EndsWith(suffix) && host.Length > suffix.Length;
+    }
+
+    private static void RelayStreams(SslStream client, SslStream upstream)
+    {
+        var clientToUpstream = Task.Run(() => CopyStream(client, upstream));
+        var upstreamToClient = Task.Run(() => CopyStream(upstream, client));
+
+        try
+        {
+            Task.WaitAll(clientToUpstream, upstreamToClient);
+        }
+        catch
+        {
+            // CopyStream handles connection errors; this is a last-resort guard.
+        }
+    }
+
+    private static void CopyStream(Stream source, Stream destination)
+    {
+        var buffer = new byte[65536];
+        try
+        {
+            while (true)
+            {
+                var len = source.Read(buffer, 0, buffer.Length);
+                if (len <= 0) break;
+
+                destination.Write(buffer, 0, len);
+                destination.Flush();
+            }
+        }
+        catch
+        {
+            // Connection closed by either side.
+        }
+        finally
+        {
+            try
+            {
+                destination.Close();
+            }
+            catch
+            {
+                // Optional
+            }
+        }
+    }
+
+    [GeneratedRegex(@"(?<method>GET|POST|PUT|PATCH|DELETE|OPTIONS|HEAD) (?<path>[^\s]+)", RegexOptions.Compiled)]
     private static partial Regex HttpRequestMethodAndPathRegex();
 
     [GeneratedRegex(@"^https?://[^/]+", RegexOptions.Compiled)]
@@ -1302,9 +1322,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     [GeneratedRegex(@"Range: bytes=(?<StartPosition>\d+)(-(?<EndPosition>\d+))?", RegexOptions.Compiled)]
     private static partial Regex RangeHeaderRegex2();
 
-    [GeneratedRegex(@"Content-Length:\s*(?<ContentLength>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
-    private static partial Regex ContentLengthHeaderRegex();
-
     [GeneratedRegex(@"/(?<ContentId>\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/(?<Version>\d+\.\d+\.\d+\.\d+)\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}", RegexOptions.Compiled)]
     private static partial Regex ContentIdVersionRegex();
 
@@ -1314,9 +1331,4 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     [GeneratedRegex(@"\.(msixvc|msi)$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex MsiXvcRegex();
 
-    [GeneratedRegex(@"^HTTP/\d+(\.\d*)? (?<StatusCode>\d+)", RegexOptions.Compiled)]
-    private static partial Regex StatusCodeHeaderRegex();
-
-    [GeneratedRegex(@"Transfer-Encoding:\s*(?<TransferEncoding>.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
-    private static partial Regex TransferEncodingHeaderRegex();
 }
