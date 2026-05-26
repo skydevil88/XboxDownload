@@ -418,15 +418,11 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             {
                 while (serviceViewModel.IsListening && socket.Connected)
                 {
-                    var receive = new byte[4096];
-                    var num = socket.Receive(receive, 0, receive.Length, SocketFlags.None, out _);
-                    if (num == 0) break;
-
-                    var headers = Encoding.ASCII.GetString(receive, 0, num);
+                    if (!TryReadHttpRequestStart(socket, out var request)) break;
+                    var headers = request.Headers;
 
                     var result = HttpRequestMethodAndPathRegex().Match(headers);
                     if (!result.Success) break;
-                    //var method = result.Groups["method"].Value;
                     var filePath = BaseUrlRegex().Replace(result.Groups["path"].Value.Trim(), "");
 
                     result = HostHeaderRegex().Match(headers);
@@ -799,7 +795,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         var headers = request.Headers;
                         var result = HttpRequestMethodAndPathRegex().Match(headers);
                         if (!result.Success) break;
-                        //var method = result.Groups["method"].Value;
                         var filePath = BaseUrlRegex().Replace(result.Groups["path"].Value.Trim(), "");
                         result = HostHeaderRegex().Match(headers);
                         if (!result.Success) break;
@@ -1069,41 +1064,52 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         public required byte[] InitialBodyBytes { get; init; }
     }
 
-    private static bool TryReadHttpRequestStart(SslStream ssl, out HttpRequestStart requestStart)
+    private static bool TryReadHttpRequestStart(Socket socket, out HttpRequestStart requestStart) =>
+        TryReadHttpRequestStart((buffer, count) => socket.Receive(buffer, 0, count, SocketFlags.None, out _), out requestStart);
+
+    private static bool TryReadHttpRequestStart(SslStream ssl, out HttpRequestStart requestStart) =>
+        TryReadHttpRequestStart((buffer, count) => ssl.Read(buffer, 0, count), out requestStart);
+
+    private static bool TryReadHttpRequestStart(Func<byte[], int, int> read, out HttpRequestStart requestStart)
     {
         requestStart = null!;
 
         const int maxHeaderBytes = 64 * 1024;
         var buffer = new byte[4096];
-        var request = new List<byte>();
+        using var request = new MemoryStream(buffer.Length);
         var headerLength = -1;
+        var scanStart = 0;
 
         while (headerLength < 0)
         {
-            var len = ssl.Read(buffer, 0, buffer.Length);
+            var previousLength = (int)request.Length;
+            var len = read(buffer, buffer.Length);
             if (len <= 0) return false;
 
-            request.AddRange(buffer.Take(len));
-            if (request.Count > maxHeaderBytes) return false;
+            request.Write(buffer, 0, len);
+            if (request.Length > maxHeaderBytes) return false;
 
-            headerLength = FindHeaderLength(request);
+            var requestBytes = request.GetBuffer();
+            headerLength = FindHeaderLength(requestBytes, (int)request.Length, scanStart);
+            scanStart = Math.Max(0, previousLength - 3);
         }
 
-        var headerBytes = request.Take(headerLength).ToArray();
+        var allRequestBytes = request.ToArray();
+        var headerBytes = allRequestBytes[..headerLength];
         var headers = Encoding.ASCII.GetString(headerBytes);
 
         requestStart = new HttpRequestStart
         {
             Headers = headers,
             HeaderBytes = headerBytes,
-            InitialBodyBytes = request.Skip(headerLength).ToArray()
+            InitialBodyBytes = allRequestBytes[headerLength..]
         };
         return true;
     }
 
-    private static int FindHeaderLength(List<byte> bytes)
+    private static int FindHeaderLength(byte[] bytes, int length, int start)
     {
-        for (var i = 0; i <= bytes.Count - 4; i++)
+        for (var i = start; i <= length - 4; i++)
         {
             if (bytes[i] == '\r' && bytes[i + 1] == '\n' && bytes[i + 2] == '\r' && bytes[i + 3] == '\n')
                 return i + 4;
