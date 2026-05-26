@@ -427,87 +427,12 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                     result = HostHeaderRegex().Match(headers);
                     if (!result.Success) break;
-                    var host = result.Groups[1].Value.Trim().ToLowerInvariant();
+                    var host = result.Groups["host"].Value.Trim().ToLowerInvariant();
 
-                    string tmpPath = QueryStringRegex().Replace(filePath, ""), localPath = string.Empty;
-                    if (serviceViewModel.IsLocalUploadEnabled)
+                    var tmpPath = QueryStringRegex().Replace(filePath, "");
+                    if (TryGetLocalUploadPath(tmpPath, out var localPath))
                     {
-                        var tmpPath1 = serviceViewModel.LocalUploadPath + tmpPath;
-                        var tmpPath2 = Path.Combine(serviceViewModel.LocalUploadPath, Path.GetFileName(tmpPath));
-                        if (File.Exists(tmpPath1))
-                        {
-                            if (OperatingSystem.IsWindows()) tmpPath1 = tmpPath1.Replace("/", "\\");
-                            localPath = tmpPath1;
-                        }
-                        else if (File.Exists(tmpPath2))
-                            localPath = tmpPath2;
-                    }
-
-                    if (serviceViewModel.IsLocalUploadEnabled && !string.IsNullOrEmpty(localPath))
-                    {
-                        FileStream? fs = null;
-                        try
-                        {
-                            fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        }
-                        catch (Exception ex)
-                        {
-                            if (serviceViewModel.IsLogging)
-                                serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.LocalUpload"), ex.Message, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                        }
-                        if (fs != null)
-                        {
-                            if (serviceViewModel.IsLogging)
-                                serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.LocalUpload"), localPath, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                            using var br = new BinaryReader(fs);
-                            string contentRange = string.Empty, status = "200 OK";
-                            long fileLength = br.BaseStream.Length, startPosition = 0;
-                            var endPosition = fileLength;
-                            result = RangeHeaderRegex2().Match(headers);
-                            if (result.Success)
-                            {
-                                startPosition = long.Parse(result.Groups["StartPosition"].Value);
-                                if (startPosition > br.BaseStream.Length) startPosition = 0;
-                                if (!string.IsNullOrEmpty(result.Groups["EndPosition"].Value))
-                                    endPosition = long.Parse(result.Groups["EndPosition"].Value) + 1;
-                                contentRange = "bytes " + startPosition + "-" + (endPosition - 1) + "/" + fileLength;
-                                status = "206 Partial Content";
-                            }
-
-                            var sb = new StringBuilder();
-                            sb.Append("HTTP/1.1 " + status + "\r\n");
-                            sb.Append($"Content-Type: {ContentTypeHelper.GetMimeMapping(filePath)}\r\n");
-                            sb.Append($"Content-Length: {endPosition - startPosition}\r\n");
-                            if (!string.IsNullOrEmpty(contentRange)) sb.Append($"Content-Range: {contentRange}\r\n");
-                            sb.Append("Accept-Ranges: bytes\r\n\r\n");
-
-                            var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                            socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-
-                            br.BaseStream.Position = startPosition;
-                            const int size = 4096;
-                            while (serviceViewModel.IsListening && socket.Connected)
-                            {
-                                var remaining = endPosition - br.BaseStream.Position;
-                                var response = new byte[remaining <= size ? remaining : size];
-                                _ = br.Read(response, 0, response.Length);
-                                socket.Send(response, 0, response.Length, SocketFlags.None, out _);
-                                if (remaining <= size) break;
-                            }
-                            fs.Close();
-                            await fs.DisposeAsync();
-                        }
-                        else
-                        {
-                            var response = "Internal Server Error"u8.ToArray();
-                            var sb = new StringBuilder();
-                            sb.Append("HTTP/1.1 500 Server Error\r\n");
-                            sb.Append("Content-Type: text/html\r\n");
-                            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                            var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                            socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-                            socket.Send(response, 0, response.Length, SocketFlags.None, out _);
-                        }
+                        SendLocalUploadFile(headers, filePath, localPath, new SocketResponseWriter(socket), ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                     }
                     else
                     {
@@ -798,88 +723,12 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         var filePath = BaseUrlRegex().Replace(result.Groups["path"].Value.Trim(), "");
                         result = HostHeaderRegex().Match(headers);
                         if (!result.Success) break;
-                        var host = result.Groups[1].Value.Trim().ToLowerInvariant();
+                        var host = result.Groups["host"].Value.Trim().ToLowerInvariant();
 
-                        string tmpPath = QueryStringRegex().Replace(filePath, ""), localPath = string.Empty;
-                        if (serviceViewModel.IsLocalUploadEnabled)
+                        var tmpPath = QueryStringRegex().Replace(filePath, "");
+                        if (TryGetLocalUploadPath(tmpPath, out var localPath))
                         {
-                            var tmpPath1 = serviceViewModel.LocalUploadPath + tmpPath;
-                            var tmpPath2 = Path.Combine(serviceViewModel.LocalUploadPath, Path.GetFileName(tmpPath));
-                            if (File.Exists(tmpPath1))
-                            {
-                                if (OperatingSystem.IsWindows()) tmpPath1 = tmpPath1.Replace("/", "\\");
-                                localPath = tmpPath1;
-                            }
-                            else if (File.Exists(tmpPath2))
-                                localPath = tmpPath2;
-                        }
-
-                        if (serviceViewModel.IsLocalUploadEnabled && !string.IsNullOrEmpty(localPath))
-                        {
-                            FileStream? fs = null;
-                            try
-                            {
-                                fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            }
-                            catch (Exception ex)
-                            {
-                                if (serviceViewModel.IsLogging)
-                                    serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.LocalUpload"), ex.Message, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                            }
-                            if (fs != null)
-                            {
-                                if (serviceViewModel.IsLogging)
-                                    serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.LocalUpload"), localPath, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                                using var br = new BinaryReader(fs);
-                                string contentRange = string.Empty, status = "200 OK";
-                                long fileLength = br.BaseStream.Length, startPosition = 0;
-                                var endPosition = fileLength;
-                                result = RangeHeaderRegex2().Match(headers);
-                                if (result.Success)
-                                {
-                                    startPosition = long.Parse(result.Groups["StartPosition"].Value);
-                                    if (startPosition > br.BaseStream.Length) startPosition = 0;
-                                    if (!string.IsNullOrEmpty(result.Groups["EndPosition"].Value))
-                                        endPosition = long.Parse(result.Groups["EndPosition"].Value) + 1;
-                                    contentRange = "bytes " + startPosition + "-" + (endPosition - 1) + "/" + fileLength;
-                                    status = "206 Partial Content";
-                                }
-
-                                var sb = new StringBuilder();
-                                sb.Append("HTTP/1.1 " + status + "\r\n");
-                                sb.Append($"Content-Type: {ContentTypeHelper.GetMimeMapping(filePath)}\r\n");
-                                sb.Append($"Content-Length: {endPosition - startPosition}\r\n");
-                                if (!string.IsNullOrEmpty(contentRange)) sb.Append($"Content-Range: {contentRange}\r\n");
-                                sb.Append("Accept-Ranges: bytes\r\n\r\n");
-
-                                var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                ssl.Write(headersBytes);
-
-                                br.BaseStream.Position = startPosition;
-                                const int size = 4096;
-                                while (serviceViewModel.IsListening && socket.Connected)
-                                {
-                                    var remaining = endPosition - br.BaseStream.Position;
-                                    var response = new byte[remaining <= size ? remaining : size];
-                                    _ = br.Read(response, 0, response.Length);
-                                    ssl.Write(response);
-                                    if (remaining <= size) break;
-                                }
-                                ssl.Flush();
-                                fs.Close();
-                                await fs.DisposeAsync();
-                            }
-                            else
-                            {
-                                var response = "Internal Server Error"u8.ToArray();
-                                var sb = new StringBuilder();
-                                sb.Append("HTTP/1.1 500 Server Error\r\n");
-                                sb.Append("Content-Type: text/html\r\n");
-                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                                var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                ssl.Write(headersBytes);
-                                ssl.Write(response);
-                            }
+                            SendLocalUploadFile(headers, filePath, localPath, new StreamResponseWriter(ssl, socket), ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                         }
                         else
                         {
@@ -950,57 +799,75 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                             if (proxy.IpAddresses?.Length >= 2)
                                             {
                                                 await proxy.Semaphore.WaitAsync();
-                                                if (proxy.IpAddresses?.Length >= 2)
+                                                try
                                                 {
-                                                    var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
-                                                    if (fastestIp != null)
-                                                        ips = proxy.IpAddresses = [fastestIp];
+                                                    if (proxy.IpAddresses?.Length >= 2)
+                                                    {
+                                                        var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
+                                                        if (fastestIp != null)
+                                                            ips = proxy.IpAddresses = [fastestIp];
+                                                    }
                                                 }
-                                                proxy.Semaphore.Release();
+                                                finally
+                                                {
+                                                    proxy.Semaphore.Release();
+                                                }
                                             }
                                         }
                                         else if (proxy.IpAddresses == null)
                                         {
                                             await proxy.Semaphore.WaitAsync();
-                                            if (proxy.IpAddresses == null)
+                                            try
                                             {
-                                                var domain = proxy.Branch ?? host;
-
-                                                List<IPAddress> ipAddresses = [];
-                                                var tasks = new List<Task>();
-                                                foreach (var sniProxyId in App.Settings.SniProxyId)
+                                                if (proxy.IpAddresses == null)
                                                 {
-                                                    var selectedDohServer = serviceViewModel.DohServersMappings.FirstOrDefault(d => d.Id == sniProxyId);
-                                                    if (selectedDohServer == null) continue;
-                                                    var useProxy = App.Settings.DohServerUseProxyId.Contains(selectedDohServer.Id) && !selectedDohServer.IsProxyDisabled;
-                                                    var doHServer = DnsHelper.GetConfigureDoH(selectedDohServer.Url, selectedDohServer.Ip, useProxy);
-                                                    if (serviceViewModel.IsIPv6Support)
+                                                    var domain = proxy.Branch ?? host;
+
+                                                    var ipAddresses = new ConcurrentBag<IPAddress>();
+                                                    var tasks = new List<Task>();
+                                                    foreach (var sniProxyId in App.Settings.SniProxyId)
                                                     {
+                                                        var selectedDohServer = serviceViewModel.DohServersMappings.FirstOrDefault(d => d.Id == sniProxyId);
+                                                        if (selectedDohServer == null) continue;
+                                                        var useProxy = App.Settings.DohServerUseProxyId.Contains(selectedDohServer.Id) && !selectedDohServer.IsProxyDisabled;
+                                                        var doHServer = DnsHelper.GetConfigureDoH(selectedDohServer.Url, selectedDohServer.Ip, useProxy);
+                                                        if (serviceViewModel.IsIPv6Support)
+                                                        {
+                                                            tasks.Add(Task.Run(async () =>
+                                                            {
+                                                                var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
+                                                                if (ipV6 != null)
+                                                                {
+                                                                    foreach (var ip in ipV6)
+                                                                        ipAddresses.Add(ip);
+                                                                }
+                                                            }));
+                                                        }
                                                         tasks.Add(Task.Run(async () =>
                                                         {
-                                                            var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
-                                                            if (ipV6 != null)
-                                                                ipAddresses = [.. ipAddresses, .. ipV6];
+                                                            var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
+                                                            if (ipV4 != null)
+                                                            {
+                                                                foreach (var ip in ipV4)
+                                                                    ipAddresses.Add(ip);
+                                                            }
                                                         }));
                                                     }
-                                                    tasks.Add(Task.Run(async () =>
-                                                    {
-                                                        var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
-                                                        if (ipV4 != null)
-                                                            ipAddresses = [.. ipAddresses, .. ipV4];
-                                                    }));
-                                                }
-                                                await Task.WhenAll(tasks);
-                                                if (ipAddresses.Count > 0)
-                                                    proxy.IpAddresses = [.. ipAddresses.Distinct()];
+                                                    await Task.WhenAll(tasks);
+                                                    if (!ipAddresses.IsEmpty)
+                                                        proxy.IpAddresses = [.. ipAddresses.Distinct()];
 
-                                                if (proxy.IpAddresses?.Length >= 2)
-                                                {
-                                                    var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
-                                                    if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
+                                                    if (proxy.IpAddresses?.Length >= 2)
+                                                    {
+                                                        var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
+                                                        if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
+                                                    }
                                                 }
                                             }
-                                            proxy.Semaphore.Release();
+                                            finally
+                                            {
+                                                proxy.Semaphore.Release();
+                                            }
                                         }
                                         ips ??= proxy.IpAddresses?.Length >= 2 ? [.. proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16)] : proxy.IpAddresses;
 
@@ -1063,6 +930,126 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         public required byte[] HeaderBytes { get; init; }
         public required byte[] InitialBodyBytes { get; init; }
     }
+
+    private interface IResponseWriter
+    {
+        bool IsConnected { get; }
+        void Write(byte[] bytes, int length);
+        void Flush();
+    }
+
+    private readonly struct SocketResponseWriter(Socket socket) : IResponseWriter
+    {
+        public bool IsConnected => socket.Connected;
+
+        public void Write(byte[] bytes, int length) => socket.Send(bytes, 0, length, SocketFlags.None, out _);
+
+        public void Flush()
+        {
+        }
+    }
+
+    private readonly struct StreamResponseWriter(Stream stream, Socket socket) : IResponseWriter
+    {
+        public bool IsConnected => socket.Connected;
+
+        public void Write(byte[] bytes, int length) => stream.Write(bytes, 0, length);
+
+        public void Flush() => stream.Flush();
+    }
+
+    private bool TryGetLocalUploadPath(string requestPath, out string localPath)
+    {
+        localPath = string.Empty;
+        if (!serviceViewModel.IsLocalUploadEnabled) return false;
+
+        var directPath = serviceViewModel.LocalUploadPath + requestPath;
+        var fileNamePath = Path.Combine(serviceViewModel.LocalUploadPath, Path.GetFileName(requestPath));
+        if (File.Exists(directPath))
+        {
+            localPath = OperatingSystem.IsWindows() ? directPath.Replace("/", "\\") : directPath;
+        }
+        else if (File.Exists(fileNamePath))
+        {
+            localPath = fileNamePath;
+        }
+
+        return !string.IsNullOrEmpty(localPath);
+    }
+
+    private void SendLocalUploadFile(string headers, string filePath, string localPath, IResponseWriter writer, string remoteAddress)
+    {
+        FileStream? fs = null;
+        try
+        {
+            fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        }
+        catch (Exception ex)
+        {
+            if (serviceViewModel.IsLogging)
+                serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.LocalUpload"), ex.Message, remoteAddress);
+        }
+
+        if (fs == null)
+        {
+            var response = "Internal Server Error"u8.ToArray();
+            var sb = new StringBuilder();
+            sb.Append("HTTP/1.1 500 Server Error\r\n");
+            sb.Append("Content-Type: text/html\r\n");
+            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
+            WriteBytes(writer, Encoding.ASCII.GetBytes(sb.ToString()));
+            WriteBytes(writer, response);
+            writer.Flush();
+            return;
+        }
+
+        using (fs)
+        using (var br = new BinaryReader(fs))
+        {
+            if (serviceViewModel.IsLogging)
+                serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.LocalUpload"), localPath, remoteAddress);
+
+            string contentRange = string.Empty, status = "200 OK";
+            long fileLength = br.BaseStream.Length, startPosition = 0;
+            var endPosition = fileLength;
+            var result = RangeHeaderRegex2().Match(headers);
+            if (result.Success)
+            {
+                startPosition = long.Parse(result.Groups["StartPosition"].Value);
+                if (startPosition > br.BaseStream.Length) startPosition = 0;
+                if (!string.IsNullOrEmpty(result.Groups["EndPosition"].Value))
+                    endPosition = long.Parse(result.Groups["EndPosition"].Value) + 1;
+                endPosition = Math.Min(endPosition, fileLength);
+                contentRange = "bytes " + startPosition + "-" + (endPosition - 1) + "/" + fileLength;
+                status = "206 Partial Content";
+            }
+
+            var sb = new StringBuilder();
+            sb.Append("HTTP/1.1 " + status + "\r\n");
+            sb.Append($"Content-Type: {ContentTypeHelper.GetMimeMapping(filePath)}\r\n");
+            sb.Append($"Content-Length: {endPosition - startPosition}\r\n");
+            if (!string.IsNullOrEmpty(contentRange)) sb.Append($"Content-Range: {contentRange}\r\n");
+            sb.Append("Accept-Ranges: bytes\r\n\r\n");
+
+            WriteBytes(writer, Encoding.ASCII.GetBytes(sb.ToString()));
+
+            br.BaseStream.Position = startPosition;
+            var buffer = new byte[4096];
+            while (serviceViewModel.IsListening && writer.IsConnected)
+            {
+                var remaining = endPosition - br.BaseStream.Position;
+                var readLength = br.Read(buffer, 0, (int)Math.Min(buffer.Length, remaining));
+                if (readLength <= 0) break;
+
+                writer.Write(buffer, readLength);
+                if (remaining <= readLength) break;
+            }
+        }
+
+        writer.Flush();
+    }
+
+    private static void WriteBytes(IResponseWriter writer, byte[] bytes) => writer.Write(bytes, bytes.Length);
 
     private static bool TryReadHttpRequestStart(Socket socket, out HttpRequestStart requestStart) =>
         TryReadHttpRequestStart((buffer, count) => socket.Receive(buffer, 0, count, SocketFlags.None, out _), out requestStart);
@@ -1271,11 +1258,16 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
         try
         {
-            Task.WaitAll(clientToUpstream, upstreamToClient);
+            Task.WaitAny(clientToUpstream, upstreamToClient);
         }
         catch
         {
             // CopyStream handles connection errors; this is a last-resort guard.
+        }
+        finally
+        {
+            SafeClose(client);
+            SafeClose(upstream);
         }
     }
 
@@ -1290,7 +1282,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                 if (len <= 0) break;
 
                 destination.Write(buffer, 0, len);
-                destination.Flush();
             }
         }
         catch
@@ -1299,14 +1290,19 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
         finally
         {
-            try
-            {
-                destination.Close();
-            }
-            catch
-            {
-                // Optional
-            }
+            SafeClose(destination);
+        }
+    }
+
+    private static void SafeClose(Stream stream)
+    {
+        try
+        {
+            stream.Close();
+        }
+        catch
+        {
+            // Optional
         }
     }
 
@@ -1316,7 +1312,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     [GeneratedRegex(@"^https?://[^/]+", RegexOptions.Compiled)]
     private static partial Regex BaseUrlRegex();
 
-    [GeneratedRegex(@"Host:(.+)", RegexOptions.Compiled)]
+    [GeneratedRegex(@"^Host:\s*(?<host>[^\r\n]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline)]
     private static partial Regex HostHeaderRegex();
 
     [GeneratedRegex(@"\?.*$", RegexOptions.Compiled)]
