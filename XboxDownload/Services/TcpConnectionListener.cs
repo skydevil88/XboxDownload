@@ -1383,5 +1383,4 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     [GeneratedRegex(@"\.(msixvc|msi)$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
     private static partial Regex MsiXvcRegex();
-
 }
