@@ -741,7 +741,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
                     try
                     {
-                        using var proxy = new UdpClient(iPEndPoint.Address.AddressFamily);
+                        using var proxy = new UdpClient(iPEndPoint.AddressFamily);
                         proxy.Client.ReceiveTimeout = 3000;
                         await proxy.SendAsync(buff, read, iPEndPoint);
                         var result = proxy.Receive(ref iPEndPoint);
