@@ -1,5 +1,6 @@
 ﻿using Avalonia.Platform;
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Formats.Asn1;
@@ -31,6 +32,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     private static Socket? _httpsSocket;
     private const int HttpPort = 80;
     private const int HttpsPort = 443;
+    private const int RelayBufferSize = 65536;
     private static readonly TimeSpan RelayIdleTimeout = TimeSpan.FromMinutes(5);
     private const int CertificateHostMatchCacheLimit = 8192;
     private static readonly ConcurrentDictionary<string, bool> CertificateHostMatchCache = new();
@@ -558,15 +560,22 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                                 var headersBytes = response.StatusCode == HttpStatusCode.PartialContent
                                                     ? Encoding.ASCII.GetBytes($"HTTP/1.1 206 Partial Content\r\n{response.Content.Headers}{response.Headers}\r\n")
                                                     : Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\n{response.Content.Headers}{response.Headers}\r\n");
-                                                socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
+                                                SendAll(socket, headersBytes, headersBytes.Length);
 
-                                                var dataBuffer = new byte[65536];
-                                                var stream = await response.Content.ReadAsStreamAsync();
-                                                int readLength;
-                                                while ((readLength = await stream.ReadAsync(dataBuffer)) > 0)
+                                                var dataBuffer = ArrayPool<byte>.Shared.Rent(RelayBufferSize);
+                                                try
                                                 {
-                                                    if (!socket.Connected) break;
-                                                    socket.Send(dataBuffer, 0, readLength, SocketFlags.None, out _);
+                                                    var stream = await response.Content.ReadAsStreamAsync();
+                                                    int readLength;
+                                                    while ((readLength = await stream.ReadAsync(dataBuffer)) > 0)
+                                                    {
+                                                        if (!socket.Connected) break;
+                                                        SendAll(socket, dataBuffer, readLength);
+                                                    }
+                                                }
+                                                finally
+                                                {
+                                                    ArrayPool<byte>.Shared.Return(dataBuffer);
                                                 }
                                             }
                                         }
@@ -801,7 +810,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     {
         public bool IsConnected => socket.Connected;
 
-        public void Write(byte[] bytes, int length) => socket.Send(bytes, 0, length, SocketFlags.None, out _);
+        public void Write(byte[] bytes, int length) => SendAll(socket, bytes, length);
 
         public void Flush()
         {
@@ -815,6 +824,19 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         public void Write(byte[] bytes, int length) => stream.Write(bytes, 0, length);
 
         public void Flush() => stream.Flush();
+    }
+
+    private static void SendAll(Socket socket, byte[] bytes, int length)
+    {
+        var sent = 0;
+        while (sent < length)
+        {
+            var current = socket.Send(bytes, sent, length - sent, SocketFlags.None);
+            if (current <= 0)
+                throw new IOException("Socket closed before all bytes were sent.");
+
+            sent += current;
+        }
     }
 
     private static (SniProxy? Proxy, string[]? ExpectedHosts) TryGetSniProxy(string host)
@@ -1005,15 +1027,22 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             WriteBytes(writer, Encoding.ASCII.GetBytes(sb.ToString()));
 
             br.BaseStream.Position = startPosition;
-            var buffer = new byte[4096];
-            while (serviceViewModel.IsListening && writer.IsConnected)
+            var buffer = ArrayPool<byte>.Shared.Rent(RelayBufferSize);
+            try
             {
-                var remaining = endPosition - br.BaseStream.Position;
-                var readLength = br.Read(buffer, 0, (int)Math.Min(buffer.Length, remaining));
-                if (readLength <= 0) break;
+                while (serviceViewModel.IsListening && writer.IsConnected)
+                {
+                    var remaining = endPosition - br.BaseStream.Position;
+                    var readLength = br.Read(buffer, 0, (int)Math.Min(buffer.Length, remaining));
+                    if (readLength <= 0) break;
 
-                writer.Write(buffer, readLength);
-                if (remaining <= readLength) break;
+                    writer.Write(buffer, readLength);
+                    if (remaining <= readLength) break;
+                }
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
             }
         }
 
@@ -1117,6 +1146,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         var isOk = true;
         string? errMessage = null;
         using Socket socket = new(ips[0].AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        socket.NoDelay = true;
         socket.SendTimeout = 6000;
         socket.ReceiveTimeout = 6000;
         try
@@ -1320,19 +1350,20 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
     private static async Task CopyStreamAsync(Stream source, Stream destination, CancellationToken cancellationToken)
     {
-        var buffer = new byte[65536];
+        var buffer = ArrayPool<byte>.Shared.Rent(RelayBufferSize);
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
         try
         {
+            RefreshRelayIdleTimeout(cts);
             while (true)
             {
-                using var readCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-                readCts.CancelAfter(RelayIdleTimeout);
-                var len = await source.ReadAsync(buffer, readCts.Token);
+                var len = await source.ReadAsync(buffer, cts.Token);
                 if (len <= 0) break;
 
-                using var writeCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-                writeCts.CancelAfter(RelayIdleTimeout);
-                await destination.WriteAsync(buffer.AsMemory(0, len), writeCts.Token);
+                RefreshRelayIdleTimeout(cts);
+                await destination.WriteAsync(buffer.AsMemory(0, len), cts.Token);
+                RefreshRelayIdleTimeout(cts);
             }
         }
         catch
@@ -1341,9 +1372,13 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
         finally
         {
+            await cts.CancelAsync();
+            ArrayPool<byte>.Shared.Return(buffer);
             SafeClose(destination);
         }
     }
+
+    private static void RefreshRelayIdleTimeout(CancellationTokenSource cts) => cts.CancelAfter(RelayIdleTimeout);
 
     private static void SafeClose(Stream stream)
     {
