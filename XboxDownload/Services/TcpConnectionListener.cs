@@ -31,6 +31,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     private static Socket? _httpsSocket;
     private const int HttpPort = 80;
     private const int HttpsPort = 443;
+    private static readonly TimeSpan RelayIdleTimeout = TimeSpan.FromMinutes(5);
+    private const int CertificateHostMatchCacheLimit = 8192;
+    private static readonly ConcurrentDictionary<string, bool> CertificateHostMatchCache = new();
     private bool _isSimplifiedChinese;
 
     public static readonly ConcurrentDictionary<string, (SniProxy, string[]?)> DicSniProxy = new();
@@ -51,6 +54,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     {
         DicSniProxy.Clear();
         DicSniProxy2.Clear();
+        CertificateHostMatchCache.Clear();
 
         if (!OperatingSystem.IsWindows())
         {
@@ -727,8 +731,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     var (proxy, expectedHosts) = TryGetSniProxy(host);
                                     if (proxy != null)
                                     {
+                                        var remoteAddress = ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString();
                                         if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog("Proxy", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
+                                            serviceViewModel.AddLog("Proxy", url, remoteAddress);
 
                                         fileFound = true;
                                         var ips = await ResolveSniProxyIpsAsync(proxy, host);
@@ -736,7 +741,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         string? errMessage;
                                         if (ips != null)
                                         {
-                                            if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, request, ssl, out errMessage))
+                                            var proxyResult = await ExecuteSniProxyAsync(host, ips, proxy.Sni, expectedHosts, request, ssl);
+                                            errMessage = proxyResult.ErrorMessage;
+                                            if (!proxyResult.IsOk)
                                             {
                                                 proxy.IpAddresses = null;
                                             }
@@ -744,6 +751,9 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         else errMessage = $"Unable to query domain {host}. Please check whether the DoH server is reachable. If necessary, enable proxy forwarding for the request.";
                                         if (!string.IsNullOrEmpty(errMessage))
                                         {
+                                            if (serviceViewModel.IsLogging)
+                                                serviceViewModel.AddLog("Proxy Error", $"{host}: {errMessage}", remoteAddress);
+
                                             var response = Encoding.UTF8.GetBytes(errMessage);
                                             WriteHttpResponse(new StreamResponseWriter(ssl, socket), "500 Server Error", "text/html; charset=utf-8", response, Encoding.UTF8);
                                         }
@@ -968,10 +978,19 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             if (result.Success)
             {
                 startPosition = long.Parse(result.Groups["StartPosition"].Value);
-                if (startPosition > br.BaseStream.Length) startPosition = 0;
+                if (startPosition >= fileLength)
+                {
+                    WriteRangeNotSatisfiable(writer, fileLength);
+                    return;
+                }
                 if (!string.IsNullOrEmpty(result.Groups["EndPosition"].Value))
                     endPosition = long.Parse(result.Groups["EndPosition"].Value) + 1;
                 endPosition = Math.Min(endPosition, fileLength);
+                if (endPosition <= startPosition)
+                {
+                    WriteRangeNotSatisfiable(writer, fileLength);
+                    return;
+                }
                 contentRange = "bytes " + startPosition + "-" + (endPosition - 1) + "/" + fileLength;
                 status = "206 Partial Content";
             }
@@ -1007,6 +1026,12 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     {
         var headers = new Dictionary<string, string> { { "Location", url } };
         WriteHttpResponse(writer, "302 Moved Temporarily", "text/html", [], headers);
+    }
+
+    private static void WriteRangeNotSatisfiable(IResponseWriter writer, long fileLength)
+    {
+        var headers = new Dictionary<string, string> { { "Content-Range", $"bytes */{fileLength}" } };
+        WriteHttpResponse(writer, "416 Range Not Satisfiable", "text/html", [], headers);
     }
 
     private static void WriteHttpResponse(IResponseWriter writer, string status, string contentType, byte[] body, Encoding? encoding = null)
@@ -1087,16 +1112,16 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         return -1;
     }
 
-    private static bool ExecuteSniProxy(string targetHost, IPAddress[] ips, string? sni, string[]? expectedHosts, HttpRequestStart request, SslStream client, out string? errMessage)
+    private static async Task<(bool IsOk, string? ErrorMessage)> ExecuteSniProxyAsync(string targetHost, IPAddress[] ips, string? sni, string[]? expectedHosts, HttpRequestStart request, SslStream client)
     {
         var isOk = true;
-        errMessage = null;
+        string? errMessage = null;
         using Socket socket = new(ips[0].AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         socket.SendTimeout = 6000;
         socket.ReceiveTimeout = 6000;
         try
         {
-            socket.Connect(ips[0], 443);
+            await socket.ConnectAsync(ips[0], 443);
         }
         catch (Exception ex)
         {
@@ -1105,7 +1130,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         }
         if (socket.Connected)
         {
-            using SslStream ssl = new(new NetworkStream(socket), false, (_, _, _, _) => true, null);
+            await using SslStream ssl = new(new NetworkStream(socket), false, (_, _, _, _) => true, null);
             ssl.WriteTimeout = 30000;
             ssl.ReadTimeout = 30000;
             try
@@ -1115,7 +1140,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                     TargetHost = string.IsNullOrEmpty(sni) ? ips[0].ToString() : sni,
                     CertificateRevocationCheckMode = X509RevocationMode.Online
                 };
-                ssl.AuthenticateAsClient(options);
+                await ssl.AuthenticateAsClientAsync(options);
                 if (ssl.IsAuthenticated)
                 {
                     if (expectedHosts == null || expectedHosts.Length > 0)
@@ -1187,12 +1212,12 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
                     if (isOk)
                     {
-                        ssl.Write(request.HeaderBytes);
+                        await ssl.WriteAsync(request.HeaderBytes);
                         if (request.InitialBodyBytes.Length > 0)
-                            ssl.Write(request.InitialBodyBytes);
-                        ssl.Flush();
+                            await ssl.WriteAsync(request.InitialBodyBytes);
+                        await ssl.FlushAsync();
 
-                        RelayStreams(client, ssl);
+                        await RelayStreamsAsync(client, ssl);
                     }
                 }
             }
@@ -1219,51 +1244,95 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             }
         }
 
-        return isOk;
+        return (isOk, errMessage);
     }
 
     private static bool CertificateHostMatches(string host, string certificateHost)
     {
-        host = host.Trim().TrimEnd('.').ToLowerInvariant();
-        certificateHost = certificateHost.Trim().TrimEnd('.').ToLowerInvariant();
-        if (host.Equals(certificateHost)) return true;
-        if (!certificateHost.StartsWith("*.")) return false;
-
-        var suffix = certificateHost[1..];
-        return host.EndsWith(suffix) && host.Length > suffix.Length;
+        host = NormalizeCertificateHost(host);
+        certificateHost = NormalizeCertificateHost(certificateHost);
+        var cacheKey = host + "|" + certificateHost;
+        if (CertificateHostMatchCache.Count >= CertificateHostMatchCacheLimit)
+            CertificateHostMatchCache.Clear();
+        return CertificateHostMatchCache.GetOrAdd(cacheKey, _ => CertificateHostMatchesCore(host, certificateHost));
     }
 
-    private static void RelayStreams(SslStream client, SslStream upstream)
+    private static bool CertificateHostMatchesCore(string host, string certificateHost)
     {
-        var clientToUpstream = Task.Run(() => CopyStream(client, upstream));
-        var upstreamToClient = Task.Run(() => CopyStream(upstream, client));
+        if (host.Equals(certificateHost)) return true;
+        if (CertificateHostPatternMatches(host, certificateHost)) return true;
+
+        return host.StartsWith('*') && CertificateHostPatternMatches(certificateHost, host);
+    }
+
+    private static string NormalizeCertificateHost(string host) => host.Trim().TrimEnd('.').ToLowerInvariant();
+
+    private static bool CertificateHostPatternMatches(string host, string pattern)
+    {
+        if (!pattern.StartsWith('*')) return false;
+
+        if (pattern.StartsWith("*."))
+        {
+            var suffix = pattern[1..];
+            return host.EndsWith(suffix) && host.Length > suffix.Length;
+        }
+
+        var rootHost = pattern[1..];
+        if (host.StartsWith("*."))
+            host = host[2..];
+        return host.Equals(rootHost) || host.EndsWith("." + rootHost);
+    }
+
+    private static async Task RelayStreamsAsync(SslStream client, SslStream upstream)
+    {
+        using var cts = new CancellationTokenSource();
+        var clientToUpstream = CopyStreamAsync(client, upstream, cts.Token);
+        var upstreamToClient = CopyStreamAsync(upstream, client, cts.Token);
 
         try
         {
-            Task.WaitAny(clientToUpstream, upstreamToClient);
+            await Task.WhenAny(clientToUpstream, upstreamToClient);
         }
         catch
         {
-            // CopyStream handles connection errors; this is a last-resort guard.
+            // CopyStreamAsync handles connection errors; this is a last-resort guard.
         }
         finally
         {
+            await cts.CancelAsync();
             SafeClose(client);
             SafeClose(upstream);
+            await ObserveRelayTasksAsync(clientToUpstream, upstreamToClient);
         }
     }
 
-    private static void CopyStream(Stream source, Stream destination)
+    private static async Task ObserveRelayTasksAsync(params Task[] tasks)
+    {
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch
+        {
+            // All relay task exceptions are intentionally observed here.
+        }
+    }
+
+    private static async Task CopyStreamAsync(Stream source, Stream destination, CancellationToken cancellationToken)
     {
         var buffer = new byte[65536];
         try
         {
             while (true)
             {
-                var len = source.Read(buffer, 0, buffer.Length);
+                using var readCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                readCts.CancelAfter(RelayIdleTimeout);
+                var len = await source.ReadAsync(buffer, readCts.Token);
                 if (len <= 0) break;
 
-                destination.Write(buffer, 0, len);
+                using var writeCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                writeCts.CancelAfter(RelayIdleTimeout);
+                await destination.WriteAsync(buffer.AsMemory(0, len), writeCts.Token);
             }
         }
         catch
