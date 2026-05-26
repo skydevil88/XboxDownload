@@ -334,10 +334,10 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             ? IPAddress.Parse(App.Settings.LocalIp)
             : IPAddress.Any;
 
-        _httpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        _httpSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         var httpEndPoint = new IPEndPoint(ipAddress, HttpPort);
 
-        _httpsSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        _httpsSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         var httpsEndPoint = new IPEndPoint(ipAddress, HttpsPort);
         try
         {

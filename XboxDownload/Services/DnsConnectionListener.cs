@@ -394,7 +394,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         serviceViewModel.DnsIp = iPEndPoint.Address.ToString();
 
         var ipe = new IPEndPoint(App.Settings.ListeningIp == "LocalIp" ? localIpAddr : IPAddress.Any, DnsPort);
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        _socket = new Socket(iPEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
         try
         {
             _socket.Bind(ipe);
