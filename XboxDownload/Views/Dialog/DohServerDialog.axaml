@@ -178,13 +178,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="300" Header="{DynamicResource Service.SecureDns.Domain}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
-                                    <TextBlock VerticalAlignment="Center" Margin="12,0" Text="{Binding Domain}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="300" Binding="{Binding Domain}" Header="{DynamicResource Service.SecureDns.Domain}"/>
                         <DataGridTemplateColumn MinWidth="280" Header="{DynamicResource Service.SecureDns.DohServer}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
@@ -194,7 +188,7 @@
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
                                     <ComboBox MinWidth="280"
-                                              ItemsSource="{Binding $parent.((dialog:DohServerDialogViewModel)DataContext).DohServersMappings, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
+                                              ItemsSource="{Binding $parent[DataGrid].((dialog:DohServerDialogViewModel)DataContext).DohServersMappings, FallbackValue={x:Null}, TargetNullValue={x:Null}}"
                                               SelectedItem="{Binding DohServer}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate x:DataType="service:DohServerOption">
@@ -205,13 +199,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="100" Width="*" Header="{DynamicResource Service.SecureDns.Note}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate x:DataType="dialog:DohServerDialogViewModel+DohHostMappingEntry">
-                                    <TextBlock VerticalAlignment="Center" Margin="12,0" Text="{Binding Note}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn MinWidth="100" Width="*" Binding="{Binding Note}" Header="{DynamicResource Service.SecureDns.Note}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
