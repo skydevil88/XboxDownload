@@ -520,13 +520,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                         if (redirect)
                         {
                             var url = $"http://{newHost}{filePath}";
-                            var sb = new StringBuilder();
-                            sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                            sb.Append("Content-Type: text/html\r\n");
-                            sb.Append($"Location: {url}\r\n");
-                            sb.Append("Content-Length: 0\r\n\r\n");
-                            var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                            socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
+                            WriteRedirect(new SocketResponseWriter(socket), url);
                             if (serviceViewModel.IsLogging)
                                 serviceViewModel.AddLog("HTTP 302", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                         }
@@ -541,13 +535,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     {
                                         fileFound = true;
                                         var response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
-                                        var sb = new StringBuilder();
-                                        sb.Append("HTTP/1.1 200 OK\r\n");
-                                        sb.Append("Content-Type: text/plain\r\n");
-                                        sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                                        var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                        socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-                                        socket.Send(response, 0, response.Length, SocketFlags.None, out _);
+                                        WriteHttpResponse(new SocketResponseWriter(socket), "200 OK", "text/plain", response);
                                         if (serviceViewModel.IsLogging)
                                             serviceViewModel.AddLog("HTTP 200", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                                     }
@@ -585,13 +573,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     {
                                         fileFound = true;
                                         url = $"https://{host}{filePath}";
-                                        StringBuilder sb = new();
-                                        sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                        sb.Append("Content-Type: text/html\r\n");
-                                        sb.Append($"Location: {url}\r\n");
-                                        sb.Append("Content-Length: 0\r\n\r\n");
-                                        var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                        socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
+                                        WriteRedirect(new SocketResponseWriter(socket), url);
                                         if (serviceViewModel.IsLogging)
                                             serviceViewModel.AddLog("HTTP 302", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                                     }
@@ -600,13 +582,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             if (!fileFound)
                             {
                                 var response = Encoding.ASCII.GetBytes("File not found.");
-                                StringBuilder sb = new();
-                                sb.Append("HTTP/1.1 404 Not Found\r\n");
-                                sb.Append("Content-Type: text/html\r\n");
-                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                                var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                socket.Send(headersBytes, 0, headersBytes.Length, SocketFlags.None, out _);
-                                socket.Send(response, 0, response.Length, SocketFlags.None, out _);
+                                WriteHttpResponse(new SocketResponseWriter(socket), "404 Not Found", "text/html", response);
                                 if (serviceViewModel.IsLogging)
                                     serviceViewModel.AddLog("HTTP 404", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                             }
@@ -742,154 +718,34 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     if (fastestUrl != null)
                                     {
                                         fileFound = true;
-                                        StringBuilder sb = new();
-                                        sb.Append("HTTP/1.1 302 Moved Temporarily\r\n");
-                                        sb.Append("Content-Type: text/html\r\n");
-                                        sb.Append($"Location: {fastestUrl}\r\n");
-                                        sb.Append("Content-Length: 0\r\n\r\n");
-                                        var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                        ssl.Write(headersBytes);
-                                        ssl.Flush();
+                                        WriteRedirect(new StreamResponseWriter(ssl, socket), fastestUrl);
                                     }
                                 }
 
                                 if (!fileFound)
                                 {
-                                    SniProxy? proxy = null;
-                                    string[]? expectedHosts = null;
-                                    if (DicSniProxy.TryGetValue(host, out var tuple))
-                                    {
-                                        proxy = tuple.Item1;
-                                        expectedHosts = tuple.Item2;
-                                    }
-                                    else
-                                    {
-                                        tuple = DicSniProxy2.Where(kvp => host.EndsWith(kvp.Key)).Select(x => x.Value).FirstOrDefault();
-                                        if (tuple.Item1 != null)
-                                        {
-                                            proxy = new SniProxy
-                                            {
-                                                Branch = tuple.Item1.Branch,
-                                                Sni = tuple.Item1.Sni,
-                                                IpAddressesV4 = tuple.Item1.IpAddressesV4,
-                                                IpAddressesV6 = tuple.Item1.IpAddressesV6,
-                                                UseCustomIpAddress = tuple.Item1.UseCustomIpAddress
-                                            };
-                                            expectedHosts = tuple.Item2;
-                                            DicSniProxy.TryAdd(host, (proxy, expectedHosts));
-                                        }
-                                    }
-
+                                    var (proxy, expectedHosts) = TryGetSniProxy(host);
                                     if (proxy != null)
                                     {
                                         if (serviceViewModel.IsLogging)
                                             serviceViewModel.AddLog("Proxy", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
 
                                         fileFound = true;
-                                        IPAddress[]? ips = null;
-                                        if (proxy is { UseCustomIpAddress: true, IpAddresses: null })
-                                        {
-                                            IPAddress[]? ipV6 = proxy.IpAddressesV6, ipV4 = proxy.IpAddressesV4;
-                                            proxy.IpAddresses = serviceViewModel.IsIPv6Support switch
-                                            {
-                                                true when ipV6 != null && ipV4 != null => [.. ipV6, .. ipV4],
-                                                true => ipV6 ?? ipV4,
-                                                _ => ipV4
-                                            };
-                                            if (proxy.IpAddresses?.Length >= 2)
-                                            {
-                                                await proxy.Semaphore.WaitAsync();
-                                                try
-                                                {
-                                                    if (proxy.IpAddresses?.Length >= 2)
-                                                    {
-                                                        var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
-                                                        if (fastestIp != null)
-                                                            ips = proxy.IpAddresses = [fastestIp];
-                                                    }
-                                                }
-                                                finally
-                                                {
-                                                    proxy.Semaphore.Release();
-                                                }
-                                            }
-                                        }
-                                        else if (proxy.IpAddresses == null)
-                                        {
-                                            await proxy.Semaphore.WaitAsync();
-                                            try
-                                            {
-                                                if (proxy.IpAddresses == null)
-                                                {
-                                                    var domain = proxy.Branch ?? host;
+                                        var ips = await ResolveSniProxyIpsAsync(proxy, host);
 
-                                                    var ipAddresses = new ConcurrentBag<IPAddress>();
-                                                    var tasks = new List<Task>();
-                                                    foreach (var sniProxyId in App.Settings.SniProxyId)
-                                                    {
-                                                        var selectedDohServer = serviceViewModel.DohServersMappings.FirstOrDefault(d => d.Id == sniProxyId);
-                                                        if (selectedDohServer == null) continue;
-                                                        var useProxy = App.Settings.DohServerUseProxyId.Contains(selectedDohServer.Id) && !selectedDohServer.IsProxyDisabled;
-                                                        var doHServer = DnsHelper.GetConfigureDoH(selectedDohServer.Url, selectedDohServer.Ip, useProxy);
-                                                        if (serviceViewModel.IsIPv6Support)
-                                                        {
-                                                            tasks.Add(Task.Run(async () =>
-                                                            {
-                                                                var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
-                                                                if (ipV6 != null)
-                                                                {
-                                                                    foreach (var ip in ipV6)
-                                                                        ipAddresses.Add(ip);
-                                                                }
-                                                            }));
-                                                        }
-                                                        tasks.Add(Task.Run(async () =>
-                                                        {
-                                                            var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
-                                                            if (ipV4 != null)
-                                                            {
-                                                                foreach (var ip in ipV4)
-                                                                    ipAddresses.Add(ip);
-                                                            }
-                                                        }));
-                                                    }
-                                                    await Task.WhenAll(tasks);
-                                                    if (!ipAddresses.IsEmpty)
-                                                        proxy.IpAddresses = [.. ipAddresses.Distinct()];
-
-                                                    if (proxy.IpAddresses?.Length >= 2)
-                                                    {
-                                                        var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
-                                                        if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
-                                                    }
-                                                }
-                                            }
-                                            finally
-                                            {
-                                                proxy.Semaphore.Release();
-                                            }
-                                        }
-                                        ips ??= proxy.IpAddresses?.Length >= 2 ? [.. proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16)] : proxy.IpAddresses;
-
-                                        string? errMessae;
+                                        string? errMessage;
                                         if (ips != null)
                                         {
-                                            if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, request, ssl, out errMessae))
+                                            if (!ExecuteSniProxy(host, ips, proxy.Sni, expectedHosts, request, ssl, out errMessage))
                                             {
                                                 proxy.IpAddresses = null;
                                             }
                                         }
-                                        else errMessae = $"Unable to query domain {host}. Please check whether the DoH server is reachable. If necessary, enable proxy forwarding for the request.";
-                                        if (!string.IsNullOrEmpty(errMessae))
+                                        else errMessage = $"Unable to query domain {host}. Please check whether the DoH server is reachable. If necessary, enable proxy forwarding for the request.";
+                                        if (!string.IsNullOrEmpty(errMessage))
                                         {
-                                            var response = Encoding.UTF8.GetBytes(errMessae);
-                                            StringBuilder sb = new();
-                                            sb.Append("HTTP/1.1 500 Server Error\r\n");
-                                            sb.Append("Content-Type: text/html; charset=utf-8\r\n");
-                                            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                                            ssl.Write(Encoding.UTF8.GetBytes(sb.ToString()));
-                                            ssl.Write(response);
-                                            ssl.Flush();
+                                            var response = Encoding.UTF8.GetBytes(errMessage);
+                                            WriteHttpResponse(new StreamResponseWriter(ssl, socket), "500 Server Error", "text/html; charset=utf-8", response, Encoding.UTF8);
                                         }
                                     }
                                 }
@@ -897,14 +753,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             if (!fileFound)
                             {
                                 var response = "File not found."u8.ToArray();
-                                StringBuilder sb = new();
-                                sb.Append("HTTP/1.1 404 Not Found\r\n");
-                                sb.Append("Content-Type: text/html\r\n");
-                                sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-                                var headersBytes = Encoding.ASCII.GetBytes(sb.ToString());
-                                ssl.Write(headersBytes);
-                                ssl.Write(response);
-                                ssl.Flush();
+                                WriteHttpResponse(new StreamResponseWriter(ssl, socket), "404 Not Found", "text/html", response);
                                 if (serviceViewModel.IsLogging)
                                     serviceViewModel.AddLog("HTTP 404", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
                             }
@@ -958,6 +807,115 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         public void Flush() => stream.Flush();
     }
 
+    private static (SniProxy? Proxy, string[]? ExpectedHosts) TryGetSniProxy(string host)
+    {
+        if (DicSniProxy.TryGetValue(host, out var tuple))
+            return (tuple.Item1, tuple.Item2);
+
+        tuple = DicSniProxy2.Where(kvp => host.EndsWith(kvp.Key)).Select(x => x.Value).FirstOrDefault();
+        if (tuple.Item1 == null) return (null, null);
+
+        var proxy = new SniProxy
+        {
+            Branch = tuple.Item1.Branch,
+            Sni = tuple.Item1.Sni,
+            IpAddressesV4 = tuple.Item1.IpAddressesV4,
+            IpAddressesV6 = tuple.Item1.IpAddressesV6,
+            UseCustomIpAddress = tuple.Item1.UseCustomIpAddress
+        };
+        DicSniProxy.TryAdd(host, (proxy, tuple.Item2));
+        return (proxy, tuple.Item2);
+    }
+
+    private async Task<IPAddress[]?> ResolveSniProxyIpsAsync(SniProxy proxy, string host)
+    {
+        IPAddress[]? ips = null;
+        if (proxy is { UseCustomIpAddress: true, IpAddresses: null })
+        {
+            IPAddress[]? ipV6 = proxy.IpAddressesV6, ipV4 = proxy.IpAddressesV4;
+            proxy.IpAddresses = serviceViewModel.IsIPv6Support switch
+            {
+                true when ipV6 != null && ipV4 != null => [.. ipV6, .. ipV4],
+                true => ipV6 ?? ipV4,
+                _ => ipV4
+            };
+            if (proxy.IpAddresses?.Length >= 2)
+            {
+                await proxy.Semaphore.WaitAsync();
+                try
+                {
+                    if (proxy.IpAddresses?.Length >= 2)
+                    {
+                        var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
+                        if (fastestIp != null)
+                            ips = proxy.IpAddresses = [fastestIp];
+                    }
+                }
+                finally
+                {
+                    proxy.Semaphore.Release();
+                }
+            }
+        }
+        else if (proxy.IpAddresses == null)
+        {
+            await proxy.Semaphore.WaitAsync();
+            try
+            {
+                if (proxy.IpAddresses == null)
+                {
+                    var domain = proxy.Branch ?? host;
+
+                    var ipAddresses = new ConcurrentBag<IPAddress>();
+                    var tasks = new List<Task>();
+                    foreach (var sniProxyId in App.Settings.SniProxyId)
+                    {
+                        var selectedDohServer = serviceViewModel.DohServersMappings.FirstOrDefault(d => d.Id == sniProxyId);
+                        if (selectedDohServer == null) continue;
+                        var useProxy = App.Settings.DohServerUseProxyId.Contains(selectedDohServer.Id) && !selectedDohServer.IsProxyDisabled;
+                        var doHServer = DnsHelper.GetConfigureDoH(selectedDohServer.Url, selectedDohServer.Ip, useProxy);
+                        if (serviceViewModel.IsIPv6Support)
+                        {
+                            tasks.Add(Task.Run(async () =>
+                            {
+                                var ipV6 = await DnsHelper.ResolveDohAsync(domain, doHServer, true);
+                                if (ipV6 != null)
+                                {
+                                    foreach (var ip in ipV6)
+                                        ipAddresses.Add(ip);
+                                }
+                            }));
+                        }
+                        tasks.Add(Task.Run(async () =>
+                        {
+                            var ipV4 = await DnsHelper.ResolveDohAsync(domain, doHServer);
+                            if (ipV4 != null)
+                            {
+                                foreach (var ip in ipV4)
+                                    ipAddresses.Add(ip);
+                            }
+                        }));
+                    }
+                    await Task.WhenAll(tasks);
+                    if (!ipAddresses.IsEmpty)
+                        proxy.IpAddresses = [.. ipAddresses.Distinct()];
+
+                    if (proxy.IpAddresses?.Length >= 2)
+                    {
+                        var fastestIp = await HttpClientHelper.GetFastestHttpsIpAsync(proxy.IpAddresses);
+                        if (fastestIp != null) ips = proxy.IpAddresses = [fastestIp];
+                    }
+                }
+            }
+            finally
+            {
+                proxy.Semaphore.Release();
+            }
+        }
+
+        return ips ?? (proxy.IpAddresses?.Length >= 2 ? [.. proxy.IpAddresses.OrderBy(_ => Random.Shared.Next()).Take(16)] : proxy.IpAddresses);
+    }
+
     private bool TryGetLocalUploadPath(string requestPath, out string localPath)
     {
         localPath = string.Empty;
@@ -993,13 +951,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         if (fs == null)
         {
             var response = "Internal Server Error"u8.ToArray();
-            var sb = new StringBuilder();
-            sb.Append("HTTP/1.1 500 Server Error\r\n");
-            sb.Append("Content-Type: text/html\r\n");
-            sb.Append($"Content-Length: {response.Length}\r\n\r\n");
-            WriteBytes(writer, Encoding.ASCII.GetBytes(sb.ToString()));
-            WriteBytes(writer, response);
-            writer.Flush();
+            WriteHttpResponse(writer, "500 Server Error", "text/html", response);
             return;
         }
 
@@ -1050,6 +1002,36 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
     }
 
     private static void WriteBytes(IResponseWriter writer, byte[] bytes) => writer.Write(bytes, bytes.Length);
+
+    private static void WriteRedirect(IResponseWriter writer, string url)
+    {
+        var headers = new Dictionary<string, string> { { "Location", url } };
+        WriteHttpResponse(writer, "302 Moved Temporarily", "text/html", [], headers);
+    }
+
+    private static void WriteHttpResponse(IResponseWriter writer, string status, string contentType, byte[] body, Encoding? encoding = null)
+    {
+        WriteHttpResponse(writer, status, contentType, body, null, encoding);
+    }
+
+    private static void WriteHttpResponse(IResponseWriter writer, string status, string contentType, byte[] body, Dictionary<string, string>? headers, Encoding? encoding = null)
+    {
+        encoding ??= Encoding.ASCII;
+        var sb = new StringBuilder();
+        sb.Append("HTTP/1.1 " + status + "\r\n");
+        sb.Append($"Content-Type: {contentType}\r\n");
+        if (headers != null)
+        {
+            foreach (var (key, value) in headers)
+                sb.Append($"{key}: {value}\r\n");
+        }
+        sb.Append($"Content-Length: {body.Length}\r\n\r\n");
+
+        WriteBytes(writer, encoding.GetBytes(sb.ToString()));
+        if (body.Length > 0)
+            WriteBytes(writer, body);
+        writer.Flush();
+    }
 
     private static bool TryReadHttpRequestStart(Socket socket, out HttpRequestStart requestStart) =>
         TryReadHttpRequestStart((buffer, count) => socket.Receive(buffer, 0, count, SocketFlags.None, out _), out requestStart);
