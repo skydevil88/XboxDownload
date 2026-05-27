@@ -7,40 +7,17 @@ namespace XboxDownload.Models.Dns;
 
 public class Query
 {
-    public string? QueryName { get; set; }
-    public QueryType QueryType { get; set; }
-    public short QueryClass { get; set; }
+    public string? QueryName { get; init; }
+    public QueryType QueryType { get; init; }
+    public short QueryClass { get; init; }
 
-    public Query() { }
+    protected Query() { }
 
-    public Query(Func<int, byte[]> read)
+    internal Query(DnsMessage.DnsPacketReader reader)
     {
-        byte ReadByte()
-        {
-            var b = read(1);
-            if (b.Length < 1) throw new InvalidOperationException("Unexpected end of stream.");
-            return b[0];
-        }
-
-        var name = new StringBuilder();
-        var length = ReadByte();
-
-        while (length != 0)
-        {
-            var labelBytes = read(length);
-            if (labelBytes.Length != length)
-                throw new InvalidOperationException("Label length mismatch.");
-
-            name.Append(Encoding.ASCII.GetString(labelBytes));
-
-            length = ReadByte();
-            if (length != 0)
-                name.Append('.');
-        }
-
-        QueryName = name.ToString();
-        QueryType = (QueryType)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(read(2), 0));
-        QueryClass = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(read(2), 0));
+        QueryName = reader.ReadDomainName();
+        QueryType = (QueryType)reader.ReadUInt16();
+        QueryClass = (short)reader.ReadUInt16();
     }
 
     public virtual byte[] ToBytes()

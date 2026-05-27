@@ -452,7 +452,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 if (App.Settings.IsXboxGameDownloadLinksShown)
                                 {
                                     redirect = true;
-                                    newHost = DnsConnectionListener.Ipv4ServiceMapBackup.IsEmpty && (_isSimplifiedChinese || App.Settings.XboxGlobalIp == App.Settings.LocalIp)
+                                    newHost = DnsConnectionListener.Ipv4ServiceMapBackup.IsEmpty && ((_isSimplifiedChinese && string.IsNullOrWhiteSpace(App.Settings.XboxGlobalIp)) || App.Settings.XboxGlobalIp == App.Settings.LocalIp)
                                         ? "assets2.xboxlive.cn"
                                         : "assets2.xboxlive.com";
                                 }
@@ -476,7 +476,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                 if (App.Settings.IsXboxGameDownloadLinksShown)
                                 {
                                     redirect = true;
-                                    newHost = DnsConnectionListener.Ipv4ServiceMapBackup.IsEmpty && (_isSimplifiedChinese || App.Settings.XboxGlobalIp == App.Settings.LocalIp)
+                                    newHost = DnsConnectionListener.Ipv4ServiceMapBackup.IsEmpty && ((_isSimplifiedChinese && string.IsNullOrWhiteSpace(App.Settings.XboxGlobalIp)) || App.Settings.XboxGlobalIp == App.Settings.LocalIp)
                                         ? "dlassets2.xboxlive.cn"
                                         : "dlassets2.xboxlive.com";
                                 }

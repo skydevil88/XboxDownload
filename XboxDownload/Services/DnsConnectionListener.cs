@@ -26,6 +26,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 {
     private static Socket? _socket;
     private const int DnsPort = 53;
+    private const int MaxConcurrentDnsRequests = 256;
+    private static readonly SemaphoreSlim DnsRequestSemaphore = new(MaxConcurrentDnsRequests, MaxConcurrentDnsRequests);
     private static readonly ConcurrentDictionary<string, DnsServer> NetworkInterfaceDnsMap = new();
     private const string TcpIpV4Path = @"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\";
     private const string TcpIpV6Path = @"SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters\Interfaces\";
@@ -35,9 +37,12 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
     private static readonly ConcurrentDictionary<string, DnsHelper.DoHServer> ForceEncryptedDomainMap = new();
     public static readonly ConcurrentDictionary<string, List<ResourceRecord>> Ipv4ServiceMap = new(), Ipv6ServiceMap = new(), Ipv4ServiceMapBackup = new();
-    private static readonly ConcurrentDictionary<string, List<ResourceRecord>> Ipv4HostMap = new(), Ipv6ServiceMapBackup = new(), Ipv6HostMap = new();
-    private static readonly List<KeyValuePair<string, List<ResourceRecord>>> Ipv4WildcardHostMap = [];
-    private static readonly List<KeyValuePair<string, List<ResourceRecord>>> Ipv6WildcardHostMap = [];
+    private static readonly ConcurrentDictionary<string, List<ResourceRecord>> Ipv6ServiceMapBackup = new();
+    private static ConcurrentDictionary<string, List<ResourceRecord>> _ipv4HostMap = new(), _ipv6HostMap = new();
+    private static KeyValuePair<string, List<ResourceRecord>>[] _ipv4WildcardHostMap = [];
+    private static KeyValuePair<string, List<ResourceRecord>>[] _ipv6WildcardHostMap = [];
+    private long _lastDnsRequestDroppedLogTicks;
+    private long _lastMalformedDnsRequestLogTicks;
 
     private record DnsServer
     {
@@ -69,12 +74,25 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
             foreach (var element in root.EnumerateArray())
             {
-                var isEnabled = element.GetProperty("IsEnabled").GetBoolean();
+                if (!element.TryGetProperty("IsEnabled", out var isEnabledProperty) ||
+                    !element.TryGetProperty("Domain", out var domainProperty) ||
+                    !element.TryGetProperty("DohServerId", out var dohServerIdProperty))
+                {
+                    continue;
+                }
+
+                var isEnabled = isEnabledProperty.ValueKind == JsonValueKind.True;
                 if (!isEnabled)
                     continue;
 
-                var domain = element.GetProperty("Domain").GetString();
-                var dohServerId = element.GetProperty("DohServerId").GetString();
+                if (domainProperty.ValueKind != JsonValueKind.String ||
+                    dohServerIdProperty.ValueKind != JsonValueKind.String)
+                {
+                    continue;
+                }
+
+                var domain = domainProperty.GetString()?.Trim().ToLowerInvariant();
+                var dohServerId = dohServerIdProperty.GetString();
 
                 if (string.IsNullOrWhiteSpace(domain) || string.IsNullOrWhiteSpace(dohServerId))
                     continue;
@@ -96,11 +114,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
     public async Task LoadHostAndAkamaiMapAsync(string? akamaiIp = null)
     {
-        Ipv4HostMap.Clear();
-        Ipv6HostMap.Clear();
-        Ipv4WildcardHostMap.Clear();
-        Ipv6WildcardHostMap.Clear();
-
+        var hostV4Temp = new ConcurrentDictionary<string, List<ResourceRecord>>();
+        var hostV6Temp = new ConcurrentDictionary<string, List<ResourceRecord>>();
         var wildcardV4Temp = new ConcurrentDictionary<string, List<ResourceRecord>>();
         var wildcardV6Temp = new ConcurrentDictionary<string, List<ResourceRecord>>();
 
@@ -147,7 +162,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         var record = new ResourceRecord
                         {
                             Data = ip.GetAddressBytes(),
-                            TTL = 100,
+                            Ttl = 100,
                             QueryClass = 1,
                             QueryType = ip.AddressFamily == AddressFamily.InterNetwork ? QueryType.A : QueryType.AAAA
                         };
@@ -168,8 +183,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         else
                         {
                             // *example.com → host["example.com"] + wildcard[".example.com"]
-                            AddOrUpdateMap(Ipv4HostMap, hostNameNoStar, v4Records);
-                            AddOrUpdateMap(Ipv6HostMap, hostNameNoStar, v6Records);
+                            AddOrUpdateMap(hostV4Temp, hostNameNoStar, v4Records);
+                            AddOrUpdateMap(hostV6Temp, hostNameNoStar, v6Records);
 
                             AddOrUpdateMap(wildcardV4Temp, "." + hostNameNoStar, v4Records);
                             AddOrUpdateMap(wildcardV6Temp, "." + hostNameNoStar, v6Records);
@@ -177,8 +192,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     }
                     else
                     {
-                        AddOrUpdateMap(Ipv4HostMap, hostNameRaw, v4Records);
-                        AddOrUpdateMap(Ipv6HostMap, hostNameRaw, v6Records);
+                        AddOrUpdateMap(hostV4Temp, hostNameRaw, v4Records);
+                        AddOrUpdateMap(hostV6Temp, hostNameRaw, v6Records);
                     }
                 }
             }
@@ -206,7 +221,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     var record = new ResourceRecord
                     {
                         Data = ip.GetAddressBytes(),
-                        TTL = 100,
+                        Ttl = 100,
                         QueryClass = 1,
                         QueryType = ip.AddressFamily == AddressFamily.InterNetwork ? QueryType.A : QueryType.AAAA
                     };
@@ -245,8 +260,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                             else
                             {
                                 // *example.com → host["example.com"] + wildcard[".example.com"]
-                                Ipv4HostMap.TryAdd(hostNameNoStar, v4Records);
-                                Ipv6HostMap.TryAdd(hostNameNoStar, v6Records);
+                                hostV4Temp.TryAdd(hostNameNoStar, v4Records);
+                                hostV6Temp.TryAdd(hostNameNoStar, v6Records);
 
                                 wildcardV4Temp.TryAdd("." + hostNameNoStar, v4Records);
                                 wildcardV6Temp.TryAdd("." + hostNameNoStar, v6Records);
@@ -254,8 +269,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         }
                         else
                         {
-                            Ipv4HostMap.TryAdd(hostNameRaw, v4Records);
-                            Ipv6HostMap.TryAdd(hostNameRaw, v6Records);
+                            hostV4Temp.TryAdd(hostNameRaw, v4Records);
+                            hostV6Temp.TryAdd(hostNameRaw, v6Records);
                         }
                     }
                 }
@@ -271,9 +286,11 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             }
         }
 
-        // Sort wildcard maps by key length descending
-        Ipv4WildcardHostMap.AddRange(wildcardV4Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key));
-        Ipv6WildcardHostMap.AddRange(wildcardV6Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key));
+        // Publish sorted wildcard maps as immutable snapshots for concurrent readers.
+        Volatile.Write(ref _ipv4HostMap, hostV4Temp);
+        Volatile.Write(ref _ipv6HostMap, hostV6Temp);
+        Volatile.Write(ref _ipv4WildcardHostMap, [.. wildcardV4Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key)]);
+        Volatile.Write(ref _ipv6WildcardHostMap, [.. wildcardV6Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key)]);
     }
 
     private static void AddOrUpdateMap(ConcurrentDictionary<string, List<ResourceRecord>> map, string host, List<ResourceRecord> records)
@@ -340,7 +357,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
                 var ipRecords = new List<ResourceRecord>
                 {
-                    new() { Data = IPAddress.Parse(akamaiIp).GetAddressBytes(), TTL = 100, QueryClass = 1, QueryType = QueryType.A }
+                    new() { Data = IPAddress.Parse(akamaiIp).GetAddressBytes(), Ttl = 100, QueryClass = 1, QueryType = QueryType.A }
                 };
 
                 // Backup current IPv4 mapping if exists
@@ -394,139 +411,164 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         serviceViewModel.DnsIp = iPEndPoint.Address.ToString();
 
         var ipe = new IPEndPoint(App.Settings.ListeningIp == "LocalIp" ? localIpAddr : IPAddress.Any, DnsPort);
-        _socket = new Socket(iPEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+        var socket = new Socket(iPEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+        _socket = socket;
+        var hasAppliedLocalDns = false;
         try
         {
-            _socket.Bind(ipe);
+            socket.Bind(ipe);
         }
         catch (SocketException ex)
         {
+            socket.Dispose();
+            Interlocked.CompareExchange(ref _socket, null, socket);
             serviceViewModel.IsListeningFailed = true;
             return string.Format(ResourceHelper.GetString("Service.Listening.DnsStartFailedDialogMessage"), ex.Message);
         }
 
-        var localIpBytes = localIpAddr.GetAddressBytes();
-        _localIpRecords = [new ResourceRecord { Data = localIpBytes, TTL = 100, QueryClass = 1, QueryType = QueryType.A }];
+        try
+        {
+            var localIpBytes = localIpAddr.GetAddressBytes();
+            _localIpRecords = [new ResourceRecord { Data = localIpBytes, Ttl = 100, QueryClass = 1, QueryType = QueryType.A }];
 
-        byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null;
-        var ipMap = new List<(string host, Func<string?> get, Action<string> set, Action<byte[]?> setBytes)>
-        {
-            ("assets2.xboxlive.cn", () => serviceViewModel.XboxCn1Ip, val => serviceViewModel.XboxCn1Ip = val, val => xboxCn1Ip = val),
-            ("dlassets2.xboxlive.cn", () => serviceViewModel.XboxCn2Ip, val => serviceViewModel.XboxCn2Ip = val, val => xboxCn2Ip = val),
-            ("tlu.dl.delivery.mp.microsoft.com", () => serviceViewModel.XboxAppIp, val => serviceViewModel.XboxAppIp = val, val => xboxAppIp = val),
-            ("gst.prod.dl.playstation.net", () => serviceViewModel.PsIp, val => serviceViewModel.PsIp = val, val => psIp = val),
-            ("atum.hac.lp1.d4c.nintendo.net", () => serviceViewModel.NsIp, val => serviceViewModel.NsIp = val, val => nsIp = val),
-            ("origin-a.akamaihd.net", () => serviceViewModel.EaIp, val => serviceViewModel.EaIp = val, val => eaIp = val),
-            ("blzddist1-a.akamaihd.net", () => serviceViewModel.BattleIp, val => serviceViewModel.BattleIp = val, val => battleIp = val)
-        };
-        if (isSimplifiedChinese)
-        {
-            if (!string.IsNullOrEmpty(serviceViewModel.XboxGlobalIp))
+            byte[]? xboxGlobalIp = null, xboxCn1Ip = null, xboxCn2Ip = null, xboxAppIp = null, psIp = null, nsIp = null, eaIp = null, battleIp = null;
+            var isXboxGlobalIpSpecified = !string.IsNullOrWhiteSpace(serviceViewModel.XboxGlobalIp);
+            var ipMap = new List<(string host, Func<string?> get, Action<string> set, Action<byte[]?> setBytes)>
             {
-                xboxGlobalIp = IPAddress.Parse(serviceViewModel.XboxGlobalIp).GetAddressBytes();
+                ("assets2.xboxlive.cn", () => serviceViewModel.XboxCn1Ip, val => serviceViewModel.XboxCn1Ip = val, val => xboxCn1Ip = val),
+                ("dlassets2.xboxlive.cn", () => serviceViewModel.XboxCn2Ip, val => serviceViewModel.XboxCn2Ip = val, val => xboxCn2Ip = val),
+                ("tlu.dl.delivery.mp.microsoft.com", () => serviceViewModel.XboxAppIp, val => serviceViewModel.XboxAppIp = val, val => xboxAppIp = val),
+                ("gst.prod.dl.playstation.net", () => serviceViewModel.PsIp, val => serviceViewModel.PsIp = val, val => psIp = val),
+                ("atum.hac.lp1.d4c.nintendo.net", () => serviceViewModel.NsIp, val => serviceViewModel.NsIp = val, val => nsIp = val),
+                ("origin-a.akamaihd.net", () => serviceViewModel.EaIp, val => serviceViewModel.EaIp = val, val => eaIp = val),
+                ("blzddist1-a.akamaihd.net", () => serviceViewModel.BattleIp, val => serviceViewModel.BattleIp = val, val => battleIp = val)
+            };
+            if (isSimplifiedChinese)
+            {
+                if (isXboxGlobalIpSpecified)
+                {
+                    xboxGlobalIp = IPAddress.Parse(serviceViewModel.XboxGlobalIp).GetAddressBytes();
+                }
+                else
+                {
+                    serviceViewModel.XboxGlobalIp = App.Settings.LocalIp;
+                    xboxGlobalIp = localIpBytes;
+                }
             }
             else
             {
-                serviceViewModel.XboxGlobalIp = App.Settings.LocalIp;
-                xboxGlobalIp = localIpBytes;
+                ipMap.Add(("assets2.xboxlive.com", () => serviceViewModel.XboxGlobalIp, val => serviceViewModel.XboxGlobalIp = val, val => xboxGlobalIp = val));
             }
-        }
-        else
-        {
-            ipMap.Add(("assets2.xboxlive.com", () => serviceViewModel.XboxGlobalIp, val => serviceViewModel.XboxGlobalIp = val, val => xboxGlobalIp = val));
-        }
 
-        var ipResolveTasks = ipMap.Select(async tuple =>
-        {
-            var (host, get, set, setBytes) = tuple;
-            var ip = get();
-            var (ipBytes, resolved) = await ResolveIpAsync(ip, host, serviceViewModel.DnsIp, serviceViewModel.IsDoHEnabled);
-            setBytes(ipBytes);
-            if (string.IsNullOrEmpty(ip) && resolved is not null)
-                set(resolved);
-        }).ToArray();
-        await Task.WhenAll(ipResolveTasks);
-
-        Ipv4ServiceMap.Clear();
-        Ipv6ServiceMap.Clear();
-
-        AddDnsMappings("XboxGlobal", xboxGlobalIp, _localIpRecords, EmptyIpRecords, serviceViewModel.IsXboxGameDownloadLinksShown, isSimplifiedChinese);
-        AddDnsMappings("XboxCn1", xboxCn1Ip, _localIpRecords, EmptyIpRecords, serviceViewModel.IsXboxGameDownloadLinksShown);
-        AddDnsMappings("XboxCn2", xboxCn2Ip, _localIpRecords, EmptyIpRecords, serviceViewModel.IsXboxGameDownloadLinksShown);
-        AddDnsMappings("XboxApp", xboxAppIp, _localIpRecords, EmptyIpRecords);
-        AddDnsMappings("Ps", psIp, _localIpRecords, EmptyIpRecords);
-        AddDnsMappings("Ns", nsIp, _localIpRecords, EmptyIpRecords);
-        AddDnsMappings("Ea", eaIp, _localIpRecords, EmptyIpRecords);
-        AddDnsMappings("Battle", battleIp, _localIpRecords, EmptyIpRecords);
-
-        if (serviceViewModel.IsSetLocalDnsEnabled)
-        {
-            if (OperatingSystem.IsWindows())
+            var ipResolveTasks = ipMap.Select(async tuple =>
             {
-                using var localMachine = Microsoft.Win32.Registry.LocalMachine;
-                var adapters = NetworkAdapterHelper.GetValidAdapters();
-                foreach (var adapter in adapters)
-                {
-                    var dns = new DnsServer
-                    {
-                        IPv4 = GetRegistryDns(localMachine, TcpIpV4Path + adapter.Id, App.Settings.LocalIp),
-                        IPv6 = GetRegistryDns(localMachine, TcpIpV6Path + adapter.Id, "::")
-                    };
-                    NetworkInterfaceDnsMap.TryAdd(adapter.Id, dns);
-                }
-                await ApplyDns(App.Settings.LocalIp);
-            }
-            else if (OperatingSystem.IsMacOS())
-            {
-                var serviceName = await GetNetworkServiceNameAsync(serviceViewModel.SelectedAdapter!.Adapter.Name);
-                if (!string.IsNullOrEmpty(serviceName))
-                {
-                    var ips = new List<IPAddress>();
-                    var dnsServers =
-                        await CommandHelper.RunCommandWithOutputAsync("networksetup",
-                            $"-getdnsservers \"{serviceName}\"");
-                    foreach (var line in dnsServers)
-                    {
-                        if (IPAddress.TryParse(line, out var ip) && ip.ToString() != App.Settings.LocalIp)
-                            ips.Add(ip);
-                    }
+                var (host, get, set, setBytes) = tuple;
+                var ip = get();
+                var (ipBytes, resolved) = await ResolveIpAsync(ip, host, serviceViewModel.DnsIp, serviceViewModel.IsDoHEnabled);
+                setBytes(ipBytes);
+                if (string.IsNullOrEmpty(ip) && resolved is not null)
+                    set(resolved);
+            }).ToArray();
+            await Task.WhenAll(ipResolveTasks);
 
-                    if (ips.Count > 0)
+            Ipv4ServiceMap.Clear();
+            Ipv6ServiceMap.Clear();
+
+            AddDnsMappings("XboxGlobal", xboxGlobalIp, _localIpRecords, EmptyIpRecords, serviceViewModel.IsXboxGameDownloadLinksShown, isSimplifiedChinese && !isXboxGlobalIpSpecified);
+            AddDnsMappings("XboxCn1", xboxCn1Ip, _localIpRecords, EmptyIpRecords, serviceViewModel.IsXboxGameDownloadLinksShown);
+            AddDnsMappings("XboxCn2", xboxCn2Ip, _localIpRecords, EmptyIpRecords, serviceViewModel.IsXboxGameDownloadLinksShown);
+            AddDnsMappings("XboxApp", xboxAppIp, _localIpRecords, EmptyIpRecords);
+            AddDnsMappings("Ps", psIp, _localIpRecords, EmptyIpRecords);
+            AddDnsMappings("Ns", nsIp, _localIpRecords, EmptyIpRecords);
+            AddDnsMappings("Ea", eaIp, _localIpRecords, EmptyIpRecords);
+            AddDnsMappings("Battle", battleIp, _localIpRecords, EmptyIpRecords);
+
+            if (serviceViewModel.IsSetLocalDnsEnabled)
+            {
+                if (OperatingSystem.IsWindows())
+                {
+                    using var localMachine = Microsoft.Win32.Registry.LocalMachine;
+                    var adapters = NetworkAdapterHelper.GetValidAdapters();
+                    foreach (var adapter in adapters)
                     {
                         var dns = new DnsServer
                         {
-                            IPv4 = string.Join(" ", ips)
+                            IPv4 = GetRegistryDns(localMachine, TcpIpV4Path + adapter.Id, App.Settings.LocalIp),
+                            IPv6 = GetRegistryDns(localMachine, TcpIpV6Path + adapter.Id, "::")
                         };
-                        NetworkInterfaceDnsMap.TryAdd(serviceName, dns);
+                        NetworkInterfaceDnsMap.TryAdd(adapter.Id, dns);
                     }
+                    await ApplyDns(App.Settings.LocalIp);
+                    hasAppliedLocalDns = true;
+                }
+                else if (OperatingSystem.IsMacOS())
+                {
+                    var serviceName = await GetNetworkServiceNameAsync(serviceViewModel.SelectedAdapter!.Adapter.Name);
+                    if (!string.IsNullOrEmpty(serviceName))
+                    {
+                        var ips = new List<IPAddress>();
+                        var dnsServers =
+                            await CommandHelper.RunCommandWithOutputAsync("networksetup",
+                                $"-getdnsservers \"{serviceName}\"");
+                        foreach (var line in dnsServers)
+                        {
+                            if (IPAddress.TryParse(line, out var ip) && ip.ToString() != App.Settings.LocalIp)
+                                ips.Add(ip);
+                        }
 
-                    await CommandHelper.RunCommandAsync("networksetup", $"-setdnsservers \"{serviceName}\" {App.Settings.LocalIp}");
+                        if (ips.Count > 0)
+                        {
+                            var dns = new DnsServer
+                            {
+                                IPv4 = string.Join(" ", ips)
+                            };
+                            NetworkInterfaceDnsMap.TryAdd(serviceName, dns);
+                        }
+
+                        await CommandHelper.RunCommandAsync("networksetup", $"-setdnsservers \"{serviceName}\" {App.Settings.LocalIp}");
+                        hasAppliedLocalDns = true;
+                    }
+                }
+                else if (OperatingSystem.IsLinux())
+                {
+                    await CommandHelper.RunCommandAsync("resolvectl", $"dns {serviceViewModel.SelectedAdapter!.Adapter.Name} {App.Settings.LocalIp}");
+                    hasAppliedLocalDns = true;
                 }
             }
-            else if (OperatingSystem.IsLinux())
+
+            if (App.Settings.IsHttpServiceEnabled)
             {
-                await CommandHelper.RunCommandAsync("resolvectl", $"dns {serviceViewModel.SelectedAdapter!.Adapter.Name} {App.Settings.LocalIp}");
+                AddMapping("www.msftconnecttest.com", _localIpRecords, EmptyIpRecords);
             }
-        }
 
-        if (App.Settings.IsHttpServiceEnabled)
-        {
-            AddMapping("www.msftconnecttest.com", _localIpRecords, EmptyIpRecords);
-        }
-
-        if (App.Settings.IsLocalProxyEnabled)
-        {
-            foreach (var hostname in TcpConnectionListener.DicSniProxy.Keys)
+            if (App.Settings.IsLocalProxyEnabled)
             {
-                AddMapping(hostname, _localIpRecords, EmptyIpRecords);
+                foreach (var hostname in TcpConnectionListener.DicSniProxy.Keys)
+                {
+                    AddMapping(hostname, _localIpRecords, EmptyIpRecords);
+                }
             }
-        }
 
-        await LoadHostAndAkamaiMapAsync();
-        await LoadForceEncryptedDomainMapAsync();
-        serviceViewModel.IsDnsReady = true;
-        _ = Task.Run(() => Listening(iPEndPoint));
-        return string.Empty;
+            await LoadHostAndAkamaiMapAsync();
+            await LoadForceEncryptedDomainMapAsync();
+            serviceViewModel.IsDnsReady = true;
+            _ = Task.Factory.StartNew(static state =>
+            {
+                var (listener, listeningSocket, upstreamEndPoint) = ((DnsConnectionListener, Socket, IPEndPoint))state!;
+                listener.Listening(listeningSocket, upstreamEndPoint);
+            }, (this, socket, iPEndPoint), CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+            return string.Empty;
+        }
+        catch (Exception ex)
+        {
+            Interlocked.CompareExchange(ref _socket, null, socket);
+            socket.Dispose();
+            serviceViewModel.IsDnsReady = false;
+            serviceViewModel.IsListeningFailed = true;
+            if (hasAppliedLocalDns)
+                await ApplyDns();
+            return string.Format(ResourceHelper.GetString("Service.Listening.DnsStartFailedDialogMessage"), ex.Message);
+        }
     }
 
     public static async Task StopAsync()
@@ -677,7 +719,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         DnsV6Query = ResourceHelper.GetString("Service.Listening.DnsV6Query"),
         DnsQueryFailed = ResourceHelper.GetString("Service.Listening.DnsQueryFailed");
 
-    private void Listening(IPEndPoint iPEndPoint)
+    private void Listening(Socket socket, IPEndPoint iPEndPoint)
     {
         while (serviceViewModel.IsListening)
         {
@@ -685,80 +727,136 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             {
                 EndPoint client = new IPEndPoint(IPAddress.Any, 0);
                 var buff = new byte[512];
-                var read = _socket!.ReceiveFrom(buff, ref client);
+                var read = socket.ReceiveFrom(buff, ref client);
+                if (!serviceViewModel.IsListening || read < 12)
+                    continue;
+
+                if (!DnsRequestSemaphore.Wait(0))
+                {
+                    LogDroppedDnsRequest(client);
+                    continue;
+                }
+
                 _ = Task.Run(async () =>
                 {
-                    var dns = new DnsMessage(buff, read);
-                    if (dns is { QR: 0, Opcode: 0, Queries.Count: 1 })
-                    {
-                        var queryName = (dns.Queries[0].QueryName ?? string.Empty).ToLowerInvariant();
-                        if (string.IsNullOrWhiteSpace(queryName)) return;
-
-                        switch (dns.Queries[0].QueryType)
-                        {
-                            case QueryType.A:
-                                {
-                                    var wasDnsHandled = HandleDnsQuery(Ipv4ServiceMap, Ipv4HostMap, Ipv4WildcardHostMap, dns, client, queryName, QueryType.A);
-                                    if (wasDnsHandled) return;
-
-                                    if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
-                                    {
-                                        var wasDohHandled = await HandleDohQueryAsync(dns, client, queryName, QueryType.A, doHServer);
-                                        if (wasDohHandled) return;
-                                    }
-
-                                    if (serviceViewModel.IsLogging)
-                                        serviceViewModel.AddLog(DnsV4Query, queryName, ((IPEndPoint)client).Address.ToString());
-                                    break;
-                                }
-                            case QueryType.AAAA:
-                                {
-                                    var wasHandled = HandleDnsQuery(Ipv6ServiceMap, Ipv6HostMap, Ipv6WildcardHostMap, dns, client, queryName, QueryType.AAAA);
-                                    if (wasHandled) return;
-
-                                    if (serviceViewModel.IsIPv6DomainFilterEnabled)
-                                    {
-                                        dns.QR = 1;
-                                        dns.RA = 1;
-                                        dns.RD = 1;
-                                        dns.ResourceRecords = EmptyIpRecords;
-                                        _socket.SendTo(dns.ToBytes(), client);
-                                        return;
-                                    }
-
-                                    if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
-                                    {
-                                        var wasDohHandled = await HandleDohQueryAsync(dns, client, queryName, QueryType.AAAA, doHServer);
-                                        if (wasDohHandled) return;
-                                    }
-
-                                    if (serviceViewModel.IsLogging)
-                                        serviceViewModel.AddLog(DnsV6Query, queryName, ((IPEndPoint)client).Address.ToString());
-                                    break;
-                                }
-                        }
-                    }
-
                     try
                     {
-                        using var proxy = new UdpClient(iPEndPoint.AddressFamily);
+                        var dns = new DnsMessage(buff, read);
+                        if (dns is { Qr: 0, Opcode: 0, Queries.Count: 1 })
+                        {
+                            var queryName = (dns.Queries[0].QueryName ?? string.Empty).ToLowerInvariant();
+                            if (string.IsNullOrWhiteSpace(queryName)) return;
+
+                            var ipv4HostMap = Volatile.Read(ref _ipv4HostMap);
+                            var ipv6HostMap = Volatile.Read(ref _ipv6HostMap);
+                            var ipv4WildcardHostMap = Volatile.Read(ref _ipv4WildcardHostMap);
+                            var ipv6WildcardHostMap = Volatile.Read(ref _ipv6WildcardHostMap);
+
+                            switch (dns.Queries[0].QueryType)
+                            {
+                                case QueryType.A:
+                                    {
+                                        var wasDnsHandled = HandleDnsQuery(socket, Ipv4ServiceMap, ipv4HostMap, ipv4WildcardHostMap, dns, client, queryName, QueryType.A);
+                                        if (wasDnsHandled) return;
+
+                                        if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
+                                        {
+                                            var wasDohHandled = await HandleDohQueryAsync(socket, dns, client, queryName, QueryType.A, doHServer);
+                                            if (wasDohHandled) return;
+                                        }
+
+                                        if (serviceViewModel.IsLogging)
+                                            serviceViewModel.AddLog(DnsV4Query, queryName, ((IPEndPoint)client).Address.ToString());
+                                        break;
+                                    }
+                                case QueryType.AAAA:
+                                    {
+                                        var wasHandled = HandleDnsQuery(socket, Ipv6ServiceMap, ipv6HostMap, ipv6WildcardHostMap, dns, client, queryName, QueryType.AAAA);
+                                        if (wasHandled) return;
+
+                                        if (serviceViewModel.IsIPv6DomainFilterEnabled)
+                                        {
+                                            dns.Qr = 1;
+                                            dns.Ra = 1;
+                                            dns.Rd = 1;
+                                            dns.ResourceRecords = EmptyIpRecords;
+                                            socket.SendTo(dns.ToBytes(), client);
+                                            return;
+                                        }
+
+                                        if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
+                                        {
+                                            var wasDohHandled = await HandleDohQueryAsync(socket, dns, client, queryName, QueryType.AAAA, doHServer);
+                                            if (wasDohHandled) return;
+                                        }
+
+                                        if (serviceViewModel.IsLogging)
+                                            serviceViewModel.AddLog(DnsV6Query, queryName, ((IPEndPoint)client).Address.ToString());
+                                        break;
+                                    }
+                            }
+                        }
+
+                        var upstreamEndPoint = new IPEndPoint(iPEndPoint.Address, iPEndPoint.Port);
+                        using var proxy = new UdpClient(upstreamEndPoint.AddressFamily);
                         proxy.Client.ReceiveTimeout = 3000;
-                        await proxy.SendAsync(buff, read, iPEndPoint);
-                        var result = proxy.Receive(ref iPEndPoint);
-                        _socket.SendTo(result, client);
+                        await proxy.SendAsync(buff, read, upstreamEndPoint);
+                        var remoteAddress = upstreamEndPoint.AddressFamily == AddressFamily.InterNetworkV6
+                            ? IPAddress.IPv6Any
+                            : IPAddress.Any;
+                        var remoteEndPoint = new IPEndPoint(remoteAddress, 0);
+                        var result = proxy.Receive(ref remoteEndPoint);
+                        socket.SendTo(result, client);
                     }
                     catch (Exception ex)
                     {
-                        if (serviceViewModel.IsLogging)
-                            serviceViewModel.AddLog(DnsQueryFailed, ex.Message, ((IPEndPoint)client).Address.ToString());
+                        if (serviceViewModel is { IsListening: true, IsLogging: true })
+                            LogMalformedDnsRequest(client, ex);
+                    }
+                    finally
+                    {
+                        DnsRequestSemaphore.Release();
                     }
                 });
+            }
+            catch (ObjectDisposedException)
+            {
+                break;
+            }
+            catch (SocketException)
+            {
+                if (!serviceViewModel.IsListening || !ReferenceEquals(_socket, socket))
+                    break;
             }
             catch
             {
                 // ignored
             }
         }
+    }
+
+    private void LogDroppedDnsRequest(EndPoint client)
+    {
+        if (!serviceViewModel.IsLogging) return;
+
+        if (!ShouldLogLimited(ref _lastDnsRequestDroppedLogTicks)) return;
+
+        serviceViewModel.AddLog(DnsQueryFailed, "DNS request dropped: concurrency limit reached", ((IPEndPoint)client).Address.ToString());
+    }
+
+    private void LogMalformedDnsRequest(EndPoint client, Exception ex)
+    {
+        if (!ShouldLogLimited(ref _lastMalformedDnsRequestLogTicks)) return;
+
+        serviceViewModel.AddLog(DnsQueryFailed, ex.Message, ((IPEndPoint)client).Address.ToString());
+    }
+
+    private static bool ShouldLogLimited(ref long lastLogTicks)
+    {
+        var nowTicks = Environment.TickCount64;
+        var lastTicks = Interlocked.Read(ref lastLogTicks);
+        if (nowTicks - lastTicks < 5000) return false;
+        return Interlocked.CompareExchange(ref lastLogTicks, nowTicks, lastTicks) == lastTicks;
     }
 
     [SupportedOSPlatform("windows")]
@@ -889,7 +987,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
         var ipRecords = new List<ResourceRecord>
         {
-            new() { Data = ip, TTL = 100, QueryClass = 1, QueryType = isV4 ? QueryType.A : QueryType.AAAA }
+            new() { Data = ip, Ttl = 100, QueryClass = 1, QueryType = isV4 ? QueryType.A : QueryType.AAAA }
         };
 
         var ipv4Records = isV4 ? ipRecords : emptyIpRecords;
@@ -933,12 +1031,12 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         Ipv6ServiceMap.TryAdd(hostname, ipv6Records);
     }
 
-    private async Task<bool> HandleDohQueryAsync(DnsMessage dnsMessage, EndPoint client, string queryName, QueryType queryType, DnsHelper.DoHServer? doHServer = null)
+    private async Task<bool> HandleDohQueryAsync(Socket socket, DnsMessage dnsMessage, EndPoint client, string queryName, QueryType queryType, DnsHelper.DoHServer? doHServer = null)
     {
         doHServer ??= DnsHelper.CurrentDoH;
         if (doHServer == null) return false;
 
-        var requestUrl = $"{doHServer.Url}?name={queryName}&type={queryType}";
+        var requestUrl = $"{doHServer.Url}?name={Uri.EscapeDataString(queryName)}&type={queryType}";
         var responseString = await HttpClientHelper.GetStringContentAsync(
             requestUrl,
             headers: doHServer.Headers,
@@ -956,9 +1054,9 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 return false;
 
             var expectedType = queryType == QueryType.AAAA ? 28 : 1;
-            dnsMessage.QR = 1;
-            dnsMessage.RA = 1;
-            dnsMessage.RD = 1;
+            dnsMessage.Qr = 1;
+            dnsMessage.Ra = 1;
+            dnsMessage.Rd = 1;
             dnsMessage.ResourceRecords = [];
             if (dnsResponse.Answer != null)
             {
@@ -967,16 +1065,16 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                     if (answer.Type != expectedType || !IPAddress.TryParse(answer.Data, out var ip)) continue;
                     dnsMessage.ResourceRecords.Add(new ResourceRecord
                     {
-                        QueryName = answer.Name,
+                        QueryName = queryName,
                         Data = ip.GetAddressBytes(),
-                        TTL = answer.Ttl,
+                        Ttl = answer.Ttl,
                         QueryClass = 1,
                         QueryType = queryType
                     });
                 }
             }
 
-            _socket?.SendTo(dnsMessage.ToBytes(), client);
+            socket.SendTo(dnsMessage.ToBytes(), client);
 
             if (serviceViewModel.IsLogging && dnsMessage.ResourceRecords.Count > 0)
             {
@@ -993,12 +1091,12 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         }
     }
 
-    private bool HandleDnsQuery(ConcurrentDictionary<string, List<ResourceRecord>> serviceMap, ConcurrentDictionary<string, List<ResourceRecord>> hostMap, List<KeyValuePair<string, List<ResourceRecord>>> wildcardHostMap, DnsMessage dnsMessage, EndPoint client, string queryName, QueryType queryType)
+    private bool HandleDnsQuery(Socket socket, ConcurrentDictionary<string, List<ResourceRecord>> serviceMap, ConcurrentDictionary<string, List<ResourceRecord>> hostMap, KeyValuePair<string, List<ResourceRecord>>[] wildcardHostMap, DnsMessage dnsMessage, EndPoint client, string queryName, QueryType queryType)
     {
         var queryTypeText = queryType == QueryType.AAAA ? DnsV6Query : DnsV4Query;
         if (serviceMap.TryGetValue(queryName, out var serviceRecords))
         {
-            SendDnsResponse(dnsMessage, client, serviceRecords, queryTypeText, queryName);
+            SendDnsResponse(socket, dnsMessage, client, serviceRecords, queryTypeText, queryName);
             return true;
         }
 
@@ -1007,7 +1105,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             if (hostRecords.Count > 1)
                 hostRecords = [.. hostRecords.OrderBy(_ => Random.Shared.Next()).Take(16)];
 
-            SendDnsResponse(dnsMessage, client, hostRecords, queryTypeText, queryName);
+            SendDnsResponse(socket, dnsMessage, client, hostRecords, queryTypeText, queryName);
             return true;
         }
 
@@ -1018,31 +1116,39 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
             var wildcardHost = kv.Value;
 
             if (queryType == QueryType.AAAA)
-                Ipv6HostMap.TryAdd(queryName, wildcardHost);
+                _ipv6HostMap.TryAdd(queryName, wildcardHost);
             else
-                Ipv4HostMap.TryAdd(queryName, wildcardHost);
+                _ipv4HostMap.TryAdd(queryName, wildcardHost);
 
             if (wildcardHost.Count > 1)
                 wildcardHost = [.. wildcardHost.OrderBy(_ => Random.Shared.Next()).Take(16)];
 
-            SendDnsResponse(dnsMessage, client, wildcardHost, queryTypeText, queryName);
+            SendDnsResponse(socket, dnsMessage, client, wildcardHost, queryTypeText, queryName);
             return true;
         }
 
         return false;
     }
 
-    private void SendDnsResponse(DnsMessage dnsMessage, EndPoint client, List<ResourceRecord> records, string queryTypeText, string queryName)
+    private void SendDnsResponse(Socket socket, DnsMessage dnsMessage, EndPoint client, List<ResourceRecord> records, string queryTypeText, string queryName)
     {
-        dnsMessage.QR = 1;
-        dnsMessage.RA = 1;
-        dnsMessage.RD = 1;
-        dnsMessage.ResourceRecords = records;
-        foreach (var record in dnsMessage.ResourceRecords)
-            record.QueryName = queryName;
+        dnsMessage.Qr = 1;
+        dnsMessage.Ra = 1;
+        dnsMessage.Rd = 1;
+        dnsMessage.ResourceRecords =
+        [
+            .. records.Select(record => new ResourceRecord
+            {
+                QueryName = queryName,
+                Data = record.Data,
+                Ttl = record.Ttl,
+                QueryClass = record.QueryClass,
+                QueryType = record.QueryType
+            })
+        ];
 
         var bytes = dnsMessage.ToBytes();
-        _socket?.SendTo(bytes, client);
+        socket.SendTo(bytes, client);
 
         if (!serviceViewModel.IsLogging || dnsMessage.ResourceRecords.Count == 0) return;
         serviceViewModel.AddLog(queryTypeText,

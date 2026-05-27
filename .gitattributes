@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 
+# Keep C# files aligned with the repository's existing Windows line endings.
+*.cs text eol=crlf
+
 # Shell scripts must use LF line endings.
 *.sh text eol=lf
 

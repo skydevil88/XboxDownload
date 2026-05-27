@@ -894,11 +894,11 @@ public partial class StoreViewModel : ObservableObject
                 }
 
                 platformDownload.Url = xboxGame.Url;
+                platformDownload.FileSize = xboxGame.FileSize;
                 platformDownload.Display = Path.GetFileName(xboxGame.Url);
                 if (platformDownload.ExpectedSize != xboxGame.FileSize)
                 {
                     platformDownload.Outdated = true;
-                    platformDownload.FileSize = xboxGame.FileSize;
                     platformDownload.Display += $" ({ResourceHelper.GetString("Store.UpdateAvailable")})";
                 }
                 else platformDownload.Outdated = false;

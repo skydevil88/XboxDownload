@@ -6,28 +6,17 @@ namespace XboxDownload.Models.Dns;
 
 public class ResourceRecord : Query
 {
-    public uint TTL { get; set; }
-    public byte[]? Data { get; set; }
+    public uint Ttl { get; init; }
+    public byte[]? Data { get; init; }
 
     public ResourceRecord() { }
 
-    public ResourceRecord(Func<int, byte[]> read) : base(read)
+    internal ResourceRecord(DnsMessage.DnsPacketReader reader) : base(reader)
     {
-        var ttlBytes = read(4);
-        if (ttlBytes.Length < 4)
-            throw new InvalidOperationException("Invalid TTL length");
+        Ttl = reader.ReadUInt32();
 
-        TTL = (uint)IPAddress.NetworkToHostOrder(BitConverter.ToInt32(ttlBytes, 0));
-
-        var lenBytes = read(2);
-        if (lenBytes.Length < 2)
-            throw new InvalidOperationException("Invalid length bytes");
-
-        var length = IPAddress.NetworkToHostOrder(BitConverter.ToInt16(lenBytes, 0));
-        if (length < 0)
-            throw new InvalidOperationException("Negative RDLENGTH");
-
-        Data = read(length);
+        var length = reader.ReadUInt16();
+        Data = reader.ReadBytes(length);
     }
 
     public override byte[] ToBytes()
@@ -36,10 +25,10 @@ public class ResourceRecord : Query
 
         list.AddRange(base.ToBytes());
 
-        if (TTL > int.MaxValue)
+        if (Ttl > int.MaxValue)
             throw new InvalidOperationException("TTL exceeds int.MaxValue");
 
-        list.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)TTL)));
+        list.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)Ttl)));
 
         if (Data != null)
         {
