@@ -699,7 +699,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 if (!ReferenceEquals(_socket, socket))
                     break;
 
-                if (!socket.Poll(200_000, SelectMode.SelectRead))
+                if (!OperatingSystem.IsWindows() && !socket.Poll(200_000, SelectMode.SelectRead))
                     continue;
 
                 EndPoint client = new IPEndPoint(IPAddress.Any, 0);
