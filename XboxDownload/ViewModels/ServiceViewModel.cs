@@ -47,30 +47,7 @@ public partial class ServiceViewModel : ObservableObject
         DnsConnectionListener = new DnsConnectionListener(this);
         _tcpConnectionListener = new TcpConnectionListener(this);
 
-        var adapters = NetworkAdapterHelper.GetValidAdapters();
-        foreach (var adapter in adapters)
-        {
-            var ipv4 = adapter.GetIPProperties()
-                .UnicastAddresses
-                .FirstOrDefault(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)?.Address.ToString();
-
-            if (string.IsNullOrEmpty(ipv4))
-                continue;
-
-            var adapt = new AdapterInfo(ipv4, adapter);
-            AdapterList.Add(adapt);
-
-            if (string.IsNullOrEmpty(App.Settings.LocalIp))
-                continue;
-
-            // If the IP matches exactly, or if no adapter is selected and the subnet prefix matches (e.g., 192.168.x.)
-            if (string.Equals(App.Settings.LocalIp, ipv4) ||
-                (SelectedAdapter == null && App.Settings.LocalIp.StartsWith(ipv4[..(ipv4.LastIndexOf('.') + 1)])))
-            {
-                SelectedAdapter = adapt;
-            }
-        }
-        SelectedAdapter ??= AdapterList.FirstOrDefault();
+        RefreshAdapterList(App.Settings.LocalIp);
 
         SelectedListeningIp = ListeningIpOptions.FirstOrDefault(x => x.Key == App.Settings.ListeningIp)
                               ?? (OperatingSystem.IsMacOS() ? ListeningIpOptions.LastOrDefault() : ListeningIpOptions.FirstOrDefault());
@@ -417,6 +394,18 @@ public partial class ServiceViewModel : ObservableObject
             LocalUploadPath = LocalUploadPath.Trim().TrimEnd('/', '\\');
             if (string.IsNullOrEmpty(LocalUploadPath)) LocalUploadPath = Path.Combine(AppContext.BaseDirectory, "Upload");
 
+            RefreshAdapterList();
+            var localIp = SelectedAdapter?.Ip;
+            if (string.IsNullOrWhiteSpace(localIp))
+            {
+                IsListening = false;
+                await DialogHelper.ShowInfoDialogAsync(
+                    ResourceHelper.GetString("Service.Service.NoAvailableAdapterTitle"),
+                    ResourceHelper.GetString("Service.Service.NoAvailableAdapterMessage"),
+                    Icon.Error);
+                return;
+            }
+
             App.Settings.DnsIp = DnsIp.Trim();
             App.Settings.XboxGlobalIp = XboxGlobalIp.Trim();
             App.Settings.XboxCn1Ip = XboxCn1Ip.Trim();
@@ -437,7 +426,7 @@ public partial class ServiceViewModel : ObservableObject
             App.Settings.IsDoHEnabled = IsDoHEnabled;
             App.Settings.IsIPv6DomainFilterEnabled = IsIPv6DomainFilterEnabled;
             App.Settings.IsLocalProxyEnabled = IsLocalProxyEnabled;
-            App.Settings.LocalIp = SelectedAdapter!.Ip;
+            App.Settings.LocalIp = localIp;
             SettingsManager.Save(App.Settings);
 
             IsListening = true;
@@ -810,6 +799,48 @@ public partial class ServiceViewModel : ObservableObject
         if (!OperatingSystem.IsWindows())
         {
             AdapterInfo = AdapterInfo[..AdapterInfo.LastIndexOf('\n')];
+        }
+    }
+
+    private void RefreshAdapterList(string? preferredIp = null)
+    {
+        var previousAdapterId = SelectedAdapter?.Adapter.Id;
+        var previousAdapterName = SelectedAdapter?.Adapter.Name;
+        var previousIp = SelectedAdapter?.Ip;
+        preferredIp = string.IsNullOrWhiteSpace(preferredIp) ? previousIp : preferredIp;
+
+        AdapterList.Clear();
+        foreach (var adapter in NetworkAdapterHelper.GetValidAdapters())
+        {
+            foreach (var address in adapter.GetIPProperties().UnicastAddresses
+                         .Where(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                         .Select(ip => ip.Address.ToString()))
+            {
+                AdapterList.Add(new AdapterInfo(address, adapter));
+            }
+        }
+
+        SelectedAdapter = AdapterList.FirstOrDefault(adapter =>
+                              string.Equals(adapter.Adapter.Id, previousAdapterId, StringComparison.Ordinal) &&
+                              string.Equals(adapter.Ip, previousIp, StringComparison.Ordinal))
+                          ?? AdapterList.FirstOrDefault(adapter =>
+                              string.Equals(adapter.Adapter.Id, previousAdapterId, StringComparison.Ordinal))
+                          ?? AdapterList.FirstOrDefault(adapter =>
+                              string.Equals(adapter.Adapter.Name, previousAdapterName, StringComparison.Ordinal) &&
+                              string.Equals(adapter.Ip, previousIp, StringComparison.Ordinal))
+                          ?? AdapterList.FirstOrDefault(adapter =>
+                              string.Equals(adapter.Adapter.Name, previousAdapterName, StringComparison.Ordinal))
+                          ?? AdapterList.FirstOrDefault(adapter =>
+                              string.Equals(adapter.Ip, preferredIp, StringComparison.Ordinal))
+                          ?? AdapterList.FirstOrDefault(adapter =>
+                              !string.IsNullOrEmpty(preferredIp) &&
+                              preferredIp.StartsWith(adapter.Ip[..(adapter.Ip.LastIndexOf('.') + 1)], StringComparison.Ordinal))
+                          ?? AdapterList.FirstOrDefault();
+
+        if (SelectedAdapter == null)
+        {
+            AdapterInfo = string.Empty;
+            Traffic = string.Empty;
         }
     }
 

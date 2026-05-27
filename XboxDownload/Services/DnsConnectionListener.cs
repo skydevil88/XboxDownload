@@ -573,39 +573,10 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
     public static async Task StopAsync()
     {
-        await ApplyDns();
-
         var dnsS = Interlocked.Exchange(ref _socket, null);
-        if (dnsS == null) return;
+        dnsS?.Dispose();
 
-        try
-        {
-            if (dnsS is { Connected: true })
-            {
-                dnsS.Shutdown(SocketShutdown.Both);
-            }
-        }
-        catch
-        {
-            // Optional
-        }
-
-        if (!OperatingSystem.IsWindows())
-        {
-            try
-            {
-                using var dummy = new UdpClient();
-                dummy.Client.SendTimeout = 100;
-                var target = new IPEndPoint(IPAddress.Parse(App.Settings.LocalIp), DnsPort);
-                await dummy.SendAsync(new byte[1], 1, target);
-            }
-            catch
-            {
-                // Optional
-            }
-        }
-
-        dnsS.Dispose();
+        await ApplyDns();
     }
 
     private static readonly SearchValues<char> DnsSplitValues = SearchValues.Create([' ', ',', '\t', '\r', '\n']);
@@ -725,6 +696,12 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         {
             try
             {
+                if (!ReferenceEquals(_socket, socket))
+                    break;
+
+                if (!socket.Poll(200_000, SelectMode.SelectRead))
+                    continue;
+
                 EndPoint client = new IPEndPoint(IPAddress.Any, 0);
                 var buff = new byte[512];
                 var read = socket.ReceiveFrom(buff, ref client);

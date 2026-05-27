@@ -114,6 +114,8 @@
     <x:String x:Key="Service.Service.FastestAkamaiIpTip">Automatically selects the fastest IPv4 node from Akamai's optimized IP list, supporting platforms such as Xbox, PlayStation, Nintendo Switch, EA, Battle.net, Epic, Ubisoft, Riot Games, Rockstar, and Spotify.&#x0a;&#x0a;Tip: After switching IPs, please pause any ongoing game downloads and resume the installation to ensure the new node takes effect.</x:String>
     <x:String x:Key="Service.Service.StopListening">Stop Listening</x:String>
     <x:String x:Key="Service.Service.InvalidIpTitle">Invalid IP</x:String>
+    <x:String x:Key="Service.Service.NoAvailableAdapterTitle">No Available Network Adapter</x:String>
+    <x:String x:Key="Service.Service.NoAvailableAdapterMessage">The local IP is unavailable. Please connect to a network and try again.</x:String>
     <x:String x:Key="Service.Service.InvalidDnsIpMessage">Please enter a valid IP address for the upstream DNS server.</x:String>
     <x:String x:Key="Service.Service.InvalidXboxGlobalIpMessage">Please enter a valid IP address for the Xbox global download server.</x:String>
     <x:String x:Key="Service.Service.InvalidXboxCn1IpMessage">Please enter a valid IP address for the Xbox CN1 download server.</x:String>

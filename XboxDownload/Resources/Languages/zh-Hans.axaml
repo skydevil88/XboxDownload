@@ -114,6 +114,8 @@
     <x:String x:Key="Service.Service.StartListening">开始监听</x:String>
     <x:String x:Key="Service.Service.StopListening">停止监听</x:String>
     <x:String x:Key="Service.Service.InvalidIpTitle">无效 IP 地址</x:String>
+    <x:String x:Key="Service.Service.NoAvailableAdapterTitle">未检测到可用网络适配器</x:String>
+    <x:String x:Key="Service.Service.NoAvailableAdapterMessage">本机 IP 不可用，请连接网络后重试。</x:String>
     <x:String x:Key="Service.Service.InvalidDnsIpMessage">输入的上游 DNS 服务器 IP 地址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidXboxGlobalIpMessage">输入的 Xbox com 下载 IP 地址不合法。</x:String>
     <x:String x:Key="Service.Service.InvalidXboxCn1IpMessage">输入的 Xbox cn1 下载 IP 地址不合法。</x:String>
