@@ -26,8 +26,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 {
     private static Socket? _socket;
     private const int DnsPort = 53;
-    private const int MaxConcurrentDnsRequests = 256;
-    private static readonly SemaphoreSlim DnsRequestSemaphore = new(MaxConcurrentDnsRequests, MaxConcurrentDnsRequests);
     private static readonly ConcurrentDictionary<string, DnsServer> NetworkInterfaceDnsMap = new();
     private const string TcpIpV4Path = @"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\";
     private const string TcpIpV6Path = @"SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters\Interfaces\";
@@ -41,7 +39,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
     private static ConcurrentDictionary<string, List<ResourceRecord>> _ipv4HostMap = new(), _ipv6HostMap = new();
     private static KeyValuePair<string, List<ResourceRecord>>[] _ipv4WildcardHostMap = [];
     private static KeyValuePair<string, List<ResourceRecord>>[] _ipv6WildcardHostMap = [];
-    private long _lastDnsRequestDroppedLogTicks;
     private long _lastMalformedDnsRequestLogTicks;
 
     private record DnsServer
@@ -708,12 +705,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 if (!serviceViewModel.IsListening || read < 12)
                     continue;
 
-                if (!DnsRequestSemaphore.Wait(0))
-                {
-                    LogDroppedDnsRequest(client);
-                    continue;
-                }
-
                 _ = Task.Run(async () =>
                 {
                     try
@@ -790,10 +781,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         if (serviceViewModel is { IsListening: true, IsLogging: true })
                             LogMalformedDnsRequest(client, ex);
                     }
-                    finally
-                    {
-                        DnsRequestSemaphore.Release();
-                    }
                 });
             }
             catch (ObjectDisposedException)
@@ -810,15 +797,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 // ignored
             }
         }
-    }
-
-    private void LogDroppedDnsRequest(EndPoint client)
-    {
-        if (!serviceViewModel.IsLogging) return;
-
-        if (!ShouldLogLimited(ref _lastDnsRequestDroppedLogTicks)) return;
-
-        serviceViewModel.AddLog(DnsQueryFailed, "DNS request dropped: concurrency limit reached", ((IPEndPoint)client).Address.ToString());
     }
 
     private void LogMalformedDnsRequest(EndPoint client, Exception ex)
