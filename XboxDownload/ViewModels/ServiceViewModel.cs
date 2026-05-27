@@ -820,27 +820,50 @@ public partial class ServiceViewModel : ObservableObject
             }
         }
 
-        SelectedAdapter = AdapterList.FirstOrDefault(adapter =>
-                              string.Equals(adapter.Adapter.Id, previousAdapterId, StringComparison.Ordinal) &&
-                              string.Equals(adapter.Ip, previousIp, StringComparison.Ordinal))
-                          ?? AdapterList.FirstOrDefault(adapter =>
-                              string.Equals(adapter.Adapter.Id, previousAdapterId, StringComparison.Ordinal))
-                          ?? AdapterList.FirstOrDefault(adapter =>
-                              string.Equals(adapter.Adapter.Name, previousAdapterName, StringComparison.Ordinal) &&
-                              string.Equals(adapter.Ip, previousIp, StringComparison.Ordinal))
-                          ?? AdapterList.FirstOrDefault(adapter =>
-                              string.Equals(adapter.Adapter.Name, previousAdapterName, StringComparison.Ordinal))
-                          ?? AdapterList.FirstOrDefault(adapter =>
-                              string.Equals(adapter.Ip, preferredIp, StringComparison.Ordinal))
-                          ?? AdapterList.FirstOrDefault(adapter =>
-                              !string.IsNullOrEmpty(preferredIp) &&
-                              preferredIp.StartsWith(adapter.Ip[..(adapter.Ip.LastIndexOf('.') + 1)], StringComparison.Ordinal))
+        SelectedAdapter = MatchByAdapterId(previousAdapterId, previousIp)
+                          ?? MatchByAdapterId(previousAdapterId)
+                          ?? MatchByAdapterName(previousAdapterName, previousIp)
+                          ?? MatchByAdapterName(previousAdapterName)
+                          ?? MatchByIp(preferredIp)
+                          ?? MatchBySubnet(preferredIp)
                           ?? AdapterList.FirstOrDefault();
 
         if (SelectedAdapter == null)
         {
             AdapterInfo = string.Empty;
             Traffic = string.Empty;
+        }
+
+        AdapterInfo? MatchByAdapterId(string? adapterId, string? ip = null) =>
+            string.IsNullOrEmpty(adapterId)
+                ? null
+                : AdapterList.FirstOrDefault(adapter =>
+                    string.Equals(adapter.Adapter.Id, adapterId, StringComparison.Ordinal) &&
+                    (ip == null || string.Equals(adapter.Ip, ip, StringComparison.Ordinal)));
+
+        AdapterInfo? MatchByAdapterName(string? adapterName, string? ip = null) =>
+            string.IsNullOrEmpty(adapterName)
+                ? null
+                : AdapterList.FirstOrDefault(adapter =>
+                    string.Equals(adapter.Adapter.Name, adapterName, StringComparison.Ordinal) &&
+                    (ip == null || string.Equals(adapter.Ip, ip, StringComparison.Ordinal)));
+
+        AdapterInfo? MatchByIp(string? ip) =>
+            string.IsNullOrEmpty(ip)
+                ? null
+                : AdapterList.FirstOrDefault(adapter =>
+                    string.Equals(adapter.Ip, ip, StringComparison.Ordinal));
+
+        AdapterInfo? MatchBySubnet(string? ip)
+        {
+            if (string.IsNullOrEmpty(ip)) return null;
+
+            var lastDotIndex = ip.LastIndexOf('.');
+            if (lastDotIndex < 0) return null;
+
+            var subnetPrefix = ip[..(lastDotIndex + 1)];
+            return AdapterList.FirstOrDefault(adapter =>
+                adapter.Ip.StartsWith(subnetPrefix, StringComparison.Ordinal));
         }
     }
 
