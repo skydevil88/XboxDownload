@@ -368,7 +368,7 @@
     <x:String x:Key="Cdn.InvalidIpDialogTitle">Invalid IP Address</x:String>
     <x:String x:Key="Cdn.InvalidIpDialogMessage">The following IP address(es) are invalid:&#x0a;&#x0a;{0}</x:String>
 
-    <x:String x:Key="Storage.XboxExternalStorageDevice">Xbox Console External Storage Device</x:String>
+    <x:String x:Key="Storage.XboxExternalStorageDevice">Xbox Console External Storage Device (Windows only)</x:String>
     <x:String x:Key="Storage.Index">No.</x:String>
     <x:String x:Key="Storage.Model">Model</x:String>
     <x:String x:Key="Storage.SerialNumber">Serial Number</x:String>

@@ -771,7 +771,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             }
                             if (!fileFound)
                             {
-                                var response = "File not found."u8.ToArray();
+                                var response = Encoding.ASCII.GetBytes("File not found.");
                                 WriteHttpResponse(new StreamResponseWriter(ssl, socket), "404 Not Found", "text/html", response);
                                 if (serviceViewModel.IsLogging)
                                     serviceViewModel.AddLog("HTTP 404", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
@@ -982,7 +982,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
 
         if (fs == null)
         {
-            var response = "Internal Server Error"u8.ToArray();
+            var response = Encoding.ASCII.GetBytes("Internal Server Error");
             WriteHttpResponse(writer, "500 Server Error", "text/html", response);
             return;
         }

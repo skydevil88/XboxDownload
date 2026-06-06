@@ -368,7 +368,7 @@
     <x:String x:Key="Cdn.InvalidIpDialogTitle">无效 IP 地址</x:String>
     <x:String x:Key="Cdn.InvalidIpDialogMessage">以下 IP 地址无效：&#x0a;&#x0a;{0}</x:String>
 
-    <x:String x:Key="Storage.XboxExternalStorageDevice">Xbox 主机外置存储设备</x:String>
+    <x:String x:Key="Storage.XboxExternalStorageDevice">Xbox 主机外置存储设备(只支持 Windows 系统)</x:String>
     <x:String x:Key="Storage.Index">编号</x:String>
     <x:String x:Key="Storage.Model">型号</x:String>
     <x:String x:Key="Storage.SerialNumber">序列号</x:String>
