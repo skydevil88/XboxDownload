@@ -1235,7 +1235,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                     : null;
                                 errMessage = expectedFor != null
                                     ? $"Certificate domain mismatch.<br>The server's certificate is issued for {issuedFor},<br>but the expected domain was {expectedFor}."
-                                    : $"Certificate domain mismatch.<br>The server's certificate is issued for {issuedFor}.";
+                                    : $"Certificate domain mismatch.<br>The server's certificate is issued for {issuedFor}.<br><br>To trust this certificate, add the following rule to the verification policy:<br>\"{targetHost}\" = {issuedFor}";
                             }
                         }
                     }

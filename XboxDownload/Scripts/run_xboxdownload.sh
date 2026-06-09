@@ -110,11 +110,11 @@ if [[ "$PLATFORM" == "macos" ]]; then
         local current_owner
         current_owner="$(stat -f "%u:%g" "$dir" 2>/dev/null || true)"
 
-        if [[ "$current_owner" == "$TARGET_UID:$TARGET_GID" && -r "$dir" && -w "$dir" && -x "$dir" ]]; then
-            return 0
-        fi
+#        if [[ "$current_owner" == "$TARGET_UID:$TARGET_GID" && -r "$dir" && -w "$dir" && -x "$dir" ]]; then
+#            return 0
+#        fi
 
-        echo "🔧 Fixing permissions for $dir..."
+#        echo "🔧 Fixing permissions for $dir..."
         chown -R "$REAL_USER:$REAL_GROUP" "$dir"
         chmod -R u+rwX "$dir"
     }

@@ -1,3 +1,5 @@
+Please scroll down for Chinese version 请往下看以阅读中文版本
+
 # 🚀 Getting Started
 
 This section explains how to run **XboxDownload** for the first time on
