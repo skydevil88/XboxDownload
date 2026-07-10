@@ -15,7 +15,6 @@ OUTPUT_ROOT="$SCRIPT_DIR/Release"
 # --------------------------------------------------
 COMMON_ARGS=(
     -c Release
-    /p:PublishSingleFile=true
     --self-contained true
     /p:PublishTrimmed=false
     /p:DebugType=none
@@ -216,7 +215,10 @@ publish_target() {
 
     local output_dir="$OUTPUT_ROOT/XboxDownload-$output_rid"
     local native_extract=true
+    local single_file=true
+
     [[ "$rid" == osx* ]] && native_extract=false
+    [[ "$rid" == osx* ]] && single_file=false
 
     # -------------------------------
     # Clean old directory
@@ -229,7 +231,7 @@ publish_target() {
 
     echo
     echo -e "\033[93mPublishing for $rid -> $output_dir\033[0m"
-    dotnet publish "$PROJECT_FILE" -r "$rid" -o "$output_dir" "${COMMON_ARGS[@]}" /p:IncludeNativeLibrariesForSelfExtract="$native_extract"
+    dotnet publish "$PROJECT_FILE" -r "$rid" -o "$output_dir" "${COMMON_ARGS[@]}" /p:PublishSingleFile="$single_file" /p:IncludeNativeLibrariesForSelfExtract="$native_extract"
     remove_symbol_files "$output_dir"
     echo -e "\033[92m[OK] Publish success: $output_dir\033[0m"
 
