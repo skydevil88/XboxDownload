@@ -21,8 +21,8 @@ Run the following:
 
 ```bash
 cd /path/to/XboxDownload
-sudo xattr -dr com.apple.quarantine run_xboxdownload.command XboxDownload
-chmod +x run_xboxdownload.command XboxDownload
+sudo xattr -dr com.apple.quarantine run_xboxdownload.command XboxDownload.app
+chmod +x run_xboxdownload.command
 ./run_xboxdownload.command
 ```
 
@@ -32,8 +32,8 @@ XboxDownload directory.
 > ✅ This only needs to be done once after downloading.
 
 After the first successful run, you can simply double-click:
--   `run_xboxdownload.sh` — Runs with root privileges
--   `XboxDownload` — Runs with normal user privileges
+-   `run_xboxdownload.command` — Runs with root privileges
+-   `XboxDownload.app` — Runs with normal user privileges
 
 > 💡 Most features are available when running with normal privileges.\
 > Some advanced features (such as port listening or modifying system
@@ -96,8 +96,8 @@ double-click the file and select **Run**.
 
 ```bash
 cd /path/to/XboxDownload
-sudo xattr -dr com.apple.quarantine run_xboxdownload.command XboxDownload
-chmod +x run_xboxdownload.command XboxDownload
+sudo xattr -dr com.apple.quarantine run_xboxdownload.command XboxDownload.app
+chmod +x run_xboxdownload.command
 ./run_xboxdownload.command
 ```
 
@@ -107,7 +107,7 @@ chmod +x run_xboxdownload.command XboxDownload
 
 首次成功运行后，今后可直接双击：
 -   `run_xboxdownload.command` — 以 root 权限运行
--   `XboxDownload` — 以普通用户权限运行
+-   `XboxDownload.app` — 以普通用户权限运行
 > 💡 在普通用户权限下可以使用大部分功能。\
 > 某些高级功能（例如监听端口或修改系统网络设置）可能需要以 root 权限运行。
 

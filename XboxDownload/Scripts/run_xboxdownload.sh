@@ -39,7 +39,9 @@ esac
 # Candidate executable paths
 # ----------------------------
 CANDIDATES=(
+    "$SCRIPT_DIR/XboxDownload.app/Contents/MacOS/XboxDownloadLauncher"
     "$SCRIPT_DIR/XboxDownload"
+    "$SCRIPT_DIR/Release/XboxDownload-$PLATFORM-$ARCH/XboxDownload.app/Contents/MacOS/XboxDownloadLauncher"
     "$SCRIPT_DIR/Release/XboxDownload-$PLATFORM-$ARCH/XboxDownload"
 )
 
@@ -89,48 +91,20 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # ----------------------------
-# macOS permission repair
+# macOS quarantine repair
 # ----------------------------
 if [[ "$PLATFORM" == "macos" ]]; then
-    REAL_USER="${SUDO_USER:-$(logname 2>/dev/null || id -un)}"
-    REAL_GROUP="$(id -gn "$REAL_USER")"
-    TARGET_UID="$(id -u "$REAL_USER")"
-    TARGET_GID="$(id -g "$REAL_USER")"
-
-    REAL_HOME="$(dscl . -read "/Users/$REAL_USER" NFSHomeDirectory 2>/dev/null | awk '{print $2}')"
-    : "${REAL_HOME:=/Users/$REAL_USER}"
-
-    APP_DIR="$REAL_HOME/.net/XboxDownload"
-    NET_DIR="$REAL_HOME/.net"
-
-    fix_if_broken() {
-        local dir="$1"
-        [ -d "$dir" ] || return 0
-
-        local current_owner
-        current_owner="$(stat -f "%u:%g" "$dir" 2>/dev/null || true)"
-
-#        if [[ "$current_owner" == "$TARGET_UID:$TARGET_GID" && -r "$dir" && -w "$dir" && -x "$dir" ]]; then
-#            return 0
-#        fi
-
-#        echo "🔧 Fixing permissions for $dir..."
-        chown -R "$REAL_USER:$REAL_GROUP" "$dir"
-        chmod -R u+rwX "$dir"
-    }
-
-    # Fix child first, then parent
-    fix_if_broken "$APP_DIR"
-    fix_if_broken "$NET_DIR"
-
-    # Remove quarantine from executable if needed
-    if xattr -p com.apple.quarantine "$APP" >/dev/null 2>&1; then
-        echo "🛡 Removing macOS quarantine attribute..."
-        xattr -dr com.apple.quarantine "$APP" 2>/dev/null || true
+    QUARANTINE_TARGET="$APP"
+    if [[ "$APP" == *".app/Contents/MacOS/"* ]]; then
+        QUARANTINE_TARGET="${APP%%.app/Contents/MacOS/*}.app"
     fi
+
+    echo "🛡 Removing macOS quarantine attribute..."
+    xattr -dr com.apple.quarantine "$QUARANTINE_TARGET" 2>/dev/null || true
 fi
 
 # ----------------------------
 # Run with root (required for DNS / hosts / ports)
 # ----------------------------
-exec nohup "$APP" "$@" >/dev/null 2>&1
+nohup "$APP" "$@" >/dev/null 2>&1 &
+exit 0

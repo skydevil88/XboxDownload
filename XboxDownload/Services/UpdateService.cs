@@ -155,8 +155,7 @@ public static partial class UpdateService
                             var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
                             await mainWindowVm.OnShutdownAsync();
 
-                            var appPath = Process.GetCurrentProcess().MainModule?.FileName;
-                            var appDir = Path.GetDirectoryName(appPath);
+                            var installContext = GetUpdateInstallContext();
 
                             if (OperatingSystem.IsWindows())
                             {
@@ -166,8 +165,9 @@ public static partial class UpdateService
 @echo off
 chcp 65001 >nul
 timeout /t 3 /nobreak >nul
-robocopy ""{extractDir.FullName}"" ""{appDir}"" /e /is /it /r:5 /w:2 >nul 2>&1
-start """" /d ""{appDir}"" ""{appPath}""
+robocopy ""{extractDir.FullName}"" ""{installContext.AppDir}"" /e /is /it /r:5 /w:2 >nul 2>&1
+if %ERRORLEVEL% GEQ 8 exit /b %ERRORLEVEL%
+start """" /d ""{installContext.AppDir}"" ""{installContext.AppPath}""
 rd /s /q ""{tempDirectory}""
 ";
 
@@ -181,23 +181,40 @@ rd /s /q ""{tempDirectory}""
                                 var script = $@"
 #!/bin/bash
 sleep 3
-cp -Rf ""{extractDir.FullName}""/. ""{appDir}""
 
 if [[ ""$(uname)"" == ""Darwin"" ]]; then
-    DOTNET_EXTRACT_DIR=""$(eval echo ~$SUDO_USER)/.net/XboxDownload""
-    if [[ -d ""$DOTNET_EXTRACT_DIR"" ]]; then
-        rm -rf -- ""$DOTNET_EXTRACT_DIR""/* 2>/dev/null || true
+    APP_BUNDLE=""{installContext.MacosAppBundlePath}""
+    APP_EXEC=""$APP_BUNDLE/Contents/MacOS/XboxDownloadLauncher""
+    APP_BIN=""$APP_BUNDLE/Contents/MacOS/XboxDownload""
+    RUN_SCRIPT=""{installContext.InstallDir}/run_xboxdownload.command""
+
+    if ! rm -rf -- ""$APP_BUNDLE""; then
+        exit 1
+    fi
+    if ! cp -Rf ""{extractDir.FullName}""/. ""{installContext.InstallDir}""; then
+        exit 1
     fi
 
-    xattr -dr com.apple.quarantine ""{appPath}"" 2>/dev/null || true
-    xattr -dr com.apple.quarantine ""{appDir}/run_xboxdownload.command"" 2>/dev/null || true
-    chmod +x ""{appPath}"" 2>/dev/null || true
-    chmod +x ""{appDir}/run_xboxdownload.command"" 2>/dev/null || true
-    open ""{appPath}"" &
+    xattr -dr com.apple.quarantine ""$APP_BUNDLE"" 2>/dev/null || true
+    xattr -dr com.apple.quarantine ""$RUN_SCRIPT"" 2>/dev/null || true
+    chmod +x ""$APP_EXEC"" 2>/dev/null || true
+    chmod +x ""$APP_BIN"" 2>/dev/null || true
+    chmod +x ""$RUN_SCRIPT"" 2>/dev/null || true
+
+    if [[ -n ""${{SUDO_USER:-}}"" ]]; then
+        REAL_GROUP=""$(id -gn ""$SUDO_USER"" 2>/dev/null || echo staff)""
+        chown ""$SUDO_USER:$REAL_GROUP"" ""{installContext.InstallDir}"" 2>/dev/null || true
+        chown -R ""$SUDO_USER:$REAL_GROUP"" ""$APP_BUNDLE"" ""$RUN_SCRIPT"" ""{installContext.InstallDir}/README.md"" 2>/dev/null || true
+    fi
+
+    open ""$APP_BUNDLE"" &
 else
-    chmod +x ""{appPath}"" 2>/dev/null || true
-    chmod +x ""{appDir}/run_xboxdownload.sh"" 2>/dev/null || true
-    nohup ""{appPath}"" >/dev/null 2>&1 </dev/null &
+    if ! cp -Rf ""{extractDir.FullName}""/. ""{installContext.InstallDir}""; then
+        exit 1
+    fi
+    chmod +x ""{installContext.AppPath}"" 2>/dev/null || true
+    chmod +x ""{installContext.InstallDir}/run_xboxdownload.sh"" 2>/dev/null || true
+    nohup ""{installContext.AppPath}"" >/dev/null 2>&1 </dev/null &
 fi
 
 rm -rf -- ""{tempDirectory}""
@@ -233,6 +250,42 @@ exit 0
 
     [GeneratedRegex(@"/releases/tag/(?<tag_name>[^\d]*(?<version>\d+(\.\d+){2,3}))$", RegexOptions.Compiled)]
     private static partial Regex GitHubTagRegex();
+
+    private readonly record struct UpdateInstallContext(
+        string? AppPath,
+        string? AppDir,
+        string? InstallDir,
+        string? MacosAppBundlePath);
+
+    private static UpdateInstallContext GetUpdateInstallContext()
+    {
+        var appPath = Process.GetCurrentProcess().MainModule?.FileName;
+        var appDir = Path.GetDirectoryName(appPath);
+        var installDir = appDir;
+        var macosAppBundlePath = appDir != null ? Path.Combine(appDir, $"{nameof(XboxDownload)}.app") : null;
+
+        if (OperatingSystem.IsMacOS() && appDir != null)
+        {
+            var macosDir = new DirectoryInfo(appDir);
+            var contentsDir = macosDir.Name == "MacOS" ? macosDir.Parent : null;
+            var appBundleDir = contentsDir?.Name == "Contents" && contentsDir.Parent?.Name.EndsWith(".app", StringComparison.OrdinalIgnoreCase) == true
+                ? contentsDir.Parent
+                : null;
+
+            if (appBundleDir != null)
+            {
+                installDir = appBundleDir.Parent?.FullName ?? appDir;
+                macosAppBundlePath = appBundleDir.FullName;
+            }
+            else
+            {
+                installDir = appDir;
+                macosAppBundlePath = Path.Combine(installDir, $"{nameof(XboxDownload)}.app");
+            }
+        }
+
+        return new UpdateInstallContext(appPath, appDir, installDir, macosAppBundlePath);
+    }
 
     public static async Task DownloadIpAsync(FileInfo fi, string keyword = "")
     {
