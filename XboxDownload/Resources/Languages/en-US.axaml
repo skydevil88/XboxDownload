@@ -46,8 +46,6 @@
     <x:String x:Key="Update.Progress.Preparing">Preparing</x:String>
     <x:String x:Key="Update.Progress.Processing">Processing</x:String>
     <x:String x:Key="Update.Progress.Cancel">Cancel</x:String>
-    <x:String x:Key="Update.Progress.Cancelling">Cancelling the update...</x:String>
-    <x:String x:Key="Update.Progress.CancellingShort">Cancelling</x:String>
     <x:String x:Key="Update.Progress.Connecting">Connecting to the download server...</x:String>
     <x:String x:Key="Update.Progress.UnknownSize">Unknown size</x:String>
 

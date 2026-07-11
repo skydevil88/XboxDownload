@@ -46,8 +46,6 @@
     <x:String x:Key="Update.Progress.Preparing">准备中</x:String>
     <x:String x:Key="Update.Progress.Processing">处理中</x:String>
     <x:String x:Key="Update.Progress.Cancel">取消</x:String>
-    <x:String x:Key="Update.Progress.Cancelling">正在取消更新...</x:String>
-    <x:String x:Key="Update.Progress.CancellingShort">取消中</x:String>
     <x:String x:Key="Update.Progress.Connecting">正在连接下载服务器...</x:String>
     <x:String x:Key="Update.Progress.UnknownSize">未知大小</x:String>
 

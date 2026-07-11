@@ -223,11 +223,7 @@ public static partial class UpdateService
 
     private sealed class UpdateDownloadDialogState(
         CancellationTokenSource cancellation,
-        Button cancelButton,
-        TextBlock statusText,
-        TextBlock percentText,
-        string cancellingText,
-        string cancellingShortText) : IDisposable
+        Button cancelButton) : IDisposable
     {
         public bool CanClose { get; set; }
 
@@ -238,8 +234,6 @@ public static partial class UpdateService
 
             cancellation.Cancel();
             cancelButton.IsEnabled = false;
-            statusText.Text = cancellingText;
-            percentText.Text = cancellingShortText;
         }
 
         public void Dispose()
@@ -355,13 +349,7 @@ public static partial class UpdateService
         };
         Grid.SetColumn(percentText, 1);
 
-        var dialogState = new UpdateDownloadDialogState(
-            downloadCancellation,
-            cancelButton,
-            statusText,
-            percentText,
-            ResourceHelper.GetString("Update.Progress.Cancelling"),
-            ResourceHelper.GetString("Update.Progress.CancellingShort"));
+        var dialogState = new UpdateDownloadDialogState(downloadCancellation, cancelButton);
         dialog.Tag = dialogState;
         cancelButton.Tag = dialogState;
 
