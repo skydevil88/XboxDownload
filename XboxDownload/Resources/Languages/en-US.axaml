@@ -43,6 +43,13 @@
     <x:String x:Key="Update.UpdateFailedTitle">Update Failed</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">An error occurred while checking for updates. Please try again later.</x:String>
     <x:String x:Key="Update.DownloadFailed">Error downloading the update package. Please try again later.</x:String>
+    <x:String x:Key="Update.Progress.Preparing">Preparing</x:String>
+    <x:String x:Key="Update.Progress.Processing">Processing</x:String>
+    <x:String x:Key="Update.Progress.Cancel">Cancel</x:String>
+    <x:String x:Key="Update.Progress.Cancelling">Cancelling the update...</x:String>
+    <x:String x:Key="Update.Progress.CancellingShort">Cancelling</x:String>
+    <x:String x:Key="Update.Progress.Connecting">Connecting to the download server...</x:String>
+    <x:String x:Key="Update.Progress.UnknownSize">Unknown size</x:String>
 
     <x:String x:Key="About.Title">About</x:String>
     <x:String x:Key="About.XboxDownload">Xbox Download Assistant by Devil</x:String>

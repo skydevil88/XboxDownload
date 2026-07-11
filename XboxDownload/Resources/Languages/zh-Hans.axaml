@@ -43,6 +43,13 @@
     <x:String x:Key="Update.UpdateFailedTitle">更新失败</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">检查更新出错，请稍候再试。</x:String>
     <x:String x:Key="Update.DownloadFailed">下载更新包出错。请稍后再试。</x:String>
+    <x:String x:Key="Update.Progress.Preparing">准备中</x:String>
+    <x:String x:Key="Update.Progress.Processing">处理中</x:String>
+    <x:String x:Key="Update.Progress.Cancel">取消</x:String>
+    <x:String x:Key="Update.Progress.Cancelling">正在取消更新...</x:String>
+    <x:String x:Key="Update.Progress.CancellingShort">取消中</x:String>
+    <x:String x:Key="Update.Progress.Connecting">正在连接下载服务器...</x:String>
+    <x:String x:Key="Update.Progress.UnknownSize">未知大小</x:String>
 
     <x:String x:Key="About.Title">关于</x:String>
     <x:String x:Key="About.XboxDownload">Xbox下载助手 by Devil</x:String>

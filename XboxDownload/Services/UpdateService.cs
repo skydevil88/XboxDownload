@@ -110,10 +110,6 @@ public static partial class UpdateService
             return;
         }
 
-        var serviceVm = Ioc.Default.GetRequiredService<ServiceViewModel>();
-        if (serviceVm.IsLogging)
-            serviceVm.AddLog(ResourceHelper.GetString("Update.Title"), ResourceHelper.GetString("Update.Downloading"), "System");
-
         var systemLabel = OperatingSystem.IsWindows() ? "windows" :
                           OperatingSystem.IsMacOS() ? "macos" :
                           OperatingSystem.IsLinux() ? "linux" : "unknown";
@@ -145,7 +141,11 @@ public static partial class UpdateService
                 Directory.CreateDirectory(tempDirectory);
 
                 var saveFilepath = Path.Combine(tempDirectory, fileName);
-                if (await ShowUpdateDownloadProgressAsync(fastestUrl, saveFilepath))
+                var downloadResult = await ShowUpdateDownloadProgressAsync(fastestUrl, saveFilepath);
+                if (downloadResult == UpdateDownloadResult.Cancelled)
+                    return;
+
+                if (downloadResult == UpdateDownloadResult.Success)
                 {
                     await ZipFile.ExtractToDirectoryAsync(saveFilepath, tempDirectory, overwriteFiles: true, CancellationToken.None);
 
@@ -206,7 +206,14 @@ public static partial class UpdateService
         public static UpdateDownloadProgress Stage(string message) => new(message, 0, 0, false);
 
         public static UpdateDownloadProgress Downloading(long downloadedBytes, long totalBytes) =>
-            new(ResourceHelper.GetString("Update.Downloading"), downloadedBytes, totalBytes, true);
+            new(string.Empty, downloadedBytes, totalBytes, true);
+    }
+
+    private enum UpdateDownloadResult
+    {
+        Success,
+        Cancelled,
+        Failed
     }
 
     private readonly record struct DownloadPart(int Index, long From, long To)
@@ -218,16 +225,21 @@ public static partial class UpdateService
         CancellationTokenSource cancellation,
         Button cancelButton,
         TextBlock statusText,
-        TextBlock percentText) : IDisposable
+        TextBlock percentText,
+        string cancellingText,
+        string cancellingShortText) : IDisposable
     {
         public bool CanClose { get; set; }
 
         public void CancelDownload()
         {
+            if (cancellation.IsCancellationRequested)
+                return;
+
             cancellation.Cancel();
             cancelButton.IsEnabled = false;
-            statusText.Text = "正在取消更新...";
-            percentText.Text = "取消中";
+            statusText.Text = cancellingText;
+            percentText.Text = cancellingShortText;
         }
 
         public void Dispose()
@@ -236,13 +248,16 @@ public static partial class UpdateService
         }
     }
 
-    private static async Task<bool> ShowUpdateDownloadProgressAsync(string url, string saveFilepath)
+    private static async Task<UpdateDownloadResult> ShowUpdateDownloadProgressAsync(string url, string saveFilepath)
     {
         var downloadCancellation = new CancellationTokenSource();
         var owner = (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
+        var downloadingText = ResourceHelper.GetString("Update.Downloading");
+        var processingText = ResourceHelper.GetString("Update.Progress.Processing");
+        var unknownSizeText = ResourceHelper.GetString("Update.Progress.UnknownSize");
         var statusText = new TextBlock
         {
-            Text = ResourceHelper.GetString("Update.Downloading"),
+            Text = downloadingText,
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap
         };
@@ -254,7 +269,7 @@ public static partial class UpdateService
         };
         var percentText = new TextBlock
         {
-            Text = "准备中",
+            Text = ResourceHelper.GetString("Update.Progress.Preparing"),
             FontSize = 12,
             Foreground = Brushes.Gray,
             HorizontalAlignment = HorizontalAlignment.Right
@@ -269,7 +284,7 @@ public static partial class UpdateService
         };
         var cancelButton = new Button
         {
-            Content = "取消",
+            Content = ResourceHelper.GetString("Update.Progress.Cancel"),
             MinWidth = 88,
             HorizontalContentAlignment = HorizontalAlignment.Center
         };
@@ -340,7 +355,13 @@ public static partial class UpdateService
         };
         Grid.SetColumn(percentText, 1);
 
-        var dialogState = new UpdateDownloadDialogState(downloadCancellation, cancelButton, statusText, percentText);
+        var dialogState = new UpdateDownloadDialogState(
+            downloadCancellation,
+            cancelButton,
+            statusText,
+            percentText,
+            ResourceHelper.GetString("Update.Progress.Cancelling"),
+            ResourceHelper.GetString("Update.Progress.CancellingShort"));
         dialog.Tag = dialogState;
         cancelButton.Tag = dialogState;
 
@@ -361,20 +382,34 @@ public static partial class UpdateService
 
         var progress = new Progress<UpdateDownloadProgress>(state =>
         {
-            statusText.Text = state.Message;
-            if (state is { IsDownloading: true, TotalBytes: > 0 })
+            if (downloadCancellation.IsCancellationRequested)
+                return;
+
+            if (state.IsDownloading)
             {
-                var percent = Math.Clamp(state.DownloadedBytes * 100d / state.TotalBytes, 0, 100);
-                progressBar.IsIndeterminate = false;
-                progressBar.Value = percent;
-                detailText.Text = $"{FormatUpdateSize(state.DownloadedBytes)} / {FormatUpdateSize(state.TotalBytes)}";
-                percentText.Text = $"{percent:0}%";
+                statusText.Text = downloadingText;
+                if (state.TotalBytes > 0)
+                {
+                    var percent = Math.Clamp(state.DownloadedBytes * 100d / state.TotalBytes, 0, 100);
+                    progressBar.IsIndeterminate = false;
+                    progressBar.Value = percent;
+                    detailText.Text = $"{FormatUpdateSize(state.DownloadedBytes)} / {FormatUpdateSize(state.TotalBytes)}";
+                    percentText.Text = $"{percent:0}%";
+                }
+                else
+                {
+                    progressBar.IsIndeterminate = true;
+                    detailText.Text = $"{FormatUpdateSize(state.DownloadedBytes)} / {unknownSizeText}";
+                    percentText.Text = processingText;
+                }
+
                 return;
             }
 
+            statusText.Text = state.Message;
             progressBar.IsIndeterminate = true;
             detailText.Text = "";
-            percentText.Text = "处理中";
+            percentText.Text = processingText;
         });
 
         var downloadTask = DownloadUpdatePackageAsync(url, saveFilepath, progress, downloadCancellation.Token);
@@ -395,7 +430,7 @@ public static partial class UpdateService
         }
     }
 
-    private static async Task<bool> DownloadUpdatePackageAsync(
+    private static async Task<UpdateDownloadResult> DownloadUpdatePackageAsync(
         string url,
         string saveFilepath,
         IProgress<UpdateDownloadProgress>? progress,
@@ -403,36 +438,36 @@ public static partial class UpdateService
     {
         try
         {
-            progress?.Report(UpdateDownloadProgress.Stage("正在连接下载服务器..."));
+            progress?.Report(UpdateDownloadProgress.Stage(ResourceHelper.GetString("Update.Progress.Connecting")));
             var rangeInfo = await GetRangeDownloadInfoAsync(url, cancellationToken);
             if (rangeInfo is { SupportsRange: true, TotalBytes: >= MultiThreadDownloadThresholdBytes })
             {
-                progress?.Report(UpdateDownloadProgress.Stage("正在多线程下载更新包..."));
                 try
                 {
                     await DownloadUpdatePackageInPartsAsync(url, saveFilepath, rangeInfo.TotalBytes, progress, cancellationToken);
-                    return true;
+                    return UpdateDownloadResult.Success;
                 }
                 catch (Exception ex) when (!cancellationToken.IsCancellationRequested &&
                                            ex is IOException or InvalidDataException or HttpRequestException or TaskCanceledException)
                 {
                     TryDeleteFile(saveFilepath);
-                    progress?.Report(UpdateDownloadProgress.Stage("多线程下载失败，正在切换为单线程下载..."));
                 }
             }
 
             await DownloadUpdatePackageSingleThreadAsync(url, saveFilepath, rangeInfo.TotalBytes, progress, cancellationToken);
-            return true;
+            return UpdateDownloadResult.Success;
         }
         catch (OperationCanceledException)
         {
             TryDeleteFile(saveFilepath);
-            return false;
+            return UpdateDownloadResult.Cancelled;
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or HttpRequestException or TaskCanceledException)
         {
             TryDeleteFile(saveFilepath);
-            return false;
+            return cancellationToken.IsCancellationRequested
+                ? UpdateDownloadResult.Cancelled
+                : UpdateDownloadResult.Failed;
         }
     }
 
@@ -646,7 +681,7 @@ public static partial class UpdateService
     private static string FormatUpdateSize(long bytes)
     {
         if (bytes <= 0)
-            return "未知大小";
+            return "0 B";
 
         string[] units = ["B", "KB", "MB", "GB"];
         var size = (double)bytes;
