@@ -744,18 +744,22 @@ sleep 3
 
 if [[ ""$(uname)"" == ""Darwin"" ]]; then
     APP_BUNDLE=""{installContext.MacosAppBundlePath}""
+    NEW_APP_BUNDLE=""{extractDirectory}/XboxDownload.app""
     APP_EXEC=""$APP_BUNDLE/Contents/MacOS/XboxDownloadLauncher""
     APP_BIN=""$APP_BUNDLE/Contents/MacOS/XboxDownload""
-    RESOURCE_DIR=""$APP_BUNDLE/Contents/MacOS/Resource""
-    PRESERVED_RESOURCE_DIR=""{tempDirectory}/preserved-resource""
+    OLD_RESOURCE_DIR=""$APP_BUNDLE/Contents/MacOS/Resource""
+    NEW_RESOURCE_DIR=""$NEW_APP_BUNDLE/Contents/MacOS/Resource""
     RUN_SCRIPT=""{installContext.InstallDir}/run_xboxdownload.command""
     ROOT_LAUNCH=false
 
-    if [[ -d ""$RESOURCE_DIR"" ]]; then
-        rm -rf -- ""$PRESERVED_RESOURCE_DIR""
-        if ! cp -Rp ""$RESOURCE_DIR"" ""$PRESERVED_RESOURCE_DIR""; then
-            exit 1
-        fi
+    if [[ ! -d ""$NEW_APP_BUNDLE"" ]]; then
+        exit 1
+    fi
+
+    if [[ -d ""$OLD_RESOURCE_DIR"" ]]; then
+        rm -rf -- ""$NEW_RESOURCE_DIR"" 2>/dev/null || true
+        mkdir -p ""$(dirname ""$NEW_RESOURCE_DIR"")"" 2>/dev/null || true
+        cp -Rp ""$OLD_RESOURCE_DIR"" ""$NEW_RESOURCE_DIR"" 2>/dev/null || true
     fi
 
     if ! rm -rf -- ""$APP_BUNDLE""; then
@@ -763,13 +767,6 @@ if [[ ""$(uname)"" == ""Darwin"" ]]; then
     fi
     if ! cp -Rf ""{extractDirectory}""/. ""{installContext.InstallDir}""; then
         exit 1
-    fi
-    if [[ -d ""$PRESERVED_RESOURCE_DIR"" ]]; then
-        rm -rf -- ""$RESOURCE_DIR""
-        mkdir -p ""$(dirname ""$RESOURCE_DIR"")""
-        if ! cp -Rp ""$PRESERVED_RESOURCE_DIR"" ""$RESOURCE_DIR""; then
-            exit 1
-        fi
     fi
 
     xattr -dr com.apple.quarantine ""$APP_BUNDLE"" 2>/dev/null || true
