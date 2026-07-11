@@ -110,6 +110,15 @@ public static partial class UpdateService
             return;
         }
 
+        if (RequiresRootForProtectedMacosDirectory())
+        {
+            await DialogHelper.ShowInfoDialogAsync(
+                ResourceHelper.GetString("Update.RequiresRootTitle"),
+                ResourceHelper.GetString("Update.RequiresRootMessage"),
+                Icon.Warning);
+            return;
+        }
+
         var systemLabel = OperatingSystem.IsWindows() ? "windows" :
                           OperatingSystem.IsMacOS() ? "macos" :
                           OperatingSystem.IsLinux() ? "linux" : "unknown";
@@ -829,6 +838,39 @@ exit 0
         }
 
         return new UpdateInstallContext(appPath, appDir, installDir, macosAppBundlePath);
+    }
+
+    private static bool RequiresRootForProtectedMacosDirectory()
+    {
+        if (!OperatingSystem.IsMacOS() ||
+            string.Equals(Environment.UserName, "root", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var appBundlePath = GetUpdateInstallContext().MacosAppBundlePath;
+        if (string.IsNullOrEmpty(appBundlePath))
+            return false;
+
+        var homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        var protectedDirectories = new[]
+        {
+            Path.Combine(homeDirectory, "Documents"),
+            Path.Combine(homeDirectory, "Desktop"),
+            Path.Combine(homeDirectory, "Downloads"),
+            Path.Combine(homeDirectory, "Library", "Mobile Documents")
+        };
+
+        return protectedDirectories.Any(directory =>
+            !string.IsNullOrEmpty(directory) && IsPathWithin(appBundlePath, directory));
+    }
+
+    private static bool IsPathWithin(string path, string directory)
+    {
+        var normalizedPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar);
+        var normalizedDirectory = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
+        return string.Equals(normalizedPath, normalizedDirectory, StringComparison.OrdinalIgnoreCase) ||
+               normalizedPath.StartsWith(normalizedDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
     }
 
     private static void StartDetachedUnixUpdateScript(string scriptPath)

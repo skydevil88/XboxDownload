@@ -43,6 +43,8 @@
     <x:String x:Key="Update.UpdateFailedTitle">更新失敗</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">檢查更新出錯，請稍候再試。</x:String>
     <x:String x:Key="Update.DownloadFailed">下載更新包出錯。請稍後再試。</x:String>
+    <x:String x:Key="Update.RequiresRootTitle">需要 root 權限</x:String>
+    <x:String x:Key="Update.RequiresRootMessage">XboxDownload 位於 macOS 受限目錄。請退出軟體，執行 run_xboxdownload.command 後重新更新。</x:String>
     <x:String x:Key="Update.Progress.Preparing">準備中</x:String>
     <x:String x:Key="Update.Progress.Processing">處理中</x:String>
     <x:String x:Key="Update.Progress.Cancel">取消</x:String>

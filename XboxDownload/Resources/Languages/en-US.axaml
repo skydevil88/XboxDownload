@@ -43,6 +43,8 @@
     <x:String x:Key="Update.UpdateFailedTitle">Update Failed</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">An error occurred while checking for updates. Please try again later.</x:String>
     <x:String x:Key="Update.DownloadFailed">Error downloading the update package. Please try again later.</x:String>
+    <x:String x:Key="Update.RequiresRootTitle">Root Permission Required</x:String>
+    <x:String x:Key="Update.RequiresRootMessage">XboxDownload is located in a macOS protected folder. Quit the app, run run_xboxdownload.command, and try the update again.</x:String>
     <x:String x:Key="Update.Progress.Preparing">Preparing</x:String>
     <x:String x:Key="Update.Progress.Processing">Processing</x:String>
     <x:String x:Key="Update.Progress.Cancel">Cancel</x:String>
