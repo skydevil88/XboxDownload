@@ -43,8 +43,8 @@
     <x:String x:Key="Update.UpdateFailedTitle">更新失敗</x:String>
     <x:String x:Key="Update.UpdateFailedMessage">檢查更新出錯，請稍候再試。</x:String>
     <x:String x:Key="Update.DownloadFailed">下載更新包出錯。請稍後再試。</x:String>
-    <x:String x:Key="Update.RequiresRootTitle">需要 root 權限</x:String>
-    <x:String x:Key="Update.RequiresRootMessage">XboxDownload 位於 macOS 受限目錄。請退出軟體，執行 run_xboxdownload.command 後重新更新。</x:String>
+    <x:String x:Key="Update.DirectoryAccessDeniedTitle">未取得目錄存取權限</x:String>
+    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS 未允許 XboxDownload 存取目前的安裝目錄。請在「系統設定 → 隱私權與安全性 → 檔案與檔案夾」中允許存取，或者退出軟體並執行 run_xboxdownload.command 使用 root 權限，然後重新更新。</x:String>
     <x:String x:Key="Update.Progress.Preparing">準備中</x:String>
     <x:String x:Key="Update.Progress.Processing">處理中</x:String>
     <x:String x:Key="Update.Progress.Cancel">取消</x:String>

@@ -39,8 +39,10 @@ esac
 # Candidate executable paths
 # ----------------------------
 CANDIDATES=(
+    "$SCRIPT_DIR/XboxDownload.app/Contents/MacOS/XboxDownload"
     "$SCRIPT_DIR/XboxDownload.app/Contents/MacOS/XboxDownloadLauncher"
     "$SCRIPT_DIR/XboxDownload"
+    "$SCRIPT_DIR/Release/XboxDownload-$PLATFORM-$ARCH/XboxDownload.app/Contents/MacOS/XboxDownload"
     "$SCRIPT_DIR/Release/XboxDownload-$PLATFORM-$ARCH/XboxDownload.app/Contents/MacOS/XboxDownloadLauncher"
     "$SCRIPT_DIR/Release/XboxDownload-$PLATFORM-$ARCH/XboxDownload"
 )

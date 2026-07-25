@@ -136,14 +136,7 @@ create_macos_app_bundle() {
         -exec mv {} "$staging_dir/" \;
 
     cp -R "$staging_dir/." "$macos_dir/"
-    cat > "$macos_dir/${app_name}Launcher" <<'EOF'
-#!/usr/bin/env bash
-set -e
-
-APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec "$APP_DIR/XboxDownload" "$@"
-EOF
-    chmod +x "$macos_dir/$app_name" "$macos_dir/${app_name}Launcher"
+    chmod +x "$macos_dir/$app_name"
 
     create_macos_icon "$resources_dir"
 
@@ -157,7 +150,7 @@ EOF
     <key>CFBundleDisplayName</key>
     <string>XboxDownload</string>
     <key>CFBundleExecutable</key>
-    <string>XboxDownloadLauncher</string>
+    <string>XboxDownload</string>
     <key>CFBundleIconFile</key>
     <string>XboxDownload</string>
     <key>CFBundleIdentifier</key>
@@ -174,6 +167,12 @@ EOF
     <string>$bundle_version</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>XboxDownload needs access to update the application in this folder.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>XboxDownload needs access to update the application in this folder.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>XboxDownload needs access to update the application in this folder.</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 </dict>

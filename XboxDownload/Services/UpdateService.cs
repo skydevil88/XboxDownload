@@ -110,11 +110,12 @@ public static partial class UpdateService
             return;
         }
 
-        if (RequiresRootForProtectedMacosDirectory())
+        var installContext = GetUpdateInstallContext();
+        if (OperatingSystem.IsMacOS() && !RequestMacosInstallDirectoryAccess(installContext))
         {
             await DialogHelper.ShowInfoDialogAsync(
-                ResourceHelper.GetString("Update.RequiresRootTitle"),
-                ResourceHelper.GetString("Update.RequiresRootMessage"),
+                ResourceHelper.GetString("Update.DirectoryAccessDeniedTitle"),
+                ResourceHelper.GetString("Update.DirectoryAccessDeniedMessage"),
                 Icon.Warning);
             return;
         }
@@ -163,8 +164,6 @@ public static partial class UpdateService
                     {
                         var mainWindowVm = Ioc.Default.GetRequiredService<MainWindowViewModel>();
                         await mainWindowVm.OnShutdownAsync();
-
-                        var installContext = GetUpdateInstallContext();
 
                         if (OperatingSystem.IsWindows())
                         {
@@ -754,44 +753,35 @@ sleep 3
 if [[ ""$(uname)"" == ""Darwin"" ]]; then
     APP_BUNDLE=""{installContext.MacosAppBundlePath}""
     NEW_APP_BUNDLE=""{extractDirectory}/XboxDownload.app""
-    APP_EXEC=""$APP_BUNDLE/Contents/MacOS/XboxDownloadLauncher""
-    APP_BIN=""$APP_BUNDLE/Contents/MacOS/XboxDownload""
+    APP_EXEC=""$APP_BUNDLE/Contents/MacOS/XboxDownload""
     OLD_RESOURCE_DIR=""$APP_BUNDLE/Contents/MacOS/Resource""
     NEW_RESOURCE_DIR=""$NEW_APP_BUNDLE/Contents/MacOS/Resource""
-    RUN_SCRIPT=""{installContext.InstallDir}/run_xboxdownload.command""
-    ROOT_LAUNCH=false
 
-    if [[ ! -d ""$NEW_APP_BUNDLE"" ]]; then
+    if [[ ! -f ""$NEW_APP_BUNDLE/Contents/MacOS/XboxDownload"" ]]; then
         exit 1
     fi
 
     if [[ -d ""$OLD_RESOURCE_DIR"" ]]; then
-        rm -rf -- ""$NEW_RESOURCE_DIR"" 2>/dev/null || true
-        mkdir -p ""$(dirname ""$NEW_RESOURCE_DIR"")"" 2>/dev/null || true
-        cp -Rp ""$OLD_RESOURCE_DIR"" ""$NEW_RESOURCE_DIR"" 2>/dev/null || true
+        if ! mkdir -p ""$NEW_RESOURCE_DIR"" ||
+           ! /usr/bin/ditto ""$OLD_RESOURCE_DIR"" ""$NEW_RESOURCE_DIR""; then
+            exit 1
+        fi
     fi
 
     if ! rm -rf -- ""$APP_BUNDLE""; then
         exit 1
     fi
-    if ! cp -Rf ""{extractDirectory}""/. ""{installContext.InstallDir}""; then
+    if ! /usr/bin/ditto ""$NEW_APP_BUNDLE"" ""$APP_BUNDLE""; then
         exit 1
     fi
 
-    xattr -dr com.apple.quarantine ""$APP_BUNDLE"" 2>/dev/null || true
-    xattr -dr com.apple.quarantine ""$RUN_SCRIPT"" 2>/dev/null || true
     chmod +x ""$APP_EXEC"" 2>/dev/null || true
-    chmod +x ""$APP_BIN"" 2>/dev/null || true
-    chmod +x ""$RUN_SCRIPT"" 2>/dev/null || true
+    chflags nohidden ""$APP_BUNDLE"" 2>/dev/null || true
+    xattr -dr com.apple.quarantine ""$APP_BUNDLE"" 2>/dev/null || true
 
     if [[ -n ""${{SUDO_USER:-}}"" ]]; then
-        ROOT_LAUNCH=true
         REAL_GROUP=""$(id -gn ""$SUDO_USER"" 2>/dev/null || echo staff)""
-        chown ""$SUDO_USER:$REAL_GROUP"" ""{installContext.InstallDir}"" 2>/dev/null || true
-        chown -R ""$SUDO_USER:$REAL_GROUP"" ""$APP_BUNDLE"" ""$RUN_SCRIPT"" ""{installContext.InstallDir}/README.md"" 2>/dev/null || true
-    fi
-
-    if [[ ""$ROOT_LAUNCH"" == true ]]; then
+        chown -R ""$SUDO_USER:$REAL_GROUP"" ""$APP_BUNDLE"" 2>/dev/null || true
         nohup ""$APP_EXEC"" >/dev/null 2>&1 </dev/null &
     else
         open ""$APP_BUNDLE"" &
@@ -840,37 +830,34 @@ exit 0
         return new UpdateInstallContext(appPath, appDir, installDir, macosAppBundlePath);
     }
 
-    private static bool RequiresRootForProtectedMacosDirectory()
+    private static bool RequestMacosInstallDirectoryAccess(UpdateInstallContext installContext)
     {
-        if (!OperatingSystem.IsMacOS() ||
-            string.Equals(Environment.UserName, "root", StringComparison.Ordinal))
+        if (Program.UnixUserIsRoot())
+            return true;
+
+        var installDirectory = installContext.InstallDir;
+        if (string.IsNullOrEmpty(installDirectory))
+            return false;
+
+        var probePath = Path.Combine(installDirectory, $".xboxdownload-update-{Guid.NewGuid():N}.tmp");
+        try
+        {
+            // Reading existing entries triggers macOS TCC; creating a new file alone may not.
+            _ = Directory.EnumerateFileSystemEntries(installDirectory).FirstOrDefault();
+
+            File.Create(probePath).Dispose();
+
+            File.Delete(probePath);
+            return true;
+        }
+        catch (Exception ex) when (ex is UnauthorizedAccessException or IOException)
         {
             return false;
         }
-
-        var appBundlePath = GetUpdateInstallContext().MacosAppBundlePath;
-        if (string.IsNullOrEmpty(appBundlePath))
-            return false;
-
-        var homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        var protectedDirectories = new[]
+        finally
         {
-            Path.Combine(homeDirectory, "Documents"),
-            Path.Combine(homeDirectory, "Desktop"),
-            Path.Combine(homeDirectory, "Downloads"),
-            Path.Combine(homeDirectory, "Library", "Mobile Documents")
-        };
-
-        return protectedDirectories.Any(directory =>
-            !string.IsNullOrEmpty(directory) && IsPathWithin(appBundlePath, directory));
-    }
-
-    private static bool IsPathWithin(string path, string directory)
-    {
-        var normalizedPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar);
-        var normalizedDirectory = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
-        return string.Equals(normalizedPath, normalizedDirectory, StringComparison.OrdinalIgnoreCase) ||
-               normalizedPath.StartsWith(normalizedDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+            TryDeleteFile(probePath);
+        }
     }
 
     private static void StartDetachedUnixUpdateScript(string scriptPath)
