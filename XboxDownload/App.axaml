@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="XboxDownload.App"
              xmlns:local="using:XboxDownload"
+             xmlns:ui="using:XboxDownload.Helpers.UI"
              x:CompileBindings="False"
              RequestedThemeVariant="Default">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -13,6 +14,9 @@
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <Style Selector="DataGrid">
+            <Setter Property="ui:DataGridClipboard.IsEnabled" Value="True"/>
+        </Style>
 
         <Style Selector="HeaderedContentControl">
             <Setter Property="Template">
