@@ -56,7 +56,7 @@ public sealed class DataGridClipboard : AvaloniaObject
 
     private static DataGridCell? ResolveFocusedCell(DataGrid grid)
     {
-        var focused = TopLevel.GetTopLevel(grid)?.FocusManager?.GetFocusedElement() as Control;
+        var focused = TopLevel.GetTopLevel(grid)?.FocusManager.GetFocusedElement() as Control;
         var focusedCell = focused as DataGridCell ?? focused?.FindAncestorOfType<DataGridCell>();
         if (focusedCell is not null && ReferenceEquals(focusedCell.FindAncestorOfType<DataGrid>(), grid))
         {
@@ -164,6 +164,18 @@ public sealed class DataGridClipboard : AvaloniaObject
             : ClipboardHelper.SetTextAsync(clipboard, GetDisplayedText(cell));
     }
 
+    private static async Task CopyCellAsync(DataGrid grid, DataGridCell cell)
+    {
+        try
+        {
+            await CopyAsync(grid, cell);
+        }
+        catch
+        {
+            // Clipboard access can fail when the OS denies or temporarily owns it.
+        }
+    }
+
     private static void GridOnCellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
     {
         if (sender is DataGrid grid)
@@ -172,7 +184,7 @@ public sealed class DataGridClipboard : AvaloniaObject
         }
     }
 
-    private static async void GridOnKeyDown(object? sender, KeyEventArgs e)
+    private static void GridOnKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Handled || !IsCopyGesture(e) || sender is not DataGrid grid)
         {
@@ -193,14 +205,7 @@ public sealed class DataGridClipboard : AvaloniaObject
 
         StoreSelection(selection, cell);
         e.Handled = true;
-        try
-        {
-            await CopyAsync(grid, cell);
-        }
-        catch
-        {
-            // Clipboard access can fail when the OS denies or temporarily owns it.
-        }
+        _ = CopyCellAsync(grid, cell);
     }
 
     private sealed class CellSelection
