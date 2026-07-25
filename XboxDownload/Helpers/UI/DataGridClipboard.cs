@@ -44,13 +44,14 @@ public sealed class DataGridClipboard : AvaloniaObject
     private static bool IsCopyGesture(KeyEventArgs e) =>
         e.Key == Key.C && (e.KeyModifiers & (KeyModifiers.Control | KeyModifiers.Meta)) != 0;
 
-    private static DataGridCell? ResolveCurrentCell(object? sender, KeyEventArgs e, DataGridCell? fallback)
+    private static DataGridCell? ResolveCurrentCell(object? sender, KeyEventArgs e, CellSelection fallback)
     {
         var grid = sender as DataGrid ?? (e.Source as Control)?.FindAncestorOfType<DataGrid>();
         var current = e.Source as DataGridCell ?? (e.Source as Control)?.FindAncestorOfType<DataGridCell>();
         if (current is not null && ReferenceEquals(current.FindAncestorOfType<DataGrid>(), grid)) return current;
         if (grid is not null && ResolveFocusedCell(grid) is { } focused) return focused;
-        return fallback is not null && ReferenceEquals(fallback.FindAncestorOfType<DataGrid>(), grid) ? fallback : null;
+        if (ResolveGridCurrentCell(grid) is { } gridCurrent) return gridCurrent;
+        return IsValidCachedCell(grid, fallback) ? fallback.Cell : null;
     }
 
     private static DataGridCell? ResolveFocusedCell(DataGrid grid)
@@ -71,6 +72,54 @@ public sealed class DataGridClipboard : AvaloniaObject
         }
 
         return null;
+    }
+
+    private static DataGridCell? ResolveGridCurrentCell(DataGrid? grid)
+    {
+        if (grid?.SelectedItem is null || grid.CurrentColumn is null)
+        {
+            return null;
+        }
+
+        foreach (var descendant in grid.GetVisualDescendants())
+        {
+            if (descendant is not DataGridRow row || !ReferenceEquals(row.DataContext, grid.SelectedItem))
+            {
+                continue;
+            }
+
+            foreach (var rowDescendant in row.GetVisualDescendants())
+            {
+                if (rowDescendant is DataGridCell cell &&
+                    ReferenceEquals(DataGridColumn.GetColumnContainingElement(cell), grid.CurrentColumn))
+                {
+                    return cell;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static bool IsValidCachedCell(DataGrid? grid, CellSelection selection)
+    {
+        if (grid is null ||
+            selection.Cell is not { } cell ||
+            selection.Column is null ||
+            !ReferenceEquals(cell.FindAncestorOfType<DataGrid>(), grid) ||
+            !ReferenceEquals(cell.DataContext, selection.RowItem))
+        {
+            return false;
+        }
+
+        return ReferenceEquals(DataGridColumn.GetColumnContainingElement(cell), selection.Column);
+    }
+
+    private static void StoreSelection(CellSelection selection, DataGridCell cell, DataGridColumn? column = null)
+    {
+        selection.Cell = cell;
+        selection.RowItem = cell.DataContext;
+        selection.Column = column ?? DataGridColumn.GetColumnContainingElement(cell);
     }
 
     private static string GetDisplayedText(DataGridCell cell)
@@ -119,7 +168,7 @@ public sealed class DataGridClipboard : AvaloniaObject
     {
         if (sender is DataGrid grid)
         {
-            Selections.GetOrCreateValue(grid).Cell = e.Cell;
+            StoreSelection(Selections.GetOrCreateValue(grid), e.Cell, e.Column);
         }
     }
 
@@ -136,16 +185,17 @@ public sealed class DataGridClipboard : AvaloniaObject
         }
 
         var selection = Selections.GetOrCreateValue(grid);
-        selection.Cell = ResolveCurrentCell(grid, e, selection.Cell);
-        if (selection.Cell is null)
+        var cell = ResolveCurrentCell(grid, e, selection);
+        if (cell is null)
         {
             return;
         }
 
+        StoreSelection(selection, cell);
         e.Handled = true;
         try
         {
-            await CopyAsync(grid, selection.Cell);
+            await CopyAsync(grid, cell);
         }
         catch
         {
@@ -156,5 +206,7 @@ public sealed class DataGridClipboard : AvaloniaObject
     private sealed class CellSelection
     {
         public DataGridCell? Cell { get; set; }
+        public object? RowItem { get; set; }
+        public DataGridColumn? Column { get; set; }
     }
 }
