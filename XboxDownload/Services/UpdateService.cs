@@ -754,18 +754,9 @@ if [[ ""$(uname)"" == ""Darwin"" ]]; then
     APP_BUNDLE=""{installContext.MacosAppBundlePath}""
     NEW_APP_BUNDLE=""{extractDirectory}/XboxDownload.app""
     APP_EXEC=""$APP_BUNDLE/Contents/MacOS/XboxDownload""
-    OLD_RESOURCE_DIR=""$APP_BUNDLE/Contents/MacOS/Resource""
-    NEW_RESOURCE_DIR=""$NEW_APP_BUNDLE/Contents/MacOS/Resource""
 
     if [[ ! -f ""$NEW_APP_BUNDLE/Contents/MacOS/XboxDownload"" ]]; then
         exit 1
-    fi
-
-    if [[ -d ""$OLD_RESOURCE_DIR"" ]]; then
-        if ! mkdir -p ""$NEW_RESOURCE_DIR"" ||
-           ! /usr/bin/ditto ""$OLD_RESOURCE_DIR"" ""$NEW_RESOURCE_DIR""; then
-            exit 1
-        fi
     fi
 
     if ! rm -rf -- ""$APP_BUNDLE""; then
