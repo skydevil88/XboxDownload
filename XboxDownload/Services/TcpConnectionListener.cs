@@ -953,9 +953,11 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
         localPath = string.Empty;
         if (!serviceViewModel.IsLocalUploadEnabled) return false;
 
-        var directPath = serviceViewModel.LocalUploadPath + requestPath;
+        var basePath = Path.GetFullPath(serviceViewModel.LocalUploadPath);
+        var basePrefix = basePath.EndsWith(Path.DirectorySeparatorChar) ? basePath : basePath + Path.DirectorySeparatorChar;
+        var directPath = Path.GetFullPath(serviceViewModel.LocalUploadPath + requestPath);
         var fileNamePath = Path.Combine(serviceViewModel.LocalUploadPath, Path.GetFileName(requestPath));
-        if (File.Exists(directPath))
+        if (directPath.StartsWith(basePrefix, StringComparison.Ordinal) && File.Exists(directPath))
         {
             localPath = OperatingSystem.IsWindows() ? directPath.Replace("/", "\\") : directPath;
         }
