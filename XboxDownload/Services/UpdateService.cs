@@ -890,19 +890,23 @@ exit 0
             var completedTask = await Task.WhenAny(tasks);
             tasks.Remove(completedTask);
             var responseString = await completedTask;
-            if (!responseString.StartsWith(keyword)) continue;
+            if (!IsValidIpData(responseString, keyword)) continue;
             await cts.CancelAsync();
             await SaveToFileAsync(fi, responseString);
+            return;
         }
 
         if (!cts.IsCancellationRequested)
         {
             var responseString = await HttpClientHelper.GetStringContentAsync($"{Project.Replace("https://github.com", "https://testingcf.jsdelivr.net/gh")}/IP/{fi.Name}", token: CancellationToken.None);
-            if (responseString.StartsWith(keyword))
+            if (IsValidIpData(responseString, keyword))
             {
                 await SaveToFileAsync(fi, responseString);
+                return;
             }
         }
+
+        Console.Error.WriteLine($"IP data update failed for {fi.Name}; existing cached data was retained.");
     }
 
     private static async Task SaveToFileAsync(FileInfo fi, string content)
@@ -914,11 +918,45 @@ exit 0
             if (!OperatingSystem.IsWindows())
                 await PathHelper.FixOwnershipAsync(fi.DirectoryName!, true);
         }
-        await File.WriteAllTextAsync(fi.FullName, content);
+        var temporaryPath = $"{fi.FullName}.{Guid.NewGuid():N}.tmp";
+        try
+        {
+            await File.WriteAllTextAsync(temporaryPath, content);
+            File.Move(temporaryPath, fi.FullName, true);
+        }
+        finally
+        {
+            if (File.Exists(temporaryPath))
+                File.Delete(temporaryPath);
+        }
+
         fi.Refresh();
 
         if (!OperatingSystem.IsWindows())
             await PathHelper.FixOwnershipAsync(fi.FullName);
+    }
+
+    private static bool IsValidIpData(string content, string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(content) || !content.StartsWith(keyword, StringComparison.Ordinal))
+            return false;
+
+        if (keyword == "{")
+        {
+            try
+            {
+                using var document = JsonDocument.Parse(content);
+                return document.RootElement.ValueKind == JsonValueKind.Object;
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
+        }
+
+        return content.Split('\n').Any(line => line
+            .Split([' ', '\t', '(', ')', '#'], StringSplitOptions.RemoveEmptyEntries)
+            .Any(token => IPAddress.TryParse(token.Trim(), out _)));
     }
 
     public static async Task<string> FetchAppDownloadUrlAsync(string product, CancellationToken token = default)
