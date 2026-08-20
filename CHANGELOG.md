@@ -2,6 +2,24 @@
 
 All notable changes to XboxFastz are documented here.
 
+## XboxFastz v1.1.0 — 2026-08-21
+
+### Development Task
+
+Added network/download diagnostics and safe performance improvements while preserving the existing UI and networking architecture.
+
+### Added
+
+- Added network diagnostics for a selected download endpoint.
+- Added DNS resolution, selected-IP reachability, latency, packet-loss, duration, and success/failure reporting.
+- Added cancellation, clipboard copy, and text export for diagnostic results.
+
+### Performance
+
+- Reused one DNS resolution and one selected address for each diagnostic run.
+- Reused the existing HTTP latency path and disposed each response after measurement.
+- Canceled the three-attempt diagnostic operation through a linked cancellation token.
+
 ## [Unreleased]
 
 ### Added

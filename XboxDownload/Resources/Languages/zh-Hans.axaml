@@ -313,6 +313,21 @@
     <x:String x:Key="SpeedTest.Timeout">超时(秒)</x:String>
     <x:String x:Key="SpeedTest.StartTest">开始测速</x:String>
     <x:String x:Key="SpeedTest.StopTest">停止测速</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Run">运行诊断</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancel">取消</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Copy">复制</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Export">导出</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Running">正在运行诊断...</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancelled">诊断已取消。</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.NoEndpoint">请先选择或输入下载地址。</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failed">诊断失败：{0}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Success">成功</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failure">失败</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Resolved">已解析</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Unresolved">未解析</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Report">状态：{0} | 主机：{1} | DNS：{2} | IP：{3} | 延迟：{4} 毫秒 | 丢包：{5} | 用时：{6:F0} 毫秒{7}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.ExportTitle">导出诊断</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.TextFile">文本文件</x:String>
 
     <x:String x:Key="EditHosts.SpeedTest.Title">编辑系统 hosts 文件</x:String>
     <x:String x:Key="EditHosts.SpeedTest.Save">保存</x:String>

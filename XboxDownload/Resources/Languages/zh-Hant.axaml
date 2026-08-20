@@ -313,6 +313,21 @@
     <x:String x:Key="SpeedTest.Timeout">超時(秒)</x:String>
     <x:String x:Key="SpeedTest.StartTest">開始測速</x:String>
     <x:String x:Key="SpeedTest.StopTest">停止測速</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Run">執行診斷</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancel">取消</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Copy">複製</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Export">匯出</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Running">正在執行診斷...</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancelled">診斷已取消。</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.NoEndpoint">請先選擇或輸入下載位址。</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failed">診斷失敗：{0}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Success">成功</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failure">失敗</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Resolved">已解析</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Unresolved">未解析</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Report">狀態：{0} | 主機：{1} | DNS：{2} | IP：{3} | 延遲：{4} 毫秒 | 丟包：{5} | 用時：{6:F0} 毫秒{7}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.ExportTitle">匯出診斷</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.TextFile">文字檔案</x:String>
 
     <x:String x:Key="EditHosts.SpeedTest.Title">編輯系統 hosts 檔</x:String>
     <x:String x:Key="EditHosts.SpeedTest.Save">保存</x:String>

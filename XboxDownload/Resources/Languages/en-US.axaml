@@ -313,6 +313,21 @@
     <x:String x:Key="SpeedTest.Timeout">Timeout (s)</x:String>
     <x:String x:Key="SpeedTest.StartTest">Start Test</x:String>
     <x:String x:Key="SpeedTest.StopTest">Stop Test</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Run">Run diagnostics</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancel">Cancel</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Copy">Copy</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Export">Export</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Running">Running diagnostics...</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancelled">Diagnostics cancelled.</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.NoEndpoint">Select or enter a download endpoint first.</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failed">Diagnostics failed: {0}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Success">Success</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failure">Failure</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Resolved">resolved</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Unresolved">not resolved</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Report">Status: {0} | Host: {1} | DNS: {2} | IP: {3} | Latency: {4} ms | Packet loss: {5} | Duration: {6:F0} ms{7}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.ExportTitle">Export diagnostics</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.TextFile">Text file</x:String>
 
     <x:String x:Key="EditHosts.SpeedTest.Title">Edit Hosts</x:String>
     <x:String x:Key="EditHosts.SpeedTest.Save">Save</x:String>
