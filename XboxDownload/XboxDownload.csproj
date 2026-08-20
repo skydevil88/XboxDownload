@@ -8,6 +8,9 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <FileVersion>3.0.0.65</FileVersion>
+        <AssemblyTitle>XboxFastz</AssemblyTitle>
+        <Product>XboxFastz</Product>
+        <Description>XboxFastz is an independent XboxDownload fork for game download links, network services, CDN testing, and storage tools.</Description>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <x:String x:Key="App.Title">Xbox下載助手 v3</x:String>
+    <x:String x:Key="App.Title">XboxFastz</x:String>
 
     <x:String x:Key="Menu.Options">選項</x:String>
     <x:String x:Key="Menu.Language">語言</x:String>
@@ -44,7 +44,7 @@
     <x:String x:Key="Update.UpdateFailedMessage">檢查更新出錯，請稍候再試。</x:String>
     <x:String x:Key="Update.DownloadFailed">下載更新包出錯。請稍後再試。</x:String>
     <x:String x:Key="Update.DirectoryAccessDeniedTitle">未取得目錄存取權限</x:String>
-    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS 未允許 XboxDownload 存取目前的安裝目錄。請在「系統設定 → 隱私權與安全性 → 檔案與檔案夾」中允許存取，或者退出軟體並執行 run_xboxdownload.command 使用 root 權限，然後重新更新。</x:String>
+    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS 未允許 XboxFastz 存取目前的安裝目錄。請在「系統設定 → 隱私權與安全性 → 檔案與檔案夾」中允許存取，或者退出軟體並執行 run_xboxdownload.command 使用 root 權限，然後重新更新。</x:String>
     <x:String x:Key="Update.Progress.Preparing">準備中</x:String>
     <x:String x:Key="Update.Progress.Processing">處理中</x:String>
     <x:String x:Key="Update.Progress.Cancel">取消</x:String>
@@ -52,7 +52,7 @@
     <x:String x:Key="Update.Progress.UnknownSize">未知大小</x:String>
 
     <x:String x:Key="About.Title">關於</x:String>
-    <x:String x:Key="About.XboxDownload">Xbox下載助手 by Devil</x:String>
+    <x:String x:Key="About.XboxDownload">XboxFastz，基於 skydevil88 的 XboxDownload 獨立分支</x:String>
     <x:String x:Key="About.Version">版本 {0}</x:String>
     <x:String x:Key="About.Donate">如果您覺得該軟體有用，請隨意打賞!</x:String>
 
