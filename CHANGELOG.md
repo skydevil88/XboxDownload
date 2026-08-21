@@ -2,22 +2,26 @@
 
 All notable changes to XboxFastz are documented here.
 
-## XboxFastz v1.2.0 — Smart Endpoint Selection
+## XboxFastz v1.2.0 — Smart Endpoint Discovery
 
 ### Added
 
-- Added `EndpointSelectorService` for automatic, low-bandwidth endpoint/IP selection that does not assume the upstream author's preferred IP is optimal for every user.
-- Selection uses a cheap-to-expensive funnel: ICMP reachability/latency → small HTTP latency probes (packet-loss estimation) → small 4 MB ranged speed test on the most promising candidates → rank by speed (tie-break by latency) → automatic selection.
-- Wired the smart selector into the existing "Fastest Akamai IP" auto-feature, with the legacy race-based selector retained as a fallback.
+- Added `EndpointSelectorService` for automatic, low-bandwidth endpoint discovery and selection that does NOT rely on the upstream-maintained `IP.*.txt` files.
+- Candidates are discovered independently by DNS-resolving the bounded, hardcoded catalog of real Xbox/CDN download domains in `DnsMappingGenerator.HostRules` (e.g. `assets1.xboxlive.com`, `xvcf1.xboxlive.com`, `gst.prod.dl.playstation.net`, …). Discovered IPs are capped at 60 candidates.
+- Selection uses a cheap-to-expensive funnel: ICMP reachability/latency → small HTTP latency probes (packet-loss estimation) → small 4 MB ranged speed test on the top 5 finalists → rank by measured throughput (latency as tie-breaker) → automatic selection.
+- Wired the DNS-based selector into the existing "Fastest Akamai IP" auto-feature. The legacy IP-file race-based selector is no longer used as the automatic selector.
 
 ### Performance
 
 - Cheap connectivity/latency checks run before any speed test; the speed-test stage downloads at most 4 MB per finalist instead of the 30/50 MB used by the Speed Test tab.
 - Concurrent ICMP stage with a hard 3-second cap and early stop, minimizing wasted probing.
+- Bandwidth is bounded (≤ ~20 MB worst case) and cancellation is preserved throughout.
 
 ### Preserved
 
-- Existing Speed Test tab workflow and per-IP full speed test are unchanged.
+- Existing Speed Test tab workflow and per-IP full speed test are unchanged and still use the IP files.
+- The legacy `IP.*.txt` files, loaders, and related services are retained for backward compatibility; they are not deleted.
+- On discovery failure the currently working endpoint is preserved and a clear failure result is returned (no silent fallback to IP-file candidates).
 - Network Diagnostics from v1.1.0, XboxFastz branding, and original author attribution/donation information are preserved.
 
 ## XboxFastz v1.1.1 — Maintenance Update

@@ -11,18 +11,27 @@ using XboxDownload.Models.SpeedTest;
 namespace XboxDownload.Services;
 
 /// <summary>
-/// Selects the best-performing endpoint from a candidate IP list using a
-/// cheap-to-expensive funnel: ICMP reachability/latency → small HTTP latency
-/// probe → small ranged speed test → rank → automatic selection.
+/// Automatically discovers and selects the best-performing endpoint for the
+/// user's current network WITHOUT relying on the upstream-maintained
+/// <c>IP.*.txt</c> files.
+///
+/// Candidates are discovered by resolving the bounded, hardcoded catalog of
+/// real Xbox/CDN download domains in <see cref="DnsMappingGenerator.HostRules"/>
+/// via DNS. The discovered IPs then flow through a cheap-to-expensive funnel:
+/// ICMP reachability/latency → small HTTP latency probe → small ranged speed
+/// test → rank by measured throughput → automatic selection.
 ///
 /// This complements <see cref="SpeedTestService"/> (full per-IP speed test on
-/// the Speed Test tab) and <see cref="NetworkDiagnosticsService"/> (single
-/// endpoint diagnostics) by providing automatic, low-bandwidth endpoint
-/// discovery that does not assume the upstream author's preferred IP is
-/// optimal for every user.
+/// the Speed Test tab, which still uses the IP files) and
+/// <see cref="NetworkDiagnosticsService"/> (single endpoint diagnostics). The
+/// legacy IP-file infrastructure is intentionally left intact and is NOT used
+/// as the candidate source here.
 /// </summary>
 public static class EndpointSelectorService
 {
+    /// <summary>Maximum discovered IP candidates (bounded; no IP-range scanning).</summary>
+    private const int MaxDiscoveredCandidates = 60;
+
     /// <summary>Maximum candidates kept after the ICMP reachability stage.</summary>
     private const int MaxReachableCandidates = 12;
 
@@ -44,6 +53,9 @@ public static class EndpointSelectorService
     /// <summary>Hard cap for the speed-test stage.</summary>
     private static readonly TimeSpan SpeedTestStageTimeout = TimeSpan.FromSeconds(12);
 
+    /// <summary>Per-domain DNS resolution timeout.</summary>
+    private static readonly TimeSpan DnsResolveTimeout = TimeSpan.FromSeconds(3);
+
     /// <summary>
     /// Result of ranking a single candidate through the funnel.
     /// </summary>
@@ -56,35 +68,61 @@ public static class EndpointSelectorService
         double? SpeedMiBPerSecond);
 
     /// <summary>
-    /// Automatically selects the best-performing endpoint from <paramref name="candidates"/>
-    /// using a cheap-to-expensive funnel. Returns <c>null</c> if no candidate is reachable,
-    /// in which case the caller should keep its current endpoint (sensible fallback).
+    /// Outcome of an automatic discovery-and-selection run.
     /// </summary>
-    /// <param name="candidates">Candidate IPs (typically loaded from an IP file).</param>
+    public sealed record EndpointDiscoveryResult(
+        bool Success,
+        IpItem? BestEndpoint,
+        int CandidateCount,
+        string FailureReason)
+    {
+        public static EndpointDiscoveryResult Failed(string reason) =>
+            new(false, null, 0, reason);
+    }
+
+    /// <summary>
+    /// Automatically discovers candidate endpoints by DNS-resolving the bounded
+    /// download-domain catalog for <paramref name="categoryKey"/>, then selects the
+    /// best-performing one through the cheap-to-expensive funnel.
+    ///
+    /// This is the v1.2.0 automatic selector. It does NOT read <c>IP.*.txt</c>.
+    /// On failure it returns <see cref="EndpointDiscoveryResult.Failed"/> so the
+    /// caller can preserve the currently working endpoint.
+    /// </summary>
+    /// <param name="categoryKey">Host-rule key (e.g. "Akamai", "XboxGlobal", "Ps").
+    /// "Akamai*" resolves to the full Akamai-related set per <see cref="DnsMappingGenerator"/>.</param>
     /// <param name="testUri">Download URI used for the HTTP latency and speed-test stages.</param>
     /// <param name="userAgent">User-Agent header for the HTTP probes.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    public static async Task<IpItem?> SelectBestEndpointAsync(
-        List<IpItem> candidates,
+    public static async Task<EndpointDiscoveryResult> DiscoverAndSelectAsync(
+        string categoryKey,
         Uri testUri,
         string userAgent,
         CancellationToken cancellationToken)
     {
-        if (candidates is null || candidates.Count == 0)
-            return null;
+        if (string.IsNullOrWhiteSpace(categoryKey))
+            return EndpointDiscoveryResult.Failed("No endpoint category was specified.");
+
+        // Stage 0: independent candidate discovery via DNS (no IP files).
+        var candidates = await DiscoverCandidatesAsync(categoryKey, cancellationToken);
+        if (candidates.Count == 0)
+            return EndpointDiscoveryResult.Failed("DNS discovery returned no candidate addresses.");
 
         // Stage 1: ICMP reachability + latency (cheap, concurrent, hard-capped).
         var reachable = await PingFilterAsync(candidates, cancellationToken);
         if (reachable.Count == 0)
-            return null;
+            return EndpointDiscoveryResult.Failed("No discovered candidate was reachable.");
 
         // Stage 2: small HTTP latency probes (cheap, no large download).
         var probed = await HttpLatencyFilterAsync(reachable, testUri, userAgent, cancellationToken);
         if (probed.Count == 0)
         {
-            // Every HTTP probe failed, but ICMP succeeded. Fall back to the
-            // lowest-latency reachable candidate rather than declaring failure.
-            return reachable.OrderBy(c => c.RoundtripTime ?? long.MaxValue).FirstOrDefault();
+            // Every HTTP probe failed, but ICMP succeeded. Use the best reachable
+            // DNS-discovered candidate rather than declaring total failure.
+            var bestReachable = reachable.OrderBy(c => c.RoundtripTime ?? long.MaxValue).FirstOrDefault();
+            return bestReachable is null
+                ? EndpointDiscoveryResult.Failed("No discovered candidate responded to HTTP probes.")
+                : new EndpointDiscoveryResult(true, bestReachable, candidates.Count, string.Empty);
         }
 
         // Stage 3: pick the most promising candidates for the expensive stage.
@@ -97,7 +135,7 @@ public static class EndpointSelectorService
         // Stage 4: small ranged speed test on the finalists.
         var ranked = await SpeedTestRankAsync(finalists, testUri, userAgent, cancellationToken);
 
-        // Stage 5: rank by speed, tie-break by HTTP latency then ICMP latency.
+        // Stage 5: rank by measured throughput, tie-break by HTTP latency then ICMP latency.
         var best = ranked
             .Where(r => r.SpeedMiBPerSecond.HasValue && r.SpeedMiBPerSecond > 0)
             .OrderByDescending(r => r.SpeedMiBPerSecond)
@@ -106,13 +144,76 @@ public static class EndpointSelectorService
             .FirstOrDefault();
 
         if (best != null)
-            return best.Item;
+            return new EndpointDiscoveryResult(true, best.Item, candidates.Count, string.Empty);
 
-        // Speed test produced no usable throughput; fall back to best latency.
-        return probed
+        // Speed tests produced no usable throughput; select the best reachable
+        // DNS-discovered candidate by latency.
+        var bestByLatency = probed
             .OrderBy(r => r.HttpLatencyMilliseconds ?? long.MaxValue)
+            .ThenBy(r => r.Item.RoundtripTime ?? long.MaxValue)
             .Select(r => r.Item)
             .FirstOrDefault();
+        return bestByLatency is null
+            ? EndpointDiscoveryResult.Failed("Speed tests failed and no latency-ranked candidate was available.")
+            : new EndpointDiscoveryResult(true, bestByLatency, candidates.Count, string.Empty);
+    }
+
+    /// <summary>
+    /// Stage 0: independent candidate discovery. Resolves the bounded download-domain
+    /// catalog for <paramref name="categoryKey"/> via DNS and deduplicates the resulting
+    /// IP addresses. Does NOT read <c>IP.*.txt</c>. Candidate count is capped at
+    /// <see cref="MaxDiscoveredCandidates"/>.
+    /// </summary>
+    private static async Task<List<IpItem>> DiscoverCandidatesAsync(
+        string categoryKey,
+        CancellationToken cancellationToken)
+    {
+        var domains = DnsMappingGenerator.GenerateHostList(categoryKey, includeHosts: true, includeRedirects: false, includeBlacklist: false);
+        if (domains.Count == 0)
+            return [];
+
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(DnsResolveTimeout);
+
+        var seen = new ConcurrentDictionary<IPAddress, byte>();
+        var bag = new ConcurrentBag<IpItem>();
+
+        var tasks = domains.Select(async domain =>
+        {
+            if (cts.IsCancellationRequested) return;
+            try
+            {
+                // Prefer DoH when configured, otherwise system DNS — same helpers
+                // used by the existing resolve-domain workflow.
+                List<IPAddress>? addresses = null;
+                if (DnsHelper.CurrentDoH is { } doh)
+                    addresses = await DnsHelper.ResolveDohAsync(domain, doh);
+                addresses ??= await DnsHelper.ResolveDnsAsync(domain);
+
+                if (addresses is null) return;
+                foreach (var ip in addresses)
+                {
+                    if (ip.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork) continue; // IPv4 only for the override workflow
+                    if (seen.TryAdd(ip, 0))
+                        bag.Add(new IpItem { Ip = ip.ToString(), Location = domain });
+                }
+            }
+            catch
+            {
+                // ignored — a single domain failing to resolve is not fatal
+            }
+        }).ToList();
+
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch (OperationCanceledException)
+        {
+            // ignored
+        }
+
+        return bag.Take(MaxDiscoveredCandidates).ToList();
     }
 
     /// <summary>
