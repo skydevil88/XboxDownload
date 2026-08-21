@@ -7,8 +7,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <Version>1.1.1</Version>
-        <FileVersion>1.1.1</FileVersion>
+        <Version>1.2.0</Version>
+        <FileVersion>1.2.0</FileVersion>
         <AssemblyTitle>XboxFastz</AssemblyTitle>
         <Product>XboxFastz</Product>
         <Description>XboxFastZ</Description>

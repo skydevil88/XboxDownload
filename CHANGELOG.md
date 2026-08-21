@@ -2,6 +2,24 @@
 
 All notable changes to XboxFastz are documented here.
 
+## XboxFastz v1.2.0 — Smart Endpoint Selection
+
+### Added
+
+- Added `EndpointSelectorService` for automatic, low-bandwidth endpoint/IP selection that does not assume the upstream author's preferred IP is optimal for every user.
+- Selection uses a cheap-to-expensive funnel: ICMP reachability/latency → small HTTP latency probes (packet-loss estimation) → small 4 MB ranged speed test on the most promising candidates → rank by speed (tie-break by latency) → automatic selection.
+- Wired the smart selector into the existing "Fastest Akamai IP" auto-feature, with the legacy race-based selector retained as a fallback.
+
+### Performance
+
+- Cheap connectivity/latency checks run before any speed test; the speed-test stage downloads at most 4 MB per finalist instead of the 30/50 MB used by the Speed Test tab.
+- Concurrent ICMP stage with a hard 3-second cap and early stop, minimizing wasted probing.
+
+### Preserved
+
+- Existing Speed Test tab workflow and per-IP full speed test are unchanged.
+- Network Diagnostics from v1.1.0, XboxFastz branding, and original author attribution/donation information are preserved.
+
 ## XboxFastz v1.1.1 — Maintenance Update
 
 ### Fixed

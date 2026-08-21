@@ -523,7 +523,11 @@ public partial class ServiceViewModel : ObservableObject
             _backupIps.TryAdd("EaIp", EaIp);
             _backupIps.TryAdd("BattleIp", BattleIp);
 
-            var bestIp = await SpeedTestService.FindFastestOrBestAkamaiIpAsync(items, ListeningToken);
+            // Smart endpoint selection: cheap reachability/latency filtering before a
+            // small ranged speed test, falling back to the legacy race-based selector.
+            var smartTestUri = new Uri("http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt");
+            var bestIp = await EndpointSelectorService.SelectBestEndpointAsync(items, smartTestUri, nameof(XboxDownload), ListeningToken);
+            bestIp ??= await SpeedTestService.FindFastestOrBestAkamaiIpAsync(items, ListeningToken);
             if (IsListening)
             {
                 if (bestIp != null)
