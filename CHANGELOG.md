@@ -2,6 +2,20 @@
 
 All notable changes to XboxFastz are documented here.
 
+## XboxFastz v1.1.1 — Maintenance Update
+
+### Fixed
+
+- Verified the in-app update checker points to the XboxFastZ releases (`https://github.com/DreamOpenS/XboxFastZ`) instead of the original XboxDownload repository.
+- Version/release checking now resolves the latest tag from XboxFastZ releases.
+- The Help → Download menu and the About dialog project link continue to point to XboxFastZ.
+
+### Preserved
+
+- Network Diagnostics introduced in v1.1.0.
+- Improved English README and XboxFastz branding/rebranding.
+- Original author attribution and crypto donation information.
+
 ## XboxFastz v1.1.0 — 2026-08-21
 
 ### Development Task
