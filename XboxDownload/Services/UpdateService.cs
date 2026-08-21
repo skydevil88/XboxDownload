@@ -133,7 +133,7 @@ public static partial class UpdateService
             _ => "unknown"
         };
 
-        var fileName = $"{nameof(XboxDownload)}-{systemLabel}-{archLabel}.zip";
+        var fileName = $"XboxFastz-{systemLabel}-{archLabel}.zip";
 
         var fastestUrl = await HttpClientHelper.GetFastestProxyAsync([.. Proxies1, .. Proxies2],
             $"{Project}/releases/download/{tagName}/{fileName}",
