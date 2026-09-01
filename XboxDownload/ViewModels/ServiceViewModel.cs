@@ -483,36 +483,6 @@ public partial class ServiceViewModel : ObservableObject
         if (!IsListening) return;
         if (IsFastestAkamaiIp)
         {
-            var filePath = PathHelper.GetResourceFilePath("IP.AkamaiV2.txt");
-            var fi = new FileInfo(filePath);
-            if (!fi.Exists || fi.LastWriteTimeUtc < DateTime.UtcNow.AddDays(-7))
-            {
-                await UpdateService.DownloadIpAsync(fi);
-            }
-
-            // ReSharper disable once MethodSupportsCancellation
-            var content = fi.Exists ? await File.ReadAllTextAsync(fi.FullName) : string.Empty;
-            var matches = RegexHelper.ExtractIpv4AndLocation().Matches(content);
-            var items = matches.Where(m => m.Success).Select(m => new IpItem
-            {
-                Ip = m.Groups["IP"].Value,
-                Location = m.Groups["Location"].Value
-            }).ToList();
-
-            if (items.Count == 0)
-            {
-                await DialogHelper.ShowInfoDialogAsync(
-                    ResourceHelper.GetString("Service.Service.FastestAkamaiIpFailedDialogTitle"),
-                    ResourceHelper.GetString("Service.Service.FastestAkamaiIpFailedDialogMessage"),
-                    Icon.Error);
-                return;
-            }
-
-            if (App.Settings.Culture != "zh-Hans")
-            {
-                await Ioc.Default.GetRequiredService<SpeedTestViewModel>().TranslationLocation(items);
-            }
-
             _backupIps.Clear();
             _backupIps.TryAdd("XboxGlobalIp", XboxGlobalIp);
             _backupIps.TryAdd("XboxCn1Ip", XboxCn1Ip);
@@ -523,7 +493,12 @@ public partial class ServiceViewModel : ObservableObject
             _backupIps.TryAdd("EaIp", EaIp);
             _backupIps.TryAdd("BattleIp", BattleIp);
 
-            var bestIp = await SpeedTestService.FindFastestOrBestAkamaiIpAsync(items, ListeningToken);
+            // v1.2.0 smart endpoint discovery: candidates come from DNS resolution
+            // of the bounded download-domain catalog, NOT from the IP.*.txt files.
+            // On failure the current working endpoint is preserved (bestIp stays null).
+            var smartTestUri = new Uri("http://xvcf1.xboxlive.com/Z/routing/extraextralarge.txt");
+            var discovery = await EndpointSelectorService.DiscoverAndSelectAsync("Akamai", smartTestUri, nameof(XboxDownload), ListeningToken);
+            var bestIp = discovery.Success ? discovery.BestEndpoint : null;
             if (IsListening)
             {
                 if (bestIp != null)
