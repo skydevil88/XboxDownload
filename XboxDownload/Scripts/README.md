@@ -2,7 +2,7 @@ Please scroll down for Chinese version 请往下看以阅读中文版本
 
 # 🚀 Getting Started
 
-This section explains how to run **XboxDownload** for the first time on
+This section explains how to run **XboxFastz** for the first time on
 macOS and Linux.
 
 ---
@@ -27,7 +27,8 @@ chmod +x run_xboxdownload.command
 ```
 
 Replace `/path/to/XboxDownload` with the actual path to your
-XboxDownload directory.
+XboxFastz directory. The executable and launcher filenames remain
+`XboxDownload` for compatibility with existing packages.
 
 > ✅ This only needs to be done once after downloading.
 
@@ -52,13 +53,14 @@ chmod +x run_xboxdownload.sh XboxDownload
 ```
 
 Replace `/path/to/XboxDownload` with the actual path to your
-XboxDownload directory.
+XboxFastz directory. The executable filename remains `XboxDownload`
+for compatibility with existing packages.
 
 ---
 
 ### Method 2 — Run via File Manager
 
-1.  Open the **XboxDownload** directory.
+1.  Open the **XboxFastz** directory.
 2.  Locate `run_xboxdownload.sh` or `XboxDownload`.
 3.  Right-click → **Properties**.
 4.  Enable **Allow executing file as program**.
@@ -77,7 +79,7 @@ double-click the file and select **Run**.
 
 # 🚀 使用说明
 
-本章节说明 **XboxDownload** 在 macOS 与 Linux 下的首次运行步骤。
+本章节说明 **XboxFastz** 在 macOS 与 Linux 下的首次运行步骤。
 
 ---
 

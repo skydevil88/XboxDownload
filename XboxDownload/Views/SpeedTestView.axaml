@@ -307,6 +307,14 @@
                     <Button Grid.Column="1" Height="50" MinWidth="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{DynamicResource SpeedTest.StartTest}" Command="{Binding StartSpeedTestCommand}" IsVisible="{Binding !IsSpeedTest}"/>
                     <Button Grid.Column="2" Height="50" MinWidth="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="{DynamicResource SpeedTest.StopTest}" Command="{Binding StopSpeedTestCommand}" IsVisible="{Binding IsSpeedTest}"/>
                 </Grid>
+
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,2,0,0">
+                    <TextBlock Grid.Column="0" Text="{Binding DiagnosticsText}" TextWrapping="Wrap" MaxHeight="56" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                    <Button Grid.Column="1" Content="{DynamicResource SpeedTest.Diagnostics.Run}" Command="{Binding RunDiagnosticsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" IsVisible="{Binding !IsDiagnosticsRunning}"/>
+                    <Button Grid.Column="1" Content="{DynamicResource SpeedTest.Diagnostics.Cancel}" Command="{Binding CancelDiagnosticsCommand}" IsVisible="{Binding IsDiagnosticsRunning}"/>
+                    <Button Grid.Column="2" Content="{DynamicResource SpeedTest.Diagnostics.Copy}" Command="{Binding CopyDiagnosticsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" IsEnabled="{Binding !IsDiagnosticsRunning}"/>
+                    <Button Grid.Column="3" Content="{DynamicResource SpeedTest.Diagnostics.Export}" Command="{Binding ExportDiagnosticsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" IsEnabled="{Binding !IsDiagnosticsRunning}"/>
+                </Grid>
             </StackPanel>
         </Border>
     </Grid>

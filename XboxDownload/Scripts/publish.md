@@ -1,6 +1,6 @@
-# 📦 Xbox下载助手  发布说明
+# 📦 XboxFastz 发布说明
 
-Xbox下载助手 支持将项目发布为各平台的**独立可执行程序**，无需目标系统安装 .NET 运行时。
+XboxFastz 支持将项目发布为各平台的**独立可执行程序**，无需目标系统安装 .NET 运行时。
 
 ---
 
@@ -45,12 +45,12 @@ Xbox下载助手 支持将项目发布为各平台的**独立可执行程序**�
 ```
 Scripts/
 ├── Release/
-│   ├── XboxDownload-linux-arm64.zip
-│   ├── XboxDownload-linux-x64.zip
-│   ├── XboxDownload-macos-arm64.zip
-│   ├── XboxDownload-macos-x64.zip
-│   ├── XboxDownload-windows-arm64.zip
-│   └── XboxDownload-windows-x64.zip
+│   ├── XboxFastz-linux-arm64.zip
+│   ├── XboxFastz-linux-x64.zip
+│   ├── XboxFastz-macos-arm64.zip
+│   ├── XboxFastz-macos-x64.zip
+│   ├── XboxFastz-windows-arm64.zip
+│   └── XboxFastz-windows-x64.zip
 
 ```
 
