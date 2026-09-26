@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo -e "\033[96mPublishing XboxDownload...\033[0m"
+echo -e "\033[96mPublishing XboxFastz...\033[0m"
 
 # --------------------------------------------------
 # Paths
@@ -148,17 +148,17 @@ create_macos_app_bundle() {
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>XboxDownload</string>
+    <string>XboxFastz</string>
     <key>CFBundleExecutable</key>
     <string>XboxDownload</string>
     <key>CFBundleIconFile</key>
     <string>XboxDownload</string>
     <key>CFBundleIdentifier</key>
-    <string>com.xboxdownload.app</string>
+    <string>com.xboxfastz.app</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>XboxDownload</string>
+    <string>XboxFastz</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -168,11 +168,11 @@ create_macos_app_bundle() {
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
     <key>NSDesktopFolderUsageDescription</key>
-    <string>XboxDownload needs access to update the application in this folder.</string>
+    <string>XboxFastz needs access to update the application in this folder.</string>
     <key>NSDocumentsFolderUsageDescription</key>
-    <string>XboxDownload needs access to update the application in this folder.</string>
+    <string>XboxFastz needs access to update the application in this folder.</string>
     <key>NSDownloadsFolderUsageDescription</key>
-    <string>XboxDownload needs access to update the application in this folder.</string>
+    <string>XboxFastz needs access to update the application in this folder.</string>
     <key>NSHighResolutionCapable</key>
     <true/>
 </dict>
@@ -191,7 +191,7 @@ EOF
 # --------------------------------------------------
 print_menu() {
     echo -e "\033[96m=========================================\033[0m"
-    echo -e "\033[96m       XboxDownload - Publish Tool       \033[0m"
+    echo -e "\033[96m       XboxFastz - Publish Tool       \033[0m"
     echo -e "\033[96m=========================================\033[0m"
     echo
     echo "Select target to publish:"
@@ -212,7 +212,7 @@ publish_target() {
     local rid="$1"
     local output_rid="$2"
 
-    local output_dir="$OUTPUT_ROOT/XboxDownload-$output_rid"
+    local output_dir="$OUTPUT_ROOT/XboxFastz-$output_rid"
     local native_extract=true
     local single_file=true
 
@@ -259,7 +259,7 @@ publish_target() {
     zip_file="$output_dir.zip"
     [[ -f "$zip_file" ]] && rm -f -- "$zip_file"
     echo -e "\033[96mCreating ZIP: $zip_file\033[0m"
-    (cd "$OUTPUT_ROOT" && zip -r "$(basename "$zip_file")" "XboxDownload-$output_rid" > /dev/null)
+    (cd "$OUTPUT_ROOT" && zip -r "$(basename "$zip_file")" "XboxFastz-$output_rid" > /dev/null)
     echo -e "\033[92m[OK] ZIP created: $zip_file\033[0m"
 
     rm -rf -- "$output_dir"
@@ -306,7 +306,7 @@ publish_current() {
     echo -e "\033[93mDetected system  : $os\033[0m"
     echo -e "\033[93mCPU Architecture : $arch\033[0m"
     echo -e "\033[93mTarget RID       : $rid\033[0m"
-    echo -e "\033[93mOutput folder    : ./Release/XboxDownload-${output_folder}\033[0m"
+    echo -e "\033[93mOutput folder    : ./Release/XboxFastz-${output_folder}\033[0m"
     echo -e "\033[96m-----------------------------------------\033[0m"
 
     publish_target "$rid" "$output_folder"

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Avalonia.Platform.Storage;
 using DynamicData;
 using DynamicData.Binding;
 using System;
@@ -94,6 +95,14 @@ public partial class SpeedTestViewModel : ViewModelBase
 
     [ObservableProperty]
     public partial bool IsSpeedTest { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsDiagnosticsRunning { get; set; }
+
+    [ObservableProperty]
+    public partial string DiagnosticsText { get; set; } = string.Empty;
+
+    private CancellationTokenSource? _diagnosticsCancellation;
 
     private readonly ReadOnlyObservableCollection<IpItem> _ipItems;
 
@@ -397,6 +406,108 @@ public partial class SpeedTestViewModel : ViewModelBase
             TargetTestUrl = ResourceHelper.GetString("SpeedTest.GettingDownloadLink");
             TargetTestUrl = await UpdateService.FetchAppDownloadUrlAsync(file.Url, fetchToken);
         }
+    }
+
+    [RelayCommand]
+    private async Task RunDiagnosticsAsync()
+    {
+        if (IsDiagnosticsRunning) return;
+        if (string.IsNullOrWhiteSpace(TargetTestUrl))
+        {
+            DiagnosticsText = ResourceHelper.GetString("SpeedTest.Diagnostics.NoEndpoint");
+            return;
+        }
+
+        IsDiagnosticsRunning = true;
+        DiagnosticsText = ResourceHelper.GetString("SpeedTest.Diagnostics.Running");
+        _diagnosticsCancellation = new CancellationTokenSource();
+        try
+        {
+            var result = await NetworkDiagnosticsService.RunAsync(
+                TargetTestUrl,
+                SelectedItem?.Ip,
+                _diagnosticsCancellation.Token);
+            DiagnosticsText = FormatDiagnosticsResult(result);
+        }
+        catch (OperationCanceledException)
+        {
+            DiagnosticsText = ResourceHelper.GetString("SpeedTest.Diagnostics.Cancelled");
+        }
+        catch (Exception ex)
+        {
+            DiagnosticsText = string.Format(ResourceHelper.GetString("SpeedTest.Diagnostics.Failed"), ex.Message);
+        }
+        finally
+        {
+            _diagnosticsCancellation.Dispose();
+            _diagnosticsCancellation = null;
+            IsDiagnosticsRunning = false;
+        }
+    }
+
+    [RelayCommand]
+    private void CancelDiagnostics()
+    {
+        _diagnosticsCancellation?.Cancel();
+    }
+
+    [RelayCommand]
+    private async Task CopyDiagnosticsAsync(Visual? visual)
+    {
+        if (visual == null || string.IsNullOrWhiteSpace(DiagnosticsText)) return;
+        var clipboard = TopLevel.GetTopLevel(visual)?.Clipboard;
+        if (clipboard != null)
+            await ClipboardHelper.SetTextAsync(clipboard, DiagnosticsText);
+    }
+
+    [RelayCommand]
+    private async Task ExportDiagnosticsAsync(Visual? visual)
+    {
+        if (visual == null || string.IsNullOrWhiteSpace(DiagnosticsText)) return;
+        var topLevel = TopLevel.GetTopLevel(visual);
+        if (topLevel == null) return;
+
+        var result = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = ResourceHelper.GetString("SpeedTest.Diagnostics.ExportTitle"),
+            SuggestedFileName = "xboxfastz-diagnostics.txt",
+            FileTypeChoices =
+            [
+                new FilePickerFileType(ResourceHelper.GetString("SpeedTest.Diagnostics.TextFile"))
+                {
+                    Patterns = ["*.txt"]
+                }
+            ]
+        });
+        if (result == null) return;
+
+        await using var stream = await result.OpenWriteAsync();
+        await using var writer = new StreamWriter(stream);
+        await writer.WriteAsync(DiagnosticsText);
+    }
+
+    private static string FormatDiagnosticsResult(NetworkDiagnosticsResult result)
+    {
+        var status = result.Success
+            ? ResourceHelper.GetString("SpeedTest.Diagnostics.Success")
+            : ResourceHelper.GetString("SpeedTest.Diagnostics.Failure");
+        var dns = result.DnsResolved
+            ? ResourceHelper.GetString("SpeedTest.Diagnostics.Resolved")
+            : ResourceHelper.GetString("SpeedTest.Diagnostics.Unresolved");
+        var loss = result.AttemptCount == 0
+            ? "-"
+            : $"{(result.AttemptCount - result.SuccessfulAttempts) * 100 / result.AttemptCount}%";
+        var latency = result.AverageLatencyMilliseconds?.ToString() ?? "-";
+        return string.Format(
+            ResourceHelper.GetString("SpeedTest.Diagnostics.Report"),
+            status,
+            result.Host,
+            dns,
+            result.SelectedIp?.ToString() ?? "-",
+            latency,
+            loss,
+            result.Duration.TotalMilliseconds,
+            result.FailureReason);
     }
 
     #region MenuItem

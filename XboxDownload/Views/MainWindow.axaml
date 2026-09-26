@@ -41,7 +41,7 @@
                     <MenuItem Header="{DynamicResource Menu.Help.Download}">
                         <MenuItem Header="{DynamicResource Menu.Help.Download.Github}"
                                   Command="{Binding AppDownloadCommand}"
-                                  CommandParameter="https://github.com/skydevil88/XboxDownload/releases"/>
+                                  CommandParameter="https://github.com/DreamOpenS/XboxFastZ/releases"/>
                         <MenuItem Header="{DynamicResource Menu.Help.Download.BaiduNetDisk}"
                                   Command="{Binding AppDownloadCommand}"
                                   CommandParameter="https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp"/>
