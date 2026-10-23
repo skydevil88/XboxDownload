@@ -1,137 +1,74 @@
-# Xbox下载助手
-[English](https://github.com/skydevil88/XboxDownload/blob/master/README-EN.md)
+# XboxFastz
+
+XboxFastz is an independent desktop toolkit for obtaining Microsoft Store game download links and improving download workflows for Xbox and PC users. It is based on [XboxDownload by skydevil88](https://github.com/skydevil88/XboxDownload), with the original project credited and its technical foundation preserved.
+
+> XboxFastz is an independent fork based on XboxDownload by skydevil88. It is not affiliated with Microsoft or the original author.
 
 Target Framework: .NET 10.0, Avalonia 12
 
-获取微软商店应用游戏下载链接
----
-![图0](images/Store.gif)
-网页版商店：https://xbox.skydevil.xyz
+## What it does
 
-使用PC下载Xbox主机游戏：https://www.bilibili.com/video/BV1CN4y197Js
+XboxFastz provides local DNS and HTTP(S) listening services, download-link inspection, CDN/IP speed testing, Hosts management, local upload, and Xbox storage tools. It can assist downloads for Xbox, Microsoft Store, PlayStation, Nintendo Switch, EA, Battle.net, Epic, Ubisoft, Riot Games, and Rockstar Games.
 
-一键解决EA下载速度慢：https://www.bilibili.com/video/BV1KC4y1i7ZK
+## Features
 
-使用说明
----
-Xbox主机是根据使用者IP分配游戏下载域名，国内IP使用assets1.xboxlive.cn，有国内CDN服务器，下载速度快（冷门游戏没有缓存除外）。国外IP使用assets1.xboxlive.com，没有国内CDN服务器，需要连接到国外，下载速度慢。国内用户使用了加速器或者代理软件，会被微软判断为国外用户并被分配使用com下载域名。
+- Microsoft Store game and application link lookup.
+- Local DNS and HTTP(S) services for console and PC download workflows.
+- CDN/IP testing with location search, imported IP lists, and custom mappings.
+- Hosts editing, domain resolution, and network diagnostics.
+- PC download and local upload back to Xbox.
+- Xbox external-drive PC/Xbox mode conversion tools.
+- Windows, macOS, and Linux builds; Windows includes Microsoft Store installation tools.
 
+## Supported platforms
 
-本软件提速原理，把 Xbox 下载链接 assets1.xboxlive.com 跳转到 assets1.xboxlive.cn 上（注1），锁定在国内服务器下载，解决使用国际域名下载速度过慢问题，并且能同时支持 PC 微软商店、 PS、 NS、 EA、 战网国际服、 Epic、 育碧、 Riot Games、 Rockstar Games 等游戏下载加速。
+Self-contained packages are published for Windows x64/ARM64, macOS x64/Apple Silicon, and Linux x64/ARM64. Download the appropriate archive from [XboxFastz Releases](https://github.com/DreamOpenS/XboxFastZ/releases). No separate .NET runtime is required for release packages.
 
-**注1：该跳转功能仅在界面语言为简体中文时启用。**
+For macOS and Linux first-run steps, see [Scripts/README.md](XboxDownload/Scripts/README.md).
 
-下载链接
-```
-Github: https://github.com/skydevil88/XboxDownload/releases
-百度网盘: https://pan.baidu.com/s/1ZqBvWjpGYZXBL8WaitMLCQ?pwd=q3cp 提取码：q3cp
-源码：https://github.com/skydevil88/XboxDownload
-```
-![图1](images/Consoles1.png)
+## Basic Xbox setup
 
-1.使用设置（Nintendo Switch、PlayStation 使用方法同理）
----
-Xbox正在下载，请先暂停，完成设置后再继续。
+Pause the current Xbox download before changing settings.
 
-一、启动下载助手，选中测速-导入IP，找你家附近IP测试速度（可以使用搜索位置功能），右键使用指定IP。
+1. Open **Speed Test**, import the IP list, test nearby addresses, and choose a suitable IP.
+2. Open **Services**, choose the PC IP on the same LAN as the Xbox, enable **DNS Service** and **HTTP(S) Service** as needed, then select **Start Listening**.
+3. On Xbox, open **Settings > General > Network settings > Advanced settings > DNS settings > Manual**. Set the primary DNS to the PC IP shown by XboxFastz and leave the secondary DNS empty. PC Xbox App users can skip this step.
+4. Restore Xbox DNS to automatic after downloading. If Xbox uses IPv6, disable IPv6 on the router while using this setup.
 
-![图2](images/SpeedTest.png)
+For a PC Wi-Fi hotspot, select **Any IP**, disable the DNS service, and disable **Set Local DNS**.
 
-二、本机IP选择跟Xbox同一IP段，一般是192.168.x.x，我这里是192.168.50.5，请自行判断选择。确认勾选 1.DNS 服务，2.HTTP(S) 服务 这两项，然后点击 开始监听。
+## PC download functionality
 
-![图3](images/Listening.png)
+Enable **Show Xbox Game Download Links**, pause the console download, and copy the displayed URL. Use a PC download tool to retrieve the files. The same workflow can be used with PC Xbox Game Pass, PlayStation, and EA downloads. Microsoft Store games downloaded on PC can be installed from **Tools > Install Microsoft Store Games and Apps**.
 
+The **Local Upload** workflow points XboxFastz at a PC download folder and uploads the files as the console requests them. External-drive import requires converting the drive to PC mode, placing the files on it under the Content ID, and converting it back to Xbox mode. Do not launch games directly from the external drive; the console may download them again. Application imports are not supported by the drive workflow.
 
-三、打开XBOX 设置->常规->网络设置->高级设置->DNS 设置->手动 把 主DNS 设为PC电脑IP（Xbox下载助手左下角 本机IP），辅助DNS留空。(PC Xbox App 用户此步骤省略)
+## Network, DNS, and CDN functionality
 
-![图4](images/Consoles2.png)
+XboxFastz can listen for DNS and HTTP(S) requests, use configurable upstream DNS servers, map download domains, edit Hosts entries, resolve domains, and test CDN/IP endpoints. IP availability and CDN cache behavior vary by region, carrier, and title; use local test results rather than copying an address blindly.
 
-注意，如果你的Xbox正在使用IPv6联网， 需要在路由器中关闭IPv6功能。
+If the PC should not remain on during downloads, configure URL rewriting on an OpenWrt router with Lighttpd, Nginx, or Caddy. See [README_OpenWrt.md](README_OpenWrt.md) for the router guide. IPv6, DNS caching, firewall rules, and router configuration can affect the result.
 
-![图5](images/Consoles3.png)
+## Troubleshooting
 
-现在可以开始愉快地下载了。
+- No log entries: verify that the listening IP is on the same network as the console, then check the OS firewall and security software.
+- Port conflict: allow the application to stop the conflicting process, or identify it with `netstat -an`.
+- Network access lost after exit: use the DNS repair action or restore the system DNS to automatic.
+- Slow or inconsistent downloads: retest the relevant CDN/IP for the current region and title; results are not permanent guarantees.
 
-下载完成后记得把Xbox DNS改回自动获取，否则Xbox下载助手关闭后没法联网。
+## Important warnings
 
+The application can change DNS, Hosts, certificates, ports, and local network listeners. Review each setting, run with the required administrator/root privileges only, and restore console and system settings after use. XboxFastz is not an official Microsoft, Xbox, Sony, Nintendo, EA, Valve, Ubisoft, or other platform-vendor product.
 
-其它问题：
+## Documentation
 
-一、	没有日志，第一种情况本机IP没有选择正确，请重新选择；第二种情况被电脑网络防火墙阻止，请关闭电脑网络防火墙，还有各种电脑管家之类软件。
+- [中文文档](README-zh-CN.md)
+- [OpenWrt guide](README_OpenWrt.md)
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
-二、	检测端口被占用，通常按是强制结束就能正常启动，不能结束可以用命令“netstat -an”查看占用端口程序，如何停止请自行上网搜索。
+## Attribution and license
 
-三、	Xbox通过电脑WiFi热点连接网络需要以下设置，1、监听IP选择“任意IP”，2、取消启用DNS 服务，4、取消设置本机 DNS。
+XboxFastz is an independent fork based on [XboxDownload by skydevil88](https://github.com/skydevil88/XboxDownload). The upstream project remains the source of the original implementation and attribution is intentionally preserved.
 
-Xbox主机DNS可以不用设置，直接自动获取。
-
-![图6](images/Hotspot.png)
-
-
-2.PC下载回传（PC XGP、PlayStation、EA同样适用）
----
-有两种方法回传Xbox，首先使用下载助手监听到游戏下载地址（勾选显示下载链接），暂停下载，右键复制下载地址，然后使用PC下载工具把文件下载回来。
-
-PC XGP游戏也可以用此方法监听到下载地址，然后使用下载工具下载，完成后在 工具->安装微软商店游戏和应用 中安装。
-
-![图7](images/Gamelink.png)
-
-方法一：本地上传
-
-把本地上传文件夹指向下载文件夹位置，勾选本地上传后启动监听，Xbox重新下载，就可以直接从PC上传Xbox。
-
-![图8](images/LocalUpload.png)
-
-方法二：硬盘导入
-
-Xbox外置移动硬盘接到PC上，然后在下载助手转换成PC模式，可能需要关闭杀毒软件，接着把下载游戏文件复制进去重命名为Content ID（也可以直接把游戏下载到移动硬盘根目录，省去复制这一步），完成后转换回Xbox模式。把刚才Xbox暂停下载的游戏删除，外置移动硬盘接回Xbox，开机联网（必须联网），设置-系统-存储，选择移动硬盘，把游戏移动到内部硬盘。注意不要在移动硬盘中启动游戏，否则游戏会重新下载，应用不支持硬盘方法导入。
-
-重命名Content ID方法：硬盘-文件信息-本地文件-浏览，选择文件，然后点击重命名本地文件。
-
-![图9](images/Storage1.png)
-
-![图10](images/Storage2.png)
-
-![图11](images/Storage3.png)
-
-
-3.不想开电脑下载
----
-OpenWrt 安装 Lighttpd 或者 Nginx，使用URL重写跳转国内CDN服务器加速下载
-https://github.com/skydevil88/XboxDownload/blob/master/README_OpenWrt.md
-
-
-其它路由器如果支持改Hosts，可以分别把 com 和cn 下载域名测速后找出最快IP写进Hosts 中，不管Xbox使用那个域名下载都能加速。
-
-CN域名（可以使用Akamai IP，对于CDN没有缓存的老游戏、冷门游戏可能效果更佳）
-```
-#第一组，主下载域名（PC主机共用）
-address=/assets1.xboxlive.cn/cn IP 或者 Akamai IP
-address=/assets2.xboxlive.cn/cn IP 或者 Akamai IP
-address=/d1.xboxlive.cn/cn IP 或者 Akamai IP
-address=/d2.xboxlive.cn/cn IP 或者 Akamai IP
-
-#第二组，XboxOne部分老游戏下载域名，PC、主机新游戏都不再使用此域名。
-address=/dlassets.xboxlive.cn/cn IP 或者 Akamai IP
-address=/dlassets2.xboxlive.cn/cn IP 或者 Akamai IP
-
-#第三组，应用和部分PC游戏使用此域名下载
-#Xbox APP提示“此游戏不支持安装到特定文件夹。它将与其他Windows应用一起安装。”, 这些都是使用应用下载域名
-address=/dl.delivery.mp.microsoft.com/cn IP 或者 Akamai IP
-address=/tlu.dl.delivery.mp.microsoft.com /cn IP 或者 Akamai IP
-```
-COM域名（不能使用cn IP）
-```
-address=/assets1.xboxlive.com/Akamai IP
-address=/assets2.xboxlive.com/Akamai IP
-address=/xvcf1.xboxlive.com/Akamai IP
-address=/xvcf2.xboxlive.com/Akamai IP
-address=/d1.xboxlive.com/Akamai IP
-address=/d2.xboxlive.com/Akamai IP
-address=/dlassets.xboxlive.com/Akamai IP
-address=/dlassets2.xboxlive.com/Akamai IP
-```
-
-关于
----
-![About](images/About.png)
+This checkout contains no standalone `LICENSE` file, so XboxFastz does not invent or replace the upstream license terms. Before redistributing or modifying the project, review the current upstream repository for its license and copyright requirements, and retain the original attribution.
