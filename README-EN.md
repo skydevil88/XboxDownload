@@ -1,39 +1,5 @@
-# Xbox Download Assistant
+# XboxFastz documentation
 
-[简体中文](https://github.com/skydevil88/XboxDownload)
+The primary English documentation is now [README.md](README.md).
 
-Store
----
-Get Microsoft Store Games download link
-![Store](images/EN/Store.gif)
-Web Store：https://xbox.skydevil.xyz
-
-Download Xbox console game via PC: https://www.youtube.com/watch?v=3F499kh_jfk
-
-Download App: https://github.com/skydevil88/XboxDownload/releases
-
-Service
----
-![Service](images/EN/Service1.png)
-Upload games to Xbox console via PC
-![Service](images/EN/Service2.png)
-
-Speed Test
----
-![Service](images/EN/SpeedTest.png)
-
-Hosts
----
-![Hosts](images/EN/Hosts.png)
-
-CDN
----
-![Hosts](images/EN/Cdn.png)
-
-Storage
----
-![Hosts](images/EN/Storage.png)
-
-About
----
-![Hosts](images/EN/About.png)
+XboxFastz is an independent fork based on [XboxDownload by skydevil88](https://github.com/skydevil88/XboxDownload). This file remains as a compatibility entry point for existing links.
