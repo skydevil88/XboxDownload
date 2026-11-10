@@ -18,6 +18,7 @@ public enum QueryType
     MX = 15,
     TXT = 16,
     AAAA = 28,
+    SRV = 33,
     HTTPS = 65,
     AXFR = 252,
     ANY = 255
