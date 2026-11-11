@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <x:String x:Key="App.Title">Xbox下载助手 v3</x:String>
+    <x:String x:Key="App.Title">XboxFastz</x:String>
 
     <x:String x:Key="Menu.Options">选项</x:String>
     <x:String x:Key="Menu.Language">语言</x:String>
@@ -44,7 +44,7 @@
     <x:String x:Key="Update.UpdateFailedMessage">检查更新出错，请稍候再试。</x:String>
     <x:String x:Key="Update.DownloadFailed">下载更新包出错。请稍后再试。</x:String>
     <x:String x:Key="Update.DirectoryAccessDeniedTitle">未获得目录访问权限</x:String>
-    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS 未允许 XboxDownload 访问当前安装目录。请在“系统设置 → 隐私与安全性 → 文件与文件夹”中允许访问，或者退出软件并运行 run_xboxdownload.command 使用 root 权限，然后重新更新。</x:String>
+    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS 未允许 XboxFastz 访问当前安装目录。请在“系统设置 → 隐私与安全性 → 文件与文件夹”中允许访问，或者退出软件并运行 run_xboxdownload.command 使用 root 权限，然后重新更新。</x:String>
     <x:String x:Key="Update.Progress.Preparing">准备中</x:String>
     <x:String x:Key="Update.Progress.Processing">处理中</x:String>
     <x:String x:Key="Update.Progress.Cancel">取消</x:String>
@@ -52,7 +52,7 @@
     <x:String x:Key="Update.Progress.UnknownSize">未知大小</x:String>
 
     <x:String x:Key="About.Title">关于</x:String>
-    <x:String x:Key="About.XboxDownload">Xbox下载助手 by Devil</x:String>
+    <x:String x:Key="About.XboxDownload">XboxFastz，基于 skydevil88 的 XboxDownload 独立分支</x:String>
     <x:String x:Key="About.Version">版本 {0}</x:String>
     <x:String x:Key="About.Donate">如果您觉得该软件有用，请随意打赏!</x:String>
 
@@ -313,6 +313,21 @@
     <x:String x:Key="SpeedTest.Timeout">超时(秒)</x:String>
     <x:String x:Key="SpeedTest.StartTest">开始测速</x:String>
     <x:String x:Key="SpeedTest.StopTest">停止测速</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Run">运行诊断</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancel">取消</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Copy">复制</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Export">导出</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Running">正在运行诊断...</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancelled">诊断已取消。</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.NoEndpoint">请先选择或输入下载地址。</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failed">诊断失败：{0}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Success">成功</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failure">失败</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Resolved">已解析</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Unresolved">未解析</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Report">状态：{0} | 主机：{1} | DNS：{2} | IP：{3} | 延迟：{4} 毫秒 | 丢包：{5} | 用时：{6:F0} 毫秒{7}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.ExportTitle">导出诊断</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.TextFile">文本文件</x:String>
 
     <x:String x:Key="EditHosts.SpeedTest.Title">编辑系统 hosts 文件</x:String>
     <x:String x:Key="EditHosts.SpeedTest.Save">保存</x:String>

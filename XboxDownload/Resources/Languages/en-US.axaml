@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <x:String x:Key="App.Title">Xbox Download Assistant v3</x:String>
+    <x:String x:Key="App.Title">XboxFastz</x:String>
 
     <x:String x:Key="Menu.Options">Options</x:String>
     <x:String x:Key="Menu.Language">Language</x:String>
@@ -44,7 +44,7 @@
     <x:String x:Key="Update.UpdateFailedMessage">An error occurred while checking for updates. Please try again later.</x:String>
     <x:String x:Key="Update.DownloadFailed">Error downloading the update package. Please try again later.</x:String>
     <x:String x:Key="Update.DirectoryAccessDeniedTitle">Folder Access Not Granted</x:String>
-    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS has not allowed XboxDownload to access its current install folder. Allow access in System Settings > Privacy &amp; Security > Files and Folders, or quit the app and run run_xboxdownload.command with root privileges, then try the update again.</x:String>
+    <x:String x:Key="Update.DirectoryAccessDeniedMessage">macOS has not allowed XboxFastz to access its current install folder. Allow access in System Settings > Privacy &amp; Security > Files and Folders, or quit the app and run run_xboxdownload.command with root privileges, then try the update again.</x:String>
     <x:String x:Key="Update.Progress.Preparing">Preparing</x:String>
     <x:String x:Key="Update.Progress.Processing">Processing</x:String>
     <x:String x:Key="Update.Progress.Cancel">Cancel</x:String>
@@ -52,7 +52,7 @@
     <x:String x:Key="Update.Progress.UnknownSize">Unknown size</x:String>
 
     <x:String x:Key="About.Title">About</x:String>
-    <x:String x:Key="About.XboxDownload">Xbox Download Assistant by Devil</x:String>
+    <x:String x:Key="About.XboxDownload">XboxFastz, independent fork of XboxDownload by skydevil88</x:String>
     <x:String x:Key="About.Version">Version {0}</x:String>
     <x:String x:Key="About.Donate">If you find this software helpful, feel free to support the author!</x:String>
 
@@ -313,6 +313,21 @@
     <x:String x:Key="SpeedTest.Timeout">Timeout (s)</x:String>
     <x:String x:Key="SpeedTest.StartTest">Start Test</x:String>
     <x:String x:Key="SpeedTest.StopTest">Stop Test</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Run">Run diagnostics</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancel">Cancel</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Copy">Copy</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Export">Export</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Running">Running diagnostics...</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Cancelled">Diagnostics cancelled.</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.NoEndpoint">Select or enter a download endpoint first.</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failed">Diagnostics failed: {0}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Success">Success</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Failure">Failure</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Resolved">resolved</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Unresolved">not resolved</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.Report">Status: {0} | Host: {1} | DNS: {2} | IP: {3} | Latency: {4} ms | Packet loss: {5} | Duration: {6:F0} ms{7}</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.ExportTitle">Export diagnostics</x:String>
+    <x:String x:Key="SpeedTest.Diagnostics.TextFile">Text file</x:String>
 
     <x:String x:Key="EditHosts.SpeedTest.Title">Edit Hosts</x:String>
     <x:String x:Key="EditHosts.SpeedTest.Save">Save</x:String>

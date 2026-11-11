@@ -1,5 +1,5 @@
 # OpenWrt 安装 Lighttpd、Nginx、Caddy，使用URL重写跳转国内CDN服务器加速下载
-提速原理请参考PC [Xbox下载助手](https://github.com/skydevil88/XboxDownload "Xbox下载助手")，同时支持PC微软商店加速。
+提速原理请参考 PC [XboxFastz](https://github.com/DreamOpenS/XboxFastZ "XboxFastz")。XboxFastz 是基于 [skydevil88/XboxDownload](https://github.com/skydevil88/XboxDownload) 的独立分支，同时支持 PC 微软商店加速。
 支持Docker路由器(小米、TP-LINK等部分型号)、NAS也可以通过Docker使用macvlan创建独立ip安装Nginx实现跳转国内下载。
 
 Xbox使用此方法需要关闭路由器IPv6功能，如果有其它设备需要用到IPv6，可以在 网络->防火墙->自定义规则 中添加以下规则屏蔽掉Xbox的IPv6。（AA:BB:CC:DD:EE:FF 替换成 Xbox Mac 地址）
@@ -66,7 +66,7 @@ d2.xboxlive.com				192.168.1.1
 dlassets.xboxlive.com			192.168.1.1
 dlassets2.xboxlive.com			192.168.1.1
 
-#xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分三组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
+#xxx.xxx.xxx.xxx 可以使用 XboxFastz 测速找出最快 IP，分三组 IP，目前国内 IP 大部分不通用，需要分别测速(Akamai IP 可以通用)
 #第一组，主下载域名（PC主机共用）
 assets1.xboxlive.cn			xxx.xxx.xxx.xxx
 assets2.xboxlive.cn			xxx.xxx.xxx.xxx
@@ -140,7 +140,7 @@ d2.xboxlive.com				192.168.1.1
 dlassets.xboxlive.com			192.168.1.1
 dlassets2.xboxlive.com			192.168.1.1
 
-#xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分 三组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
+#xxx.xxx.xxx.xxx 可以使用 XboxFastz 测速找出最快 IP，分三组 IP，目前国内 IP 大部分不通用，需要分别测速(Akamai IP 可以通用)
 #第一组，主下载域名（PC主机共用）
 assets1.xboxlive.cn			xxx.xxx.xxx.xxx
 assets2.xboxlive.cn			xxx.xxx.xxx.xxx
