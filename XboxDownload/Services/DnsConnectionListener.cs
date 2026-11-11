@@ -722,6 +722,24 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
                             switch (dns.Queries[0].QueryType)
                             {
+                                case QueryType.SRV:
+                                    {
+                                        if (serviceViewModel.IsLogging)
+                                            serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.SrvQuery"), queryName, ((IPEndPoint)client).Address.ToString());
+                                        Ipv4ServiceMap.TryGetValue(XboxSrvDiscovery.Target, out var targetRecords);
+                                        var forwardReason = XboxSrvDiscovery.GetForwardReason(dns.Queries[0], serviceViewModel.IsHttpServiceEnabled,
+                                                serviceViewModel.IsXboxGameDownloadLinksShown || App.Settings.Culture == "zh-Hans",
+                                                IPAddress.Parse(App.Settings.LocalIp), targetRecords ?? []);
+                                        if (forwardReason == null)
+                                        {
+                                            SendDnsResponse(socket, dns, client, [XboxSrvDiscovery.CreateRecord()], ResourceHelper.GetString("Service.Listening.SrvLocalResponse"), queryName);
+                                            return;
+                                        }
+                                        if (serviceViewModel.IsLogging)
+                                            serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.SrvForward"), $"{queryName} -> {iPEndPoint}; {string.Format(ResourceHelper.GetString(forwardReason), XboxSrvDiscovery.Target, App.Settings.LocalIp)}",
+                                                ((IPEndPoint)client).Address.ToString());
+                                        break;
+                                    }
                                 case QueryType.A:
                                     {
                                         var wasDnsHandled = HandleDnsQuery(socket, Ipv4ServiceMap, ipv4HostMap, ipv4WildcardHostMap, dns, client, queryName, QueryType.A);
@@ -775,6 +793,9 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         var remoteEndPoint = new IPEndPoint(remoteAddress, 0);
                         var result = proxy.Receive(ref remoteEndPoint);
                         socket.SendTo(result, client);
+                        if (serviceViewModel.IsLogging && dns.Queries.Count == 1 && dns.Queries[0].QueryType == QueryType.SRV)
+                            serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.SrvUpstream"), $"{dns.Queries[0].QueryName} <- {remoteEndPoint}; {result.Length} bytes",
+                                ((IPEndPoint)client).Address.ToString());
                     }
                     catch (Exception ex)
                     {
@@ -1087,10 +1108,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
     private void SendDnsResponse(Socket socket, DnsMessage dnsMessage, EndPoint client, List<ResourceRecord> records, string queryTypeText, string queryName)
     {
-        dnsMessage.Qr = 1;
-        dnsMessage.Ra = 1;
-        dnsMessage.Rd = 1;
-        dnsMessage.ResourceRecords =
+        dnsMessage.SetResponseRecords(
         [
             .. records.Select(record => new ResourceRecord
             {
@@ -1100,14 +1118,14 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 QueryClass = record.QueryClass,
                 QueryType = record.QueryType
             })
-        ];
+        ]);
 
         var bytes = dnsMessage.ToBytes();
         socket.SendTo(bytes, client);
 
         if (!serviceViewModel.IsLogging || dnsMessage.ResourceRecords.Count == 0) return;
         serviceViewModel.AddLog(queryTypeText,
-            $"{queryName} -> {string.Join(", ", records.Select(r => new IPAddress(r.Data ?? []).ToString()))}",
+            $"{queryName} -> {string.Join(", ", records.Select(XboxSrvDiscovery.FormatRecord))}",
             ((IPEndPoint)client).Address.ToString());
     }
 }

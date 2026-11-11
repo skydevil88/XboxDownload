@@ -23,6 +23,16 @@ public class DnsMessage
     private short AuthorityRecordCount { get; set; }
     private short AdditionalRecordCount { get; set; }
 
+    public void SetResponseRecords(List<ResourceRecord> records)
+    {
+        Qr = 1;
+        Ra = 1;
+        ResourceRecords = records;
+        // Locally generated answers do not copy authority records or EDNS OPT data.
+        AuthorityRecordCount = 0;
+        AdditionalRecordCount = 0;
+    }
+
     // ===== Serialization =====
     public byte[] ToBytes()
     {
