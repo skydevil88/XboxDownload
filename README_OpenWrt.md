@@ -12,14 +12,13 @@ ip6tables -I INPUT -p icmpv6 -m mac --mac-source AA:BB:CC:DD:EE:FF -j DROP
 以下教程里面的 192.168.1.1 替换为您的Openwrt路由器的ip地址
 
 ## 2026-11-11 更新 SRV转发
-> SRV转发
 > Xbox 下载开始时能正常通过 nginx 从 assets1.xboxlive.com 跳转至 assets1.xboxlive.cn，但下载过程中会额外查询 assets-srvs.xboxlive.com，跟随 CNAME 至 assets-srvs-net.trafficmanager.net，通过 DNS SRV 记录获取备用 CDN。
 > 
 > 主机随后解析并直连备用 CDN 的 IP，同时仍使用 Host: assets1.xboxlive.com。这会绕过现有的 DNS 地址覆盖及 nginx 302 规则，导致下载从 cn 切回海外 CDN。
 > 
 > Openwrt通过Dnsmasq（DHCP/DNS）做一下SRV转发，填写参数如图，目前可以稳定XBOX里下载走国内CDN不掉回国外CDN
+> <img width="1471" height="566" alt="700781165-24e49060-0b25-49c6-977c-01b018ee4b79" src="https://github.com/user-attachments/assets/cb38fbf8-fbf1-48f0-a8bc-20d09a565712" />
 > 
-> <img alt="Image" width="1471" height="566" src="https://private-user-images.githubusercontent.com/30657653/700781165-24e49060-0b25-49c6-977c-01b018ee4b79.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTQzOTAxNDUsIm5iZiI6MTc5NDM4OTg0NSwicGF0aCI6Ii8zMDY1NzY1My83MDA3ODExNjUtMjRlNDkwNjAtMGIyNS00OWM2LTk3N2MtMDFiMDE4ZWU0Yjc5LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjExMTElMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYxMTExVDA5MzcyNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWI0OGFhMGFkN2ZkMTYyM2ZlNzQ0OGI0NDg0Njc4Zjg1ZjUwMTM4ZWEwMDE4MDdhMTc2MGQwNWJjZGMwM2QwZmQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1pbWFnZSUyRnBuZyJ9.0M8QcUDmSnf1OaZShdukb_r0sowK1-P73aESuWVB_nM">
 
 https://github.com/skydevil88/XboxDownload/issues/156#issuecomment-6764990867
 
