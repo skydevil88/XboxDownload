@@ -136,27 +136,6 @@ create_macos_app_bundle() {
         -exec mv {} "$staging_dir/" \;
 
     cp -R "$staging_dir/." "$macos_dir/"
-    mv "$macos_dir/$app_name" "$macos_dir/$app_name.bin"
-    chmod +x "$macos_dir/$app_name.bin"
-
-    cat > "$macos_dir/$app_name" <<EOF
-#!/bin/bash
-set -e
-
-APP_DIR="\$(cd "\$(dirname "\$0")" && pwd)"
-
-APPLE_LOCALE="\$(defaults read -g AppleLocale 2>/dev/null || true)"
-if [[ -n "\$APPLE_LOCALE" ]]; then
-    POSIX_LOCALE="\${APPLE_LOCALE%@*}"
-    POSIX_LOCALE="\${POSIX_LOCALE//-/_}"
-
-    export LANG="\$POSIX_LOCALE.UTF-8"
-    export LC_ALL="\$LANG"
-fi
-
-cd "\$APP_DIR"
-exec "\$APP_DIR/$app_name.bin" "\$@"
-EOF
     chmod +x "$macos_dir/$app_name"
 
     create_macos_icon "$resources_dir"
