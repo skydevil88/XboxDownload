@@ -7,7 +7,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <FileVersion>3.0.0.65</FileVersion>
+        <FileVersion>3.0.0.66</FileVersion>
         <ApplicationIcon>Assets\xbox.ico</ApplicationIcon>
     </PropertyGroup>
 
@@ -17,17 +17,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="12.1.1" />
+        <PackageReference Include="Avalonia" Version="12.1.6" />
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
-        <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="12.1.6" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.6" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.6" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="DnsClient" Version="1.8.0" />
-        <PackageReference Include="DynamicData" Version="9.4.33" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.10" />
-        <PackageReference Include="System.Management" Version="10.0.10" />
+        <PackageReference Include="DynamicData" Version="9.5.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="11.0.0" />
+        <PackageReference Include="System.Management" Version="11.0.0" />
         <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
     </ItemGroup>
 </Project>
