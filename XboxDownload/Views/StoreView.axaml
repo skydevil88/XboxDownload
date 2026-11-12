@@ -46,8 +46,7 @@
                                     <ListBox x:Name="ResultListBox" MaxHeight="268"
                                              MinWidth="{Binding #SearchBox.Bounds.Width}"
                                              ItemsSource="{Binding SearchResults}"
-                                             Tapped="ResultListBox_OnTapped"
-                                             KeyDown="ResultListBox_OnKeyDown">
+                                             Tapped="ResultListBox_OnTapped">
                                         <ListBox.Styles>
                                             <Style Selector="ListBoxItem">
                                                 <Setter Property="HorizontalAlignment" Value="Left"/>

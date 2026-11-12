@@ -48,6 +48,12 @@ public partial class StoreView : UserControl
             RoutingStrategies.Bubble,
             handledEventsToo: true
         );
+        ResultListBox.AddHandler(
+            KeyDownEvent,
+            ResultListBox_OnKeyDown,
+            RoutingStrategies.Tunnel,
+            handledEventsToo: true
+        );
 
         DataContextChanged += OnDataContextChanged;
     }
@@ -145,7 +151,7 @@ public partial class StoreView : UserControl
     private void SearchBox_LostFocus(object? sender, FocusChangedEventArgs e)
     {
         var topLevel = TopLevel.GetTopLevel(this);
-        var focused = topLevel?.FocusManager?.GetFocusedElement();
+        var focused = topLevel?.FocusManager.GetFocusedElement();
 
         if (focused is Control c &&
             (SearchBox == c ||
