@@ -13,6 +13,7 @@ namespace XboxDownload.Services;
 public class TrayIconService : IDisposable
 {
     private TrayIcon? _trayIcon;
+    private TrayIcons? _trayIcons;
     private NativeMenuItem? _showItem, _exitItem;
 
     public void Initialize()
@@ -26,6 +27,9 @@ public class TrayIconService : IDisposable
             Menu = BuildTrayMenu(),
             IsVisible = true
         };
+
+        _trayIcons = new TrayIcons { _trayIcon };
+        TrayIcon.SetIcons(Application.Current!, _trayIcons);
 
         UpdateToolTip();
 
@@ -95,8 +99,10 @@ public class TrayIconService : IDisposable
         if (_trayIcon == null) return;
         
         _trayIcon.IsVisible = false;
+        _trayIcons?.Remove(_trayIcon);
         _trayIcon.Dispose();
         _trayIcon = null;
+        _trayIcons = null;
             
         GC.SuppressFinalize(this);
     }
