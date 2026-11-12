@@ -216,15 +216,7 @@
     <x:String x:Key="Service.Listening.DnsV4Query">DNSv4 Query</x:String>
     <x:String x:Key="Service.Listening.DnsV6Query">DNSv6 Query</x:String>
     <x:String x:Key="Service.Listening.DnsQueryFailed">DNS Failed</x:String>
-    <x:String x:Key="Service.Listening.SrvQuery">SRV Query</x:String>
-    <x:String x:Key="Service.Listening.SrvLocalResponse">SRV Local Response</x:String>
-    <x:String x:Key="Service.Listening.SrvForward">SRV Forward</x:String>
-    <x:String x:Key="Service.Listening.SrvUpstream">SRV Upstream Response</x:String>
-    <x:String x:Key="Service.Listening.SrvNotInQuery">Not an IN/SRV query</x:String>
-    <x:String x:Key="Service.Listening.SrvOtherName">Not a configured Xbox discovery name</x:String>
-    <x:String x:Key="Service.Listening.SrvHttpDisabled">HTTP service disabled</x:String>
-    <x:String x:Key="Service.Listening.SrvRedirectDisabled">Xbox HTTP redirect disabled</x:String>
-    <x:String x:Key="Service.Listening.SrvTargetNotLocal">{0} is not mapped to local IP {1}</x:String>
+    <x:String x:Key="Service.Listening.DnsSrvQuery">Dns SRV Query</x:String>
 
     <x:String x:Key="Service.Listening.TcpStartFailedDialogMessage">Failed to start the HTTP(S) service!&#x0a;Error message: {0}</x:String>
     <x:String x:Key="Service.Listening.LocalUpload">Local Upload</x:String>

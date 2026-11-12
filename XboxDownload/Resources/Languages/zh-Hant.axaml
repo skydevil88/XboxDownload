@@ -216,15 +216,7 @@
     <x:String x:Key="Service.Listening.DnsV4Query">DNSv4 查詢</x:String>
     <x:String x:Key="Service.Listening.DnsV6Query">DNSv6 查詢</x:String>
     <x:String x:Key="Service.Listening.DnsQueryFailed">DNS 查詢失敗</x:String>
-    <x:String x:Key="Service.Listening.SrvQuery">SRV 查詢</x:String>
-    <x:String x:Key="Service.Listening.SrvLocalResponse">SRV 本機回應</x:String>
-    <x:String x:Key="Service.Listening.SrvForward">SRV 轉送</x:String>
-    <x:String x:Key="Service.Listening.SrvUpstream">SRV 上游回應</x:String>
-    <x:String x:Key="Service.Listening.SrvNotInQuery">非 IN/SRV 查詢</x:String>
-    <x:String x:Key="Service.Listening.SrvOtherName">非已設定的 Xbox 探索網域</x:String>
-    <x:String x:Key="Service.Listening.SrvHttpDisabled">HTTP 服務未啟用</x:String>
-    <x:String x:Key="Service.Listening.SrvRedirectDisabled">Xbox HTTP 重新導向未啟用</x:String>
-    <x:String x:Key="Service.Listening.SrvTargetNotLocal">{0} 未對應至本機 IP {1}</x:String>
+    <x:String x:Key="Service.Listening.DnsSrvQuery">Dns SRV 查詢</x:String>
 
     <x:String x:Key="Service.Listening.TcpStartFailedDialogMessage">啟用 HTTP(S) 服務失敗!&#x0a;錯誤資訊: {0}</x:String>
     <x:String x:Key="Service.Listening.LocalUpload">本地上傳</x:String>

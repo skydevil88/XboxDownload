@@ -685,7 +685,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
     public string
         DnsV4Query = ResourceHelper.GetString("Service.Listening.DnsV4Query"),
         DnsV6Query = ResourceHelper.GetString("Service.Listening.DnsV6Query"),
-        DnsQueryFailed = ResourceHelper.GetString("Service.Listening.DnsQueryFailed");
+        DnsQueryFailed = ResourceHelper.GetString("Service.Listening.DnsQueryFailed"),
+        DnsSrvQuery = ResourceHelper.GetString("Service.Listening.DnsSrvQuery");
 
     private void Listening(Socket socket, IPEndPoint iPEndPoint)
     {
@@ -722,24 +723,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
                             switch (dns.Queries[0].QueryType)
                             {
-                                case QueryType.SRV:
-                                    {
-                                        if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.SrvQuery"), queryName, ((IPEndPoint)client).Address.ToString());
-                                        Ipv4ServiceMap.TryGetValue(XboxSrvDiscovery.Target, out var targetRecords);
-                                        var forwardReason = XboxSrvDiscovery.GetForwardReason(dns.Queries[0], serviceViewModel.IsHttpServiceEnabled,
-                                                serviceViewModel.IsXboxGameDownloadLinksShown || App.Settings.Culture == "zh-Hans",
-                                                IPAddress.Parse(App.Settings.LocalIp), targetRecords ?? []);
-                                        if (forwardReason == null)
-                                        {
-                                            SendDnsResponse(socket, dns, client, [XboxSrvDiscovery.CreateRecord()], ResourceHelper.GetString("Service.Listening.SrvLocalResponse"), queryName);
-                                            return;
-                                        }
-                                        if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.SrvForward"), $"{queryName} -> {iPEndPoint}; {string.Format(ResourceHelper.GetString(forwardReason), XboxSrvDiscovery.Target, App.Settings.LocalIp)}",
-                                                ((IPEndPoint)client).Address.ToString());
-                                        break;
-                                    }
                                 case QueryType.A:
                                     {
                                         var wasDnsHandled = HandleDnsQuery(socket, Ipv4ServiceMap, ipv4HostMap, ipv4WildcardHostMap, dns, client, queryName, QueryType.A);
@@ -780,6 +763,21 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                                             serviceViewModel.AddLog(DnsV6Query, queryName, ((IPEndPoint)client).Address.ToString());
                                         break;
                                     }
+                                case QueryType.SRV:
+                                {
+                                    if (dns.Queries[0].QueryClass == 1 && queryName is
+                                            "assets-srvs.xboxlive.com" or
+                                            "assets-srvs-net.trafficmanager.net" or
+                                            "assets-srvs-apac.delivery.microsoft.com" or
+                                            "assets-srvs-na.delivery.microsoft.com")
+                                    {
+                                        SendDnsResponse(socket, dns, client, [XboxSrvDiscovery.CreateRecord()], DnsSrvQuery, queryName);
+                                        return;
+                                    }
+                                    if (serviceViewModel.IsLogging)
+                                        serviceViewModel.AddLog(DnsSrvQuery, queryName, ((IPEndPoint)client).Address.ToString());
+                                    break;
+                                }
                             }
                         }
 
@@ -793,9 +791,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         var remoteEndPoint = new IPEndPoint(remoteAddress, 0);
                         var result = proxy.Receive(ref remoteEndPoint);
                         socket.SendTo(result, client);
-                        if (serviceViewModel.IsLogging && dns.Queries.Count == 1 && dns.Queries[0].QueryType == QueryType.SRV)
-                            serviceViewModel.AddLog(ResourceHelper.GetString("Service.Listening.SrvUpstream"), $"{dns.Queries[0].QueryName} <- {remoteEndPoint}; {result.Length} bytes",
-                                ((IPEndPoint)client).Address.ToString());
                     }
                     catch (Exception ex)
                     {

@@ -159,6 +159,7 @@ public partial class ServiceViewModel : ObservableObject
         DnsConnectionListener.DnsV4Query = ResourceHelper.GetString("Service.Listening.DnsV4Query");
         DnsConnectionListener.DnsV6Query = ResourceHelper.GetString("Service.Listening.DnsV6Query");
         DnsConnectionListener.DnsQueryFailed = ResourceHelper.GetString("Service.Listening.DnsQueryFailed");
+        DnsConnectionListener.DnsSrvQuery = ResourceHelper.GetString("Service.Listening.DnsSrvQuery");
     }
 
     #region Service
