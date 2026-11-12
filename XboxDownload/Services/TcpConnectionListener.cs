@@ -536,16 +536,6 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                             var url = $"http://{host}{filePath}";
                             switch (host)
                             {
-                                case "www.msftconnecttest.com":
-                                    if (tmpPath.Equals("/connecttest.txt", StringComparison.CurrentCultureIgnoreCase)) // 网络连接 (NCSI)，修复 Xbox、Windows 系统网络正常却显示离线
-                                    {
-                                        fileFound = true;
-                                        var response = Encoding.ASCII.GetBytes("Microsoft Connect Test");
-                                        WriteHttpResponse(new SocketResponseWriter(socket), "200 OK", "text/plain", response);
-                                        if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog("HTTP 200", url, ((IPEndPoint)socket.RemoteEndPoint!).Address.ToString());
-                                    }
-                                    break;
                                 case "blzddist1-a.akamaihd.net":
                                     {
                                         if (IPAddress.TryParse(App.Settings.BattleIp, out var address) && address.AddressFamily == AddressFamily.InterNetworkV6)

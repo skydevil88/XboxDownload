@@ -286,8 +286,8 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         // Publish sorted wildcard maps as immutable snapshots for concurrent readers.
         Volatile.Write(ref _ipv4HostMap, hostV4Temp);
         Volatile.Write(ref _ipv6HostMap, hostV6Temp);
-        Volatile.Write(ref _ipv4WildcardHostMap, [.. wildcardV4Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key)]);
-        Volatile.Write(ref _ipv6WildcardHostMap, [.. wildcardV6Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key)]);
+        Volatile.Write(ref _ipv4WildcardHostMap, [.. wildcardV4Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key, StringComparer.Ordinal)]);
+        Volatile.Write(ref _ipv6WildcardHostMap, [.. wildcardV6Temp.OrderByDescending(x => x.Key.Length).ThenByDescending(x => x.Key, StringComparer.Ordinal)]);
     }
 
     private static void AddOrUpdateMap(ConcurrentDictionary<string, List<ResourceRecord>> map, string host, List<ResourceRecord> records)
@@ -533,11 +533,6 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 }
             }
 
-            if (App.Settings.IsHttpServiceEnabled)
-            {
-                AddMapping("www.msftconnecttest.com", _localIpRecords, EmptyIpRecords);
-            }
-
             if (App.Settings.IsLocalProxyEnabled)
             {
                 foreach (var hostname in TcpConnectionListener.DicSniProxy.Keys)
@@ -745,10 +740,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
 
                                         if (serviceViewModel.IsIPv6DomainFilterEnabled)
                                         {
-                                            dns.Qr = 1;
-                                            dns.Ra = 1;
-                                            dns.Rd = 1;
-                                            dns.ResourceRecords = EmptyIpRecords;
+                                            dns.SetResponseRecords(EmptyIpRecords);
                                             socket.SendTo(dns.ToBytes(), client);
                                             return;
                                         }
@@ -1025,10 +1017,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                 return false;
 
             var expectedType = queryType == QueryType.AAAA ? 28 : 1;
-            dnsMessage.Qr = 1;
-            dnsMessage.Ra = 1;
-            dnsMessage.Rd = 1;
-            dnsMessage.ResourceRecords = [];
+            dnsMessage.SetResponseRecords([]);
             if (dnsResponse.Answer != null)
             {
                 foreach (var answer in dnsResponse.Answer)

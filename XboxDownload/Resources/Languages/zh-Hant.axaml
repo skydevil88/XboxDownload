@@ -216,7 +216,7 @@
     <x:String x:Key="Service.Listening.DnsV4Query">DNSv4 查詢</x:String>
     <x:String x:Key="Service.Listening.DnsV6Query">DNSv6 查詢</x:String>
     <x:String x:Key="Service.Listening.DnsQueryFailed">DNS 查詢失敗</x:String>
-    <x:String x:Key="Service.Listening.DnsSrvQuery">Dns SRV 查詢</x:String>
+    <x:String x:Key="Service.Listening.DnsSrvQuery">DNS SRV 查詢</x:String>
 
     <x:String x:Key="Service.Listening.TcpStartFailedDialogMessage">啟用 HTTP(S) 服務失敗!&#x0a;錯誤資訊: {0}</x:String>
     <x:String x:Key="Service.Listening.LocalUpload">本地上傳</x:String>

@@ -216,7 +216,7 @@
     <x:String x:Key="Service.Listening.DnsV4Query">DNSv4 Query</x:String>
     <x:String x:Key="Service.Listening.DnsV6Query">DNSv6 Query</x:String>
     <x:String x:Key="Service.Listening.DnsQueryFailed">DNS Failed</x:String>
-    <x:String x:Key="Service.Listening.DnsSrvQuery">Dns SRV Query</x:String>
+    <x:String x:Key="Service.Listening.DnsSrvQuery">DNS SRV Query</x:String>
 
     <x:String x:Key="Service.Listening.TcpStartFailedDialogMessage">Failed to start the HTTP(S) service!&#x0a;Error message: {0}</x:String>
     <x:String x:Key="Service.Listening.LocalUpload">Local Upload</x:String>
