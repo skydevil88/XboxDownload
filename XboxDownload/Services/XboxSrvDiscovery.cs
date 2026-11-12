@@ -8,8 +8,9 @@ namespace XboxDownload.Services;
 internal static class XboxSrvDiscovery
 {
     private const string Target = "assets1.xboxlive.com";
+    private static readonly byte[] SrvData = BuildSrvData();
 
-    internal static ResourceRecord CreateRecord()
+    private static byte[] BuildSrvData()
     {
         // SRV RDATA: priority=0, weight=0, port=80, uncompressed DNS target.
         var data = new List<byte> { 0, 0, 0, 0, 0, 80 };
@@ -19,8 +20,16 @@ internal static class XboxSrvDiscovery
             data.AddRange(Encoding.ASCII.GetBytes(label));
         }
         data.Add(0);
-        return new ResourceRecord { QueryType = QueryType.SRV, QueryClass = 1, Ttl = 100, Data = [.. data] };
+        return [.. data];
     }
+
+    internal static ResourceRecord CreateRecord() => new()
+    {
+        QueryType = QueryType.SRV,
+        QueryClass = 1,
+        Ttl = 100,
+        Data = SrvData
+    };
 
     internal static string FormatRecord(ResourceRecord record) => record.QueryType switch
     {
