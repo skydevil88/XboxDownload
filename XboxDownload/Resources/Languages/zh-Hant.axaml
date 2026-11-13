@@ -286,7 +286,7 @@
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-2">光環無限(XS)</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-3">極限競速:地平線5(PC)</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-4">戰爭機器5(PC)</x:String>
-    <x:String x:Key="SpeedTest.TestFile.XboxCn2-1">刺客信條:大革命</x:String>
+    <x:String x:Key="SpeedTest.TestFile.XboxCn2-1">刺客教條4:黑旗</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn2-2">麥克斯:兄弟魔咒</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn2-3">光之子</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn2-4">型可塑</x:String>

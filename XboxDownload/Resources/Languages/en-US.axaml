@@ -286,7 +286,7 @@
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-2">Halo Infinite (XS)</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-3">Forza Horizon 5 (PC)</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn1-4">Gears 5 (PC)</x:String>
-    <x:String x:Key="SpeedTest.TestFile.XboxCn2-1">Assassin's Creed: Unity</x:String>
+    <x:String x:Key="SpeedTest.TestFile.XboxCn2-1">Assassin's Creed IV Black Flag</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn2-2">Max: The Curse of Brotherhood</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn2-3">Child of Light</x:String>
     <x:String x:Key="SpeedTest.TestFile.XboxCn2-4">Shape Up</x:String>
