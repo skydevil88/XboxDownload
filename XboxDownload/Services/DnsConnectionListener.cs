@@ -708,67 +708,70 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                         var dns = new DnsMessage(buff, read);
                         if (dns is { Qr: 0, Opcode: 0, Queries.Count: 1 })
                         {
-                            var queryName = (dns.Queries[0].QueryName ?? string.Empty).ToLowerInvariant();
+                            var query = dns.Queries[0];
+                            var queryName = (query.QueryName ?? string.Empty).ToLowerInvariant();
                             if (string.IsNullOrWhiteSpace(queryName)) return;
 
-                            var ipv4HostMap = Volatile.Read(ref _ipv4HostMap);
-                            var ipv6HostMap = Volatile.Read(ref _ipv6HostMap);
-                            var ipv4WildcardHostMap = Volatile.Read(ref _ipv4WildcardHostMap);
-                            var ipv6WildcardHostMap = Volatile.Read(ref _ipv6WildcardHostMap);
-
-                            switch (dns.Queries[0].QueryType)
+                            if (query.QueryClass == 1)
                             {
-                                case QueryType.A:
-                                    {
-                                        var wasDnsHandled = HandleDnsQuery(socket, Ipv4ServiceMap, ipv4HostMap, ipv4WildcardHostMap, dns, client, queryName, QueryType.A);
-                                        if (wasDnsHandled) return;
-
-                                        if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
+                                switch (query.QueryType)
+                                {
+                                    case QueryType.A:
                                         {
-                                            var wasDohHandled = await HandleDohQueryAsync(socket, dns, client, queryName, QueryType.A, doHServer);
-                                            if (wasDohHandled) return;
+                                            var ipv4HostMap = Volatile.Read(ref _ipv4HostMap);
+                                            var ipv4WildcardHostMap = Volatile.Read(ref _ipv4WildcardHostMap);
+                                            var wasDnsHandled = HandleDnsQuery(socket, Ipv4ServiceMap, ipv4HostMap, ipv4WildcardHostMap, dns, client, queryName, QueryType.A);
+                                            if (wasDnsHandled) return;
+
+                                            if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
+                                            {
+                                                var wasDohHandled = await HandleDohQueryAsync(socket, dns, client, queryName, QueryType.A, doHServer);
+                                                if (wasDohHandled) return;
+                                            }
+
+                                            if (serviceViewModel.IsLogging)
+                                                serviceViewModel.AddLog(DnsV4Query, queryName, ((IPEndPoint)client).Address.ToString());
+                                            break;
                                         }
-
-                                        if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog(DnsV4Query, queryName, ((IPEndPoint)client).Address.ToString());
-                                        break;
-                                    }
-                                case QueryType.AAAA:
-                                    {
-                                        var wasHandled = HandleDnsQuery(socket, Ipv6ServiceMap, ipv6HostMap, ipv6WildcardHostMap, dns, client, queryName, QueryType.AAAA);
-                                        if (wasHandled) return;
-
-                                        if (serviceViewModel.IsIPv6DomainFilterEnabled)
+                                    case QueryType.AAAA:
                                         {
-                                            dns.SetResponseRecords(EmptyIpRecords);
-                                            socket.SendTo(dns.ToBytes(), client);
+                                            var ipv6HostMap = Volatile.Read(ref _ipv6HostMap);
+                                            var ipv6WildcardHostMap = Volatile.Read(ref _ipv6WildcardHostMap);
+                                            var wasHandled = HandleDnsQuery(socket, Ipv6ServiceMap, ipv6HostMap, ipv6WildcardHostMap, dns, client, queryName, QueryType.AAAA);
+                                            if (wasHandled) return;
+
+                                            if (serviceViewModel.IsIPv6DomainFilterEnabled)
+                                            {
+                                                dns.SetResponseRecords(EmptyIpRecords);
+                                                socket.SendTo(dns.ToBytes(), client);
+                                                return;
+                                            }
+
+                                            if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
+                                            {
+                                                var wasDohHandled = await HandleDohQueryAsync(socket, dns, client, queryName, QueryType.AAAA, doHServer);
+                                                if (wasDohHandled) return;
+                                            }
+
+                                            if (serviceViewModel.IsLogging)
+                                                serviceViewModel.AddLog(DnsV6Query, queryName, ((IPEndPoint)client).Address.ToString());
+                                            break;
+                                        }
+                                    case QueryType.SRV:
+                                    {
+                                        if (queryName is
+                                                "assets-srvs.xboxlive.com" or
+                                                "assets-srvs-net.trafficmanager.net" or
+                                                "assets-srvs-apac.delivery.microsoft.com" or
+                                                "assets-srvs-na.delivery.microsoft.com")
+                                        {
+                                            SendDnsResponse(socket, dns, client, [XboxSrvDiscovery.CreateRecord()], DnsSrvQuery, queryName);
                                             return;
                                         }
-
-                                        if (ForceEncryptedDomainMap.TryGetValue(queryName, out var doHServer) || serviceViewModel.IsDoHEnabled)
-                                        {
-                                            var wasDohHandled = await HandleDohQueryAsync(socket, dns, client, queryName, QueryType.AAAA, doHServer);
-                                            if (wasDohHandled) return;
-                                        }
-
                                         if (serviceViewModel.IsLogging)
-                                            serviceViewModel.AddLog(DnsV6Query, queryName, ((IPEndPoint)client).Address.ToString());
+                                            serviceViewModel.AddLog(DnsSrvQuery, queryName, ((IPEndPoint)client).Address.ToString());
                                         break;
                                     }
-                                case QueryType.SRV:
-                                {
-                                    if (dns.Queries[0].QueryClass == 1 && queryName is
-                                            "assets-srvs.xboxlive.com" or
-                                            "assets-srvs-net.trafficmanager.net" or
-                                            "assets-srvs-apac.delivery.microsoft.com" or
-                                            "assets-srvs-na.delivery.microsoft.com")
-                                    {
-                                        SendDnsResponse(socket, dns, client, [XboxSrvDiscovery.CreateRecord()], DnsSrvQuery, queryName);
-                                        return;
-                                    }
-                                    if (serviceViewModel.IsLogging)
-                                        serviceViewModel.AddLog(DnsSrvQuery, queryName, ((IPEndPoint)client).Address.ToString());
-                                    break;
                                 }
                             }
                         }
