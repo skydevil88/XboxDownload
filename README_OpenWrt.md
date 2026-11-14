@@ -19,6 +19,7 @@ assets1.xboxlive.com.edgesuite.net	# Akamai
 cl-glcb907925.gcdn.co			# G-Core
 fg.microsoft.map.fastly.net		# Fastly
 ```
+或者参考 https://github.com/skydevil88/XboxDownload/issues/156#issuecomment-6764990867 通过Dnsmasq（DHCP/DNS）做SRV转发
 
 ## 方法一：Lighttpd 
 B站视频教程：https://www.bilibili.com/video/BV1wP4y1G7zf
