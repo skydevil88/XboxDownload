@@ -11,8 +11,9 @@ ip6tables -I INPUT -p icmpv6 -m mac --mac-source AA:BB:CC:DD:EE:FF -j DROP
 
 以下教程里面的 192.168.1.1 替换为您的Openwrt路由器的ip地址
 
-# 2026-11-11 更新 SRV转发，增加以下四个重定向域名
+# 2026-11-11 更新 SRV转发
 ```bash
+增加以下四个重定向域名
 5.xb.delivery.microsoft.com		# 谷歌云
 assets1.xboxlive.com.edgesuite.net	# Akamai
 cl-glcb907925.gcdn.co			# G-Core
@@ -53,7 +54,7 @@ $HTTP["host"] =~ "^(dlassets|dlassets2)\.xboxlive\.com$" {
 }
 #2026-11-11 更新 SRV转发
 $HTTP["host"] =~ "^(5\.xb\.delivery\.microsoft\.com|assets1\.xboxlive\.com\.edgesuite\.net|cl-glcb907925\.gcdn\.co|fg.microsoft\.map\.fastly\.net)$" {
-	url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
+	url.redirect = ( "(.*)" => "http://assets1.xboxlive.cn$1" )
 }
 #其它访问转发到8080端口，进入管理页面不需要加端口(可选)
 server.modules +=( "mod_proxy")
