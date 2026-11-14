@@ -22,8 +22,8 @@ ip6tables -I INPUT -p icmpv6 -m mac --mac-source AA:BB:CC:DD:EE:FF -j DROP
 
 https://github.com/skydevil88/XboxDownload/issues/156#issuecomment-6764990867
 
+如果路由器不方便设置设置SRV转发，也可以把下面5个域名使用302重定向到 assets1.xboxlive.cn 或者 assets1.xboxlive.com
 ```bash
-如果路由器不方便设置设置SRV转发，也可以把下面5个域名重定向到 assets1.xboxlive.cn
 5.xb.delivery.microsoft.com		# 谷歌云
 assets1.xboxlive.com.edgesuite.net	# Akamai
 cl-glcb907925.gcdn.co			# G-Core
