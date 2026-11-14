@@ -46,20 +46,38 @@ opkg install lighttpd lighttpd-mod-redirect lighttpd-mod-proxy
 vi /etc/lighttpd/lighttpd.conf
 #按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
 
-server.modules = ( "mod_redirect" )
+
+# 1. 统一加载需要的模块
+server.modules = (
+    "mod_redirect",
+    "mod_proxy"
+)
+
+# 2. 核心下载与静态资源域名重定向到 assets1
 $HTTP["host"] =~ "^(assets1|assets2|d1|d2|xvcf1|xvcf2)\.xboxlive\.com$" {
-	url.redirect = ( "(.*)" => "http://assets1.xboxlive.cn$1" )
+    url.redirect = ( "(.*)" => "http://assets1.xboxlive.cn$1" )
 }
+
+# 3. dlassets 系列域名重定向到 dlassets
 $HTTP["host"] =~ "^(dlassets|dlassets2)\.xboxlive\.com$" {
-	url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
+    url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
 }
-#2026-11-11 更新 SRV转发
-$HTTP["host"] =~ "^(5\.xb\.delivery\.microsoft\.com|assets1\.xboxlive\.com\.edgesuite\.net|cl-glcb907925\.gcdn\.co|fg.microsoft\.map\.fastly\.net)$" {
-	url.redirect = ( "(.*)" => "http://assets1.xboxlive.cn$1" )
+
+# 4. 其他相关微软 CDN / SRV 转发域名重定向到 assets1
+$HTTP["host"] =~ "^(5\.xb\.delivery\.microsoft\.com|assets1\.xboxlive\.com\.edgesuite\.net|cl-glcb907925\.gcdn\.co|fg\.microsoft\.map\.fastly\.net)$" {
+    url.redirect = ( "(.*)" => "http://assets1.xboxlive.cn$1" )
 }
-#其它访问转发到8080端口，进入管理页面不需要加端口(可选)
-server.modules +=( "mod_proxy")
-proxy.server = ( "" => (( "host" => "127.0.0.1", "port" => 8080	)))
+
+# 5. 兜底转发：其他所有访问统一转发到本地 8080 端口（管理页面或代理后端）
+proxy.server = (
+    "" => (
+        (
+            "host" => "127.0.0.1",
+            "port" => 8080
+        )
+    )
+)
+
 
 #启动lighttpd服务以及设置其开机自启
 /etc/init.d/lighttpd start
