@@ -513,7 +513,13 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
                                         _ = UpdateGameUrl(host, tmpPath);
                                 }
                                 break;
-
+                            case "5.xb.delivery.microsoft.com":
+                            case "assets1.xboxlive.com.edgesuite.net":
+                            case "cl-glcb907925.gcdn.co":
+                            case "fg.microsoft.map.fastly.net":
+                                redirect = true;
+                                newHost = _isSimplifiedChinese ? "assets2.xboxlive.cn" : "assets2.xboxlive.com";
+                                break;
                             case "us.cdn.blizzard.com":
                             case "eu.cdn.blizzard.com":
                             case "kr.cdn.blizzard.com":

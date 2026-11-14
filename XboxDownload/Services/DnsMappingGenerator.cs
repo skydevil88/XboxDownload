@@ -21,7 +21,12 @@ public static class DnsMappingGenerator
                 "d1.xboxlive.com", "d2.xboxlive.com",
                 "dlassets.xboxlive.com", "dlassets2.xboxlive.com"
             ],
-            [],
+            [
+                "5.xb.delivery.microsoft.com",
+                "assets1.xboxlive.com.edgesuite.net",
+                "cl-glcb907925.gcdn.co",
+                "fg.microsoft.map.fastly.net"
+            ],
             []
         ),
         ["XboxCn1"] = (
