@@ -11,18 +11,7 @@ ip6tables -I INPUT -p icmpv6 -m mac --mac-source AA:BB:CC:DD:EE:FF -j DROP
 
 以下教程里面的 192.168.1.1 替换为您的Openwrt路由器的ip地址
 
-## 2026-11-11 更新 SRV转发
-> Xbox 下载开始时能正常通过 nginx 从 assets1.xboxlive.com 跳转至 assets1.xboxlive.cn，但下载过程中会额外查询 assets-srvs.xboxlive.com，跟随 CNAME 至 assets-srvs-net.trafficmanager.net，通过 DNS SRV 记录获取备用 CDN。
-> 
-> 主机随后解析并直连备用 CDN 的 IP，同时仍使用 Host: assets1.xboxlive.com。这会绕过现有的 DNS 地址覆盖及 nginx 302 规则，导致下载从 cn 切回海外 CDN。
-> 
-> Openwrt通过Dnsmasq（DHCP/DNS）做一下SRV转发，填写参数如图，目前可以稳定XBOX里下载走国内CDN不掉回国外CDN
-> <img width="1471" height="566" alt="700781165-24e49060-0b25-49c6-977c-01b018ee4b79" src="https://github.com/user-attachments/assets/cb38fbf8-fbf1-48f0-a8bc-20d09a565712" />
-> 
-
-https://github.com/skydevil88/XboxDownload/issues/156#issuecomment-6764990867
-
-如果路由器不方便设置SRV转发，也可以把下面4个域名使用302重定向到 assets1.xboxlive.cn 或者 assets1.xboxlive.com
+# 2026-11-11 更新 SRV转发，增加以下四个重定向域名
 ```bash
 5.xb.delivery.microsoft.com		# 谷歌云
 assets1.xboxlive.com.edgesuite.net	# Akamai
@@ -62,6 +51,10 @@ $HTTP["host"] =~ "^(assets1|assets2|d1|d2|xvcf1|xvcf2)\.xboxlive\.com$" {
 $HTTP["host"] =~ "^(dlassets|dlassets2)\.xboxlive\.com$" {
 	url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
 }
+#2026-11-11 更新 SRV转发
+$HTTP["host"] =~ "^(5\.xb\.delivery\.microsoft\.com|assets1\.xboxlive\.com\.edgesuite\.net|cl-glcb907925\.gcdn\.co|fg.microsoft\.map\.fastly\.net)$" {
+	url.redirect = ( "(.*)" => "http://dlassets.xboxlive.cn$1" )
+}
 #其它访问转发到8080端口，进入管理页面不需要加端口(可选)
 server.modules +=( "mod_proxy")
 proxy.server = ( "" => (( "host" => "127.0.0.1", "port" => 8080	)))
@@ -84,6 +77,11 @@ d1.xboxlive.com				192.168.1.1
 d2.xboxlive.com				192.168.1.1
 dlassets.xboxlive.com			192.168.1.1
 dlassets2.xboxlive.com			192.168.1.1
+#2026-11-11 更新 SRV转发
+5.xb.delivery.microsoft.com		192.168.1.1
+assets1.xboxlive.com.edgesuite.net	192.168.1.1
+cl-glcb907925.gcdn.co			192.168.1.1
+fg.microsoft.map.fastly.net		192.168.1.1
 
 #xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分三组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
 #第一组，主下载域名（PC主机共用）
@@ -130,12 +128,16 @@ vi /etc/nginx/conf.d/xbox.conf
 server_names_hash_bucket_size 64;
 server {
         listen 80;
-        server_name assets1.xboxlive.com assets2.xboxlive.com d1.xboxlive.com d2.xboxlive.com xvcf1.xboxlive.com xvcf2.xboxlive.com dlassets.xboxlive.com dlassets2.xboxlive.com;
+        server_name assets1.xboxlive.com assets2.xboxlive.com d1.xboxlive.com d2.xboxlive.com xvcf1.xboxlive.com xvcf2.xboxlive.com dlassets.xboxlive.com dlassets2.xboxlive.com 5.xb.delivery.microsoft.com assets1.xboxlive.com.edgesuite.net cl-glcb907925.gcdn.co fg.microsoft.map.fastly.net 
         if ($host !~* "^dlassets2?\.xboxlive\.com$") {
                 return 302 http://assets1.xboxlive.cn$request_uri;
         }
         if ($host ~* "^dlassets2?\.xboxlive\.com$") {
                 return 302 http://dlassets.xboxlive.cn$request_uri;
+        }
+        #2026-11-11 更新 SRV转发
+        if ($host !~* "^(5\.xb\.delivery\.microsoft\.com|assets1\.xboxlive\.com\.edgesuite\.net|cl-glcb907925\.gcdn\.co|fg.microsoft\.map\.fastly\.net)$") {
+                return 302 http://assets1.xboxlive.cn$request_uri;
         }
 }
 
@@ -158,6 +160,11 @@ d1.xboxlive.com				192.168.1.1
 d2.xboxlive.com				192.168.1.1
 dlassets.xboxlive.com			192.168.1.1
 dlassets2.xboxlive.com			192.168.1.1
+#2026-11-11 更新 SRV转发
+5.xb.delivery.microsoft.com		192.168.1.1
+assets1.xboxlive.com.edgesuite.net	192.168.1.1
+cl-glcb907925.gcdn.co			192.168.1.1
+fg.microsoft.map.fastly.net		192.168.1.1
 
 #xxx.xxx.xxx.xxx 可以使用Xbox下载助手测速找出最快IP，分 三组IP，目前国内IP大部分不通用，需要分别测速(Akamai IP可以通用)
 #第一组，主下载域名（PC主机共用）
@@ -186,7 +193,7 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 Caddyfile:
 
 ```
-http://assets1.xboxlive.com, http://assets1.xboxlive.com, http://d1.xboxlive.com, http://d2.xboxlive.com, http://xvcf1.xboxlive.com, http://xvcf2.xboxlive.com {
+http://assets1.xboxlive.com, http://assets1.xboxlive.com, http://d1.xboxlive.com, http://d2.xboxlive.com, http://xvcf1.xboxlive.com, http://xvcf2.xboxlive.com http://5.xb.delivery.microsoft.com, http://assets1.xboxlive.com.edgesuite.net, http://cl-glcb907925.gcdn.co, http://fg.microsoft.map.fastly.net {
         redir http://assets1.xboxlive.cn{uri}
 }
 http://dlassets.xboxlive.com, http://dlassets2.xboxlive.com {
