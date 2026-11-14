@@ -129,18 +129,29 @@ vi /etc/nginx/conf.d/xbox.conf
 
 server_names_hash_bucket_size 64;
 server {
-        listen 80;
-        server_name assets1.xboxlive.com assets2.xboxlive.com d1.xboxlive.com d2.xboxlive.com xvcf1.xboxlive.com xvcf2.xboxlive.com dlassets.xboxlive.com dlassets2.xboxlive.com 5.xb.delivery.microsoft.com assets1.xboxlive.com.edgesuite.net cl-glcb907925.gcdn.co fg.microsoft.map.fastly.net 
-        if ($host !~* "^dlassets2?\.xboxlive\.com$") {
-                return 302 http://assets1.xboxlive.cn$request_uri;
-        }
-        if ($host ~* "^dlassets2?\.xboxlive\.com$") {
-                return 302 http://dlassets.xboxlive.cn$request_uri;
-        }
-        #2026-11-11 更新 SRV转发
-        if ($host !~* "^(5\.xb\.delivery\.microsoft\.com|assets1\.xboxlive\.com\.edgesuite\.net|cl-glcb907925\.gcdn\.co|fg.microsoft\.map\.fastly\.net)$") {
-                return 302 http://assets1.xboxlive.cn$request_uri;
-        }
+    listen 80;
+
+    server_name
+        assets1.xboxlive.com
+        assets2.xboxlive.com
+        d1.xboxlive.com
+        d2.xboxlive.com
+        xvcf1.xboxlive.com
+        xvcf2.xboxlive.com
+        dlassets.xboxlive.com
+        dlassets2.xboxlive.com
+        5.xb.delivery.microsoft.com
+        assets1.xboxlive.com.edgesuite.net
+        cl-glcb907925.gcdn.co
+        fg.microsoft.map.fastly.net;
+
+    # dlassets 两个域名重定向到对应的国内域名
+    if ($host ~* "^dlassets2?\.xboxlive\.com$") {
+        return 302 http://dlassets.xboxlive.cn$request_uri;
+    }
+
+    # 其他列出的域名统一重定向
+    return 302 http://assets1.xboxlive.cn$request_uri;
 }
 
 #启动 nginx 服务以及设置其开机自启。
