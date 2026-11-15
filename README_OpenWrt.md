@@ -27,7 +27,7 @@ B站视频教程：https://www.bilibili.com/video/BV1wP4y1G7zf
 1. 修改uhttpd端口（修改后进入OpenWrt管理页面要用 192.168.1.1:8080，修改端口目的是要让出80端口给Lighttpd或者Nginx使用）
 ```bash
 vi /etc/config/uhttpd
-#按 i 进入编辑模式，
+#按 i 进入编辑模式，把监听端口 80 改为 8080
 list listen_http '0.0.0.0:80' --> list listen_http '0.0.0.0:8080
 list listen_http '[::]:80' --> list listen_http '[::]:8080'
 #按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi, 重启uhttpd
@@ -44,9 +44,10 @@ opkg install lighttpd lighttpd-mod-redirect lighttpd-mod-proxy
 3.配置 lighttpd
 ```bash
 vi /etc/lighttpd/lighttpd.conf
-#按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
+```
 
-
+按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
+```bash
 # 1. 统一加载需要的模块
 server.modules = (
     "mod_redirect",
@@ -77,15 +78,17 @@ proxy.server = (
         )
     )
 )
+```
 
+![图2](images/OpenWrp/Op2.png)
 
-#启动lighttpd服务以及设置其开机自启
+启动lighttpd服务以及设置其开机自启
+```bash
 /etc/init.d/lighttpd start
 /etc/init.d/lighttpd enable
 #重启lighttpd
 /etc/init.d/lighttpd restart
 ```
-![图2](images/OpenWrp/Op2.png)
 
 4.打开OpenWrt管理页 网络-》主机名 ，添加 主机名：
 ```bash
@@ -142,9 +145,9 @@ tlu.dl.delivery.mp.microsoft.com	xxx.xxx.xxx.xxx
 3. SSH连进路由器
 ```bash
 vi /etc/nginx/conf.d/xbox.conf
-#按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
-#启动报错可以增加以下一句，server_names_hash_bucket_size 64; 不够就按32倍数往上加(128、256)
-
+```
+按 i 进入编辑模式，然后复制下面代码，Shift+Inset 粘贴，按ESC键 跳到命令模式，然后输入 :wq 保存文件并退出vi
+```bash
 server_names_hash_bucket_size 64;
 server {
     listen 80;
@@ -171,14 +174,16 @@ server {
     # 其他列出的域名统一重定向
     return 302 http://assets1.xboxlive.cn$request_uri;
 }
+```
+![图2.4](images/OpenWrp/Op2.4.png)
 
-#启动 nginx 服务以及设置其开机自启。
+启动 nginx 服务以及设置其开机自启。
+```bash
 /etc/init.d/nginx start
 /etc/init.d/nginx enable
 #重启nginx
 /etc/init.d/nginx restart
 ```
-![图2.4](images/OpenWrp/Op2.4.png)
 ![图2.5](images/OpenWrp/Op2.5.png)
 
 4.打开OpenWrt管理页(http://192.168.1.1:8080) 网络-》主机名 ，添加 主机名：
