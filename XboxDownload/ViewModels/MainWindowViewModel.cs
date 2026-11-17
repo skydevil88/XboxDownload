@@ -117,6 +117,7 @@ public partial class MainWindowViewModel(
 
         ServiceViewModel.LanguageChanged();
         SpeedTestViewModel.UploadAkamaiIpsVisible = SpeedTestViewModel.SelectedImportOption!.Key.StartsWith("Akamai") && culture == "zh-Hans";
+        SpeedTestViewModel.LockChinaCdnVisible = SpeedTestViewModel.SelectedImportOption!.Key == "XboxCn1" && culture == "zh-Hans" && OperatingSystem.IsWindows();
         StoreViewModel.LanguageChanged();
         ToolsViewModel.LanguageChanged();
 

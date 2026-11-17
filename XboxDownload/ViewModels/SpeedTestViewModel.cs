@@ -132,6 +132,9 @@ public partial class SpeedTestViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool IsAkamaiVisible { get; set; }
 
+    [ObservableProperty]
+    public partial bool LockChinaCdnVisible { get; set; }
+
     private string _selectedImportKey = string.Empty;
     [RelayCommand]
     private async Task LoadIpAsync()
@@ -179,11 +182,12 @@ public partial class SpeedTestViewModel : ViewModelBase
                 : option.Key is "ChinaTelecom" or "ChinaUnicom" or "ChinaMobile";
         }
 
-        IsXboxCn1Visible = IsXboxCn2Visible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = IsAkamaiVisible = UploadAkamaiIpsVisible = false;
+        IsXboxCn1Visible = IsXboxCn2Visible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = IsAkamaiVisible = LockChinaCdnVisible = UploadAkamaiIpsVisible = false;
         switch (SelectedImportOption.Key)
         {
             case "XboxCn1":
                 IsXboxCn1Visible = IsXboxSeparatorVisible = true;
+                if (App.Settings.Culture == "zh-Hans" && OperatingSystem.IsWindows()) LockChinaCdnVisible = true;
                 break;
             case "XboxCn2":
                 IsXboxCn2Visible = IsXboxSeparatorVisible = true;
@@ -422,8 +426,8 @@ public partial class SpeedTestViewModel : ViewModelBase
         var count = lines.Count(line => !line.StartsWith('#')); // 排除以 # 开头的行（忽略前导空格）
 
         var cnXboxDownloadHint = App.Settings.Culture == "zh-Hans" && exportContent.Contains(".xboxlive.cn") ?
-            $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 下载游戏可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
-            "";
+                $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 游戏下载有时会使用 .com 域名。{Environment.NewLine}可通过“锁定 Xbox 国内 CDN 下载服务器”进行加速。" :
+                "";
 
         await DialogHelper.ShowInfoDialogAsync(
             ResourceHelper.GetString("SpeedTest.MenuItem.ExportRules"),
@@ -557,7 +561,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 .Count(line => !string.IsNullOrWhiteSpace(line));
 
             var cnXboxDownloadHint = App.Settings.Culture == "zh-Hans" && dnsMapping.Contains(".xboxlive.cn") ?
-                $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 下载游戏可能会使用 .com 域名，{Environment.NewLine}此时需启用监听跳转方式才能加速下载。" :
+                $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 游戏下载有时会使用 .com 域名。{Environment.NewLine}可通过“锁定 Xbox 国内 CDN 下载服务器”进行加速。" :
                 "";
 
             await DialogHelper.ShowInfoDialogAsync(
@@ -571,6 +575,56 @@ public partial class SpeedTestViewModel : ViewModelBase
                 ResourceHelper.GetString("SpeedTest.MenuItem.WriteToSystemHostsFileFailed"),
                 ResourceHelper.GetString("SpeedTest.MenuItem.WriteToSystemHostsFileFailedMsg") + Environment.NewLine + Environment.NewLine + ex.Message,
                 Icon.Error);
+        }
+    }
+
+    [RelayCommand]
+    private async Task LockChinaCdnAsync()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            await DialogHelper.ShowInfoDialogAsync("设置 Xbox 国内 CDN 下载服务器失败", "此功能仅支持 Windows。", Icon.Error);
+            return;
+        }
+
+        try
+        {
+            const string registryPath = @"SOFTWARE\Microsoft\GamingServices";
+            using var existingKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(registryPath);
+            var isLocked = existingKey?.GetValue("ForegroundCdnRoot") is not null;
+
+            if (isLocked)
+            {
+                var confirm = await DialogHelper.ShowConfirmDialogAsync(
+                    "取消 Xbox 国内 CDN 下载服务器锁定（PC）",
+                    "是否取消 Xbox 国内 CDN 下载服务器锁定（PC）？",
+                    Icon.Question);
+                if (!confirm) return;
+
+                using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(registryPath, writable: true)
+                    ?? throw new InvalidOperationException("无法打开 GamingServices 注册表项。");
+                key.DeleteValue("ForegroundCdnRoot", throwOnMissingValue: false);
+                key.DeleteValue("BackgroundCdnRoot", throwOnMissingValue: false);
+
+                await DialogHelper.ShowInfoDialogAsync("已取消 Xbox 国内 CDN 下载服务器锁定（PC）", "已取消 Xbox 国内 CDN 下载服务器锁定。请重启电脑使设置生效。", Icon.Success);
+                return;
+            }
+
+            var shouldLock = await DialogHelper.ShowConfirmDialogAsync(
+                "锁定 Xbox 国内 CDN 下载服务器（PC）",
+                "是否将 Xbox 下载服务器锁定到国内 CDN（PC）？",
+                Icon.Question);
+            if (!shouldLock) return;
+
+            using var newKey = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(registryPath);
+            newKey.SetValue("ForegroundCdnRoot", "http://assets1.xboxlive.com", Microsoft.Win32.RegistryValueKind.String);
+            newKey.SetValue("BackgroundCdnRoot", "http://assets2.xboxlive.com", Microsoft.Win32.RegistryValueKind.String);
+
+            await DialogHelper.ShowInfoDialogAsync("已锁定 Xbox 国内 CDN 下载服务器（PC）", "已将 Xbox 下载服务器锁定到国内 CDN。请重启电脑使设置生效。", Icon.Success);
+        }
+        catch (Exception ex)
+        {
+            await DialogHelper.ShowInfoDialogAsync("设置 Xbox 国内 CDN 下载服务器失败", ex.Message, Icon.Error);
         }
     }
 
