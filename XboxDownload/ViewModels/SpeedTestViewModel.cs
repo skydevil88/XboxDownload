@@ -14,6 +14,8 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.Versioning;
+using System.ServiceProcess;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -579,6 +581,7 @@ public partial class SpeedTestViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    [SupportedOSPlatform("windows")]
     private async Task LockChinaCdnAsync()
     {
         if (!OperatingSystem.IsWindows())
@@ -606,7 +609,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 key.DeleteValue("ForegroundCdnRoot", throwOnMissingValue: false);
                 key.DeleteValue("BackgroundCdnRoot", throwOnMissingValue: false);
 
-                await DialogHelper.ShowInfoDialogAsync("已取消 Xbox 国内 CDN 下载服务器锁定（PC）", "已取消 Xbox 国内 CDN 下载服务器锁定。请重启电脑使设置生效。", Icon.Success);
+                await DialogHelper.ShowInfoDialogAsync("已取消 Xbox 国内 CDN 下载服务器锁定（PC）", "已取消 Xbox 国内 CDN 下载服务器锁定。", Icon.Success);
                 return;
             }
 
@@ -617,10 +620,22 @@ public partial class SpeedTestViewModel : ViewModelBase
             if (!shouldLock) return;
 
             using var newKey = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(registryPath);
-            newKey.SetValue("ForegroundCdnRoot", "http://assets1.xboxlive.com", Microsoft.Win32.RegistryValueKind.String);
-            newKey.SetValue("BackgroundCdnRoot", "http://assets2.xboxlive.com", Microsoft.Win32.RegistryValueKind.String);
+            newKey.SetValue("ForegroundCdnRoot", "http://assets1.xboxlive.cn", Microsoft.Win32.RegistryValueKind.String);
+            newKey.SetValue("BackgroundCdnRoot", "http://assets2.xboxlive.cn", Microsoft.Win32.RegistryValueKind.String);
 
-            await DialogHelper.ShowInfoDialogAsync("已锁定 Xbox 国内 CDN 下载服务器（PC）", "已将 Xbox 下载服务器锁定到国内 CDN。请重启电脑使设置生效。", Icon.Success);
+            await Task.Run(() =>
+            {
+                var service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == "GamingServices");
+                if (service == null) return;
+                if (service.Status != ServiceControllerStatus.Stopped)
+                {
+                    service.Stop();
+                    service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(30));
+                }
+                service.Start();
+            });
+
+            await DialogHelper.ShowInfoDialogAsync("已锁定 Xbox 国内 CDN 下载服务器（PC）", "已将 Xbox 下载服务器锁定到国内 CDN。", Icon.Success);
         }
         catch (Exception ex)
         {
