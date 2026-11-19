@@ -114,7 +114,7 @@
                                                     <Image Source="/Assets/Speedtest/windows.ico" Width="16" Height="16"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="锁定/取消 使用国内 CDN 服务器（PC）"
+                                            <MenuItem Header="锁定/取消 国内 CDN 下载服务器（PC）"
                                                       IsVisible="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).LockChinaCdnVisible, FallbackValue=False, TargetNullValue=False}"
                                                       Command="{Binding $parent[DataGrid].((vm:SpeedTestViewModel)DataContext).LockChinaCdnCommand, FallbackValue={x:Null}, TargetNullValue={x:Null}}">
                                                 <MenuItem.Icon>

@@ -14,8 +14,6 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Runtime.Versioning;
-using System.ServiceProcess;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -24,6 +22,7 @@ using System.Threading.Tasks;
 using XboxDownload.Helpers.IO;
 using XboxDownload.Helpers.Network;
 using XboxDownload.Helpers.Resources;
+using XboxDownload.Helpers.System;
 using XboxDownload.Helpers.UI;
 using XboxDownload.Helpers.Utilities;
 using XboxDownload.Models.SpeedTest;
@@ -581,8 +580,7 @@ public partial class SpeedTestViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    [SupportedOSPlatform("windows")]
-    private async Task LockChinaCdnAsync()
+    private static async Task LockChinaCdnAsync()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -623,17 +621,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             newKey.SetValue("ForegroundCdnRoot", "http://assets1.xboxlive.cn", Microsoft.Win32.RegistryValueKind.String);
             newKey.SetValue("BackgroundCdnRoot", "http://assets2.xboxlive.cn", Microsoft.Win32.RegistryValueKind.String);
 
-            await Task.Run(() =>
-            {
-                var service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == "GamingServices");
-                if (service == null) return;
-                if (service.Status != ServiceControllerStatus.Stopped)
-                {
-                    service.Stop();
-                    service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(30));
-                }
-                service.Start();
-            });
+            CommandHelper.RestartGamingServices();
 
             await DialogHelper.ShowInfoDialogAsync("已锁定 Xbox 国内 CDN 下载服务器（PC）", "已将 Xbox 下载服务器锁定到国内 CDN。", Icon.Success);
         }

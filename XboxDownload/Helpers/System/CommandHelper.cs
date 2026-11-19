@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
+using System.ServiceProcess;
 using System.Threading.Tasks;
 
 namespace XboxDownload.Helpers.System;
@@ -93,6 +95,37 @@ public static class CommandHelper
         {
             if (!string.IsNullOrWhiteSpace(line))
                 outputList.Add(line.Trim());
+        }
+    }
+
+    [SupportedOSPlatform("windows")]
+    public static void RestartGamingServices()
+    {
+        try
+        {
+            _= Task.Run(() =>
+            {
+                var service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == "GamingServices");
+                if (service == null) return;
+
+                service.Refresh();
+
+                if (service.Status != ServiceControllerStatus.Stopped)
+                {
+                    service.Stop();
+                    service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(30));
+                }
+
+                service.Refresh();
+                if (service.Status == ServiceControllerStatus.Running) return;
+
+                service.Start();
+                service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30));
+            });
+        }
+        catch
+        {
+            // ignored
         }
     }
 
