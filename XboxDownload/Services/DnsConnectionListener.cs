@@ -765,9 +765,14 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                                                 "assets-srvs-apac.delivery.microsoft.com" or
                                                 "assets-srvs-na.delivery.microsoft.com")
                                         {
-                                            SendDnsResponse(socket, dns, client, [XboxSrvDiscovery.CreateRecord()], DnsSrvQuery, queryName);
+                                            dns.SetResponseRecords([]);
+                                            socket.SendTo(dns.ToBytes(), client);
+
+                                            if (serviceViewModel.IsLogging)
+                                                serviceViewModel.AddLog(DnsSrvQuery, $"{queryName} -> Blocked", ((IPEndPoint)client).Address.ToString());
                                             return;
                                         }
+
                                         if (serviceViewModel.IsLogging)
                                             serviceViewModel.AddLog(DnsSrvQuery, queryName, ((IPEndPoint)client).Address.ToString());
                                         break;
@@ -1111,8 +1116,9 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         socket.SendTo(bytes, client);
 
         if (!serviceViewModel.IsLogging || dnsMessage.ResourceRecords.Count == 0) return;
+
         serviceViewModel.AddLog(queryTypeText,
-            $"{queryName} -> {string.Join(", ", records.Select(XboxSrvDiscovery.FormatRecord))}",
+            $"{queryName} -> {string.Join(", ", records.Select(r => new IPAddress(r.Data ?? []).ToString()))}",
             ((IPEndPoint)client).Address.ToString());
     }
 }
