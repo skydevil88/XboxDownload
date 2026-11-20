@@ -80,7 +80,6 @@ public partial class MainWindowViewModel(
         dictionaries.Add(langDict);
 
         App.Settings.Culture = culture;
-        App.ApplySortingCulture(culture);
         SettingsManager.Save(App.Settings);
 
         // 更新 ObservableCollection 语言

@@ -765,7 +765,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                                                 "assets-srvs-apac.delivery.microsoft.com" or
                                                 "assets-srvs-na.delivery.microsoft.com")
                                         {
-                                            dns.SetResponseRecords(EmptyIpRecords);
+                                            dns.SetResponseRecords([]);
                                             socket.SendTo(dns.ToBytes(), client);
 
                                             if (serviceViewModel.IsLogging)
