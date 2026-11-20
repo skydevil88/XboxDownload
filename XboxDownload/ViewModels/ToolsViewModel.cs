@@ -28,7 +28,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     private UsbWatcher? _usbWatcher;
 
     [ObservableProperty]
-    public partial bool IsChineseUsers { get; set; } = App.IsSimplifiedChinese;
+    public partial bool IsSimplifiedChinese { get; set; } = App.IsSimplifiedChinese;
 
     public ObservableCollection<DeviceMappingEntry> DrivePaths { get; } = [];
 
@@ -39,8 +39,8 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     {
         OnSelectedDrivePathChanged(SelectedDrivePath);
 
-        IsChineseUsers = App.IsSimplifiedChinese;
-        if (IsChineseUsers)
+        IsSimplifiedChinese = App.IsSimplifiedChinese;
+        if (IsSimplifiedChinese)
         {
             EnableUsbWatcherIfNeeded();
         }
@@ -237,7 +237,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
 
     public void EnableUsbWatcherIfNeeded()
     {
-        if (!OperatingSystem.IsWindows() || !IsChineseUsers || _usbWatcher != null) return;
+        if (!OperatingSystem.IsWindows() || !IsSimplifiedChinese || _usbWatcher != null) return;
 
         _usbWatcher = new UsbWatcher();
         _usbWatcher.UsbInserted += OnUsbInserted;

@@ -20,7 +20,7 @@ public partial class AboutDialogViewModel : ObservableObject
         .Version);
 
     [ObservableProperty]
-    public partial bool IsChineseUser { get; set; } = App.IsSimplifiedChinese;
+    public partial bool IsSimplifiedChinese { get; set; } = App.IsSimplifiedChinese;
 
     private static string Project => UpdateService.Project;
 

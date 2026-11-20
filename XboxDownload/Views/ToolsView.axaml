@@ -56,7 +56,7 @@
             </Grid>
         </HeaderedContentControl>
 
-        <HeaderedContentControl Header="国行Xbox制作出国/回国U盘 (Only supports China region Xbox consoles)" IsVisible="{Binding IsChineseUsers}">
+        <HeaderedContentControl Header="国行Xbox制作出国/回国U盘 (Only supports China region Xbox consoles)" IsVisible="{Binding IsSimplifiedChinese}">
             <Grid ColumnDefinitions="*,*">
                 <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="5"  ColumnSpacing="10">
                     <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="机器型号"/>
