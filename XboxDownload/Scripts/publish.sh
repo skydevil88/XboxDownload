@@ -146,7 +146,13 @@ create_macos_app_bundle() {
 <plist version="1.0">
 <dict>
     <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
+    <string>en-US</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en-US</string>
+        <string>zh-Hans</string>
+        <string>zh-Hant</string>
+    </array>
     <key>CFBundleDisplayName</key>
     <string>XboxDownload</string>
     <key>CFBundleExecutable</key>
