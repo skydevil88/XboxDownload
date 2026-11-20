@@ -5,7 +5,7 @@ namespace XboxDownload.Models;
 
 public class AppSettings
 {
-    public string Culture { get; set; } = string.Empty;
+    public string Language { get; set; } = string.Empty;
     public string Theme { get; set; } = "Default";
     public DateTime NextUpdate { get; set; }
     public string DnsIp { get; set; } = string.Empty;

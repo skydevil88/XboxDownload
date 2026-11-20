@@ -65,7 +65,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         foreach (var option in LocationFilters)
         {
-            option.IsVisible = App.Settings.Culture == "zh-Hans"
+            option.IsVisible = App.IsSimplifiedChinese
                 ? option.Key is "ChinaTelecom" or "ChinaUnicom" or "ChinaMobile"
                 : option.Key is not ("ChinaTelecom" or "ChinaUnicom" or "ChinaMobile");
         }
@@ -169,7 +169,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
         var isAkamai = SelectedImportOption.Key.StartsWith("Akamai");
 
-        if (isAkamai && App.Settings.Culture != "zh-Hans" || App.Settings.Culture == "zh-Hant")
+        if (isAkamai && !App.IsSimplifiedChinese || App.Settings.Language == "zh-Hant")
         {
             await TranslationLocation(items);
         }
@@ -188,7 +188,7 @@ public partial class SpeedTestViewModel : ViewModelBase
         {
             case "XboxCn1":
                 IsXboxCn1Visible = IsXboxSeparatorVisible = true;
-                if (App.Settings.Culture == "zh-Hans" && OperatingSystem.IsWindows()) LockChinaCdnVisible = true;
+                if (App.IsSimplifiedChinese && OperatingSystem.IsWindows()) LockChinaCdnVisible = true;
                 break;
             case "XboxCn2":
                 IsXboxCn2Visible = IsXboxSeparatorVisible = true;
@@ -203,7 +203,7 @@ public partial class SpeedTestViewModel : ViewModelBase
             case "AkamaiV2":
             case "AkamaiV6":
                 IsAkamaiVisible = IsXboxAppVisible = IsXboxSeparatorVisible = IsPsVisible = IsPsSeparatorVisible = true;
-                if (App.Settings.Culture == "zh-Hans") UploadAkamaiIpsVisible = true;
+                if (App.IsSimplifiedChinese) UploadAkamaiIpsVisible = true;
                 break;
         }
 
@@ -214,7 +214,7 @@ public partial class SpeedTestViewModel : ViewModelBase
 
     public async Task TranslationLocation(List<IpItem> items)
     {
-        if (App.Settings.Culture == "zh-Hant")
+        if (App.Settings.Language == "zh-Hant")
         {
             foreach (var ip in items)
             {
@@ -426,7 +426,7 @@ public partial class SpeedTestViewModel : ViewModelBase
         var lines = exportContent.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var count = lines.Count(line => !line.StartsWith('#')); // 排除以 # 开头的行（忽略前导空格）
 
-        var cnXboxDownloadHint = App.Settings.Culture == "zh-Hans" && exportContent.Contains(".xboxlive.cn") ?
+        var cnXboxDownloadHint = App.IsSimplifiedChinese && exportContent.Contains(".xboxlive.cn") ?
                 $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 游戏下载有时会使用 .com 域名。{Environment.NewLine}可通过“锁定 Xbox 国内 CDN 下载服务器”进行加速。" :
                 "";
 
@@ -561,7 +561,7 @@ public partial class SpeedTestViewModel : ViewModelBase
                 .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
                 .Count(line => !string.IsNullOrWhiteSpace(line));
 
-            var cnXboxDownloadHint = App.Settings.Culture == "zh-Hans" && dnsMapping.Contains(".xboxlive.cn") ?
+            var cnXboxDownloadHint = App.IsSimplifiedChinese && dnsMapping.Contains(".xboxlive.cn") ?
                 $"{Environment.NewLine}提示：{Environment.NewLine}国内 Xbox 游戏下载有时会使用 .com 域名。{Environment.NewLine}可通过“锁定 Xbox 国内 CDN 下载服务器”进行加速。" :
                 "";
 
@@ -942,7 +942,7 @@ public partial class SpeedTestViewModel : ViewModelBase
     private async Task UploadPreferredAkamaiIpsIfInChinaAsync()
     {
         // 若上传选项未显示、未启用上传功能，或当前语言非简体中文，则跳过上传逻辑
-        if (!(UploadAkamaiIpsVisible && UploadAkamaiIpsEnabled && App.Settings.Culture == "zh-Hans"))
+        if (!(UploadAkamaiIpsVisible && UploadAkamaiIpsEnabled && App.IsSimplifiedChinese))
             return;
 
         // 优选区域：仅包含指定亚洲地区节点

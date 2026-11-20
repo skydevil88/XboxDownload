@@ -246,7 +246,7 @@ public partial class ResolveDomainDialogViewModel : ObservableObject
         }
         var normalizedIp = new IPAddress(normalizedBytes);
 
-        var isSimplifiedChineseUser = App.Settings.Culture.Equals("zh-Hans");
+        var isSimplifiedChineseUser = App.IsSimplifiedChinese;
         var key = normalizedIp + "|" + isSimplifiedChineseUser;
         if (IpLocationCache.TryGetValue(key, out var cachedLocation)) return (latency, cachedLocation);
 

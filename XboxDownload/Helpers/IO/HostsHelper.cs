@@ -150,7 +150,7 @@ namespace XboxDownload.Helpers.IO
                         {
                             foreach (var hostsMap in DnsMappingGenerator.HostsMap)
                             {
-                                if (App.Settings.Culture == "zh-Hans")
+                                if (App.IsSimplifiedChinese)
                                 {
                                     if (hostsMap.Value != "XboxGlobal" &&
                                         (hostsMap.Value is not ("XboxCn1" or "XboxCn2") || hostsMap.Key.Contains('2')))

@@ -28,7 +28,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     private UsbWatcher? _usbWatcher;
 
     [ObservableProperty]
-    public partial bool IsChineseUsers { get; set; } = App.Settings.Culture == "zh-Hans";
+    public partial bool IsChineseUsers { get; set; } = App.IsSimplifiedChinese;
 
     public ObservableCollection<DeviceMappingEntry> DrivePaths { get; } = [];
 
@@ -39,7 +39,7 @@ public partial class ToolsViewModel : ObservableObject, IDisposable
     {
         OnSelectedDrivePathChanged(SelectedDrivePath);
 
-        IsChineseUsers = App.Settings.Culture == "zh-Hans";
+        IsChineseUsers = App.IsSimplifiedChinese;
         if (IsChineseUsers)
         {
             EnableUsbWatcherIfNeeded();

@@ -23,6 +23,7 @@ public partial class App : Application
     public static TrayIconService TrayIconService { get; } = new();
     public static AppSettings Settings { get; private set; } = new();
     public static IServiceProvider? Services { get; private set; }
+    public static bool IsSimplifiedChinese => Settings.Language == "zh-Hans";
 
     // Windows wake-up message ID (assigned in Program)
     public static uint ShowWindowMessageId;
@@ -49,27 +50,27 @@ public partial class App : Application
     
     private void LoadLanguage()
     {
-        var culture = Settings.Culture;
+        var language = Settings.Language;
 
-        if (culture is not ("en-US" or "zh-Hans" or "zh-Hant"))
+        if (language is not ("en-US" or "zh-Hans" or "zh-Hant"))
         {
-            culture = CultureInfo.CurrentUICulture.Name switch
+            language = CultureInfo.CurrentUICulture.Name switch
             {
                 "zh" or "zh-CN" or "zh-SG" or "zh-Hans" or "zh-Hans-CN" or "zh-Hans-SG" => "zh-Hans",
                 "zh-HK" or "zh-MO" or "zh-TW" or "zh-Hant" or "zh-Hant-HK" or "zh-Hant-MO" or "zh-Hant-TW" => "zh-Hant",
                 _ => "en-US"
             };
+            Settings.Language = language;
             if (string.IsNullOrEmpty(Settings.DohServerId))
             {
-                Settings.DohServerId = culture == "zh-Hans" ? "AlibabaCloud" : "Google";
+                Settings.DohServerId = IsSimplifiedChinese ? "AlibabaCloud" : "Google";
             }
-            Settings.Culture = culture;
             SettingsManager.Save(Settings);
         }
 
         var langDict = new ResourceInclude(new Uri($"resm:Styles?assembly={nameof(XboxDownload)}"))
         {
-            Source = new Uri($"avares://{nameof(XboxDownload)}/Resources/Languages/{culture}.axaml")
+            Source = new Uri($"avares://{nameof(XboxDownload)}/Resources/Languages/{language}.axaml")
         };
         Resources.MergedDictionaries.Add(langDict);
     }

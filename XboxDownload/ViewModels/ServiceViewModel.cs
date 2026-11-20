@@ -509,7 +509,7 @@ public partial class ServiceViewModel : ObservableObject
                 return;
             }
 
-            if (App.Settings.Culture != "zh-Hans")
+            if (!App.IsSimplifiedChinese)
             {
                 await Ioc.Default.GetRequiredService<SpeedTestViewModel>().TranslationLocation(items);
             }

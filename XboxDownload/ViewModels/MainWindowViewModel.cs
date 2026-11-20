@@ -58,9 +58,9 @@ public partial class MainWindowViewModel(
 
 
     [RelayCommand]
-    private void SwitchLanguage(string culture)
+    private void SwitchLanguage(string language)
     {
-        if (Application.Current is not App app || string.Equals(App.Settings.Culture, culture))
+        if (Application.Current is not App app || string.Equals(App.Settings.Language, language))
             return;
 
         var dictionaries = app.Resources.MergedDictionaries;
@@ -74,12 +74,12 @@ public partial class MainWindowViewModel(
 
         var langDict = new ResourceInclude(new Uri($"resm:Styles?assembly={nameof(XboxDownload)}"))
         {
-            Source = new Uri($"avares://{nameof(XboxDownload)}/Resources/Languages/{culture}.axaml")
+            Source = new Uri($"avares://{nameof(XboxDownload)}/Resources/Languages/{language}.axaml")
         };
 
         dictionaries.Add(langDict);
 
-        App.Settings.Culture = culture;
+        App.Settings.Language = language;
         SettingsManager.Save(App.Settings);
 
         // 更新 ObservableCollection 语言
@@ -109,15 +109,15 @@ public partial class MainWindowViewModel(
             SpeedTestViewModel.TargetTestUrl = string.Empty;
             foreach (var option in SpeedTestViewModel.LocationFilters)
             {
-                option.IsVisible = App.Settings.Culture == "zh-Hans"
+                option.IsVisible = App.IsSimplifiedChinese
                     ? option.Key is "ChinaTelecom" or "ChinaUnicom" or "ChinaMobile"
                     : option.Key is not ("ChinaTelecom" or "ChinaUnicom" or "ChinaMobile");
             }
         }
 
         ServiceViewModel.LanguageChanged();
-        SpeedTestViewModel.UploadAkamaiIpsVisible = SpeedTestViewModel.SelectedImportOption!.Key.StartsWith("Akamai") && culture == "zh-Hans";
-        SpeedTestViewModel.LockChinaCdnVisible = SpeedTestViewModel.SelectedImportOption!.Key == "XboxCn1" && culture == "zh-Hans" && OperatingSystem.IsWindows();
+        SpeedTestViewModel.UploadAkamaiIpsVisible = SpeedTestViewModel.SelectedImportOption!.Key.StartsWith("Akamai") && App.IsSimplifiedChinese;
+        SpeedTestViewModel.LockChinaCdnVisible = SpeedTestViewModel.SelectedImportOption!.Key == "XboxCn1" && App.IsSimplifiedChinese && OperatingSystem.IsWindows();
         StoreViewModel.LanguageChanged();
         ToolsViewModel.LanguageChanged();
 

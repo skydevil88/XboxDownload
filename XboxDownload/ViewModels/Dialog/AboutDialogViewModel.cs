@@ -20,7 +20,7 @@ public partial class AboutDialogViewModel : ObservableObject
         .Version);
 
     [ObservableProperty]
-    public partial bool IsChineseUser { get; set; } = App.Settings.Culture == "zh-Hans";
+    public partial bool IsChineseUser { get; set; } = App.IsSimplifiedChinese;
 
     private static string Project => UpdateService.Project;
 

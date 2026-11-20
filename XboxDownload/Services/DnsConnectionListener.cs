@@ -382,7 +382,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
         _serviceName = null;
         NetworkInterfaceDnsMap.Clear();
 
-        var isSimplifiedChinese = App.Settings.Culture == "zh-Hans";
+        var isSimplifiedChinese = App.IsSimplifiedChinese;
         var localIpAddr = IPAddress.Parse(App.Settings.LocalIp);
         IPEndPoint? iPEndPoint = null;
         if (string.IsNullOrEmpty(App.Settings.DnsIp))
@@ -765,7 +765,7 @@ public class DnsConnectionListener(ServiceViewModel serviceViewModel)
                                                 "assets-srvs-apac.delivery.microsoft.com" or
                                                 "assets-srvs-na.delivery.microsoft.com")
                                         {
-                                            dns.SetResponseRecords([]);
+                                            dns.SetResponseRecords(EmptyIpRecords);
                                             socket.SendTo(dns.ToBytes(), client);
 
                                             if (serviceViewModel.IsLogging)

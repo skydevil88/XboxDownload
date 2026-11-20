@@ -182,7 +182,7 @@ public partial class StorageViewModel : ObservableObject
         switch (parameter)
         {
             case "Guide":
-                await HttpClientHelper.OpenUrlAsync(App.Settings.Culture == "zh-Hans"
+                await HttpClientHelper.OpenUrlAsync(App.IsSimplifiedChinese
                     ? "https://www.bilibili.com/video/BV1CN4y197Js?t=130"
                     : "https://www.youtube.com/watch?v=3F499kh_jfk&t=130");
                 break;

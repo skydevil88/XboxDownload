@@ -355,7 +355,7 @@ public partial class TcpConnectionListener(ServiceViewModel serviceViewModel)
             return string.Format(ResourceHelper.GetString("Service.Listening.TcpStartFailedDialogMessage"), ex.Message);
         }
 
-        _isSimplifiedChinese = App.Settings.Culture == "zh-Hans";
+        _isSimplifiedChinese = App.IsSimplifiedChinese;
 
         _ = Task.Run(() => Listening(_httpSocket, false));
         _ = Task.Run(() => Listening(_httpsSocket, true));

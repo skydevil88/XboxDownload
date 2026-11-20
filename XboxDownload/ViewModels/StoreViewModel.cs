@@ -435,7 +435,7 @@ public partial class StoreViewModel : ObservableObject
     public bool IsShowContextMenu => !string.IsNullOrEmpty(SelectedPlatformDownloadItem?.Url);
     public bool IsShowGameCnMenu =>
         SelectedPlatformDownloadItem!.Category == "Game"
-        && App.Settings.Culture == "zh-Hans";
+        && App.IsSimplifiedChinese;
     public bool IsShowAzureMenu =>
         SelectedPlatformDownloadItem!.Category == "Game"
         && !SelectedPlatformDownloadItem!.Url.Contains("/public/");
@@ -1065,7 +1065,7 @@ public partial class StoreViewModel : ObservableObject
     [RelayCommand]
     private static async Task OpenConsoleGuide()
     {
-        await HttpClientHelper.OpenUrlAsync(App.Settings.Culture == "zh-Hans"
+        await HttpClientHelper.OpenUrlAsync(App.IsSimplifiedChinese
             ? "https://www.bilibili.com/video/BV1CN4y197Js"
             : "https://www.youtube.com/watch?v=3F499kh_jfk");
     }
