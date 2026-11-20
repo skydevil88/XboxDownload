@@ -9,7 +9,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -743,7 +742,6 @@ public partial class SpeedTestViewModel : ViewModelBase
                 {
                     null when b == null => 0,
                     null => -1,
-                    string aText when b is string bText => App.GetSortingCulture(App.Settings.Culture).CompareInfo.Compare(aText, bText, CompareOptions.IgnoreCase),
                     _ => b == null ? 1 : Comparer<IComparable>.Default.Compare(a, b)
                 };
 
