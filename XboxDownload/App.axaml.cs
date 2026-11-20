@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using XboxDownload.Models;
 using XboxDownload.Services;
@@ -67,12 +66,28 @@ public partial class App : Application
             SettingsManager.Save(Settings);
         }
 
+        ApplySortingCulture(culture);
+
         var langDict = new ResourceInclude(new Uri($"resm:Styles?assembly={nameof(XboxDownload)}"))
         {
             Source = new Uri($"avares://{nameof(XboxDownload)}/Resources/Languages/{culture}.axaml")
         };
         Resources.MergedDictionaries.Add(langDict);
     }
+
+    public static void ApplySortingCulture(string culture)
+    {
+        var sortingCulture = GetSortingCulture(culture);
+        CultureInfo.DefaultThreadCurrentCulture = sortingCulture;
+        CultureInfo.CurrentCulture = sortingCulture;
+    }
+
+    public static CultureInfo GetSortingCulture(string culture) => CultureInfo.GetCultureInfo(culture switch
+    {
+        "zh-Hans" => "zh-CN",
+        "zh-Hant" => "zh-TW",
+        _ => "en-US"
+    });
 
     public override void OnFrameworkInitializationCompleted()
     {
