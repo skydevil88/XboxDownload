@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.Versioning;
-using WindowsFirewallHelper;
-using WindowsFirewallHelper.FirewallRules;
 
 namespace XboxDownload.Helpers.Network;
 
 public static class FirewallHelper
 {
+    private const int AllProfiles = 0x7FFFFFFF;
+    private const int InboundDirection = 1;
+    private const int AllowAction = 1;
+    private const int AnyProtocol = 256;
+
     /// <summary>
     /// Ensure a firewall rule with the given name exists and matches the current executable path.
     /// </summary>
@@ -22,39 +25,34 @@ public static class FirewallHelper
 
         try
         {
-            // Get current executable path
             var exePath = Process.GetCurrentProcess().MainModule?.FileName;
             if (string.IsNullOrWhiteSpace(exePath) || !File.Exists(exePath))
                 return;
 
-            var firewall = FirewallManager.Instance;
-
-            if (firewall == null)
+            var policyType = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
+            if (policyType == null || Activator.CreateInstance(policyType) is not { } policyInstance)
                 return;
 
-            // Get all rules with matching name (case-insensitive)
-            var existingRules = firewall.Rules
-                .Where(r => r.Name.Equals(ruleName, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            dynamic policy = policyInstance;
+            dynamic rules = policy.Rules;
+            var existingRules = GetRulesByName(rules, ruleName);
 
             var needUpdate = existingRules.Count switch
             {
                 0 => true,
-                1 => !IsRuleValid(existingRules[0], exePath),
+                1 => !IsRuleValid(existingRules[0], ruleName, exePath),
                 _ => true
             };
 
             if (!needUpdate)
                 return;
 
-            // Remove all existing rules
-            foreach (var rule in existingRules)
+            foreach (dynamic rule in existingRules)
             {
-                firewall.Rules.Remove(rule);
+                rules.Remove(rule.Name);
             }
 
-            // Add new rule
-            CreateFirewallRule(firewall, ruleName, exePath);
+            CreateFirewallRule(rules, ruleName, exePath);
         }
         catch (Exception ex)
         {
@@ -63,37 +61,56 @@ public static class FirewallHelper
     }
 
     /// <summary>
-    /// Checks whether the specified firewall rule is valid:
-    /// - The application path matches
-    /// - The rule is enabled
-    /// - All required profiles are present (Domain, Private, Public)
+    /// Finds rules managed by this helper.
     /// </summary>
-    private static bool IsRuleValid(IFirewallRule rule, string exePath)
+    private static List<dynamic> GetRulesByName(dynamic rules, string ruleName)
     {
-        const FirewallProfiles requiredProfiles =
-            FirewallProfiles.Domain | FirewallProfiles.Private | FirewallProfiles.Public;
+        var matchingRules = new List<dynamic>();
 
-        return string.Equals(rule.ApplicationName, exePath, StringComparison.OrdinalIgnoreCase)
-               && rule.IsEnable
-               && (rule.Profiles & requiredProfiles) == requiredProfiles;
+        foreach (dynamic rule in rules)
+        {
+            if (string.Equals((string?)rule.Name, ruleName, StringComparison.OrdinalIgnoreCase))
+            {
+                matchingRules.Add(rule);
+            }
+        }
+
+        return matchingRules;
+    }
+
+    private static bool IsRuleValid(dynamic rule, string ruleName, string exePath)
+    {
+        var profiles = (int)rule.Profiles;
+
+        return string.Equals((string?)rule.Name, ruleName, StringComparison.OrdinalIgnoreCase)
+               && string.Equals((string?)rule.ApplicationName, exePath, StringComparison.OrdinalIgnoreCase)
+               && rule.Enabled
+               && rule.Direction == InboundDirection
+               && rule.Protocol == AnyProtocol
+               && rule.Action == AllowAction
+               && profiles == AllProfiles;
     }
 
     /// <summary>
     /// Creates a new inbound application firewall rule with full profile coverage.
     /// </summary>
-    private static void CreateFirewallRule(IFirewall firewall, string ruleName, string exePath)
+    [SupportedOSPlatform("windows")]
+    private static void CreateFirewallRule(dynamic rules, string ruleName, string exePath)
     {
-        var rule = new FirewallWASRule(
-            ruleName,
-            exePath,
-            FirewallAction.Allow,
-            FirewallDirection.Inbound,
-            FirewallProfiles.Domain | FirewallProfiles.Private | FirewallProfiles.Public
-        )
-        {
-            IsEnable = true,
-            Description = "Allow inbound access for XboxDownload tool"
-        };
-        firewall.Rules.Add(rule);
+        var ruleType = Type.GetTypeFromProgID("HNetCfg.FWRule");
+        if (ruleType == null || Activator.CreateInstance(ruleType) is not { } ruleInstance)
+            return;
+
+        dynamic rule = ruleInstance;
+        rule.Name = ruleName;
+        rule.ApplicationName = exePath;
+        rule.Action = AllowAction;
+        rule.Direction = InboundDirection;
+        rule.Protocol = AnyProtocol;
+        rule.Profiles = AllProfiles;
+        rule.Enabled = true;
+        rule.Description = "Allow inbound access for XboxDownload tool";
+
+        rules.Add(rule);
     }
 }
